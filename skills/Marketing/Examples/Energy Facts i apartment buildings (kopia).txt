@@ -1,0 +1,16 @@
+Energy Facts i apartment buildings
+
+https://www.tandfonline.com/doi/full/10.1080/19401493.2024.2416684#d1e138
+
+Tenants add about 2 g of moisture per kg of air to the indoor air in apartment, often fluctuating between 1 and 3 g/kg of dry air during the day.
+The specific energy use for a new energy-efficient apartment building in the Stockholm area is around 60 kWh/m2,year.
+Apartment buildings built about year 2000 years ago, their energy use can be 100–120 kWh/m2,year (which gives 75–95 kWh/m2,year without Hot Tap Water).
+The total heat demand is approximately 25 kWh/m2,year.
+This heat demand is divided between reheating the supply air in the AHU, which uses approximately 6 kWh/m2,year to maintain the desired supply air temperature.
+The radiator system, which covers the heat demand for losses through the building envelope, which uses approximately 7 kWh/m2,year.
+The split between the AHU and the the radiator system depends on the airflow balance and the supply air temperature.
+In addition, the heat demand for window ventilation is estimated at 4 kWh/m2,year and is covered by the radiator system.
+The consumption of hot tap water in apartment buildings is standardized at 25 kWh/m2
+The normal use of household electricity is 30 kWh/m2.
+The normal indoor temperature in apartment buildings in Sweden during the heating season is 21°C.
+The heat loss per metre of hot water pipe with 60 mm insulation is 50 kWh per metre of pipe per year

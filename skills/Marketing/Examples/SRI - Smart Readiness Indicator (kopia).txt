@@ -1,0 +1,19 @@
+SRI - Smart Readiness Indicator
+Smart Readiness Indicator (SRI), som mäter byggnaders förmåga att förbättra energieffektiviteten och användarkomforten genom smart teknik, är anpassad till ISO 52000-1. Denna ISO-standard tillhandahåller ett allmänt ramverk för byggnaders energiprestanda, särskilt med fokus på energieffektivitet, förvaltning och prestandamått. ISO 52000-1 är en del av en serie standarder utvecklade under ISO 52000, som erbjuder riktlinjer för bedömning av byggnaders övergripande energiprestanda, inklusive aspekter som värme, kyla, ventilation, belysning och automation. SRI bygger på detta ramverk för att bedöma en byggnads "smarta" kapacitet i termer av hur dessa system interagerar för att förbättra energiprestanda och användarupplevelse.
+
+Vilka områden täcker en SRI-bedömning?
+En SRI-bedömning består av att utvärdera prestandan för "smarta färdiga tjänster" kategoriserade i följande 9 tekniska domäner: värme, kyla, tappvarmvatten, ventilation, belysning, dynamiskt klimatskal, el, elfordonsladdning, övervakning och kontroll.
+
+SRI bedömer byggnaders (eller byggnadsenheters) smarta beredskap i deras förmåga att utföra tre nyckelfunktioner:
+optimera energieffektivitet och övergripande prestanda under användning
+anpassa fastighetens system efter verksamhetsbehov
+anpassa sig till signaler från nätet (till exempel energiflexibilitet)
+
+Om man inte mäter energi, effekt, verksamhet och kan styra ner vid effektbrist på ett aktivt sätt, uppfyller man inte kraven enligt SRI.
+
+Vill du att dina fastigheter skall vara smarta och beredda på framtidens behov?
+
+Börja med att samla in energi- effekt- och klimatdata i dina byggnader med Enkey Building Insight!
+Enkey levererar en automatiserad PropTech-lösning som effektivt samlar in mätdata i byggnader och hjälper därigenom fastighetsägare att öka sin produktivitet samtidigt som resursanvändningen minskar och inomhuskvaliteten förbättras. Enkey är fastighetsägarnas IoT-partner för att skapa hållbara byggnader.
+
+https://enkey.io

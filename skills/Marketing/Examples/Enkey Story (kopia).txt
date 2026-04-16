@@ -1,0 +1,4 @@
+Enkey Story
+Robert Rennel med bakgrund från BMS-branschen var frustrerad över att så mycket data finns men så lite går att använda för insikter för att förbättra byggnaders.
+Kalle Hultman hade under flera år försökt sälja smarta sensorer och smarta mätare till fastighetsägare, men aldrig lyckats med det på samma sätt som han gjort hos industri och infrastrukturbolag.
+Johan Glimskog som utvecklat flertalet IT-system åt fastighetsägare men inte fått utveckla potentialen av Agentic platforms in facility management.

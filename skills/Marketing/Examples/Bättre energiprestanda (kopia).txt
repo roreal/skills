@@ -1,0 +1,6 @@
+Bättre energiprestanda
+Hur Enkeys smarta mätare bidrog till bättre energiprestanda.
+En kund som installerade Enkeys elmätare upptäckte att kunden "stal" ström i huset.
+Det var en liten datahall som byggts och utan fastighetsägarens vetskap kopplades omätt ström in i datahallen.
+En extra elmätare från Enkey installerades och kunden debiterades för verklig förbrukning.
+Det som också hände var att fastighetens elenergi minskade i samma storlek, vilket bidrog till att husets driftnetto ökade och energiprestanda förbättrades.

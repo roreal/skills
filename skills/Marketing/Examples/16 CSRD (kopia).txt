@@ -1,0 +1,44 @@
+Hur påverkas fastighetsägare av direktivet om hållbarhetsrapportering (CSRD)?
+
+Syftet med denna artikel är att ge fastighetsägare större insikt om hur de kommer påverkas av CSRD, Corporate Sustainability Reporting Directive ur ett energi- och klimatperspektiv.
+ 
+2022 antog Europaparlamentet EU-taxonomiförordningen och CSRD-rapportering vilket innebär att EU officiellt utökar hållbarhetsrapporteringen som en del av sin övergång till en grön och hållbar ekonomi.
+De nya reglerna, som "stora företag" måste följa, kommer att tvinga fler organisationer att ge mer detaljerad rapportering om bland annat hållbarhetsfrågor.
+De företag som definieras som "stora företag", uppfyller något av nedanstående kriterier:
+>€40M i omsättning
+>€20M i tillgångar
+>250 anställda 
+
+Vad är CSRD?
+Genom införandet av CSRD sätter EU likhetstecken mellan hållbarhetsrapportering och finansiell rapportering.
+Det nya ramverket rullas ut i ett stegvis tillvägagångssätt från 2024. Det kommer att kräva att fastighetsägare rapporterar om hur hållbarhetsfrågor, såsom klimatförändringar, påverkar deras verksamhet och hur deras verksamhet i sin tur påverkar människor och planeten – en unik princip som kallas "dubbel väsentlighet".
+
+Hur påverkar förändringarna mig som fastighetsägare?
+Fastighetsägare  kommer att behöva vara mer detaljerade i sin hållbarhetsrapportering, som täcker frågor som miljö, sociala och mänskliga rättigheter samt bolagsstyrning.
+Fastighetsägare måste publicera sin information i hållbarhetsrapporter.
+Rapporterna måste bland annat omfatta miljöfrågor – inklusive vetenskapsbaserade mål, EU-taxonomin och klimatriskrelaterad rapportering.
+
+Det ställs krav på att hållbarhetsrapporterna är:
+Kvalitativa och kvantitativa.
+Framåt- och tillbakablickande.
+Baserat på kort, medellång och lång sikt.
+
+CSRD ställer också krav på att en oberoende revisor verifierar att rapporteringen följer gällande hållbarhetsrapporteringsstandarder. Detta för att säkerställa att informationen är korrekt och tillförlitlig.
+
+Bättre tillgänglighet till information är också en del av det nya direktivet och företag kommer att behöva se till att deras information förs in och finns tillgänglig i en öppen databas.
+
+Möjligheterna med CSRD
+Istället för att bara se CSRD som ett obligatoriskt krav finns det flera fördelar för fastighetsägare:
+Fastighetsägare spelar en avgörande roll i omställningen till en resurseffektiv ekonomi med låga koldioxidutsläpp, då fastigheter står för stora utsläpp.
+Effektivisering och transparens är avgörande för all rapportering. CSRD minskar risken för greenwashing och ger klarhet för externa intressenter, oavsett om det är investerare eller konsumenter.
+Rapportering ger ökad trovärdighet och möjlighet att attrahera externa investeringar och jämförbarhet på marknaden.
+Regleringar som CSRD gör klimatrapportering till standardpraxis och en del av vardagen. Det betyder att fastighetsägare kan spela en roll i att vidta konkreta klimatåtgärder och bevisa att deras planer är baserade på vetenskapsbaserade parametrar, samtidigt som det blir en spårbarhet i genomförandet.
+
+De som investerar i fastigheter måste i allt högre grad förstå vilken påverkan fastigheter har på miljön och människorna. Hyresgästerna behöver också mer information för att göra hållbara val. Så hållbarhetsinformation måste i allt högre grad vara jämförbar, pålitlig och tillförlitlig, inte bara för att bygga upp förtroende för den gröna investeringsmarknaden, utan också för att skapa större offentligt ansvar.
+
+Även om utökad hållbarhetsrapportering kan kännas som en extra arbetsbörda för många fastighetsägare, är det viktigt att vidta den här typen av åtgärder om vi ska åstadkomma den typ av förändring vi behöver för att nå en framtid med låga koldioxidutsläpp.
+
+Hur kan Enkey hjälpa fastighetsägare med CSRD-rapporteringen?
+Enkey levererar ett brukaranpassat, systemorienterat och datadrivet övervaknings- och uppföljningssystem för byggnadsprestanda.
+Det är en automatiserad PropTech-lösning som effektivt samlar in energi- och klimattdata i byggnader och hjälper därigenom fastighetsägare med kvantitativ och kvalitativ datainsamling enligt CSRD och EFRAG. Ekeys datamodell följer Brick Schema och RealEstateCore API vilket gör dina data i Enkey till en del av din byggnads digitala tvilling.
+Enkey är fastighetsägarnas IoT-partner för att skapa hållbara byggnader.

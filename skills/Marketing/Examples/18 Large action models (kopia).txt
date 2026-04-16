@@ -1,0 +1,15 @@
+"Large action models" är en term som kan användas för att beskriva modeller inom maskininlärning, specifikt inom områden som reinforcement learning (förstärkt inlärning) eller agentbaserad modellering, där modellen tar beslut eller utför handlingar baserat på givna observationer och mål.
+
+Inom förstärkt inlärning kan en "large action model" referera till en modell som är kapabel att hantera en stor eller komplex handlingrymd. Handlingrymden avser alla möjliga handlingar som en agent kan utföra i ett givet problem. Stora actionmodeller kan ha en stor mängd möjliga handlingar att välja mellan och kan behöva hantera komplexa situationer för att välja den bästa handlingen baserat på den givna observationen och målet.
+
+Exempel på situationer där "large action models" kan vara relevanta inkluderar autonoma system som autonoma fordon, robotar eller datorspelsagenter, där modellen måste fatta beslut om en rad olika åtgärder för att uppnå sitt mål i en dynamisk och ibland komplex miljö.
+
+Det är viktigt att notera att hantering av stora handlingrymder kan vara en utmaning för maskininlärningsmodeller på grund av ökande dimensioner och komplexitet, vilket kan kräva avancerade algoritmer och resurskrävande beräkningar för att vara effektiva.
+
+Amy Webb
+
+
+
+
+
+

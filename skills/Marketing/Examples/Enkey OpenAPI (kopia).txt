@@ -1,0 +1,25 @@
+Större flexibilitet och framtidssäkerhet för fastighetsägare med Enkey OpenAPI!
+
+Vi på Enkey är glada att kunna meddela en viktig nyhet för alla fastighetsägare som strävar efter smartare och mer hållbar fastighetsförvaltning! Nu är det möjligt att kommunicera med Enkey Building Insight® via OpenAPI.
+Detta, i kombination med Enkeys befintliga stöd för RealEstateCore och Brick Schema, öppnar upp betydande möjligheter.
+Vad innebär detta för dig som fastighetsägare?
+Användningen av OpenAPI, RealEstateCore och Brick Schema i Enkey Building Insight® ger flera viktiga fördelar:
+• Ökad interoperabilitet och standardisering
+OpenAPI skapar ett gemensamt API-gränssnitt som förenklar integrationen mellan olika system och plattformar, vilket möjliggör en strömlinjeformad koppling av olika byggnadsautomations- och energihanteringssystem. RealEstateCore ger en enhetlig struktur på fastighetsdata, vilket gör den enklare att hantera, analysera och dela. Brick Ontology erbjuder en modell för att beskriva byggnadsautomation och energiövervakning, vilket gör att system kan förstå och interagera mer intelligent med byggnadsinfrastrukturen.
+• Effektivare integration med externa system
+Med OpenAPI kan du effektivt samla in och bearbeta data från olika källor, inklusive byggnadsautomationssystem, IoT-enheter och sensorer. Tillsammans med RealEstateCore och Brick Ontology kan du enkelt utbyta information om byggnader, energi och drift med andra aktörer.
+• Möjliggör framtida automatisering och smarta byggnader
+Brick Ontology ger avancerade automatiseringsmöjligheter där system kan agera baserat på realtidsdata för att optimera den energi och effektanvändning i dina fastigheter.
+• Bättre datahantering och analyser
+RealEstateCore och Brick Ontology strukturerar din fastighetsdata på ett standardiserat sätt, vilket underlättar insamling, bearbetning och analys av data om byggnaden och dess funktioner. Detta stöder optimering av drift, underhåll och energianvändning, samt förenklar hållbarhetsrapportering. Enkey Building Insight® samlar in kvalitetssäkrad och spårbar data på detaljnivå.
+• Förbättrad skalbarhet och framtidssäkring
+Eftersom OpenAPI, RealEstateCore och Brick är öppna standarder kan systemen skalas och utvecklas utan att vara bundna till en specifik leverantör eller plattform. Detta gör att du enkelt kan lägga till nya tjänster eller teknologier.
+• Förbättrad hållbarhet och rapportering
+Dessa ontologier gör det lättare att följa och rapportera om byggnadernas energieffektivitet och hållbarhetsmål. Du kan enkelt mäta och följa upp indikatorer som energiåtgång och koldioxidutsläpp. Enkey Building Insight® visualiserar energianvändning och ger en överblick över din totala miljöpåverkan, och kan underlätta rapportering enligt CSRD-direktivet avsevärt.
+
+Enkey Building Insight® är en automatiserad PropTech-lösning som effektivt samlar in energi- och klimatdata i byggnader. Det hjälper fastighetsägare att arbeta proaktivt med energimål och klimatkrav, agera på avvikelser, förbättra processer och följa upp mål. Enkey Building Insight® är ett datadrivet system för övervakning och uppföljning av byggnadsprestanda och kan hjälpa till med systematisk energieffektivisering.
+
+Sammanfattningsvis skapar användningen av dessa standarder en teknologiskt avancerad och skalbar infrastruktur som kan optimera fastighetsdriften, minska kostnader och bidra till hållbarhetsmål.
+Vill du veta mer om hur Enkey Building Insight® kan hjälpa dig att ta din fastighetsförvaltning till nästa nivå med öppna standarder?
+Kontakta oss på Enkey via http://enkey.io eller hello@enkey.io.
+#PropTech #Fastigheter #Digitalisering #Energi #Hållbarhet #CSRD #OpenAPI #RealEstateCore #BrickSchema #Enkey #BuildingInsight

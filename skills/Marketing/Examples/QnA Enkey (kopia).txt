@@ -1,0 +1,11 @@
+F: Vad är Enkey?
+S: Enkey möter fastighetsägarnas framtida krav på skalbara Proptech-lösningar och myndigheternas krav på energirapportering.
+
+F: Vad säljer Enkey?
+S: Enkey säljer en tjänst, Building Insight, för energi- och klimatuppföljning av fastigheter, med energi- och klimatsensorer som driftsätts automatiskt mot Building Insight.
+
+F: Varför skall jag som fastighetsägare köpa Enkeys tjänster och produkter.
+S. Om jag som fastighetsägare vill uppfylla Sveriges etappmål till 2030, krävs kvalitetssäkrat data avseende dina byggnaders energi och klimat. Det är förenat med stora kvalitetsbrister och är mycket resurskrävande att göra detta med dagens metoder; manuell avläsning, webscraping och uppkoppling till diverse informations-tjänster.
+
+F: Vad skiljer Enkey från Ambiductor?
+S: Ambiductor inriktar sig mot process och VA-system, samt IMD i byggnader. Enkey inriktar sig till fastighetsägare som vill få kontroll över sina byggnaders miljöpåverkan och inomhusklimat, samt minska sin klimatpåverkan.

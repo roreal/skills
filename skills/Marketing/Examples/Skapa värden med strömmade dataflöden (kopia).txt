@@ -1,0 +1,19 @@
+Skapa värden genom att förena strömmande dataflöden med maskininlärning.
+
+
+Maskininlärningsmodeller blir mer sofistikerade och effektiva.
+På Enkey bygger och tränar vi AI-drivna applikationer, så kallade Autonoma Agenter, för att lösa utmaningarna med vårt strömmande dataflöde.
+
+
+Vad är ett strömmande dataflöde?
+Strömmande dataflöde är en serverlös datainsamling och replikeringstjänst som gör data tillgängligt från en mängd olika källor med låg fördröjning.
+
+Vårt dataflöde skapas i sensorer, skickas via gateways i fastigheterna och överför varje förändring av data i datakällan - IoT-sensorerna till molnpattformen Enkey Building Insight(R).
+
+Våra autonoma agenter utför till exempel en realtidsanalys och filtrerar, sorterar, förutsäger, klassificerar och 
+optimerar strömmande dataflödet  
+
+Enkey Building Insight(R) berikar dataströmmen med fastighetsrelaterad information som gör att en digital tvilling blir tillgänglig.
+
+Från Enkey Building Insight(R) kan sedan berikad data abonneras via olika API:er, såsom GraphQL, REST m.m.
+

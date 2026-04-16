@@ -1,0 +1,39 @@
+GRESB rapport 2024
+
+GRESB släppte sin rapport 2024 Real Estate Assessment Results den 15 oktober 2024. Detta markerar det 15:e året av GRESB:s roll i benchmarking av ESG-prestanda för reala tillgångar, vilket visar branschens framsteg mot hållbarhet. Resultaten belyser deltagandet av ett rekordstort antal fastighets- och infrastrukturenheter, vilket återspeglar växande investerarförväntningar och regulatoriskt tryck
+
+Rapporten belyser positiva trender inom flera nyckelområden:
+GRESB Real Estate Benchmark täcker nu 7 biljoner USD i förvaltat kapital globalt, med fastigheter i 15 sektorer och 80 marknader.
+Antalet deltagare som sätter nettonollmål har ökat med 15 % och uppgår nu till 65 %.
+
+Vad är GRESB?
+
+GRESB (Global Real Estate Sustainability Benchmark) är en internationellt erkänd organisation som utvärderar och betygsätter hållbarhetsprestanda för fastighets- och infrastrukturbolag, fonder och tillgångar. GRESB skapades 2009 och erbjuder standardiserade och verifierade bedömningsverktyg för att hjälpa investerare att förstå hur hållbart deras fastighets- och infrastrukturtillgångar hanteras.
+
+Hur gör GRESB sin bedömning?
+GRESB bedömning fokuserar på olika aspekter av miljömässig, social och styrningsrelaterad (ESG) prestanda, som inkluderar energianvändning, vattenförbrukning, koldioxidutsläpp, hållbarhet i byggnader och styrning av sociala aspekter. Betygen används av investerare för att fatta mer informerade beslut och för att förbättra hållbarheten inom sina portföljer.
+
+För att uppfylla rapporteringskraven för fastighetssektorn inom GRESB ramverk behövs mätpunkter och mätare för att övervaka:
+
+Energianvändning
+Elförbrukning: Mätare som registrerar fastighetens elförbrukning, både total och för specifika områden eller system.
+Fjärrvärme/fjärrkyla: Mätare för att övervaka användning av fjärrvärme och fjärrkyla.
+Gasförbrukning: Mätare för att mäta gasförbrukning i byggnader med gassystem (t.ex. för uppvärmning eller varmvatten).
+Förnybar energi: Mätare som övervakar produktion från solpaneler, vindkraftverk eller andra förnybara energikällor på fastigheten.
+
+Vattenanvändning
+Vattenförbrukning: Mätare som registrerar total vattenförbrukning i fastigheten.
+
+Inomhusklimat och luftkvalitet
+Temperatur och luftfuktighet: Sensorer som övervakar inomhusklimatet för att säkerställa komfort och energieffektivitet.
+CO2-halter: Mätare för att övervaka koldioxidhalter inomhus, särskilt i arbetsmiljöer eller offentliga utrymmen.
+Partikelmätare: Mätare som registrerar luftburna partiklar (PM2.5, PM10) för att övervaka luftkvaliteten.
+
+GRESB-rapporten 2024 Real Estate Assessment Results hittar du här: https://www.gresb.com/nl-en/2024-real-estate-assessment-results/
+
+Är du intresserad av hur du på ett enkelt sätt kan mäta mer i dina befintliga byggnader för att lättare uppnå regulatoriska krav och myndighetskrav?
+
+Kontakta oss genom:
+https://enkey.io
+hello@enkey.io
+https://www.linkedin.com/company/enkey-io/
