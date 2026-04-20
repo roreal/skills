@@ -27,4 +27,4 @@ Bocka i User Credentials
 18. Gå till Network server device ../#networkserver/device
 klicka på "Add".
 19. Fråga i vilken mapp krypteringsnycklarna finns.
-20. Öppna filerna 
+20. Öppna excel-filerna som heter "108675 - Enkey AB - LR210 reläkontroll x2 + P1 HAN-portsomvandlare" elle liknande. Beroende på givartyp så skall formuläret fyllas i lite olika.
