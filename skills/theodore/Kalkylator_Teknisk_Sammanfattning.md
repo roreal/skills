@@ -1,6 +1,6 @@
 # Enkey Energipotential-kalkylator — teknisk sammanfattning
 
-**Version:** 1.1 (marketing-v26.5.719, 2026-05-26)  
+**Version:** 1.2 (marketing-v26.5.722, 2026-05-27)  
 **URL:** https://enkey.io/kalkylator  
 **Kod:** `neptune-marketing/src/utils/energiPotential.ts` + `KalkylatorPage.tsx`
 
@@ -131,11 +131,18 @@ bruttobesparing/år = påverkbar energi (MWh) × 1 100 kr/MWh × besparingsproce
 
 ## 6. Abonnemang (internt, visas ej publikt)
 
-```
-abonnemang = min(max(6 000, påverkbar MWh × kr/MWh), bruttobesparing × 0,45)
-```
+Tre kommersiella segment med olika formler:
 
-Value-share-tak på 45 % skyddar mot orimliga abonnemang i små fastigheter.
+| Segment | Villkor | Formel |
+|---|---|---|
+| **Small** | 1 UC och <500 MWh påverkbar | `min(max(9 000, MWh×50), gross×35%, 18 000)` |
+| **Medium** | 1–2 UC och 500–1 500 MWh | `max(6 000, min(score-raw, gross×40%))` |
+| **Large** | >1 500 MWh eller >2 UC | `max(6 000, min(score-raw, gross×45%))` |
+
+Small har flexibelt minimum (value-share kan gå under 9 000 kr i extremfall).  
+Medium/Large har **absolut minimum 6 000 kr** — value-share-cap kan inte underskridas.
+
+### Score-baserat kr/MWh-pris (Medium & Large)
 
 | Optimate Score | kr/MWh (lowerbound) |
 |---|---:|
@@ -211,6 +218,18 @@ Visas i resultatkort som en färgad badge.
 ## 11. Kontaktformulär
 
 Visas alltid under resultatet. Skickar e-post med alla beräkningsparametrar och resultat till hello@enkey.io.
+
+---
+
+## 11b. Schablonsänkning vid värmeåtervinning
+
+Om `hasHeatRecovery = true` och ingen faktisk energi angetts reduceras schablonen med 15 %:
+
+```
+totalMwh = schablon × 0,85
+```
+
+Kombineras med `confidence = 'low'` och varningsruta i resultatet.
 
 ---
 
