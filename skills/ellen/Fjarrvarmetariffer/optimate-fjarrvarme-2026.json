@@ -2,7 +2,7 @@
   "schema_version": "0.1.3",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-02",
+  "as_of": "2026-09-06",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
