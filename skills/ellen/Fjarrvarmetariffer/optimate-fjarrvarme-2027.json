@@ -1,0 +1,813 @@
+{
+  "schema_version": "0.1.3",
+  "dataset_id": "optimate-prisdialogen-district-heating-2027",
+  "language": "sv-SE",
+  "as_of": "2026-09-07",
+  "target_price_year": 2027,
+  "time_zone": "Europe/Stockholm",
+  "status": "reviewable_tariff_catalog_not_production_calculator",
+  "scope": {
+    "member_registry_url": "https://www.prisdialogen.se/medlemmar/",
+    "customers": [
+      "business",
+      "housing_association"
+    ],
+    "coverage": "Samtliga 53 medlems-/områdesposter i medlemsförteckningen. Prisdata där extraherade; inte alla specialavtal, produkter eller nät garanteras täckta.",
+    "excluded": [
+      "Individuellt förhandlade avtal",
+      "Anslutningskostnader",
+      "Villatariffer som endast gäller konsumenter",
+      "Prognoser för 2027–2028 som aktuella priser"
+    ]
+  },
+  "integration_contract": {
+    "member_key": "members[].id",
+    "tariff_key": "tariffs[].id",
+    "source_join": "source_refs[].source_id -> sources[].id",
+    "unknown_value": null,
+    "unknown_semantics": "null eller uteblivet fält betyder okänt/ej extraherat; aldrig automatiskt noll.",
+    "month_order": "energy.rates: januari till december, index 0–11",
+    "money": "SEK; kontrollera vat_basis per tariff. Energipriser normaliserade till SEK/MWh.",
+    "capacity": "billing_basis har angiven basis_unit. kWh/day är dygnsenergi och får inte behandlas som kW. Varje bands fixed och variable använder rate_period.",
+    "bands": "Originalintervall bevaras. Välj supplier_confirmed_band_id; intervallsträngar får inte automatiskt parsas till produktionsgränser.",
+    "formula_safety": "Formler är dokumentation. Implementera typade beräkningsfunktioner; använd inte eval.",
+    "validation_gate": [
+      "Kontrollera price_status och issues före aktivering.",
+      "Bekräfta moms, tidsenhet, periodisering, gruppgränser och saknade komponenter.",
+      "Mappa kunden till nät, produkt och prisgrupp via avtal/faktura.",
+      "Implementera faktiska regler för debiterbar effekt, övertrassering och rabatter.",
+      "Jämför beräknade fakturor med leverantörens fakturor, inklusive vinter/sommar och gränsfall."
+    ],
+    "currency_precision": "Decimalaritmetik; avrundning enligt leverantörsvillkor, ej generell avrundning per delsteg.",
+    "freshness": "Årsetikett räcker inte. Dokument kan innehålla föreslagna priser eller äldre deltabeller; status följer innehållet. Nya revisioner måste kontrolleras före produktionsaktivering.",
+    "investigation_status": "utreds: frågor/villkor kvarstår; detta innebär inte aktiv utredning eller automatisk bevakning. lost: den enskilda frågan är löst, inte att hela tariffen är produktionsklar."
+  },
+  "coverage_summary": {
+    "member_registry_entries": 53,
+    "tariffs": 2,
+    "members_with_energy_rates": 2,
+    "members_missing_final_rates": [
+      "borlange-energi",
+      "e-on-jarfalla",
+      "e-on-malmo",
+      "eskilstuna-energi-och-miljo",
+      "falu-energi-vatten",
+      "finspangs-tekniska-verk",
+      "gavle-energi",
+      "goteborg-energi",
+      "gotlands-energi",
+      "habo-energi",
+      "halmstads-energi-och-miljo",
+      "harnosand-energi-miljo",
+      "hassleholm-miljo",
+      "jamtkraft",
+      "jonkoping-energi",
+      "karlstads-energi",
+      "kils-energi",
+      "kraftringen",
+      "lidkoping-energi",
+      "lulea-energi",
+      "malarenergi",
+      "mjolby-svartadalen-energi",
+      "molndal-energi",
+      "navirum-energi-norrkoping-och-soderkoping",
+      "navirum-energi-orebro-kumla-och-hallsberg",
+      "nevel",
+      "norrenergi",
+      "oresundskraft",
+      "ovik-energi",
+      "partille-energi",
+      "piteenergi",
+      "sandviken-energi",
+      "skelleftea-kraft",
+      "skovde-energi",
+      "soderhamn-nara",
+      "sodertorns-fjarrvarme",
+      "stockholm-exergi",
+      "sundsvall-energi",
+      "tekniska-verken-katrineholm",
+      "tekniska-verken-linkoping",
+      "telge-nat",
+      "temab-fjarrvarme",
+      "trollhattan-energi",
+      "umea-energi",
+      "vanerenergi",
+      "vattenfall-haninge-tyreso-alta-och-gustavsberg",
+      "vattenfall-motala-och-askersund",
+      "vattenfall-nykoping",
+      "vattenfall-uppsala",
+      "vattenfall-vanersborg",
+      "vb-energi"
+    ],
+    "price_status_counts": {
+      "published_2027": 2
+    },
+    "production_ready_tariffs": 0,
+    "information_request_status_counts": {}
+  },
+  "sources": [
+    {
+      "id": "00_0-2027",
+      "title": "Prisändringsmodell 2026 (pdf) — avser 2027 års priser",
+      "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2026-Boras.pdf",
+      "retrieved_on": "2026-09-07",
+      "sha256": "b8b6a12bcd52f6f81e098a49fb5435afd82a30335420985c80e9b177a7cd0efa",
+      "kind": "supplier_document_hosted_by_prisdialogen",
+      "note_sv": "Prisdialogens sidetikett anger samrådsåret, inte prisåret — dokumentet gäller för året efter det märkta året. Bekräftat i dokumentets egen rubrik 'NORMALPRISLISTA FJÄRRVÄRME FÖRETAGSKUNDER (2027 års priser)' och i löptexten 'Prisförändring 2027 ... från 2026 till 2027', samt oberoende av Prisdialogens aktuellt-inlägg 2026-08-25."
+    },
+    {
+      "id": "02_0-2027",
+      "title": "Prisändringsmodell 2026 (pdf) — avser 2027 års priser",
+      "url": "https://www.prisdialogen.se/wp-content/uploads/2025/08/Prisandringsmodell-2026-C4-Energi-1.pdf",
+      "retrieved_on": "2026-09-07",
+      "sha256": "e9c3ce9696b4ba60740fd24f4cbf1006d18aac8313e6d975b38e5801443c398f",
+      "kind": "supplier_document_hosted_by_prisdialogen",
+      "note_sv": "Samma årsetikett-konvention som Borås — dokumentet avser 2027 års priser (bilaga 8, 'Prislista 2027'; löptext 'Från och med den 1 januari 2027 höjs fjärrvärmepriset')."
+    }
+  ],
+  "members": [
+    {
+      "id": "boras-energi-och-miljo",
+      "name": "Borås Energi och Miljö",
+      "source_ids": [
+        "00_0-2027"
+      ],
+      "tariff_ids": [
+        "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2027"
+      ],
+      "coverage_status": "rates_extracted",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "borlange-energi",
+      "name": "Borlänge Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "c4-energi",
+      "name": "C4 Energi",
+      "source_ids": [
+        "02_0-2027"
+      ],
+      "tariff_ids": [
+        "c4-energi-kristianstad-2027"
+      ],
+      "coverage_status": "rates_extracted",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "e-on-jarfalla",
+      "name": "E.ON - Järfälla",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "e-on-malmo",
+      "name": "E.ON - Malmö",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "eskilstuna-energi-och-miljo",
+      "name": "Eskilstuna Energi och Miljö",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "falu-energi-vatten",
+      "name": "Falu Energi & Vatten",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "finspangs-tekniska-verk",
+      "name": "Finspångs Tekniska Verk",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "gavle-energi",
+      "name": "Gävle Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "goteborg-energi",
+      "name": "Göteborg Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "gotlands-energi",
+      "name": "Gotlands Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "habo-energi",
+      "name": "Habo Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "halmstads-energi-och-miljo",
+      "name": "Halmstads Energi och Miljö",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "harnosand-energi-miljo",
+      "name": "Härnösand Energi & Miljö",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "hassleholm-miljo",
+      "name": "Hässleholm Miljö",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "jamtkraft",
+      "name": "Jämtkraft",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "jonkoping-energi",
+      "name": "Jönköping Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "karlstads-energi",
+      "name": "Karlstads Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "kils-energi",
+      "name": "Kils Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "kraftringen",
+      "name": "Kraftringen",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "lidkoping-energi",
+      "name": "Lidköping Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "lulea-energi",
+      "name": "Luleå Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "malarenergi",
+      "name": "Mälarenergi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "mjolby-svartadalen-energi",
+      "name": "Mjölby Svartådalen Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "molndal-energi",
+      "name": "Mölndal Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "navirum-energi-norrkoping-och-soderkoping",
+      "name": "Navirum Energi - Norrköping och Söderköping",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "navirum-energi-orebro-kumla-och-hallsberg",
+      "name": "Navirum Energi - Örebro, Kumla och Hallsberg",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "nevel",
+      "name": "Nevel",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "norrenergi",
+      "name": "Norrenergi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "oresundskraft",
+      "name": "Öresundskraft",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "ovik-energi",
+      "name": "Övik Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "partille-energi",
+      "name": "Partille Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "piteenergi",
+      "name": "PiteEnergi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "sandviken-energi",
+      "name": "Sandviken Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "skelleftea-kraft",
+      "name": "Skellefteå Kraft",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "skovde-energi",
+      "name": "Skövde Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "soderhamn-nara",
+      "name": "Söderhamn Nära",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "sodertorns-fjarrvarme",
+      "name": "Södertörns Fjärrvärme",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "stockholm-exergi",
+      "name": "Stockholm Exergi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "sundsvall-energi",
+      "name": "Sundsvall Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "tekniska-verken-katrineholm",
+      "name": "Tekniska Verken - Katrineholm",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "tekniska-verken-linkoping",
+      "name": "Tekniska Verken - Linköping",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "telge-nat",
+      "name": "Telge Nät",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "temab-fjarrvarme",
+      "name": "TEMAB Fjärrvärme",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "trollhattan-energi",
+      "name": "Trollhättan Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "umea-energi",
+      "name": "Umeå Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vanerenergi",
+      "name": "VänerEnergi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vattenfall-haninge-tyreso-alta-och-gustavsberg",
+      "name": "Vattenfall - Haninge, Tyresö, Älta och Gustavsberg",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vattenfall-motala-och-askersund",
+      "name": "Vattenfall - Motala och Askersund",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vattenfall-nykoping",
+      "name": "Vattenfall - Nyköping",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vattenfall-uppsala",
+      "name": "Vattenfall - Uppsala",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vattenfall-vanersborg",
+      "name": "Vattenfall - Vänersborg",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    },
+    {
+      "id": "vb-energi",
+      "name": "VB Energi",
+      "source_ids": [],
+      "tariff_ids": [],
+      "coverage_status": "not_yet_available",
+      "network_coverage": "networks_and_products_listed_only; not_exhaustive"
+    }
+  ],
+  "tariffs": [
+    {
+      "id": "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2027",
+      "member_id": "boras-energi-och-miljo",
+      "network_or_product": "Borås, Sjömarken, Sandared, Dalsjöfors, Fristad",
+      "customer_scope": [
+        "business",
+        "housing_association"
+      ],
+      "price_year": 2027,
+      "valid_from": "2027-01-01",
+      "valid_to": null,
+      "price_status": "published_2027",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615,
+          615
+        ]
+      },
+      "capacity": {
+        "type": "heterogeneous_bands",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "rate_period": "year",
+        "bands": [
+          {
+            "id": "1",
+            "annual_energy_interval_MWh": "0–40",
+            "fixed_SEK": 580,
+            "variable": 370,
+            "basis_unit": "MWh_normal_year"
+          },
+          {
+            "id": "2",
+            "annual_energy_interval_MWh": "40–150",
+            "fixed_SEK": 690,
+            "variable": 365,
+            "basis_unit": "MWh_normal_year"
+          },
+          {
+            "id": "3",
+            "annual_energy_interval_MWh": "150–600",
+            "fixed_SEK": 530,
+            "variable": 54080,
+            "basis_unit": "m3/h"
+          },
+          {
+            "id": "4",
+            "annual_energy_interval_MWh": "600–2000",
+            "fixed_SEK": 10790,
+            "variable": 51580,
+            "basis_unit": "m3/h"
+          },
+          {
+            "id": "5",
+            "annual_energy_interval_MWh": "2000–7000",
+            "fixed_SEK": 114920,
+            "variable": 43950,
+            "basis_unit": "m3/h"
+          },
+          {
+            "id": "6",
+            "annual_energy_interval_MWh": ">7000",
+            "fixed_SEK": 313170,
+            "variable": 39810,
+            "basis_unit": "m3/h"
+          }
+        ],
+        "billing_basis_method": "Wn: medel av tre normalårskorrigerade år. Q: abonnerat maxflöde.",
+        "monthly_proration": null
+      },
+      "adjustments": [
+        {
+          "type": "optional_environmental_addon",
+          "name": "Bra Miljöval",
+          "rate": 32,
+          "unit": "SEK/MWh",
+          "source_page": 5
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "00_0-2027",
+          "pages": [
+            5,
+            6
+          ]
+        }
+      ],
+      "issues": [
+        "OCR-extraherat ur skannad bild (inget textlager i PDF:en) — siffrorna är korsvaliderade mot 2026-katalogens motsvarande fält och stämmer med den angivna prisökningen (+1,8%), men är inte manuellt dubbelkollade mot originaldokumentet sida för sida.",
+        "Två skilda kapacitetsbaser; välj prisgrupp från avtal.",
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
+        "Prisändring 2026→2027 enligt dokumentet: +1,8%. Prognos 2028 och målsättning 2029: +1–5% (ej bindande prisdata, endast prognos)."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "ocr_extraction_cross_validated_against_prior_year_no_manual_page_check",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "OCR-extraherat, inte manuellt sida-för-sida-kontrollerat mot originalet.",
+          "Två skilda kapacitetsbaser; välj prisgrupp från avtal.",
+          "Månadsperiodisering saknas eller behöver verifieras."
+        ]
+      }
+    },
+    {
+      "id": "c4-energi-kristianstad-2027",
+      "member_id": "c4-energi",
+      "network_or_product": "Kristianstad",
+      "customer_scope": [
+        "business",
+        "housing_association"
+      ],
+      "price_year": 2027,
+      "valid_from": "2027-01-01",
+      "valid_to": null,
+      "price_status": "published_2027",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          621,
+          621,
+          621,
+          433,
+          433,
+          433,
+          433,
+          433,
+          433,
+          433,
+          621,
+          621
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "year",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "0–2",
+            "fixed": 4241,
+            "variable": 0
+          },
+          {
+            "id": "2",
+            "source_interval": "3–49",
+            "fixed": 0,
+            "variable": 1346
+          },
+          {
+            "id": "3",
+            "source_interval": "50–99",
+            "fixed": 12080,
+            "variable": 1104
+          },
+          {
+            "id": "4",
+            "source_interval": "100–199",
+            "fixed": 16240,
+            "variable": 1063
+          },
+          {
+            "id": "5",
+            "source_interval": "200–499",
+            "fixed": 27200,
+            "variable": 1008
+          },
+          {
+            "id": "6",
+            "source_interval": ">500",
+            "fixed": 39890,
+            "variable": 983
+          }
+        ],
+        "billing_basis_method": "Högsta dygnsmedeleffekt senaste 12 månaderna; sidan anger lägsta debiteringseffekt 3 kW.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [],
+      "source_refs": [
+        {
+          "source_id": "02_0-2027",
+          "pages": [
+            15
+          ]
+        }
+      ],
+      "issues": [
+        "OCR-extraherat ur skannad bild (inget textlager i PDF:en) — siffrorna är korsvaliderade mot 2026-katalogens motsvarande fält och stämmer med den angivna prisökningen (+1,5%), men är inte manuellt dubbelkollade mot originaldokumentet sida för sida.",
+        "Exakt 500 kW saknar entydig grupp i publicerad tabell (samma anmärkning som 2026).",
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
+        "Prisändring 2026→2027 enligt dokumentet: +1,5%, jämnt fördelat över priskomponenterna. Prognos 2028–2029: +2–5% (ej bindande, endast prognos)."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "ocr_extraction_cross_validated_against_prior_year_no_manual_page_check",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "OCR-extraherat, inte manuellt sida-för-sida-kontrollerat mot originalet.",
+          "Exakt 500 kW saknar entydig grupp i tabellen.",
+          "Månadsperiodisering saknas eller behöver verifieras."
+        ]
+      }
+    }
+  ],
+  "validation_examples": [],
+  "website_review_summary": {
+    "reviewed_on": "2026-09-07",
+    "scope": "Endast Borås Energi och Miljö samt C4 Energi hittills — de två medlemmar som enligt Prisdialogens aktuellt-inlägg 2026-08-25 fått förnyat medlemskap och publicerat prisändringsmodeller för 2027 först. Övriga 51 medlemmar är ännu inte granskade för 2027 och saknar data i den här katalogen.",
+    "method": "PDF hämtad från prisdialogen.se, renderad till bild (poppler) och OCR-läst (tesseract, svenskt språkstöd) eftersom dokumenten är skannade bilder utan textlager. Siffrorna korsvaliderade mot 2026-katalogens motsvarande belopp och den i dokumenten angivna procentuella prisökningen.",
+    "internal_work_remaining": "Manuell sida-för-sida-kontroll av OCR-resultatet mot originaldokumenten. Bevakning av övriga 51 medlemmar när de publicerar sina 2027-prisändringsmodeller — se det schemalagda jobbet prisdialogen-bevakning i enkey-agents."
+  },
+  "remaining_information_requests": [],
+  "change_log": [
+    {
+      "date": "2026-09-07",
+      "revision": "0.1.0",
+      "changes": [
+        "Ny katalog för prisår 2027. Skapad med samma schema som 2026-katalogen. Endast Borås Energi och Miljö samt C4 Energi ifyllda hittills — de enda två medlemmar som publicerat 2027-prisändringsmodeller vid skapandet."
+      ]
+    }
+  ],
+  "resolved_information_requests": []
+}
