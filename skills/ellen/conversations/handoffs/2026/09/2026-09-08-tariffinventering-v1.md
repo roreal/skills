@@ -11,7 +11,7 @@ v4_delivered_at: "2026-09-08T13:45:00+02:00"
 v5_delivered_at: "2026-09-08T14:58:36+02:00"
 v6_delivered_at: "2026-09-08T15:32:00+02:00"
 v7_delivered_at: "2026-09-08T16:10:00+02:00"
-v8_delivered_at: "PENDING_COMMIT_TIME"
+v8_delivered_at: "2026-09-08T17:20:42+02:00"
 latest_review: "2026-09-08-007"
 scope: "Fullständig v1–v8-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
