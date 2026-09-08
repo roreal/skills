@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T12:05:00+02:00"
+last_updated: "2026-09-08T13:10:40+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v3-delivered-awaiting-review
+status: v3-reviewed-changes-required-awaiting-v4
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -273,7 +273,61 @@ för första gången, den maskinspecifika länken i teknisk-kartläggningen rät
 portabel relativ länk. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind
 ändrad. Ingen ny tariff aktiverad. Väntar på Codex omgranskning.
 
+### Robert — användare
+
+> Nu är claude igenom
+
+### Codex — assistent
+
+Codex omgranskade V3 i den lokala committen `7b2db36`. Kontrollmängden är nu formellt
+komplett: exakt 78 unika katalog-ID:n, 14 räknade variant-ID:n och totalen 92; Eskilstuna,
+säsongsmånaderna och batchordningen är rättade. Granskningen fick ändå
+`changes-required`. E.ON/Navirums 36-månadersvariant beskriver felaktigt ett rullande
+temperaturmedel i stället för tre högsta dygnsmedeleffekter, batch 1 saknar VänerEnergis
+helårsflöde, batch 5c kräver felaktigt effekt för Mälarenergi 2–4 lägenheter och batch 3
+tappar Kraftringens minimifaktor `max(0,2; …)`. Variantkällor, Finspångs disposition,
+Sundsvall/Stockholms lägesstatus och Borås batchräkning behöver också bli entydiga.
+Committen är fortfarande inte självbärande eftersom den incheckade indexen länkar till
+35 ospårade dokument. Fullständig omgranskning:
+[`2026-09-08-003`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v3.md).
+Claude har fått en avgränsad V4-beställning. Ingen implementation eller push godkändes.
+
+### Claude — assistent
+
+Claude levererade
+[`tariffinventering-v4.md`](../../../../Fjarrvarmetariffer/tariffinventering-v4.md) och
+[`batchplan-v4.md`](../../../../Fjarrvarmetariffer/batchplan-v4.md) som svar på samtliga
+sex fynd i omgranskning `2026-09-08-003`. E.ON/Navirums 36-månadersvariant rättad från fel
+fysisk storhet (verifieringslistan verifierades direkt: "medelvärdet av de tre högsta
+dygnsmedeleffekterna under de senaste 36 månaderna", inte framledningstemperatur) till
+leverantörsvärde-mönstret — samma tre fält som huvudfallet, ingen ny tidsseriemotor.
+Kraftringens golv `max(0,2; 0,2+(Tf−60)×0,02)` separerad från E.ON/Navirums golvfria formel
+i en parametriserad motortyp (verifierat direkt mot katalog-JSON: E.ON/Navirums
+`correction_formula` är `null`, Kraftringens `candidate_factor` bär redan den exakta
+strängen). VänerEnergis och Mälarenergis batchtext rättad till exakt inventeringens
+obligatoriska fält. Finspångs spetsvärmetillägg flyttad till `blocked_external_info`
+(utlösande kunder/perioder inte kartlagda — bröt mot `ready`-definitionen); ny fördelning
+9/5 för varianterna (54/31 för hela kontrollmängden, oförändrad totalsumma 92). `source_id`
+och aktuell officiell 2026-länk på alla 14 varianter; sex bastariffrader (E.ON Järfälla ×2,
+E.ON Malmö ×2, Navirum ×4, VänerEnergi) rättade från en gammal 2025-URL till den källa
+verifieringslistan faktiskt bar godkännandet mot. Sundsvall Indals och Stockholm Exergis
+inmatningsläge fryst konsekvent (Sundsvall: mwh/kr/schablon, legacyväg, aldrig
+kontraktsgated; Stockholm Exergi: kr/schablon blockerade, inte "avgörs vid
+implementation"). Borås-batchens semantik förtydligad: kontrollmängden är uttryckligen 78
+bastariffer + 14 räknade varianttäckningskrav.
+
+Dokumentationscommitten spårar för första gången HELA `skills/ellen/conversations/`-trädet
+i git (42 filer: reviews/, proposals/, sessions/, handoffs/, templates/, README.md) —
+`index.md` är projektets huvudaggregator och länkar i praktiken till nästan alla, så en
+explicit fillista landade på att spåra hela katalogen i stället för att välja ut enskilda
+filer. Ingen annan ospårad Ellen-arbetskopia (PDF-prislistor, `AGENTS.md`, `SKILL.md`,
+`../milesight`-pekaren m.fl.) fångades. Ingen produktkod, tariffdata, genererad fil eller
+produktionsgrind ändrad. Ingen ny tariff aktiverad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-08T13:45:00+02:00` – Claude levererade tariffinventering v4.0 och batchplan v4.0 som svar på samtliga fynd i omgranskning `2026-09-08-003`: E.ON/Navirums 36-månadersvariant rättad från fel fysisk storhet (framledningstemperatur) till den verifierade regeln (medelvärde av de tre högsta dygnsmedeleffekterna, kW) med leverantörsvärde-mönstret som valt kontrakt, ingen ny tidsseriemotor; Kraftringens golvbegränsade flödesfaktor separerad från E.ON/Navirums i en parametriserad motortyp med två regelvarianter; batch 1 (VänerEnergi) och batch 5c (Mälarenergi, ingen kapacitetsdel) rättade till exakt inventeringens indata; Finspångs spetsvärmetillägg flyttat till `blocked_external_info` (utlösningsvillkor inte kartlagt, ny fördelning 9/5 för varianterna); `source_id` + aktuell officiell länk på alla 14 varianter och sex bastariffrader (E.ON/Navirum ×6, VänerEnergi) rättade från gammal 2025-URL till aktuell 2026-källa; Sundsvall Indal och Stockholm Exergis inmatningslägen frysta konsekvent i både inventering och batchplan; Borås-batchens semantik förtydligad (78 bas + 14 räknade varianttäckningskrav). Dokumentationscommitten spårar för första gången HELA `skills/ellen/conversations/`-trädet i git (42 filer), inte bara de senast citerade granskningarna. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-08T13:10:40+02:00` – Codex omgranskade V3 i `skills@7b2db36` i granskning `2026-09-08-003`. Kontrollmängden 78 bas + 14 varianter är komplett och flera V2-fynd är lösta, men E.ON/Navirums felaktiga 36-månadersindata, Kraftringens tappade minimifaktor, VänerEnergi/Mälarenergis batchindata, variantproveniens/Finspångs status, lägesmotsägelser, Borås batchräkning och 35 ospårade indexmål kräver V4. Ingen implementation eller push godkänd.
 
 - `2026-09-08T12:05:00+02:00` – Claude levererade tariffinventering v3.0 och batchplan v3.0 som svar på samtliga fynd i omgranskning `2026-09-08-002`: 16 flödes-/temperaturluckor stängda med tariffvisa `months`-listor (inte ett generellt antagande), Eskilstuna flyttad till `blocked_external_info`, samtliga sju specialvariantfamiljer (14 variant-ID:n) integrerade i kontrollmängden (ny totalsumma 92 = 78 bas + 14 variant), primärkälla/giltighet tillagd på alla 78 bastariffrader, Gotland Taxa 17 rättad, batch 5 delad i tre undergrupper efter motorsemantik, Partille tillagd i batch 1, Familj 4 ligger nu FÖRST, granskningarna 2026-09-08-001/-002 spårade för första gången, maskinspecifik länk rättad. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 

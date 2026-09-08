@@ -3,11 +3,12 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v3-delivered-awaiting-review
+status: v4-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
-latest_review: "2026-09-08-002"
+v4_delivered_at: "2026-09-08T13:45:00+02:00"
+latest_review: "2026-09-08-003"
 scope: "Fullständig v1-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
@@ -17,6 +18,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v2.md"
   - "Fjarrvarmetariffer/tariffinventering-v3.md"
   - "Fjarrvarmetariffer/batchplan-v3.md"
+  - "Fjarrvarmetariffer/tariffinventering-v4.md"
+  - "Fjarrvarmetariffer/batchplan-v4.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -146,3 +149,17 @@ och Finspång-varianterna. Dokumentationscommitten gjord självbärande: granskn
 `2026-09-08-001` och `2026-09-08-002` spårade för första gången, maskinspecifik länk
 rättad. Väntar på Codex omgranskning. Ingen produktkod, tariffdata eller aktivering
 ändrad; ingen push.
+
+## Codex omgranskning av v3 2026-09-08
+
+Omgranskning
+[`2026-09-08-003`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v3.md)
+har status `changes-required`. V3 har rätt 78 katalog-ID:n, 14 räknade variant-ID:n och
+formellt korrekt total 92, men E.ON/Navirums 36-månadersvariant använder felaktigt
+framledningstemperaturhistorik i stället för tre högsta dygnsmedeleffekter. Batch 1
+utelämnar VänerEnergis helårsflöde, batch 5c kräver felaktigt effekt för Mälarenergi 2–4
+lägenheter och batch 3 tappar Kraftringens `max(0,2; …)`-golv. Varianttabellen saknar
+beställd direkt källproveniens, Finspångs `ready`-status motsägs av kvarstående
+utlösningskartläggning och den incheckade indexen har 35 länkar till dokument som inte
+finns i committen. Claude ska leverera V4 enligt granskningens avgränsade beställning.
+Ingen implementation eller push är godkänd.

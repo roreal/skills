@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-03-001"
 started_at: "2026-09-03"
-last_updated: "2026-09-04T08:07:03+02:00"
+last_updated: "2026-09-07T08:32:18+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -24,6 +24,8 @@ topics:
   - uppgift-7
   - buggfix
   - kodgranskning
+  - effektunderlag
+  - forskningsgranskning
 source: visible-conversation
 transcript_fidelity: reconstructed-from-visible-conversation
 ---
@@ -42,6 +44,27 @@ Claude genomförde därefter en åtgärdsrunda och pushade slutresultatet till `
 
 Claude rättade därefter Gotlands nuvarande UI-flöde genom att kräva föregående kalenderårs MWh i kronor-läget, justerade standardvärdestexten och kontaktunderlaget samt lade till grindkontroller för SEK och förekomst av prisår. Codex verifierade de pushade versionerna (`37dd7cd` och `4777176`) med enhetstester, typkontroll, produktionsbygge och riktade Playwright-rundturer. Gotlands spärr fungerar end-to-end. Den utökade testningen hittade dock ett annat P1-fel i kronor-läget: för realistiska kostnadsbelopp där fixpunktslösaren inte konvergerar kastas ett handlingsbart domänfel som ett osynligt `pageerror` i stället för att visas för användaren. Prisårskontrollen accepterar dessutom vilket sanningsvärdigt objekt som helst, och Gotlands krav finns endast i React-sidan, inte i de exporterade motorgränssnitten.
 
+Den 7 september ifrågasatte Robert om projektet som helhet har ett väldefinierat slutmål.
+Codex bedömning är nej: vision, säkerhetsprinciper och definitionen av en färdig enskild
+tariff är tydliga, men dokumentationen blandar fyra leveranser — Ellen-agenten,
+fjärrvärmekalkylatorn, tariffplattformen och Optimate som verkligt styrsystem — utan att
+välja första produktrelease, primär användare, avgränsning eller gemensam Definition of
+Done. Rekommendationen är att avsluta pågående Sandvikenrättning men pausa nästa
+tariffbatch tills ett kort produktdirektiv för Optimate v1 har beslutats.
+
+Robert beslutade därefter målprioriteringen: det primära målet är webbplatsens
+leverantörsspecifika fjärrvärmekalkyl. Det sekundära målet är att Ellen ska analysera
+verklig energi- och effektanvändning för att minimera fjärrvärmekostnaden inom ett
+bibehållet klimatkrav. Tariffkatalogen och tariffmotorn är därmed en gemensam, stödjande
+plattform för båda målen — inte ett självständigt slutmål.
+
+Robert preciserade även verifieringsnivån. Fakturor används för kontroll när fastigheten
+är Enkeys kund eller när någon uttryckligen ber om fakturagranskning. För övriga
+leverantörer verifieras kostnadsmotorn på årsbasis mot leverantörens publicerade
+räkneexempel, prislista eller motsvarande officiella underlag. Resultat som inte har
+stämts av mot en verklig kundfaktura ska redovisas som beräknade eller uppskattade, inte
+som fakturaverifierade.
+
 ## Beslut
 
 - Projektets synliga AI-konversationer ska kunna sparas som Markdown.
@@ -59,6 +82,14 @@ Claude rättade därefter Gotlands nuvarande UI-flöde genom att kräva föregå
 - Föregående kalenderårs MWh är nu obligatoriskt i Gotlands kronor-läge (Claudes beslut, i linje med Codex första alternativ) — inget scenariovisningsalternativ byggt. Kataloggrinden kräver nu även SEK och ett angivet prisår. Pushat till origin/main: enkey-agents `37dd7cd`, neptune_academy `4777176`.
 - Codex bekräftar Gotlands UI-rättning men rekommenderar att förväntade icke-konvergensfel i kronor-läget visas i formuläret innan flödet betraktas som robust. Samma Gotlandskrav bör senare flyttas till en domännära wrapper inför andra konsumenter.
 - Icke-konvergensfelet visas nu i formuläret (bekräftat i egen webbläsartestning: samma Playwright-scenario ger ett tydligt fel, inget konsolfel). Prisårskontrollen kräver nu exakt heltalet 2026. Gotlandskravet flyttat till den domännära motorfunktionen (`mwhFranArskostnadForFjarrvarme`) — de generiska, lägre motorfunktionerna behåller medvetet sitt nuvarande approximationsbeteende. Pushat till origin/main: enkey-agents `545f1e0`, neptune_academy `ce47d58`.
+- Robert har beslutat att första produktmålet är den publika kalkylatorn: kundens valda
+  fjärrvärmeleverantör, nät och produkt ska påverka kalkylen genom rätt, verifierad tariff.
+  Sekundärt ska Ellen analysera energi och effekt för att minimera kostnaden med bibehållet
+  avtalat inomhusklimat. Gemensam tariffdata och kostnadsmotor ska återanvändas av båda.
+- Fakturaverifiering görs för Enkeys kunder eller på uttrycklig begäran. Övriga
+  leverantörsmodeller verifieras på årsbasis mot publicerade leverantörsexempel,
+  prislistor eller likvärdigt officiellt underlag. Alla andra redovisade resultat märks
+  som beräknade eller uppskattade; de får inte beskrivas som fakturaverifierade.
 
 ## Öppna frågor
 
@@ -74,6 +105,15 @@ Claude rättade därefter Gotlands nuvarande UI-flöde genom att kräva föregå
 - Produktionsgrinden validerar nu SEK, prisår, momsbasis och de fyra kapacitetsfälten — men fortfarande inte energiprisets enhet, kapacitetsbandens fixed_unit/variable_unit, en justeringstyps egen formula/unit, eller fixed_charge.unit/periodisering vid null capacity. Medvetet skjutet: kräver en noggrann genomgång av giltiga värden per kontext, inte en enda konstant.
 - Kontaktunderlaget visar nu statiska defaulttal, markerar dynamiska värden som härledda och innehåller den angivna MWh-siffran. Faktiskt resolverade dynamiska tal, tariff-id/version och per-fält källmarkering (invoice/derived/neutral_default) kvarstår.
 - Direkt motorindata behöver strukturerad validering av `NaN`, okända nycklar och klampade värden innan en Ellen- eller API-integration.
+- Kalkylatorns v1-täckning återstår att besluta: vilka leverantörer/nät/produkter som måste
+  finnas vid release, och hur en användare med ännu ej stödd tariff ska hanteras utan att
+  få ett falskt leverantörsspecifikt resultat.
+- Kalkylatorns befintliga ordval "exakt" behöver inventeras före v1-release. En
+  tariffverifierad, deterministisk årsberäkning är inte samma sak som ett
+  fakturaverifierat kundutfall; UI och resultatmetadata ska skilja dessa nivåer.
+- Det sekundära målets klimatkontrakt behöver preciseras. Ett medel på 22 °C räcker inte
+  ensamt eftersom kalla rum kan döljas av varma; besluta avtalat börvärde, toleransband,
+  representativa zoner och tillåten tid utanför bandet.
 
 ## Konversation
 
@@ -767,8 +807,874 @@ Instruktion till Claude:
 
 Detta ger en spårbar dokumentationsbaslinje och håller kommande kodändringar separerade.
 
+### Claude — assistent
+
+Läste verifieringslistan och to-do-listan i sin helhet, kontrollerade `git status` och den
+staged diffen, och skapade den begärda baslinjecommitten (`8ef6955`) med exakt de fyra
+namngivna filerna — ingen annan del av den ospårade Ellen-mappen togs med. Inte pushad ännu.
+
+Genomförde därefter steg 2 i to-do-listan: en teknisk kartläggning av samtliga 28
+källgodkända tariffer mot befintligt stöd i `katalog.py`/`faktura.py`/`justeringar.py`.
+
+- [Teknisk kartläggning: de 28 källgodkända tarifferna](/Users/robertrennel/Code/skills/skills/ellen/Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md:1)
+
+I korthet: motorn beräknar aldrig kundens debiterbara effekt själv (det är redan ett
+formulärfält), så inget av de 28 kräver att motorn lär sig räkna effekt. Elva tariffer
+(Grupp 1 minus Matfors/Kvissleby, plus Övik och Södertörn) är rena katalogfyllnader.
+Sundsvall Indal/Liden/Lucksta kräver en liten `grind()`-utökning för kapacitetslösa
+tariffer. Den stora återstående frågan är en delad, ny "nätrelativ flödesjustering"
+(kr/m³ × en korrigeringsfaktor mot ett nätreferensvärde) som E.ON/Navirum (8 tariffer),
+Sundsvall Matfors/Kvissleby och hela Vattenfall-familjen (12 tariffer) alla behöver i
+någon variant — föreslås byggd som EN generaliserad mekanism, inte tre separata. Vattenfalls
+tariffval (Standard/Spetsig) beror dessutom på samma sorts frågeställning som det ännu
+obesvarade `eligibility`-förslaget för Gotland — Robert och Codex behöver ta ställning till
+den frågan innan Vattenfall-gruppen implementeras.
+
+Inget implementerat. Väntar på Roberts godkännande av ordningen och Codex oberoende
+granskning av kartläggningen innan flera modeller byggs samtidigt.
+
+### Robert — användare
+
+> Du kan kolla kommunikationsloggen nu.
+
+### Codex — assistent
+
+Baslinjecommitten `8ef6955` är korrekt avgränsad till de fyra beställda filerna och är
+fortfarande lokal/opushad. Den tekniska kartläggningen har däremot fått bedömningen
+`changes-required`; ingen tariffimplementation bör starta från den nuvarande versionen.
+
+Den fullständiga granskningen finns i
+`conversations/reviews/2026/09/2026-09-04-granskning-teknisk-kartlaggning-28-tariffer.md`
+(`review_id: 2026-09-04-002`). Huvudfynden är:
+
+- debiterbar effekt är fortfarande frivillig och uppskattas i webbprodukten, trots att flera
+  av de nya tarifferna kräver leverantörens värde,
+- E.ON/Navirums föreslagna standardtemperatur 60 °C ger faktor 0,2 och därmed en verklig
+  kostnad; den är inte neutral,
+- E.ON/Navirum, Sundsvall och Vattenfall har tre skilda flödesformler och dagens motor
+  räknar justeringar årsvis, inte med månadens temperatur/nätvärde,
+- Vattenfalls oktober–april omfattar sju månader, föregående maj–april behöver vara en egen
+  obligatorisk bandgrund och överuttag får bara avgränsas bort om rekommenderad effekt
+  verkligen framtvingas,
+- Telges nyttjandetidstillägg finns redan i motorn, medan dess stegvisa månadstemperatur inte
+  kan återges exakt med dagens enda årsvärde,
+- en ren energitariff bör modelleras med periodisering ”ej tillämplig”, inte en påhittad
+  kalenderdagsregel.
+
+Claude behöver revidera kartläggningen över samtliga lager — Python, generator, TypeScript,
+domänwrapper och React — samt redovisa obligatoriska indata och exakt/approximativ
+tidsupplösning innan Robert väljer en implementationbatch.
+
+### Robert — användare
+
+> Jag har en fil jag vill att du tittar igenom och ser om den kan ta oss förbi en del
+> hinder med de energibolag som kräver en effekt. Se
+> `/Users/robertrennel/Code/skills/skills/ellen/Fjarrvarmetariffer/fjarrvarme-energi-effekt-forskningsunderlag.md`
+
+### Codex — assistent
+
+Ja — underlaget kan hjälpa projektet förbi ett gemensamt arkitekturhinder, men inte genom
+att omvandla års-MWh till en säker debiterbar effekt. Det visar tvärtom varför en sådan
+generell omräkning inte är fakturakorrekt.
+
+Den praktiska vägen är att införa tre tydligt skilda lägen: leverantörens/fakturans effekt
+som obligatorisk indata, tariffspecifik beräkning från rätt tidsserie och väderdata, samt
+ett separat uppskattningsläge med redovisad osäkerhet. Bara de två första kan ligga till
+grund för en reproducerbar tariff. I den kartlagda 28-gruppen har 27 tariffer en
+effekt-/kapacitetsdel; Indal/Liden/Lucksta är en ren energitariff och omfattas inte av det
+gemensamma effekthindret.
+
+Den fullständiga bedömningen finns i
+`conversations/reviews/2026/09/2026-09-04-bedomning-forskningsunderlag-energi-effekt.md`
+(`review_id: 2026-09-04-003`). Forskningsfilen och implementationen har inte ändrats.
+
+### Robert — användare
+
+> Claude har arbetat igenom och har skrivit i konversationsloggen. Du kanske skall läsa de
+> innan och sedan ge Claude nytt underlag.
+
+### Robert — användare
+
+> Kolla filen `Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md`
+
+### Codex — assistent
+
+Codex läste Claudes v2 och kontrollerade dess påståenden mot aktuell Pythonkod,
+TypeScript-wrapper, verifieringslista, forskningsbedömning och Vattenfalls lokala officiella
+2026-prislista. V2 har rättat huvuddelen av den första granskningen men är ännu inte
+implementeringsklar.
+
+Den nya omgranskningen finns i
+`conversations/reviews/2026/09/2026-09-04-omgranskning-teknisk-kartlaggning-v2.md`
+(`review_id: 2026-09-04-004`). Kvarstående huvudfynd är att obligatoriska indata måste
+omfatta mer än effekt, att dagens `manadsuppdelning` inte räknar tariffjusteringar per
+faktisk månad, att Vattenfalls nätmedel inte är verifierat som ett statiskt katalogvärde
+och att en villkorad överuttagsavgift inte får representeras som noll. Dessutom berör
+effekthindret 27, inte 28, tariffer och Vattenfalls volymrabatt är redan tillräckligt
+beskriven i primärkällan för att struktureras.
+
+Claude har fått en konkret beställning på v3 och en per-tariffmatris som skiljer
+leverantörsvärde, tariffspecifik tidsserieberäkning och uppskattning. Ingen implementation
+har ändrats.
+
+### Robert — användare
+
+> Ändringarna är loggade i sessionsfilen
+
+### Codex — assistent
+
+Codex läste Claudes v3 via sessionsloggens ändringspost och granskade hela den reviderade
+kartläggningen. V3 löser huvuddelen av v2-fynden, särskilt årsavgränsningen, Vattenfalls
+blockerade nätmedel, `capacity_overrun`, tariffantalet och volymrabatten. Den är ändå inte
+implementeringsklar eftersom kontraktet blandar tariffmetadata, kundvärden och
+resultatstatus; ett E.ON-snapshot och en Vattenfalltariff utan flödespost kan felaktigt få
+etiketten `exact_annual`; samt Södertörns och Telges neutrala temperaturdefaultar fortfarande
+behandlas som verifierad noll.
+
+Den fullständiga omgranskningen finns i
+`conversations/reviews/2026/09/2026-09-04-omgranskning-teknisk-kartlaggning-v3.md`
+(`review_id: 2026-09-04-005`, `status: changes-required`). Claude har fått ett konkret
+förslag till uppdelat data- och resultatkontrakt samt krav på en verkligt tariffspecifik
+parameterlista. Ingen implementation eller tariffdata ändrades.
+
+### Robert — användare
+
+> Nu finns det ny info i loggen
+
+### Codex — assistent
+
+Codex läste Claudes v4 och jämförde hela dokumentet mot granskning `2026-09-04-005`. V4
+stänger samtliga sex tidigare fynd. Den nya matrisen kontrollerades maskinellt: den innehåller
+27 unika tariff-ID:n och alla finns i katalogen.
+
+Arkitekturen är nu `approved-with-conditions` för en avgränsad grundimplementation. Claude
+kan bygga det tredelade kontraktet, den gemensamma statusfunktionen, speglingen mellan Python
+och TypeScript samt Indal/Liden/Luckstas sentinel. Inga nya tariffer får aktiveras förrän
+exakt-/estimatlägen, motorgrinden och tariffspecifika indatakrav är testade. Sundsvall Matfors
+och hela Vattenfallgruppen ska fortsatt vara inaktiva.
+
+Den fullständiga bedömningen och den godkända första implementationsetappen finns i
+`conversations/reviews/2026/09/2026-09-04-godkannande-teknisk-kartlaggning-v4.md`
+(`review_id: 2026-09-04-006`). Ingen implementation eller tariffdata ändrades av Codex.
+
+### Robert — användare
+
+> Claude svarade "want me to start on this scoped stage (items 1–4 above) now, or hold for
+> your explicit go-ahead first?"
+
+### Codex — assistent
+
+Codex rekommenderade uttryckligt klartecken för exakt den godkända etappen 1–4:
+
+1. implementera `required_input`, `supplied_input`, `result_metadata` och en gemensam,
+   deterministisk statusfunktion,
+2. spegla samma typade kontrakt genom Python, generator och TypeScript,
+3. testa exakt-/estimatlägen, blockerande obligatoriska fält och att inget direkt motoranrop
+   kan ge ett omärkt exakt resultat,
+4. implementera Indal/Liden/Luckstas `ej_tillämpligt`-sentinel som enda tariffändring.
+
+Avgränsningen är att inga andra tariffer aktiveras, Familj 4/Telge/E.ON väntar till Codex
+kontrollpunkt och Sundsvall Matfors samt samtliga Vattenfalltariffer förblir blockerade.
+Claude ska göra fokuserade commits per berört repository, inte använda `git add .`, redovisa
+commit-hashar, ändrade filer och testresultat samt vänta med push tills Codex har granskat den
+lokala kontrollpunkten.
+
+### Claude — assistent
+
+Genomförde etapp 1–4. Resultatkontraktet (`resultatkontrakt.py`/`resultatkontrakt.ts`) är
+byggt som tre separata objekt enligt v4/granskning 006 — `KravPost` (tariffens statiska krav),
+`IndataPost` (kundens/fakturans faktiska värde) och `Resultatstatus` (exakt/snapshot/estimated
+× complete/blocked) — och en gemensam `harled_resultatstatus`/`harledResultatstatus`-funktion
+som är den enda platsen som får kombinera dem till en status. Inga `KravPost`-listor är
+instansierade för någon enskild tariff än; det väntar på nästa kontrollpunkt.
+
+`EJ_TILLAMPLIGT`-sentinelen löser Sundsvall Indal/Liden/Luckstas periodiseringsproblem: en ren
+energitariff utan kapacitetsdel ELLER fast avgift skiljs nu uttryckligen från "okänd
+periodiseringsregel" i stället för att kastas eller (som förra kartläggningsversionen riskerade)
+tilldelas en påhittad regel. `grind()` godtar nu `capacity: null` utan `fixed_charge` — inte bara
+med ett belopp satt, som var Gotlands enda tidigare undantag. Den riktiga katalogposten för
+Sundsvall Indal/Liden/Lucksta rördes INTE — `investigation.status` är fortsatt "utreds", så
+tariffen förblir avstängd i produktionskatalogen. Mekanismen är bevisad mot en egen, fristående
+fixture i `test_ren_energitariff.py`/`renEnergitariff.test.ts` i stället.
+
+**Commits (lokala, opushade):**
+
+- `enkey-agents@6f88ed7` — "Lägg till resultatkontraktet och en ej_tillämpligt-
+  periodiseringssentinel". 7 filer: `tools/tariffer/faktura.py`, `katalog.py` (ändrade),
+  `resultatkontrakt.py` (ny), `tests/test_gotland.py`, `tests/test_katalog.py` (ändrade,
+  regressionsanpassade räkningar), `tests/test_ren_energitariff.py`,
+  `tests/test_resultatkontrakt.py` (nya). **196 gröna pytest** (upp från 186).
+- `neptune_academy@abaca72` — "Spegla resultatkontraktet och ej_tillämpligt-
+  periodiseringssentinelen". 4 filer under `neptune-marketing/src/utils/`: `fjarrvarme.ts`
+  (ändrad), `resultatkontrakt.ts`, `resultatkontrakt.test.ts`, `renEnergitariff.test.ts` (nya).
+  **235 gröna vitest** (upp från 216), `tsc --noEmit` rent, `npm run eval:build` grönt.
+
+Ingen `git add .` användes i något repo — `git status`/`git diff --cached --stat` kontrollerades
+före varje commit. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga
+Vattenfalltariffer är helt orörda. Ingen push. Väntar på Codex granskning av kontrollpunkten
+innan push eller nästa tariffbatch.
+
+### Robert — användare
+
+> Nu finns det nytt att granska
+
+### Codex — assistent
+
+Codex granskade de lokala committerna `enkey-agents@6f88ed7` och
+`neptune_academy@abaca72`, körde om 196 Python- och 235 TypeScript-tester, typkontroll och
+utvärderingsbygge. Testerna är gröna, arbetskopiorna är rena och inga tariffer har
+aktiverats.
+
+Kontrollpunkten fick ändå `changes-required`. Kataloggrinden tolkar nu generellt
+`capacity: null` plus saknad fast avgift som verifierad ren energi, i strid med invarianten
+att `null` betyder okänt. Resultatfunktionen ger dessutom `exact/complete` för en tom,
+oinstansierad kravlista och ignorerar period, kvalitet och nyckelidentitet; kontraktet saknar
+tidsseriestöd. Slutligen används funktionen ännu inte av någon publik beräkningsväg och den
+manuella Python–TypeScript-spegeln saknar generator- eller gemensam testvektorspärr.
+
+Den fullständiga granskningen och en avgränsad rättningsbeställning finns i
+`conversations/reviews/2026/09/2026-09-04-kodgranskning-grundetapp-resultatkontrakt.md`
+(`review_id: 2026-09-04-007`). Claude ska rätta de två lokala committerna utan att röra nästa
+tariffbatch och utan att pusha före ny Codex-kontroll. Codex ändrade ingen implementation.
+
+### Robert — användare
+
+> Kan du aktivera en bevakning för förändringar i conversations, så jag slipper agera relä mellan Codex och Claude?
+
+### Codex — assistent
+
+Codex aktiverade ett långkörande mål som bevakar relevanta ändringar i `conversations` för
+den pågående granskningskedjan `2026-09-04-007`. När Claude skriver ny information där ska
+Codex läsa den, kontrollera hänvisade lokala commits och filer, köra proportionerliga tester
+och dokumentera bedömningen i granskningsfil, index och sessionslogg. Därmed behöver Robert
+inte längre meddela Codex manuellt efter varje loggändring.
+
+Bevakningen ger inte Codex rätt att ändra Claudes implementation, aktivera tariffer, committa
+eller pusha. Den avslutas först när grundetappen är godkänd för push/nästa etapp eller när ett
+verkligt produkt- eller domänbeslut kräver Roberts ställningstagande. Detta är en
+Codex-målbevakning, inte en fristående realtidsdaemon; den förutsätter att Claude fortsätter
+att skriva sina överlämningar i den gemensamma `conversations`-strukturen och att Codex kan
+komma åt den lokala projektmappen.
+
+### Claude — assistent
+
+Claude rättade samtliga sex fynd i granskning `2026-09-04-007` i två nya lokala commits:
+`enkey-agents@005c6d9` och `neptune_academy@96f2d27`. Rättningen återställde fail-closed för
+`capacity: null`, införde den explicita formen `capacity.type: "not_applicable"`, lade till
+`Tariffpolicy.komplett`, utökade period-/kvalitets-/tidsseriekontrollerna, byggde en
+kontraktsfasad runt `arskostnad` och lade till manuellt kopierade språkoberoende
+testvektorer. Claude redovisade 221 Python- och 252 TypeScript-tester, ren typkontroll och
+grönt bygge. Ingen tariff aktiverades och ingen push gjordes.
+
+### Codex — assistent
+
+Filbevakaren upptäckte Claudes post utan att Robert behövde agera relä. Codex läste de nya
+committerna, körde om 221 Python- och 252 TypeScript-tester, typkontroll och
+utvärderingsbygge samt verifierade rena arbetskopior och opushade HEAD-versioner.
+
+Två rättningar godkänns i sak: `capacity: null` är åter fail-closed och en ofullständig
+`Tariffpolicy` blockerar. Kontrollpunkten behåller ändå `changes-required`. Fasaden validerar
+ett `IndataPost` men kan prissätta ett separat kapacitets-/fältvärde och kontrollerar inte
+tariff-ID. Fel period, okänd kvalitet, framtida `giltig_fran` och en tolvposter lång serie av
+`NaN` kan fortfarande bli `exact/complete`; Python skiljer dessutom JSON-lista från tuple.
+Ingen riktig produktväg använder fasaden, `not_applicable` tillåter motsägande
+kapacitetsband och de två testvektorfilerna saknar en faktisk synkspärr.
+
+Fullständig reproduktion och avgränsad rättningsbeställning finns i
+`conversations/reviews/2026/09/2026-09-04-omgranskning-rattningar-resultatkontrakt.md`
+(`review_id: 2026-09-04-008`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude rättade de sex fynden i granskning `2026-09-04-008` i två nya lokala commits:
+`enkey-agents@b4d355c` och `neptune_academy@ee5f041`. Fasaden härleder nu kapacitet och
+tariffspecifika fält ur `IndataPost`, tariff-ID jämförs, rullande och källperiodsbundna fält
+får högst `snapshot`, datum och kvalitetsvärden valideras, `not_applicable` stängs mot
+motsägande prisfält och en `_kraver_kontrakt`-markör blockerar direktanrop. En lokal
+SHA-256-kontroll jämför även fixturekopiorna. Claude redovisade 239 Python- och 268
+TypeScript-tester, ren typkontroll och grönt bygge. Ingen tariff aktiverades och ingen push
+gjordes.
+
+### Codex — assistent
+
+Filbevakaren upptäckte Claudes nya post utan Robert som relä. Codex granskade committerna,
+körde om 239 Python- och 268 TypeScript-tester, typkontroll och produktionsbygge; samtliga
+ordinarie kontroller är gröna och arbetskopiorna rena.
+
+Kontrollpunkten behåller ändå `changes-required`. `kapacitet_nyckel` är fortfarande ett
+fritt anropsval: ett icke validerat extrafält kan prissättas eller nyckeln utelämnas helt och
+ändå ge `exact/complete`. `NaN` kan på samma sätt bli `exact/complete` och ge en `NaN`-kostnad.
+TypeScripts `Date.parse` accepterar omöjliga kalenderdatum som Python avvisar, och
+`unverified` eller saknad kvalitet kan fortfarande ge `exact`. Produktspärren är inte kopplad
+till katalog/generator/produktentry och dess bypass är ett publikt booleskt argument.
+Fixturekontrollen beror slutligen på `~/Code/neptune_academy` och hoppas över i isolerade
+kloner, så den är inte en portabel CI-spärr.
+
+Fullständig reproduktion och en ny avgränsad rättningsbeställning finns i
+`conversations/reviews/2026/09/2026-09-04-slutgranskning-resultatkontrakt-grundetapp.md`
+(`review_id: 2026-09-04-009`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude rättade fynden i granskning `2026-09-04-009` i två nya lokala commits:
+`enkey-agents@8ea1fbb` och `neptune_academy@1082bd8`. Motorbindningen flyttades till statisk
+`Tariffpolicy`-data, numerisk validering och kalenderriktig datumvalidering infördes,
+`verified` blev krav för `exact`, den booleska motorbypassen ersattes med en sentinel och
+`till_prisar` kan härleda kontraktsmarkören ur katalogfältet `contract_required`.
+Fixturekopiorna fick varsin hårdkodad SHA-256-kontroll. Claude redovisade 266 Python- och 292
+TypeScript-tester, ren typkontroll och grönt bygge. Ingen tariff aktiverades och ingen push
+gjordes.
+
+### Codex — assistent
+
+Filbevakaren upptäckte posten och Codex granskade `8ea1fbb`/`1082bd8`. Samtliga 266 Python-
+och 292 TypeScript-tester, typkontrollen och produktionsbygget passerar. Datum-, kvalitets-
+och numerikrättningarna godkänns, liksom att odeklarerade extrafält inte längre når motorns
+`falt`.
+
+Kontrollpunkten behåller ändå `changes-required`. Ett prisobjekt med verkligt kapacitetspris
+kan ha `kapacitet_bindning=None` och ge `exact/complete` med 0 kr kapacitetskostnad. En
+bindning mot endast månadsrelevant indata ger först `annual exact/complete` och sedan
+`KeyError`; en rullande serie ger `snapshot/complete` och därefter `TypeError`. Den nya
+`contract_required`-markören är fortfarande opt-in utan tariff-ID-kopplat policyregister eller
+produktentry, och TypeScripts passersedel exporteras. Två separata lokala hash-pinnar kan
+slutligen fortfarande glida isär med gröna tester i båda repona.
+
+Fullständig reproduktion och avgränsad rättningsbeställning finns i
+`conversations/reviews/2026/09/2026-09-04-omgranskning-policybindning-produktgrind.md`
+(`review_id: 2026-09-04-010`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude rättade kapacitetskrascherna och korsrepojämförelsen i `enkey-agents@0842a59` och
+`neptune_academy@45fc11c`. Efter Roberts separata klartecken byggde Claude även ett tomt
+policyregister, en katalog-/generatorgrind, serialisering till TypeScript och ett
+produktentry-test i `enkey-agents@a0d5c6e` och `neptune_academy@a9a6cb8`. Inga riktiga
+tariffer, policyer eller genererade produktdata aktiverades och ingen push gjordes. Claude
+redovisade 281 Python- och 303 TypeScript-tester, ren typkontroll och grönt bygge.
+
+### Codex — assistent
+
+Filbevakaren upptäckte de nya posterna utan att Robert behövde agera relä. Codex granskade
+båda commitstegen, körde om 281 Python- och 303 TypeScript-tester, typkontroll och
+produktionsbygge; samtliga ordinarie kontroller är gröna och implementationsarbetskopiorna
+rena.
+
+Kontrollpunkten behåller ändå `changes-required`. Generatorns `bool(...)` gör att exempelvis
+`contract_required: "false"` passerar som sant. Förbudet mot varje rullande
+kapacitetsbindning gör samtidigt den redan godkända E.ON/Navirum-modellen omöjlig: ett enda
+leverantörsvärde ska kunna ge `snapshot/complete`, medan bara en faktisk serie utan
+reduceringsregel ska blockeras. Python och TypeScript exponerar dessutom fortfarande en
+direkt hjälpfunktion som ger naken `Kostnad` och därmed kan kringgå resultatstatusen. Den
+obligatoriska fixturejämförelsen är verklig i Roberts checkout men saknar ännu portabel
+CI-konfiguration.
+
+Fullständig reproduktion och avgränsad rättningsbeställning finns i
+`conversations/reviews/2026/09/2026-09-04-slutkontroll-policyregister-och-produktgrind.md`
+(`review_id: 2026-09-04-011`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude rättade granskning 011 i `enkey-agents@e05b58e` och
+`neptune_academy@df0f6ef`. Generatorn skickar nu rått `contract_required` och grinden kräver
+exakt booleska `True`; E.ON/Navirums rullande kapacitetskrav tillåter åter ett skalärt
+`snapshot/complete` men stoppar en faktisk serie utan reduceringsregel. De nakna
+kostnadshjälparna fick understrukna namn och nya arkitekturtester, och sökvägen till
+korsrepo-fixturen blev konfigurerbar. Inga tariffer eller policyer aktiverades och ingen push
+gjordes. Claude redovisade 291 Python- och 307 TypeScript-tester, ren typkontroll och grönt
+bygge.
+
+### Codex — assistent
+
+Filbevakaren upptäckte posten och Codex verifierade båda committerna. Alla 291 Python- och
+307 TypeScript-tester, typkontrollen och produktionsbygget passerar. De tre tidigare
+P1-fynden är rättade i beräkningsflödet, och den konfigurerbara korsreposökvägen uppfyller
+P2-villkoret.
+
+Kontrollpunkten behåller ändå `changes-required` för ett enda avgränsat fynd. TypeScripts
+nya arkitekturtest påstår sig skanna `src`, men granskar bara fem av 74 produktionsfiler:
+endast toppnivåns `.ts`-filer i `src/utils`, inte `.tsx`, sidor eller komponentkataloger.
+Exempelvis kan `KalkylatorPage.tsx` fortfarande importera den exporterade nakna
+kostnadsfunktionen utan att testet märker det. Pythonvarianten är också icke-rekursiv.
+Eftersom understreck är en namnkonvention och inte ett körningsskydd måste testerna täcka
+hela den relevanta produktkoden. Två inaktuella kommentarer ska rättas samtidigt.
+
+Fullständig kontroll och den sista lilla rättningsbeställningen finns i
+`conversations/reviews/2026/09/2026-09-04-omgranskning-rattningar-policyregister-produktgrind.md`
+(`review_id: 2026-09-04-012`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude rättade det sista fyndet i `enkey-agents@467c89f` och
+`neptune_academy@82bcf3c`. Arkitekturtesterna söker nu rekursivt: Python under hela
+`tools/tariffer`, TypeScript under hela webbproduktens `src` med både `.ts` och `.tsx`.
+Självkontroller bekräftar en nästlad Pythonfil respektive `KalkylatorPage.tsx`. De två
+inaktuella kommentarerna rättades utan ändring av affärslogik. Inga tariffer aktiverades och
+ingen push gjordes. Claude redovisade 292 Python- och 308 TypeScript-tester, ren typkontroll
+och grönt bygge.
+
+### Codex — assistent
+
+Codex verifierade diffarna och körde om hela kontrollpaketet: 292 Python- och 308
+TypeScript-tester, `tsc --noEmit`, produktionsbygge och `git diff --check` är gröna. Båda
+implementationsarbetskopiorna är rena.
+
+Resultatkontraktets grundetapp är därmed godkänd för push och nästa separat avgränsade
+tariffetapp i granskning `2026-09-04-013`. Godkännandet gäller infrastrukturen och de lokala
+commitkedjorna, inte att de 28 nya tarifferna redan är produktionsgodkända. Sundsvall
+Matfors/Kvissleby och samtliga Vattenfalltariffer förblir blockerade enligt kartläggningen;
+en enskild Familj 4-pilot är lämplig nästa kontrollpunkt. Codex ändrade ingen implementation
+och gjorde ingen push.
+
+Det långkörande bevakningsmålet avslutades enligt sin stoppregel när grundetappen blev
+godkänd. Fortsatt tariffimplementation ska få en ny avgränsad beställning och kontrollpunkt.
+
+### Claude — assistent
+
+Efter Roberts klartecken pushade Claude de godkända grundcommitterna:
+`enkey-agents@467c89f` och `neptune_academy@82bcf3c` till respektive `origin/main`. Robert
+valde därefter den redan live Stockholm Exergi-leverantörsfilen som nästa pilot. Claude
+kartlade att leverantörsfilerna passerar förbi katalogens befintliga kontraktsgrind och skrev
+förslag `2026-09-04-002` före kodning. Ingen ny implementation eller tariffdata ändrades.
+
+### Codex — assistent
+
+Codex granskade förslaget, den live leverantörsfilen, generatorvägen,
+resultatkontraktsfasaden, Åkermannen-fixturen och produktens publika beräkningsflöden.
+Stockholm Exergi är ett lämpligt pilotfall men förslaget behöver en v2 före implementation.
+
+Fyra frågor måste lösas: policyn ska omfatta inte bara debiterbar effekt utan även kall
+månadsvolym och månadsvis returtemperatur; den årsvis fastställda debiterbara effekten ska
+inte blandas ihop med en egen rullande prognos; kontraktsmarkören får inte aktiveras innan
+båda live produktflödena använder fasaden; och regressionsplanen ska utgå från fixturens tolv
+månadsrader över två prisår samt reda ut dokumentens motstridiga uppgifter om 12, 18 och 21
+fakturor. Generisk leverantörsfilinfrastruktur rekommenderas, men bara Stockholm aktiveras
+som pilot och först efter shadow-/produktmigrering samt ny kontrollpunkt.
+
+Den fullständiga bedömningen och en sexpunktsbeställning till Claude finns i
+`conversations/reviews/2026/09/2026-09-05-granskning-stockholm-exergi-kontraktsretrofit.md`
+(`review_id: 2026-09-05-001`, `status: changes-required`). Ingen implementation, tariffdata,
+commit eller push ändrades av Codex.
+
+### Claude — assistent
+
+Claude skrev version 2 av Stockholm Exergi-förslaget efter granskning `2026-09-05-001`,
+fortfarande utan kodändringar. V2 gör debiterbar effekt årsvis, beskriver en generell
+leverantörsfilsväg med `off`/`shadow`/`enforced`, tar med kall månadsvolym och månadsvis
+returtemperatur, separerar framtida egen effektprognos samt föreslår en tvåfasaktivering och
+en ny regressionsplan. Claude försökte även förklara avvikelsen mellan 12, 18 och 21 som en
+skillnad mellan konsoliderade månader och preliminära/avräknade fakturadokument.
+
+### Codex — assistent
+
+Codex granskade v2 mot de pushade motorerna och reproducerade ett kvarstående kritiskt hål:
+eftersom kallvolym och returtemperatur i förslaget bara gäller `monthly` filtreras de bort
+vid en årsberäkning, som därför får `annual/exact/complete` med endast effekten angiven.
+Nuvarande kontrakt stöder inte föreslagna månadsmappningar eller deras motorbindningar, och
+årsmotorn kan bara ta en enda returtemperatur.
+
+Kalkylatorns kronor-till-MWh-flöde är dessutom underbestämt utan kalla volymer och
+returtemperatur. Den föreslagna delårsregressionen kan inte använda årsfasaden: Codex mätte
+att fixturens åtta månader 2025 bär 93 620,88 kr fast kostnad via månadsanrop men 139 476,00
+kr via årsanrop; motsvarande fyra månader 2026 ger 48 225,21 respektive 146 685,00 kr,
+eftersom årsfasaden alltid debiterar hela årets kapacitetsdel.
+
+V2 får därför fortsatt `changes-required`. V3 ska skilja fakturaexakt månadsreproduktion,
+framåtriktad årskalkyl och kronor-till-MWh, specificera verkligt månads-/bindningsstöd,
+ersätta delårstesten med en månadsfasad, göra aktiveringsläget fail-closed och beskriva hur
+resultatstatus når UI:t. 12/18/21 ska tills vidare redovisas som tre separat attribuerade
+uppgifter; fixturen ensam bevisar inte Claudes exakta preliminär-/avräkningsförklaring.
+
+Fullständig omgranskning och sjupunktsbeställning finns i
+`conversations/reviews/2026/09/2026-09-05-omgranskning-stockholm-exergi-forslag-v2.md`
+(`review_id: 2026-09-05-002`). Ingen implementation, tariffdata, commit eller push ändrades
+av Codex.
+
+### Claude — assistent
+
+Claude skrev v3 av Stockholm Exergi-förslaget utan kodändringar. V3 avgränsar piloten till
+en ny månadsvis kontraktsfasad för de tolv fakturaraderna, med skalära bindningar av
+debiterbar effekt, kall energi och returtemperatur per anrop. Produktens årsprognos och
+kronor-till-MWh-invers lämnas oförändrade. `shadow` byts mot den strikt validerade
+bygg-/teststatusen `validated`, delårstesten tas bort, `effektgrans_kw: 96` flyttas som
+kundspecifik fixturedata och 12/18/21 redovisas utan obekräftad slutsats.
+
+### Codex — assistent
+
+Codex godkände v3 för en avgränsad implementation av `validated` månadsvis
+fakturaåterspelning. Ingen v4-plan krävs. Godkännandet omfattar inte global `enforced`,
+produktens årsprognos, invers eller UI.
+
+Sex bindande villkor följer med godkännandet: policyfullständighet ska vara uttryckligen
+begränsad till `monthly_invoice`; `enforced` ska kasta så länge års-/inversflödena saknar
+kontrakt; samtliga tre motorbindningar ska vara relevanta och fail-closed; månadens identitet
+och effektens giltighet ska jämföras mot den faktiska fixture-månaden i stället för dagens
+datum; numeriska domänregler som `0 <= mwh_kallt <= mwh` ska valideras; och den interna
+passersedelsgränsen, språkpariteten, generatorpariteten och alla tolv fakturaregressioner ska
+testas.
+
+Claude får nu implementera denna avgränsade etapp i fokuserade lokala commits och därefter
+stanna för ny Codex-kodgranskning. Ingen push och ingen kontraktsmarkör/enforcement ingår.
+Fullständiga acceptansvillkor finns i
+`conversations/reviews/2026/09/2026-09-05-godkannande-stockholm-exergi-forslag-v3.md`
+(`review_id: 2026-09-05-003`, `status: approved-with-conditions`). Codex ändrade ingen
+implementation eller tariffdata.
+
+### Robert — användare
+
+> Det blir en paus till 19:00 i morgon, spara ner allt i minnet.
+
+### Codex — assistent
+
+Codex skapade en beständig pausöverlämning för återupptagning tidigast
+`2026-09-06T19:00:00+02:00`. Den bevarar aktuell beslutspunkt, godkänd och utesluten
+omfattning, de sex bindande implementationsvillkoren, domänbeslut, repo-heads,
+arbetskopiestatus, testbaslinje, viktiga filer och en stegvis återupptagningskontroll.
+
+Överlämningen finns i
+`conversations/handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md`
+(`handoff_id: 2026-09-05-001`, `status: paused`). Ingen automatisk återstart eller bevakning
+är aktiv. Inga implementationsfiler, commits eller pushar ändrades.
+
+### Robert — användare
+
+> Ok då finns det nya uppgifter
+
+### Codex — assistent
+
+Codex återupptog arbetet från pausöverlämning `2026-09-05-001`, läste Claudes nya
+implementationsrapport och kodgranskade de två lokala, opushade committerna
+`enkey-agents@670efa7` och `neptune_academy@68543a4` mot de sex bindande villkoren i
+granskning `2026-09-05-003`.
+
+Kontrollpunkten fick `changes-required` i
+`conversations/reviews/2026/09/2026-09-06-kodgranskning-stockholm-exergi-manadskontrakt.md`
+(`review_id: 2026-09-06-001`). Codex reproducerade två P1-fel: borttagen
+`kallenergi_bindning` eller `returtemperatur_bindning` kan fortfarande ge
+`monthly/exact/complete` medan motorn använder tyst `0`/`None`, och en debiterbar effekt
+utan giltighetsintervall eller endast giltig månadens första dag kan också ge
+`exact/complete`. TypeScript saknar dessutom unikhetskontroll för
+`tillampligaManader`, och uttryckligt beställda negativtester för saknad bindning och okänt
+aktiveringsläge saknas.
+
+Övrig regression är grön: 330 tariff-pytest, 347 Vitest, `tsc --noEmit`, produktionsbygge,
+fixture-synk och `git diff --check`. Implementationerna är rena och opushade. Codex ändrade
+ingen implementationskod eller tariffdata; endast kommunikationsloggen uppdaterades med
+fynd och en avgränsad rättningsbeställning till Claude.
+
+### Robert — användare
+
+> Nu kan du granska
+
+### Codex — assistent
+
+Codex omgranskade Claudes lokala rättningscommits `enkey-agents@0c5c81e` och
+`neptune_academy@f4f04f6`. De tidigare två P1-reproduktionerna, hela-månaden-giltigheten,
+TypeScripts dubblettkontroll, allow-list-fallen och dokumentationsrättningarna fungerar.
+342 tariff-pytest, 358 Vitest, typkontroll, produktionsbygge och diffkontroll är gröna.
+
+Kontrollpunkten behåller `changes-required` i
+`conversations/reviews/2026/09/2026-09-06-omgranskning-rattningar-stockholm-exergi-manadskontrakt.md`
+(`review_id: 2026-09-06-002`) på ett återstående P1-fynd. En kallenergi- eller
+kapacitetsbindning kan fortfarande peka på ett policyfält vars `tillampliga_manader` inte
+omfattar målmånaden. Codex reproducerade falskt `monthly/exact/complete` med åter
+nollställd kallenergi och fel kostnad samt en rå `KeyError` i kapacitetsfallet. Claude fick
+en sista avgränsad rättningsbeställning: centralisera relevanskontrollen för alla tre
+bindningarna, spegla två negativtester och lägga det saknade `enforced`-regressionstestet.
+Ingen implementation eller push ändrades av Codex.
+
+### Robert — användare
+
+> Nu kan du omgranska
+
+### Codex — assistent
+
+Codex slutomgranskade Claudes lokala rättningscommits `enkey-agents@2dd62a2` och
+`neptune_academy@e64c3de` samt hela Stockholm-kedjan om tre commits per repository.
+Den gemensamma bindningskontrollen stoppar nu kapacitet, kall energi och returtemperatur
+fail-closed före status och dataindexering när en nödvändig bindning saknas eller dess
+policyfält inte omfattar målmånaden. Det saknade regressionstestet bekräftar dessutom att
+dagens endast-`monthly_invoice`-policy avvisar `enforced` och att `validated` inte sätter
+`_kraver_kontrakt`.
+
+Kontrollpunkten fick **slutgodkännande för push** i
+`conversations/reviews/2026/09/2026-09-06-slutgodkannande-stockholm-exergi-manadskontrakt.md`
+(`review_id: 2026-09-06-003`). 345 tariff-pytest, 360 Vitest, `tsc --noEmit`,
+produktionsbygge och `git diff --check` är gröna; båda implementationsarbetskopiorna är
+rena och exakt tre commits före respektive `origin/main`. Godkännandet gäller endast
+Stockholm Exergis `validated` månadsvisa fakturaåterspelning. `enforced`, årsprognos,
+invers, UI och andra tariffer ingår inte. Codex ändrade ingen implementation och pushade
+ingenting.
+
+### Robert — användare
+
+> Nu kand du granska
+
+### Codex — assistent
+
+Codex granskade Claudes Sandviken-förslag `2026-09-06-001` mot den aktuella officiella
+pris-/effektinformationen, katalogposten, policyregistret, generatorn och kalkylatorns båda
+produktflöden. Sandviken Helleverans är en lämplig första katalogpilot och katalogens priser
+samt kalenderdagsperiodisering stämmer, men förslaget fick `changes-required` i
+`conversations/reviews/2026/09/2026-09-06-granskning-familj4-sandviken-kartlaggning.md`
+(`review_id: 2026-09-06-004`).
+
+Huvudskälet är att `contract_required: true` inte kopplar in kontraktsfasaden: dagens MWh-
+och kronorflöden kastar avsiktligt `KontraktKravs`, vilket Codex bekräftade med det
+befintliga produktentry-testet (3/3 grönt). En simulering av den föreslagna genereringen gav
+markören men tom `indatafalt`-lista och en policy som produkten inte konsumerar. V2 måste
+därför definiera en verklig årsadapter för MWh-läget, göra leverantörseffekten obligatorisk,
+spärra kronorläget tills `annual_inverse` finns, skilja helleverans från delleverans och
+lösa bandval/avrundning fail-closed. Katalogdiffen måste dessutom få aktuella 2026-källor,
+explicit dagperiodisering och en versionshanterad/pinnad katalogkälla; JSON-filen är i dag
+ospårad i Git. Codex avgjorde de tre öppna frågorna: `rullande=False`, katalogrättningen ska
+vara samordnad med adaptern och `monthly_proration=days_in_month/days_in_year`. Ingen kod,
+tariffdata, genererad fil eller push ändrades.
+
+### Robert — användare
+
+> Granska V2
+
+### Codex — assistent
+
+Codex omgranskade Sandviken-förslag v2 mot generatorns faktiska utdataform,
+Stockholm Exergis redan pushade `validated`-policy, produktens returtyper och tre
+`beraknaBesparingsvarde`-anrop, kataloggrinden och regressionsbaslinjen. V2 är bättre
+avgränsad men fick fortsatt `changes-required` i
+`conversations/reviews/2026/09/2026-09-06-omgranskning-familj4-sandviken-forslag-v2.md`
+(`review_id: 2026-09-06-005`).
+
+Det avgörande kopplingsfelet är att v2 läser `prisar.policy`: kataloggeneratorn lägger i
+dag Sandvikens framtida policy på leverantörsnivå, medan Stockholm Exergis befintliga
+`validated`-policy faktiskt ligger i prisårsposten. Förslaget skulle därför missa
+Sandviken men fånga och blockera Stockholms års- och kronorflöden. V2:s partiella
+`resultatBlockerat` passar inte heller `Besparingsvarde`/`KalkylatorResult`-kedjan, och
+`summaExkl` skulle bryta produktens momsinklusive fakturasemantik. Den föreslagna
+`Math.round`/golvklämningen ändrar dessutom leverantörsvärdet innan det märks
+`supplier_value`/`verified`; tester av den egna avrundningen kan inte verifiera en
+opublicerad Sandvikenregel. `network_or_product` påverkar inte dropdownen när endast en
+tariff är godkänd, och schablonläget är fortfarande öppet trots MWh-only-scope.
+
+V3 ska därför kanonisera policyplaceringen per prisår, aktivera årsadaptern på exakt
+`_kraver_kontrakt` + rätt täckning utan att röra `validated`, definiera ett typkorrekt
+blockeringskontrakt genom hela produktkedjan, behålla `summaInkl`, använda oförändrade
+entydiga heltalseffekter (eller riktigt band-ID), göra Helleveransetiketten verklig,
+avgöra schablonspärren och fullfölja katalogmetadata/proveniens. Nuvarande katalogbaslinje
+är 6 godkända och ska bli 7, inte v2:s 62. Det fokuserade produktentry-testet är fortsatt
+grönt 3/3. Ingen implementation, katalogdata, genererad fil eller push ändrades.
+
+### Robert — användare
+
+> V3 framme
+
+### Codex — assistent
+
+Codex granskade Sandviken-förslag v3 mot den verkliga katalogen, generatorn,
+produktens returtyper och felvägar samt de befintliga sex godkända legacytarifferna.
+V3 godkändes med bindande villkor för lokal implementation i
+`conversations/reviews/2026/09/2026-09-06-godkannande-familj4-sandviken-forslag-v3.md`
+(`review_id: 2026-09-06-006`). Ingen v4-plan behövs.
+
+V3 har rättat kärnproblemen: policyn flyttas till prisårsposten, adaptern grindas av
+`_kraver_kontrakt`, momsinklusive belopp behålls, Sandvikens effekt används rå utan
+avrundning och kronor-/schablonvägarna hålls utanför MWh-piloten. Innan implementationen
+kan godkännas måste grinden vara helt fail-closed även vid trasig eller ofullständig
+policy, lyckade resultat bära kontraktsstatus, felorsaker vara maskinläsbara och ge rätt
+svensk användartext, faktisk positiv MWh krävas och effektfältet vara obligatoriskt med
+heltalsvalidering både i UI och domänlager.
+
+V3:s generella etikettregel godkändes inte som skriven: den skulle ändra befintliga namn
+för Göteborg, Halmstad och Mölndal. Claude ska använda en explicit opt-in eller lika snäv
+regel, generera exakt `Sandviken Energi — Helleverans` och bevara ett stabilt tariff-ID.
+Katalogändringen ska även uppdatera datum, ändringslogg och reproducerbar proveniens.
+Claude får nu skapa tre fokuserade lokala commits, en per repo, och därefter stanna för
+Codex kodgranskning. Ingen push, invers, schablon, Delleverans eller annan tariff ingår.
+Codex ändrade ingen implementation eller katalogdata.
+
+### Robert — användare
+
+> Nu kör Claude uppdateringar. Jag fungerar på om vi verklgien har ett väldefinierat slutmål med detta projekt?
+
+### Codex — assistent
+
+Codex bedömning är att projektet har en tydlig **vision**, men ännu inte ett tillräckligt
+väldefinierat **slutmål eller releasemål**. Dokumenten beskriver Ellen som en säker
+domänexpert och Optimate som prognosstyrning med inomhusåterföring. Den äldre PRD:n anger
+också komfort- och energimål. Samtidigt pågår i praktiken fyra olika leveranser:
+
+1. Ellen som analys-, rapport- och samarbetsagent.
+2. Fjärrvärmekalkylatorn som användarprodukt.
+3. Tariffkatalogen och tariffmotorn som delad teknisk plattform.
+4. Optimate som verklig styrtjänst med mätning, Outdoor Emulator, fallback och verifierad
+   effekt.
+
+Varje enskild tariff har numera en bra Definition of Done, men det finns inget beslut om
+vilken av de fyra leveranserna som är projektets första release, vem den primära användaren
+är, vilken pilot eller kund som ska bevisa värdet, vilka funktioner som uttryckligen ligger
+utanför v1 eller när projektfasen får kallas klar. Därför kan arbetet fortsätta tariff för
+tariff utan en naturlig slutpunkt.
+
+Codex rekommenderar följande nordstjärna som utkast: **Optimate v1 ska på en namngiven
+pilotfastighet hålla avtalad inomhuskomfort och ge en spårbar, reproducerbar minskning av
+fjärrvärmekostnaden med hjälp av verkliga mätdata, aktuell tariff och säker
+prognosstyrning; alla beslut ska loggas och kommunikationsbortfall ska återgå till
+verifierad lokal styrning.** Ett generellt besparingsprocenttal ska inte vara
+godkännandekrav; utfallet ska jämföras mot en beslutad baslinje med samma komfort.
+
+En möjlig Definition of Done för den första piloten är:
+
+- en namngiven fastighet, ansvarig kundanvändare, tariff och mätgräns är valda;
+- komfortmålet och mätmetoden är avtalade, med minst PRD:ns preliminära mål om 95 procent
+  tid inom komfortbandet;
+- mätdata, tariff, styrsignal, kvittens och fallback är validerade;
+- skuggläge visar stabilt beteende innan begränsad automatik tillåts;
+- kostnad, energi, effekt och komfort jämförs separat mot en godkänd baslinje;
+- intern- och kundrapport kan reproduceras från källor och versionssatt kod;
+- Robert godkänner pilotutfall och produktpresentation.
+
+Kalkylatorn och tariffmotorn blir då stödjande leveranser med egna avgränsade releasemål,
+inte projektets oändliga huvudbacklog. Nästa tariffbatch bör prioriteras efter verkliga
+kunder/pilotbehov, inte målet att implementera alla 78 poster. När Claudes pågående
+Sandvikenrättning är klar rekommenderas därför en kort målworkshop och ett versionssatt
+`projekt/optimate/PROJECT_CHARTER.md` med problem, användare, v1-scope, uttryckliga
+icke-mål, acceptanskriterier, pilot, ägare och milstolpar innan mer breddarbete startar.
+Codex ändrade ingen implementation.
+
+### Robert — användare
+
+> Det primära målet är att bygga en kalkyl på hemsidan som skall ta hänsyn till vilket fjärrvärmebolag som är kundens leverantör. Det sekundära målet är att Ellen skall kunna analysera energi och effektanvändningen och därigenom kunna minimera fjärrvärmekostnaderna med behållet klimatkrav t ex medeltemp 22 grader inomhus.
+
+### Codex — assistent
+
+Detta fastställer en tydlig målordning. **Primärmål:** webbplatsens kalkyl ska beräkna
+kundens ekonomiska potential med rätt fjärrvärmeleverantör, nät, produkt och prisår — inte
+med ett generellt energipris när en leverantörsspecifik beräkning påstås. **Sekundärmål:**
+Ellen ska använda mätserier för energi, fysisk effekt, debiterbar kapacitet, väder och
+inomhusklimat för att identifiera och senare optimera de kostnadskomponenter som faktiskt
+går att påverka, under ett bindande komfortvillkor.
+
+Föreslagen Definition of Done för kalkylatorns första release:
+
+- användaren väljer rätt leverantör, nät och vid behov tariffprodukt;
+- kalkylen använder aktuell, källhänvisad och versionssatt tariff;
+- obligatoriska värden från faktura eller avtal visas och valideras; ingenting kritiskt
+  ersätts av ett dolt standardvärde;
+- nuvarande årskostnad och besparingsscenario beräknas med relevanta energi-, effekt-,
+  flödes-, temperatur- och fasta prisdelar;
+- resultatet visar prisår, antaganden, beräkningsomfattning och kvalitetsnivå;
+- en tariff som saknar tillräckligt underlag blockeras eller märks uttryckligen som
+  generell uppskattning, aldrig som leverantörsspecifik;
+- varje aktiverad tariff har officiell källa, automatiska gränstester och helst jämförelse
+  med verklig faktura eller leverantörens räkneexempel;
+- Robert godkänner det synliga flödet i testmiljön.
+
+Kalkylatorns v1 behöver inte omfatta alla 78 katalogposter. Ett robust releasemål är i
+stället att alla tariffer som faktiskt visas är korrekta och att nästa bolag prioriteras
+efter kund- och försäljningsbehov. Återstående produktbeslut är vilken minsta
+leverantörstäckning som krävs vid lansering och hur “min leverantör saknas” ska hanteras.
+
+För Ellen bör målfunktionen formuleras som: **minimera kundens påverkbara
+fjärrvärmekostnad, med avtalad komfort som randvillkor.** Exempelvis kan börvärdet vara
+22 °C, men ett byggnadsmedel på 22 °C är inte ensamt ett säkert klimatkrav: varma rum kan
+dölja kalla. Kontraktet bör därför ange börvärde, toleransband och tillåten tid utanför
+bandet per representativ zon eller lägenhet. Ellen ska skilja energi, fysisk effekt,
+debiterbar kapacitet och faktisk kostnad, och endast föreslå åtgärder vars komfort- och
+kostnadseffekt kan följas upp.
+
+Arkitekturkonsekvensen är att tariffkatalogen och den deterministiska kostnadsmotorn ska
+vara gemensam kärna. Kalkylatorn använder den för scenarier; Ellen använder samma kärna
+med verkliga tidsserier och tariffhistorik. Affärsregler ska inte dupliceras i agentprompt,
+webbgränssnitt och analyskod. Målbeslutet loggades; ingen implementation ändrades.
+
+### Robert — användare
+
+> Bra, Vi kommmer bara ha fakturor att kontrollera beräknade månadskostnader på de som är våra kunder eller utryckligen ber om det, så vi får utgå från att våra beräkningar stämmer med exempel på de olika energileverantörenas hemsidor eller liknande, på årsbasis. Allt annat redovisat är uppskattat.
+
+### Codex — assistent
+
+Beslutet innebär tre tydliga verifieringsnivåer. En modell kan vara **tariffverifierad på
+årsbasis** när pris, regler och ett representativt årsfall stämmer mot ett officiellt
+räkneexempel eller motsvarande komplett leverantörsunderlag. Ett resultat är
+**fakturaverifierat** först när det har stämts av mot en faktisk kundfaktura. Alla övriga
+resultat ska märkas som **uppskattningar**, med kända antaganden och begränsningar.
+
+Fakturor krävs därmed inte generellt för att ta in en tariff i kalkylatorns årsflöde.
+De används när Enkey har kunden eller när fakturakontroll uttryckligen efterfrågas.
+Kalkylatorns befintliga formuleringar som lovar "exakt" kostnad behöver däremot ändras
+före v1-release, eftersom deterministisk tariffberäkning inte är samma sak som
+fakturaverifiering. Beslutet dokumenterades; ingen implementation ändrades.
+
+### Robert — användare
+
+> Så vad blir nästa steg när Claude är klar?
+
+### Codex — assistent
+
+När Claude har pushat den slutgodkända Sandviken-kedjan ska Codex först verifiera att de
+tre remote-headsen matchar de granskade fullhasharna. Därefter ska ingen ny tariffbatch
+starta direkt. Nästa avgränsade Claude-uppgift är en dokumentationsetapp som skapar ett
+kort produktkontrakt för kalkylator v1 och synkar äldre arbetsdokument med Roberts nya
+beslut.
+
+Produktkontraktet ska fastställa syfte och Definition of Done, skilja
+tariffverifierad årsberäkning från uppskattning och fakturaverifiering, besluta minsta
+leverantörstäckning samt definiera ett ärligt flöde när användarens leverantör saknas.
+Claude ska samtidigt inventera befintliga UI-ord som "exakt", men lämna kodändringen som
+en separat liten etapp efter Codex granskning av textförslaget.
+
+När produktkontraktet är godkänt prioriteras nästa tariffbatch efter verkliga
+kunder/prospekt och återanvändbar prismodell. Om inget kundbehov ändrar ordningen är
+rekommendationen att återanvända Sandviken-adaptern för de återstående källgodkända
+Familj 4-tarifferna, en liten granskningsbar batch i taget. E.ON/Navirum och Vattenfall
+kommer därefter eftersom de kräver större gemensamma modeller. Ellens sekundära
+optimeringsmål startar först med ett separat data- och komfortkontrakt när kalkylatorns
+v1-kärna och tariffmotorn är stabila.
+
 ## Ändringslogg
 
+- `2026-09-07T08:32:18+02:00` – Codex angav arbetsordningen efter Claudes Sandviken-push: verifiera remote-heads, skriv och granska ett kort produktkontrakt för kalkylator v1, synka den inaktuella tariff-to-do-listan med års-/fakturaverifieringsbeslutet, gör därefter en separat terminologirättning och välj nästa lilla tariffbatch efter kundnytta och återanvändbar modell. Ingen ny tariffkod ska starta innan produktkontraktet är granskat.
+- `2026-09-07T08:25:34+02:00` – Robert fastställde verifieringsprincipen: fakturor används för Enkeys kunder eller på uttrycklig begäran; övriga leverantörsmodeller verifieras på årsbasis mot publicerade exempel, prislistor eller likvärdiga officiella källor; allt annat redovisas som beräknat eller uppskattat. Codex noterade att befintliga UI-ord som "exakt" därför behöver en separat terminologigenomgång före kalkylatorns v1-release.
+- `2026-09-07T08:19:57+02:00` – Robert fastställde målprioriteringen: primärt en webbplatskalkyl som tar hänsyn till kundens verkliga fjärrvärmeleverantör; sekundärt Ellen-analys av energi och effekt för minimerad fjärrvärmekostnad inom bibehållet klimatkrav. Codex preciserade Definition of Done, noterade att medeltemperatur 22 °C måste kompletteras med zon-/toleranskrav och drog arkitekturkonsekvensen att båda målen ska dela samma tariffkatalog och deterministiska kostnadsmotor. Återstående beslut är kalkylatorns minsta leverantörstäckning och hantering av ej stödd leverantör.
+- `2026-09-07T08:16:30+02:00` – Robert ifrågasatte projektets slutmål. Codex bedömde att vision och delmål är tydliga men att projektet saknar ett beslutat v1-releasemål: Ellen-agent, kalkylator, tariffplattform och verklig Optimate-styrning blandas. Rekommenderad nordstjärna är en namngiven Optimate-pilot som håller avtalad komfort, minskar kostnad spårbart mot beslutad baslinje och har verifierad fallback. Nästa tariffbatch bör pausas efter pågående Sandvikenrättning tills ett kort versionssatt produktdirektiv har beslutats.
+- `2026-09-06T21:00:33+02:00` – Codex godkände Sandviken-förslag v3 med bindande villkor i granskning `2026-09-06-006`; ingen v4-plan krävs. Claude får implementera Helleverans lokalt för faktisk MWh + rå heltalseffekt i tre fokuserade commits och ska sedan stanna för kodgranskning. Villkoren omfattar helt fail-closed kontraktsgrind, status på lyckade resultat, typade användarfel, obligatorisk positiv MWh, oförändrad effekt, en snäv etikettregel som inte döper om Göteborg/Halmstad/Mölndal, stabilt tariff-ID samt reproducerbar katalogproveniens. Ingen push, invers, schablon, Delleverans, annan tariff eller implementationsändring ingår.
+- `2026-09-06T20:49:49+02:00` – Codex omgranskade Sandviken-förslag v2 och satte fortsatt `changes-required` i granskning `2026-09-06-005`. V2 skulle läsa policy från fel nivå, missa Sandviken men fånga Stockholms `validated`-policy, returnera en typinkompatibel blockering och använda exklusive moms. Dold avrundning/golvklämning, faktisk Helleveransetikett, schablonspärr, strikt katalogstatus och korrekt baslinje (6 → 7, inte 62) återstår. 3/3 fokuserade produktentry-tester gröna. Ingen implementation eller push ändrades.
+- `2026-09-06T20:29:06+02:00` – Codex granskade Sandviken-förslag `2026-09-06-001` och satte `changes-required` i granskning `2026-09-06-004`. Officiella priser och dagperiodisering stämmer, men en kontraktsmarkering gör i dag båda produktflödena obrukbara; v2 måste bygga produktadapter, obligatorisk effekt, MWh-only-spärr för inversen, helleveransidentitet, säker bandregel och spårad katalogkälla. `rullande=False`; periodisering `days_in_month/days_in_year`. Ingen implementation eller push ändrades.
+- `2026-09-06T20:03:55+02:00` – Codex slutomgranskade `2dd62a2`/`e64c3de` och godkände hela den lokala Stockholm-kedjan för push i granskning `2026-09-06-003`. Den gemensamma bindningskontrollen och `enforced`-regressionen stänger de sista fynden; 345+360 tester, typkontroll, bygge och diffkontroll är gröna. Godkännandet är avgränsat till `validated` månadsvis fakturaåterspelning. Ingen implementation eller push ändrades av Codex.
+- `2026-09-06T19:48:30+02:00` – Codex omgranskade `0c5c81e`/`f4f04f6`. Tidigare P1-fall är rättade och 342+358 tester, typkontroll och bygge är gröna, men `changes-required` kvarstår i granskning `2026-09-06-002`: kallenergi- och kapacitetsbindningarnas egna månadstillämplighet kan fortfarande kringgå statusen; `enforced`-spärrens kod fungerar men dess begärda regressionstest saknas. Ingen implementation eller push ändrades.
+- `2026-09-06T19:56:00+02:00` – Claude rättade det enda kvarstående P1-fyndet plus P2-fyndet i granskning `2026-09-06-002`. P1 (kapacitets- och kallenergibindningar kunde vara otillämpliga för målmånaden): förra rundans kontroll verifierade bara `returtemperatur_bindning` mot sitt eget `KravPost.tillampliga_manader` — inte kapacitet eller kall energi. Codex reproducerade att en felkonfigurerad `kallenergi_bindning` (rätt bindning, men fältets `tillampliga_manader` uteslöt målmånaden) fortfarande gav `exact/complete` med fel energikostnad (64 608,49 kr i stället för 65 580,45 kr), och att motsvarande kapacitetsfel gav en rå `KeyError` efter en redan `complete` status. Löst genom att centralisera kontrollen: en enda gemensam loop (`kravs_denna_manad` + `tillampliga_manader`) körs nu för samtliga tre strukturkrävda bindningar, FÖRE statusen och FÖRE all indexering i `inrapporterad_indata` — ingen väg kan längre nå vare sig en beräknad kostnad eller en rå krasch. P2 (`enforced`-regressionstestet saknades): nytt test bekräftar att dagens Stockholm-policy (bara `monthly_invoice`-täckning) avvisar `enforced` och att `validated` aldrig sätter `_kraver_kontrakt`. Tre nya tester totalt (en för `enforced`-avvisningen, två för felkonfigurerad kapacitet-/kallenergibindning) plus TS-motsvarigheter till de två sistnämnda. Ingen produktionsväg, ingen `enforced`-aktivering, ingen push. Fokuserade lokala commits: `enkey-agents@2dd62a2` (2 filer, 345 gröna pytest, upp från 342) och `neptune_academy@e64c3de` (2 filer under `neptune-marketing/`, 360 gröna vitest, upp från 358, `tsc --noEmit` rent, produktionsbygge ok, `git diff --check` rent). Väntar på Codex slutomgranskning.
+- `2026-09-06T20:05:00+02:00` – Codex slutgodkände Stockholm Exergis hela lokala trecommitskedja (`enkey-agents`: `670efa7`/`0c5c81e`/`2dd62a2`, `neptune_academy`: `68543a4`/`f4f04f6`/`e64c3de`) i granskning `2026-09-06-003`, `status: approved`, `push_status: approved-for-push`. Samma fail-closed-bindningskontroll i båda språken, ingen falsk `exact/complete`, giltighetsintervallet skottårskorrekt, aktiveringsgrinden en strikt allow-list, `enforced` uttryckligen spärrat för Stockholm Exergi eftersom årsprognos/invers saknar kontraktstäckning. 345+360 tester, typkontroll, bygge och diffkontroll gröna. Godkännandet gäller uttryckligen bara `validated`-kedjan — inte `enforced`, årsprognosen, inversen, UI eller andra bolag/tariffer. Push är enligt sessionens etablerade regel Roberts beslut; Claude har därför INTE pushat och frågar Robert i chatten.
+- `2026-09-06T20:07:00+02:00` – Robert godkände push. Claude pushade exakt de granskade HEAD-versionerna till `origin/main` i båda implementationsrepona: `enkey-agents` (467c89f..2dd62a2) och `neptune_academy` (82bcf3c..e64c3de). Remote-heads verifierade och matchar exakt de av Codex godkända commit-hascharna. Stockholm Exergis `validated` månadsvisa resultatkontrakt är därmed live i båda repona — fortfarande utan `enforced`/`_kraver_kontrakt`, kalkylatorns årsprognos och kronor-till-MWh-invers är helt orörda.
+- `2026-09-06T20:14:00+02:00` – Robert bad Claude börja kartlägga Familj 4 som nästa steg (efter en fråga om vad nästa steg blir; Claude rekommenderade Familj 4/Sandviken via katalogvägen framför `enforced` för Stockholm Exergi, som en mindre och redan Codex-föreslagen kontrollpunkt). Claude undersökte katalogen (`optimate-fjarrvarme-2026.json`), den tekniska kartläggningen och `verifieringslista-fjarrvarmebolag.md`, och skrev en avgränsad kartläggning för EN tariff — Sandviken Energi — via den ursprungliga katalog-/`contract_required`-mekanismen (grundetappen, inte Stockholm Exergis nya månadsfasad). Viktigt fynd: katalogpostens `investigation.status: "utreds"` verkar inaktuell — `verifieringslista-fjarrvarmebolag.md` har en nyare, godkänd post daterad 2026-09-04 ("Källunderlag godkänt ... för helleverans... Använd leverantörens effektvärde tills metoden implementerats", periodisering verifierad som dagbaserad) som katalogfilen inte speglar. Claude ändrade INTE katalogfilen (delad med alla 27 övriga kartlagda tariffer, kräver egen kontrollpunkt) utan flaggade det som öppen fråga i förslaget, tillsammans med om Sandvikens effektfält ska markeras `rullande=True` (linje med E.ON/Navirums mönster, ger `snapshot`) eller inte, och om `capacity.monthly_proration` ska sättas explicit i samma katalogändring. Förslag `2026-09-06-001` (`proposals/2026/09/2026-09-06-familj4-sandviken-kartlaggning.md`) lämnat. Ingen kod skriven, ingen tariffdata ändrad, inga andra Familj 4-medlemmar eller andra tariffer rörda. Väntar på Codex-granskning innan implementation.
+- `2026-09-06T20:33:00+02:00` – Codex granskade förslag `2026-09-06-001` i granskning `2026-09-06-004`: `changes-required`, fem P1- och två P2-fynd, men bekräftade att Sandviken är rätt val och att katalogens priser (489 kr/MWh, effektgrupper 1355/1247/1161 kr/kW, fasta årsdelar 2200/7050/22200 kr) stämmer mot leverantörens aktuella 2026-sidor. P1 (aktiveringen gör tariffen valbar men inte beräkningsbar): `contract_required: true` stoppar de BEFINTLIGA MWh- och kronorvägarna (`beraknaBesparingsvarde`/`mwhFranArskostnadForFjarrvarme` kastar `KontraktKravs`, bekräftat av det redan existerande `besparingsvardeProduktentry.test.ts`, 3/3 grönt) — v1 saknade en verklig produktadapter. P1 (obligatorisk effekt fortfarande frivillig): kalkylatorns globala fält är frivilligt och ger en uppskattning om tomt; för Sandviken måste ett faktiskt leverantörsvärde krävas, annars blockerat, aldrig märkt `supplier_value`/`verified` på en uppskattning. P1 (helleverans ≠ generell Sandviken-tariff): den verifierade raden gäller bara helleverans (489 kr/MWh); delleverans har en helt annan taxa (1387 kr/MWh) på samma officiella sida, men dropdownen skulle bara visa "Sandviken Energi". P1 (bandval/avrundning overifierat): katalogen anger `supplier_confirmed_band_id_required` men motorn gör redan om gränserna till numeriska band och avrundar; ingen publicerad avrundningsregel finns. P2 (katalogrättningen ofullständig): källreferensen pekar fortfarande på en 2025-prismodell, `billing_basis_method`/`monthly_proration` är `null`. P2 (katalogens spårbarhet): `optimate-fjarrvarme-2026.json` är ospårad av Git i `skills`-repot och läses via en hårdkodad sökväg — en produktionsaktivering får inte vila på en ospårad källa. Codex svarade också på Claudes tre öppna frågor: `rullande=False` (effekten är historikgrundad, uppdateras en gång per år — inte löpande föränderlig som E.ON/Navirum), katalogstatusen ska rättas som DEL av samma samordnade kontrollpunkt (inte en fristående commit), och `monthly_proration` ska sättas explicit till `days_in_month/days_in_year`. Claude skrev v2 samma dag: piloten avgränsad till "Sandviken Energi — Helleverans", MWh-läge, `tackning={"annual_forward"}`; en konkret produktadapter i `besparingsvarde.ts` som bygger `IndataPost` och kör både före- och efterkostnaden genom `beraknaArskostnadMedKontrakt`, med ett nytt `resultatBlockerat`-fält i stället för ett kastat fel; kronorläget spärras med ett Sandviken-specifikt, svensktextat fel via samma redan granskade `catch`-mönster som `kapacitetsfelText`; debiterbar effekt görs obligatorisk med en villkorlig UI-textändring och ingen uppskattningsväg; bandvalet återanvänder den REDAN DELADE, redan levande `normaliseraKapacitet`/`kapacitetsGolv`-regeln (inte en ny Stockholm-specifik regel, utan den generella normalisering alla katalogtariffer med numeriska band redan går igenom) plus elva explicita gränstester (3, 49, 49.4–49.6, 50, 199, 199.4–199.6, 200 kW); en fullständig katalogdiff (källreferenser, `billing_basis_method`, `monthly_proration`, `investigation`/`issues` konsekventa, `contract_required` sist i samma samordnade commit); och ett minimikrav för katalogens spårbarhet (`git add` i `skills`-repot, en SHA-256-hash-pin motsvarande `resultatkontrakt-testvektorer.json`s mönster, kompatibla lokala heads i alla tre repon) utan att bygga om hela den hårdkodade sökvägsarkitekturen (uttryckligen uppskjutet). Förslag v2 lämnat. Ingen kod skriven, ingen katalogdata ändrad. Väntar på Codex-granskning av v2.
+- `2026-09-06T20:40:00+02:00` – Codex omgranskade v2 i granskning `2026-09-06-005`: `changes-required`, fem P1- och tre P2-fynd. P1 (fel policyplacering): kataloggeneratorn lägger policyn på LEVERANTÖRSOBJEKTET (`entry["policy"]`), inte prisårsposten — v2:s `if (policy)`-gren skulle ha missat Sandvikens policy OCH felaktigt fångat Stockholm Exergis redan pushade `validated`-policy (som ligger rätt men bara täcker `monthly_invoice`), blockerat dess levande årsprognos. P1 (blockeringsreturen typfel + fel moms): `Besparingsvarde`/`calcResult`s tre anrop tål inte ett partiellt `resultatBlockerat`-objekt, och v2 använde av misstag `summaExkl` där produktionskoden konsekvent använder `summaInkl` (skulle sänkt redovisade belopp 20%). P1 (leverantörsvärdet ändrades ändå): v2 körde värdet genom `normaliseraKapacitet` (avrundning + golv) INNAN det märktes `supplier_value` — exakt det granskning 004 redan förbjöd; Codex rättade också att `Math.round` rundar positiva halvtal UPPÅT, inte "till jämnt" som v2 påstod. P1 (etikett/schablon ofullständiga): generatorn visar bara produktsuffixet vid FLERA godkända tariffer per medlem — Sandviken blir ensam, så "Helleverans" skulle aldrig synas; `schablon`-läget (areauppskattning) var dessutom helt obehandlat, bara `kr`-läget spärrades. P2: katalogens `investigation.status: "kall_verifierad"` är ett påhittat, ovaliderat värde; `production_ready`/`calculation_status`/`component_completeness` lämnades motstridiga; källorna är HTML utan sidnummer (`pages` ska vara `null`, inte `[1]`); regressionsbaslinjen "62 godkända" var fel (Codex verifierade direkt: 6 i dag, 7 efter piloten); "samma commit" över tre repon är inte möjligt. Claude skrev v3 samma dag: flyttade katalogvägens policy till prisårsposten (samma plats som Stockholm Exergi); en delad `kontraktsgatadPolicy()`-funktion som grenar på `_kraver_kontrakt === true` + `annual_forward`-täckning, inte policyförekomst; en ny `KontraktBlockerat`-felklass fångad i `KalkylatorPage.tsx`s REDAN BEFINTLIGA `calcResult`-catch (samma mönster som `kapacitetsfelText`) i stället för att röra `Besparingsvarde`-typen, med `summaInkl` rättat; helt BORTTAGEN normalisering på Sandvikens kontraktsväg — bara entydiga råa heltal från 3 kW accepteras, decimaler/under-minimum blockeras utan gissning; en verklig generatorfix för etiketten (villkoret utökat till "flera tariffer ELLER produktnamnet skiljer sig från medlemsnamnet"); både kronor- OCH schablonläge spärrat; katalogens `investigation: null` (matchar EXAKT de sex legacy-tariffernas redan etablerade mönster, inga påhittade statusvärden, `production_ready`/`calculation_status`/`component_completeness` lämnade orörda); rättad baslinje 6→7; tre samordnade lokala commits (en per repo) med en SHA-256-hash-pin plus katalogens commit-hash inskriven i den genererade filens huvud som proveniens. Förslag v3 lämnat. Ingen kod skriven, ingen katalogdata ändrad. Väntar på Codex-granskning av v3.
+
+- `2026-09-06T19:34:45+02:00` – Codex återupptog pausen och kodgranskade `670efa7`/`68543a4`. Trots 330+347 gröna tester, typkontroll, bygge och ren diff kvarstår `changes-required` i granskning `2026-09-06-001`: saknade kallenergi-/returtemperaturbindningar kan ge falskt `exact/complete`, effektens giltighet behöver inte täcka hela målmånaden, TypeScript tillåter dubblerade tillämpliga månader och två beställda negativtester saknas. Ingen implementation eller push ändrades.
+
+- `2026-09-05T13:37:00+02:00` – Robert pausade arbetet till tidigast 2026-09-06 kl. 19:00. Codex skapade beständig överlämning `2026-09-05-001` med beslut, scope, spärrar, repo-heads, testbaslinje och exakt återstartsinstruktion. Ingen automatisk återstart/bevakning och ingen implementationsändring.
+- `2026-09-06T19:13:00+02:00` – Robert bad Claude fortsätta. Claude implementerade den godkända avgränsningen (granskning `2026-09-05-003`) enligt samtliga sex bindande villkor. Kärnkontraktet utökat: `Tariffpolicy.tackning` (lista täckningsområden `monthly_invoice`/`annual_forward`/`annual_inverse`) ersätter den globala `komplett`-boolen, så en policy komplett för ett ändamål inte kan ge `complete` för ett annat (villkor 1). Två nya statiska bindningar (`kallenergi_bindning`, `returtemperatur_bindning`) utöver `kapacitet_bindning` — vilken omfattning en bindning måste gälla kontrolleras nu vid ANROPSTILLFÄLLET i respektive fasad, inte vid `Tariffpolicy`-konstruktion (villkor 2, samma mönster som seriekontrollen från granskning 011). `KravPost.tillampliga_manader` gör ett fält obligatoriskt bara vissa månader (returtemperatur, november–mars); nytt `KravPost.matchning_mot_manad` — fristående från det befintliga `kalperiod_definition`-taket — verifierar maskinellt att `observerad_period` (ÅÅÅÅ-MM) matchar anropets år/månad utan att i sig tvinga fram `snapshot` (villkor 3; upptäckte under arbetet att återanvända `kalperiod_definition` för detta av misstag hade tvingat alla Stockholm-fält till snapshot — löst med det separata fältet). Numeriska domänregler (`mwh>=0`, `0<=kall_energi<=mwh`, positiv debiterbar effekt) i den nya fasaden (villkor 4). Ny fasad `berakna_manadskostnad_med_kontrakt`/`beraknaManadskostnadMedKontrakt` (och `_manadskostnad_for_kontraktfasad`/`_manadskostnadForKontraktfasad`, skyddad av de utökade arkitekturtesterna) återspelar EN kalendermånad i taget — löser delårsfelet Codex mätte (villkor 5). Generisk leverantörsfilsgrind (`kontrollera_leverantorsfilsgrind`): `aktiveringslage` `off`/`validated`/`enforced` som strikt allow-list; `enforced` kräver täckning för alla tre ändamål och kastar därför alltid i denna etapp (ingen tariff har den täckningen). Stockholm Exergis leverantörsfil (båda prisåren) fick `tariff_id`/`aktiveringslage: "validated"` — INTE `enforced`, `_kraver_kontrakt` sätts aldrig; kalkylatorns årsprognos och kronor-till-MWh-invers är helt orörda. `effektgrans_kw` (aldrig läst av motorn) flyttad till Åkermannen-fixturens egen sektion. Alla tolv Åkermannen-fixturraderna verifierade krontal för krontal mot den befintliga direkta `manadskostnad`-vägen via den nya fasaden (villkor 6), plus negativa tester för månadsidentitet, giltighet och domänregler i båda språken. `tariffer.generated.ts` regenererad och verifierad mot `test_synk.py`. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@670efa7` (12 filer, 330 gröna pytest, upp från 292) och `neptune_academy@68543a4` (9 filer under `neptune-marketing/`, 347 gröna vitest, upp från 308, `tsc --noEmit` rent, produktionsbygge ok, `git diff --check` rent). Ingen push, ingen `enforced`-aktivering. Väntar på Codex kodgranskning av committerna, precis som instruktionen i pausöverlämningen anger.
+- `2026-09-06T19:44:00+02:00` – Claude rättade båda P1-fynden samt P2/P3-fynden i granskning `2026-09-06-001`. P1 (kallenergi-/returtemperaturbindningarna inte fail-closed): en policy utan `kallenergi_bindning`/`returtemperatur_bindning` gav tidigare tyst `exact/complete` med motorernas defaultvärden (0/None) — Codex reproducerade en felaktig energikostnad (64 608,49 kr i stället för 65 580,45 kr) och en tappad returpost (0 kr i stället för −28,91 kr) för januari 2026. Korskontrollerar nu båda bindningarna mot `prisar`s FAKTISKA struktur (`energi.tillagg` respektive `returtemperatur.manader`), samma mönster som `kapacitet_bindning` redan hade — plus att en registrerad `returtemperatur_bindning`s egna `tillampliga_manader` verkligen täcker målmånaden när `prisar` kräver posten (skyddar mot en felkonfigurerad policy, inte bara en saknad bindning). P1 (effektgiltigheten bevisade inte hela månaden): den enda `berakningsdatum`-punkten (månadens första dag) kunde ge `exact/complete` helt utan `giltig_fran`/`giltig_till`, eller med ett intervall som bara täckte en enda dag — Codex reproducerade båda. Kräver nu explicit att kapacitetspostens giltighetsintervall omsluter både månadens första OCH sista kalenderdag (skottårskorrekt via `calendar.monthrange`), annars blockeras resultatet i stället för att kastas (en legitim datalucka, inte ett anroparfel). P2 (TypeScript tillät dubblerade `tillampligaManader`): `skapaKravPost` avvisar nu dubbletter explicit. P2 (två beställda negativtester saknades): tillagda för saknad bindning och okänt `aktiveringslage` (felstavning, `None`, tal, lista, objekt) i båda språken. P3: modulkommentarerna i `resultatkontrakt.py` och `KontraktKravs` i `faktura.py` uppdaterade till att beskriva `tackning`, tre bindningar och månadsfasaden i stället för grundetappens gamla bild. Arton nya tester totalt (elva Python, sju plus TS-motsvarigheter till alla). Ingen produktionsväg, ingen `enforced`-aktivering, ingen push. Fokuserade lokala commits: `enkey-agents@0c5c81e` (3 filer, 342 gröna pytest, upp från 330) och `neptune_academy@f4f04f6` (2 filer under `neptune-marketing/`, 358 gröna vitest, upp från 347, `tsc --noEmit` rent, produktionsbygge ok, `git diff --check` rent). Väntar på Codex omgranskning.
+- `2026-09-05T11:14:56+02:00` – Codex godkände Stockholm Exergi-förslag v3 med sex bindande villkor för en avgränsad `validated` månadsfasad. Policytäckning ska vara scope-bunden, månad/giltighet och numerik fail-closed, alla tre motorbindningar skyddade och Python/TypeScript/generator/regression synkade. Claude får implementera i lokala commits och stanna för kodgranskning; `enforced`, årsprognos, invers, UI och push ingår inte. Se granskning `2026-09-05-003`.
+- `2026-09-05T10:59:43+02:00` – Codex omgranskade Stockholm Exergi-förslag v2 mot motorerna och reproducerade falskt `annual/exact/complete` när bara effekt anges samt visade att delårsdata genom årsfasaden debiterar hel kapacitetsavgift. V3 krävs: separera månadsfaktura, årskalkyl och invers; bygg verkliga månadsbindningar, strikt aktiveringsläge och status till UI. Full beställning i granskning `2026-09-05-002`. Ingen implementation eller push ändrades av Codex.
+- `2026-09-05T10:35:10+02:00` – Codex granskade Claudes Stockholm Exergi-förslag mot live leverantörsfil, generator, kontraktsfasad, Åkermannen-fixtur, produktflöden och officiella prisvillkor. Förslaget behöver v2 före kodning: alla dynamiska kostnadsindata måste kontraktsbindas, debiterbar effekt klassas årsvis, aktiveringen göras i shadow/atomär produktmigrering och regressionsplanen rättas till fixturens tolv månadsrader över två prisår. Full beställning i granskning `2026-09-05-001`. Ingen implementation eller push ändrades av Codex.
+- `2026-09-04T21:50:00+02:00` – Codex slutverifierade `467c89f`/`82bcf3c`: 292+308 tester, typkontroll, bygge och diffkontroll är gröna. Resultatkontraktets grundetapp godkänns i granskning `2026-09-04-013` för push och nästa separat avgränsade tariffetapp; inga nya tariffer är därmed automatiskt produktionsgodkända. Bevakningsmålet avslutades enligt sin stoppregel. Ingen implementation eller push ändrades av Codex.
+- `2026-09-04T21:40:00+02:00` – Codex bevakare verifierade `e05b58e`/`df0f6ef`. De tre tidigare P1-fynden och P2-dokumentationsvillkoret är rättade, och 291+307 tester samt typkontroll och bygge är gröna. `changes-required` kvarstår i granskning `2026-09-04-012` endast därför att arkitekturtesterna inte söker rekursivt i hela produktkoden: TypeScript-testet granskar 5 av 74 `.ts`/`.tsx`-produktionsfiler och missar bland annat `KalkylatorPage.tsx`. Ingen implementation eller push ändrades.
+- `2026-09-04T21:18:00+02:00` – Codex bevakare granskade `0842a59`/`45fc11c` och `a0d5c6e`/`a9a6cb8`. Trots 281+303 gröna tester kvarstår `changes-required` i granskning `2026-09-04-011`: sanningskonverteringen för `contract_required`, förbudet mot E.ON/Navirums skalära snapshot-fall och en publikt importerbar kostnadsbypass blockerar push. Korsrepojämförelsen är verklig lokalt men ännu inte portabel i vanlig CI. Ingen implementation eller push ändrades.
+- `2026-09-04T20:12:05+02:00` – Codex bevakare upptäckte och omgranskade `8ea1fbb`/`1082bd8`. Trots 266+292 gröna tester kvarstår `changes-required` i granskning `2026-09-04-010`: kapacitetsbindningen kan nollställa en verklig kapacitetsdel eller krascha efter `complete`, produktgrinden är fortfarande opt-in och de separata hash-pinnarna utgör ingen verklig korsreposynk. Ingen implementation eller push ändrades.
+- `2026-09-04T20:35:00+02:00` – Claude rättade delfynd 1 och 3 i granskning 2026-09-04-010, men lämnade fynd 2 medvetet oåtgärdat. Fynd 1 (kapacitetsbindningen kunde nollställa eller krascha kapacitetsdelen): `Tariffpolicy.kapacitet_bindning`/`kapacitetBindning` valideras nu vid konstruktion mot att kravet gäller "annual" och inte är rullande (stänger de två kraschfallen Codex reproducerade); `berakna_arskostnad_med_kontrakt`/`beraknaArskostnadMedKontrakt` korskontrollerar dessutom bindningen mot `prisar`s faktiska kapacitetsstruktur — ett prisobjekt med kapacitetsnivå kräver nu en bindning, ett utan kapacitetsdel får inte ha en (stänger huvudreproduktionen: kapacitetsnivå + ingen bindning gav tidigare tyst 0 kr). Ett relevant fält vars värde är en serie kastar nu i stället för att tyst hoppas över när `falt` byggs. Fynd 3 (två oberoende hash-pinnar bevisar ingen korsreposynk): dokumentationen är rättad till att beskriva dem som lokala drift-detektorer, och den faktiska filsystemsjämförelsen mot neptune-marketing är gjord obligatorisk (fallerar om sidorepot saknas, med ett uttryckligt `ELLEN_FRISTAENDE_KLON=1`-undantag) i stället för att tyst hoppa över. Fynd 2 (kontraktskravet är fortfarande frivilligt, inget policyregister genom katalog/generator till produktionsentryn) bedöms gå utöver den avgränsade grundetappen — Claude har INTE byggt detta och flaggar det till Robert i chatten i stället för att fortsätta autonomt. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@0842a59` (3 filer, 271 gröna pytest, upp från 266) och `neptune_academy@45fc11c` (2 filer under `neptune-marketing/`, 297 gröna vitest, upp från 292, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på Roberts beslut om fynd 2:s omfattning innan vidare arbete.
+- `2026-09-04T21:05:00+02:00` – Robert bekräftade att policyregistret behövs i alla kommande steg (Familj 4/Telge, E.ON/Navirum, Vattenfall kräver alla exakt samma mekanism) och gav klartecken att utöka den avgränsade grundetappen med fynd 2. Claude byggde det: nytt `policyregister.py` (`POLICYREGISTER`, tomt; `LEGACY_UNDANTAGNA_TARIFF_ID`, de sex redan godkända tarifferna explicit undantagna; `kontrollera_aktiveringsgrind`). `generera.py`s `bygg_ts_fran_katalog` kopplar in grinden: en katalogtariff utanför legacy-undantaget måste nu ha `contract_required` OCH en matchande, komplett policy för att generatorn ska inkludera den — annars kastar den, i stället för att tyst generera en okontrollerad tariff. Helt inert mot den riktiga katalogen (bara de sex legacy-tarifferna godkänns i dag, grenen når aldrig grinden). Passersedeln flyttades bakom en riktig gräns: Python fick `arskostnad_for_kontraktfasad` (enda avsedda konsumenten, samma understruknde skyddsnivå som förut), TypeScript slutade exportera `KONTRAKT_PASSERSEDEL` helt — en genuin modulgräns, bara `arskostnadForKontraktfasad` kommer förbi. Ny `policyFranGenererad` i TypeScript läser generatorns snake_case-policy och validerar den som vilken policy som helst. Ett nytt end-to-end-test (`test_policyregister.py`) kör en påhittad katalogfixture genom grind/generator till en riktig, verifierad kostnad via `berakna_arskostnad_med_kontrakt` — hela kedjan, inte bara en isolerad statuskontroll. Ett nytt TypeScript-test (`besparingsvardeProduktentry.test.ts`) mockar den genererade tariffdatan och bevisar att `besparingsvarde.ts` — OFÖRÄNDRAT, samma funktioner `KalkylatorPage.tsx` anropar — kastar `KontraktKravs` för en kontraktsmarkerad tariff, utan att röra produktionskoden. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes fortsatt inte; inga riktiga tariffer, policyer eller genererade produktdata aktiverade. Fokuserade lokala commits: `enkey-agents@a0d5c6e` (5 filer, 281 gröna pytest, upp från 271) och `neptune_academy@a9a6cb8` (4 filer under `neptune-marketing/`, 303 gröna vitest, upp från 297, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
+- `2026-09-04T21:35:00+02:00` – Claude rättade samtliga tre P1-fynd och P2-fyndet i slutkontroll 2026-09-04-011. P1 (aktiveringsgrinden godtog andra sanningsvärdiga typer än exakt `True`): generatorn skickar nu det RÅA katalogvärdet, inte `bool(...)`, och grinden kräver `is not True`-identitet — en katalogpost med `contract_required: "false"`, `1` eller ett objekt/listvärde avvisas nu (negativa tester tillagda i båda). P1 (E.ON/Navirums godkända snapshot-fall hade gjorts omöjligt): `Tariffpolicy.kapacitet_bindning`/`kapacitetBindning` tillåter åter en bindning mot ett rullande fält — serie-kontrollen flyttad från konstruktion till anropstillfället i `berakna_arskostnad_med_kontrakt`/`beraknaArskostnadMedKontrakt`, där det faktiska värdet är känt: ett skalärt värde ger nu `snapshot/complete` och prissätts (E.ON/Navirums fall), en serie blockeras med ett tydligt strukturfel. P1 (en publikt exporterad funktion kunde ge en naken `Kostnad` utan `Resultatstatus`): `arskostnad_for_kontraktfasad`/`arskostnadForKontraktfasad` namngivna understruket och skyddade av nya arkitekturtester (`test_arkitektur_kontraktsgrans.py`, `resultatkontraktArkitektur.test.ts`) som fäller om någon fil utanför `resultatkontrakt.py`/`.ts` refererar till dem — Python kan inte enforcementa detta språkligt (samma erkända begränsning som passersedelskonventionen), TypeScript-sidan är av samma skäl (en exporterad funktion måste finnas för att en annan modul ska importera den). P2 (korsrepo-testet hemkatalogsbundet): sökvägen till neptune-marketing är nu konfigurerbar via `ELLEN_NEPTUNE_MARKETING_SOKVAG`, dokumenterat för en framtida CI-pipeline; ingen CI-konfiguration skapades, det bedöms vara ett separat beslut. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte; inga riktiga tariffer, policyer eller genererade produktdata aktiverade. Fokuserade lokala commits: `enkey-agents@e05b58e` (8 filer, 291 gröna pytest, upp från 281) och `neptune_academy@df0f6ef` (4 filer under `neptune-marketing/`, 307 gröna vitest, upp från 303, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
+- `2026-09-04T21:26:00+02:00` – Claude rättade det enda kvarstående P1-fyndet plus två P3-kommentarer i omgranskning 2026-09-04-012. P1 (arkitekturtestet missade merparten av produktens möjliga konsumenter): Python-testet skannade tidigare bara `tools/tariffer/*.py` icke-rekursivt, TypeScript-testet bara filer direkt i `src/utils/` — Codex bekräftade genom att direkt importera `_arskostnad_for_kontraktfasad` och få tillbaka en naken `Kostnad`. Båda testerna skannar nu REKURSIVT hela sitt katalogträd (Python: `tools/tariffer/` med `rglob`, undantar `tests`/`__pycache__`-underkataloger; TypeScript: hela `src/` med både `.ts` och `.tsx`, undantar `.test.ts(x)`), med en självkontroll vardera som bevisar täckningen: Python skapar en riktig temporär nästlad produktfil och en nästlad testfil och verifierar att bara den förra fångas; TypeScript verifierar att `src/pages/KalkylatorPage.tsx` (en av de 69 tidigare missade filerna Codex räknade) faktiskt ingår i skanningsmängden. P3 (två kommentarer beskrev fortfarande gammalt beteende): `resultatkontrakt.py`s docstring sa fortfarande att en kapacitetsbindning "får inte vara rullande" trots att granskning 011 återställde just detta för E.ON/Navirum — rättat till att beskriva anropstidskontrollen. Kommentaren ovanför TypeScripts exporterade `_arskostnadForKontraktfasad` kallade gränsen "en riktig modulgräns" trots att funktionen förblir exporterad — förtydligat att bara `KONTRAKT_PASSERSEDEL` har en genuin språklig modulgräns, medan den exporterade funktionen bara skyddas av arkitekturtestet. Ingen affärslogik ändrad, inga tariffer aktiverade; Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@467c89f` (2 filer, 292 gröna pytest, upp från 291) och `neptune_academy@82bcf3c` (2 filer under `neptune-marketing/`, 308 gröna vitest, upp från 307, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
+- `2026-09-04T21:36:00+02:00` – Codex gav i granskning 2026-09-04-013 SLUTGODKÄNNANDE (`status: approved`, `push_status: approved-for-push`) för resultatkontraktets hela grundetapp mot `enkey-agents@467c89f`/`neptune_academy@82bcf3c`: aktiveringsgrind, korskontroll mot prisars kapacitetsstruktur, E.ON/Navirums snapshot-fall, arkitekturskyddet och korsrepo-fixturen är alla gröna. Godkännandet gäller uttryckligen bara grundinfrastrukturen — de 28 kartlagda tarifferna är inte produktionsgodkända förrän varje enskild tariff/familj fått sina egna `KravPost`/policydata, källor, formler och tester granskade separat; Codex föreslår en enda enkel Familj 4-tariff (t.ex. Sandviken) som nästa avgränsade kontrollpunkt. Push är enligt sessionens etablerade regel Roberts beslut, inte en del av den redan godkända autonoma processen (rätta/testa/committa lokalt) — Claude har därför INTE pushat och frågar Robert i chatten om a) push av de nuvarande lokala commitkedjorna (8 commits i enkey-agents, 35 i neptune_academy) och b) om nästa steg ska vara att påbörja en avgränsad Familj 4-pilot. Inga tariffer eller policyer aktiverade under denna kontroll.
+- `2026-09-04T21:44:00+02:00` – Robert godkände push (a) och valde Stockholm Exergi (b) i stället för det Codex-föreslagna Familj 4/Sandviken-spåret. Claude pushade `enkey-agents@467c89f` (545f1e0..467c89f) direkt; `neptune_academy@82bcf3c`-pushen blockerades först av auto-mode-klassificeraren (repot har två remotes, `origin` roreal/neptune_academy och `upstream` doowhsalf/neptune_academy — main spårar `upstream`) och krävde ett uttryckligt val av Robert: `origin`, matchande hur samtliga tidigare pushar i den här sessionen loggats. Pushad (f2dfe6c..82bcf3c). Innan kodning upptäckte Claude att "Stockholm Exergi" är tvetydigt: dels en redan LIVE leverantörsfil (`leverantor-stockholm-exergi.md`, verifierad mot 21 fakturor för Brf Åkermannen 33, helt utanför katalog-/kontraktsmekanismen), dels en katalogpost (`stockholm-exergi-stockholm-exergi-normal-2026`) som fortfarande är `investigation.status: "utreds"` med en öppen prisvillkorsfråga (tvådelad vardagsprognos, alternativa vinterregler). Robert bekräftade att den LIVE leverantörsfilen avses — en retrofit av en redan produktionsanvänd, fakturaverifierad tariff, inte en aktivering av en ny. Eftersom hela resultatkontrakt/policyregister-mekanismen hittills bara byggts och testats mot katalogtariffer (leverantörsfiler skrivs i dag rakt in i den genererade datan i `generera.py`, helt förbi `till_prisar()`/aktiveringsgrinden) och detta rör en riktig kunds redan verifierade fakturasiffror, skrev Claude en teknisk kartläggning/förslag (`proposals/2026/09/2026-09-04-stockholm-exergi-kontraktsretrofit.md`, förslags-ID `2026-09-04-002`) i stället för att koda direkt — samma ordning (kartläggning → Codex-granskning → kod) som gällde för resultatkontraktets grundetapp. Förslaget lyfter tre öppna frågor till Codex: vilka fält (utöver kapaciteten, som redan är strukturellt likvärdig E.ON/Navirums rullande mönster) som ska omfattas av kontraktets fältmodell, vad `komplett: True` ska betyda för en tariff som redan genereras i produktion utan att riskera att av misstag blockera en fungerande beräkning, och om detta ska bli det generella mönstret för alla leverantörsfiler eller en ensam pilot. Ingen kod skriven, inga tariffer eller policyer ändrade. Väntar på Codex-granskning av förslaget innan implementation.
+- `2026-09-05T10:36:00+02:00` – Codex granskade förslag `2026-09-04-002` (v1) i granskning `2026-09-05-001`: `changes-required`, fyra fynd. P1 (kapacitet ensam räcker inte): v1 band bara `debiterbar_effekt_kw` men fasaden tar fortfarande emot `returtemp_c`/`mwh_kallt_per_manad` som fria, ovaliderade motorargument — en policy kunde ge `complete` trots två obundna kostnadspåverkande fält; `effektgrans_kw: 96` i leverantörsfilen är dessutom Åkermannen-specifik fixturedata, inte en generell tariffkonstant. P1 (fel analogi med E.ON/Navirum): Stockholm Exergis debiterbara effekt är ett årsvis FAKTURERAT värde (beslutat en gång per kalenderår), inte ett rullande prognosfält — att själv räkna fram nästa års rekommenderade effekt är ett separat, senare problem. P1 (markören skulle bryta den live kalkylatorn): leverantörsfiler saknar i dag per-år `tariff_id`/policy helt, och produktionens `besparingsvarde.ts` anropar fortfarande de nakna motorfunktionerna direkt — att sätta `_kraver_kontrakt` utan att samtidigt migrera BÅDA produktflödena (`beraknaBesparingsvarde` och `mwhFranArskostnadForFjarrvarme`) skulle slå ut en redan live tariff med `KontraktKravs`; Codex begär en tvåfas-aktivering (shadow innan enforced). P2 (regressionsplanen stämde inte med fixturen): `akermannen-baslinje.json` har tolv månadsrader och korsar två prisår — kan inte spelas upp fakturaexakt i ett enda årsanrop; byte-identitet är fel testkrav. Codex bekräftade att Claude gjorde rätt som stannade före kodning och beställde en v2 av förslaget (ingen kod ännu). Claude skrev v2 samma dag: generiskt leverantörsfilskontrakt (per-års `tariff_id` + `aktiveringslage: off/shadow/enforced`, ingen Stockholm-hårdkodning i generatorn), motorbindning för alla tre dynamiska fält (`debiterbar_effekt_kw`, `kallvolym_mwh_per_manad`, `returtemperatur_c_per_manad`) med egna exact/snapshot/blocked-regler, uttrycklig separation av årsvis fakturerad effekt från en framtida egen prognosberäkning (utanför scope), en tvåfasplan (Fas A: shadow + migrera båda produktflödena i samma leverans; Fas B: enforced, egen separat commit och egen Codex-kontrollpunkt, kodas inte nu), och en reviderad regressionsplan (behåll den befintliga månadsregressionen som auktoritativ, lägg till per-prisårs kontraktstester, en semantisk datadiff i stället för byte-identitet, täckning av båda produktflödena inkl. blockerat/uppskattat fall). 12/18/21-fakturaavvikelsen i källorna kunde inte lösas av Claude utan tillgång till de faktiska fakturorna — flaggad som öppen fråga till Robert i förslaget i stället för att gissas. Ingen kod skriven, ingen tariffdata eller markör ändrad. Väntar på Codex-granskning av v2.
+- `2026-09-05T10:53:00+02:00` – Robert förklarade i chatten att flera av Stockholm Exergi-fakturorna är preliminära på grund av avläsningsproblem. Claude uppdaterade förslagets 12/18/21-avsnitt med en hypotes (preliminär `(P)`-debitering + separat avräkningsfaktura, samma mekanism som leverantörsfilens egen "Avräkningspraxis"-sektion och fixturens `korrigering_kr`-fält redan beskriver) i stället för att lämna det som en olöst motsägelse. Ingen kod ändrad.
+- `2026-09-05T11:03:00+02:00` – Codex omgranskade förslag v2 i granskning `2026-09-05-002`: `changes-required`, tre P1- och två P2-fynd. P1 (falskt annual/exact/complete kvarstod): `harled_resultatstatus(..., omfattning="annual")` filtrerar bort alla `monthly`-krav, så en policy med bara effekten bunden gav fortfarande fullständigt resultat trots ovaliderad kall energi/returtemp — samma brist v1 skulle lösa. v2 hade dessutom flera konkreta kontraktsmotsägelser: `kalla_typ="fakturerad"` finns inte (giltiga värden är `supplier_value`/`calculated`/`estimated`), en månadsmappning som varken `IndataPost.varde` eller årsfasadens enda statiska `kapacitet_bindning` kan representera, och en serie på ett icke-rullande fält kastas medan ett rullande fält aldrig kan bli `exact`. P1 (inversen är underbestämd): `mwhFranArskostnad` saknar kall energi/returtemp som indata — olika kombinationer kan ge samma totalbelopp för Stockholm Exergi, så kronor→MWh kan inte bli fakturaexakt utan samma tre fält; att bara säga att båda produktflödena delar en policy löste inte detta. P1 (delårs-årstestet ogiltigt): Codex mätte konkret att ett årsanrop med bara 2025-delen av fixturen ger 139 476 kr fast kostnad mot 93 620,88 kr av de verkliga månadsanropen (2026-delen: 146 685 kr mot 48 225,21 kr) — årsfasaden kan strukturellt inte återspela ett delår, motorn räknar alltid tolv månaders kapacitetsavgift oavsett hur få månaders energi som anges. P2 (aktiveringsläge inte fail-closed): `!= "off"` som villkor tillåter felstavningar att nå policykontrollen tyst oaktiverade; `shadow` är dessutom fel namn eftersom inget runtime-jämförelseläge faktiskt byggs. P2 (12/18/21-förklaringen ännu en ohypotes): Claudes preliminär-/avräkningsteori är rimlig men obekräftad — dokumentationen ska presentera de tre talen separat utan att påstå dem lösta. Claude skrev v3 samma dag: delade upp arbetet i tre uttryckligen separata beräkningsändamål (A: fakturaexakt månadsåterspelning via en ny `berakna_manadskostnad_med_kontrakt`-fasad, internt regressionsverktyg; B: den befintliga årsprognosen i `beraknaBesparingsvarde`, lämnas OFÖRÄNDRAD i denna pilot; C: kronor→MWh-inversen, lämnas också OFÖRÄNDRAD — ingen ny uppskattningsmekanism byggs utan ett separat produktbeslut av Robert). Modellutvidgning: `KravPost` får ett nytt `tillampliga_manader`-fält, `harled_resultatstatus` får ett nytt `omfattning="monthly"` som inte filtrerar bort månadskrav, `Tariffpolicy` får två nya statiska bindningar (`kallenergi_bindning`, `returtemperatur_bindning`) vid sidan av den befintliga `kapacitet_bindning`, alla skalära (en bindning per kalendermånadsanrop, ingen mappning behövs). `kalla_typ` rättat till `"supplier_value"`. Aktiveringsläget bytt till en strikt `frozenset`-allowlist (`off`/`validated`/`enforced`) och döpt om från `shadow` till `validated` eftersom det är en bygg-/testgrind, inte ett observerbart läge. `effektgrans_kw`-motsägelsen löst: flyttas till fixturens egen, uttryckligen Åkermannen-specifika sektion, och den semantiska diffen namnger explicit vilka fält som får ändras. Regressionsplanen ersatt helt: tolv kontraktsanrop, ett per fixture-rad, jämförda mot den befintliga direkta vägen, plus ett explicit negativtest för att avsaknad kall energi aldrig ger `exact`. 12/18/21 presenterat som tre separata, oattribuerade fakta utan påstådd lösning. Eftersom detta rör grundetappens kärnkontrakt (`harled_resultatstatus`, `Tariffpolicy`) och inte bara Stockholm-specifik kod, kodas fortfarande ingenting förrän Codex granskat v3. Ingen tariffdata eller markör ändrad.
+- `2026-09-04T19:44:32+02:00` – Codex filbevakare upptäckte Claudes nya rättningspost och slutgranskade `b4d355c`/`ee5f041`. Trots 239+268 gröna tester kvarstår `changes-required` i granskning `2026-09-04-009`: motorbindningen kan fortfarande välja eller utelämna ovaliderade värden, icke-ändlig numerik kan bli `exact`, TypeScript normaliserar omöjliga datum, `unverified`/saknad kvalitet kan bli `exact`, produktspärren är frivillig och publikt kringgångbar samt fixturekontrollen är hemkatalogbunden och hoppbar. Ingen implementation eller push ändrades.
 - `2026-09-03T17:11:32+02:00` – Sessionsloggen och den första mappstrukturen skapades av Codex.
 - `2026-09-03T17:22:36+02:00` – Repositoryts nuläge analyserades och ett strukturförslag dokumenterades av Codex.
 - `2026-09-03T17:29:03+02:00` – En systemövergripande arkitekturanalys och riskinventering dokumenterades av Codex.
@@ -792,3 +1698,21 @@ Detta ger en spårbar dokumentationsbaslinje och håller kommande kodändringar 
 - `2026-09-04T09:37:43+02:00` – Codex avslutade den externa källgranskningen av samtliga 72 poster, länkade officiella 2026-källor och dokumenterade 28 fullständigt godkända, 31 villkorade/årsgodkända, 12 underkända samt Stockholm Exergi som separat verifierat undantag.
 - `2026-09-04T13:32:57+02:00` – Codex skapade en gemensam to-do-lista med ansvar, arbetsordning, leverantörsfrågor och definition av produktionsgodkänd tariff.
 - `2026-09-04T14:19:57+02:00` – Codex dokumenterade instruktionen till Claude om en avgränsad dokumentationscommit och varningen att inte lägga till hela den ospårade Ellen-mappen med `git add .`.
+- `2026-09-04T15:02:00+02:00` – Claude skapade den avgränsade dokumentationscommitten (`8ef6955`, opushad) och redovisade en teknisk kartläggning av de 28 källgodkända tarifferna, utan att implementera något.
+- `2026-09-04T14:34:43+02:00` – Codex granskade kartläggningen mot Pythonmotorn, TypeScript-spegeln och React-formuläret. Baslinjecommitten godkändes, men kartläggningen fick `changes-required` med fyra P1-, tre P2- och ett P3-fynd.
+- `2026-09-04T15:30:00+02:00` – Claude reviderade kartläggningen (v2) efter granskning 2026-09-04-002: rättade alla åtta fynd, verifierade varje familjs formel direkt mot katalogens JSON i stället för mot verifieringslistans prosa, och identifierade ett nytt gemensamt hinder (effektfältet är i dag frivilligt med tyst uppskattning, inte en spärr) som berör samtliga 28 tariffer. Inget implementerat.
+- `2026-09-04T14:46:37+02:00` – Codex bedömde forskningsunderlaget om energi och effekt, verifierade huvudkällorna och dokumenterade tre separata vägar för leverantörsvärde, tariffspecifik tidsserieberäkning och osäker uppskattning. Underlaget godkändes som metodstöd men inte som grund för generell MWh-till-effekt-omräkning; ingen implementation ändrades.
+- `2026-09-04T14:52:47+02:00` – Codex omgranskade Claudes tekniska kartläggning v2 mot koden, forskningsbedömningen och Vattenfalls officiella 2026-villkor. V2 fick fortsatt `changes-required`; åtta konkreta rättningar och ett begärt v3-underlag dokumenterades utan implementationsändringar.
+- `2026-09-04T16:10:00+02:00` – Claude reviderade kartläggningen (v3) efter omgranskning 2026-09-04-004: bytte den enda effektflaggan mot ett fältvist `required_inputs`-datakontrakt med tre statusnivåer, valde årsnivå (inte fakturaexakt månad) som uttryckligt scope för denna batch, blockerade Vattenfalls flödespost och Sundsvall Matfors i väntan på extern nätreferensdata i stället för att anta katalogvärden, gjorde `capacity_overrun` till en uttrycklig `ej_tillämplig`-spärr, rättade räkningen till 27 kapacitetstariffer, strukturerade Vattenfalls volymrabatt ur redan verifierad källa, la till en per-tariffmatris för samtliga 27 samt en Fas A/Fas B-uppdelning med Sandviken som föreslagen första automatiseringspilot. Inget implementerat.
+- `2026-09-04T15:59:33+02:00` – Codex omgranskade v3 och dokumenterade kvarstående kontrakts- och exakthetsfrågor i granskning 2026-09-04-005. V3 behåller `changes-required`; ingen implementation eller tariffdata ändrades.
+- `2026-09-04T16:40:00+02:00` – Claude reviderade kartläggningen (v4) efter omgranskning 2026-09-04-005: delade upp datakontraktet i tre separata objekt (tariffkrav, kundindata, resultatstatus) och tog bort den fjärde, odefinierade statusnivån; satte E.ON/Navirums enskilda effektvärde till `accuracy: snapshot` i stället för `exact`; satte hela Vattenfalltariffens resultat till `completeness: blocked` så länge flödesposten saknar formel, även om övriga delproblem är byggbara; gjorde Södertörns och Telges neutrala temperaturdefault till obligatorisk indata för ett exakt resultat i stället för tyst verifierad noll; skilde uttryckligen på vad som byggs (E.ON/Navirum, Vattenfalls tre delproblem) och vad som inte byggs i denna batch (Sundsvall Matfors, Vattenfalls flödespost); ersatte den familjeaggregerade matrisen med en familjetabell och en 27-radig per-tariff-ID-tabell. Inget implementerat.
+- `2026-09-04T16:09:59+02:00` – Codex godkände v4:s arkitektur med villkor för en avgränsad grundimplementation, verifierade matrisens 27 unika katalog-ID:n och dokumenterade acceptansvillkor samt första implementationsetapp i granskning 2026-09-04-006. Ingen implementation eller tariffdata ändrades.
+- `2026-09-04T16:20:53+02:00` – Codex rekommenderade uttryckligt klartecken till Claude för den avgränsade etappen 1–4, med fokuserade lokala commits, full testredovisning, inga nya tariffaktiveringar och en ny Codex-kontrollpunkt före push eller nästa tariffbatch.
+- `2026-09-04T17:05:00+02:00` – Claude genomförde etapp 1–4 av granskning 2026-09-04-006: nytt `resultatkontrakt.py`/`resultatkontrakt.ts` (KravPost/IndataPost/Resultatstatus + `harled_resultatstatus`/`harledResultatstatus`, inga tariffer instansierade än), en `EJ_TILLAMPLIGT`-periodiseringssentinel i `faktura.py`/`fjarrvarme.ts`, och en utvidgad `grind()` som godtar `capacity: null` utan `fixed_charge` (ren energitariff). Sundsvall Indal/Liden/Luckstas katalogpost lämnades medvetet oförändrad (`investigation.status: "utreds"` kvarstår) — mekanismen är byggd och testad mot en egen fixture, inte mot den riktiga katalograden, så tariffen förblir avstängd. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@6f88ed7` (7 filer, 196 gröna pytest, upp från 186) och `neptune_academy@abaca72` (4 filer under `neptune-marketing/`, 235 gröna vitest, upp från 216, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på Codex granskning av kontrollpunkten.
+- `2026-09-04T16:41:11+02:00` – Codex granskade de två opushade grundcommitterna och körde om Python-, TypeScript-, typ- och byggkontroller. Trots gröna tester fick kontrollpunkten `changes-required` i granskning 2026-09-04-007 på grund av fail-open-tolkning av `capacity: null`, fail-open tom kravpolicy, oanvänd tids-/kvalitetsmetadata, saknat tidsseriestöd, utebliven motorintegration och avsaknad av generator-/konformitetsspärr. Ingen implementation ändrades.
+- `2026-09-04T16:55:47+02:00` – Codex aktiverade ett långkörande bevakningsmål för relevanta ändringar i `conversations` kring granskning 2026-09-04-007, så att gransknings- och rättningsloopen kan fortsätta utan Robert som manuellt relä.
+- `2026-09-04T17:52:00+02:00` – Claude rättade samtliga sex fynd i granskning 2026-09-04-007 utan att utöka tariffomfattningen. P1 (grinden gjorde en JSON-frånvaro till ett verifierat affärsvillkor): `capacity: null` utan `fixed_charge` avvisas åter (fail-closed, som innan etapp 1–4); en ren energitariff kräver nu den explicita markören `capacity.type == "not_applicable"` (`EJ_TILLAMPLIG_KAPACITETSFORM`), som ingen riktig katalogpost bär. P1 (tomt kontrakt gav exact/complete): `Tariffpolicy` bär nu ett obligatoriskt `komplett`-intyg (standard `False`); saknas det blockeras resultatet alltid. P1 (period/kvalitet/nyckel/tidsserie ignorerades): `harled_resultatstatus` validerar nu nyckelidentitet, avvisar `kvalitet: "invalid"`, blockerar på passerat `giltig_till`, kräver `observerad_period` när ett fält har en källperiod, och stöder tidsserier (en fullständig tolvmånadersserie för ett rullande fält ger nu `exact`, inte bara `snapshot`). P1 (ingen publik beräkningsväg skyddad): ny integrationsfasad `berakna_arskostnad_med_kontrakt`/`beraknaArskostnadMedKontrakt` kopplar statusen till en verklig `arskostnad`-beräkning — ett blockerat resultat räknar aldrig ut en kostnad, bevisat med ett integrationstest. P2 (ingen Python/TypeScript-synk): en delad, språkoberoende testvektorfil (`resultatkontrakt-testvektorer.json`, manuellt kopierad mellan repona) körs nu av båda testsviterna. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte; Sundsvall Indal/Liden/Luckstas katalogpost är fortsatt oförändrad och avvisas nu (liksom innan etapp 1–4) på "kapacitetsform". Fokuserade lokala commits: `enkey-agents@005c6d9` (8 filer, 221 gröna pytest, upp från 196) och `neptune_academy@96f2d27` (4 filer under `neptune-marketing/`, 252 gröna vitest, upp från 235, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
+- `2026-09-04T18:50:16+02:00` – Codex filbevakare upptäckte Claudes rättningspost automatiskt och omgranskade committerna 005c6d9/96f2d27. Trots 221+252 gröna tester fick kontrollpunkten fortsatt `changes-required` i granskning 2026-09-04-008: kontraktsindata är inte bundna till prissatta motorvärden, period/kvalitet/serietäckning kan fortfarande ge falskt `exact`, ingen produktväg använder fasaden, `not_applicable` tillåter motsägande band och fixturekopiorna saknar synkspärr. Ingen implementation eller push ändrades.
+- `2026-09-04T19:15:00+02:00` – Claude rättade samtliga sex fynd i granskning 2026-09-04-008. P1 (fasaden validerade ett värde men prissatte ett annat): `berakna_arskostnad_med_kontrakt`/`beraknaArskostnadMedKontrakt` tar inte längre fria `kapacitet`/`falt`-argument — de härleds nu ur de validerade `IndataPost`-värdena via `kapacitet_nyckel`, och `policy.tariff_id` kontrolleras mot `prisar['tariff_id']`. P1 (period/kvalitet/nyckel gav fortfarande falskt exact): riktig ISO-datumvalidering (`giltig_fran` läses nu också), en allow-list av kvalitetsvärden i stället för att bara avvisa "invalid". P1 (serielängd ≠ tidsseriedäckning, Python/TS-avvikelse): ett rullande eller källperiodsbundet fält kan aldrig längre ge `exact` i denna etapp, bara `snapshot` som bäst — oavsett serielängd; serier stöds nu som både list och tuple utan tyst konvertering. P1 (ingen produktionsväg skyddad): ny `KontraktKravs`-spärr i `faktura.py`/`fjarrvarme.ts` — en prisårspost märkt `_kraver_kontrakt` vägrar direktanrop till `arskostnad`/`manadskostnad`/`manadsuppdelning`/`mwh_fran_arskostnad`, bara fasaden kommer förbi; ingen katalogtariff sätter markören, de sex redan godkända tarifferna är regressionstestat opåverkade. P1 (`not_applicable` tillät motsägande band): markören avvisas nu om kapacitetsobjektet samtidigt bär ett prissättande fält, och `till_prisar` läser aldrig band för en markerad tariff. P2 (två okopplade fixturekopior): en automatisk SHA-256-synkkontroll (`test_fixture_synkad_med_neptune_marketing`) jämför kopiorna direkt via filsystemet och fäller Python-sviten vid avvikelse. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@b4d355c` (7 filer, 239 gröna pytest, upp från 221) och `neptune_academy@ee5f041` (5 filer under `neptune-marketing/`, 268 gröna vitest, upp från 252, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
+- `2026-09-04T19:44:32+02:00` – Codex filbevakare slutgranskade `b4d355c`/`ee5f041`. Trots 239+268 gröna tester kvarstod `changes-required` i granskning 2026-09-04-009: fri motorbindning, ovaliderad numerik/datum/kvalitet, en frivillig produktspärr och en hemkatalogbunden fixturekontroll (se den separata posten ovanför denna rad, som Codex fogade in direkt efter Ändringslogg-rubriken i stället för kronologiskt sist).
+- `2026-09-04T20:15:00+02:00` – Claude rättade samtliga sex fynd i granskning 2026-09-04-009. P1 (fri motorbindning kunde peka på ovaliderad indata): `Tariffpolicy.kapacitet_bindning`/`kapacitetBindning` är nu statisk, validerad policydata i stället för ett fritt per-anrop-argument; `falt` byggs bara av policy-relevanta fält, ett odeklarerat extrafält kan inte längre påverka kostnaden (regressionstestat). P1 (icke-ändlig numerik gav exact): `NaN`/`inf`/bool/tom serie kastar nu i stället för att ge en beräknad meningslös kostnad. P1 (TypeScript normaliserade omöjliga kalenderdatum): en UTC-rundtursvalidering ersatte `Date.parse`, matchar nu Pythons `date.fromisoformat`-strikthet (testat mot 2026-02-29/30, 2026-04-31). P1 (`unverified`/saknad kvalitet gav exact): bara `"verified"` räcker nu för `exact`, övriga kända kvalitetsvärden ger högst `snapshot`. P1 (produktspärren var en frivillig bool): `_via_kontraktfasad`/`viaKontraktfasad` ersatt av en sentinel-passersedel (`_KontraktPassersedel` i Python, ett `Symbol` i TypeScript) som en trivial `True`/`true` inte längre kommer förbi; `till_prisar` härleder markören ur ett nytt, ännu oanvänt katalogfält (`contract_required`) i stället för att lämna den som en lös nyckel — läggs bara till när sann, så ingen redan godkänd tariffs genererade data ändras (verifierat mot `test_synk.py`). P2 (fixturekontrollen var hemkatalogbunden och hoppbar): en portabel hash-pin (`_FORVANTAD_SHA256`/`FORVANTAD_SHA256`, hårdkodad i båda testfilerna) är nu den primära synkspärren, oberoende av var sidorepot är utcheckat; den gamla hemkatalogskontrollen kvarstår bara som en extra lokal bekvämlighet. Familj 4, Telge, E.ON/Navirum, Sundsvall Matfors och samtliga Vattenfalltariffer rördes inte. Fokuserade lokala commits: `enkey-agents@8ea1fbb` (6 filer, 266 gröna pytest, upp från 239) och `neptune_academy@1082bd8` (7 filer under `neptune-marketing/`, inkl. ny devDependency `@types/node` för Node-inbyggda moduler i testet, 292 gröna vitest, upp från 268, `tsc --noEmit` rent, produktionsbygge ok). Ingen push. Väntar på ny Codex-granskning.
