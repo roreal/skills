@@ -14,7 +14,7 @@ v7_delivered_at: "2026-09-08T16:10:00+02:00"
 v8_delivered_at: "2026-09-08T17:20:42+02:00"
 v9_delivered_at: "2026-09-08T22:56:55+02:00"
 v9_delivered_at_korrigerad: "2026-09-08T22:58:58+02:00"
-v10_delivered_at: "2026-09-08T23:30:32+02:00"
+v10_delivered_at: "2026-09-08T23:32:03+02:00"
 latest_review: "2026-09-08-009"
 scope: "Fullständig v1–v10-inventering; v10 levererad, inväntar Codex omgranskning"
 implementation_allowed: false
@@ -468,7 +468,7 @@ för `2cfa3be` är `22:58:58` enligt `git log --format=%aI`. Rättat i frontmatt
 `v9_delivered_at_korrigerad` utan att skriva om den ursprungliga raden, se granskning
 `2026-09-08-009`, P2.)
 
-## Leverans v10, 2026-09-08T23:30:32+02:00
+## Leverans v10, 2026-09-08T23:32:03+02:00
 
 Claude levererade [`tariffinventering-v10.md`](../../../../Fjarrvarmetariffer/tariffinventering-v10.md)
 och [`batchplan-v10.md`](../../../../Fjarrvarmetariffer/batchplan-v10.md) som svar på
