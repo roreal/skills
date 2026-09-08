@@ -3,14 +3,15 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v5-delivered-awaiting-codex-review
+status: v6-delivered-awaiting-codex-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
 v4_delivered_at: "2026-09-08T13:45:00+02:00"
-v5_delivered_at: "2026-09-08T15:40:00+02:00"
-latest_review: "2026-09-08-004"
-scope: "Fullständig v1–v5-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v5_delivered_at: "2026-09-08T14:58:36+02:00"
+v6_delivered_at: "2026-09-08T15:32:00+02:00"
+latest_review: "2026-09-08-005"
+scope: "Fullständig v1–v6-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -23,6 +24,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v4.md"
   - "Fjarrvarmetariffer/tariffinventering-v5.md"
   - "Fjarrvarmetariffer/batchplan-v5.md"
+  - "Fjarrvarmetariffer/tariffinventering-v6.md"
+  - "Fjarrvarmetariffer/batchplan-v6.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -215,7 +218,7 @@ tariff och pusha inte. Om ett sakförhållande verkligen inte kan avgöras från
 underlag ska det dokumenteras som en konkret blockering i V5; det är inte skäl att lämna
 hela arbetsordern väntande.
 
-## Leverans v5, 2026-09-08T15:40:00+02:00
+## Leverans v5, 2026-09-08T14:58:36+02:00
 
 Claude levererade [`tariffinventering-v5.md`](../../../../Fjarrvarmetariffer/tariffinventering-v5.md)
 och [`batchplan-v5.md`](../../../../Fjarrvarmetariffer/batchplan-v5.md), som svar på samtliga
@@ -241,3 +244,62 @@ nio) rättat som en daterad korrigering utan att ändra den äldre raden. Dispos
 planen, flyttade ingen post. Fokuserad lokal dokumentationscommit ovanpå `ada05e7`. Ingen
 produktkod, tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad;
 inget pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v5, 2026-09-08T15:14:26+02:00
+
+Omgranskning
+[`2026-09-08-005`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v5.md)
+har status `changes-required`. V5 behåller korrekt kontrollmängd och löser många av V4:s
+uttryckliga dokumentationsfynd, men `45/45 grind()` är inte en reproducerbar kontroll av
+den fulla aktiveringskedjan. Dagens produktkontrakt saknar bindning för leverantörsvalt
+effektband, request-modellen kan inte blockera tariffvis inom samma medlem, Umeås B-faktor
+saknar typad och intervallvaliderad väg, och katalogaktivering av Stockholm skulle skapa
+ett andra leverantörs-ID för samma produkt. Sundsvall Indals påstådda kontraktsfria
+legacy-väg stoppas dessutom av generatorn.
+
+Claude ska leverera V6 med en sammansatt preflight som omfattar verklig
+utredningsstatus/request-scope, grind, policy, generator, unikt produkt-ID och ett minimalt
+årsberäkningsfall; därefter exakta band-, Umeå- och Stockholm-kontrakt samt rättade
+P2-motsägelser. Ändra ingen produktkod eller tariffdata och pusha inte. Den tidigare
+V5-leveranstiden `15:40:00` var senare än både committen (`14:58:36`) och kontrolltiden;
+front matter och denna rubrik använder därför committens verifierbara tid. Den äldre
+felaktiga tidsraden i sessionsloggens ändringshistorik lämnas kvar och rättas med en ny
+daterad not.
+
+## Leverans v6, 2026-09-08T15:32:00+02:00
+
+Claude levererade [`tariffinventering-v6.md`](../../../../Fjarrvarmetariffer/tariffinventering-v6.md)
+och [`batchplan-v6.md`](../../../../Fjarrvarmetariffer/batchplan-v6.md) som svar på samtliga
+fynd i omgranskning `2026-09-08-005`. Grind-only-preflighten ersatt av en sammansatt
+fyrastegspreflight (§6): utrednings-/request-status → `grind()` → generatorns kontraktsgrind
+mot det verkliga policyregistret → ett minimalt `annual_forward`-anrop. Steg 3 (verifierat
+genom att läsa `policyregister.py`/`generera.py` direkt) visade att samtliga 45 `ready`-rader
+— inklusive de 31 v5 kallade "leverantörsvärde-mönstret räcker" — saknar en registrerad
+`Tariffpolicy` och kräver var sin nya policy innan generatorn accepterar dem.
+
+Sundsvall Indal rättad: v5:s påstående att tariffen "går på legacy-vägen utan
+kontraktskrav" var verifierat fel — tariff-ID:t finns inte i `LEGACY_UNDANTAGNA_TARIFF_ID`,
+`bygg_ts_fran_katalog()` hade kastat. Batchen bygger nu en minimal, kontraktsgated
+`Tariffpolicy` (Sandviken-mönstret); "Visas för användaren" rättad från "alla tre lägen"
+till mwh-only.
+
+Fyra kontraktstillägg specificerade i ett nytt §6a: `KravPost.maxvarde` (mirror av
+`minvarde`, Falu ytterorters 500 kW-tak), `supplier_confirmed_band_id` (Borlänge/C4:s
+osäkra gränsfall, skild från det numeriska debiteringsunderlaget), en namngiven
+`kapacitet_multiplikator_bindning` med `minvarde=0.93`/`maxvarde=1.4` för Umeås `B`, och ett
+nytt `ADAPTERREGISTER` som exkluderar Stockholm Exergis katalogdubblett helt till förmån för
+en utökad leverantörsfilsadapter — verifierat genom att köra `_stabilt_tariff_id()` mot den
+verkliga katalograden (gav `stockholm-exergi-stockholm-exergi-normal`, en tredje,
+dubblerande produkt-ID skild från leverantörsfilens `stockholm-exergi`).
+
+`remaining_information_requests` bytt till en `tariff_ids`-representation (§7) som ersätter
+v5:s "SPLITTA"/"eller" med en enda, konsekvent livscykel för samtliga 14 requests. De
+felaktiga filnamnen `katalog.ts`/`adjustments.ts` (existerar inte) rättade till de verkliga
+`fjarrvarme.ts`/`resultatkontrakt.ts`/`justeringar.py` (speglad inline i `fjarrvarme.ts`).
+
+Dispositionsräkningen 7 + 45 + 26 = 78 bas, 9 + 5 = 14 variant, 92 totalt är OFÖRÄNDRAD —
+v6 fördjupade och rättade kontraktsplaneringen, flyttade ingen post. Fokuserad lokal
+dokumentationscommit ovanpå `ce53f75`, inklusive den tidigare ospårade granskningen
+`2026-09-08-005` för att hålla committen självbärande. Ingen produktkod, tariffdata,
+genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar
+på Codex omgranskning.

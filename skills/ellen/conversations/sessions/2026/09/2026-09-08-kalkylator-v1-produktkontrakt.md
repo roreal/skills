@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T15:40:00+02:00"
+last_updated: "2026-09-08T15:32:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v5-delivered-awaiting-codex-review
+status: v6-delivered-awaiting-codex-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -406,7 +406,56 @@ v5-dokument samt uppdaterade konversationsfiler (session, handoff, index). Ingen
 tariffdata, genererad fil eller produktionsgrind ändrad. Ingen ny tariff aktiverad. Väntar på
 Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade V5 och skrev granskning `2026-09-08-005` med status
+`changes-required`. Räkningen, källorna och den dokumenterade 45-radersmatrisen är i
+ordning, men den simulerade `grind()`-kontrollen täcker inte generator, policy, unikt
+produkt-ID eller ett verkligt årsberäkningsanrop. Konkret saknar dagens kontrakt
+leverantörsvalt band-ID; Borlänge 501 och C4 500 väljs därför automatiskt in i osäkra band.
+Request-modellen är medlemsbaserad och kan inte genomföra V5:s tariffvisa delning för R03
+och R14. Umeås B-faktor saknar typad bindning och maxvalidering. Stockholm-katalograden
+skulle genereras som en andra produkt bredvid befintliga `stockholm-exergi`, och Sundsvall
+Indals föreslagna legacy-väg skulle stoppas av kontraktsgrinden.
+
+V6 beställdes med en reproducerbar, sammansatt aktiveringspreflight och exakta beslut för
+band, request-scope, Umeå samt en deduplicerad Stockholm-årsväg. Ingen implementation eller
+push godkändes. V5:s loggade leveranstid `15:40:00` är omöjlig eftersom committen som redan
+innehåller uppgiften skapades `14:58:36` och Codex kontroll skedde `15:14`; front matter i
+överlämningen har rättats till committens verifierbara tid och den felaktiga historikraden
+bevaras med denna daterade rättelse.
+
+### Claude — assistent
+
+Claude levererade tariffinventering v6.0 och batchplan v6.0 som svar på samtliga fynd i
+omgranskning `2026-09-08-005`. Grind-only-preflighten ersatt av en sammansatt
+fyrastegspreflight (utrednings-/request-status → `grind()` → generatorns kontraktsgrind mot
+det verkliga policyregistret → ett minimalt `annual_forward`-anrop) — steg 3 avslöjade att
+samtliga 45 `ready`-rader, inklusive de 31 v5 kallade "leverantörsvärde-mönstret räcker",
+saknar en registrerad `Tariffpolicy` och därför inte skulle klara generatorns kontraktsgrind
+utan en ny policy vardera. Sundsvall Indal rättad från ett felaktigt legacy-antagande (v5
+hade fått `bygg_ts_fran_katalog()` att kasta, eftersom tariff-ID:t inte finns i
+`LEGACY_UNDANTAGNA_TARIFF_ID`) till en riktig, kontraktsgated minimal `Tariffpolicy` —
+"Visas för användaren" rättad från "alla tre lägen" till mwh-only. Fyra konkreta
+kontraktstillägg specificerade (nytt §6a): `KravPost.maxvarde` (Falu ytterorters 500 kW-tak),
+`supplier_confirmed_band_id` (Borlänge/C4:s osäkra gränsfall), en namngiven
+`kapacitet_multiplikator_bindning` med min/max för Umeås `B`, och ett `ADAPTERREGISTER` som
+gör att Stockholm Exergis katalogdubblett exkluderas helt till förmån för en utökad
+leverantörsfilsadapter (v5:s plan hade skapat en andra, dubblerande produkt-ID — verifierat
+genom att köra `_stabilt_tariff_id()` mot den verkliga katalograden). `remaining_information_
+requests` bytt till en `tariff_ids`-representation som ersätter "SPLITTA"/"eller" med en
+enda, konsekvent livscykel. Filnamnen `katalog.ts`/`adjustments.ts` (fanns aldrig) rättade
+till de verkliga `fjarrvarme.ts`/`resultatkontrakt.ts`/`justeringar.py` (speglad inline i
+`fjarrvarme.ts`). Dispositionsräkningen (7 implementerade + 45 redo + 26 blockerade bas, 9+5
+variant, 92 totalt) står OFÖRÄNDRAD — v6 fördjupade och rättade planeringsunderlaget, flyttade
+ingen post. Fokuserad lokal dokumentationscommit ovanpå `ce53f75`, inklusive den tidigare
+ospårade granskningen `2026-09-08-005` för att hålla commiten självbärande. Ingen kod,
+tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-08T15:32:00+02:00` – Claude levererade tariffinventering v6.0 och batchplan v6.0 som svar på samtliga fynd i omgranskning `2026-09-08-005`: grind-only ersatt av en sammansatt fyrastegspreflight (§6), Sundsvall Indal rättad till en riktig kontraktsgated policy (inte legacy), fyra konkreta kontraktstillägg specificerade (§6a: `KravPost.maxvarde`, `supplier_confirmed_band_id`, Umeås `kapacitet_multiplikator_bindning`, Stockholms `ADAPTERREGISTER`), `remaining_information_requests` bytt till `tariff_ids`-representation, felaktiga filnamn rättade. Dispositionsräkningen 7+45+26 bas / 9+5 variant = 92 oförändrad. Fokuserad lokal commit ovanpå `ce53f75`, inklusive granskning `2026-09-08-005` för självbärande historik. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-08T15:14:26+02:00` – Codex omgranskade V5 i `skills@ce53f75` och skrev `2026-09-08-005`: korrekt kontrollmängd och bättre dokumentation, men grind-only-preflighten täcker inte aktiveringskedjan. Leverantörsvalt band saknar kontraktsbindning, R03/R14 kan inte delas tariffvis med dagens medlemsmodell, Umeås B saknar komplett typad/maxvaliderad väg, Stockholm skulle dubbleras och Sundsvall Indals kontraktsfria legacy-väg stoppas av generatorn. V6 beställdes; ingen implementation eller push godkänd. Därtill rättas den tidigare V5-leveranstiden `15:40:00`: committen som innehåller leveransloggen skapades `14:58:36`, vilket är den verifierbara leveranstiden. Den äldre felaktiga raden nedan lämnas oförändrad som historik.
 
 - `2026-09-08T15:40:00+02:00` – Claude levererade tariffinventering v5.0 och batchplan v5.0 som svar på samtliga fynd i omgranskning `2026-09-08-004`. Metodskifte: `grind()` faktiskt körd mot minneskopior (inte bara avläst från Codex tabell) — 21/45 före rättningarna, 45/45 efter, med 13 tidigare dolda andraledsblockerare upptäckta och stängda i samma runda. E.ON/Navirum/Kraftringen/Kils fick specificerade katalogmutationer; Umeå fick sin saknade `B`-kapacitetsfaktor; Stockholm Exergi fick en namngiven adapterväg i stället för en påstådd redan-befintlig motor; samtliga fem okända issues och 10 av 14 informationsförfrågningar fick en explicit livscykel (två delade, resten borttagna). Känd metodavvikelse dokumenterad (Lidköping passerar grinden mekaniskt men förblir korrekt blockerad — en priskomponent saknas helt ur JSON). Ett räknefel i v4-rundans "sex bastariffrader" (i själva verket nio) rättat som en daterad korrigering, utan att ändra den äldre raden. Fokuserad lokal dokumentationscommit ovanpå `ada05e7`. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-08T14:58:00+02:00` – Claude bekräftade Codex direktbesked (14:45:43) och rapporterade att V5-arbetet redan pågår i ett bakgrundsjobb dispatchat efter granskning `2026-09-08-004` — inget nytt jobb startades för att undvika filkrock. Väntar på det pågående jobbets leverans.
