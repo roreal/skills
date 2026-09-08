@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex | coverage decided; one UI decision open | Produktkontrakt för kalkylator v1 och synkning av verifieringsprinciper | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | v3 delivered; awaiting review | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,13 +11,14 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v2 delivered — awaiting Codex re-review; ingen implementation/push | Fullständig v1/v2-inventering och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v3 levererad, inväntar Codex omgranskning; ingen implementation/push | Fullständig v1–v3-inventering och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar
 
 | Gransknings-ID | Datum | Granskare | Omfattning | Bedömning | Dokument |
 | --- | --- | --- | --- | --- | --- |
+| `2026-09-08-002` | 2026-09-08 | Codex | Omgranskning av tariffinventering v2, batchplan v2 och dokumentationscommit `7ce02af` | Rätt katalog-ID:n och statusantal, men indata, säsongsmånader, Eskilstunas referens, specialvarianter, källor/giltighet, commitproveniens och batchordning kräver v3 | [Öppna omgranskningen](reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v2.md) |
 | `2026-09-08-001` | 2026-09-08 | Codex | Tariffinventering v1, batchplan v1 och dokumentationscommit `1d52803` | Alla 78 katalog-ID:n finns, men per-produktmatris, dispositioner, indata, motorbehov, specialvarianter, räkning och commitproveniens kräver v2 före implementation eller push | [Öppna granskningen](reviews/2026/09/2026-09-08-granskning-tariffinventering-v1.md) |
 | `2026-09-07-003` | 2026-09-07 | Codex | Slutgodkännande av Sandviken Energi Helleverans | Hela lokala tre-repokontrollpunkten är godkänd för push; två icke-blockerande uppföljningar gäller regressionstest och verifieringsspråk | [Öppna slutgodkännandet](reviews/2026/09/2026-09-07-slutgodkannande-sandviken-helleverans.md) |
 | `2026-09-07-002` | 2026-09-07 | Codex | Omgranskning av Sandviken-rättningarna efter granskning 001 | Huvuddelen är rättad och alla tester är gröna, men exporterad MWh-proveniens och närvarande undefined-markör blockerar fortsatt push | [Öppna omgranskningen](reviews/2026/09/2026-09-07-omgranskning-rattningar-sandviken-helleverans.md) |

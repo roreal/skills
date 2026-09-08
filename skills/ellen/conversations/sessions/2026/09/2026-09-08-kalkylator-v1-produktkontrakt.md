@@ -1,12 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T09:36:59+02:00"
+last_updated: "2026-09-08T12:05:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
-status: coverage-decided
+  - Claude
+status: v3-delivered-awaiting-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -226,8 +227,57 @@ och v1-leveransens tidsstämpel är rättade till det verkliga commit-tidsstämp
 Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad. Ingen ny tariff
 aktiverad. Väntar på Codex omgranskning.
 
+### Robert — användare
+
+> Claude påstår att den levererat, kolla igen
+
+### Codex — assistent
+
+Codex kontrollerade igen och bekräftade att leveransen nu finns i den lokala committen
+`7ce02af` — den blev synlig efter den föregående kontrollen. V2 omgranskades mot katalogen,
+överlämningen och granskning `2026-09-08-001`. Exakt 78 unika katalog-ID:n finns och
+dispositionerna 7 + 46 + 25 stämmer, men kontrollpunkten har fortsatt
+`changes-required`: tretton flödeskrävande `ready`-poster saknar flöde i sin obligatoriska
+indata, batch 5b använder fel säsongsmånader, Eskilstuna kräver fortfarande en overifierad
+nätreferens, specialvarianterna skjuts utanför den frusna totalsumman och primärkällor samt
+giltighet saknas per produkt. Batchordning och dokumentationsmotsägelser återstår också;
+committen saknar dessutom den ospårade granskning `2026-09-08-001` som V2 citerar.
+Fullständig omgranskning:
+[`2026-09-08-002`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v2.md).
+Ingen implementation eller push godkändes.
+
+### Claude — assistent
+
+Claude levererade tariffinventering v3.0 och batchplan v3.0 som svar på samtliga fynd i
+omgranskning `2026-09-08-002`. Sexton `ready`-rader fick sitt saknade flödes-/temperaturfält
+tillagt i Obligatorisk indata (sex fullårsflödestariffer, sju säsongsflödestariffer — nu med
+varje tariffs FAKTISKA `months`-lista i stället för ett generellt oktober–april-antagande,
+Kraftringens `Tf`, Finspångs villkorade flöde, Stockholm Exergis period-/upplösningskontrakt
+för de fem vintermånaderna). Eskilstuna flyttad från `ready_to_implement` till
+`blocked_external_info` med en formulerad fråga om nätreferensens karaktär. Samtliga sju
+specialvariantfamiljer (14 variant-ID:n — E.ON/Navirums 36-månadersmetod räknas som ÅTTA
+egna variant-ID:n, en per bastariff) är nu integrerade i den räknade kontrollmängden i
+stället för att stå utanför totalen — kontrollmängden är därför nu 92 räknade enheter
+(78 bastariffer + 14 varianter), inte 78. Primärkälla (`source_id` + URL) och verklig
+giltighet (`valid_from`/`valid_to`, explicit `unknown` där katalogen har `null` — 69 av 78
+rader) tillagda på samtliga 78 bastariffrader. Gotland Taxa 17:s beskrivning rättad
+(`foregaende_ars_mwh` styr tariffvalet mellan Taxa 17/21, är ingen `volume_discount`-post —
+raden har `adjustments: []`). Batchplanen omarbetad: batch 5 delad i tre undergrupper efter
+faktisk motorsemantik (ingen justering/fullårsflöde/säsongsflöde) i stället för v2:s enda
+felaktiga 5a/5b-delning, Eskilstuna borttagen från batch 4, Partille tillagd i batch 1 (var
+felaktigt utelämnad helt i v2), nya delbatcher 3b/6b för de nu räknade E.ON/Navirum- och
+Finspång-varianterna, Familj 4-resten ligger nu FÖRST utan en icke-dokumenterad
+omprioritering. Dokumentationscommitten gjord självbärande med en explicit fillista:
+granskningarna `2026-09-08-001` och `2026-09-08-002` (v3:s eget normativa underlag) spåras
+för första gången, den maskinspecifika länken i teknisk-kartläggningen rättad till en
+portabel relativ länk. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind
+ändrad. Ingen ny tariff aktiverad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-08T12:05:00+02:00` – Claude levererade tariffinventering v3.0 och batchplan v3.0 som svar på samtliga fynd i omgranskning `2026-09-08-002`: 16 flödes-/temperaturluckor stängda med tariffvisa `months`-listor (inte ett generellt antagande), Eskilstuna flyttad till `blocked_external_info`, samtliga sju specialvariantfamiljer (14 variant-ID:n) integrerade i kontrollmängden (ny totalsumma 92 = 78 bas + 14 variant), primärkälla/giltighet tillagd på alla 78 bastariffrader, Gotland Taxa 17 rättad, batch 5 delad i tre undergrupper efter motorsemantik, Partille tillagd i batch 1, Familj 4 ligger nu FÖRST, granskningarna 2026-09-08-001/-002 spårade för första gången, maskinspecifik länk rättad. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+
+- `2026-09-08T11:28:26+02:00` – Codex bekräftade att Claudes V2-leverans finns i `skills@7ce02af` och omgranskade den i `2026-09-08-002`. ID- och statusräkningen stämmer, men tretton flödesluckor, fel säsongsmånader, Eskilstunas overifierade nätreferens, specialvarianter utanför kontrollmängden, ofullständig käll-/giltighetsproveniens, en fortsatt icke självbärande granskningskedja samt batch-/dokumentationsmotsägelser kräver V3. Ingen implementation eller push godkänd.
 - `2026-09-08T10:43:54+02:00` – Claude levererade tariffinventering v2.0 och batchplan v2.0 som svar på samtliga fynd i granskning `2026-09-08-001`: verklig per-produktmatris (46 ready/25 blocked/7 implemented), tre rättade dispositioner (Borlänge, C4, Stockholm Exergis årsprodukt), motorstatus omräknad mot `JUSTERINGSTYPER` (16 ready-tariffer kräver ny motorkod, inte bara fyra familjer), sju specialvarianter spårade i egen tabell i stället för `not_applicable`, rättat räkningsspråk (78 tariffprodukter + 1 schablon, 54 leverantörsentiteter), omordnad batchplan med fullständiga ID:n, självbärande dokumentationscommit och sex rättade länkar. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-08` – Codex kontrollerade mappen efter Roberts uppmaning att läsa Claudes svar. Inget nytt Claude-svar, inga V2-filer och ingen rättningscommit fanns ännu; HEAD var fortsatt `1d52803`.
 - `2026-09-08` – Codex granskade tariffinventering v1 och batchplan v1 i granskning `2026-09-08-001`: `changes-required`. Alla katalog-ID:n finns, men per-produktmatris, dispositioner, obligatoriska indata, adapterbehov, specialvarianter, räkning, länkar och commitproveniens kräver v2. Ingen implementation eller push godkänd.

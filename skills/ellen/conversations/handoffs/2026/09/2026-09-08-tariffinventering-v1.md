@@ -3,10 +3,11 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v2-delivered-awaiting-rereview
+status: v3-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
-latest_review: "2026-09-08-001"
+v3_delivered_at: "2026-09-08T12:05:00+02:00"
+latest_review: "2026-09-08-002"
 scope: "Fullständig v1-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
@@ -14,6 +15,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v1.md"
   - "Fjarrvarmetariffer/tariffinventering-v2.md"
   - "Fjarrvarmetariffer/batchplan-v2.md"
+  - "Fjarrvarmetariffer/tariffinventering-v3.md"
+  - "Fjarrvarmetariffer/batchplan-v3.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -88,7 +91,7 @@ sammanfattning. Ingen kod, tariffdata eller aktivering ändrad; väntar på Code
 
 ## Codex granskning 2026-09-08
 
-Granskning [`2026-09-08-001`](../../../../reviews/2026/09/2026-09-08-granskning-tariffinventering-v1.md)
+Granskning [`2026-09-08-001`](../../../reviews/2026/09/2026-09-08-granskning-tariffinventering-v1.md)
 har status `changes-required`. Leveransen innehåller alla 78 katalog-ID:n, men den beställda
 per-produktmatrisen saknas och flera dispositioner, obligatoriska indata, adapterbehov,
 specialvarianter, delsummeringar samt dokumentationslänkar måste rättas. Ingen implementation
@@ -111,3 +114,35 @@ schablon, 53 leverantörer + 1 schablonentitet); batchplanen omordnad (Familj 4 
 Sundsvall Indal, Kraftringen flyttad till samma batch som E.ON/Navirum, fullständiga
 tariff-ID:n utan förkortning). Väntar på Codex omgranskning. Ingen produktkod, tariffdata
 eller aktivering ändrad; ingen push.
+
+## Codex omgranskning 2026-09-08
+
+Omgranskning
+[`2026-09-08-002`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v2.md)
+har status `changes-required`. V2 har rätt antal katalog-ID:n och dispositioner, men
+obligatoriska flödes-/temperaturfält saknas fortfarande, batch 5b använder felaktigt ett
+generellt oktober–april-antagande, Eskilstunas `ready`-status är villkorad av en ännu
+overifierad nätreferens och specialvarianterna skjuts fortfarande utanför den frusna
+kontrollmängden. Primärkällor/giltighet per produkt, batchordning, två lägesmotsägelser och
+dokumentationsmetadata/länkar behöver också rättas i V3. Committen är fortfarande inte
+självbärande eftersom den citerade granskningen `2026-09-08-001` är ospårad. Ingen
+implementation eller push är godkänd.
+
+## Leverans v3, 2026-09-08T12:05:00+02:00
+
+Claude levererade [`tariffinventering-v3.md`](../../../../Fjarrvarmetariffer/tariffinventering-v3.md)
+och [`batchplan-v3.md`](../../../../Fjarrvarmetariffer/batchplan-v3.md), som svar på samtliga
+fynd i omgranskning `2026-09-08-002`. Sammanfattning: 16 `ready`-rader fick sitt saknade
+flödes-/temperaturfält (sex fullårsflöde, sju säsongsflöde med varje tariffs FAKTISKA
+`months`-lista, Kraftringens `Tf`, Finspångs villkorade flöde, Stockholm Exergis
+period-/upplösningskontrakt); Eskilstuna flyttad till `blocked_external_info`; samtliga sju
+specialvariantfamiljer (14 variant-ID:n) integrerade i den räknade kontrollmängden — ny
+totalsumma **92** (78 bastariffer + 14 varianter), inte 78; primärkälla + giltighet
+(`valid_from`/`valid_to`, explicit `unknown` där `null`) tillagt på samtliga 78
+bastariffrader; Gotland Taxa 17:s beskrivning rättad; batchplanen omarbetad med batch 5
+delad i tre undergrupper efter motorsemantik, Partille tillagd (var utelämnad i v2), Familj
+4 FÖRST utan odokumenterad omprioritering, nya delbatcher 3b/6b för de räknade E.ON/Navirum-
+och Finspång-varianterna. Dokumentationscommitten gjord självbärande: granskningarna
+`2026-09-08-001` och `2026-09-08-002` spårade för första gången, maskinspecifik länk
+rättad. Väntar på Codex omgranskning. Ingen produktkod, tariffdata eller aktivering
+ändrad; ingen push.

@@ -6,7 +6,7 @@
 > "exakt" i kundgränssnittet. Se [produktdirektivet](../PROJECT_CHARTER.md).
 
 Upprättad 2026-09-04 av Claude. **v4 — reviderad efter omgranskning
-[2026-09-04-005](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-04-omgranskning-teknisk-kartlaggning-v3.md:1)
+[2026-09-04-005](../conversations/reviews/2026/09/2026-09-04-omgranskning-teknisk-kartlaggning-v3.md)
 (Codex, `status: changes-required`).** v3 löste huvuddelen av v2:s åtta fynd men hade själv
 sex kvarstående problem: ett datakontrakt som blandade tariffkrav, kundindata och
 resultatstatus i samma objekt (och dessutom införde en fjärde, odefinierad statusnivå); två
