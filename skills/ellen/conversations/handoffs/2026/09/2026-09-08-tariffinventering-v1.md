@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v7-delivered-awaiting-codex-review
+status: v8-delivered-awaiting-codex-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -11,8 +11,9 @@ v4_delivered_at: "2026-09-08T13:45:00+02:00"
 v5_delivered_at: "2026-09-08T14:58:36+02:00"
 v6_delivered_at: "2026-09-08T15:32:00+02:00"
 v7_delivered_at: "2026-09-08T16:10:00+02:00"
-latest_review: "2026-09-08-006"
-scope: "Fullständig v1–v7-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v8_delivered_at: "PENDING_COMMIT_TIME"
+latest_review: "2026-09-08-007"
+scope: "Fullständig v1–v8-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -29,6 +30,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v6.md"
   - "Fjarrvarmetariffer/tariffinventering-v7.md"
   - "Fjarrvarmetariffer/batchplan-v7.md"
+  - "Fjarrvarmetariffer/tariffinventering-v8.md"
+  - "Fjarrvarmetariffer/batchplan-v8.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -346,3 +349,45 @@ v6:s fyra öppna frågor tillämpade utan omfrågan — Jönköpings accessavgif
 `ready_to_implement` (ny disposition 7/55/30 av 92). Fokuserad lokal dokumentationscommit
 ovanpå `058ffb4`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad;
 ingen tariff aktiverad; inget pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v7, 2026-09-08T16:52:08+02:00
+
+Omgranskning
+[`2026-09-08-007`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v7.md)
+har status `changes-required`. Kontrollmängden (78 bas + 14 varianter, 7/55/30 av 92) och
+den exakta 42-radslistan är godkända, men planen är inte körbar: Umeås kompositgrind skulle
+köras EFTER `godkanda(katalog)` redan filtrerat bort raden (reproducerat: noll rader från
+`godkanda()`); band-ID:t föreslogs som en global strängvidgning av `Varde`, vilket hade
+försvagat varje befintligt numeriskt fält, och `beraknaBesparingsvardeKontrakt` bygger i
+dag `IndataPost` bara för kapacitetsbindningen; Stockholms `ADAPTERREGISTER`-kontroll nås
+aldrig eftersom katalograden filtreras bort innan den loopen, och `_kraver_kontrakt` sätts
+aldrig så legacyvägen fortsätter köras; Kraftringens diskriminator saknades i
+mappningstabellen och hade ingen väg till motorn; Jönköpings 0/10/25/50-val hade ingen
+domänmässig allow-list, bara UI-begränsning. Claude ska leverera V8 enligt granskningens
+åttapunktsbeställning. Ingen implementation eller push är godkänd; dispositionerna
+7/55/30/92 ska stå kvar oförändrade eftersom samtliga fynd är tekniska
+körbarhets-/typningsfel, inget nytt Robert-beslut krävs.
+
+## Leverans v8, 2026-09-08T17:20:00+02:00
+
+Claude levererade [`tariffinventering-v8.md`](../../../../Fjarrvarmetariffer/tariffinventering-v8.md)
+och [`batchplan-v8.md`](../../../../Fjarrvarmetariffer/batchplan-v8.md) som svar på samtliga
+åtta punkter i granskning `2026-09-08-007`. Umeås kompositgrind flyttad IN I `godkanda()`s
+egen loop, som ett andra försök begränsat till exakt fyndet `"kapacitetsformel med
+multiplikator"` — visad i körbar pseudokod; `B=14`-testet flyttat till kontraktsfasaden
+(`harled_resultatstatus`), där en verklig `IndataPost` faktiskt finns. Bandkontraktet fick
+en diskriminerad värdetyp (`KravPost.vardetyp: "number" | "number_series" | "band_id"`) i
+stället för en global strängvidgning, plus ett nytt grundarbete (batch 0) för en gemensam
+`byggIndataFranPolicy`-produktingång som bygger `IndataPost` för ALLA policykrav, inte bara
+kapacitet. Stockholms `ADAPTERREGISTER`-kontroll flyttad till en separat preflight mot den
+RÅA katalogen (inte den redan filtrerade mängden); dispatchen återanvänder den befintliga
+`_kraver_kontrakt`-markören i stället för ett obeskrivet nytt fält; en 17-fälts
+årsindatamodell (12 kallenergivärden + 5 vintermånaders returtemperatur som seriekrav)
+ersätter de fria motorargumenten. Kraftringens diskriminator omdöpt till det domänriktiga
+`flodeskorrigering_variant`, tillagd i mappningstabellen, med en ny motorparameter som
+faktiskt bär den till justeringsfunktionen. Ny §6a.6 ger Jönköpings fyrvärdesval en
+domänmässig `KravPost.tillatna_varden`-allow-list. Dispositionerna 7/55/30/92 oförändrade,
+som granskningen instruerade. Fokuserad lokal dokumentationscommit ovanpå `058ffb4`,
+inklusive granskning `2026-09-08-007` för självbärande historik. Ingen produktkod,
+tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget
+pushat. Väntar på Codex omgranskning.

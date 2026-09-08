@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T16:10:00+02:00"
+last_updated: "2026-09-08T17:20:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v7-delivered-awaiting-codex-review
+status: v7-reviewed-changes-required-v8
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -475,7 +475,64 @@ ett obligatoriskt kundval 0/10/25/50 kr/mån utan default ska ingå, vilket flyt
 varianttäckningen till ready och ger 7 implementerade, 55 ready och 30 blockerade av 92.
 Ingen implementation eller push godkändes.
 
+### Claude — assistent
+
+Claude levererade tariffinventering v7.0 och batchplan v7.0 i den lokala
+dokumentationscommitten `skills@f0f3ee7`. V7 utvidgar bandinventeringen till exakt 42
+ready-bastariffer, låter det bekräftade band-ID:t välja prisraden, föreslår en konsoliderad
+Stockholm-policy med typat adapterregister, en separat Umeå-kompositgrind och en explicit
+Kraftringen-diskriminator. Jönköpings accessavgift är flyttad till ready enligt tidigare
+beslut och kontrollmängden anges till 7 implementerade, 55 redo och 30 blockerade av 92.
+Ingen produktkod eller tariffdata ändrades och inget pushades.
+
+### Robert — användare
+
+> V7 är redo för granskning
+
+### Codex — assistent
+
+Codex omgranskade V7 och skrev granskning `2026-09-08-007` med status
+`changes-required`. Räkningen och den exakta 42-radslistan är godkända, men planen är ännu
+inte körbar: Umeå filtreras bort innan efterkontrollen kan köras; band-ID saknar en
+diskriminerad värdetyp och en verklig produkt-/UI-väg; Stockholm-raden når inte
+adapterregistret efter `godkanda()` och leverantörsfilens årsberäkning fortsätter på
+legacyvägen; årsfasaden kan inte binda 12+5 månadsdata. Kraftringens diskriminator når
+inte motorn och Jönköpings 0/10/25/50-val saknar domänmässig allow-list.
+
+V8 beställdes som en fortsatt dokumentationsrättning med en gemensam grundbatch för
+policyindata och produktdispatch, körbar Umeå-/Stockholm-ordning samt synkade batchfiler.
+Ingen implementation eller push godkändes. V7-committen har verifierbar tid 16:32:28;
+den äldre 16:10-raden bevaras som historik och rättas här i stället för att skrivas om.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v8.md` och `batchplan-v8.md` som svar på samtliga åtta
+punkter i granskning `2026-09-08-007`. Umeås kompositgrind flyttad IN I `godkanda()`s egen
+loop (körbar pseudokod), begränsad till exakt fyndet `"kapacitetsformel med multiplikator"`;
+`B=14`-testet flyttat till kontraktsfasaden där en verklig `IndataPost` finns. Band-ID:t
+fick en diskriminerad värdetyp (`KravPost.vardetyp`) i stället för en global
+strängvidgning, plus en ny grundbatch (batch 0) för en gemensam `byggIndataFranPolicy`-
+produktingång — dagens `beraknaBesparingsvardeKontrakt` bygger annars `IndataPost` bara för
+kapacitet. Stockholms adapterkontroll flyttad till en preflight mot den RÅA katalogen
+(inte den redan filtrerade), dispatchen återanvänder den befintliga `_kraver_kontrakt`-
+markören, och en 17-fälts årsindatamodell (seriekrav för 12 kallenergivärden + 5
+vintermånaders returtemperatur) ersätter de fria motorargumenten. Kraftringens
+diskriminator omdöpt till `flodeskorrigering_variant` och given en verklig motorväg.
+Jönköping fick en domänmässig `tillatna_varden`-allow-list. Dispositionerna 7/55/30/92
+oförändrade. Fokuserad lokal dokumentationscommit ovanpå `058ffb4`. Ingen produktkod,
+tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-08T17:20:00+02:00` – Claude levererade tariffinventering v8.0 och batchplan v8.0 som svar på samtliga åtta punkter i granskning `2026-09-08-007`: Umeås kompositgrind gjord körbar (flyttad in i `godkanda()`s egen loop, med `B=14`-testet flyttat till kontraktsfasaden), bandkontraktet fick en diskriminerad värdetyp i stället för en global strängvidgning, ny grundbatch (batch 0) för en gemensam policyindata-produktingång, Stockholms adapterkontroll flyttad till en preflight mot den råa katalogen med `_kraver_kontrakt`-återanvänd dispatch och en 17-fälts årsindatamodell, Kraftringens diskriminator omdöpt (`flodeskorrigering_variant`) och given en motorväg, Jönköping fick en domänmässig allow-list. Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå `058ffb4`. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-08T16:52:08+02:00` – Codex omgranskade V7 i `skills@f0f3ee7` och skrev
+  `2026-09-08-007`: kontrollmängden 78+14 och den exakta 42-radslistan stämmer, men Umeås
+  eftergrind kan inte återinföra en redan filtrerad rad, band-ID saknar ett säkert
+  end-to-end-produktkontrakt, Stockholm saknar nåbar dedup/årsdispatch och representerbar
+  12+5-månadsbindning, Kraftringens diskriminator når inte motorn och Jönköpings fyrvärdesval
+  saknar domänallow-list. V8 beställdes; ingen implementation eller push godkänd. Den äldre
+  V7-leveranstiden 16:10 rättas här till committens verifierbara tid 16:32:28 utan att den
+  historiska raden nedan skrivs om.
 
 - `2026-09-08T16:04:00+02:00` – Codex omgranskade V6 i
   `skills@1a429dc` samt korrigeringscommitten `058ffb4` och skrev `2026-09-08-006`: flera V5-fynd är lösta, men
