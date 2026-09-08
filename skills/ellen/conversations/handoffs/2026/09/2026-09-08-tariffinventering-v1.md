@@ -299,7 +299,7 @@ felaktiga filnamnen `katalog.ts`/`adjustments.ts` (existerar inte) rättade till
 
 Dispositionsräkningen 7 + 45 + 26 = 78 bas, 9 + 5 = 14 variant, 92 totalt är OFÖRÄNDRAD —
 v6 fördjupade och rättade kontraktsplaneringen, flyttade ingen post. Fokuserad lokal
-dokumentationscommit ovanpå `ce53f75`, inklusive den tidigare ospårade granskningen
-`2026-09-08-005` för att hålla committen självbärande. Ingen produktkod, tariffdata,
+dokumentationscommit `skills@1a429dc` (ovanpå `ce53f75`), inklusive den tidigare ospårade
+granskningen `2026-09-08-005` för att hålla committen självbärande. Ingen produktkod, tariffdata,
 genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar
 på Codex omgranskning.
