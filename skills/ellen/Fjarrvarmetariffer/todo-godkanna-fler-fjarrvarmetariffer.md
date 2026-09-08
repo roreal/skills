@@ -1,6 +1,7 @@
 # To-do: godkänna och införa fler fjärrvärmetariffer
 
 Upprättad 2026-09-04 utifrån [verifieringslistan](verifieringslista-fjarrvarmebolag.md).
+Uppdaterad 2026-09-08 enligt [produktdirektivet](../PROJECT_CHARTER.md).
 
 ## Nuläge
 
@@ -8,33 +9,53 @@ Upprättad 2026-09-04 utifrån [verifieringslistan](verifieringslista-fjarrvarme
 - 31 tariffer är villkorat godkända eller godkända endast för årsberäkning.
 - 12 tariffer är underkända i väntan på entydiga leverantörsbesked.
 - Stockholm Exergi är separat implementerad och fakturavaliderad men katalogposten kräver fortfarande motorarbete.
+- Sju katalogtariffer från sex leverantörer är nu aktiva efter den godkända och pushade Sandviken-etappen. De är en utvärderingsbas, inte slutlig v1-täckning.
 - Källgodkännande betyder inte att tariffen redan är implementerad, testad eller synlig i kalkylatorn.
+
+## Slutmål för tariffarbetet
+
+Samtliga tariffer som kan återskapas som en källverifierad, uppskattad årskostnad ska
+implementeras. För en fryst tariffinventering och ett angivet prisår ska varje
+tariffprodukt — både i JSON-katalogen och i separat förvaltade leverantörsfiler — till
+slut vara antingen:
+
+- `implemented_source_verified_annual`;
+- `blocked_external_info`, med exakt saknat leverantörsbesked eller datakrav;
+- `not_applicable`, med dokumenterad motivering.
+
+"Möjlig" betyder att alla prisdelar och regler är kända och att varje dynamiskt värde kan
+anges av användaren, hämtas från verifierad källa eller beräknas från uttryckligt underlag.
+Att bolaget kan fakturera räcker inte ensamt om en nödvändig intern formel eller
+nätreferens inte går att reproducera externt. Prioritering efter kundnytta styr ordningen,
+inte vilka möjliga tariffer som till slut ska omfattas.
 
 ## Ansvar
 
 | Ansvarig | Uppgift |
 |---|---|
-| Robert | Bestäm produktnivå och prioriteringsordning, kontakta leverantörer, ordna anonymiserade fakturor och lämna slutligt verksamhetsgodkännande. |
+| Robert | Bestäm v1-täckning och prioriteringsordning, kontakta leverantörer, ordna fakturor för egna kunder eller uttrycklig fakturakontroll och lämna slutligt verksamhetsgodkännande. |
 | Claude | Kartlägg motorstöd, rätta katalogdata, implementera tariff och användargränssnitt, skriva tester samt lämna en ändrings- och testrapport. |
 | Codex | Oberoende kontroll av källa mot katalog och kod, gränsvärdes- och webbläsartestning, fakturajämförelse samt dokumenterat godkännande eller fynd. |
 | Fjärrvärmebolaget | Besvara sådant som inte framgår entydigt av publicerade villkor och vid behov bekräfta kundens prisgrupp, effekt eller andra avtalsvärden. |
 
 ## 1. Robert beslutar godkännandenivå
 
-- [ ] Bestäm om kalkylatorn tills vidare bara ska visa tariffer med komplett månadsmodell. **Rekommendation:** börja så; hantera årsberäkning som en senare, tydligt märkt funktion.
-- [ ] Bestäm om kundspecifika värden från faktura eller leverantör, exempelvis debiterbar effekt, får vara obligatoriska indata. De får aldrig ersättas med ett dolt standardvärde.
-- [ ] Bestäm miniminivå för fakturavalidering. **Rekommendation:** minst en anonymiserad verklig faktura per prismodell och, när priset är säsongsberoende, helst en vinter- och en sommarfaktura.
-- [ ] Godkänn första införandebatchen efter Claudes tekniska kartläggning i steg 2.
+- [x] Årsberäkning är kalkylatorns primära scope. Månadsresultat kräver separat verifierad periodisering och får inte antydas generellt.
+- [x] Kund-/leverantörsspecifika värden, exempelvis debiterbar effekt, får vara obligatoriska. De får aldrig ersättas med ett dolt standardvärde.
+- [x] Fakturor krävs för Enkeys kunder eller när fakturakontroll uttryckligen efterfrågas. Övriga årsmodeller verifieras mot ett tillräckligt komplett officiellt räkneexempel eller en oberoende referensberäkning från leverantörens publicerade villkor.
+- [x] Första införandebatchen Sandviken Energi — Helleverans är godkänd och pushad.
+- [x] Täckningsmål beslutat: implementera samtliga möjliga tariffer i den frysta v1-inventeringen, inklusive separat förvaltade leverantörsfiler; klassificera resten explicit som blockerade eller ej tillämpliga.
+- [ ] Bestäm om saknad leverantör ska ge ett separat, tydligt märkt generellt resultat enligt rekommendationen i produktdirektivet.
 
-## 2. Claude kartlägger de 28 källgodkända tarifferna
+## 2. Claude kartlägger de 28 källgodkända tarifferna — slutförd grundkartläggning
 
-- [ ] Jämför varje tariff med befintligt stöd i Python-, TypeScript- och gränssnittslagret.
-- [ ] Klassificera varje tariff som `enbart katalogändring`, `mindre motorändring`, `ny gemensam prismodell` eller `ny obligatorisk kundindata`.
-- [ ] Lista exakt vilka fält, formler, spärrar och gränssnittskomponenter som behöver ändras.
-- [ ] Bekräfta att samma beräkning kan användas i både MWh- och kronorflödet.
-- [ ] Lämna kartläggningen till Codex för oberoende granskning innan flera modeller byggs samtidigt.
+- [x] Jämför varje tariff med befintligt stöd i Python-, TypeScript- och gränssnittslagret.
+- [x] Klassificera varje tariff som `enbart katalogändring`, `mindre motorändring`, `ny gemensam prismodell` eller `ny obligatorisk kundindata`.
+- [x] Lista exakt vilka fält, formler, spärrar och gränssnittskomponenter som behöver ändras.
+- [x] Klassificera MWh-, kronor- och schablonflödet separat; ett läge som inte kan stödjas entydigt ska blockeras.
+- [x] Lämna kartläggningen till Codex för oberoende granskning innan flera modeller byggs samtidigt.
 
-Föreslagen granskningsordning:
+Föreslagen granskningsordning om inget konkret kund-/prospektbehov ger en annan prioritet:
 
 1. **Första gruppen att tekniskt bedöma:** Karlstad, Sandviken, Matfors/Kvissleby, Södertörns Fjärrvärme, VänerEnergi och Övik Energi.
 2. **Gemensam högutväxlingsmodell:** E.ON och Navirum, totalt åtta tariffer. Samma rullande effekt- och flödesmodell kan återanvändas. Malmö/Burlöv måste samtidigt rättas från −15 till −8 °C.
@@ -63,8 +84,8 @@ För varje tariff:
 - [ ] Testa alla säsongsbyten och månadsperiodiseringar.
 - [ ] Testa noll, negativa värden, saknade obligatoriska värden och otillåten kundtyp.
 - [ ] Testa eventuella rabatt-, flödes-, returtemperatur- och överuttagsregler.
-- [ ] Testa både direkt MWh-beräkning och inversen från kronor till MWh.
-- [ ] Testa kronor → MWh → kronor som rimlighetskontroll där modellen tillåter det.
+- [ ] Testa varje inmatningsläge som tariffen deklarerar stöd för och testa att övriga lägen blockeras.
+- [ ] Testa kronor → MWh → kronor som rimlighetskontroll endast där inversen är entydig och verifierad.
 - [ ] Lägg till regressionsfall för Malmö/Burlövs −8 °C och Öviks kalenderdagsfördelning.
 - [ ] Kör relevanta Python- och TypeScript-tester, typkontroll och produktionsbygge.
 
@@ -111,8 +132,8 @@ Efter varje svar:
 
 ## 8. Hantera de 31 villkorade tarifferna
 
-- [ ] Robert beslutar om en separat, tydligt märkt årsberäkning ska stödjas. Om svaret är nej ligger tariffer utan verifierad månadsfördelning kvar avstängda.
-- [ ] Robert begär vid behov exakt månadsfördelning från berörda leverantörer.
+- [x] En separat, tydligt märkt årsberäkning ska stödjas när årsmodellen är källverifierad. Avsaknad av generell månadsmodell blockerar inte i sig detta scope.
+- [ ] Robert begär vid behov exakt månadsfördelning från berörda leverantörer när ett månadsresultat eller en fakturakontroll faktiskt efterfrågas.
 - [ ] Robert eller användaren tillhandahåller avtals-/fakturavärden när tariffen kräver exempelvis effektgrupp, P, Wn, Q, A, B eller U.
 - [ ] Claude gör sådana värden obligatoriska och synliga; inga automatiska antaganden får göras.
 - [ ] Codex verifierar att årsresultat aldrig presenteras som månadsresultat och att villkoren följer med genom hela användarflödet.
@@ -125,7 +146,12 @@ En tariff får markeras som produktionsgodkänd först när allt nedan är uppfy
 - [ ] Det finns ingen olöst motsägelse eller dold standardtolkning.
 - [ ] Katalog, motor och gränssnitt stöder hela den avsedda omfattningen eller blockerar resten uttryckligen.
 - [ ] Automatiska normal-, gräns-, fel- och regressionstester är gröna.
-- [ ] Resultatet har jämförts med faktura eller ett tillräckligt komplett officiellt räkneexempel.
+- [ ] Årsmodellen har jämförts med ett tillräckligt komplett officiellt räkneexempel eller en oberoende referensberäkning från publicerade villkor. Faktura används för egna kunder eller uttrycklig fakturakontroll.
+- [ ] Kundtexten skiljer beräknad årskostnad, uppskattning och fakturaverifierat utfall och använder inte ordet "exakt" som synonym för någon av dem.
 - [ ] Codex oberoende granskning är godkänd och eventuella fynd är stängda.
 - [ ] Robert har godkänt funktion och presentation i testmiljön.
 - [ ] Ändringen, källorna och godkännandet finns i konversations-/granskningsloggen.
+
+Kalkylatorns tariffetapp som helhet är klar först när ingen tariff i den frysta
+kontrollmängden är oklassificerad och samtliga genomförbara tariffer har godkänts enligt
+listan ovan.

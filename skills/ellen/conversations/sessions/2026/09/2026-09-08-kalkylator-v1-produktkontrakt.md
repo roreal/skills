@@ -111,11 +111,11 @@ motiverat ej tillämplig — ingen oklassificerad restlista.
 Claude genomförde överlämning `2026-09-08-001`: en fullständig, deduplicerad
 tariffinventering och batchplan, ingen kod eller tariffdata ändrad.
 
-[`tariffinventering-v1.md`](../../../Fjarrvarmetariffer/tariffinventering-v1.md) täcker
+[`tariffinventering-v1.md`](../../../../Fjarrvarmetariffer/tariffinventering-v1.md) täcker
 samtliga 78 katalograder plus de två separat förvaltade leverantörsfilerna (Stockholm
 Exergi, Riksgenomsnittet) — 80 enheter, deduplicerat till 79 unika produkter. Byggd på
-den redan granskade [verifieringslistan](../../../Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md)
-och [teknisk-kartläggning v4](../../../Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md)
+den redan granskade [verifieringslistan](../../../../Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md)
+och [teknisk-kartläggning v4](../../../../Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md)
 i stället för att omgranska källorna på nytt, plus en direkt läsning av
 `katalog.py`/`policyregister.py`/`tariffer.generated.ts` för faktisk motor-/kontrakts-/
 UI-status. Disposition: 8 `implemented_source_verified_annual` (de sju katalogtarifferna +
@@ -125,7 +125,7 @@ katalogduplikat). Summan stämmer mot kontrollmängden (78 katalog + 2 leverant�
 `optimate-fjarrvarme-2027.json` (en annan sessions redan pushade commit `62181a1`, prisår
 2027, bara 2 av 53 medlemmar ifyllda) är uttryckligen utanför denna frusna 2026-version.
 
-[`batchplan-v1.md`](../../../Fjarrvarmetariffer/batchplan-v1.md) föreslår sju batcher (43
+[`batchplan-v1.md`](../../../../Fjarrvarmetariffer/batchplan-v1.md) föreslår sju batcher (43
 tariffer) i stigande risk-/motorarbetesordning: (1) Sundsvall Indal/Liden/Lucksta —
 ren energitariff, ren aktivering; (2) Familj 4-resten + Telge, Sandviken-mönstret rakt av;
 (3) E.ON/Navirum, delad ny flödesformel; (4a–4c) 26 fristående leverantörsvärde-tariffer i
@@ -145,8 +145,92 @@ Brunnshög hos Kraftringen, spetsvärme hos Finspång) är rätt avvägning.
 Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad. Ingen ny tariff
 aktiverad.
 
+### Robert — användare
+
+> Dags för granskning
+
+### Codex — assistent
+
+Codex granskade tariffinventering v1, batchplan v1 och den lokala dokumentationscommitten
+`1d52803`. Alla 78 katalog-ID:n finns i inventeringen, men kontrollpunkten fick
+`changes-required`: dokumentet saknar den beställda per-produktmatrisen, Borlänge/C4 är
+felaktigt externt blockerade, Stockholm Exergis månadsvalidering bär inte ensam
+årsdispositionen, flera flödes-/temperaturfält och nya adapterbehov saknas och kända
+specialvarianter får inte gömmas som "ej tillämpliga i denna batch". Räkningen och
+dokumentationsproveniensen har också fel och sex lokala länkar är brutna. Claude har fått en
+avgränsad v2-beställning utan produktkod, tariffdata eller push. Fullständig granskning:
+[`2026-09-08-001`](../../../reviews/2026/09/2026-09-08-granskning-tariffinventering-v1.md).
+
+### Robert — användare
+
+> Läs igenom claude
+
+### Codex — assistent
+
+Codex kontrollerade den delade mappen igen. Inget nytt Claude-svar, ingen
+`tariffinventering-v2.md`, ingen `batchplan-v2.md` och ingen rättningscommit fanns ännu.
+Repositoryts HEAD var fortsatt `1d52803`; de senaste filändringarna i conversations var
+Codex granskning och logguppdateringar från 10:14. V2-beställningen i granskning
+`2026-09-08-001` kvarstår därför oförändrad.
+
+### Claude — assistent
+
+Claude levererade v2 av båda dokumenten som svar på samtliga fynd i granskning
+`2026-09-08-001`.
+
+[`tariffinventering-v2.md`](../../../../Fjarrvarmetariffer/tariffinventering-v2.md) ersätter
+v1 i sin helhet: en normaliserad post per unik tariff-ID (46 `ready_to_implement`, 25
+`blocked_external_info`, 7 `implemented_source_verified_annual`) i stället för grupptext,
+med källa/katalog/motor/kontrakt/test/UI-status som separata fält, obligatorisk indata med
+fyndplats, inmatningsläge och tariffamilj per rad. Riksgenomsnittet ligger nu i en egen
+schablontabell (§7), inte bland tariffprodukterna. Tre dispositioner rättade:
+`borlange-energi-borlange-2026` och `c4-energi-kristianstad-2026` är `ready_to_implement`
+(leverantörsvärde-mönstret, automatisk gruppindelning blockerad); Stockholm Exergis
+katalograd (`stockholm-exergi-stockholm-exergi-normal-2026`) är `ready_to_implement`, inte
+längre räknad som implementerad — dess `monthly_invoice`-kontrakt (godkänt `2026-09-06-003`)
+täcker inte kalkylatorns årsprognos. Motorstatusen är omräknad direkt mot
+`justeringar.py`s `JUSTERINGSTYPER`: 16 av de 46 `ready`-tarifferna kräver ny motorkod (en
+ej implementerad justeringstyp eller kapacitetsform) — Kraftringen (samma typ som
+E.ON/Navirum), Eskilstuna, Jämtkrafts tre produkter, Umeå och Finspång saknades i v1:s
+motorbedömning. Sju kända specialvarianter (E.ON/Navirums 36-månadersmetod, Södertörns
+kundvalda effekt, Kraftringens Brunnshög, Tekniska Verken Linköpings lågtemperaturvariant,
+Finspångs spetsvärmetillägg, Jönköpings accessavgift, Borås miljötillägg) är utbrutna till
+en egen spårad tabell (§5) i stället för `not_applicable`. Räkningsspråket är rättat: 79
+unika enheter = 78 tariffprodukter + 1 syntetisk schablon (inte "79 unika tariffprodukter"),
+53 leverantörer + 1 schablonentitet (inte 55) — verifierat programmatiskt mot katalog-JSON,
+inte räknat för hand.
+
+[`batchplan-v2.md`](../../../../Fjarrvarmetariffer/batchplan-v2.md) ersätter v1: ordningen
+följer nu överlämningens regel (Familj 4-resten före Sundsvall Indal, som ändå läggs FÖRST
+som ett eget, oberoende, lägsta-risk-beslut eftersom det inte konkurrerar om samma
+granskningskapacitet som Familj 4-arbetet). Kraftringen flyttad till samma batch som
+E.ON/Navirum (batch 3, 9 tariffer, delad `supply_temperature_adjusted_flow`-motorkod). Ny
+batch 4 för Eskilstuna/Jämtkraft/Umeå (5 tariffer, tre separata nya justeringstyper — helt
+utelämnad i v1). Leverantörsvärde-gruppen delad i 5a (11, inget nytt motorarbete) och 5b
+(12, kräver `volume`+`months`-säsongssemantik som dagens motor saknar). Batch 6 (Borås/
+Finspång) uppdaterad med Borås miljötillägg och Finspångs dubbla motorbehov
+(`piecewise_polynomial` OCH `conditional_flow`). Ny batch 7 för Stockholm Exergis
+årsprodukt. Batch 8 (Vattenfall) oförändrad, kontingent. Samtliga tariff-ID:n skrivna ut
+fullständigt, ingen förkortning.
+
+Dokumentationshistoriken gjordes självbärande: `PROJECT_CHARTER.md`,
+`teknisk-kartlaggning-28-tariffer.md`, `optimate-agentfundament-bebo-fjarrvarme.md` och den
+redan ändrade `todo-godkanna-fler-fjarrvarmetariffer.md` togs med i rättningscommitten
+tillsammans med v2-dokumenten och de uppdaterade konversationsfilerna — ingen orelaterad
+arbetskopiefil (PDF-prislistor, `AGENTS.md`, `SKILL.md`, `../milesight`-pekaren, m.fl.)
+fångades. De sex brutna relativa länkarna (`../../../Fjarrvarmetariffer/...` →
+`../../../../Fjarrvarmetariffer/...`) i handoff- och sessionsfilen är rättade. `delivered_at`
+och v1-leveransens tidsstämpel är rättade till det verkliga commit-tidsstämplet för
+`1d52803` (`09:53:32`, inte den felaktiga `10:15:00`).
+
+Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad. Ingen ny tariff
+aktiverad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-08T10:43:54+02:00` – Claude levererade tariffinventering v2.0 och batchplan v2.0 som svar på samtliga fynd i granskning `2026-09-08-001`: verklig per-produktmatris (46 ready/25 blocked/7 implemented), tre rättade dispositioner (Borlänge, C4, Stockholm Exergis årsprodukt), motorstatus omräknad mot `JUSTERINGSTYPER` (16 ready-tariffer kräver ny motorkod, inte bara fyra familjer), sju specialvarianter spårade i egen tabell i stället för `not_applicable`, rättat räkningsspråk (78 tariffprodukter + 1 schablon, 54 leverantörsentiteter), omordnad batchplan med fullständiga ID:n, självbärande dokumentationscommit och sex rättade länkar. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-08` – Codex kontrollerade mappen efter Roberts uppmaning att läsa Claudes svar. Inget nytt Claude-svar, inga V2-filer och ingen rättningscommit fanns ännu; HEAD var fortsatt `1d52803`.
+- `2026-09-08` – Codex granskade tariffinventering v1 och batchplan v1 i granskning `2026-09-08-001`: `changes-required`. Alla katalog-ID:n finns, men per-produktmatris, dispositioner, obligatoriska indata, adapterbehov, specialvarianter, räkning, länkar och commitproveniens kräver v2. Ingen implementation eller push godkänd.
 - `2026-09-08T10:15:00+02:00` – Claude levererade tariffinventering v1.0 och batchplan v1.0 enligt överlämning `2026-09-08-001`: 80 enheter klassade (8 implementerade, 43 redo, 27 externt blockerade, 2 ej tillämpliga), sju föreslagna implementationsbatcher, fyra öppna frågor till Codex. Ingen kod, tariffdata eller aktivering ändrad.
 - `2026-09-08T09:36:59+02:00` – Codex skapade överlämning `2026-09-08-001` till Claude för en fullständig, deduplicerad v1-inventering och batchplan. Kontrollmängden ska omfatta både JSON-katalogen och separat förvaltade leverantörsfiler; ingen kod, tariffdata eller aktivering får ändras före Codex granskning.
 - `2026-09-08T09:31:03+02:00` – Robert beslutade att de sju aktiva tarifferna endast är en utvärdering och att alla möjliga tariffer ska implementeras. Produktdirektiv v0.2 och tariff-to-do uppdaterades med ett versionssatt slutkriterium och dispositionerna `implemented_source_verified_annual`, `blocked_external_info` och `not_applicable`. Ingen implementation eller tariffdata ändrad.

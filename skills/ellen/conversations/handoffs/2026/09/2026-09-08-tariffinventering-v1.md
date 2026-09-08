@@ -3,13 +3,17 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: delivered
-delivered_at: "2026-09-08T10:15:00+02:00"
+status: v2-delivered-awaiting-rereview
+delivered_at: "2026-09-08T09:53:32+02:00"
+v2_delivered_at: "2026-09-08T10:43:54+02:00"
+latest_review: "2026-09-08-001"
 scope: "Fullständig v1-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
   - "Fjarrvarmetariffer/batchplan-v1.md"
+  - "Fjarrvarmetariffer/tariffinventering-v2.md"
+  - "Fjarrvarmetariffer/batchplan-v2.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -69,12 +73,41 @@ obligatoriska indata, filer, teststrategi och vilket resultat som ska visas för
 - En fokuserad dokumentationscommit får förberedas lokalt, men ska inte pushas före
   granskning och Roberts beslut.
 
-## Leverans 2026-09-08T10:15:00+02:00
+## Leverans v1, 2026-09-08T09:53:32+02:00
 
-Klaudes leverans: [`tariffinventering-v1.md`](../../../Fjarrvarmetariffer/tariffinventering-v1.md)
-och [`batchplan-v1.md`](../../../Fjarrvarmetariffer/batchplan-v1.md). Räkningskontroll: 80
+Klaudes leverans: [`tariffinventering-v1.md`](../../../../Fjarrvarmetariffer/tariffinventering-v1.md)
+och [`batchplan-v1.md`](../../../../Fjarrvarmetariffer/batchplan-v1.md). Räkningskontroll: 80
 enheter (78 katalograder + 2 leverantörsfiler) = 8 implementerade + 43 redo att implementera
 + 27 externt blockerade + 2 ej tillämpliga. Sju föreslagna batcher för de 43. Fyra öppna
 frågor lämnade i inventeringens §8. Se sessionsloggens Claude-inlägg för fullständig
 sammanfattning. Ingen kod, tariffdata eller aktivering ändrad; väntar på Codex granskning.
 
+(Timestamp ovan rättad 2026-09-08 till det verkliga commit-tidsstämplet för `1d52803`
+— den tidigare `10:15:00`-uppgiften i denna rad och i `delivered_at` var fel, se granskning
+`2026-09-08-001`.)
+
+## Codex granskning 2026-09-08
+
+Granskning [`2026-09-08-001`](../../../../reviews/2026/09/2026-09-08-granskning-tariffinventering-v1.md)
+har status `changes-required`. Leveransen innehåller alla 78 katalog-ID:n, men den beställda
+per-produktmatrisen saknas och flera dispositioner, obligatoriska indata, adapterbehov,
+specialvarianter, delsummeringar samt dokumentationslänkar måste rättas. Ingen implementation
+eller push är godkänd. Claude ska leverera v2 och en lokal rättningscommit utan produktkod
+eller tariffdata och därefter stanna för omgranskning.
+
+## Leverans v2, 2026-09-08T10:43:54+02:00
+
+Claude levererade [`tariffinventering-v2.md`](../../../../Fjarrvarmetariffer/tariffinventering-v2.md)
+och [`batchplan-v2.md`](../../../../Fjarrvarmetariffer/batchplan-v2.md), som svar på samtliga
+fynd i granskning `2026-09-08-001`. Sammanfattning: en normaliserad post per unik tariff-ID
+(46 `ready_to_implement`, 25 `blocked_external_info`) i stället för grupptext;
+`borlange-energi-borlange-2026`, `c4-energi-kristianstad-2026` och Stockholm Exergis
+katalograd (`stockholm-exergi-stockholm-exergi-normal-2026`) omklassade till
+`ready_to_implement`; motorstatus omräknad direkt mot `justeringar.py`s `JUSTERINGSTYPER` —
+16 av de 46 `ready`-tarifferna kräver ny motorkod, inte bara de fyra familjer v1 flaggade;
+sju kända specialvarianter utbrutna till en egen spårad tabell i stället för
+`not_applicable`; räkningsspråket rättat (79 unika enheter = 78 tariffprodukter + 1
+schablon, 53 leverantörer + 1 schablonentitet); batchplanen omordnad (Familj 4 före
+Sundsvall Indal, Kraftringen flyttad till samma batch som E.ON/Navirum, fullständiga
+tariff-ID:n utan förkortning). Väntar på Codex omgranskning. Ingen produktkod, tariffdata
+eller aktivering ändrad; ingen push.
