@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T17:20:00+02:00"
+last_updated: "2026-09-08T22:56:55+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v7-reviewed-changes-required-v8
+status: v9-delivered-awaiting-codex-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -522,8 +522,57 @@ Jönköping fick en domänmässig `tillatna_varden`-allow-list. Dispositionerna 
 oförändrade. Fokuserad lokal dokumentationscommit ovanpå `058ffb4`. Ingen produktkod,
 tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade V8 och skrev granskning `2026-09-08-008` med status
+`changes-required`. Kraftringens och Jönköpings huvudlösningar är nu användbara, men Umeås
+andra grindförsök kan fortfarande hoppa över bakomliggande fel. Värdediskriminatorn
+omfattar inte själva `IndataPost`-typen, och den numeriska UI-/produktkedjan kan varken
+skapa eller bära band-ID, enum och serier. Stockholms årsmodell växlar mellan 17 skalärer
+och två serier, saknar statiska årsseriebindningar och definierar inte kallenergins
+före/efterregel. Adapterpreflighten verifierar inte provider-/reversevillkoren den utlovar.
+V9 beställdes som fortsatt dokumentationsrättning. Ingen implementation eller push
+godkändes; fördelningen 7/55/30 av 92 ändrades inte.
+
+### Claude — assistent
+
+Claude levererade [`tariffinventering-v9.md`](../../../../Fjarrvarmetariffer/tariffinventering-v9.md)
+och [`batchplan-v9.md`](../../../../Fjarrvarmetariffer/batchplan-v9.md) som svar på samtliga
+fynd i granskning `2026-09-08-008`. Umeås sammansatta grind kör nu ett riktigt andra
+`grind()`-pass (på en kopia med endast `post_multiplier` neutraliserat) efter att
+multiplikatorbindningen kvitterats — löser att Codex reproducerade en dold andra/tredje
+blockering (okänd `issue` OCH `asymmetric_flow_difference`) bakom det första fyndet;
+`bygg_ts_fran_katalog()`/`main()` för nu samma explicita `policyregister` till `godkanda()`.
+`IndataPost.varde` (inte bara `KravPost.vardetyp`) fick den diskriminerade värdeunionen
+`float | Sequence[float] | str`, plus ett nytt generiskt `KravPost.antal_varden`-fält som
+gör `number_series` till en verklig, tvingande diskriminator i stället för att förlita sig
+på att `rullande=True` råkar tillåta en serie. Batch 0 fick genererad UI-metadata
+(`policyFaltMetadata`, band-ID från den valda tariffens `nivaer[].id`, aldrig `parseFloat`
+på enum/serie) och en `KontraktBlockerat.saknadeFalt`-gren som skiljer legitimt saknad
+kundindata från ett trasigt policykontrakt. Stockholms årsmodell rättad till EN modell (två
+serie-`KravPost`, inte "17 KravPost" i vissa stycken och två serier i andra) med två nya
+statiska bindningar, ett breddat effektkrav (`monthly` + `annual`), och en fail-closed
+regel: uppskattad aktuell årskostnad tillåts, besparingsvärdering exkluderas tills en
+källmässigt försvarbar kallenergi-transformationsregel finns. Adapterpreflighten
+kontrollerar nu `provider_id` mot den byggda leverantörsmängden och den omvända regeln
+(policytäckning utan adapter kastar). P2 rättat: §10:s kvarvarande `kapacitet_bindning_
+variant`-referens synkroniserad till `flodeskorrigering_variant`, och §6:s felaktiga
+"45/45 passerar den nakna grind()"-påstående ersatt med den korrekta kedjan (43 nakna
+katalogpassager + Umeå via sammansatt grind = 44 katalogaktiveringar + Stockholm via
+leverantörsfilsadapter = 45). Dispositionerna 7/55/30 av 92 oförändrade. Fokuserad lokal
+dokumentationscommit ovanpå `fd372a2`/`b7790ca`. Ingen kod, tariffdata eller aktivering
+ändrad. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-08T22:56:55+02:00` – Claude levererade tariffinventering v9.0 och batchplan v9.0 som svar på samtliga fynd i granskning `2026-09-08-008`: Umeås sammansatta grind kör nu ett riktigt andra `grind()`-pass efter multiplikatorkvittering (stänger den reproducerade dolda andra/tredje blockeringen), `IndataPost.varde` fick den diskriminerade värdeunionen (inte bara `KravPost`), nytt generiskt `antal_varden`-kardinalitetsfält gör `number_series` till en verklig diskriminator, batch 0 fick genererad UI-metadata och en felklassningsgren (`saknadeFalt`), Stockholms årsmodell rättad till EN modell (två serier, två nya statiska bindningar, breddat effektkrav, fail-closed före/efter-regel för besparingsvärdering), adapterpreflighten kontrollerar nu provider/reverse-villkoren, samt två P2-rättningar (stale `kapacitet_bindning_variant`-referens, felaktigt "45/45 grind()"-påstående). Dispositionerna 7/55/30/92 oförändrade. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+
+- `2026-09-08T22:37:24+02:00` – Codex omgranskade V8 i `skills@b7790ca` och skrev
+  `2026-09-08-008`: Kraftringens typade diskriminator och Jönköpings allow-list är i
+  huvudsak lösta, men Umeås andra grindförsök hoppar över dolda fynd, `IndataPost`- och
+  UI-/produktkedjan kan inte bära band/enum/serier, Stockholms årsserier saknar statiska
+  bindningar och före/efterregel, och adapterpreflighten validerar inte provider/reverse.
+  V9 beställdes; ingen implementation eller push godkänd.
 - `2026-09-08T17:20:00+02:00` – Claude levererade tariffinventering v8.0 och batchplan v8.0 som svar på samtliga åtta punkter i granskning `2026-09-08-007`: Umeås kompositgrind gjord körbar (flyttad in i `godkanda()`s egen loop, med `B=14`-testet flyttat till kontraktsfasaden), bandkontraktet fick en diskriminerad värdetyp i stället för en global strängvidgning, ny grundbatch (batch 0) för en gemensam policyindata-produktingång, Stockholms adapterkontroll flyttad till en preflight mot den råa katalogen med `_kraver_kontrakt`-återanvänd dispatch och en 17-fälts årsindatamodell, Kraftringens diskriminator omdöpt (`flodeskorrigering_variant`) och given en motorväg, Jönköping fick en domänmässig allow-list. Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå `058ffb4`. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-08T16:52:08+02:00` – Codex omgranskade V7 i `skills@f0f3ee7` och skrev
   `2026-09-08-007`: kontrollmängden 78+14 och den exakta 42-radslistan stämmer, men Umeås

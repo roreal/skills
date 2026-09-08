@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v8-delivered-awaiting-codex-review
+status: v9-delivered-awaiting-codex-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -12,8 +12,9 @@ v5_delivered_at: "2026-09-08T14:58:36+02:00"
 v6_delivered_at: "2026-09-08T15:32:00+02:00"
 v7_delivered_at: "2026-09-08T16:10:00+02:00"
 v8_delivered_at: "2026-09-08T17:20:42+02:00"
-latest_review: "2026-09-08-007"
-scope: "Fullständig v1–v8-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v9_delivered_at: "2026-09-08T22:56:55+02:00"
+latest_review: "2026-09-08-008"
+scope: "Fullständig v1–v9-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -32,6 +33,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v7.md"
   - "Fjarrvarmetariffer/tariffinventering-v8.md"
   - "Fjarrvarmetariffer/batchplan-v8.md"
+  - "Fjarrvarmetariffer/tariffinventering-v9.md"
+  - "Fjarrvarmetariffer/batchplan-v9.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -391,3 +394,48 @@ som granskningen instruerade. Fokuserad lokal dokumentationscommit ovanpå `058f
 inklusive granskning `2026-09-08-007` för självbärande historik. Ingen produktkod,
 tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget
 pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v8, 2026-09-08T22:37:24+02:00
+
+Omgranskning
+[`2026-09-08-008`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v8.md)
+har status `changes-required`. V8 löser Kraftringens diskriminator, Jönköpings domänregel
+och huvudidén för Stockholms dispatch, men är inte implementeringsklar. Umeås andra
+grindförsök kvitterar det första fyndet utan att återköra bakomliggande issue-/
+justeringskontroller och använder inte generatorns injicerade policyregister.
+`KravPost.vardetyp` räcker inte för att göra `IndataPost.varde` typat för band-ID och serie,
+och dagens numeriska `indatafalt`/`falt`-kedja kan inte rendera eller transportera band,
+enum eller serier. Stockholm blandar 17 skalärer med två serieposter, saknar statiska
+årsseriebindningar och en definierad före/efterregel för kallenergin. Adapterpreflightens
+pseudokod använder inte `provider_id` och kan inte bevisa den utlovade omvända
+adapterregeln. Claude ska leverera V9 enligt granskningens åttapunktsbeställning. Ingen
+implementation eller push är godkänd; dispositionerna 7/55/30/92 står kvar.
+
+## Leverans v9, 2026-09-08T22:56:55+02:00
+
+Claude levererade [`tariffinventering-v9.md`](../../../../Fjarrvarmetariffer/tariffinventering-v9.md)
+och [`batchplan-v9.md`](../../../../Fjarrvarmetariffer/batchplan-v9.md), som svar på
+samtliga fynd i granskning `2026-09-08-008`. Sammanfattning: Umeås sammansatta grind kör nu
+ett riktigt andra `grind()`-pass (på en kopia med endast `post_multiplier` neutraliserat)
+efter att multiplikatorbindningen kvitterats, i stället för att lägga till raden direkt —
+stänger den reproducerade risken att en dold andra/tredje blockering (okänd `issue`,
+`asymmetric_flow_difference`) aldrig skulle kontrolleras; `bygg_ts_fran_katalog()`/`main()`
+för nu samma explicita `policyregister` till `godkanda()`. `IndataPost.varde` fick den
+diskriminerade värdeunionen `float | Sequence[float] | str` (inte bara `KravPost.vardetyp`),
+och ett nytt generiskt `KravPost.antal_varden`-fält gör `number_series` till en verklig,
+tvingande diskriminator. Batch 0 fick genererad UI-metadata (`policyFaltMetadata`,
+band-ID-alternativ från den valda tariffens `nivaer[].id`, enum/serie parsas aldrig som tal)
+och en `KontraktBlockerat.saknadeFalt`-gren som skiljer legitimt saknad kundindata från ett
+trasigt policykontrakt. Stockholms årsmodell rättad till EN modell (två serie-`KravPost`,
+inte "17 KravPost" i vissa stycken och två serier i andra) med två nya statiska bindningar,
+ett breddat effektkrav (`monthly`+`annual`), och en fail-closed före/efter-regel för
+kallenergin i besparingsberäkningen (uppskattad aktuell årskostnad tillåts, besparingsvärde
+exkluderas tills en källmässigt försvarbar regel finns). Adapterpreflighten kontrollerar nu
+`provider_id` mot den byggda leverantörsmängden och den omvända regeln (policytäckning utan
+adapter kastar). Två P2-rättningar: §10:s kvarvarande `kapacitet_bindning_variant`-referens
+synkroniserad till `flodeskorrigering_variant`, och §6:s felaktiga "45/45 passerar den
+nakna `grind()`"-påstående ersatt med den korrekta kedjan (43 nakna katalogpassager + Umeå
+via sammansatt grind = 44 katalogaktiveringar + Stockholm via leverantörsfilsadapter = 45).
+Dispositionerna 7/55/30 av 92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå
+`fd372a2`/`b7790ca`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind
+ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex omgranskning.
