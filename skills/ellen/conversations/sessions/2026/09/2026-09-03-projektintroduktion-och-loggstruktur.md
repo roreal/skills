@@ -558,7 +558,7 @@ Committad direkt till `main`, commit `33b0ec2`.
 
 Jag har gått igenom Claudes implementation och skrivit en separat, prioriterad kodgranskning:
 
-- [Kodgranskning: tariffmotorplanen och uppgift 7](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-03-kodgranskning-tariffmotor-uppgift-7.md:1)
+- [Kodgranskning: tariffmotorplanen och uppgift 7](../../../reviews/2026/09/2026-09-03-kodgranskning-tariffmotor-uppgift-7.md:1)
 
 Min bedömning är att arbetet är välstrukturerat och omfattande testat, men att det **inte bör pushas som produktionsklart ännu**. De tre viktigaste fynden är:
 
@@ -612,7 +612,7 @@ Alla ändringar committade lokalt till `main` i båda repona (14 commits denna o
 
 Jag har granskat den pushade `main` och dokumenterat omgranskningen:
 
-- [Omgranskning: tariffmotorns pushade main](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-03-omgranskning-pushad-main.md:1)
+- [Omgranskning: tariffmotorns pushade main](../../../reviews/2026/09/2026-09-03-omgranskning-pushad-main.md:1)
 
 Kort bedömning: kärnrättningarna fungerar, men jag kan inte bekräfta att alla tidigare fynd är helt stängda.
 
@@ -662,7 +662,7 @@ Allt committat och pushat till `origin/main` i båda repona: enkey-agents `37dd7
 
 Jag har läst och testat slutrapporten. Den fullständiga verifieringen finns här:
 
-- [Verifiering av Claudes slutrapport](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-03-verifiering-av-slutrapport.md:1)
+- [Verifiering av Claudes slutrapport](../../../reviews/2026/09/2026-09-03-verifiering-av-slutrapport.md:1)
 
 Slutrapportens huvudfix är bekräftad: Gotland taxa 21 stoppas nu med ett tydligt formulärfel i kronor-läget när föregående års MWh saknas. Med värdet ifyllt fungerar beräkningen, och MWh-läget påverkas inte.
 
@@ -686,9 +686,9 @@ Jag har inte ändrat implementationen — endast verifieringsrapporten, indexet 
 
 Ja. Det är kommunicerat på tre ställen i `conversations/`:
 
-- [Verifieringsrapporten](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-03-verifiering-av-slutrapport.md:1) innehåller alla fynd, reproduktionsfall, testresultat och rekommendationer.
-- [Indexet](/Users/robertrennel/Code/skills/skills/ellen/conversations/index.md:13) länkar rapporten som granskning `2026-09-03-003`.
-- [Den gemensamma sessionsloggen](/Users/robertrennel/Code/skills/skills/ellen/conversations/sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md:621) innehåller både din begäran och min sammanfattning till Claude.
+- [Verifieringsrapporten](../../../reviews/2026/09/2026-09-03-verifiering-av-slutrapport.md:1) innehåller alla fynd, reproduktionsfall, testresultat och rekommendationer.
+- [Indexet](../../../index.md:13) länkar rapporten som granskning `2026-09-03-003`.
+- [Den gemensamma sessionsloggen](../../../sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md:621) innehåller både din begäran och min sammanfattning till Claude.
 
 Claude kan alltså läsa indexet eller slutet av sessionsloggen och hitta hela verifieringen. Inga implementationsfiler har ändrats.
 
@@ -713,7 +713,7 @@ Allt committat och pushat till `origin/main`: enkey-agents `545f1e0`, neptune_ac
 Jag har granskat och testat den rättade versionen. Den fullständiga
 slutverifieringen finns här:
 
-- [Slutverifiering av rättad version](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-03-slutverifiering-av-rattad-version.md:1)
+- [Slutverifiering av rättad version](../../../reviews/2026/09/2026-09-03-slutverifiering-av-rattad-version.md:1)
 
 Jag hittar inget nytt lanseringsblockerande fel i ändringarna. Göteborgs
 tidigare osynliga fixpunktsfel visas nu som ett begripligt formulärfel utan
@@ -816,7 +816,7 @@ namngivna filerna — ingen annan del av den ospårade Ellen-mappen togs med. In
 Genomförde därefter steg 2 i to-do-listan: en teknisk kartläggning av samtliga 28
 källgodkända tariffer mot befintligt stöd i `katalog.py`/`faktura.py`/`justeringar.py`.
 
-- [Teknisk kartläggning: de 28 källgodkända tarifferna](/Users/robertrennel/Code/skills/skills/ellen/Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md:1)
+- [Teknisk kartläggning: de 28 källgodkända tarifferna](../../../../Fjarrvarmetariffer/teknisk-kartlaggning-28-tariffer.md:1)
 
 I korthet: motorn beräknar aldrig kundens debiterbara effekt själv (det är redan ett
 formulärfält), så inget av de 28 kräver att motorn lär sig räkna effekt. Elva tariffer

@@ -3,13 +3,14 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v4-delivered-awaiting-review
+status: v5-delivered-awaiting-codex-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
 v4_delivered_at: "2026-09-08T13:45:00+02:00"
-latest_review: "2026-09-08-003"
-scope: "Fullständig v1-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v5_delivered_at: "2026-09-08T15:40:00+02:00"
+latest_review: "2026-09-08-004"
+scope: "Fullständig v1–v5-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -20,6 +21,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v3.md"
   - "Fjarrvarmetariffer/tariffinventering-v4.md"
   - "Fjarrvarmetariffer/batchplan-v4.md"
+  - "Fjarrvarmetariffer/tariffinventering-v5.md"
+  - "Fjarrvarmetariffer/batchplan-v5.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -163,3 +166,78 @@ beställd direkt källproveniens, Finspångs `ready`-status motsägs av kvarstå
 utlösningskartläggning och den incheckade indexen har 35 länkar till dokument som inte
 finns i committen. Claude ska leverera V4 enligt granskningens avgränsade beställning.
 Ingen implementation eller push är godkänd.
+
+## Leverans v4, 2026-09-08T13:45:00+02:00
+
+Claude levererade [`tariffinventering-v4.md`](../../../../Fjarrvarmetariffer/tariffinventering-v4.md)
+och [`batchplan-v4.md`](../../../../Fjarrvarmetariffer/batchplan-v4.md). De uttryckliga
+V3-fynden rättades: 36-månadersmetoden använder leverantörens effektvärde, Kraftringens
+golvformel är separat, batchindatan för VänerEnergi och Mälarenergi stämmer, Finspångs
+spetsvariant är blockerad och kontrollmängden är 78 bastariffer + 14 varianter med
+fördelningen 7 implementerade + 54 redo + 31 blockerade. Hela `conversations`-trädet
+spårades i dokumentationscommitten `ada05e7`. Ingen produktkod eller tariffdata ändrades
+och inget pushades.
+
+## Codex omgranskning av v4 2026-09-08
+
+Omgranskning
+[`2026-09-08-004`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v4.md)
+har status `changes-required`. V4 löser samtliga uttryckliga fynd från V3-ronden och den
+räknade kontrollmängden 78 bas + 14 varianter är fortsatt korrekt. En fullständig
+förkontroll mot den verkliga produktgrinden visar däremot att endast 21 av 45
+`ready_to_implement`-bastariffer passerar efter simulerat lyft av utredningsspärrarna;
+24 har ytterligare katalog-, motor- eller issuehinder. V5 ska därför innehålla en
+45-raders preflightmatris och en explicit grindöppnande åtgärd för varje post, inklusive
+E.ON/Navirums månadsperiodisering, Kraftringen/Kils nollvärden, Umeås faktor `B`, Stockholm
+Exergis energiform samt issue- och medlemsblockeringarnas livscykel. Ingen implementation
+eller push är godkänd.
+
+## Codex arbetsbesked till Claude, 2026-09-08T14:45:43+02:00
+
+**Fortsätt V5-arbetet nu; invänta inte ytterligare besked eller granskning från Codex.**
+De nuvarande `tariffinventering-v5.md` och `batchplan-v5.md` är ännu ofärdiga arbetskopior
+med V4-rubrik och V4-text och ska därför inte lämnas som leverans i nuvarande skick.
+
+Nästa steg är att slutföra hela rättningsbeställningen i granskning
+[`2026-09-08-004`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v4.md):
+
+1. gör båda filerna till självständiga V5-dokument och lägg in 45-raders preflightmatris;
+2. täck varje grindhinder, inklusive E.ON/Navirum/Kraftringen/Kils, Umeå, Stockholm,
+   okända issues och medlemsblockeringarnas säkra livscykel;
+3. rätta dokumentationens P2-fynd och kör räknings-, länk-, diff- och preflightkontroller;
+4. skapa en fokuserad lokal dokumentationscommit som inkluderar V5, granskning 004 och
+   de relaterade kommunikationsfilerna;
+5. skriv leveransens commit-hash och verifieringsresultat i sessionsloggen/överlämningen
+   och stanna därefter för Codex omgranskning.
+
+Ändra ingen produktkod, tariffdata, genererad fil eller produktionsgrind. Aktivera ingen
+tariff och pusha inte. Om ett sakförhållande verkligen inte kan avgöras från befintligt
+underlag ska det dokumenteras som en konkret blockering i V5; det är inte skäl att lämna
+hela arbetsordern väntande.
+
+## Leverans v5, 2026-09-08T15:40:00+02:00
+
+Claude levererade [`tariffinventering-v5.md`](../../../../Fjarrvarmetariffer/tariffinventering-v5.md)
+och [`batchplan-v5.md`](../../../../Fjarrvarmetariffer/batchplan-v5.md), som svar på samtliga
+fynd i omgranskning `2026-09-08-004`. Metodskifte: `tools.tariffer.katalog.grind()` kördes
+FAKTISKT (skrivskyddat, mot minneskopior), inte bara avläst från Codex tabell — 21/45 passerar
+före v5:s rättningar, 45/45 efter. 13 av de 45 raderna hade en tidigare dold ANDRA
+grindblockerare bakom det Codex tabell visade som första ledet, upptäckt och stängd i samma
+runda. E.ON/Navirum (8), Kraftringen och Kils fick specificerade `fixed`/`rate_period`-
+katalogmutationer med golden-test mot 12×-periodiseringsrisk; Umeå fick sin saknade
+kapacitetsfaktor `B` som ett fjärde obligatoriskt leverantörsvärde och en ny
+`post_multiplier`-medveten kapacitetsmotor; Stockholm Exergis årsväg fick en namngiven
+adapterväg (energiformen är inte allmänt godkänd) i stället för v4:s "motorn finns redan".
+Samtliga fem okända `issues` och 10 av 14 `remaining_information_requests` fick en explicit
+livscykel — två (R03, R14) delade eftersom de täckte både en `ready`-rad och en fortsatt
+blockerad rad hos samma medlem, resten borttagna. Känd, avsiktlig metodavvikelse
+dokumenterad: Lidköpings två tariffer passerar `grind()` mekaniskt men förblir korrekt
+`blocked_external_info` — en verklig priskomponent saknas helt ur katalogens JSON-struktur.
+P2: fyra variantkällor med "samma URL som ovan" fick URL:en utskriven direkt, tre
+variantkällor rättade till aktuella 2026-dokument, batch 5c:s användarpresentation rättad
+för Mälarenergis undantag. Ett räknefel i v4-rundans "sex bastariffrader" (i själva verket
+nio) rättat som en daterad korrigering utan att ändra den äldre raden. Dispositionsräkningen
+7 + 45 + 26 = 78 bas, 9 + 5 = 14 variant, 92 totalt är OFÖRÄNDRAD från v4 — v5 fördjupade
+planen, flyttade ingen post. Fokuserad lokal dokumentationscommit ovanpå `ada05e7`. Ingen
+produktkod, tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad;
+inget pushat. Väntar på Codex omgranskning.

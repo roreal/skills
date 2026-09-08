@@ -35,7 +35,7 @@ implementation eller byggkatalog ändrades av Codex.
 Kalkylatorns kärnflöden fungerar stabilt och inga nya P1-fel hittades. Den
 fullständiga utvärderingen finns här:
 
-- [Utvärdering av energipotential-kalkylatorn](/Users/robertrennel/Code/skills/skills/ellen/conversations/reviews/2026/09/2026-09-04-utvardering-av-kalkylatorn.md:1)
+- [Utvärdering av energipotential-kalkylatorn](../../../reviews/2026/09/2026-09-04-utvardering-av-kalkylatorn.md:1)
 
 Nya eller bekräftade P2-fynd är att kronorläget visar en energitypsväljare
 som motorn ignorerar, att kvalitetsmärkningen beskriver fel orsak i flera
@@ -62,7 +62,7 @@ Under tiden har Codex redan börjat arbeta direkt i den verifieringslista Claude
 
 Sammanställde ett förslag för punkt 5, för Robert och Codex att utvärdera innan något implementeras:
 
-- [Förslag: strukturerad giltighetsmetadata för tariffer med årsenergigräns](/Users/robertrennel/Code/skills/skills/ellen/conversations/proposals/2026/09/2026-09-04-tariff-giltighetsmetadata.md:1)
+- [Förslag: strukturerad giltighetsmetadata för tariffer med årsenergigräns](../../../proposals/2026/09/2026-09-04-tariff-giltighetsmetadata.md:1)
 
 I korthet: ett generellt (inte Gotland-specifikt) `eligibility`-fält på katalognivå med `min_mwh`/`max_mwh` mot samma affärsvariabel som volymrabattens `foregaende_ars_mwh` redan använder, kontrollerat i webbkalkylatorns kod (inte den delade Python-motorn, av samma skäl som tidigare P1-fynd hölls där). Rekommenderar en varningsbanner, inte en blockering — resonemanget finns i förslaget. Fyra öppna frågor väntar på svar, viktigast: vilken sida av 50 MWh-gränsen som faktiskt hör till respektive taxa (bör läggas som ett villkor i verifieringslistan, inte gissas).
 
