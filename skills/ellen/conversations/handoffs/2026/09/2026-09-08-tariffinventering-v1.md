@@ -3,15 +3,16 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v6-delivered-awaiting-codex-review
+status: v7-delivered-awaiting-codex-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
 v4_delivered_at: "2026-09-08T13:45:00+02:00"
 v5_delivered_at: "2026-09-08T14:58:36+02:00"
 v6_delivered_at: "2026-09-08T15:32:00+02:00"
-latest_review: "2026-09-08-005"
-scope: "Fullständig v1–v6-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v7_delivered_at: "2026-09-08T16:10:00+02:00"
+latest_review: "2026-09-08-006"
+scope: "Fullständig v1–v7-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -26,6 +27,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v5.md"
   - "Fjarrvarmetariffer/tariffinventering-v6.md"
   - "Fjarrvarmetariffer/batchplan-v6.md"
+  - "Fjarrvarmetariffer/tariffinventering-v7.md"
+  - "Fjarrvarmetariffer/batchplan-v7.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -303,3 +306,43 @@ dokumentationscommit `skills@1a429dc` (ovanpå `ce53f75`), inklusive den tidigar
 granskningen `2026-09-08-005` för att hålla committen självbärande. Ingen produktkod, tariffdata,
 genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar
 på Codex omgranskning.
+
+## Codex omgranskning av v6, 2026-09-08T16:04:00+02:00
+
+Omgranskning
+[`2026-09-08-006`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v6.md)
+har status `changes-required`. V6 rättar Sundsvall, väljer en deduplicerad Stockholm-väg
+och beskriver flera nya kontraktsfält, men planen är ännu inte implementeringsbar.
+Katalogens eget kontrakt kräver leverantörsbekräftat band för 42 av 45 ready-bastariffer,
+inte bara Borlänge/C4; dagens värdetyp kan inte bära sträng-ID och `till_prisar()` kastar
+bort band-ID:t. Stockholms två föreslagna policyer kan inte samexistera i
+`dict[str, Tariffpolicy]`, alla 45 ready-rader står kvar som `utreds` utan mutationsplan,
+request-API:t passar inte `grind()`-signaturen, Umeås grind kan inte se policybindningen och
+TypeScripts manuella deserialisering skulle tappa nya fält.
+
+Claude ska leverera V7 enligt granskningens åttapunktsbeställning. Codex har samtidigt
+besvarat V6:s öppna produktfrågor: Jönköpings accessavgift ska vara ett obligatoriskt,
+synligt kundval 0/10/25/50 kr/mån utan default (varianttäckningen flyttas till ready;
+totalen blir 7 implementerade, 55 ready och 30 blockerade), batch 3b får ligga efter batch
+3, 5a/5b/5c-granulariteten godtas efter bandrättningen och Kraftringens parametrisering
+godtas med explicit fail-closed regelvariant. Ingen implementation eller push är godkänd.
+
+## Leverans v7, 2026-09-08T16:10:00+02:00
+
+Claude levererade [`tariffinventering-v7.md`](../../../../Fjarrvarmetariffer/tariffinventering-v7.md)
+och [`batchplan-v7.md`](../../../../Fjarrvarmetariffer/batchplan-v7.md) som svar på samtliga
+åtta punkter i granskning `2026-09-08-006`. Bandkontraktet (§6a.2) omfattar nu 42 `ready`-
+rader (verifierat mekaniskt mot katalogen), omkonstruerat så det bekräftade band-ID:t
+SJÄLVT väljer prisraden i stället för att bara valideras mot `_niva()`s automatiska val.
+Stockholm Exergi: EN utökad policy i stället för två poster med samma nyckel, typat
+`ADAPTERREGISTER` med fail-closed täckningskontroll. Umeås aktiveringsgrind
+arkitektoniskt separerad (`kontrollera_kompositgrind()`, den nakna `grind()` orörd),
+`B`-taket omräknat till 1,401. Kraftringens diskriminator namngiven explicit
+(`kapacitet_bindning_variant`). Request-representationen förenklad till en enda
+`blockerade_tariff_ider(katalog)`-upplösning FÖRE `grind()`-anropet. TypeScript-
+deserialiseringen för samtliga tre nya kontraktsfält specificerad radvis. Per-produktmatrisens
+tre stale rader (Stockholm, Sundsvall Indal, Umeå) synkroniserade. Codex/Roberts beslut på
+v6:s fyra öppna frågor tillämpade utan omfrågan — Jönköpings accessavgift flyttad till
+`ready_to_implement` (ny disposition 7/55/30 av 92). Fokuserad lokal dokumentationscommit
+ovanpå `058ffb4`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad;
+ingen tariff aktiverad; inget pushat. Väntar på Codex omgranskning.

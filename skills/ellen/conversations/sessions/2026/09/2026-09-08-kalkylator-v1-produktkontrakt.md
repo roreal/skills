@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T15:32:00+02:00"
+last_updated: "2026-09-08T16:10:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v6-delivered-awaiting-codex-review
+status: v7-delivered-awaiting-codex-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -452,12 +452,45 @@ ingen post. Fokuserad lokal dokumentationscommit `skills@1a429dc` (ovanpå `ce53
 ospårade granskningen `2026-09-08-005` för att hålla commiten självbärande. Ingen kod,
 tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 
+### Robert — användare
+
+> Redo för granskning
+
+### Codex — assistent
+
+Codex omgranskade V6 och skrev granskning `2026-09-08-006` med status
+`changes-required`. V6 löser flera tidigare fynd, men katalogens normativa krav på
+leverantörsbekräftat band gäller 42 av 45 ready-bastariffer medan planen bara omfattar två.
+Dagens kontrakt kan inte bära band-ID och katalogkonverteringen kastar bort ID:t.
+Stockholms dubbla policy går inte att uttrycka i nuvarande dictionary, alla 45 ready-rader
+saknar verklig utredningsstatusmutation, request-API:t passar inte `grind()`-signaturen,
+Umeås grind kan inte verifiera den planerade policybindningen och TypeScripts manuella
+deserialisering skulle tappa nya fält. Per-produktmatrisen har dessutom kvar motstridiga
+V5-instruktioner för Stockholm, Sundsvall och Umeå.
+
+V7 beställdes med ett komplett band-ID-kontrakt, körbar status-/requestmodell, en
+representerbar Stockholm-policy/adapter, korrekt Umeå- och TypeScript-väg samt synkade
+batchfiler. Codex tillämpade samtidigt Roberts befintliga mål på Jönköpings accessavgift:
+ett obligatoriskt kundval 0/10/25/50 kr/mån utan default ska ingå, vilket flyttar
+varianttäckningen till ready och ger 7 implementerade, 55 ready och 30 blockerade av 92.
+Ingen implementation eller push godkändes.
+
 ## Ändringslogg
+
+- `2026-09-08T16:04:00+02:00` – Codex omgranskade V6 i
+  `skills@1a429dc` samt korrigeringscommitten `058ffb4` och skrev `2026-09-08-006`: flera V5-fynd är lösta, men
+  band-ID-kontraktet täcker bara två av 42 berörda ready-tariffer och är inte typat eller
+  bevarat genom generatorn; Stockholms dubbelpolicy är omöjlig i nuvarande register;
+  utredningsstatus/request-API, Umeås policyberoende grind och TypeScript-deserialisering
+  är ofullständiga. V7 beställdes. Jönköpings accessavgift beslutades som obligatoriskt
+  kundval utan default, vilket ändrar totalfördelningen till 7/55/30. Ingen implementation
+  eller push godkänd.
 
 - `2026-09-08T15:32:00+02:00` – Claude levererade tariffinventering v6.0 och batchplan v6.0 som svar på samtliga fynd i omgranskning `2026-09-08-005`: grind-only ersatt av en sammansatt fyrastegspreflight (§6), Sundsvall Indal rättad till en riktig kontraktsgated policy (inte legacy), fyra konkreta kontraktstillägg specificerade (§6a: `KravPost.maxvarde`, `supplier_confirmed_band_id`, Umeås `kapacitet_multiplikator_bindning`, Stockholms `ADAPTERREGISTER`), `remaining_information_requests` bytt till `tariff_ids`-representation, felaktiga filnamn rättade. Dispositionsräkningen 7+45+26 bas / 9+5 variant = 92 oförändrad. Fokuserad lokal commit `skills@1a429dc` (ovanpå `ce53f75`), inklusive granskning `2026-09-08-005` för självbärande historik. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-08T15:14:26+02:00` – Codex omgranskade V5 i `skills@ce53f75` och skrev `2026-09-08-005`: korrekt kontrollmängd och bättre dokumentation, men grind-only-preflighten täcker inte aktiveringskedjan. Leverantörsvalt band saknar kontraktsbindning, R03/R14 kan inte delas tariffvis med dagens medlemsmodell, Umeås B saknar komplett typad/maxvaliderad väg, Stockholm skulle dubbleras och Sundsvall Indals kontraktsfria legacy-väg stoppas av generatorn. V6 beställdes; ingen implementation eller push godkänd. Därtill rättas den tidigare V5-leveranstiden `15:40:00`: committen som innehåller leveransloggen skapades `14:58:36`, vilket är den verifierbara leveranstiden. Den äldre felaktiga raden nedan lämnas oförändrad som historik.
 
 - `2026-09-08T15:40:00+02:00` – Claude levererade tariffinventering v5.0 och batchplan v5.0 som svar på samtliga fynd i omgranskning `2026-09-08-004`. Metodskifte: `grind()` faktiskt körd mot minneskopior (inte bara avläst från Codex tabell) — 21/45 före rättningarna, 45/45 efter, med 13 tidigare dolda andraledsblockerare upptäckta och stängda i samma runda. E.ON/Navirum/Kraftringen/Kils fick specificerade katalogmutationer; Umeå fick sin saknade `B`-kapacitetsfaktor; Stockholm Exergi fick en namngiven adapterväg i stället för en påstådd redan-befintlig motor; samtliga fem okända issues och 10 av 14 informationsförfrågningar fick en explicit livscykel (två delade, resten borttagna). Känd metodavvikelse dokumenterad (Lidköping passerar grinden mekaniskt men förblir korrekt blockerad — en priskomponent saknas helt ur JSON). Ett räknefel i v4-rundans "sex bastariffrader" (i själva verket nio) rättat som en daterad korrigering, utan att ändra den äldre raden. Fokuserad lokal dokumentationscommit ovanpå `ada05e7`. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-08T16:10:00+02:00` – Claude levererade tariffinventering v7.0 och batchplan v7.0 som svar på samtliga fynd i omgranskning `2026-09-08-006`: bandkontraktet (§6a.2) omfattar nu 42 `ready`-rader i stället för 2 (verifierat mekaniskt mot katalogen, exakt Codex tal), omkonstruerat så det bekräftade band-ID:t SJÄLVT väljer prisraden i stället för att bara valideras mot vad `_niva()` skulle valt automatiskt (v6:s design gjorde leverantörsbeskedet verkningslöst i just de tvetydiga gränsfall det finns till för); Stockholm Exergis policy rättad till EN utökad post i stället för två separata med samma nyckel (`POLICYREGISTER[tariff_id]` kan inte bära två), `ADAPTERREGISTER` typat med provider/tariff/täckningskrav; Umeås aktiveringsgrind arkitektoniskt separerad i en ny `kontrollera_kompositgrind()` — den nakna `grind()` rörs inte, `B`-taket omräknat till 1,401; Kraftringens diskriminator namngiven explicit (`kapacitet_bindning_variant`, §6a.5); request-representationen förenklad till en enda `blockerade_tariff_ider(katalog)`-upplösning FÖRE grindanropet (löser v6:s tvetydiga `grind(tariff, utredda)`-signatur); TypeScript-deserialiseringen för samtliga tre nya kontraktsfält specificerad explicit (ingen automatisk mappning finns); per-produktmatrisens tre stale rader (Stockholm, Sundsvall Indal, Umeå) synkroniserade mot besluten. Codex/Roberts beslut på v6:s fyra öppna frågor tillämpade utan omfrågan — Jönköpings accessavgift flyttad till `ready_to_implement` (ny disposition 7/55/30 av 92, variantsplit 10/4). Dokumentationscommit ovanpå `058ffb4`. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-08T14:58:00+02:00` – Claude bekräftade Codex direktbesked (14:45:43) och rapporterade att V5-arbetet redan pågår i ett bakgrundsjobb dispatchat efter granskning `2026-09-08-004` — inget nytt jobb startades för att undvika filkrock. Väntar på det pågående jobbets leverans.
 - `2026-09-08T14:45:43+02:00` – Codex gav Claude explicit klartecken att fortsätta och slutföra V5 enligt granskning `2026-09-08-004`, därefter skapa en lokal dokumentationscommit, logga leveransen och stanna för omgranskning. Ingen implementation eller push är tillåten.
 
