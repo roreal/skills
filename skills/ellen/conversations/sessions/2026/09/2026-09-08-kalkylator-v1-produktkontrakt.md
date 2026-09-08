@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T22:56:55+02:00"
+last_updated: "2026-09-08T23:30:32+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v9-delivered-awaiting-codex-review
+status: v10-delivered-awaiting-codex
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -563,7 +563,70 @@ leverantörsfilsadapter = 45). Dispositionerna 7/55/30 av 92 oförändrade. Foku
 dokumentationscommit ovanpå `fd372a2`/`b7790ca`. Ingen kod, tariffdata eller aktivering
 ändrad. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade V9 och skrev granskning `2026-09-08-009` med status
+`changes-required`. Umeås säkra tvåpassgrind, den korrigerade 43+1+1-räkningen och
+Stockholms 12/5-seriemodell med stoppat besparingsflöde är nu i huvudsak lösta. Kvarvarande
+P1-fynd gäller batch 0:s produktkontrakt: den föreslagna `falt`-typen kan inte bära en
+serie; UI-metadatan saknar prispost/omfattning/etikettkälla och dubblerar kapacitet; ogiltig
+kundindata behandlas fortsatt som internt fel; Stockholm saknar en nåbar produktentry för
+att visa aktuell årskostnad; och adapterpreflightens reverse-regel är fortfarande
+icke-körbar och icke-injicerbar. V10 beställdes som fortsatt dokumentationsrättning. Ingen
+implementation eller push godkändes; fördelningen 7/55/30 av 92 ändrades inte.
+
+### Claude — assistent
+
+Claude levererade [`tariffinventering-v10.md`](../../../../Fjarrvarmetariffer/tariffinventering-v10.md)
+och [`batchplan-v10.md`](../../../../Fjarrvarmetariffer/batchplan-v10.md) som svar på samtliga
+fynd i granskning `2026-09-08-009`. En NY, parallell produkt-DTO `policyFalt: Record<string,
+PolicyInputValue>` ersätter påståendet att det numeriska `falt` räckte — det befintliga
+`falt` rörs inte och förblir legacyvägens fria fakturafält; `IndataPost.varde` fick en egen
+`IndataVarde = Varde | str`-typ i stället för att vidga den delade `Varde`-aliasen (som även
+är `_validera_varde`/`valideraVarde`s parametertyp — v9:s "ingen global vidgning"-påstående
+motsades av dess egen kodrad). `policyFaltMetadata` fick `(policy, prisar, omfattning)` som
+signatur (i stället för bara `policy`) för att kunna bygga bandalternativ, undvika att
+blanda `monthly`/`annual` och undvika att dubblera kapacitetsfältet; `KravPost` fick
+obligatoriska `etikett`/`hjalptext`-fält satta av `policyregister.py`. `KontraktBlockerat`
+fick ett nytt `ogiltigaFalt`-fält vid sidan av `saknadeFalt` — både saknad och strukturellt
+ogiltig kundindata (fel typ, fel serielängd, okänt band-/enumval) blir nu typade,
+fältnära användarfel i stället för att det senare förblev ett generiskt kastat
+kontraktsfel. Stockholm fick en namngiven produktentry: ny `ArsprodukResultat`-union och
+`beraknaArsprodukt(args, onskadTyp)`, med dispatch i `calcResult` och en egen
+resultatsektion i `KalkylatorPage.tsx` för `aktuell_arskostnad` utan besparingsfält.
+Adapterpreflighten ersatte det bokstavliga `pass` och den självmotsägande "OR"-regeln med
+ett nytt `Tariffpolicy.ersatter_katalograd`-fält och en injicerbar
+`kontrollera_adapterpreflight(rak_katalog, byggda_leverantorer, policyregister,
+adapterregister)`-funktion, samma injektionsmönster som §6a.3:s `godkanda()`. P2 rättat:
+proveniensen för V9 (`2cfa3be`, direkt ovanpå `b7790ca`, verklig committid `22:58:58`
+enligt `git log --format=%aI`). Dispositionerna 7/55/30 av 92 oförändrade — samtliga
+V10-fynd var körbarhets-/typningsfel i redan beslutade kontraktsdesigner. Fokuserad lokal
+dokumentationscommit ovanpå `2cfa3be`, inklusive granskning `2026-09-08-009` för
+självbärande historik. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex
+omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-08T23:30:32+02:00` – Claude levererade tariffinventering v10.0 och batchplan
+  v10.0 som svar på samtliga fynd i granskning `2026-09-08-009`: ny parallell
+  `policyFalt: Record<string, PolicyInputValue>`-DTO genom hela produktkedjan (det
+  numeriska `falt` orört), `IndataPost.varde` fick en egen `IndataVarde`-typ i stället för
+  att vidga den delade `Varde`-aliasen, `policyFaltMetadata(policy, prisar, omfattning)`
+  löser bandalternativ/omfattningsfiltrering/kapacitetsdubblering, `KontraktBlockerat.
+  ogiltigaFalt` klassar strukturellt ogiltig kundindata som ett typat användarfel vid sidan
+  av `saknadeFalt`, Stockholm fick en namngiven produktentry (`ArsprodukResultat`,
+  `beraknaArsprodukt`) med dispatch och rendering, adapterpreflighten ersatte `pass`/globala
+  register med `Tariffpolicy.ersatter_katalograd` och en injicerbar
+  `kontrollera_adapterpreflight`. Dispositionerna 7/55/30 av 92 oförändrade. Fokuserad lokal
+  dokumentationscommit ovanpå `2cfa3be`. Ingen kod, tariffdata eller aktivering ändrad.
+  Väntar på Codex omgranskning.
+- `2026-09-08T23:12:46+02:00` – Codex omgranskade V9 i `skills@2cfa3be` och skrev
+  `2026-09-08-009`: Umeås tvåpassgrind, Stockholms 12/5-seriemodell och räkningen är
+  förbättrade, men den angivna produkt-DTO:n kan inte bära serier, UI-metadatan saknar
+  nödvändig prispost/omfattning och skulle dubblera kapacitet, invalid kundindata
+  felklassas, Stockholm saknar en nåbar aktuell-årskostnadsväg och adapterpreflighten är
+  fortfarande en skiss med globala register och `pass`. V10 beställdes; ingen
+  implementation eller push godkänd.
 
 - `2026-09-08T22:56:55+02:00` – Claude levererade tariffinventering v9.0 och batchplan v9.0 som svar på samtliga fynd i granskning `2026-09-08-008`: Umeås sammansatta grind kör nu ett riktigt andra `grind()`-pass efter multiplikatorkvittering (stänger den reproducerade dolda andra/tredje blockeringen), `IndataPost.varde` fick den diskriminerade värdeunionen (inte bara `KravPost`), nytt generiskt `antal_varden`-kardinalitetsfält gör `number_series` till en verklig diskriminator, batch 0 fick genererad UI-metadata och en felklassningsgren (`saknadeFalt`), Stockholms årsmodell rättad till EN modell (två serier, två nya statiska bindningar, breddat effektkrav, fail-closed före/efter-regel för besparingsvärdering), adapterpreflighten kontrollerar nu provider/reverse-villkoren, samt två P2-rättningar (stale `kapacitet_bindning_variant`-referens, felaktigt "45/45 grind()"-påstående). Dispositionerna 7/55/30/92 oförändrade. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 

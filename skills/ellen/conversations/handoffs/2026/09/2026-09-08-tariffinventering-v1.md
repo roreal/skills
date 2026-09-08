@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v9-delivered-awaiting-codex-review
+status: v10-delivered-awaiting-codex
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -13,8 +13,10 @@ v6_delivered_at: "2026-09-08T15:32:00+02:00"
 v7_delivered_at: "2026-09-08T16:10:00+02:00"
 v8_delivered_at: "2026-09-08T17:20:42+02:00"
 v9_delivered_at: "2026-09-08T22:56:55+02:00"
-latest_review: "2026-09-08-008"
-scope: "Fullständig v1–v9-inventering och batchplan för samtliga möjliga fjärrvärmetariffer"
+v9_delivered_at_korrigerad: "2026-09-08T22:58:58+02:00"
+v10_delivered_at: "2026-09-08T23:30:32+02:00"
+latest_review: "2026-09-08-009"
+scope: "Fullständig v1–v10-inventering; v10 levererad, inväntar Codex omgranskning"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -35,6 +37,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v8.md"
   - "Fjarrvarmetariffer/tariffinventering-v9.md"
   - "Fjarrvarmetariffer/batchplan-v9.md"
+  - "Fjarrvarmetariffer/tariffinventering-v10.md"
+  - "Fjarrvarmetariffer/batchplan-v10.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -439,3 +443,52 @@ via sammansatt grind = 44 katalogaktiveringar + Stockholm via leverantörsfilsad
 Dispositionerna 7/55/30 av 92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå
 `fd372a2`/`b7790ca`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind
 ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v9, 2026-09-08T23:12:46+02:00
+
+Omgranskning
+[`2026-09-08-009`](../../../reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v9.md)
+har status `changes-required`. V9 löser Umeås dolda grindfynd, rättar aktiveringsräkningen
+och väljer en konsekvent 12/5-seriemodell för Stockholm med fail-closed stopp för
+besparingsvärdering. Batch 0 är dock fortfarande inte implementeringsklar: den angivna
+`falt`-DTO:n kan inte bära serier, `policyFaltMetadata(policy)` saknar vald prispost,
+omfattning och en källa till etikett/hjälptext samt skulle dubblera kapacitetsfältet.
+Ogiltig kundindata felklassas som internt kontraktsfel. Stockholm saknar en faktisk
+produktentry/resultattyp som kan visa aktuell årskostnad utan att gå genom den
+besparingsfunktion som ska kasta. Adapterpreflighten innehåller fortsatt ett `pass`, använder
+globala register och beskriver tre oförenliga reverse-regler.
+
+Claude ska leverera V10 enligt granskningens åttapunktsbeställning: en enda typad DTO och
+verklig UI-metadata, typade saknade/ogiltiga användarfel, nåbar Stockholm-väg för aktuell
+årskostnad, unik band-ID-validering samt en injicerbar maskinläsbar adapterbijektion.
+Ingen implementation eller push är godkänd; dispositionerna 7/55/30 av 92 står kvar.
+
+(V9-tidsstämpeln ovan, `v9_delivered_at: 22:56:55`, var fel — den verifierbara committiden
+för `2cfa3be` är `22:58:58` enligt `git log --format=%aI`. Rättat i frontmatter som
+`v9_delivered_at_korrigerad` utan att skriva om den ursprungliga raden, se granskning
+`2026-09-08-009`, P2.)
+
+## Leverans v10, 2026-09-08T23:30:32+02:00
+
+Claude levererade [`tariffinventering-v10.md`](../../../../Fjarrvarmetariffer/tariffinventering-v10.md)
+och [`batchplan-v10.md`](../../../../Fjarrvarmetariffer/batchplan-v10.md) som svar på
+samtliga fynd i granskning `2026-09-08-009`. Sammanfattning: ny, PARALLELL
+`policyFalt: Record<string, PolicyInputValue>`-DTO genom `KalkylatorPage` →
+`energiPotential` → `besparingsvarde` → `IndataPost` (det befintliga numeriska `falt` orört,
+förblir legacyvägens fria fakturafält); `IndataPost.varde` fick en egen `IndataVarde = Varde
+| str`-typ i stället för att vidga den delade `Varde`-aliasen som även är
+`_validera_varde`/`valideraVarde`s parametertyp; `policyFaltMetadata(policy, prisar,
+omfattning)` löser bandalternativ (från den valda prispostens `nivaer[].id`),
+omfattningsfiltrering (Stockholms `monthly`/`annual`-krav blandas inte längre) och
+kapacitetsdubbleringen; `KravPost` fick obligatoriska `etikett`/`hjalptext`-fält;
+`KontraktBlockerat.ogiltigaFalt` klassar strukturellt ogiltig kundindata (fel typ/längd/
+enumval) som ett typat, fältnära användarfel vid sidan av `saknadeFalt`. Stockholm fick en
+namngiven produktentry (`ArsprodukResultat`-union, `beraknaArsprodukt(args, onskadTyp)`) med
+dispatch i `calcResult` och en egen resultatsektion i `KalkylatorPage.tsx` för
+`aktuell_arskostnad` utan besparingsfält. Adapterpreflighten ersatte det bokstavliga `pass`
+och den självmotsägande "OR"-regeln med ett nytt `Tariffpolicy.ersatter_katalograd`-fält och
+en injicerbar `kontrollera_adapterpreflight(rak_katalog, byggda_leverantorer,
+policyregister, adapterregister)`. Dispositionerna 7/55/30 av 92 oförändrade. Fokuserad
+lokal dokumentationscommit ovanpå `2cfa3be`. Ingen produktkod, tariffdata, genererad fil
+eller produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex
+omgranskning.
