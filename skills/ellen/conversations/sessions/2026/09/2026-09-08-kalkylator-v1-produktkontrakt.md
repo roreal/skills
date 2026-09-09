@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T07:01:50+02:00"
+last_updated: "2026-09-09T08:53:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v10-reviewed-changes-required
+status: v12-delivered
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -624,8 +624,59 @@ adapterpreflighten fungerar inte med tom `bygg_ts()`-kontext och tappar provider
 nyckeln. V11 beställdes som fortsatt dokumentationsrättning. Ingen implementation eller
 push godkändes; fördelningen 7/55/30 av 92 ändrades inte.
 
+### Claude — assistent
+
+Claude levererade tariffinventering V11 och batchplan V11 i
+`skills@02c50aa`, följt av tidskorrigeringen `136d9cd`. Leveransen ändrade bara
+dokumentation och logg, redovisade oförändrad disposition 7/55/30 av 92 och stannade för
+Codex omgranskning.
+
+### Robert — användare
+
+> Är du klar och dags för Claude?
+
+### Codex — assistent
+
+Codex omgranskade V11 och skrev granskning `2026-09-09-002` med status
+`changes-required`. V11 behåller flera riktiga förbättringar, men parserns saknat-typ,
+förvalidatorns min/max/heltal- och nulltransport, `bygg_ts()` omöjliga adapterkontext samt
+årsproduktens dubbla/odefinierade dispatchkontrakt kräver V12. Claude får fortsätta med den
+avgränsade dokumentationsrättningen; ingen implementation eller push är godkänd.
+
 ## Ändringslogg
 
+- `2026-09-09T08:53:00+02:00` – Claude levererade tariffinventering v12.0 och batchplan
+  v12.0 som svar på samtliga fynd i omgranskning `2026-09-09-002`: parserns felresultat är
+  nu en typkorrekt diskriminerad union (`PolicyParseResultat = {status:'parsed', varde} |
+  {status:'saknat'} | {status:'ogiltigt', orsak}`) i stället för `PolicyInputValue |
+  PolicyValideringsFel`, som inte kunde bära `'saknat'`; `valideraPolicyIndata` täcker nu
+  `minVarde`/`maxVarde`/`heltal` bredvid de befintliga kontrollerna, bandfält identifieras
+  via `vardetyp === 'band_id'` i stället för en metadataegenskap validatorn inte tar emot,
+  och `maxVarde`-transporten null-normaliseras (`?? undefined`); `bygg_ts()` fick ett
+  verkligt, körbart anropskontrakt genom att `kontrollera_adapterpreflight` tar
+  `rak_katalog: dict | None` och bara kör riktning 1 (katalogberoende) när en riktig katalog
+  finns, medan `bygg_ts()` skickar `rak_katalog=None` och bara riktning 2 (bijektionens
+  reverse-led) — en uttryckligen avgränsad, mindre garanti än `bygg_ts_fran_katalog()`s
+  fulla tvåvägskontroll, inte en låtsad fullständig bijektion som v11 aldrig kunde köra utan
+  att kasta; årsproduktdispatchen smalnades till EN gren i `beraknaArsprodukt`
+  (`aktuell_arskostnad`), `onskadTyp` finns nu bara på `KalkylatorInputs` (v11 hade den både
+  som funktionsparameter och inputfält), en ny `stodjerAktuellArskostnad(prisar)` ger
+  explicit produktförmåga och fail-closer INNAN `beraknaArsprodukt` anropas, `argsFranInputs`
+  extraherades som en genuin funktion ur `calcResult`s befintliga logik (v11 anropade den
+  utan att någonsin definiera den), och besparingsvägen är uttryckligen den BEFINTLIGA,
+  oförändrade `calcResult`-vägen — v11:s andra dispatch-gren konstruerades aldrig av den
+  riktiga sidan och togs bort som en död omkonstruktion. P2 rättat: "Testat identiskt"
+  ändrat till framtida tempus (ingen sådan testsvit finns ännu). Dispositionerna 7/55/30/92
+  oförändrade. Fokuserad lokal dokumentationscommit ovanpå `136d9cd`. Ingen produktkod,
+  tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget
+  pushat. Väntar på Codex omgranskning.
+- `2026-09-09T08:24:19+02:00` – Codex omgranskade V11 i `skills@136d9cd` och skrev
+  `2026-09-09-002`: parsern använder `'saknat'` utanför sin felunion och klassar tomma
+  råvärden inkonsekvent; förvalidatorn täcker inte min/max/heltal och `maxvarde: null`
+  transporteras inte till `undefined`; `bygg_ts()` får en tom katalog och måste därför
+  kasta mot det verkliga adapterregistret; sidwrappern har två källor till `onskadTyp`,
+  saknar produktförmåga/argumentbyggare och anropar inte den nya besparingsgrenen. V12
+  beställdes. Ingen implementation eller push godkänd; dispositionen 7/55/30 står kvar.
 - `2026-09-09T07:20:05+02:00` – Claude levererade tariffinventering v11.0 och batchplan v11.0 som svar på samtliga fynd i omgranskning `2026-09-09-001`: rått formulärstate (`PolicyRawFormValue`) skilt från den parsade `PolicyInputValue`-DTO:n med en strikt `parsaPolicyIndata`-parser (tomma/delvis ifyllda serier ger fältnära fel i stället för fail-open-nollor; Jönköpings numeriska enum konverteras till tal, band-ID förblir sträng); en ny `valideraPolicyIndata`-funktion körs FÖRE fasadanropet och gör `KontraktBlockerat.ogiltigaFalt` till en verkligen körbar felkanal (v10:s design försökte läsa den ur ett `blocked`-resultat `harledResultatstatus` aldrig returnerar för ogiltiga — bara saknade — värden); `beraknaArsprodukt` fick tre dispatch-grenar i stället för en, så besparingsflödet för Sandviken och alla framtida kontraktstariffer bevaras samtidigt som Stockholms aktuella-årskostnad-väg blir nåbar via en helt separat, ny `KalkylatorResultUnion`-wrapper (`calcResultForOnskadTyp`) i stället för en omöjlig retrofit av `KalkylatorResult`s obligatoriska besparingsfält; adapterpreflighten fick ETT anropskontrakt för `bygg_ts()` (alltid det verkliga produktionsregistret, aldrig en låtsad tom kontext) och en reverse-nyckel på hela `(provider_id, tariff_id, ersatter_katalograd)` i stället för bara `tariff_id`. P2 rättat: etikett/hjälptext har en källa (policyregistret), batch 0 säger nu tre värdetyper, `kontrollera_adapterpreflight` ägs konsekvent av `generera.py`. Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
 - `2026-09-09T07:01:50+02:00` – Codex omgranskade V10 i `skills@ab38b79` och skrev
   `2026-09-09-001`: den parallella DTO:n, pris-/omfattningsmedvetna metadatan och den

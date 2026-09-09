@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v11-delivered-awaiting-review
+status: v11-reviewed-changes-required
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -17,8 +17,9 @@ v9_delivered_at_korrigerad: "2026-09-08T22:58:58+02:00"
 v10_delivered_at: "2026-09-08T23:32:03+02:00"
 v10_reviewed_at: "2026-09-09T07:01:50+02:00"
 v11_delivered_at: "2026-09-09T07:20:05+02:00"
-latest_review: "2026-09-09-001"
-scope: "Fullständig v1–v11-inventering; v11 levererad som svar på 2026-09-09-001, inväntar Codex omgranskning"
+v11_reviewed_at: "2026-09-09T08:24:19+02:00"
+latest_review: "2026-09-09-002"
+scope: "Fullständig v1–v11-inventering; v11 omgranskad med changes-required, v12 beställd"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -532,3 +533,38 @@ som Stockholms aktuella-årskostnad-väg blir nåbar via en ny, separat
 (alltid det verkliga produktionsregistret) och en reverse-nyckel på hela
 `(provider_id, tariff_id, ersatter_katalograd)`. Dispositionerna 7/55/30/92 oförändrade.
 Ingen kod, tariffdata eller aktivering ändrad; ingen push. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v11, 2026-09-09T08:24:19+02:00
+
+Omgranskning
+[`2026-09-09-002`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v11.md)
+har status `changes-required`. V11 löser råstate/DTO-uppdelningen, numerisk enum kontra
+band-ID, delad kapacitetsbyggare, separat aktuell-kostnadsresultat och provider-specifik
+reverse-nyckel. Fyra P1-områden återstår: parsern returnerar `'saknat'` utanför sin egen
+felunion och blandar saknat/ogiltigt; förvalidatorn saknar min/max/heltal och
+`maxvarde: null` normaliseras inte; `bygg_ts()` måste kasta när det får tom katalog och det
+verkliga adapterregistret trots att planen senare kräver grönt test; produktdispatchen har
+två källor till `onskadTyp`, ingen legacy-/energisystemförmåga, en odefinierad
+`argsFranInputs` och en besparingsgren som sidwrappern inte anropar.
+
+Claude ska leverera V12 enligt granskningens åttapunktsbeställning. Ingen implementation
+eller push är godkänd; dispositionerna 7/55/30 av 92 står kvar.
+
+## Leverans v12, 2026-09-09T08:53:00+02:00
+
+Claude levererade [`tariffinventering-v12.md`](../../../../Fjarrvarmetariffer/tariffinventering-v12.md)
+och [`batchplan-v12.md`](../../../../Fjarrvarmetariffer/batchplan-v12.md) som svar på
+samtliga fynd i omgranskning `2026-09-09-002`. Sammanfattning: parserns felresultat är nu en
+typkorrekt diskriminerad union (`PolicyParseResultat`, med en egen `'saknat'`-status) i
+stället för `PolicyInputValue | PolicyValideringsFel`; `valideraPolicyIndata` täcker nu
+`minVarde`/`maxVarde`/`heltal` och bandfält identifieras via `vardetyp === 'band_id'`;
+`maxVarde`-transporten null-normaliseras; `kontrollera_adapterpreflight` tar
+`rak_katalog: dict | None` så `bygg_ts()` (som skickar `None`) får en körbar, uttryckligen
+SNÄVARE garanti (bara bijektionens reverse-led) i stället för v11:s design som alltid
+kastade; `beraknaArsprodukt` smalnades till EN gren, `onskadTyp` finns bara på
+`KalkylatorInputs`, en ny `stodjerAktuellArskostnad`-kapacitetsfunktion och en verkligen
+definierad `argsFranInputs` infördes, och besparing går uttryckligen via den befintliga,
+oförändrade `calcResult`-vägen. Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal
+dokumentationscommit ovanpå `136d9cd`. Ingen produktkod, tariffdata, genererad fil eller
+produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex
+omgranskning.
