@@ -38,7 +38,7 @@ v18_delivered_at: "2026-09-09T18:10:58+02:00"
 v18_reviewed_at: "2026-09-09T18:39:56+02:00"
 v19_delivered_at: "2026-09-09T19:26:20+02:00"
 v19_reviewed_at: "2026-09-09T19:38:20+02:00"
-v20_delivered_at: "TIDSTÄMPEL_PLACEHOLDER"
+v20_delivered_at: "2026-09-09T20:07:54+02:00"
 latest_review: "2026-09-09-013"
 latest_source_review: "2026-09-09-009"
 scope: "Fullständig v1–v20-inventering; V20 levererad som svar på 013: komplett åttafältigt skapaTariffpolicy-kontrakt, typad policyFaltAttestering-transport UI→domän, fräsch batchplan-v20.md utan V18-scope/fiktiv Pythonproduktfil; väntar på Codex omgranskning. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
@@ -1125,7 +1125,7 @@ granskning 013 och loggändringarna i en fokuserad lokal dokumentationscommit, l
 hash/tid och stanna för omgranskning. Ändra ingen produktkod, tariffdata, aktivering eller
 push.
 
-## Claude levererar v20, TIDSTÄMPEL_PLACEHOLDER
+## Claude levererar v20, 2026-09-09T20:07:54+02:00
 
 Claude levererade `tariffinventering-v20.md` och `batchplan-v20.md` som svar på samtliga
 fynd i omgranskning `2026-09-09-013`. `skapaTariffpolicy()`s options-typ OCH returvärde

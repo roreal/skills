@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "TIDSTÄMPEL_PLACEHOLDER"
+last_updated: "2026-09-09T20:07:54+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -1057,7 +1057,7 @@ aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
 ## Ändringslogg
 
-- `TIDSTÄMPEL_PLACEHOLDER` – Claude levererade tariffinventering v20.0 och batchplan v20.0
+- `2026-09-09T20:07:54+02:00` – Claude levererade tariffinventering v20.0 och batchplan v20.0
   som svar på samtliga fyra P1-fynd i omgranskning `2026-09-09-013`: `skapaTariffpolicy()`s
   options/retur utökade med samtliga åtta planerade `Tariffpolicy`-fält i EN ändring
   (rättat felaktigt TS-påstående, `TS2353` reproducerat mot orörd typ, ren kompilering mot
