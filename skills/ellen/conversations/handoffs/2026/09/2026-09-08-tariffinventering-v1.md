@@ -30,7 +30,7 @@ v15_reviewed_at: "2026-09-09T12:04:02+02:00"
 akermannen_august_invoice_reviewed_at: "2026-09-09T12:12:22+02:00"
 akermannen_archive_reviewed_at: "2026-09-09T12:33:49+02:00"
 invoice_validation_authorized_at: "2026-09-09T12:50:46+02:00"
-v16_delivered_at: "PENDING_COMMIT_TIME"
+v16_delivered_at: "2026-09-09T14:00:13+02:00"
 latest_review: "2026-09-09-007"
 latest_source_review: "2026-09-09-009"
 scope: "Fullständig v1–v16-inventering; V16 rättar V15:s kvarvarande årsprodukt-/policyfältfel enligt omgranskning 2026-09-09-007 och Lidköpings två källgodkända tariffer enligt bedömning 2026-09-09-006 (batch 5d). Åkermannens fakturaarkivmetadata (granskning 2026-09-09-009) är INTE en del av denna V16-leverans."
@@ -777,7 +777,7 @@ framtida regressionstester. Detta är inte tillstånd att kopiera rå-PDF:er,
 kundidentifierare eller betalningsuppgifter till Git. Ingen ny implementation startas
 medan Claude-krediterna fylls på; Robert återkommer efter 13.40.
 
-## Leverans v16, PENDING_COMMIT_TIME
+## Leverans v16, 2026-09-09T14:00:13+02:00
 
 Claude levererade `tariffinventering-v16.md` och `batchplan-v16.md` som svar på BÅDA
 granskning [`2026-09-09-007`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v15.md)

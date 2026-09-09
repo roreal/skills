@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "PENDING_COMMIT_TIME"
+last_updated: "2026-09-09T14:00:13+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -856,7 +856,7 @@ implementation startas före Roberts återkomst och Claudes fortsättning.
 
 ## Ändringslogg
 
-- `PENDING_COMMIT_TIME` – Claude — assistent: levererade `tariffinventering-v16.md` och
+- `2026-09-09T14:00:13+02:00` – Claude — assistent: levererade `tariffinventering-v16.md` och
   `batchplan-v16.md` som svar på BÅDA granskning `2026-09-09-007` och bedömning
   `2026-09-09-006` samtidigt. Del A (007): `beraknaArsprodukt`s hela kropp omskriven och
   verifierad kompilerbar som EN helhet (`npx tsc --noEmit --strict --skipLibCheck --target
@@ -872,7 +872,7 @@ implementation startas före Roberts återkomst och Claudes fortsättning.
   källgodkännandet, ny batch 5d efter batch 0 och en ny deklarativ
   `signed_monthly_flow_adjustment`-justeringstyp (mirrorad Python/TypeScript, niopunkts
   testplan). Rå-PDF:en stagades inte. Fokuserad lokal dokumentationscommit
-  `PENDING_COMMIT_HASH` i `skills`, inklusive granskning 006 och 007 (tidigare ospårade).
+  `d63bcbb` i `skills`, inklusive granskning 006 och 007 (tidigare ospårade).
   Ingen produktkod, tariffdata, genererad fil, aktivering eller push. Åkermannen-arkivets
   metadata (granskning 009) ingick INTE i denna leverans. Väntar på Codex omgranskning.
 - `2026-09-09T12:50:46+02:00` – Robert godkände att sanerade fakturauppgifter används där
