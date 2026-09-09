@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T09:40:00+02:00"
+last_updated: "2026-09-09T10:05:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v13-delivered
+status: v14-delivered
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,19 +28,13 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V12 är nu omgranskad i `2026-09-09-003` med status `changes-required`. Min/max/heltal,
-nulltransporten och den snävare `bygg_ts()`-preflighten är lösta. V13 behövs för att sluta
-parserns saknat-kontrakt, göra exakta saknade fält till en domänägd felkanal och ge
-årsproduktdispatchen en enda förmågemodell samt en faktisk, typkorrekt argumentbyggare.
-
-Claude har nu levererat V13 enligt granskning `2026-09-09-003`: parsersignaturen tar
-`ravarde: PolicyRawFormValue | undefined`, en delad `PolicyValideringsOrsak`-union ersätter
-det spridda felspråket, ny `forkontrolleraPolicyIndata` beräknar `saknade`/`ogiltiga` direkt
-ur `policy.kravdaFalt` (oberoende av anroparen, sluter `saknadeFalt`-hålet för direkta
-produktanrop), `stodjerAktuellArskostnad` har EN definition via `kontraktsgatadPolicy` med
-guarden upprepad inuti `beraknaArsprodukt`, och `argsFranInputs` är en faktisk funktion som
-bygger den nya, smalare `Tariffberakningsunderlag`-typen i stället för att tvinga fram
-påhittade besparingsfält. Dispositionerna 7/55/30/92 oförändrade.
+V13 är omgranskad i `2026-09-09-004` med status `changes-required`. Versionen bevarar flera
+riktiga förbättringar från V12, men fyra kontraktsluckor blockerar implementation:
+parser-/valideringstyperna och returfältnamnen är inte enhetliga; förkontrollen saknar
+beräkningsomfattning och en konstruerbar domänfelorsak; produktförmågan läser fel nivå ur
+`kontraktsgatadPolicy()` och verkställer inte energisystemgrinden; argumentbyggaren använder
+fält och hjälpare som inte finns och är inte delad med besparingsvägen. V14 är beställd.
+Dispositionerna 7/55/30 av 92 är oförändrade.
 
 Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering ändrades.
 
@@ -80,9 +74,9 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude har levererat `tariffinventering-v13.md` och `batchplan-v13.md` enligt granskning
-`2026-09-09-003`, i en fokuserad lokal dokumentationscommit ovanpå `a773524`. Väntar nu på
-Codex omgranskning av V13. Ingen produktkod, tariffdata, aktivering eller push är godkänd
+Claude har levererat `tariffinventering-v14.md` och `batchplan-v14.md` enligt granskning
+`2026-09-09-004`, i en fokuserad lokal dokumentationscommit ovanpå `b467d0a`. Väntar nu på
+Codex omgranskning av V14. Ingen produktkod, tariffdata, aktivering eller push är godkänd
 före den.
 
 ## Konversation
@@ -686,8 +680,60 @@ katalog-JSON), batchplanens dubbla "9."-numrering rättad, och handoff-dokumente
 v11-referenser synkade till v13. Dispositionerna 7/55/30 av 92 oförändrade. Ingen kod,
 tariffdata eller aktivering ändrad. Stannade för Codex omgranskning.
 
+### Robert — användare
+
+> V13 är klar för granskning
+>
+> Nytt att granska
+
+### Codex — assistent
+
+Codex omgranskade V13 och skrev granskning `2026-09-09-004` med status
+`changes-required`. Senaste synliga leveransen är fortfarande `skills@b467d0a`; ingen V14
+finns ännu. V13 förbättrar flera delar, men enhetliga parser-/valideringstyper,
+omfattningsmedveten förkontroll med konstruerbar felkanal, rätt åtkomst och
+energisystemguard i produktförmågan samt en verkligt delad och typkorrekt argumentbyggare
+kräver V14. Ingen implementation eller push är godkänd.
+
+### Claude — assistent
+
+Claude har levererat `tariffinventering-v14.md` och `batchplan-v14.md` enligt granskning
+`2026-09-09-004`s åttapunktsbeställning: `forkontrolleraPolicyIndata` tar nu en
+`omfattning: Omfattning`-parameter och filtrerar `policy.kravdaFalt` med samma mönster som
+`harledResultatstatus`; `PolicyValideringsOrsak` har EN modell överallt (dedikerade
+`'min'`/`'max'`/`'heltal'`, `'numerik'` reserverad för icke-ändliga tal); en konkret,
+konstruerbar `KontraktBlockerat`-väg finns nu (två nya `orsak`-värden,
+`missing_policy_fields`/`invalid_policy_fields`, plus ett tredje options-argument på
+konstruktorn, verifierat säkert mot samtliga 8 verkliga anropsställen);
+`stodjerAktuellArskostnad` läser `gated?.policy.kallenergiArsserieBindning` (rättad
+objektsväg, samma bugg fanns oberoende i båda v13-dokumenten) och
+`calcResultForOnskadTyp` kontrollerar `energySystem === 'fjarrvarme'` FÖRST;
+`argsFranInputs`/`Tariffberakningsunderlag` bygger nu enbart på fält verifierat existerande
+på `KalkylatorInputs` (`energyMwh`, `energyScope`, `energyInputMode` — inte de påhittade
+`rumsvarmeAngiven`/`totalMwh`); `onskadTyp` är valfritt med implicit default `'besparing'`
+i stället för obligatoriskt. `GenereradPrisarspost` är definierad för första gången (P2).
+Dispositionerna 7/55/30 av 92 oförändrade. Ingen kalkylatorkod, tariffdata, adapter,
+genererad fil eller tariffaktivering ändrades; inget pushat. De tidigare ospårade
+granskningsfilerna `2026-09-09-003` och `2026-09-09-004` spåras nu i git. Väntar på Codex
+omgranskning av V14.
+
 ## Ändringslogg
 
+- `2026-09-09T10:05:00+02:00` – Claude levererade tariffinventering v14.0 och batchplan
+  v14.0 som svar på samtliga fyra P1-fynd i omgranskning `2026-09-09-004`:
+  omfattningsmedveten `forkontrolleraPolicyIndata`, enhetlig
+  `'min'`/`'max'`/`'heltal'`-orsaksmodell, en konkret konstruerbar
+  `KontraktBlockerat`-väg (`missing_policy_fields`/`invalid_policy_fields`), rättad
+  `stodjerAktuellArskostnad`-objektsåtkomst med energisystemgrind FÖRST i
+  `calcResultForOnskadTyp`, och `argsFranInputs`/`Tariffberakningsunderlag` byggd på
+  verkliga `KalkylatorInputs`-fält med `onskadTyp` gjord valfri. Dispositionerna 7/55/30 av
+  92 oförändrade; de ospårade granskningsfilerna 003/004 lades till i samma commit; ingen
+  produktkod, tariffdata eller aktivering ändrad; inget pushat.
+- `2026-09-09T09:45:04+02:00` – Codex omgranskade V13 i `skills@b467d0a` och skrev
+  `2026-09-09-004`: fyra P1-områden kvarstår i feltypskedjan, den omfattningslösa
+  förkontrollen/felkanalen, produktförmågans wrapperåtkomst/energisystemguard och den
+  icke-existerande samt odelade argumentbyggaren. V14 beställdes; inga produktändringar
+  eller push godkändes och dispositionen 7/55/30 står kvar.
 - `2026-09-09T09:40:00+02:00` – Claude levererade tariffinventering v13.0 och batchplan
   v13.0 som svar på samtliga fynd i omgranskning `2026-09-09-003`: parsersignaturen tar
   `PolicyRawFormValue | undefined`, en delad `PolicyValideringsOrsak`-union, ny

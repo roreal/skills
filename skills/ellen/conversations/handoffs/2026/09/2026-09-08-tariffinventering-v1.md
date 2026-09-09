@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v13-delivered
+status: v14-delivered
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -21,8 +21,10 @@ v11_reviewed_at: "2026-09-09T08:24:19+02:00"
 v12_delivered_at: "2026-09-09T08:53:39+02:00"
 v12_reviewed_at: "2026-09-09T09:08:48+02:00"
 v13_delivered_at: "2026-09-09T09:40:00+02:00"
-latest_review: "2026-09-09-003"
-scope: "Fullständig v1–v13-inventering; v13 levererad som svar på granskning 2026-09-09-003, väntar på omgranskning"
+v13_reviewed_at: "2026-09-09T09:45:04+02:00"
+v14_delivered_at: "2026-09-09T10:05:00+02:00"
+latest_review: "2026-09-09-004"
+scope: "Fullständig v1–v14-inventering; v14 levererad som svar på granskning 2026-09-09-004, väntar på omgranskning"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -51,6 +53,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v12.md"
   - "Fjarrvarmetariffer/tariffinventering-v13.md"
   - "Fjarrvarmetariffer/batchplan-v13.md"
+  - "Fjarrvarmetariffer/tariffinventering-v14.md"
+  - "Fjarrvarmetariffer/batchplan-v14.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -614,3 +618,39 @@ dubbla "9."-numrering fixad; denna handoffs kvarvarande v11-frontmatter synkad t
 Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå
 `a773524`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad; ingen
 tariff aktiverad; inget pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v13, 2026-09-09T09:45:04+02:00
+
+Omgranskning
+[`2026-09-09-004`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v13.md)
+har status `changes-required`. V13 bevarar flera riktiga förbättringar, särskilt
+`undefined`-argumentet, principen om en domänägd förkontroll och den rättade
+adaptersemantiken. Fyra P1-områden återstår: parser- och valideringsfeltyperna samt deras
+returfältnamn är fortfarande motsägande; förkontrollen saknar beräkningsomfattning och en
+konstruerbar `KontraktBlockerat`-orsak; förmågefunktionen läser bindningen på fel nivå ur
+`kontraktsgatadPolicy()` och verkställer inte energisystemgrinden; argumentbyggaren använder
+icke-existerande fält/hjälpare och delas inte med den befintliga besparingsvägen.
+
+Claude ska leverera V14 enligt granskningens åttapunktsbeställning och ta med de hittills
+ospårade granskningsfilerna `2026-09-09-003` och `2026-09-09-004` i nästa fokuserade
+dokumentationscommit. Ingen implementation eller push är godkänd; dispositionerna
+7/55/30 av 92 står kvar.
+
+## Claude levererar v14, 2026-09-09T10:05:00+02:00
+
+Claude har levererat `tariffinventering-v14.md` och `batchplan-v14.md` enligt granskning
+`2026-09-09-004`s åttapunktsbeställning: omfattningsmedveten `forkontrolleraPolicyIndata`
+(`omfattning: Omfattning`, filtrerar `policy.kravdaFalt` som `harledResultatstatus`); EN
+`PolicyValideringsOrsak`-modell med dedikerade `'min'`/`'max'`/`'heltal'`; en konkret,
+konstruerbar `KontraktBlockerat`-väg (`missing_policy_fields`/`invalid_policy_fields`, ett
+tredje options-argument på konstruktorn, säkert mot samtliga 8 verkliga anropsställen);
+`stodjerAktuellArskostnad` läser `gated?.policy.kallenergiArsserieBindning` (rättad
+objektsväg, samma bugg i BÅDA v13-dokumenten oberoende) med `energySystem ===
+'fjarrvarme'`-kontroll FÖRST i `calcResultForOnskadTyp`; `argsFranInputs`/
+`Tariffberakningsunderlag` bygger nu enbart på fält verifierat existerande på
+`KalkylatorInputs`; `onskadTyp` är nu valfritt med implicit default `'besparing'`.
+`GenereradPrisarspost` definierad för första gången (P2). Dispositionerna 7/55/30 av 92
+oförändrade. Fokuserad lokal dokumentationscommit ovanpå `b467d0a`, som även spårar de
+tidigare ospårade granskningsfilerna `2026-09-09-003`/`2026-09-09-004`. Ingen produktkod,
+tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget
+pushat. Väntar på Codex omgranskning.
