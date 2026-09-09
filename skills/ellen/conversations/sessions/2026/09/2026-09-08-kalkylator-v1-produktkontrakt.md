@@ -1169,8 +1169,61 @@ Nästa föreslagna steg är lokal Batch 0-implementation i berörda produktrepon
 tester och fokuserade commits. Ingen tariffaktivering eller push ingår, och kodstarten
 inväntar Roberts uttryckliga klartecken.
 
+### Robert — användare
+
+> Ja gå vidare
+
+### Claude — assistent
+
+Claude genomförde Batch 0:s grundinfrastruktur enligt de sex villkoren i godkännande
+`2026-09-09-016`, efter Roberts uttryckliga klartecken. Python (`enkey-agents@11f8b6e`):
+`KravPost.vardetyp` (`"number"`/`"number_series"`/`"band_id"`) med `antal_varden`-
+kardinalitet och `tillatna_varden`, `IndataVarde = Varde | str`, `IndataPost.attesterad`
+som den enda attesteringskällan `harled_resultatstatus` läser auktoritativt (ett
+`krav_attestering`-fält utan `attesterad=True` blockerar), samt åtta nya
+`Tariffpolicy`-fält (`kapacitet_band_bindning` m.fl. plus
+`stodjer_aktuell_arskostnad`/`stodjer_besparing`), samtliga validerade mot `kravda_falt`
+inklusive bindningsspecifik `vardetyp`. `stodjer_besparing=True` sattes explicit för
+Sandviken i `policyregister.py` — utan den ändringen hade den nya, generiska
+förmågegrinden tyst blockerat en redan produktionsgodkänd tariff. 369 Pythontester gröna
+(69 nya).
+
+TypeScript (`neptune_academy@85aa7a1`) speglar samma kontrakt: `TariffpolicyOptions` som
+en namngiven, strikt konstruktionskälla i BÅDA `skapaTariffpolicy` och
+`policyFranGenererad`; `byggIndataFranPolicy`/`byggKontraktIndata` (besparingsvarde.ts)
+bygger `IndataPost`-kartan ur `policyFalt`/`policyFaltAttestering`, trädd in i
+`beraknaBesparingsvardeKontrakt` i stället för den gamla enda-kapacitetsbindningen;
+`forkontrolleraPolicyIndata` (resultatkontrakt.ts) ger en fältnära förkontroll
+(`saknade`/`ogiltiga`, inklusive `'ej_attesterat'`) före fasadanropet; ny
+`Produktbegransning`-felklass plus fail-closed `stodjerBesparing`/
+`stodjerAktuellArskostnad` (en kontraktsgated tariff måste EXPLICIT opta in); ny publik
+`beraknaArsprodukt`/`ArsprodukResultat`/`Tariffberakningsunderlag`-entry för "aktuell
+årskostnad", auktoritativt spärrad av `stodjerAktuellArskostnad`. 425 tester gröna (9
+nya), `tsc --noEmit` rent, produktionsbygge lyckades.
+
+Medvetet avgränsat från denna commit: `parsaPolicyIndata`/`policyFaltMetadata` och
+`KalkylatorPage.tsx`s dynamiska formulärrendering för nya policyfält — UI-lagret för
+framtida kontraktsgatade tariffer (Lidköping m.fl., batch 5d) har ännu ingen konsument av
+dessa fält, så den byggs när en verklig tariff behöver den. `KontraktBlockeratOrsak`-
+switchen i `KalkylatorPage.tsx` uppdaterades för de två nya orsakerna
+(`missing_policy_fields`/`invalid_policy_fields`) eftersom TypeScript annars vägrade
+kompilera den redan existerande exhaustive-switchen.
+
+Ingen tariff aktiverades eller flyttades mellan dispositioner (7/57/28 av 92 oförändrat).
+Inget pushat i något repo. Två fokuserade lokala commits (en per produktrepo), redovisade
+för Codex kodgranskning.
+
 ## Ändringslogg
 
+- `2026-09-09T22:49:44+02:00` – Claude genomförde Batch 0:s grundinfrastruktur enligt
+  godkännande `2026-09-09-016`, efter Roberts klartecken: diskriminerad `vardetyp`,
+  attesteringskedjan (`IndataPost.attesterad` som enda källan), åtta nya `Tariffpolicy`-
+  fält med fail-closed `stodjerBesparing`/`stodjerAktuellArskostnad` (Sandviken explicit
+  `True`), `byggIndataFranPolicy`/`byggKontraktIndata`, `forkontrolleraPolicyIndata`, ny
+  `Produktbegransning`-felklass och `beraknaArsprodukt`-entryn. `enkey-agents@11f8b6e`
+  (369 tester, 69 nya) och `neptune_academy@85aa7a1` (425 tester, 9 nya, `tsc`/build
+  gröna). UI-rendering för nya policyfält (KalkylatorPage.tsx) medvetet avgränsad —
+  ingen konsument än. Ingen tariff aktiverad, ingen push. Väntar på Codex kodgranskning.
 - `2026-09-09T22:26:48+02:00` – Codex godkände V22 med villkor i `2026-09-09-016` som
   implementationsplan för Batch 0:s grundinfrastruktur. Båda P1-fynden är stängda; två
   redaktionella hänvisningsrester är icke-blockerande. Ingen V23 krävs. Kodstart inväntar

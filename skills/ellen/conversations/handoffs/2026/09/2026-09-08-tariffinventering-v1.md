@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v22-approved-awaiting-batch0-go
+status: batch0-implemented-awaiting-code-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -44,11 +44,14 @@ v21_delivered_at: "2026-09-09T20:31:00+02:00"
 v21_reviewed_at: "2026-09-09T22:11:18+02:00"
 v22_delivered_at: "2026-09-09T22:23:10+02:00"
 v22_reviewed_at: "2026-09-09T22:26:48+02:00"
+batch0_implementation_authorized_at: "2026-09-09T22:47:00+02:00"
+batch0_implemented_at: "2026-09-09T22:49:44+02:00"
 latest_review: "2026-09-09-016"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering; V22 godkänd med villkor i 016 som plan för Batch 0-infrastruktur. Båda P1-fynden stängda; två redaktionella noter är icke-blockerande. Kodstart inväntar Roberts klartecken. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
-implementation_allowed: false
+scope: "Fullständig v1–v22-inventering, godkänd (016) som plan för Batch 0-infrastruktur. Robert gav klartecken; Batch 0 implementerad i enkey-agents@11f8b6e och neptune_academy@85aa7a1 (diskriminerad vardetyp, attesteringskedja, TariffpolicyOptions, fail-closed stodjerBesparing/stodjerAktuellArskostnad, beraknaArsprodukt). KalkylatorPage.tsx:s dynamiska formulärrendering för nya policyfält medvetet avgränsad, ingen konsument än. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex kodgranskning av Batch 0."
+implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
+batch0_code_review_pending: true
 tariff_activation_allowed: false
 push_allowed: false
 deliverables:
@@ -1334,3 +1337,37 @@ DTO-/UI-transport, fail-closed produktgrindar, nödvändiga deterministiska gene
 och full testmatris. Legacybeteende ska bevaras. Ingen tariff får aktiveras eller flyttas
 mellan dispositioner. Skapa fokuserade lokala commits per repo, redovisa HEAD/diff/tester
 och stanna för Codex kodgranskning. Ingen push.
+
+## Claude implementerade Batch 0, 2026-09-09T22:49:44+02:00
+
+Robert gav explicit klartecken ("Ja gå vidare"). Claude implementerade Batch 0:s
+grundinfrastruktur enligt samtliga sex villkor i godkännande `2026-09-09-016`:
+
+- **Python** (`enkey-agents@11f8b6e`): `KravPost.vardetyp`
+  (`"number"`/`"number_series"`/`"band_id"`) med `antal_varden`-kardinalitet och
+  `tillatna_varden`; `IndataVarde = Varde | str`; `IndataPost.attesterad` som enda
+  attesteringskällan `harled_resultatstatus` läser auktoritativt; åtta nya
+  `Tariffpolicy`-fält (samtliga sju nyckelbärande bindningar valideras mot `kravda_falt`
+  inklusive bindningsspecifik `vardetyp`) och fail-closed `stodjer_besparing` (Sandviken
+  fick explicit `True` i `policyregister.py` — utan den ändringen hade den nya grinden
+  tyst blockerat en redan produktionsgodkänd tariff). 369 tester gröna (69 nya).
+  `tariffer.generated.ts` regenererad i samma commit-serie.
+- **TypeScript** (`neptune_academy@85aa7a1`): `TariffpolicyOptions` som enda
+  konstruktionskällan i `skapaTariffpolicy`/`policyFranGenererad`;
+  `byggIndataFranPolicy`/`byggKontraktIndata`; `forkontrolleraPolicyIndata` (fältnära
+  förkontroll, `'ej_attesterat'` inkluderad); ny `Produktbegransning`-felklass;
+  fail-closed `stodjerBesparing`/`stodjerAktuellArskostnad`; ny `beraknaArsprodukt`/
+  `ArsprodukResultat`/`Tariffberakningsunderlag`. 425 tester gröna (9 nya), `tsc --noEmit`
+  rent, produktionsbygge lyckades.
+
+**Medvetet avgränsat, inte del av denna leverans:** `parsaPolicyIndata`/
+`policyFaltMetadata` och `KalkylatorPage.tsx`s dynamiska formulärrendering för nya
+policyfält — inga befintliga tariffer konsumerar dem än (Lidköpings batch 5d är
+framtida), så den ytan byggs när en verklig tariff behöver den. `KontraktBlockeratOrsak`-
+switchen i `KalkylatorPage.tsx` fick två nya, textöversatta orsaker
+(`missing_policy_fields`/`invalid_policy_fields`) eftersom TypeScript annars vägrade
+kompilera den befintliga exhaustive-switchen.
+
+Ingen tariff aktiverad eller flyttad mellan dispositioner (7/57/28 av 92 oförändrat).
+Inget pushat i något repo. Två fokuserade lokala commits, en per produktrepo. Stannar för
+Codex kodgranskning av Batch 0.

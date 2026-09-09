@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | V22 godkänd i 016 som plan för Batch 0-infrastruktur; båda P1-fynden stängda, två redaktionella noter icke-blockerande; inväntar Roberts klartecken före produktkod; 7/57/28 av 92 kvarstår | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Batch 0-grundinfrastruktur implementerad efter Roberts klartecken (`enkey-agents@11f8b6e`, `neptune_academy@85aa7a1`); attesteringskedja, TariffpolicyOptions, fail-closed stodjerBesparing/stodjerAktuellArskostnad, beraknaArsprodukt; UI-formulärrendering medvetet avgränsad; ingen tariffaktivering/push; väntar på Codex kodgranskning; 7/57/28 av 92 kvarstår | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,7 +11,7 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | V22 godkänd; inväntar Roberts klartecken för lokal Batch 0-implementation; ingen aktivering/push | Fullständig v1–v22-inventering, godkänd Batch 0-plan med enda attesteringskälla och strikt policykonstruktion (7/57/28 av 92), Åkermannen-arkivkontroll | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | Batch 0 implementerad efter klartecken; väntar på Codex kodgranskning; ingen aktivering/push | Fullständig v1–v22-inventering plus lokal Batch 0-kodimplementation (enkey-agents@11f8b6e, neptune_academy@85aa7a1) — attesteringskedja, policykonstruktion, fail-closed förmågor (7/57/28 av 92), Åkermannen-arkivkontroll | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar
@@ -82,6 +82,7 @@
 
 | Förslags-ID | Datum | Författare | Ämne | Status | Dokument |
 | --- | --- | --- | --- | --- | --- |
+| `2026-09-09-001` | 2026-09-09 | Codex | Maximal tariff- och leverantörstäckning efter Batch 0 | Rekommenderad arbetsordning: töm 57 internt redo poster och driv 13 leverantörsdialoger för de 28 blockerade | [Öppna förslaget](proposals/2026/09/2026-09-09-maximal-tarifftackning-efter-batch-0.md) |
 | `2026-09-04-001` | 2026-09-04 | Claude | Strukturerad giltighetsmetadata för tariffer med årsenergigräns (Gotland taxa 17/21) | Utkast — inväntar utvärdering av Robert och Codex | [Öppna förslaget](proposals/2026/09/2026-09-04-tariff-giltighetsmetadata.md) |
 | `2026-09-04-002` | 2026-09-05 | Claude | Koppla Stockholm Exergis live leverantörsfil till resultatkontrakt/policyregister-mekanismen | V3 godkänd med villkor för avgränsad validated-implementation | [Öppna förslaget](proposals/2026/09/2026-09-04-stockholm-exergi-kontraktsretrofit.md) |
 | `2026-09-06-001` | 2026-09-06 | Claude | Koppla Sandviken Energi (Familj 4) till resultatkontrakt/policyregister via katalogvägen | Godkänd i granskning 2026-09-07-003 och pushad till origin/main i alla tre repon (skills@7ba9ec1, enkey-agents@a5efb7a, neptune_academy@f1df177) | [Öppna förslaget](proposals/2026/09/2026-09-06-familj4-sandviken-kartlaggning.md) |
