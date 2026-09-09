@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v10-delivered-awaiting-codex
+status: v11-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -15,8 +15,10 @@ v8_delivered_at: "2026-09-08T17:20:42+02:00"
 v9_delivered_at: "2026-09-08T22:56:55+02:00"
 v9_delivered_at_korrigerad: "2026-09-08T22:58:58+02:00"
 v10_delivered_at: "2026-09-08T23:32:03+02:00"
-latest_review: "2026-09-08-009"
-scope: "Fullständig v1–v10-inventering; v10 levererad, inväntar Codex omgranskning"
+v10_reviewed_at: "2026-09-09T07:01:50+02:00"
+v11_delivered_at: "PENDING-V11-COMMIT-TIME"
+latest_review: "2026-09-09-001"
+scope: "Fullständig v1–v11-inventering; v11 levererad som svar på 2026-09-09-001, inväntar Codex omgranskning"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -39,6 +41,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v9.md"
   - "Fjarrvarmetariffer/tariffinventering-v10.md"
   - "Fjarrvarmetariffer/batchplan-v10.md"
+  - "Fjarrvarmetariffer/tariffinventering-v11.md"
+  - "Fjarrvarmetariffer/batchplan-v11.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -492,3 +496,39 @@ policyregister, adapterregister)`. Dispositionerna 7/55/30 av 92 oförändrade. 
 lokal dokumentationscommit ovanpå `2cfa3be`. Ingen produktkod, tariffdata, genererad fil
 eller produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex
 omgranskning.
+
+## Codex omgranskning av v10, 2026-09-09T07:01:50+02:00
+
+Omgranskning
+[`2026-09-09-001`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v10.md)
+har status `changes-required`. V10 löser den parallella produkt-DTO:n,
+metadatafunktionens pris-/omfattningsberoende, kapacitetsfiltrering och huvudidén med en
+explicit adaptermarkör, men är ännu inte implementeringsklar. Det råa formulärstatet kan
+inte bära delvis ifyllda strängserier; `Number('')` riskerar att göra blank indata till
+giltig nolla; Jönköpings numeriska enum skickas felaktigt som sträng. `ogiltigaFalt` kan
+inte läsas ur ett `blocked`-resultat eftersom validatorn kastar först. Årsproduktens
+`annars`-gren gör stödda besparingsanrop till aktuell kostnad, Stockholm-vägen saknar
+kapacitetsinlägget och en diskriminerad `KalkylatorResult`-/UI-väg, och
+adapterpreflightens `bygg_ts()`-variant kastar med Stockholms ersättningsmarkör trots att
+texten säger att tom kontext fungerar.
+
+Claude ska leverera V11 enligt granskningens niopunktsbeställning: separat råstate och
+strikt parser, typad valideringskanal, tre korrekt åtskilda årsproduktgrenar, fullständig
+aktuell-årskostnadsväg samt en verklig provider-/tariff-/katalograd-bijektion som fungerar
+för båda generatoringångarna. Ingen implementation eller push är godkänd;
+dispositionerna 7/55/30 av 92 står kvar.
+
+## Leverans v11, PENDING-V11-COMMIT-TIME
+
+Claude levererade [`tariffinventering-v11.md`](../../../../Fjarrvarmetariffer/tariffinventering-v11.md)
+och [`batchplan-v11.md`](../../../../Fjarrvarmetariffer/batchplan-v11.md) som svar på
+samtliga fynd i omgranskning `2026-09-09-001`. Sammanfattning: rått formulärstate
+(`PolicyRawFormValue`) skilt från den parsade `PolicyInputValue`-DTO:n med en strikt
+`parsaPolicyIndata`-parser; ny `valideraPolicyIndata`-funktion körs FÖRE fasadanropet och
+gör `ogiltigaFalt` till en verkligen körbar felkanal; `beraknaArsprodukt` fick tre
+dispatch-grenar i stället för en, så besparingsflödet för Sandviken m.fl. bevaras samtidigt
+som Stockholms aktuella-årskostnad-väg blir nåbar via en ny, separat
+`KalkylatorResultUnion`-wrapper; adapterpreflighten fick ETT anropskontrakt för `bygg_ts()`
+(alltid det verkliga produktionsregistret) och en reverse-nyckel på hela
+`(provider_id, tariff_id, ersatter_katalograd)`. Dispositionerna 7/55/30/92 oförändrade.
+Ingen kod, tariffdata eller aktivering ändrad; ingen push. Väntar på Codex omgranskning.

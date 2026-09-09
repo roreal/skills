@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | v10 delivered; awaiting Codex review | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | v11 delivered; awaiting Codex review | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,13 +11,14 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v10 delivered; awaiting Codex review; ingen implementation/push | Fullständig v1–v10-inventering och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v11 delivered; awaiting Codex review; ingen implementation/push | Fullständig v1–v11-inventering och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar
 
 | Gransknings-ID | Datum | Granskare | Omfattning | Bedömning | Dokument |
 | --- | --- | --- | --- | --- | --- |
+| `2026-09-09-001` | 2026-09-09 | Codex | Omgranskning av tariffinventering v10, batchplan v10 och dokumentationscommittarna `2b14378`/`ab38b79` | V10 förbättrar DTO, metadata och adaptermarkör, men råstate/parser, typad invalidväg, årsproduktdispatch, Stockholm-resultat och två generatorvägar kräver V11 | [Öppna omgranskningen](reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v10.md) |
 | `2026-09-08-009` | 2026-09-08 | Codex | Omgranskning av tariffinventering v9, batchplan v9 och dokumentationscommit `2cfa3be` | Umeå/Stockholm-serier/räkning förbättrade, men produkt-DTO/UI-metadata, användarfel, Stockholms aktuella årskostnadsväg och adapterpreflight kräver v10 | [Öppna omgranskningen](reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v9.md) |
 | `2026-09-08-008` | 2026-09-08 | Codex | Omgranskning av tariffinventering v8, batchplan v8 och dokumentationscommittarna `fd372a2`/`b7790ca` | Kraftringen/Jönköping förbättrade, men Umeås dolda grindfynd, indatatyp/UI för band och serier, Stockholms årsbindningar/före-efterregel samt adapterpreflight kräver v9 | [Öppna omgranskningen](reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v8.md) |
 | `2026-09-08-007` | 2026-09-08 | Codex | Omgranskning av tariffinventering v7, batchplan v7 och dokumentationscommit `f0f3ee7` | Kontrollmängd och 42-radslista godkända, men Umeås ordningsfel, band-ID:ts globala strängvidgning, Stockholms onåbara adapterkontroll, Kraftringens saknade motorväg och Jönköpings UI-bara val kräver v8 | [Öppna omgranskningen](reviews/2026/09/2026-09-08-omgranskning-tariffinventering-v7.md) |

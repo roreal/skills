@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-08T23:32:03+02:00"
+last_updated: "2026-09-09T07:01:50+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v10-delivered-awaiting-codex
+status: v10-reviewed-changes-required
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -27,6 +27,11 @@ genomförde den avgränsade dokumentationsetapp som tidigare rekommenderats: ett
 produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan synkades
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
+
+V10 är nu omgranskad i `2026-09-09-001` med status `changes-required`. Den förbättrade
+DTO-/metadata-/adapterstrukturen står kvar, men V11 behövs för strikt formulärparsning,
+en körbar typad valideringskanal, korrekt besparings-/aktuell-kostnadsdispatch och en
+tvåvägsadapterkontroll som fungerar för båda generatoringångarna.
 
 Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering ändrades.
 
@@ -66,14 +71,12 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude har fått överlämning `2026-09-08-001`: bygg först en fullständig, deduplicerad och
-versionssatt tariffinventering över både katalogen och separat förvaltade leverantörsfiler.
-Varje post ska klassas som implementerad, redo att implementera, externt blockerad eller
-ej tillämplig, med obligatoriska indata och stödda inmatningslägen. Claude ska även lämna
-en batchplan men inte ändra kod eller tariffdata före Codex granskning.
-
-Beslutet om UI-beteendet för saknad leverantör kan fattas parallellt. Därefter kan
-produktdirektivet få status `approved` och ett separat språk-/metadataförslag tas fram.
+Claude ska leverera `tariffinventering-v11.md` och `batchplan-v11.md` enligt granskning
+`2026-09-09-001`, i en fokuserad lokal dokumentationscommit ovanpå `ab38b79`. V11 ska
+skilja rått formulärstate från domänvärden, ge ogiltig kundindata en verkligt körbar typad
+felkanal, bevara besparingsvägen för stödda kontraktstariffer, göra Stockholms aktuella
+årskostnad representerbar genom `calcResult`/sidan och rätta adapterpreflightens båda
+anropsvägar. Ingen produktkod, tariffdata, aktivering eller push före ny Codex-granskning.
 
 ## Konversation
 
@@ -605,8 +608,33 @@ dokumentationscommit ovanpå `2cfa3be`, inklusive granskning `2026-09-08-009` f�
 självbärande historik. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex
 omgranskning.
 
+### Robert — användare
+
+> Nu finns V10 att granska
+
+### Codex — assistent
+
+Codex omgranskade V10 och skrev granskning `2026-09-09-001` med status
+`changes-required`. V10 löser flera tidigare strukturfrågor, men fem P1-fynd återstår:
+rått formulärstate och domän-DTO blandas så blankt kan bli noll och Jönköpings numeriska
+enum blir sträng; `ogiltigaFalt` kan inte härledas efter validatorns kast; årsproduktens
+dispatch gör vanliga besparingsanrop till aktuell kostnad; Stockholm-vägen saknar
+kapacitetsinlägg, diskriminerad `KalkylatorResult` och källa till `onskadTyp`; samt
+adapterpreflighten fungerar inte med tom `bygg_ts()`-kontext och tappar provider i reverse-
+nyckeln. V11 beställdes som fortsatt dokumentationsrättning. Ingen implementation eller
+push godkändes; fördelningen 7/55/30 av 92 ändrades inte.
+
 ## Ändringslogg
 
+- `PENDING-V11-COMMIT-TIME` – Claude levererade tariffinventering v11.0 och batchplan v11.0 som svar på samtliga fynd i omgranskning `2026-09-09-001`: rått formulärstate (`PolicyRawFormValue`) skilt från den parsade `PolicyInputValue`-DTO:n med en strikt `parsaPolicyIndata`-parser (tomma/delvis ifyllda serier ger fältnära fel i stället för fail-open-nollor; Jönköpings numeriska enum konverteras till tal, band-ID förblir sträng); en ny `valideraPolicyIndata`-funktion körs FÖRE fasadanropet och gör `KontraktBlockerat.ogiltigaFalt` till en verkligen körbar felkanal (v10:s design försökte läsa den ur ett `blocked`-resultat `harledResultatstatus` aldrig returnerar för ogiltiga — bara saknade — värden); `beraknaArsprodukt` fick tre dispatch-grenar i stället för en, så besparingsflödet för Sandviken och alla framtida kontraktstariffer bevaras samtidigt som Stockholms aktuella-årskostnad-väg blir nåbar via en helt separat, ny `KalkylatorResultUnion`-wrapper (`calcResultForOnskadTyp`) i stället för en omöjlig retrofit av `KalkylatorResult`s obligatoriska besparingsfält; adapterpreflighten fick ETT anropskontrakt för `bygg_ts()` (alltid det verkliga produktionsregistret, aldrig en låtsad tom kontext) och en reverse-nyckel på hela `(provider_id, tariff_id, ersatter_katalograd)` i stället för bara `tariff_id`. P2 rättat: etikett/hjälptext har en källa (policyregistret), batch 0 säger nu tre värdetyper, `kontrollera_adapterpreflight` ägs konsekvent av `generera.py`. Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit. Ingen kod, tariffdata eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-09T07:01:50+02:00` – Codex omgranskade V10 i `skills@ab38b79` och skrev
+  `2026-09-09-001`: den parallella DTO:n, pris-/omfattningsmedvetna metadatan och den
+  explicita adaptermarkören är förbättringar, men råstate/parsern kan göra blankt till noll
+  och skickar Jönköpings numeriska enum som sträng; validatorns kast gör den beskrivna
+  `ogiltigaFalt`-vägen onåbar; årsproduktens dispatch tappar stödd besparing; Stockholm
+  saknar kapacitetsinlägg och en full `KalkylatorResult`-/UI-väg; `bygg_ts()` kan inte köra
+  preflight med tom adapterkontext och reverse-kontrollen tappar provideridentitet. V11
+  beställdes. Ingen implementation eller push godkänd; dispositionen 7/55/30 står kvar.
 - `2026-09-08T23:32:03+02:00` – Claude levererade tariffinventering v10.0 och batchplan
   v10.0 som svar på samtliga fynd i granskning `2026-09-08-009`: ny parallell
   `policyFalt: Record<string, PolicyInputValue>`-DTO genom hela produktkedjan (det
