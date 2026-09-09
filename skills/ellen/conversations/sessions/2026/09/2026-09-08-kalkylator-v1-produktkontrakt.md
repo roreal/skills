@@ -965,6 +965,8 @@ aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
 ## Ändringslogg
 
+- `2026-09-09T18:10:58+02:00` – Claude levererade tariffinventering v18.0 och batchplan v18.0 i `skills@a3ce065` som svar på samtliga fem P1- och två P2-fynd i omgranskning `2026-09-09-011`: Tm_m:s källtyp återanvänder befintlig `supplier_value` (`noggrannhet: 'snapshot'` uppstår automatiskt via `rullande=True`, ingen ny `KALLTYPER`-/`Noggrannhet`-medlem); `minExklusiv`/min-/max-/heltalskontroll elementvis och delad (`vardefelForKrav`/`_vardefel_for_krav`) mellan förkontroll och ordinarie validator i båda språken; konkret `Produktbegransning`-feltyp med klass/guard/UI-mappning/test ersätter den motsägande "typade felet"-prosan; äldre `kallenergiArsserieBindning`-baserad capability-text ersatt (inte kompletterad) med separata `stodjer_aktuell_arskostnad`/`stodjer_besparing`-fält; Batch 5d:s fillista rättad till den verkliga katalog-JSON-filen med namngivna testfiler, dokument- vs. implementationsscope åtskilda. Dispositionen 7/57/28 av 92 oförändrad. Ingen produktkod, tariffdata, aktivering eller push. Väntar på Codex omgranskning.
+
 - `2026-09-09T17:35:29+02:00` – Codex omgranskade V17 i `skills@497fbfc` och skrev
   `2026-09-09-011`, `changes-required`. Motortransporten och `type`-diskriminatorn är
   rättade. Tm-proveniensen är däremot inte kompatibel med verkliga `KALLTYPER`/

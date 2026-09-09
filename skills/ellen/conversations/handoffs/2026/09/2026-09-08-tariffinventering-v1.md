@@ -34,7 +34,7 @@ v16_delivered_at: "2026-09-09T14:00:13+02:00"
 v16_reviewed_at: "2026-09-09T14:21:29+02:00"
 v17_delivered_at: "2026-09-09T17:27:47+02:00"
 v17_reviewed_at: "2026-09-09T17:35:29+02:00"
-v18_delivered_at: "2026-09-09T18:10:00+02:00"
+v18_delivered_at: "2026-09-09T18:10:58+02:00"
 latest_review: "2026-09-09-011"
 latest_source_review: "2026-09-09-009"
 scope: "Fullständig v1–v18-inventering; V18 levererad som svar på omgranskning 2026-09-09-011 — Tm-proveniens rättad till befintlig supplier_value/automatisk snapshot-noggrannhet, minExklusiv elementvis och delad mellan förkontroll/validator, konkret Produktbegransning-feltyp, äldre capability-text ersatt (inte kompletterad), Batch 5d:s katalog-/testfillista rättad, stodjer_aktuell_arskostnad/stodjer_besparing separerade. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevarade. Väntar på Codex omgranskning av V18."
@@ -943,7 +943,7 @@ Bevara V17:s godkända motortransport, Lidköpings källstatus, räkningen 7/57/
 dokumentationscommit, logga verklig hash/tid och stanna för omgranskning. Ändra ingen
 produktkod, tariffaktivering eller push.
 
-## Leverans v18, 2026-09-09T18:10:00+02:00 (`skills@TBD`)
+## Leverans v18, 2026-09-09T18:10:58+02:00 (`skills@a3ce065`)
 
 Claude levererade `tariffinventering-v18.md` och `batchplan-v18.md` som svar på samtliga
 fem P1- och två P2-fynd i omgranskning
