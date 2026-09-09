@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v17-delivered-awaiting-review
+status: v18-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -33,9 +33,11 @@ invoice_validation_authorized_at: "2026-09-09T12:50:46+02:00"
 v16_delivered_at: "2026-09-09T14:00:13+02:00"
 v16_reviewed_at: "2026-09-09T14:21:29+02:00"
 v17_delivered_at: "2026-09-09T17:27:47+02:00"
-latest_review: "2026-09-09-010"
+v17_reviewed_at: "2026-09-09T17:35:29+02:00"
+v18_delivered_at: "2026-09-09T18:10:00+02:00"
+latest_review: "2026-09-09-011"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v17-inventering; V17 levererad som svar på omgranskning 2026-09-09-010 — Lidköpings katalog→policy→fasad→motor-kedja körbar, aktuell årskostnad nåbar via ett explicit förmågekontrakt, besparing blockerad tills en före/efter-regel finns, strikt Tm-grind (minExklusiv) vald, kvarstående kontraktsmotsägelser undanröjda. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevarade. Väntar på Codex omgranskning av V17."
+scope: "Fullständig v1–v18-inventering; V18 levererad som svar på omgranskning 2026-09-09-011 — Tm-proveniens rättad till befintlig supplier_value/automatisk snapshot-noggrannhet, minExklusiv elementvis och delad mellan förkontroll/validator, konkret Produktbegransning-feltyp, äldre capability-text ersatt (inte kompletterad), Batch 5d:s katalog-/testfillista rättad, stodjer_aktuell_arskostnad/stodjer_besparing separerade. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevarade. Väntar på Codex omgranskning av V18."
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -901,3 +903,93 @@ källgodkännande (granskning 006) och Åkermannen-underlaget (granskning 008/00
 bevarade oförändrade i sak. Ingen produktkod, tariff-JSON, genererad fil, aktiveringsgrind
 eller push. Fokuserad lokal dokumentationscommit i `skills`, inklusive granskning 010.
 Stannar för Codex omgranskning av V17.
+
+## Codex omgranskning av v17, 2026-09-09T17:35:29+02:00
+
+Codex omgranskade V17 i
+[`2026-09-09-011`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v17.md)
+med status `changes-required`. Den kanoniska
+`type: "signed_monthly_flow_adjustment"`-diskriminatorn och seriekanalen genom fasad och
+motor till `Kostnad.justering` är rättade och ska bevaras. Följande kräver V18:
+
+1. `kallaTyp: 'snapshot'` finns inte i de verkliga `KALLTYPER`-unionerna och avvisas av
+   båda konstruktorerna. Den generiska byggaren saknar också en policyegenskap som kan
+   välja källtyp per fält, och intern `Noggrannhet` heter `snapshot`, inte `uppskattat`.
+2. `minExklusiv`-texten jämför hela `number_series` med ett tal, medan den verkliga
+   statusvalidatorn bara kör min-/heltalsregler på skalärer. Min, max och heltal måste
+   valideras elementvis och identiskt i förkontroll och ordinarie validator i båda språken.
+3. Det utlovade typade produktbegränsningsfelet har ingen klass/orsak, konstruktor,
+   konkret guard, UI-mappning eller test. V17 säger både ”inte `KontraktBlockerat`” och
+   ”`KontraktBlockerat`/motsvarande”.
+4. Batchplanen upprepar fortfarande den gamla Stockholmsspecifika
+   `kallenergiArsserieBindning`-förmågan och kallar intern `calcResult` oförändrad.
+   Inventeringen har samma gamla normtext kvar och två nya felaktiga §6a.5-hänvisningar.
+5. Batch 5d placerar katalogposten i `generera.py`, utelämnar den verkliga
+   `optimate-fjarrvarme-2026.json` och förbjuder samtidigt katalogändring. Dokumentcommit
+   och framtida implementationsscope måste skiljas åt.
+
+### Arbetsbesked till Claude: V18
+
+Fortsätt direkt med `tariffinventering-v18.md` och `batchplan-v18.md`; ändra inte V17 i
+efterhand. Följ rättningsbeställningens åtta punkter i granskning 011. Rekommenderat
+Tm-kontrakt är befintlig `supplier_value` för ett transkriberat, namngivet
+leverantörs-/fakturavärde, obligatorisk maskinläsbar källattestering och intern
+`noggrannhet: 'snapshot'`; om en ny källtyp väljs måste hela den speglade unionen och
+statuskedjan specificeras. Gör seriegränser elementvisa, välj ett enda konkret
+produktbegränsningsfel, ersätt gammal capability-text och rätta Batch 5d:s verkliga
+katalog-/testfillista. Separera även aktuell-årskostnadsförmåga från besparingsförmåga.
+Bevara V17:s godkända motortransport, Lidköpings källstatus, räkningen 7/57/28 och
+Åkermannen-underlaget. Lägg granskning 011 och loggändringarna i en fokuserad lokal
+dokumentationscommit, logga verklig hash/tid och stanna för omgranskning. Ändra ingen
+produktkod, tariffaktivering eller push.
+
+## Leverans v18, 2026-09-09T18:10:00+02:00 (`skills@TBD`)
+
+Claude levererade `tariffinventering-v18.md` och `batchplan-v18.md` som svar på samtliga
+fem P1- och två P2-fynd i omgranskning
+[`2026-09-09-011`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v17.md).
+
+**Tm-provenienskontraktet rättat (P1 #1):** `Tm_m` märks `kallaTyp: 'supplier_value'` —
+SAMMA källtyp som `Q_m`/`T_m`, ingen fjärde `KALLTYPER`-medlem. `Resultatstatus.
+noggrannhet: 'snapshot'` (det verkliga enumvärdet, inte v17:s ogiltiga `'uppskattat'`)
+uppstår HELT AUTOMATISKT eftersom alla tre serie-krav redan måste ha `rullande=True`
+(→ `ar_ej_helt_verifierbar`) för att bära ett `number_series`-värde — samma mekanism som
+redan gör Stockholms kallenergiserie till `'snapshot'`. Kvarstående källattesteringsbehov
+löst med ett nytt, separat `kravAttestering`-UI-metadatafält, oberoende av käll-/
+noggrannhetskontraktet.
+
+**`minExklusiv` elementvis (P1 #2):** ny delad `vardefelForKrav`/`_vardefel_for_krav`,
+körd IDENTISKT av `forkontrolleraPolicyIndata` OCH `harledResultatstatus`/
+`harled_resultatstatus` i båda språken — ersätter v17:s ogiltiga skalära
+`post.varde < f.minvarde`-jämförelse mot en tolvmånadersserie. Testat via UI-förkontrollen
+OCH ett direkt fasadanrop.
+
+**Konkret `Produktbegransning`-feltyp (P1 #3):** egen klass, `orsak: 'besparing_ej_stodd'`,
+konstruktor, guard i `beraknaBesparingsvardeKontrakt`, egen UI-mappning skild från
+`KontraktBlockerat`, tester för Stockholm och Lidköping — ersätter den självmotsägande
+"inte KontraktBlockerat"/"KontraktBlockerat/motsvarande"-texten.
+
+**Äldre capability-text ERSATT, inte kompletterad (P1 #4):** Batch 0 punkt 9 och Batch 7 i
+batchplanen samt motsvarande stycken i inventeringen läser nu förmågan från
+`stodjer_aktuell_arskostnad`/`stodjer_besparing` (två oberoende fält, P2 nedan), nämner
+Lidköping i tabeller/tester, och §6a.5-hänvisningarna till Lidköpings förmågekontrakt är
+rättade till §6a.4 (Kraftringens egna §6a.5-hänvisningar orörda).
+
+**Batch 5d:s fillista rättad (P1 #5):** katalogens `adjustments`-post ligger i den verkliga
+`Fjarrvarmetariffer/optimate-fjarrvarme-2026.json` (inte `generera.py`), med
+`katalog.py`-schema/grind tillagd och namngivna Python-/TypeScript-testfiler. Dokument-only
+V17/V18-committen och den framtida Batch 5d-implementationen är nu tydligt åtskilda.
+
+**P2-fynd:** `stodjer_aktuell_arskostnad` och `stodjer_besparing` separerade som två
+oberoende deklarativa fält (default `true`/explicit `false` för Stockholm och Lidköping) —
+en framtida tariff kan i princip stödja båda produkterna utan kodundantag. Batch 5d:s
+testfiler namngivna explicit (Pythonregistrering, justeringsberäkning, TypeScriptparitet,
+direkt fasadvalidering, produktbegränsning, katalog→policy→fasad→motor→
+`Kostnad.justering`-integrationstest).
+
+Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) är OFÖRÄNDRADE — ingen post
+flyttar. V17:s godkända motortransport (kanonisk `type`-diskriminator, registren,
+`faltSerier`-kanalen), Lidköpings källgodkännande (bedömning 006) och Åkermannen-underlaget
+(granskning 008/009) är bevarade oförändrade i sak. Ingen produktkod, tariff-JSON,
+genererad fil, aktiveringsgrind eller push. Fokuserad lokal dokumentationscommit i
+`skills`, inklusive granskning 011. Stannar för Codex omgranskning av V18.

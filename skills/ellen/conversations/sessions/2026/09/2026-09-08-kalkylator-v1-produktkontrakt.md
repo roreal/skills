@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T17:27:47+02:00"
+last_updated: "2026-09-09T17:35:29+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v17-delivered-awaiting-review
+status: v17-reviewed-changes-required-v18-requested
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,15 +28,13 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V16 omgranskades i `2026-09-09-010` med status `changes-required`. `tariffinventering-v17.md`
-och `batchplan-v17.md` är nu levererade som svar: Lidköpings tre serier förs genom en
-komplett katalog→policy→fasad→motor-kedja med kanonisk `type`-diskriminator och
-registrering i BÅDA språkens justeringsregister; ett nytt explicit
-`Tariffpolicy.stodjer_aktuell_arskostnad`-fält gör Lidköpings aktuella årskostnad nåbar och
-blockerar samtidigt besparingsvägen med samma typade produktbegränsningsfel som Stockholm;
-`KravPost.minvarde_exklusiv`/`minExklusiv` är vald mekanism för `Tm_m > 0`; den kvarstående
-`BesparingsvardeArgs`-/`calcResult`-motsägelsen är borttagen. Dispositionen 7/57/28 av 92
-är oförändrad. Väntar på Codex omgranskning av V17.
+V17 omgranskades i `2026-09-09-011` med status `changes-required`. Den kanoniska
+Lidköpingsmotorn och seriekanalen till `Kostnad.justering` är nu rätt väg, men planen är
+inte implementeringsklar: `kallaTyp: 'snapshot'` accepteras inte av det verkliga
+källkontraktet och saknar generisk byggartransport, `minExklusiv` jämför en hel serie som
+ett skalärt tal, det typade produktbegränsningsfelet saknar konkret typ/kast/UI-mappning,
+och batchplanen har kvar gamla capability-definitioner samt placerar katalogändringen i
+fel fil. V18 är beställd. Dispositionen 7/57/28 av 92 är oförändrad.
 
 Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
 Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
@@ -88,9 +86,10 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-`tariffinventering-v17.md` och `batchplan-v17.md` är levererade som svar på omgranskning
-`2026-09-09-010`. Väntar på Codex omgranskning av V17. Ingen produktkod, tariff-JSON,
-genererad fil, aktivering eller push är godkänd.
+Claude ska leverera `tariffinventering-v18.md` och `batchplan-v18.md` enligt omgranskning
+`2026-09-09-011`: kompatibel Tm-proveniens, elementvis serievalidering, konkret typat
+produktbegränsningsfel, ett enda aktuellt capability-kontrakt och korrekt Batch 5d-fillista.
+Ingen produktkod, tariff-JSON, genererad fil, aktivering eller push är godkänd.
 
 ## Konversation
 
@@ -917,8 +916,62 @@ borttagna efter körning). Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0
 OFÖRÄNDRADE — ingen post flyttar. Ingen produktkod, tariffdata, genererad fil eller
 aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
+### Robert — användare
+
+> V17 är klar för granskning. Claude uppgav att V17-bakgrundsarbetet inväntades och
+> levererade därefter committarna `df20de4` och `497fbfc`.
+
+### Codex — assistent
+
+Codex omgranskade V17 mot de verkliga Python-/TypeScriptkontrakten och skrev
+[`2026-09-09-011`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v17.md)
+med status `changes-required`. Den kanoniska justeringstypen och seriekanalen till
+`Kostnad.justering` är godkända att bevara. Fem P1-områden återstår: den nya
+`kallaTyp: 'snapshot'` finns inte i `KALLTYPER` och byggaren saknar en generisk
+fältstyrning; intern noggrannhet heter `snapshot`, inte `uppskattat`; `minExklusiv`
+validerar inte serieelement; produktbegränsningsfelet saknar faktisk typ/konstruktor/kast;
+äldre capability-text motsäger det nya fältet; och Batch 5d lägger katalogposten i fel fil
+samtidigt som katalogändring förbjuds. V18 beställdes med en exakt åttapunktsorder. Ingen
+produktkod, tariffdata, aktivering eller push godkändes; 7/57/28 av 92 kvarstår.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v18.md` och `batchplan-v18.md` som svar på samtliga
+fem P1- och två P2-fynd i omgranskning `2026-09-09-011`. `Tm_m`s källtyp återanvänder
+BEFINTLIG `kallaTyp: 'supplier_value'` (ingen fjärde `KALLTYPER`-medlem, ingen
+`'uppskattat'`-noggrannhet) — `Resultatstatus.noggrannhet: 'snapshot'` uppstår nu HELT
+AUTOMATISKT eftersom alla tre serie-krav redan måste ha `rullande=True`
+(→ `ar_ej_helt_verifierbar`), samma mekanism Stockholms kallenergiserie redan använder; ett
+nytt, separat `kravAttestering`-UI-metadatafält löser källattesteringsbehovet utan att röra
+käll-/noggrannhetskontraktet. `minExklusiv`/min-/max-/heltalskontroll är nu en delad,
+elementvis `vardefelForKrav`/`_vardefel_for_krav`-funktion, anropad identiskt av
+`forkontrolleraPolicyIndata` OCH den ordinarie statusvalidatorn i BÅDA språken — testad via
+UI-förkontrollen OCH ett direkt fasadanrop. Ett konkret produktbegränsningsfel,
+`Produktbegransning` (klass, `orsak: 'besparing_ej_stodd'`, konstruktor, guard i
+`beraknaBesparingsvardeKontrakt`, egen UI-mappning skild från `KontraktBlockerat`), ersätter
+den tidigare motsägande "inte KontraktBlockerat"/"KontraktBlockerat/motsvarande"-texten.
+Förmågan är nu två oberoende deklarativa fält, `stodjer_aktuell_arskostnad` och
+`stodjer_besparing` (default `true`, explicit `false` för Stockholm/Lidköping) — en framtida
+tariff kan i princip stödja båda produkterna utan kodundantag. Den äldre, indirekta
+`kallenergiArsserieBindning`-baserade capability-texten är ERSATT i Batch 0 punkt 9 och
+Batch 7 (inte kompletterad med ännu en rättelse efter den), och §6a.5-hänvisningarna till
+Lidköpings förmågekontrakt rättade till §6a.4 (Kraftringens §6a.5 orört). Batch 5d:s
+fillista rättad: katalogens `adjustments`-post ligger i den verkliga
+`Fjarrvarmetariffer/optimate-fjarrvarme-2026.json` (inte `generera.py`), med
+`katalog.py`-schema/grind tillagd och namngivna Python-/TypeScript-testfiler, samt
+dokument- vs. framtida-implementationsscope tydligt åtskilda. Dispositionerna 7/57/28 av 92
+(bas 7/47/24, variant 0/10/4) OFÖRÄNDRADE. Ingen produktkod, tariffdata, genererad fil eller
+aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-09T17:35:29+02:00` – Codex omgranskade V17 i `skills@497fbfc` och skrev
+  `2026-09-09-011`, `changes-required`. Motortransporten och `type`-diskriminatorn är
+  rättade. Tm-proveniensen är däremot inte kompatibel med verkliga `KALLTYPER`/
+  `Noggrannhet`, `minExklusiv` är inte elementvis för serier, produktbegränsningsfelet är
+  ospecificerat, äldre capability-stycken finns kvar och Batch 5d saknar den verkliga
+  katalogfilen. V18 beställdes. Ingen produktkod, tariffdata, aktivering eller push
+  godkändes; dispositionen 7/57/28 kvarstår.
 - `2026-09-09T17:27:47+02:00` – Claude levererade tariffinventering v17.0 och batchplan v17.0
   som svar på samtliga fynd i omgranskning `2026-09-09-010`: Lidköpings tre serier förs nu
   genom en komplett katalog→policy→fasad→motor-kedja (kanonisk `type`-diskriminator,
