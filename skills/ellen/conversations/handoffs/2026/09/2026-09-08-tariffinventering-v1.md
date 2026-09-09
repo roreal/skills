@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v14-delivered
+status: v15-delivered
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -23,8 +23,10 @@ v12_reviewed_at: "2026-09-09T09:08:48+02:00"
 v13_delivered_at: "2026-09-09T09:40:00+02:00"
 v13_reviewed_at: "2026-09-09T09:45:04+02:00"
 v14_delivered_at: "2026-09-09T10:05:00+02:00"
-latest_review: "2026-09-09-004"
-scope: "Fullständig v1–v14-inventering; v14 levererad som svar på granskning 2026-09-09-004, väntar på omgranskning"
+v14_reviewed_at: "2026-09-09T10:16:28+02:00"
+v15_delivered_at: "2026-09-09T10:33:00+02:00"
+latest_review: "2026-09-09-005"
+scope: "Fullständig v1–v15-inventering; v15 levererad som svar på granskning 2026-09-09-005, väntar på omgranskning"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -653,4 +655,31 @@ objektsväg, samma bugg i BÅDA v13-dokumenten oberoende) med `energySystem ===
 oförändrade. Fokuserad lokal dokumentationscommit ovanpå `b467d0a`, som även spårar de
 tidigare ospårade granskningsfilerna `2026-09-09-003`/`2026-09-09-004`. Ingen produktkod,
 tariffdata, genererad fil eller produktionsgrind ändrad; ingen tariff aktiverad; inget
+pushat. Väntar på Codex omgranskning.
+
+## Codex omgranskning av v14, 2026-09-09T10:16:28+02:00
+
+Omgranskning
+[`2026-09-09-005`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v14.md)
+har status `changes-required`. V14 löser annual-scope, den enhetliga orsaksmodellen,
+optionsvägen för `KontraktBlockerat`, `.policy`-åtkomsten, energisystemgrinden och
+bakåtkompatibiliteten för `onskadTyp`. Tre P1-områden återstår: `argsFranInputs` jämför mot
+tre omöjliga enumvärden, lämnar scope-formeln som no-op och delas inte med `calcResult`;
+`beraknaArsprodukt` saknar ett visat fail-closed flöde som avsmalnar valfri energi,
+kapacitet och policyindata; parsern saknar fortfarande scalar/array-grindarna och de
+omkastade råformstester som beställdes i granskning 004.
+
+Claude ska leverera V15 enligt granskningens niopunktsbeställning. Ingen implementation
+eller push är godkänd; dispositionerna 7/55/30 av 92 står kvar.
+
+## Claude levererar v15, 2026-09-09T10:33:00+02:00
+
+`tariffinventering-v15.md` och `batchplan-v15.md` levererade enligt granskning
+`2026-09-09-005`s niopunktsbeställning: `argsFranInputs` rättad till de faktiska
+`EnergyScope`/`EnergyInputMode`-värdena och den verkliga uppskalnings-/proveniensformeln
+(verifierad kompilerbar mot riktig kod via en tillfällig, sedan borttagen `tsc`-kontroll),
+delad med `calcResult`; `beraknaArsprodukt` fick en fullständig fail-closed kropp; parserns
+scalar/array-formgrindar tillagda; båda P2-fynden rättade. Dispositionerna 7/55/30 av 92
+oförändrade. Fokuserad lokal dokumentationscommit ovanpå `f4f2370`, inklusive granskning
+`2026-09-09-005`. Ingen produktkod, tariffdata, genererad fil eller aktivering ändrad; inget
 pushat. Väntar på Codex omgranskning.

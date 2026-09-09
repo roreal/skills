@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T10:05:00+02:00"
+last_updated: "2026-09-09T10:33:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v14-delivered
+status: v15-delivered
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,13 +28,13 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V13 är omgranskad i `2026-09-09-004` med status `changes-required`. Versionen bevarar flera
-riktiga förbättringar från V12, men fyra kontraktsluckor blockerar implementation:
-parser-/valideringstyperna och returfältnamnen är inte enhetliga; förkontrollen saknar
-beräkningsomfattning och en konstruerbar domänfelorsak; produktförmågan läser fel nivå ur
-`kontraktsgatadPolicy()` och verkställer inte energisystemgrinden; argumentbyggaren använder
-fält och hjälpare som inte finns och är inte delad med besparingsvägen. V14 är beställd.
-Dispositionerna 7/55/30 av 92 är oförändrade.
+V14 är omgranskad i `2026-09-09-005` med status `changes-required`. Annual-scope,
+felorsaksmodellen, den konstruerbara domänfelvägen, produktförmågans `.policy`-åtkomst,
+energisystemgrinden och valfria `onskadTyp` är lösta. Tre P1-områden blockerar fortfarande
+implementation: argumentbyggaren använder omöjliga enumvärden, en no-op i stället för den
+verkliga scope-formeln och delas inte med `calcResult`; den publika årsproduktens
+fail-closed-avsmalning för energi, kapacitet och policyfält är inte visad; parserns
+scalar/array-grindar saknas. V15 är beställd. Dispositionerna 7/55/30 av 92 är oförändrade.
 
 Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering ändrades.
 
@@ -74,9 +74,9 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude har levererat `tariffinventering-v14.md` och `batchplan-v14.md` enligt granskning
-`2026-09-09-004`, i en fokuserad lokal dokumentationscommit ovanpå `b467d0a`. Väntar nu på
-Codex omgranskning av V14. Ingen produktkod, tariffdata, aktivering eller push är godkänd
+Claude har levererat `tariffinventering-v15.md` och `batchplan-v15.md` enligt granskning
+`2026-09-09-005`, i en fokuserad lokal dokumentationscommit ovanpå `f4f2370`. Väntar nu på
+Codex omgranskning av V15. Ingen produktkod, tariffdata, aktivering eller push är godkänd
 före den.
 
 ## Konversation
@@ -717,8 +717,56 @@ genererad fil eller tariffaktivering ändrades; inget pushat. De tidigare ospår
 granskningsfilerna `2026-09-09-003` och `2026-09-09-004` spåras nu i git. Väntar på Codex
 omgranskning av V14.
 
+### Robert — användare
+
+> v14 är klar för granskning
+
+### Codex — assistent
+
+Codex omgranskade V14 och skrev granskning `2026-09-09-005` med status
+`changes-required`. V14 löser sex centrala delar från föregående runda, men dess
+`argsFranInputs` ger tre `TS2367`, innehåller en no-op i stället för scope-formeln och delas
+inte med `calcResult`; den publika årsproduktens fail-closed-avsmalning är ofullständig;
+parsern saknar fortfarande scalar/array-grindarna. En duplicerad `typ`-egenskap ger även
+`TS2783`. V15 beställdes utan tillstånd till produktkod eller push.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v15.md` och `batchplan-v15.md` enligt granskning
+`2026-09-09-005`s niopunktsbeställning. `argsFranInputs` skriven mot de faktiska
+`EnergyScope`/`EnergyInputMode`-värdena och den verkliga uppskalnings-/proveniensformeln
+(verifierad kompilerbar mot riktig `KalkylatorInputs`/`calcEnergyMwh`/`VARMVATTEN_ANDEL` med
+`npx tsc --noEmit --strict --skipLibCheck` i en tillfällig, sedan borttagen kontrollfil,
+samma metod Codex själv använde för att reproducera V14:s fel); `calcResult` anropar nu
+`argsFranInputs` i stället för att duplicera scope-/provenienslogiken. `beraknaArsprodukt`
+fick en fullständig fail-closed kropp i verifierad ordning (gate → proveniens → energi →
+kapacitet → policyförkontroll → fasad) och sidwrapperns dubblerade `typ`-spridning togs bort.
+Parserns scalar/array-formgrindar (`typeof`/`Array.isArray` före `.trim()`/`.length`) lades
+till med omkastade testfall. Båda P2-fynden rättade: `forkontrolleraPolicyIndata` uttryckligt
+dokumenterad som omfattnings- men inte månadsmedveten, och `KontraktBlockeratOrsak`/
+`KontraktBlockerat`s filplacering rättad till `besparingsvarde.ts` i inventeringens
+normativa text (batchplanens fillista hade redan rätt). Dispositionerna 7/55/30 av 92
+oförändrade. Ingen produktkod, tariffdata, genererad fil eller aktivering ändrad; inget
+pushat. Väntar på Codex omgranskning av V15.
+
 ## Ändringslogg
 
+- `2026-09-09T10:33:00+02:00` – Claude levererade tariffinventering v15.0 och batchplan
+  v15.0 som svar på samtliga tre P1-fynd och två P2-fynd i omgranskning `2026-09-09-005`:
+  `argsFranInputs` skriven mot verkliga enumvärden/formel och verifierad tsc-kompilerbar,
+  delad bas mellan `calcResult` och `beraknaArsprodukt`; `beraknaArsprodukt` fick en
+  fullständig fail-closed kropp och wrapperns dubblerade `typ`-spridning togs bort; parserns
+  scalar/array-formgrindar tillagda; `forkontrolleraPolicyIndata`s månadsavgränsning
+  dokumenterad; `KontraktBlockeratOrsak`s filplacering rättad. Fokuserad lokal
+  dokumentationscommit ovanpå `f4f2370`, inklusive granskning `2026-09-09-005`. Ingen
+  produktkod, tariffdata, genererad fil eller aktivering ändrad; inget pushat. Väntar på
+  Codex omgranskning.
+- `2026-09-09T10:16:28+02:00` – Codex omgranskade V14 i `skills@f4f2370` och skrev
+  `2026-09-09-005`: annual-scope, orsaksmodell, domänfelväg, `.policy`-åtkomst,
+  energisystemguard och valfri `onskadTyp` är lösta. Tre P1-områden återstår i den
+  icke-kompilerbara/odelade argumentbyggaren, årsproduktens ofullständiga fail-closed-flöde
+  och parserns saknade råformsgrindar. V15 beställdes; inga produktändringar eller push
+  godkändes och dispositionen 7/55/30 står kvar.
 - `2026-09-09T10:05:00+02:00` – Claude levererade tariffinventering v14.0 och batchplan
   v14.0 som svar på samtliga fyra P1-fynd i omgranskning `2026-09-09-004`:
   omfattningsmedveten `forkontrolleraPolicyIndata`, enhetlig
