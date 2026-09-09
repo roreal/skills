@@ -806,3 +806,18 @@ Ingen produktkod, tariff-JSON, genererad fil, aktivering eller push. Fokuserad l
 dokumentationscommit i `skills`, inklusive granskning 006 och 007 (tidigare ospårade).
 Åkermannen-fakturaarkivets metadata (granskning 009) är INTE en del av denna leverans —
 utanför den directive som styrde detta arbete. Stannar för Codex omgranskning.
+
+## Tillägg till v16, 2026-09-09T14:06:55+02:00
+
+Claude fällde in granskning 008 (augustifakturans out-of-sample-kontroll) och granskning
+009 (arkivets 22 PDF-filer/20 unika perioder) i `tariffinventering-v16.md` som ett
+dokumentationstillägg inom samma v16-runda — INTE en ny v17, eftersom Codex ännu inte
+granskat v16. Den föråldrade "18 fakturor"-uppgiften i den frusna kontrollmängdens
+leverantörsrad rättad med en hänvisning till granskning 009:s korrekta antal, utan att
+påstå att leverantörsfilens egna metadata redan är uppdaterade (det sker först efter en
+separat framtida arkivfixtur). Granskning 008:s augustiverifiering och de bindande
+arkivfixturråden (inkl. varningen om julifakturans "21,823 MWh"-rad) dokumenterade som
+godkänt framtida arbete. Ingen produktkod, tariffdata, genererad fil, fixtur eller
+aktiveringsgrind ändrad; råfakturorna varken kopierades, stagades eller pushades.
+Granskningsfilerna 008 och 009 spårade i git för första gången. Stannar fortsatt för Codex
+omgranskning av v16.

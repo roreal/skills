@@ -854,8 +854,47 @@ validerings- och regressionstester när de ger bättre kontroll av kalkylen. Rå
 kundidentifierare och betalningsuppgifter hålls fortsatt utanför Git. Ingen ny
 implementation startas före Roberts återkomst och Claudes fortsättning.
 
+### Claude — assistent
+
+Claude fällde in granskning `2026-09-09-008` (augustifakturans out-of-sample-kontroll) och
+granskning `2026-09-09-009` (arkivets 22 PDF-filer/20 unika perioder) i den redan levererade
+`tariffinventering-v16.md`, som ett dokumentationstillägg inom samma v16-runda — inte en ny
+v17, eftersom Codex ännu inte granskat v16. Den enda platsen i v16 med den föråldrade
+uppgiften "18 fakturor" (leverantörsraden i den frusna kontrollmängdens tabell) rättad: raden
+beskriver nu leverantörsfilens formellt oförändrade status (fakturavaliderad t.o.m. juli
+2026), med en ny sektion som citerar granskning 009:s korrekta antal (22 PDF-filer, 20 unika
+fakturaperioder, två dubblettpar) utan att påstå att leverantörsfilens egna metadata redan är
+uppdaterade — den uppdateringen sker först när en separat arkivfixtur implementeras och
+testerna passerar. Granskning 008:s augustiverifiering tillagd som ett nytt godkänt
+out-of-sample-kontrollfall utan tariffstatus- eller 7/57/28-ändring. De bindande
+arkivfixturråden (huvudperiod, avläst/preliminär-status, återföring, maj–juli 2026 som
+avräkningskedja, samt att ett fristående julitest bara får använda 7,190 MWh, inte
+julifakturans "21,823 MWh"-rad) dokumenterade som framtida, ej byggt arbete. Ingen produktkod,
+tariffdata, genererad fil, fixtur eller aktiveringsgrind ändrad; råfakturorna varken
+kopierades, stagades eller pushades. Granskningsfilerna 008 och 009 spårade i git för första
+gången i denna fokuserade dokumentationscommit.
+
 ## Ändringslogg
 
+- `2026-09-09T14:06:55+02:00` – Claude — assistent: fällde in granskning `2026-09-09-008`
+  (Åkermannens augustifaktura 2026, out-of-sample-kontroll) och granskning `2026-09-09-009`
+  (hela fakturaarkivet, 22 PDF-filer/20 unika perioder) i den redan levererade
+  `tariffinventering-v16.md` som ett dokumentationstillägg — INTE en ny v17, eftersom Codex
+  ännu inte granskat v16. Rättade den enda platsen i v16 med den föråldrade uppgiften "18
+  fakturor" (leverantörsraden i §"Frusen kontrollmängd"): tabellraden ändrad till att
+  beskriva leverantörsfilens nuvarande, oförändrade status (fakturavaliderad t.o.m. juli
+  2026) och en ny förklarande sektion tillagd som citerar granskning 009:s exakta fynd — 22
+  PDF-filer men 20 unika fakturaperioder (mars/april 2026 dubblerade), samt att
+  leverantörsfilens egen metadata inte ändras förrän en separat arkivfixtur byggs och
+  testerna passerar. Lade även till granskning 008:s augustiverifiering som ett nytt
+  godkänt out-of-sample-kontrollfall (ingen tariffstatus- eller 7/57/28-ändring), den frysta
+  baslinjefixturens oförändrade status, samt de bindande råden för en framtida
+  arkivfixtur (huvudperiod/avläst-preliminär-status/återföring, maj–juli 2026 som
+  avräkningskedja, och varningen att ett fristående julitest bara får använda 7,190 MWh, inte
+  julifakturans "21,823 MWh"-rad). Ingen produktkod, tariffdata, genererad fil, fixtur eller
+  aktiveringsgrind ändrad i vare sig `enkey-agents` eller `neptune_academy`; råfakturorna
+  varken kopierades, stagades eller pushades. Granskningsfilerna `2026-09-09-008` och
+  `2026-09-09-009` spårade i git för första gången i samma fokuserade dokumentationscommit.
 - `2026-09-09T14:00:13+02:00` – Claude — assistent: levererade `tariffinventering-v16.md` och
   `batchplan-v16.md` som svar på BÅDA granskning `2026-09-09-007` och bedömning
   `2026-09-09-006` samtidigt. Del A (007): `beraknaArsprodukt`s hela kropp omskriven och

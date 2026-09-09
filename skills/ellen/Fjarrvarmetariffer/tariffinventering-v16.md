@@ -235,8 +235,40 @@ designen):
 | Källa | Version/commit | Antal produkter i denna inventering |
 |---|---|---|
 | `Fjarrvarmetariffer/optimate-fjarrvarme-2026.json` | `schema_version 0.1.3`, `skills`-repo commit `7ba9ec1b6245a72a4720f11b11beec6692af6196` (sha256 `a35fc95b741c6af9a3d1462dbd3e23c12577e2f1f1b75bd05b6ab6f484b52bcd`) | 78 katalograder (53 leverantörer) |
-| `enkey-agents/skills/ellen/leverantor-stockholm-exergi.md` | fakturavaliderad mot 18 fakturor, Brf Åkermannen 33 (`monthly_invoice`-kontraktet, granskning `2026-09-06-003`) | Samma produkt som katalogens `stockholm-exergi-stockholm-exergi-normal-2026` — räknas EN gång, se §4 |
+| `enkey-agents/skills/ellen/leverantor-stockholm-exergi.md` | fakturavaliderad t.o.m. juli 2026, Brf Åkermannen 33 (`monthly_invoice`-kontraktet, granskning `2026-09-06-003`); leverantörsfilens angivna fakturaantal är ännu inte synkat mot arkivinventeringen — se korrigering nedan | Samma produkt som katalogens `stockholm-exergi-stockholm-exergi-normal-2026` — räknas EN gång, se §4 |
 | `enkey-agents/skills/ellen/leverantor-riksgenomsnitt.md` | Nils Holgersson-rapporten 2025 | 1 syntetisk schablon, egen tabell §9 — inte ett tariffprodukt |
+
+**Korrigering av fakturaantal (granskning
+[2026-09-09-009](../conversations/reviews/2026/09/2026-09-09-inventering-akermannen-fakturaarkiv.md)):**
+den tidigare uppgiften "18 fakturor" (för perioden januari 2025–juli 2026) är inte korrekt
+för det nu kompletta arkivet. Arkivet innehåller 22 PDF-filer men endast **20 unika
+fakturaperioder**, en per kalendermånad januari 2025–augusti 2026 — mars och april 2026 finns
+i två kopior vardera (identisk normaliserad text, olika bytehash, ska dedupliceras via period
+och innehåll, inte enbart bytehash). Leverantörsfilens egna verifieringsmetadata ("18
+fakturor", verifierat t.o.m. juli 2026) ändras INTE i denna dokumentationsrunda — det är en
+produktfil i `enkey-agents` och V16 är dokumentation-only. Korrigeringen till "Verifierad mot
+20 unika månadsfakturor/fakturaperioder januari 2025–augusti 2026 (22 PDF-filer inklusive två
+dubblettkopior)" sker först när en separat arkivfixtur implementeras och testerna passerar.
+
+**Nytt godkänt out-of-sample-kontrollfall (granskning
+[2026-09-09-008](../conversations/reviews/2026/09/2026-09-09-verifiering-akermannen-augusti-2026.md)):**
+Åkermannens augustifaktura 2026 verifierades separat mot både Python- och
+TypeScript-motorernas direkta månadsfunktion och `monthly_invoice`-kontraktsvägen: motorns
+`18 562,440103 kr` inkl. moms mot fakturans `18 562,43 kr` (differens ~1 öre,
+fakturaavrundning). Ingen tariffstatus eller 7/57/28-räkning ändras av detta. Den frysta
+baslinjefixturen `akermannen-baslinje.json` (maj 2025–april 2026) förblir oförändrad och ska
+inte utökas eller återanvändas för augustifallet.
+
+Bindande råd för en framtida, separat arkivfixtur (INTE byggd i V16, per samma två
+granskningar): skilj fakturans huvudperiod, avläst (`A`)/preliminär (`P`)-status, faktisk
+förbrukningsperiod per energirad, återföring av tidigare preliminärdebitering samt
+fakturabelopp vs. kalendermånadens tariffkostnad. Maj–juli 2026 utgör en avräkningskedja
+(majfakturan delvis preliminär, junifakturan preliminär, julifakturan återför 17,362 MWh och
+redovisar avlästa maj/juni/juli, sammanlagt 33,534 MWh över de tre månaderna). Ett fristående
+julitest får bara använda **7,190 MWh** som fysisk julikonsumtion — inte julifakturans rad
+"Periodens användning (A) 21,823 MWh", som är summan av tre nytillkomna avlästa delperioder
+och skulle skapa ett felaktigt kontrollfall om den användes som julis kalendermånadsvärde.
+Preliminär fakturaenergi ska aldrig märkas avläst eller `confirmed_mwh`.
 
 **Explicit utanför denna frusna version:** `Fjarrvarmetariffer/optimate-fjarrvarme-2027.json`
 (prisår 2027, `skills`-repo commit `62181a1`, endast 2 av 53 medlemmar ifyllda hittills).
