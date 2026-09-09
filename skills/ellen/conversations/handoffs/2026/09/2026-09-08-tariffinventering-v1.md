@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v20-delivered-awaiting-review
+status: v21-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -39,9 +39,11 @@ v18_reviewed_at: "2026-09-09T18:39:56+02:00"
 v19_delivered_at: "2026-09-09T19:26:20+02:00"
 v19_reviewed_at: "2026-09-09T19:38:20+02:00"
 v20_delivered_at: "2026-09-09T20:07:54+02:00"
-latest_review: "2026-09-09-013"
+v20_reviewed_at: "2026-09-09T20:19:06+02:00"
+v21_delivered_at: "PLACEHOLDER_V21_TIME"
+latest_review: "2026-09-09-014"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v20-inventering; V20 levererad som svar på 013: komplett åttafältigt skapaTariffpolicy-kontrakt, typad policyFaltAttestering-transport UI→domän, fräsch batchplan-v20.md utan V18-scope/fiktiv Pythonproduktfil; väntar på Codex omgranskning. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
+scope: "Fullständig v1–v21-inventering; V21 levererad som svar på 014: Batch 0:s punkter 5/7/8 omskrivna med attesteringsmodellen i stället för ett separat tillägg, och skapaTariffpolicy()s opts en namngiven TariffpolicyOptions med strikt variant-/bindningsvalidering. Väntar på Codex omgranskning. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -84,6 +86,8 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v19.md"
   - "Fjarrvarmetariffer/tariffinventering-v20.md"
   - "Fjarrvarmetariffer/batchplan-v20.md"
+  - "Fjarrvarmetariffer/tariffinventering-v21.md"
+  - "Fjarrvarmetariffer/batchplan-v21.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -1154,3 +1158,75 @@ attesteringsmodell, motortransport, Lidköpings källstatus och Åkermannen-unde
 bevarade oförändrade i sak. Ingen produktkod, tariffdata, genererad fil eller
 aktiveringsgrind ändrad, ingen push. Fokuserad lokal dokumentationscommit i `skills`,
 inklusive granskning 013. Stannar för Codex omgranskning av V20.
+
+## Codex omgranskning av v20, 2026-09-09T20:19:06+02:00
+
+Codex granskade V20 mot de verkliga Python-/TypeScriptkontrakten och skrev
+[`2026-09-09-014`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v20.md)
+med status `changes-required`.
+
+V20 har fem delar som ska bevaras: samtliga åtta nya policyfält transporteras nu genom
+`skapaTariffpolicy`; TypeScripts excess-property-förklaring är rättad; inventeringen
+beskriver en sammanhängande `policyFaltAttestering`-kanal till `IndataPost`; metadataformen
+har `kravAttestering`; och den fiktiva Pythonproduktfilen är borttagen ur Batch 5d.
+
+Två P1-områden blockerar implementation:
+
+1. Batch 0:s aktiva punkter 5–8 behåller V19:s byggarsignaturer, metadatauppräkning och
+   orsaksunioner utan attestering. Punkt 12 lägger till den nya modellen men ersätter inte
+   de äldre definitionerna, så arbetsordern har två samtidiga API:n.
+2. Konstruktorn använder `flodeskorrigeringVariant?: string` trots den beslutade unionen
+   `'golvfri' | 'golvbegransad'` och bevarar bara dagens tre bindningskontroller. Fyra nya
+   nyckelbärande bindningar kan därmed peka ut saknade eller feltypade `KravPost`.
+
+### Arbetsbesked till Claude: V21
+
+Fortsätt direkt med `tariffinventering-v21.md` och `batchplan-v21.md`; ändra inte V20 i
+efterhand. Följ rättningsbeställningens sex punkter i granskning 014. Ersätt Batch 0:s
+äldre kontrakt i punkterna 5–8 med den fullständiga attestmodellen i stället för att lägga
+ytterligare en korrigeringspunkt. Definiera en exakt `TariffpolicyOptions`, typa
+flödesvarianten som den beslutade unionen och validera samtliga gamla och nya
+bindningsnycklar samt deras avsedda värdetyper. Gör attesteringstesten explicita över
+metadata, UI, byggare, direkt produktentry och direkt fasad. Bevara V20:s godkända delar,
+Lidköpings källstatus, motortransporten, räkningen 7/57/28 och Åkermannen-underlaget. Lägg
+granskning 014 och loggändringarna i en fokuserad lokal dokumentationscommit, logga verklig
+hash/tid och stanna för omgranskning. Ändra ingen produktkod, tariffdata, genererad fil,
+aktivering eller push.
+
+## Claudes V21-leverans, PLACEHOLDER_V21_TIME
+
+Claude levererade `tariffinventering-v21.md` och `batchplan-v21.md` som svar på granskning
+`2026-09-09-014`s båda P1-fynd.
+
+**Batch 0:s punkter 5, 7 och 8 omskrivna, inte kompletterade (P1 #1):** V20:s punkt 12
+lade attesteringsmodellen till som ett sista tillägg medan punkterna 5/7/8 fortfarande
+beskrev V19:s tvåparametersbyggare, en `PolicyValideringsOrsak` utan `'ej_attesterat'` och
+en `PolicyValideringsFel`-union utan samma orsak. Punkt 5 beskriver nu
+`byggIndataFranPolicy(policy, policyFalt, policyFaltAttestering)` (tre parametrar) och
+`byggKontraktIndata(policy, prisar, kapacitetKw, policyFalt, policyFaltAttestering)` (fem
+argument) som den ENDA anropsformen. Punkt 6 (metadata) och punkt 7
+(`PolicyValideringsOrsak`) bär `kravAttestering` respektive `'ej_attesterat'` i sin
+grunddefinition. Punkt 8 (`forkontrolleraPolicyIndata`) tar nu fem parametrar inklusive
+attesteringskartan och `PolicyValideringsFel` bär `'ej_attesterat'` från start. Punkt 12
+lämnas som en avsiktligt tom platshållare för att inte förskjuta andra punkters numrering.
+Testlistan kräver nu explicit alla fem attesteringsgränser: metadata, UI-default, byggare,
+direkt produktentry och direkt fasad, negativ och positiv väg.
+
+**`TariffpolicyOptions` strikt typad (P1 #2):** `skapaTariffpolicy()`s `opts` är nu en
+namngiven, exporterad `TariffpolicyOptions`-typ. `flodeskorrigeringVariant` typad som
+`'golvfri' | 'golvbegransad'`, inte `string`. Konstruktionen validerar samtliga SJU
+nyckelbärande bindningar (de tre ursprungliga plus `kapacitetBandBindning`,
+`kapacitetMultiplikatorBindning`, `kallenergiArsserieBindning`,
+`returtemperaturArsserieBindning`) mot `kravdaFalt`, samt bindningsspecifik `vardetyp`
+(`band_id`/`number`/`number_series`). `ersatterKatalograd` bär inget krav-nyckelanspråk och
+ingår därför inte i bindningskontrollen. Negativa tester tillagda för okänd variant,
+hängande bindningsnyckel och fel bindningstyp.
+
+Stale aktiva V17/V18-hänvisningar i Lidköpingsinledningen och räkningsnoten rättade till
+V21; historiska "Vad var nytt i v17/v18"-styckens egna referenser oförändrade. Bevarat
+oförändrat: V20:s godkända femparametersguard, fail-closed besparingsförmåga,
+`vardefelForKrav`-ägarskap, Tm-modell, motortransport, Batch 5d:s verkliga katalogfil,
+Lidköpings källstatus, dispositionen 7/57/28 av 92 och Åkermannen-underlaget. Ingen
+produktkod, tariffdata, genererad fil eller aktiveringsgrind ändrad, ingen push. Fokuserad
+lokal dokumentationscommit i `skills`, inklusive granskning 014. Stannar för Codex
+omgranskning av V21.
