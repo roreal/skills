@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v11-reviewed-changes-required
+status: v13-delivered
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -18,8 +18,11 @@ v10_delivered_at: "2026-09-08T23:32:03+02:00"
 v10_reviewed_at: "2026-09-09T07:01:50+02:00"
 v11_delivered_at: "2026-09-09T07:20:05+02:00"
 v11_reviewed_at: "2026-09-09T08:24:19+02:00"
-latest_review: "2026-09-09-002"
-scope: "Fullständig v1–v11-inventering; v11 omgranskad med changes-required, v12 beställd"
+v12_delivered_at: "2026-09-09T08:53:39+02:00"
+v12_reviewed_at: "2026-09-09T09:08:48+02:00"
+v13_delivered_at: "2026-09-09T09:40:00+02:00"
+latest_review: "2026-09-09-003"
+scope: "Fullständig v1–v13-inventering; v13 levererad som svar på granskning 2026-09-09-003, väntar på omgranskning"
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -44,6 +47,10 @@ deliverables:
   - "Fjarrvarmetariffer/batchplan-v10.md"
   - "Fjarrvarmetariffer/tariffinventering-v11.md"
   - "Fjarrvarmetariffer/batchplan-v11.md"
+  - "Fjarrvarmetariffer/tariffinventering-v12.md"
+  - "Fjarrvarmetariffer/batchplan-v12.md"
+  - "Fjarrvarmetariffer/tariffinventering-v13.md"
+  - "Fjarrvarmetariffer/batchplan-v13.md"
 ---
 
 # Överlämning till Claude: fullständig tariffinventering för kalkylator v1
@@ -550,7 +557,7 @@ två källor till `onskadTyp`, ingen legacy-/energisystemförmåga, en odefinier
 Claude ska leverera V12 enligt granskningens åttapunktsbeställning. Ingen implementation
 eller push är godkänd; dispositionerna 7/55/30 av 92 står kvar.
 
-## Leverans v12, 2026-09-09T08:53:00+02:00
+## Leverans v12, 2026-09-09T08:53:39+02:00
 
 Claude levererade [`tariffinventering-v12.md`](../../../../Fjarrvarmetariffer/tariffinventering-v12.md)
 och [`batchplan-v12.md`](../../../../Fjarrvarmetariffer/batchplan-v12.md) som svar på
@@ -568,3 +575,42 @@ oförändrade `calcResult`-vägen. Dispositionerna 7/55/30/92 oförändrade. Fok
 dokumentationscommit ovanpå `136d9cd`. Ingen produktkod, tariffdata, genererad fil eller
 produktionsgrind ändrad; ingen tariff aktiverad; inget pushat. Väntar på Codex
 omgranskning.
+
+## Codex omgranskning av v12, 2026-09-09T09:08:48+02:00
+
+Omgranskning
+[`2026-09-09-003`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v12.md)
+har status `changes-required`. V12 löser min/max/heltal inklusive nulltransport och ger
+`bygg_ts()` en körbar, snävare adapterpreflight. Fyra P1-områden återstår: parsersignaturen
+kan inte ta den frånvarande state-nyckel den ska klassificera och felunionerna motsäger
+varandra; direkta produktanrop kan inte härleda exakta `saknadeFalt` från dagens generiska
+`Resultatstatus`; produktförmågan är motsägande, läser rå policy utanför den auktoritativa
+resolven och saknar domänguard; `argsFranInputs` är fortfarande en ellips med en för bred
+och ofullständig returtyp.
+
+Claude ska leverera V13 enligt granskningens åttapunktsbeställning. Ingen implementation
+eller push är godkänd; dispositionerna 7/55/30 av 92 står kvar.
+
+## Leverans v13, 2026-09-09T09:40:00+02:00
+
+Claude levererade [`tariffinventering-v13.md`](../../../../Fjarrvarmetariffer/tariffinventering-v13.md)
+och [`batchplan-v13.md`](../../../../Fjarrvarmetariffer/batchplan-v13.md) som svar på
+samtliga fynd i granskning `2026-09-09-003`. Parsersignaturen tar nu
+`ravarde: PolicyRawFormValue | undefined`, och en delad `PolicyValideringsOrsak`-union
+(`'typ'|'numerik'|'kardinalitet'|'min'|'max'|'heltal'|'okant_val'`) ersätter det spridda,
+delvis odeklarerade felspråket i BÅDA dokumenten. Ny `forkontrolleraPolicyIndata(policy,
+prisar, indata): { saknade; ogiltiga }` beräknar exakta saknade OCH ogiltiga fält direkt ur
+`policy.kravdaFalt`/`indata`, oberoende av om anropet kom via formuläret eller ett direkt
+produktanrop — löser att `saknadeFalt` tidigare var onåbart för det senare, eftersom
+`harledResultatstatus` kastar bort sin egen `saknade`-lista. `stodjerAktuellArskostnad` har
+nu EN definition (`kontraktsgatadPolicy(prisar)?.kallenergiArsserieBindning !== undefined`,
+`false` för Sandviken, `true` för Stockholm), och kontrollen upprepas INUTI
+`beraknaArsprodukt` (auktoritativ domänguard), inte bara i sidwrappern. `argsFranInputs` är
+nu en faktisk funktion som bygger en ny, smalare `Tariffberakningsunderlag`-bastyp i stället
+för `BesparingsvardeArgs` direkt — `calcResult` och `BesparingsvardeArgs` förblir
+oförändrade. Fyra P2-fynd rättade: `bygg_ts()`s garanti korrigerad till "endast riktning 2";
+`_bearbeta_leverantorsfil()`s policykälla korrigerad till `policyregister.py`; batchplanens
+dubbla "9."-numrering fixad; denna handoffs kvarvarande v11-frontmatter synkad till v13.
+Dispositionerna 7/55/30/92 oförändrade. Fokuserad lokal dokumentationscommit ovanpå
+`a773524`. Ingen produktkod, tariffdata, genererad fil eller produktionsgrind ändrad; ingen
+tariff aktiverad; inget pushat. Väntar på Codex omgranskning.

@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T08:53:00+02:00"
+last_updated: "2026-09-09T09:40:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v12-delivered
+status: v13-delivered
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,10 +28,19 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V10 är nu omgranskad i `2026-09-09-001` med status `changes-required`. Den förbättrade
-DTO-/metadata-/adapterstrukturen står kvar, men V11 behövs för strikt formulärparsning,
-en körbar typad valideringskanal, korrekt besparings-/aktuell-kostnadsdispatch och en
-tvåvägsadapterkontroll som fungerar för båda generatoringångarna.
+V12 är nu omgranskad i `2026-09-09-003` med status `changes-required`. Min/max/heltal,
+nulltransporten och den snävare `bygg_ts()`-preflighten är lösta. V13 behövs för att sluta
+parserns saknat-kontrakt, göra exakta saknade fält till en domänägd felkanal och ge
+årsproduktdispatchen en enda förmågemodell samt en faktisk, typkorrekt argumentbyggare.
+
+Claude har nu levererat V13 enligt granskning `2026-09-09-003`: parsersignaturen tar
+`ravarde: PolicyRawFormValue | undefined`, en delad `PolicyValideringsOrsak`-union ersätter
+det spridda felspråket, ny `forkontrolleraPolicyIndata` beräknar `saknade`/`ogiltiga` direkt
+ur `policy.kravdaFalt` (oberoende av anroparen, sluter `saknadeFalt`-hålet för direkta
+produktanrop), `stodjerAktuellArskostnad` har EN definition via `kontraktsgatadPolicy` med
+guarden upprepad inuti `beraknaArsprodukt`, och `argsFranInputs` är en faktisk funktion som
+bygger den nya, smalare `Tariffberakningsunderlag`-typen i stället för att tvinga fram
+påhittade besparingsfält. Dispositionerna 7/55/30/92 oförändrade.
 
 Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering ändrades.
 
@@ -71,12 +80,10 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude ska leverera `tariffinventering-v11.md` och `batchplan-v11.md` enligt granskning
-`2026-09-09-001`, i en fokuserad lokal dokumentationscommit ovanpå `ab38b79`. V11 ska
-skilja rått formulärstate från domänvärden, ge ogiltig kundindata en verkligt körbar typad
-felkanal, bevara besparingsvägen för stödda kontraktstariffer, göra Stockholms aktuella
-årskostnad representerbar genom `calcResult`/sidan och rätta adapterpreflightens båda
-anropsvägar. Ingen produktkod, tariffdata, aktivering eller push före ny Codex-granskning.
+Claude har levererat `tariffinventering-v13.md` och `batchplan-v13.md` enligt granskning
+`2026-09-09-003`, i en fokuserad lokal dokumentationscommit ovanpå `a773524`. Väntar nu på
+Codex omgranskning av V13. Ingen produktkod, tariffdata, aktivering eller push är godkänd
+före den.
 
 ## Konversation
 
@@ -643,9 +650,60 @@ förvalidatorns min/max/heltal- och nulltransport, `bygg_ts()` omöjliga adapter
 årsproduktens dubbla/odefinierade dispatchkontrakt kräver V12. Claude får fortsätta med den
 avgränsade dokumentationsrättningen; ingen implementation eller push är godkänd.
 
+### Claude — assistent
+
+Claude levererade tariffinventering V12 och batchplan V12 i `skills@a773524`. Leveransen
+ändrade bara dokumentation och logg, redovisade oförändrad disposition 7/55/30 av 92 och
+stannade för Codex omgranskning.
+
+### Robert — användare
+
+> V12 klar för granskning
+
+### Codex — assistent
+
+Codex omgranskade V12 och skrev granskning `2026-09-09-003` med status
+`changes-required`. V12 löser policygränsernas validering/nulltransport och
+adapterpreflightens omöjliga standalone-kontext. Parserns `undefined`-/feltyper,
+domänens exakta saknade-fält-kanal, årsproduktens enhetliga förmågeguard och den verkliga
+argumentbyggaren kräver en koncentrerad V13. Ingen implementation eller push är godkänd.
+
+### Claude — assistent
+
+Claude levererade tariffinventering V13 och batchplan V13 som svar på samtliga fynd i
+omgranskning `2026-09-09-003`: parsersignaturen tar nu `PolicyRawFormValue | undefined` och
+en delad `PolicyValideringsOrsak`-union ersätter det spridda, delvis odeklarerade
+felspråket; ny `forkontrolleraPolicyIndata` beräknar `saknade`/`ogiltiga` direkt ur
+`policy.kravdaFalt` oberoende av anroparen, vilket sluter `saknadeFalt`-hålet för ett direkt
+produktanrop som kringgår formuläret; `stodjerAktuellArskostnad` har EN definition
+(`kontraktsgatadPolicy(prisar)?.kallenergiArsserieBindning !== undefined`) med guarden
+upprepad INUTI `beraknaArsprodukt`, inte bara i sidwrappern; `argsFranInputs` är en faktisk
+funktion som bygger en ny, smalare `Tariffberakningsunderlag`-bastyp i stället för att
+tvinga fram påhittade besparingsfält på `BesparingsvardeArgs`. Fyra P2-fynd rättade:
+`bygg_ts()`s garanti korrigerad från "båda riktningarna" till "endast riktning 2",
+`_bearbeta_leverantorsfil()`s policykälla korrigerad till `policyregister.py` (inte
+katalog-JSON), batchplanens dubbla "9."-numrering rättad, och handoff-dokumentets kvarvarande
+v11-referenser synkade till v13. Dispositionerna 7/55/30 av 92 oförändrade. Ingen kod,
+tariffdata eller aktivering ändrad. Stannade för Codex omgranskning.
+
 ## Ändringslogg
 
-- `2026-09-09T08:53:00+02:00` – Claude levererade tariffinventering v12.0 och batchplan
+- `2026-09-09T09:40:00+02:00` – Claude levererade tariffinventering v13.0 och batchplan
+  v13.0 som svar på samtliga fynd i omgranskning `2026-09-09-003`: parsersignaturen tar
+  `PolicyRawFormValue | undefined`, en delad `PolicyValideringsOrsak`-union, ny
+  `forkontrolleraPolicyIndata` sluter `saknadeFalt`-hålet för direkta produktanrop, EN
+  `stodjerAktuellArskostnad`-definition via `kontraktsgatadPolicy` med guarden upprepad
+  inuti `beraknaArsprodukt`, och `argsFranInputs` byggd som faktisk funktion mot en ny,
+  smalare `Tariffberakningsunderlag`-typ. Fyra P2-fynd rättade (`bygg_ts()`s garanti,
+  `_bearbeta_leverantorsfil()`s policykälla, batchplanens dubbla "9.", handoffens
+  v11-rester). Dispositionerna 7/55/30/92 oförändrade. Ingen kod, tariffdata eller
+  aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-09T09:08:48+02:00` – Codex omgranskade V12 i `skills@a773524` och skrev
+  `2026-09-09-003`: min/max/heltal, nulltransporten och den snävare `bygg_ts()`-preflighten
+  är lösta. Parsersignaturen/felunionerna, direkta anrops exakta `saknadeFalt`, en enda
+  fail-closed produktförmåga och en faktisk typkorrekt argumentbyggare kräver V13. Ingen
+  implementation eller push godkänd; dispositionen 7/55/30 står kvar.
+- `2026-09-09T08:53:39+02:00` – Claude levererade tariffinventering v12.0 och batchplan
   v12.0 som svar på samtliga fynd i omgranskning `2026-09-09-002`: parserns felresultat är
   nu en typkorrekt diskriminerad union (`PolicyParseResultat = {status:'parsed', varde} |
   {status:'saknat'} | {status:'ogiltigt', orsak}`) i stället för `PolicyInputValue |
