@@ -16,7 +16,7 @@ v9_delivered_at: "2026-09-08T22:56:55+02:00"
 v9_delivered_at_korrigerad: "2026-09-08T22:58:58+02:00"
 v10_delivered_at: "2026-09-08T23:32:03+02:00"
 v10_reviewed_at: "2026-09-09T07:01:50+02:00"
-v11_delivered_at: "PENDING-V11-COMMIT-TIME"
+v11_delivered_at: "2026-09-09T07:20:05+02:00"
 latest_review: "2026-09-09-001"
 scope: "Fullständig v1–v11-inventering; v11 levererad som svar på 2026-09-09-001, inväntar Codex omgranskning"
 implementation_allowed: false
@@ -518,7 +518,7 @@ aktuell-årskostnadsväg samt en verklig provider-/tariff-/katalograd-bijektion 
 för båda generatoringångarna. Ingen implementation eller push är godkänd;
 dispositionerna 7/55/30 av 92 står kvar.
 
-## Leverans v11, PENDING-V11-COMMIT-TIME
+## Leverans v11, 2026-09-09T07:20:05+02:00
 
 Claude levererade [`tariffinventering-v11.md`](../../../../Fjarrvarmetariffer/tariffinventering-v11.md)
 och [`batchplan-v11.md`](../../../../Fjarrvarmetariffer/batchplan-v11.md) som svar på
