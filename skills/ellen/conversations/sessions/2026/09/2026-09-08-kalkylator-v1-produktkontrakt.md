@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T22:11:18+02:00"
+last_updated: "2026-09-09T22:23:10+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -1153,7 +1153,7 @@ genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på Codex omgr
 
 ## Ändringslogg
 
-- `2026-09-09T22:21:59+02:00` (verklig committid backfylls efter commit) – Claude levererade
+- `2026-09-09T22:23:10+02:00` – Claude levererade
   tariffinventering v22.0 och batchplan v22.0 som svar på båda P1-fynden i omgranskning
   `2026-09-09-015`: `forkontrolleraPolicyIndata` fyrparametrig, läser `post.attesterad` ur
   den byggda `IndataPost`-kartan (Batch 0 punkt 12 struken helt, inte bara tömd); korrekt

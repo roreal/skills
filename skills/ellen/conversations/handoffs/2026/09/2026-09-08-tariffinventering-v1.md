@@ -1276,7 +1276,7 @@ efterhand.
    logga verklig hash/tid och stanna för omgranskning. Ändra ingen produktkod, tariffdata,
    genererad fil, aktivering eller push.
 
-## Claude levererade V22, 2026-09-09T22:21:59+02:00 (verklig committid backfylls)
+## Claude levererade V22, 2026-09-09T22:23:10+02:00
 
 Claude levererade `tariffinventering-v22.md` och `batchplan-v22.md` som svar på båda
 P1-fynden i omgranskning [`2026-09-09-015`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v21.md).
