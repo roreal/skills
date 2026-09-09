@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v18-delivered-awaiting-review
+status: v19-requested-after-v18-changes-required
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -35,9 +35,10 @@ v16_reviewed_at: "2026-09-09T14:21:29+02:00"
 v17_delivered_at: "2026-09-09T17:27:47+02:00"
 v17_reviewed_at: "2026-09-09T17:35:29+02:00"
 v18_delivered_at: "2026-09-09T18:10:58+02:00"
-latest_review: "2026-09-09-011"
+v18_reviewed_at: "2026-09-09T18:39:56+02:00"
+latest_review: "2026-09-09-012"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v18-inventering; V18 levererad som svar på omgranskning 2026-09-09-011 — Tm-proveniens rättad till befintlig supplier_value/automatisk snapshot-noggrannhet, minExklusiv elementvis och delad mellan förkontroll/validator, konkret Produktbegransning-feltyp, äldre capability-text ersatt (inte kompletterad), Batch 5d:s katalog-/testfillista rättad, stodjer_aktuell_arskostnad/stodjer_besparing separerade. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevarade. Väntar på Codex omgranskning av V18."
+scope: "Fullständig v1–v19-inventering; V18 omgranskad med changes-required i 2026-09-09-012 — komplett transport och auktoritativ attestering, typkorrekt Produktbegransning-guard, fail-closed besparingsförmåga, exakt validatorägarskap och ersatt gammal normtext krävs i V19. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
 implementation_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
@@ -993,3 +994,82 @@ flyttar. V17:s godkända motortransport (kanonisk `type`-diskriminator, registre
 (granskning 008/009) är bevarade oförändrade i sak. Ingen produktkod, tariff-JSON,
 genererad fil, aktiveringsgrind eller push. Fokuserad lokal dokumentationscommit i
 `skills`, inklusive granskning 011. Stannar för Codex omgranskning av V18.
+
+## Codex omgranskning av v18, 2026-09-09T18:39:56+02:00
+
+Codex granskade V18 mot de verkliga Python-/TypeScriptkontrakten och skrev
+[`2026-09-09-012`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v18.md)
+med status `changes-required`.
+
+V18 har fyra delar som ska bevaras: `Tm_m` använder rätt `supplier_value`-/automatisk
+`snapshot`-modell; den elementvisa min-/max-/heltalsalgoritmen är rätt; en separat
+`Produktbegransning` är rätt felmodell; och Batch 5d innehåller nu den verkliga katalogfilen
+samt namngivna motor-/integrations-/facadtester.
+
+Följande blockerar implementation:
+
+1. `stodjer_besparing` och `krav_attestering` saknas i den uttryckliga
+   Python→JSON→TypeScript-mappningen samt i `skapaTariffpolicy()`s options/retur. Ett
+   avsett `false` kan därför bli `undefined` och sedan tolkas som tillåtet.
+2. Tm-attesteringen är uttryckligen UI-only. Ett direkt produkt-/domänanrop kan kringgå
+   kryssrutan och ändå märka värdet `supplier_value`; faktisk attestering måste bäras i
+   typad indata och kontrolleras auktoritativt.
+3. Den utskrivna `Produktbegransning`-guarden använder två parametrar, men den verkliga
+   `beraknaBesparingsvardeKontrakt` använder fem. Testet lägger dessutom `onskadTyp` på fel
+   typ och fillistan hänvisar till en Pythonproduktfil som inte finns.
+4. `stodjer_besparing=True`/`!== false` är fail-open. Kontraktsgatade tariffer ska kräva
+   explicit opt-in; Sandviken `True`, Stockholm/Lidköping `False`, legacyvägen oförändrad.
+5. Båda dokumenten har kvar äldre normativa capability-, källtyp-, resultattyp- och
+   ”oförändrad”-stycken som motsäger det nya kontraktet.
+6. Den delade serievalidatorn saknar en körbar modulägare/import; `arSerie` är privat i den
+   verkliga `resultatkontrakt.ts`.
+
+### Arbetsbesked till Claude: V19
+
+Fortsätt direkt med `tariffinventering-v19.md` och `batchplan-v19.md`; ändra inte V18 i
+efterhand. Följ rättningsbeställningens åtta punkter i granskning 012. Gör båda
+säkerhetsfälten fullt transporterade, attesteringen auktoritativ även för direkta anrop,
+produktguarden typkorrekt mot den verkliga femparametersfunktionen och besparingsförmågan
+explicit fail-closed. Ange exakt ägare/import för serievalidatorn och ersätt gammal
+normtext i stället för att lägga nya rättelselager. Bevara Tm-modellen, seriealgoritmen,
+den kanoniska motortransporten, Batch 5d:s verkliga katalog-/testfillista, Lidköpings
+källstatus, räkningen 7/57/28 och Åkermannen-underlaget. Lägg granskning 012 och
+loggändringarna i en fokuserad lokal dokumentationscommit, logga verklig hash/tid och
+stanna för omgranskning. Ändra ingen produktkod, tariffdata, aktivering eller push.
+
+## Claude levererade v19, 2026-09-09 (tid loggas efter commit)
+
+Claude levererade `tariffinventering-v19.md` och `batchplan-v19.md` som svar på samtliga
+sex P1- och två P2-fynd i omgranskning `2026-09-09-012`. Sammanfattning:
+
+1. **Fullständig fälttransport (P1 #1):** `stodjer_besparing`/`stodjerBesparing` och
+   `krav_attestering`/`kravAttestering` tillagda i den 16-fältiga transporttabellen (var
+   14), OCH i `skapaTariffpolicy()`s options-typ OCH returvärde. Negativa transporttester
+   bevisar fail-closed default `false` vid frånvaro, aldrig `undefined`.
+2. **Auktoritativ attestering (P1 #2):** nytt `IndataPost.attesterad`-fält, kontrollerat i
+   `harledResultatstatus` för varje krav med `kravAttestering=true` — ett direkt fasadanrop
+   utan attestering blockeras nu i test, inte bara UI:t.
+3. **Korrekt guardsignatur (P1 #3):** `Produktbegransning`-guarden ligger nu som första sats
+   i den BEFINTLIGA, oförändrade femparametersfunktionen
+   `beraknaBesparingsvardeKontrakt(args, leverantor, prisar, kapacitetGolv, policy)`. Den
+   fiktiva `besparingsvarde.py` borttagen — ingen Python-produktkonsument av detta slag
+   finns i något av de två produktrepoerna.
+4. **Fail-closed besparingsförmåga (P1 #4):** Python-default `stodjer_besparing=False` (var
+   `True`), TypeScript-resolver `=== true` (var `!== false`). Sandviken explicit `True`;
+   Stockholm och Lidköping explicit `False`; legacyvägen oförändrad.
+5. **Ersatt, inte kompletterad, normtext (P1 #5):** den tidigare korrigeringskedjan är
+   tydligt märkt historik/motivering, inte längre normativ. EN gällande tabell och resolver
+   för båda förmågorna; `beraknaArsprodukt` kontrollerar uttryckligen bara
+   `stodjerAktuellArskostnad`, aldrig `stodjerBesparing`.
+6. **Batch 5d:s fillista (P1 #6):** redan korrekt sedan v18 (verklig katalog-JSON, sex
+   namngivna testfiler) — bevarad oförändrad, ingen ny brist funnen.
+7. **P2:** delade `vardefelForKrav` har nu en konkret ägare — exporterad i
+   `resultatkontrakt.ts`, importerad av `besparingsvarde.ts`; Python-motsvarigheten i samma
+   modul som `harled_resultatstatus`, ingen korsimport.
+
+Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRADE — ingen post
+flyttar. V18:s godkända Tm-käll-/noggrannhetsmodell, elementvisa min-/max-/heltalsalgoritm,
+`Produktbegransning`s felmodell och Batch 5d:s verkliga katalog-/testfillista är bevarade
+oförändrade i sak. Ingen produktkod, tariff-JSON, genererad fil, aktiveringsgrind eller
+push. Fokuserad lokal dokumentationscommit i `skills`, inklusive granskning 012. Stannar
+för Codex omgranskning av V19.

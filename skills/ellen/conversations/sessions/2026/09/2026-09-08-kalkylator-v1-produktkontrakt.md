@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T17:35:29+02:00"
+last_updated: "2026-09-09T18:39:56+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v17-reviewed-changes-required-v18-requested
+status: v18-reviewed-changes-required-v19-requested
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,18 +28,18 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V17 omgranskades i `2026-09-09-011` med status `changes-required`. Den kanoniska
-Lidköpingsmotorn och seriekanalen till `Kostnad.justering` är nu rätt väg, men planen är
-inte implementeringsklar: `kallaTyp: 'snapshot'` accepteras inte av det verkliga
-källkontraktet och saknar generisk byggartransport, `minExklusiv` jämför en hel serie som
-ett skalärt tal, det typade produktbegränsningsfelet saknar konkret typ/kast/UI-mappning,
-och batchplanen har kvar gamla capability-definitioner samt placerar katalogändringen i
-fel fil. V18 är beställd. Dispositionen 7/57/28 av 92 är oförändrad.
+V18 omgranskades i `2026-09-09-012` med status `changes-required`. Tm använder nu rätt
+`supplier_value`-/`snapshot`-modell, den elementvisa seriealgoritmen är rätt och Batch 5d
+pekar på den verkliga katalogfilen. Planen är ändå inte implementeringsklar: nya
+säkerhetsfält saknas i den handskrivna Python→JSON→TypeScript-transporten, attesteringen
+är bara en kringgåbar UI-spärr, den konkreta produktguarden har fel signatur,
+besparingsförmågan är fail-open och äldre normativa kontrakt finns kvar. V19 är beställd.
+Dispositionen 7/57/28 av 92 är oförändrad.
 
 Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
 Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
 tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen är
-därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V17; det är den
+därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V19; det är den
 tekniska integrationsplanen, inte källstatusen, som måste rättas.
 
 Hela Åkermannens fakturaarkiv är inventerat och återspelat i `2026-09-09-009`. De 22
@@ -86,10 +86,11 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude ska leverera `tariffinventering-v18.md` och `batchplan-v18.md` enligt omgranskning
-`2026-09-09-011`: kompatibel Tm-proveniens, elementvis serievalidering, konkret typat
-produktbegränsningsfel, ett enda aktuellt capability-kontrakt och korrekt Batch 5d-fillista.
-Ingen produktkod, tariff-JSON, genererad fil, aktivering eller push är godkänd.
+Claude ska leverera `tariffinventering-v19.md` och `batchplan-v19.md` enligt omgranskning
+`2026-09-09-012`: komplett transport av besparingsförmåga och attestkrav, auktoritativ
+attestering för direkta produktanrop, typkorrekt produktguard, fail-closed opt-in för
+besparing, entydigt ägarskap för serievalidatorn och borttagen gammal normtext. Ingen
+produktkod, tariff-JSON, genererad fil, aktivering eller push är godkänd.
 
 ## Konversation
 
@@ -963,7 +964,60 @@ dokument- vs. framtida-implementationsscope tydligt åtskilda. Dispositionerna 7
 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRADE. Ingen produktkod, tariffdata, genererad fil eller
 aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
+### Robert — användare
+
+> Ska du granska den nu?
+
+### Codex — assistent
+
+Codex omgranskade V18 mot de verkliga kontrakten och skrev
+[`2026-09-09-012`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v18.md)
+med status `changes-required`. Tm:s `supplier_value`/automatiska `snapshot`, den
+elementvisa min-/max-/heltalsalgoritmen, `Produktbegransning` som felmodell och Batch
+5d:s verkliga katalog-/testfillista är rätt väg och ska bevaras. Sex P1-områden återstår:
+`stodjer_besparing` och `krav_attestering` saknas i den handskrivna
+Python→JSON→TypeScript-transporten; attesteringen är endast UI-baserad och kan kringgås;
+produktguarden ersätter den verkliga femparametersfunktionen med en inkompatibel
+tvåparameterssignatur och hänvisar till en icke-existerande Pythonproduktfil;
+besparingsförmågan är fail-open; äldre normativa capability-/källtyp-/resultattexter finns
+kvar; och den delade serievalidatorns ägare/import är inte körbar. V19 beställdes. Ingen
+produktkod, tariffdata, aktivering eller push godkändes; 7/57/28 av 92 kvarstår.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v19.md` och `batchplan-v19.md` som svar på samtliga sex
+P1- och två P2-fynd i omgranskning `2026-09-09-012`. De två säkerhetskritiska policyfälten
+(`stodjer_besparing`/`stodjerBesparing`, `krav_attestering`/`kravAttestering`) transporteras
+nu HELA vägen: tillagda i den 16-fältiga transporttabellen (var 14), OCH i
+`skapaTariffpolicy()`s options-typ OCH returvärde — platsen v18 helt missade — med negativa
+transporttester som bevisar fail-closed default `false` vid frånvaro. Tm-attesteringen är
+nu auktoritativ även för direkta anrop: ny `IndataPost.attesterad`-fält, kontrollerad i den
+auktoritativa `harledResultatstatus` för varje krav med `kravAttestering=true`, inte bara en
+UI-kryssruta. `Produktbegransning`-guarden flyttad in i den verkliga, oförändrade
+femparametersfunktionen `beraknaBesparingsvardeKontrakt(args, leverantor, prisar,
+kapacitetGolv, policy)` som första sats — den fiktiva `besparingsvarde.py` borttagen, ingen
+sådan Python-produktmodul finns. Besparingsförmågan är nu fail-closed: Python-default
+`stodjer_besparing=False` (var `True`), TypeScript-resolver `=== true` (var `!== false`),
+Sandviken explicit `True`, Stockholm och Lidköping explicit `False`. Den tidigare kedjan av
+capability-korrigeringar är nu tydligt märkt historik/motivering, inte normativ text — EN
+gällande tabell och resolver för båda förmågorna, med `beraknaArsprodukt` uttryckligen bara
+kontrollerande `stodjerAktuellArskostnad` (inte `stodjerBesparing`, vilket skulle ha
+blockerat den aktuella årskostnad Stockholm/Lidköping SKA kunna få). Den delade elementvisa
+`vardefelForKrav` har nu en konkret ägare: exporterad i `resultatkontrakt.ts`, importerad av
+`besparingsvarde.ts`; Python-motsvarigheten i samma modul som `harled_resultatstatus`, ingen
+korsimport. Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRADE. Ingen
+produktkod, tariffdata, genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på
+Codex omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-09T18:39:56+02:00` – Codex omgranskade V18 i `skills@673a618` och skrev
+  `2026-09-09-012`, `changes-required`. Tm-modellen, seriealgoritmen och Batch 5d:s
+  katalog-/testfillista är förbättrade. Säkerhetsfälten transporteras däremot inte hela
+  vägen, attesteringen är UI-only, produktguarden har fel signatur, besparingsförmågan är
+  fail-open, äldre normtext finns kvar och serievalidatorns modulägarskap är oklart. V19
+  beställdes. Ingen produktkod, tariffdata, aktivering eller push godkändes; dispositionen
+  7/57/28 kvarstår.
 
 - `2026-09-09T18:10:58+02:00` – Claude levererade tariffinventering v18.0 och batchplan v18.0 i `skills@a3ce065` som svar på samtliga fem P1- och två P2-fynd i omgranskning `2026-09-09-011`: Tm_m:s källtyp återanvänder befintlig `supplier_value` (`noggrannhet: 'snapshot'` uppstår automatiskt via `rullande=True`, ingen ny `KALLTYPER`-/`Noggrannhet`-medlem); `minExklusiv`/min-/max-/heltalskontroll elementvis och delad (`vardefelForKrav`/`_vardefel_for_krav`) mellan förkontroll och ordinarie validator i båda språken; konkret `Produktbegransning`-feltyp med klass/guard/UI-mappning/test ersätter den motsägande "typade felet"-prosan; äldre `kallenergiArsserieBindning`-baserad capability-text ersatt (inte kompletterad) med separata `stodjer_aktuell_arskostnad`/`stodjer_besparing`-fält; Batch 5d:s fillista rättad till den verkliga katalog-JSON-filen med namngivna testfiler, dokument- vs. implementationsscope åtskilda. Dispositionen 7/57/28 av 92 oförändrad. Ingen produktkod, tariffdata, aktivering eller push. Väntar på Codex omgranskning.
 
