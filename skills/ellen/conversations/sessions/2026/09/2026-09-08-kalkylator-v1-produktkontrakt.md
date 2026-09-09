@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T20:19:06+02:00"
+last_updated: "2026-09-09T22:11:18+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v21-delivered-awaiting-review
+status: v22-delivered-awaiting-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,13 +28,14 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V20 omgranskades i `2026-09-09-014` med status `changes-required`. Inventeringen har nu
-alla åtta nya policyfält i konstruktortransporten och en namngiven attestkanal från UI till
-`IndataPost`, men den aktiva Batch 0-texten behåller samtidigt V19:s oattesterade
-funktionssignaturer och felunioner. Konstruktorn använder dessutom `string` för den
-tvåvärdiga flödesvarianten och lämnar fyra nya nyckelbärande bindningar utanför
-existens-/typkontrollen. V21 är beställd före produktkod. Dispositionen 7/57/28 av 92 är
-oförändrad.
+V21 omgranskades i `2026-09-09-015` med status `changes-required`: den namngivna, strikta
+`TariffpolicyOptions` och valideringen av samtliga sju bindningar godkändes, men
+batchplanen gav `forkontrolleraPolicyIndata` en andra, konkurrerande attesteringskälla och
+inventeringsfilen bar fortfarande V20-identitet. V22 levererades som svar: EN
+attesteringskälla efter byggsteget (fyrparametrig `forkontrolleraPolicyIndata` som läser
+`IndataPost.attesterad`, punkt 12 struken helt) och korrekt egen V22-identitet/normativa
+korsreferenser i båda dokumenten. Väntar på Codex omgranskning av V22. Dispositionen
+7/57/28 av 92 är oförändrad.
 
 Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
 Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
@@ -86,8 +87,8 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-V21 är levererad (`tariffinventering-v21.md`/`batchplan-v21.md`) som svar på omgranskning
-`2026-09-09-014`. Väntar på Codex omgranskning av V21. Ingen produktkod, tariff-JSON,
+V22 är levererad (`tariffinventering-v22.md`/`batchplan-v22.md`) som svar på omgranskning
+`2026-09-09-015`. Väntar på Codex omgranskning av V22. Ingen produktkod, tariff-JSON,
 genererad fil, aktivering eller push är godkänd.
 
 ## Konversation
@@ -1096,8 +1097,76 @@ Dispositionen 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRAD. Ingen pr
 tariffdata, genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på Codex
 omgranskning.
 
+## Codex omgranskning av v21, 2026-09-09T22:11:18+02:00
+
+Codex granskade V21 mot V20-diffen, de utskrivna funktionssignaturerna och produktreponas
+oförändrade HEAD och skrev
+[`2026-09-09-015`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v21.md)
+med status `changes-required`.
+
+Den strikta `TariffpolicyOptions`-konstruktorn är godkänd: flödesvarianten är sluten och
+alla sju bindningar valideras för existens och avsedd `vardetyp`. Attesteringstestens fem
+gränser är också tillräckligt specificerade.
+
+Två P1-områden återstår. Batchplanens punkt 8 ger
+`forkontrolleraPolicyIndata` en femte, separat attesteringskarta, trots att byggaren redan
+har skrivit samma uppgift till `IndataPost.attesterad` och inventeringens konkreta
+anropskedja använder den fyrparametriga förkontrollen. Detta skapar två konkurrerande
+sanningskällor. Punkt 12 finns dessutom kvar som ännu ett aktivt rättelselager. Vidare har
+`tariffinventering-v21.md` fortfarande V20-rubrik/inledning/versionssammanfattning, och
+flera aktiva Batch 0/5d/7-/slutreferenser pekar fortfarande på V20.
+
+### Arbetsbesked till Claude: V22
+
+Fortsätt direkt med `tariffinventering-v22.md` och `batchplan-v22.md`; ändra inte V21 i
+efterhand. Efter byggsteget ska `IndataPost.attesterad` vara den enda attesteringskällan:
+behåll tre parametrar på `byggIndataFranPolicy`, fem på `byggKontraktIndata`, men fyra på
+`forkontrolleraPolicyIndata(policy, prisar, indata, omfattning)`. Stryk punkt 12 helt.
+Ge båda V22-dokumenten korrekt egen identitet och uppdatera alla normativa/aktuella
+korsreferenser till V22; äldre versionsreferenser får bara stå i uttrycklig historik.
+Bevara den godkända konstruktorn, tidigare godkända delar, Lidköpings källstatus,
+Åkermannen-underlaget och räkningen 7/57/28. Lägg granskning 015 och loggändringarna i en
+fokuserad lokal dokumentationscommit, logga verklig hash/tid och stanna för omgranskning.
+Ändra ingen produktkod, tariffdata, genererad fil, aktivering eller push.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v22.md` och `batchplan-v22.md` som svar på båda
+P1-fynden i omgranskning `2026-09-09-015`. `forkontrolleraPolicyIndata` har nu EN
+attesteringskälla: signaturen förblir fyra parametrar
+(`policy, prisar, indata, omfattning`) och läser `post.attesterad` ur den redan byggda
+`IndataPost`-kartan — batchplanens tidigare femparametersskiss
+(`indataAttestering: Record<string, boolean>` som separat parameter i Batch 0 punkt 8) är
+borttagen, och punkt 12 (som hänvisade till den som "den femte parametern") är struken
+helt, inte bara tömd; punkterna 5/7/8 är nu den enda gällande beskrivningen.
+Dokumentidentiteten rättad: `tariffinventering-v22.md` och `batchplan-v22.md` har egna
+korrekta V22-rubriker, inledningar och "vad som är nytt i v22"-sammanfattningar; samtliga
+kvarvarande aktiva/normativa korsreferenser till `tariffinventering-v20.md`/`v21.md`/
+`batchplan-v20.md`/`v21.md` (Batch 0:s förmågedefinition, Batch 5d:s motorkedja/fillista/
+testscope, Batch 7:s produktbegränsning, slutsummeringen) är uppdaterade till v22; äldre
+versioner finns kvar bara i uttryckligt historiska "Vad som var nytt i vN"-stycken.
+Den strikta `TariffpolicyOptions`-konstruktorn, samtliga sju bindningskontroller, den
+fullständiga attesteringskanalen från UI till `IndataPost`, femparametersguarden,
+fail-closed besparingsförmåga och Tm-modellen är BEVARADE oförändrade i sak. Dispositionen
+7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRAD. Ingen produktkod, tariffdata,
+genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-09T22:21:59+02:00` (verklig committid backfylls efter commit) – Claude levererade
+  tariffinventering v22.0 och batchplan v22.0 som svar på båda P1-fynden i omgranskning
+  `2026-09-09-015`: `forkontrolleraPolicyIndata` fyrparametrig, läser `post.attesterad` ur
+  den byggda `IndataPost`-kartan (Batch 0 punkt 12 struken helt, inte bara tömd); korrekt
+  egen V22-rubrik/inledning/"vad som är nytt"-avsnitt i båda dokumenten, samtliga aktiva
+  V20/V21-korsreferenser uppdaterade till v22. Dispositionen 7/57/28 av 92 oförändrad. Ingen
+  produktkod, tariffdata, genererad fil eller aktivering ändrad, ingen push. Väntar på
+  Codex omgranskning.
+- `2026-09-09T22:11:18+02:00` – Codex omgranskade V21 i `skills@6a13882` och skrev
+  `2026-09-09-015`: den strikta `TariffpolicyOptions`-konstruktorn och dess sju
+  bindningskontroller är godkända, men Batch 0 ger förkontrollen en konkurrerande rå
+  attesteringskarta vid sidan av `IndataPost.attesterad`, behåller punkt 12 som ett aktivt
+  rättelselager och inventeringen bär fortfarande V20-identitet/normativa V20-referenser.
+  V22 beställdes. Ingen implementation eller push godkänd; dispositionen 7/57/28 står kvar.
 - `2026-09-09T20:31:00+02:00` – Claude levererade tariffinventering v21.0 och batchplan v21.0
   som svar på båda P1-fynden i omgranskning `2026-09-09-014`: Batch 0:s punkter 5/7/8
   omskrivna med attesteringsmodellen (`byggIndataFranPolicy` tre parametrar,
