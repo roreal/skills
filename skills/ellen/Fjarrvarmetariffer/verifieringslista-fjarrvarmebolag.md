@@ -180,18 +180,47 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 
 ### Lidköping Energi
 
-- [ ] **Lidköping 0–41 kW** (`lidkoping-energi-lidkoping-041-kw-2026`)
-  - Källor: [officiell företagsprislista 2026](https://lidkopingenergi.se/foretag/), [officiell prisändringsmodell 2026](https://lidkopingenergi.se/wp-content/uploads/2025/10/Prisandringsmodell-Fjarrvarme-2026.pdf), [officiellt länkad detaljerad modell för kommersiella kunder](https://2023.lidkopingsenergi.se/wp-content/uploads/2022/11/prismodell-komersiella.pdf) (`20_1` s.1)
-  - **⛔ Ej godkänt 2026-09-04.** Energi-, effekt- och fasta priser, intervall och minimieffekt stämmer. Katalogen saknar däremot helt den flödesavgift/flödespremie som 2026-modellen uttryckligen säger gäller kommersiella kunder. Den länkade detaljmodellen visar formeln `N × Q × (1 − T/Tm)`, men aktuell flödesprisfaktor `N` och aktuellt nätmedel `Tm` framgår inte av 2026-underlaget.
+**Externt källunderlag GODKÄNT 2026-09-09** (bedömning
+[`2026-09-09-006`](../conversations/reviews/2026/09/2026-09-09-bedomning-lidkoping-energi-leverantorssvar.md),
+gäller BÅDA raderna nedan). Lidköping Energis värmenätschef svarade skriftligt 2026-09-09
+10:07 på de öppna frågorna nedan. Lokalt arkiverad källa:
+`Fjarrvarmetariffer/Sv Förtydligande av fjärrvärmetaxa för företagskunder 2026.pdf`
+(tre sidor, sida 3 hänvisar bara till en separat, inte inbäddad bilaga
+`prismodell komersiella.pdf`), `source_sha256:
+93b47766933ba2cd6c841db982cc0981a4b44ec39fe08ff543b3c707746e8f34`. **Råfilen innehåller
+kontaktuppgifter och är INTE tillagd i git eller pushad — kräver Roberts separata beslut.**
+Bekräftade svar:
+1. Publicerade företagspriser läses exklusive moms (webbsidans "inklusive moms" är fel);
+   katalogens `vat_basis: "excluded"` är korrekt.
+2. Flödesavgift/-premie gäller samtliga kommersiella kunder i prisgrupp 2–5.
+3. Flödesprisfaktorn är `N = 5 kr/m³`.
+4. Formeln är `N × Q × (1 − T/Tm)`.
+5. `Tm` är nätets månadsvisa medel av samtliga anläggningars `T_in − T_ut`.
+6. Komponenten gäller alla månader, debiteras/krediteras månadsvis.
+7. Debiterbar effekt: i första hand effektsignatur vid −10 °C (dygnsvärden december–februari,
+   två senaste vintrarna); i andra hand högsta uppmätta dygnsmedeleffekt. Den redan beslutade
+   säkra produktvägen kan fortsatt kräva leverantörens fastställda effekt i stället för att
+   återskapa signaturen.
+8. Fasta års-/effektavgifter periodiseras 1/12 per månad.
+
+**Källgodkännande ≠ implementation/fakturavalidering.** `Tm`s tolv faktiska månadsutfall är
+INTE angivna i svaret (metoden är källbelagd, inte de tolv talen) — det är ett runtimekrav
+per kundfall, inte ett statiskt katalogvärde. Se
+[`tariffinventering-v16.md`](tariffinventering-v16.md) §6a.7 och `batchplan-v16.md` batch 5d
+för den planerade, ännu ej genomförda implementationen.
+
+- [x] **Lidköping 0–41 kW** (`lidkoping-energi-lidkoping-041-kw-2026`)
+  - Källor: [officiell företagsprislista 2026](https://lidkopingenergi.se/foretag/), [officiell prisändringsmodell 2026](https://lidkopingenergi.se/wp-content/uploads/2025/10/Prisandringsmodell-Fjarrvarme-2026.pdf), [officiellt länkad detaljerad modell för kommersiella kunder](https://2023.lidkopingsenergi.se/wp-content/uploads/2022/11/prismodell-komersiella.pdf) (`20_1` s.1), samt leverantörssvaret 2026-09-09 ovan
+  - **🟢 Källunderlag godkänt 2026-09-09.** Energi-, effekt- och fasta priser, intervall och minimieffekt stämde redan. Flödesavgiften/-premien som 2026-modellen anger för kommersiella kunder är nu källbelagd i sin helhet (`N`, formel, `Tm`-metod) genom leverantörssvaret ovan.
   - [x] Effektmetoden är källbelagd: i första hand effektsignatur vid −10 °C från dygnsvärden december–februari för de två senaste vintrarna; i andra hand högsta dygnsmedeleffekt under samma period. Leverantörens fastställda effekt bör användas tills hela metoden implementerats.
-  - [ ] Komplettera katalogen med den obligatoriska flödesjusteringen och verifiera 2026 års `N` och hur `Tm` tillhandahålls.
-  - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
-- [ ] **Lidköping 42+ kW** (`lidkoping-energi-lidkoping-42-kw-2026`)
-  - Källor: [officiell företagsprislista 2026](https://lidkopingenergi.se/foretag/), [officiell prisändringsmodell 2026](https://lidkopingenergi.se/wp-content/uploads/2025/10/Prisandringsmodell-Fjarrvarme-2026.pdf), [officiellt länkad detaljerad modell för kommersiella kunder](https://2023.lidkopingsenergi.se/wp-content/uploads/2022/11/prismodell-komersiella.pdf) (`20_1` s.1)
-  - **⛔ Ej godkänt 2026-09-04.** Energi-, effekt- och fasta priser, intervall och minimieffekt stämmer. Katalogen saknar däremot helt den flödesavgift/flödespremie som 2026-modellen uttryckligen säger gäller kommersiella kunder. Den länkade detaljmodellen visar formeln `N × Q × (1 − T/Tm)`, men aktuell flödesprisfaktor `N` och aktuellt nätmedel `Tm` framgår inte av 2026-underlaget.
+  - [x] Flödesjusteringens `N` och hur `Tm` tillhandahålls är källbelagda (leverantörssvar 2026-09-09). Kvarstår: implementation (batch 5d) och att `Tm`s tolv faktiska månadsvärden hämtas per kundfall (runtime, inte katalogstatiskt).
+  - [ ] Månadsperiodisering (1/12 för fasta avgifter) är källbelagd men behöver verifieras i implementationen; årsbelopp får inte automatiskt delas med 12 utan kontroll.
+- [x] **Lidköping 42+ kW** (`lidkoping-energi-lidkoping-42-kw-2026`)
+  - Källor: [officiell företagsprislista 2026](https://lidkopingenergi.se/foretag/), [officiell prisändringsmodell 2026](https://lidkopingenergi.se/wp-content/uploads/2025/10/Prisandringsmodell-Fjarrvarme-2026.pdf), [officiellt länkad detaljerad modell för kommersiella kunder](https://2023.lidkopingsenergi.se/wp-content/uploads/2022/11/prismodell-komersiella.pdf) (`20_1` s.1), samt leverantörssvaret 2026-09-09 ovan
+  - **🟢 Källunderlag godkänt 2026-09-09.** Samma godkännande som Lidköping 0–41 kW ovan (samma leverantörssvar, samma `N`/formel/`Tm`-metod).
   - [x] Effektmetoden är källbelagd: i första hand effektsignatur vid −10 °C från dygnsvärden december–februari för de två senaste vintrarna; i andra hand högsta dygnsmedeleffekt under samma period. Leverantörens fastställda effekt bör användas tills hela metoden implementerats.
-  - [ ] Komplettera katalogen med den obligatoriska flödesjusteringen och verifiera 2026 års `N` och hur `Tm` tillhandahålls.
-  - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
+  - [x] Flödesjusteringens `N` och hur `Tm` tillhandahålls är källbelagda (leverantörssvar 2026-09-09). Kvarstår: implementation (batch 5d) och att `Tm`s tolv faktiska månadsvärden hämtas per kundfall (runtime, inte katalogstatiskt).
+  - [ ] Månadsperiodisering (1/12 för fasta avgifter) är källbelagd men behöver verifieras i implementationen; årsbelopp får inte automatiskt delas med 12 utan kontroll.
 
 ### Luleå Energi
 

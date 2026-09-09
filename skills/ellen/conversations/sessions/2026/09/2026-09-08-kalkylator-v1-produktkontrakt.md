@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T10:33:00+02:00"
+last_updated: "PENDING_COMMIT_TIME"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v15-delivered
+status: v16-delivered-awaiting-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,13 +28,23 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V14 är omgranskad i `2026-09-09-005` med status `changes-required`. Annual-scope,
-felorsaksmodellen, den konstruerbara domänfelvägen, produktförmågans `.policy`-åtkomst,
-energisystemgrinden och valfria `onskadTyp` är lösta. Tre P1-områden blockerar fortfarande
-implementation: argumentbyggaren använder omöjliga enumvärden, en no-op i stället för den
-verkliga scope-formeln och delas inte med `calcResult`; den publika årsproduktens
-fail-closed-avsmalning för energi, kapacitet och policyfält är inte visad; parserns
-scalar/array-grindar saknas. V15 är beställd. Dispositionerna 7/55/30 av 92 är oförändrade.
+V15 är omgranskad i `2026-09-09-007` med status `changes-required`. Den verkliga enum-/
+scopeformeln, den delade argumentbyggaren och parserns råformsgrindar är lösta. Den publika
+årsproduktens kod följer däremot inte de egna typerna eller den verkliga fasadsignaturen;
+en isolerad strikt kontroll ger fem TypeScript-fel. `policyFalt`-transporten är dessutom
+motsägande mellan dokumenten och saknar ett typsäkert kontrakt genom besparingsvägen.
+
+Lidköping Energis leverantörssvar är samtidigt källgodkänt i `2026-09-09-006`. Båda
+Lidköpingstarifferna kan flyttas till `ready_to_implement` när V16 skapas, med obligatoriska
+tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen
+blir därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4). V16 är beställd mot båda
+granskningarna.
+
+Hela Åkermannens fakturaarkiv är inventerat och återspelat i `2026-09-09-009`. De 22
+PDF-filerna motsvarar 20 unika fakturaperioder januari 2025–augusti 2026; två är
+dubblettkopior. Alla nya enkelfall och maj–juli-avräkningen matchar Python och TypeScript
+inom högst 2,4 öre. Arkivet blir senare en separat sanitiserad testfixtur och ändrar inte
+tariffdispositionen.
 
 Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering ändrades.
 
@@ -74,10 +84,14 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude har levererat `tariffinventering-v15.md` och `batchplan-v15.md` enligt granskning
-`2026-09-09-005`, i en fokuserad lokal dokumentationscommit ovanpå `f4f2370`. Väntar nu på
-Codex omgranskning av V15. Ingen produktkod, tariffdata, aktivering eller push är godkänd
-före den.
+Claude ska leverera `tariffinventering-v16.md` och `batchplan-v16.md` enligt omgranskning
+`2026-09-09-007` och Lidköpingsbedömning `2026-09-09-006`: rätta den kompletta
+årsproduktkroppen och `policyFalt`-transporten, flytta de två Lidköpingstarifferna, uppdatera
+räkningen till 7/57/28 och lägg till batch 5d. Lägg även in bedömningarna
+`2026-09-09-008`/`009`, rätta Stockholms verifieringsbeskrivning till 20 unika perioder
+och dokumentera den framtida separata arkivfixturen, men ändra ingen testfixtur i
+dokumentationsetappen. Ingen produktkod, tariff-JSON, genererad fil, aktivering eller push
+är godkänd.
 
 ## Konversation
 
@@ -749,8 +763,145 @@ normativa text (batchplanens fillista hade redan rätt). Dispositionerna 7/55/30
 oförändrade. Ingen produktkod, tariffdata, genererad fil eller aktivering ändrad; inget
 pushat. Väntar på Codex omgranskning av V15.
 
+### Robert — användare
+
+> Nu finns även ett svar från Lidköping Energi att ta i beaktande. Du kanske skall baka in
+> detta i kommande åtgärder för Claude:
+> `Fjarrvarmetariffer/Sv Förtydligande av fjärrvärmetaxa för företagskunder 2026.pdf`
+>
+> Fortsätt
+
+### Codex — assistent
+
+Codex granskade leverantörssvaret och skrev källbedömning `2026-09-09-006`. Svaret löser
+de externa sakfrågorna för båda Lidköpingstarifferna: priserna är exklusive moms,
+flödesfaktorn är 5 kr/m³, den signerade formeln och månadsvis tillämpning bekräftas,
+`Tm` är nätets månadsmedelavkylning, effektmetoden bekräftas och årsavgifterna periodiseras
+1/12. Tarifferna är därmed `ready_to_implement`, men en körning ska kräva tre fullständiga
+tolvmånadersserier och blockera utan nätets faktiska `Tm`-värden.
+
+Codex omgranskade därefter den samtidigt levererade V15-versionen i `2026-09-09-007`.
+Argumentbyggaren och parsergrindarna är lösta, men årsproduktens fullständiga kodskiss gav
+fem TypeScript-fel mot de verkliga typerna/signaturerna och `policyFalt`-transporten är
+motsägande. Claude har därför fått en sammanhållen V16-beställning som både rättar dessa
+fynd och införlivar Lidköping. Ingen produktkod, tariffdata, aktivering eller push är
+godkänd.
+
+### Robert — användare
+
+> Det finns en augusti-faktura nu i Brf Åkermannen, om den ger någon hjälp i utvecklingen.
+
+### Codex — assistent
+
+Augustifakturan är relevant som ett nytt, utanför-baslinjen-test av Stockholm Exergis
+2026-modell. Den kan särskilt verifiera sommarens energipris, den månadsvisa 1/12-andelen av
+fast/effektavgift, moms, debiterbar effekt och eventuell avräkning/korrigering. Den ska inte
+ersätta den frysta tolvmånadersfixturen maj 2025–april 2026 eller ensam användas för att
+ändra årsprofilen. Den nuvarande leverantörsfilen anger verifiering till och med juli 2026;
+först efter faktisk återspelning kan underlaget höjas med augusti.
+
+Ingen ny fakturafil hittades i de lokala projekten eller via lokal filindexering. Filens
+sökväg eller en bilaga behövs därför innan siffrorna kan extraheras, jämföras och ges till
+Claude som ett verifierat tillägg. V16-arbetet behöver inte blockeras i väntan på detta.
+
+### Robert — användare
+
+> `/Users/robertrennel/Library/CloudStorage/SynologyDrive-Enkey2/Leveranser/0 Pågående/Brf
+> Åkermannen 33/Fjärrvärmefakturor/Sthlm Exergi Aug 2026.pdf`
+
+### Codex — assistent
+
+Codex läste fakturan och skrev verifiering `2026-09-09-008`. Augustis 7,161 MWh,
+125 kW och övriga prisrader kördes genom Python- och TypeScriptmotorn samt båda språkens
+validerade månadskontraktsväg. Samtliga gav 14 849,952082 kr exklusive moms mot fakturans
+14 849,95 kr. Fakturans inklusive-momssumma skiljer cirka ett öre på grund av avrundning;
+tariffkomponenterna matchar och ingen motorrättning behövs.
+
+Fakturan ska senare bli en separat sanitiserad out-of-sample-fixtur, inte en trettonde rad
+i den frysta baslinjefixturen. V16 får dokumentera testpunkten men ska inte ändra
+produktkod/testdata. Råfakturan kopieras inte till git.
+
+### Robert — användare
+
+> Alla fakturor för Åkermannen finns i kundens fjärrvärmefakturamapp i SynologyDrive.
+
+### Codex — assistent
+
+Codex inventerade hela arkivet och skrev verifiering `2026-09-09-009`. Det finns 22
+PDF-filer men 20 unika fakturaperioder januari 2025–augusti 2026; mars och april 2026 har
+var sin textidentisk dubblettkopia. Detta löser dokumentationens äldre 18/21-motsägelse:
+till och med juli är det 19 unika perioder och 21 fysiska filer, med augusti 20 respektive
+22.
+
+Sju enkelfakturor utanför den frysta tolvmånadersbaslinjen samt den särskilda
+maj–juli-avräkningen kördes i båda språken, genom direkt- och kontraktsvägen. Enkelfallen
+matchar inom högst 2,4 öre. Maj–juli matchar sammantaget inom cirka 1,7 öre efter att
+preliminärdebiteringen representerats korrekt. Julifakturans 21,823 MWh är avlästa
+delperioder från maj, juni och juli, inte julis förbrukning; fysisk juli är 7,190 MWh.
+V16 ska rätta dokumentationsbeskrivningen och hänvisa till verifieringen men inte ändra
+produktfixturer eller kod. En separat sanitiserad arkivfixtur beställs först i en senare
+implementation.
+
+### Robert — användare
+
+> Använd informationen i fakturorna om det underlättar för validering av kalkylen. Just nu
+> väntar vi på att Claude-krediterna fylls på. Robert återkommer efter 13.40.
+
+### Codex — assistent
+
+Beslutet är noterat: sanerade, beräkningsrelevanta fakturauppgifter får användas i
+validerings- och regressionstester när de ger bättre kontroll av kalkylen. Rå-PDF:erna,
+kundidentifierare och betalningsuppgifter hålls fortsatt utanför Git. Ingen ny
+implementation startas före Roberts återkomst och Claudes fortsättning.
+
 ## Ändringslogg
 
+- `PENDING_COMMIT_TIME` – Claude — assistent: levererade `tariffinventering-v16.md` och
+  `batchplan-v16.md` som svar på BÅDA granskning `2026-09-09-007` och bedömning
+  `2026-09-09-006` samtidigt. Del A (007): `beraknaArsprodukt`s hela kropp omskriven och
+  verifierad kompilerbar som EN helhet (`npx tsc --noEmit --strict --skipLibCheck --target
+  es2020` mot en scratch-fil i `neptune-marketing`, noll fel, filen borttagen efter
+  körningen) — samtliga sex bugfynd rättade (`prisar.tariff_id`, `byggKontraktIndata` FÖRE
+  förkontrollen, två separata `KontraktBlockerat`-kast utan `as any`, rätt
+  `beraknaArskostnadMedKontrakt`-signatur med `fordelaEnergi`-fördelad energi,
+  `KontraktResultat` avsmalnad före kostnadsläsning, `leverantor.namn` i stället för
+  `prisar.leverantor`); `policyFalt` gjort additivt och entydigt på `BesparingsvardeArgs` i
+  BÅDA dokumenten; P2-fyndet om `calcResult`s publika kontrakt preciserat. Del B (006):
+  Lidköpings två bastariffer flyttade till `ready_to_implement`, ny disposition 7/57/28 av
+  92 (bas 7/47/24) i BÅDA dokumenten, `verifieringslista-fjarrvarmebolag.md` uppdaterad med
+  källgodkännandet, ny batch 5d efter batch 0 och en ny deklarativ
+  `signed_monthly_flow_adjustment`-justeringstyp (mirrorad Python/TypeScript, niopunkts
+  testplan). Rå-PDF:en stagades inte. Fokuserad lokal dokumentationscommit
+  `PENDING_COMMIT_HASH` i `skills`, inklusive granskning 006 och 007 (tidigare ospårade).
+  Ingen produktkod, tariffdata, genererad fil, aktivering eller push. Åkermannen-arkivets
+  metadata (granskning 009) ingick INTE i denna leverans. Väntar på Codex omgranskning.
+- `2026-09-09T12:50:46+02:00` – Robert godkände att sanerade fakturauppgifter används där
+  de underlättar validering av kalkylen. Råfakturorna ska fortsatt ligga utanför Git.
+  Arbetet väntar på påfyllda Claude-krediter och Roberts återkomst efter 13.40; ingen ny
+  implementation startades.
+- `2026-09-09T12:33:49+02:00` – Codex inventerade hela Åkermannens fakturaarkiv i
+  `2026-09-09-009`: 22 PDF-filer motsvarar 20 unika perioder januari 2025–augusti 2026,
+  med dubblettkopior för mars/april 2026. Sju nya enkelfall och maj–juli-avräkningen
+  passerar Python/TypeScript, direkt/kontrakt, inom högst 2,4 öre. V16 ska rätta
+  arkivbeskrivningen; separat sanitiserad testfixtur skjuts till senare implementation.
+  Råfakturorna kopierades inte och ingen produktkod/testdata ändrades.
+- `2026-09-09T12:21:30+02:00` – Codex återspelade Åkermannens augustifaktura i
+  `2026-09-09-008`. Python, TypeScript och båda validerade månadskontraktsvägarna matchar
+  14 849,95 kr exklusive moms; kvarvarande differens inklusive moms är cirka ett öres
+  avrundning. Kontrollfallet planeras som separat sanitiserad out-of-sample-fixtur efter
+  dokumentationsetappen. Råfakturan kopierades inte och ingen produktkod/testdata ändrades.
+- `2026-09-09T12:12:22+02:00` – Robert upplyste om en ny augustifaktura för Brf
+  Åkermannen. Codex bedömde den som lämplig för ett separat out-of-sample-test av Stockholm
+  Exergis 2026-tariff, men kunde inte hitta filen lokalt. Sökväg/bilaga inväntas; ingen
+  verifieringsräkning eller fixtur ändrades och V16 blockeras inte.
+- `2026-09-09T12:04:02+02:00` – Codex granskade Lidköping Energis svar i
+  `2026-09-09-006` och omgranskade V15 i `2026-09-09-007`. Två Lidköpingstariffer flyttas i
+  V16 till `ready_to_implement`, vilket ändrar dispositionen till 7/57/28 av 92 och kräver
+  en separat batch 5d med tre fail-closed tolvmånadersserier. V15 löser argumentbyggaren
+  och parsergrindarna, men årsproduktens kod ger fem reproducerade TypeScript-fel och
+  `policyFalt`-transporten är inte entydig. V16 beställdes som en sammanhållen
+  dokumentationsrättning. Rå-PDF:en stagades inte; ingen produktkod, tariff-JSON,
+  genererad fil, aktivering eller push godkändes.
 - `2026-09-09T10:33:00+02:00` – Claude levererade tariffinventering v15.0 och batchplan
   v15.0 som svar på samtliga tre P1-fynd och två P2-fynd i omgranskning `2026-09-09-005`:
   `argsFranInputs` skriven mot verkliga enumvärden/formel och verifierad tsc-kompilerbar,
