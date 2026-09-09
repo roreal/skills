@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T18:39:56+02:00"
+last_updated: "TIDSTÄMPEL_PLACEHOLDER"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v18-reviewed-changes-required-v19-requested
+status: v20-delivered-awaiting-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,18 +28,18 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V18 omgranskades i `2026-09-09-012` med status `changes-required`. Tm använder nu rätt
-`supplier_value`-/`snapshot`-modell, den elementvisa seriealgoritmen är rätt och Batch 5d
-pekar på den verkliga katalogfilen. Planen är ändå inte implementeringsklar: nya
-säkerhetsfält saknas i den handskrivna Python→JSON→TypeScript-transporten, attesteringen
-är bara en kringgåbar UI-spärr, den konkreta produktguarden har fel signatur,
-besparingsförmågan är fail-open och äldre normativa kontrakt finns kvar. V19 är beställd.
+V19 omgranskades i `2026-09-09-013` med status `changes-required`. Den verkliga
+femparametersguarden, fail-closed besparingsförmåga och validatorägarskapet är nu rätt väg.
+Planen är ändå inte implementeringsklar: `skapaTariffpolicy()` saknar fortfarande
+huvuddelen av de planerade policyfälten, attesteringen har ingen typad transport från UI/
+produktindata till `IndataPost`, och `batchplan-v19.md` är fortfarande en selektivt rättad
+V18-plan med fel rubrik/scope och den fiktiva Pythonproduktfilen kvar. V20 är beställd.
 Dispositionen 7/57/28 av 92 är oförändrad.
 
 Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
 Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
 tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen är
-därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V19; det är den
+därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V20; det är den
 tekniska integrationsplanen, inte källstatusen, som måste rättas.
 
 Hela Åkermannens fakturaarkiv är inventerat och återspelat i `2026-09-09-009`. De 22
@@ -86,11 +86,9 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude ska leverera `tariffinventering-v19.md` och `batchplan-v19.md` enligt omgranskning
-`2026-09-09-012`: komplett transport av besparingsförmåga och attestkrav, auktoritativ
-attestering för direkta produktanrop, typkorrekt produktguard, fail-closed opt-in för
-besparing, entydigt ägarskap för serievalidatorn och borttagen gammal normtext. Ingen
-produktkod, tariff-JSON, genererad fil, aktivering eller push är godkänd.
+V20 är levererad (`tariffinventering-v20.md`/`batchplan-v20.md`) som svar på omgranskning
+`2026-09-09-013`. Väntar på Codex omgranskning av V20. Ingen produktkod, tariff-JSON,
+genererad fil, aktivering eller push är godkänd.
 
 ## Konversation
 
@@ -1009,7 +1007,74 @@ korsimport. Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄN
 produktkod, tariffdata, genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på
 Codex omgranskning.
 
+### Robert — användare
+
+> V19 är klar
+
+### Codex — assistent
+
+Codex omgranskade V19 mot de verkliga kontrakten och skrev
+[`2026-09-09-013`](../../../reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v19.md)
+med status `changes-required`. Tre centrala vägval är nu rätt: den verkliga
+femparametersguarden, fail-closed opt-in för besparingsförmåga och konkret ägarskap för den
+elementvisa validatorn. Fyra P1-områden återstår: `skapaTariffpolicy()`s options/retur
+saknar sju andra planerade policyfält trots den 16-radiga transporttabellen och V19:s
+förklaring om TypeScripts extra objektfält är reproducerat falsk (`TS2353`);
+attesteringen saknar en typad UI→produkt→`IndataPost`-kanal och finns inte i
+produktförkontrollen; `batchplan-v19.md` är fortfarande rubricerad och scopad som V18 samt
+har den fiktiva Pythonproduktfilen kvar; och aktuella metadata-/teststycken motsäger
+attesteringen respektive `=== true`-regeln. V20 beställdes. Ingen produktkod, tariffdata,
+aktivering eller push godkändes; 7/57/28 av 92 kvarstår.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v20.md` och `batchplan-v20.md` som svar på samtliga
+fynd i omgranskning `2026-09-09-013`. `skapaTariffpolicy()`s options-typ OCH returvärde
+utökas nu med SAMTLIGA ÅTTA planerade `Tariffpolicy`-fält i EN ändring — inte bara
+`stodjerBesparing` som v19 begränsade sig till — och v19:s felaktiga påstående att
+TypeScript inte skulle klaga på ett extra objektfält är rättat: ett isolerat
+`npx tsc --noEmit --strict --skipLibCheck`-scratchtest mot dagens verkliga, orörda
+fyrfältiga `opts`-typ reproducerade `TS2353`, medan samma verktyg bekräftade att den
+utökade, åttafältiga varianten kompilerar rent. Attesteringen har nu en fullständig, typad
+kanal: ny parallell karta `policyFaltAttestering: Record<string, boolean>`, trådad
+`KalkylatorPage.tsx` (checkbox-state) → `KalkylatorInputs`/`Tariffberakningsunderlag`/
+`BesparingsvardeArgs` → `argsFranInputs` → `byggKontraktIndata`/`byggIndataFranPolicy` →
+`IndataPost.attesterad`, med en ny fältnära `PolicyValideringsOrsak`-medlem
+`'ej_attesterat'` i `forkontrolleraPolicyIndata`, oberoende av den redan auktoritativa
+kontrollen i `harledResultatstatus` (oförändrad sedan v19). `batchplan-v20.md` är ett
+genuint fräscht v20-dokument — korrekt rubrik/föregångare/inventeringslänk/scope, ny "Vad
+som är nytt i v20"-sektion, den fiktiva `besparingsvarde.ts`/"motsvarande Pythonfil"-
+referensen i Batch 5d borttagen, Batch 0 får två nya numrerade punkter (11/12) för
+policykonstruktionen och attesteringstransporten. De två kvarvarande aktiva
+motsägelserna är rättade: `PolicyFaltMetadata`s utskrivna objektform får
+`kravAttestering: boolean`, Sandvikens sidtest motiverar sin gröna väg med
+`stodjerBesparing === true` i stället för `!== false`. Dispositionerna 7/57/28 av 92 (bas
+7/47/24, variant 0/10/4) OFÖRÄNDRADE — ingen post flyttar. V19:s godkända
+femparametersguard, fail-closed besparingsförmåga, validatorägarskap, Tm-käll-/
+attesteringsmodell, motortransport, Lidköpings källstatus och Åkermannen-underlaget
+bevarade oförändrade i sak. Ingen produktkod, tariffdata, genererad fil eller
+aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
+
 ## Ändringslogg
+
+- `TIDSTÄMPEL_PLACEHOLDER` – Claude levererade tariffinventering v20.0 och batchplan v20.0
+  som svar på samtliga fyra P1-fynd i omgranskning `2026-09-09-013`: `skapaTariffpolicy()`s
+  options/retur utökade med samtliga åtta planerade `Tariffpolicy`-fält i EN ändring
+  (rättat felaktigt TS-påstående, `TS2353` reproducerat mot orörd typ, ren kompilering mot
+  utökad typ verifierad); ny `policyFaltAttestering`-karta trådad genom hela
+  produkt-DTU-kedjan till `IndataPost.attesterad`, ny `'ej_attesterat'`-orsak i
+  `forkontrolleraPolicyIndata`; `batchplan-v20.md` ett genuint fräscht dokument utan
+  V18-scope eller fiktiv Pythonproduktfil; `PolicyFaltMetadata`/Sandviken-testet rättade.
+  Dispositionen 7/57/28 av 92 oförändrad. Ingen produktkod, tariffdata, aktivering eller
+  push godkändes. Väntar på Codex omgranskning.
+
+- `2026-09-09T19:38:20+02:00` – Codex omgranskade V19 i `skills@cf73efa` och skrev
+  `2026-09-09-013`, `changes-required`. Femparametersguarden, fail-closed besparing och
+  validatorägarskapet är rättade. Policykonstruktorn tappar dock fortfarande planerade
+  fält, attesteringen saknar produkt-DTO-kanal och fältnära förkontroll, och Batchplan V19
+  är fortfarande en motsägande V18-plan med den fiktiva Pythonproduktfilen kvar. V20
+  beställdes. Ingen produktkod, tariffdata, aktivering eller push godkändes; dispositionen
+  7/57/28 kvarstår.
 
 - `2026-09-09T19:26:20+02:00` – Claude levererade tariffinventering v19.0 och batchplan v19.0
   i `skills@eb63c2c` som svar på samtliga sex P1- och två P2-fynd i omgranskning
