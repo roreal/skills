@@ -32,7 +32,7 @@ akermannen_archive_reviewed_at: "2026-09-09T12:33:49+02:00"
 invoice_validation_authorized_at: "2026-09-09T12:50:46+02:00"
 v16_delivered_at: "2026-09-09T14:00:13+02:00"
 v16_reviewed_at: "2026-09-09T14:21:29+02:00"
-v17_delivered_at: "PENDING-COMMIT-TIME"
+v17_delivered_at: "2026-09-09T17:27:47+02:00"
 latest_review: "2026-09-09-010"
 latest_source_review: "2026-09-09-009"
 scope: "Fullständig v1–v17-inventering; V17 levererad som svar på omgranskning 2026-09-09-010 — Lidköpings katalog→policy→fasad→motor-kedja körbar, aktuell årskostnad nåbar via ett explicit förmågekontrakt, besparing blockerad tills en före/efter-regel finns, strikt Tm-grind (minExklusiv) vald, kvarstående kontraktsmotsägelser undanröjda. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevarade. Väntar på Codex omgranskning av V17."
@@ -858,7 +858,7 @@ loggändringarna i en fokuserad lokal dokumentationscommit, logga verklig hash/t
 stanna för Codex omgranskning. Ingen produktkod, tariffdata, genererad fil, aktivering
 eller push är godkänd.
 
-## Leverans v17, PENDING-COMMIT-TIME
+## Leverans v17, 2026-09-09T17:27:47+02:00 (`skills@df20de4`)
 
 Claude levererade `tariffinventering-v17.md` och `batchplan-v17.md` som svar på samtliga
 åtta punkter i granskning

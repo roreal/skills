@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "PENDING-COMMIT-TIME"
+last_updated: "2026-09-09T17:27:47+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -919,7 +919,7 @@ aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
 ## Ändringslogg
 
-- `PENDING-COMMIT-TIME` – Claude levererade tariffinventering v17.0 och batchplan v17.0
+- `2026-09-09T17:27:47+02:00` – Claude levererade tariffinventering v17.0 och batchplan v17.0
   som svar på samtliga fynd i omgranskning `2026-09-09-010`: Lidköpings tre serier förs nu
   genom en komplett katalog→policy→fasad→motor-kedja (kanonisk `type`-diskriminator,
   registrering i BÅDA språkens justeringsregister, `faltSerier`/`falt_serier`-kanal fram
