@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: v22-requested-after-v21-review
+status: v22-approved-awaiting-batch0-go
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -42,10 +42,15 @@ v20_delivered_at: "2026-09-09T20:07:54+02:00"
 v20_reviewed_at: "2026-09-09T20:19:06+02:00"
 v21_delivered_at: "2026-09-09T20:31:00+02:00"
 v21_reviewed_at: "2026-09-09T22:11:18+02:00"
-latest_review: "2026-09-09-015"
+v22_delivered_at: "2026-09-09T22:23:10+02:00"
+v22_reviewed_at: "2026-09-09T22:26:48+02:00"
+latest_review: "2026-09-09-016"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering; V22 levererad som svar på 015: forkontrolleraPolicyIndata fyrparametrig med IndataPost.attesterad som enda attesteringskälla, punkt 12 struken, korrekt V22-dokumentidentitet och uppdaterade korsreferenser. Väntar på Codex omgranskning. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
+scope: "Fullständig v1–v22-inventering; V22 godkänd med villkor i 016 som plan för Batch 0-infrastruktur. Båda P1-fynden stängda; två redaktionella noter är icke-blockerande. Kodstart inväntar Roberts klartecken. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
 implementation_allowed: false
+approved_implementation_scope: "batch-0-infrastructure-only"
+tariff_activation_allowed: false
+push_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
   - "Fjarrvarmetariffer/batchplan-v1.md"
@@ -1302,3 +1307,30 @@ sak. Dispositionen 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRAD. Ing
 produktkod, tariffdata, genererad fil eller aktiveringsgrind ändrad, ingen push. Fokuserad
 lokal dokumentationscommit i `skills`, inklusive granskning 015. Stannar för Codex
 omgranskning av V22.
+
+## Codex godkännande av V22, 2026-09-09T22:26:48+02:00
+
+Codex granskade `tariffinventering-v22.md`, `batchplan-v22.md` och committarna
+`a5729cb`/`ea917d7` och skrev
+[`2026-09-09-016`](../../../reviews/2026/09/2026-09-09-godkannande-tariffinventering-v22.md)
+med status `approved-with-conditions`.
+
+Båda P1-fynden i 015 är stängda. `forkontrolleraPolicyIndata` har exakt fyra parametrar
+och läser `IndataPost.attesterad`, samma källa som den auktoritativa statusvalidatorn.
+Dokumenten har korrekt V22-identitet och aktiva normreferenser. Den strikta
+`TariffpolicyOptions`, samtliga sju bindningskontroller och testplanens fem
+attesteringsgränser är bevarade.
+
+Två redaktionella rester är icke-blockerande: parentesen om den borttagna punkt 12 vid
+`batchplan-v22.md:515–518` och hänvisningen ”punkt 11/12” vid rad 524. De definierar inget
+alternativt API och kräver ingen V23.
+
+### Nästa föreslagna arbetsbesked: Batch 0
+
+**Invänta Roberts uttryckliga klartecken innan kodstart.** När klartecknet finns får Claude
+implementera endast Batch 0:s grundinfrastruktur enligt de sex villkoren i granskning 016:
+typade Python-/TypeScriptkontrakt, en enda attesteringskälla efter byggsteget, verklig
+DTO-/UI-transport, fail-closed produktgrindar, nödvändiga deterministiska generatorartefakter
+och full testmatris. Legacybeteende ska bevaras. Ingen tariff får aktiveras eller flyttas
+mellan dispositioner. Skapa fokuserade lokala commits per repo, redovisa HEAD/diff/tester
+och stanna för Codex kodgranskning. Ingen push.

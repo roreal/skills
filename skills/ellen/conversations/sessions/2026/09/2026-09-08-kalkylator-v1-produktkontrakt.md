@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T22:23:10+02:00"
+last_updated: "2026-09-09T22:26:48+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v22-delivered-awaiting-review
+status: v22-approved-awaiting-batch0-go
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,19 +28,18 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V21 omgranskades i `2026-09-09-015` med status `changes-required`: den namngivna, strikta
-`TariffpolicyOptions` och valideringen av samtliga sju bindningar godkändes, men
-batchplanen gav `forkontrolleraPolicyIndata` en andra, konkurrerande attesteringskälla och
-inventeringsfilen bar fortfarande V20-identitet. V22 levererades som svar: EN
-attesteringskälla efter byggsteget (fyrparametrig `forkontrolleraPolicyIndata` som läser
-`IndataPost.attesterad`, punkt 12 struken helt) och korrekt egen V22-identitet/normativa
-korsreferenser i båda dokumenten. Väntar på Codex omgranskning av V22. Dispositionen
-7/57/28 av 92 är oförändrad.
+V22 godkändes med villkor i `2026-09-09-016` som plan för en avgränsad lokal Batch 0-
+implementation. Båda P1-fynden är stängda: `forkontrolleraPolicyIndata` är fyrparametrig
+och läser `IndataPost.attesterad` som enda källa efter byggsteget, och dokumenten har
+korrekt V22-identitet/normativa korsreferenser. Den strikta `TariffpolicyOptions` och
+samtliga sju bindningskontroller är bevarade. Två redaktionella rester om borttagen punkt
+12 är icke-blockerande. Kodstart inväntar Roberts uttryckliga klartecken; ingen
+tariffaktivering eller push ingår. Dispositionen 7/57/28 av 92 är oförändrad.
 
 Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
 Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
 tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen är
-därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V20; det är den
+därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V22; det är den
 tekniska integrationsplanen, inte källstatusen, som måste rättas.
 
 Hela Åkermannens fakturaarkiv är inventerat och återspelat i `2026-09-09-009`. De 22
@@ -87,9 +86,9 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-V22 är levererad (`tariffinventering-v22.md`/`batchplan-v22.md`) som svar på omgranskning
-`2026-09-09-015`. Väntar på Codex omgranskning av V22. Ingen produktkod, tariff-JSON,
-genererad fil, aktivering eller push är godkänd.
+V22 är godkänd med villkor i `2026-09-09-016`. Nästa föreslagna steg är Batch 0:s lokala
+grundimplementation enligt godkännandets sex villkor, men arbetet ska inte starta förrän
+Robert ger uttryckligt klartecken. Ingen tariffaktivering eller push är godkänd.
 
 ## Konversation
 
@@ -1151,8 +1150,31 @@ fail-closed besparingsförmåga och Tm-modellen är BEVARADE oförändrade i sak
 7/57/28 av 92 (bas 7/47/24, variant 0/10/4) OFÖRÄNDRAD. Ingen produktkod, tariffdata,
 genererad fil eller aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex godkände V22 med villkor i
+[`2026-09-09-016`](../../../reviews/2026/09/2026-09-09-godkannande-tariffinventering-v22.md)
+som plan för Batch 0:s grundinfrastruktur. Ingen V23 krävs före den etappen.
+
+Båda P1-fynden är stängda: den fyrparametriga förkontrollen och den auktoritativa
+statusvalidatorn läser samma `IndataPost.attesterad`, och båda dokumenten har korrekt
+V22-identitet med aktuella normativa länkar. Den strikta policykonstruktorn och de fem
+attesteringstestgränserna är bevarade.
+
+Två redaktionella noter är icke-blockerande: en parentes om att punkt 12 är borttagen
+finns kvar vid `batchplan-v22.md:515–518`, och fillistan säger fortfarande ”punkt 11/12”
+vid rad 524. De definierar inget alternativt API och kräver ingen V23.
+
+Nästa föreslagna steg är lokal Batch 0-implementation i berörda produktrepon med fulla
+tester och fokuserade commits. Ingen tariffaktivering eller push ingår, och kodstarten
+inväntar Roberts uttryckliga klartecken.
+
 ## Ändringslogg
 
+- `2026-09-09T22:26:48+02:00` – Codex godkände V22 med villkor i `2026-09-09-016` som
+  implementationsplan för Batch 0:s grundinfrastruktur. Båda P1-fynden är stängda; två
+  redaktionella hänvisningsrester är icke-blockerande. Ingen V23 krävs. Kodstart inväntar
+  Roberts uttryckliga klartecken; ingen tariffaktivering eller push är godkänd.
 - `2026-09-09T22:23:10+02:00` – Claude levererade
   tariffinventering v22.0 och batchplan v22.0 som svar på båda P1-fynden i omgranskning
   `2026-09-09-015`: `forkontrolleraPolicyIndata` fyrparametrig, läser `post.attesterad` ur
