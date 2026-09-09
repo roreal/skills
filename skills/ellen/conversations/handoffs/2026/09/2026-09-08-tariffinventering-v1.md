@@ -1037,7 +1037,7 @@ källstatus, räkningen 7/57/28 och Åkermannen-underlaget. Lägg granskning 012
 loggändringarna i en fokuserad lokal dokumentationscommit, logga verklig hash/tid och
 stanna för omgranskning. Ändra ingen produktkod, tariffdata, aktivering eller push.
 
-## Claude levererade v19, 2026-09-09 (tid loggas efter commit)
+## Claude levererade v19, 2026-09-09T19:26:20+02:00 (`skills@eb63c2c`)
 
 Claude levererade `tariffinventering-v19.md` och `batchplan-v19.md` som svar på samtliga
 sex P1- och två P2-fynd i omgranskning `2026-09-09-012`. Sammanfattning:

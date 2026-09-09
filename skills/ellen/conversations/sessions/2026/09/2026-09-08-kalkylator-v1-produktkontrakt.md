@@ -1011,6 +1011,21 @@ Codex omgranskning.
 
 ## Ändringslogg
 
+- `2026-09-09T19:26:20+02:00` – Claude levererade tariffinventering v19.0 och batchplan v19.0
+  i `skills@eb63c2c` som svar på samtliga sex P1- och två P2-fynd i omgranskning
+  `2026-09-09-012`: säkerhetsfälten `stodjer_besparing`/`krav_attestering` fullt
+  transporterade Python-dataklass→JSON→TypeScript-interface→`skapaTariffpolicy` (16 fält,
+  var 14); Tm-attesteringen auktoritativ även för direkta anrop via nytt
+  `IndataPost.attesterad`-fält, kontrollerat i `harledResultatstatus`; `Produktbegransning`-
+  guarden flyttad in i den verkliga, oförändrade femparametersfunktionen
+  `beraknaBesparingsvardeKontrakt`, den fiktiva `besparingsvarde.py` borttagen;
+  besparingsförmågan fail-closed (Python-default `False`, `=== true`-resolver, Sandviken
+  explicit `True`, Stockholm/Lidköping explicit `False`); äldre normativa capability-stycken
+  ersatta i stället för kompletterade; delade `vardefelForKrav` fick en konkret ägare
+  (`resultatkontrakt.ts`, importerad av `besparingsvarde.ts`). Dispositionerna 7/57/28 av 92
+  oförändrade. Ingen produktkod, tariffdata, genererad fil eller aktiveringsgrind ändrad,
+  ingen push. Väntar på Codex omgranskning.
+
 - `2026-09-09T18:39:56+02:00` – Codex omgranskade V18 i `skills@673a618` och skrev
   `2026-09-09-012`, `changes-required`. Tm-modellen, seriealgoritmen och Batch 5d:s
   katalog-/testfillista är förbättrade. Säkerhetsfälten transporteras däremot inte hela
