@@ -1098,7 +1098,7 @@ omgranskning.
 
 ## Ändringslogg
 
-- `PLACEHOLDER_V21_TIME` – Claude levererade tariffinventering v21.0 och batchplan v21.0
+- `2026-09-09T20:31:00+02:00` – Claude levererade tariffinventering v21.0 och batchplan v21.0
   som svar på båda P1-fynden i omgranskning `2026-09-09-014`: Batch 0:s punkter 5/7/8
   omskrivna med attesteringsmodellen (`byggIndataFranPolicy` tre parametrar,
   `byggKontraktIndata` fem, `'ej_attesterat'` i grunddefinitionen av

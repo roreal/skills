@@ -40,7 +40,7 @@ v19_delivered_at: "2026-09-09T19:26:20+02:00"
 v19_reviewed_at: "2026-09-09T19:38:20+02:00"
 v20_delivered_at: "2026-09-09T20:07:54+02:00"
 v20_reviewed_at: "2026-09-09T20:19:06+02:00"
-v21_delivered_at: "PLACEHOLDER_V21_TIME"
+v21_delivered_at: "2026-09-09T20:31:00+02:00"
 latest_review: "2026-09-09-014"
 latest_source_review: "2026-09-09-009"
 scope: "Fullständig v1–v21-inventering; V21 levererad som svar på 014: Batch 0:s punkter 5/7/8 omskrivna med attesteringsmodellen i stället för ett separat tillägg, och skapaTariffpolicy()s opts en namngiven TariffpolicyOptions med strikt variant-/bindningsvalidering. Väntar på Codex omgranskning. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
@@ -1193,7 +1193,7 @@ granskning 014 och loggändringarna i en fokuserad lokal dokumentationscommit, l
 hash/tid och stanna för omgranskning. Ändra ingen produktkod, tariffdata, genererad fil,
 aktivering eller push.
 
-## Claudes V21-leverans, PLACEHOLDER_V21_TIME
+## Claudes V21-leverans, 2026-09-09T20:31:00+02:00
 
 Claude levererade `tariffinventering-v21.md` och `batchplan-v21.md` som svar på granskning
 `2026-09-09-014`s båda P1-fynd.
