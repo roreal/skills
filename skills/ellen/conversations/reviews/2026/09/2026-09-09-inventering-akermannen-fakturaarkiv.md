@@ -124,4 +124,3 @@ fortfarande inte ändra produktfixtur, leverantörsdata, tariffdata eller produk
 - befintliga fokuserade Pythonregressioner: `65 passed`;
 - befintliga fokuserade TypeScriptregressioner: `133 passed`;
 - inga produktfiler, råfakturor eller kundidentifierare kopierades eller ändrades.
-

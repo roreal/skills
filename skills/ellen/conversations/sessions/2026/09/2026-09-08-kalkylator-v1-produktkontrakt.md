@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-09T14:00:13+02:00"
+last_updated: "PENDING-COMMIT-TIME"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: v16-delivered-awaiting-review
+status: v17-delivered-awaiting-review
 topics:
   - kalkylator-v1
   - produktdirektiv
@@ -28,17 +28,21 @@ produktdirektiv för kalkylator v1 skapades, den inaktuella tariff-to-do-listan 
 med Roberts beslut om års- och fakturaverifiering och två tekniska underlag fick
 förtydliganden om verifieringsmetod och ordet `exact`.
 
-V15 är omgranskad i `2026-09-09-007` med status `changes-required`. Den verkliga enum-/
-scopeformeln, den delade argumentbyggaren och parserns råformsgrindar är lösta. Den publika
-årsproduktens kod följer däremot inte de egna typerna eller den verkliga fasadsignaturen;
-en isolerad strikt kontroll ger fem TypeScript-fel. `policyFalt`-transporten är dessutom
-motsägande mellan dokumenten och saknar ett typsäkert kontrakt genom besparingsvägen.
+V16 omgranskades i `2026-09-09-010` med status `changes-required`. `tariffinventering-v17.md`
+och `batchplan-v17.md` är nu levererade som svar: Lidköpings tre serier förs genom en
+komplett katalog→policy→fasad→motor-kedja med kanonisk `type`-diskriminator och
+registrering i BÅDA språkens justeringsregister; ett nytt explicit
+`Tariffpolicy.stodjer_aktuell_arskostnad`-fält gör Lidköpings aktuella årskostnad nåbar och
+blockerar samtidigt besparingsvägen med samma typade produktbegränsningsfel som Stockholm;
+`KravPost.minvarde_exklusiv`/`minExklusiv` är vald mekanism för `Tm_m > 0`; den kvarstående
+`BesparingsvardeArgs`-/`calcResult`-motsägelsen är borttagen. Dispositionen 7/57/28 av 92
+är oförändrad. Väntar på Codex omgranskning av V17.
 
-Lidköping Energis leverantörssvar är samtidigt källgodkänt i `2026-09-09-006`. Båda
-Lidköpingstarifferna kan flyttas till `ready_to_implement` när V16 skapas, med obligatoriska
-tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen
-blir därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4). V16 är beställd mot båda
-granskningarna.
+Lidköping Energis leverantörssvar är källgodkänt i `2026-09-09-006`. Båda
+Lidköpingstarifferna flyttades i V16 till `ready_to_implement`, med obligatoriska
+tolvmånadersserier för kundvolym, kundavkylning och nätets medelavkylning. Dispositionen är
+därmed 7/57/28 av 92 (bas 7/47/24, varianter 0/10/4) och ska bevaras i V17; det är den
+tekniska integrationsplanen, inte källstatusen, som måste rättas.
 
 Hela Åkermannens fakturaarkiv är inventerat och återspelat i `2026-09-09-009`. De 22
 PDF-filerna motsvarar 20 unika fakturaperioder januari 2025–augusti 2026; två är
@@ -84,14 +88,9 @@ Ingen kalkylatorkod, tariffdata, adapter, genererad fil eller tariffaktivering �
 
 ## Nästa kontrollpunkt
 
-Claude ska leverera `tariffinventering-v16.md` och `batchplan-v16.md` enligt omgranskning
-`2026-09-09-007` och Lidköpingsbedömning `2026-09-09-006`: rätta den kompletta
-årsproduktkroppen och `policyFalt`-transporten, flytta de två Lidköpingstarifferna, uppdatera
-räkningen till 7/57/28 och lägg till batch 5d. Lägg även in bedömningarna
-`2026-09-09-008`/`009`, rätta Stockholms verifieringsbeskrivning till 20 unika perioder
-och dokumentera den framtida separata arkivfixturen, men ändra ingen testfixtur i
-dokumentationsetappen. Ingen produktkod, tariff-JSON, genererad fil, aktivering eller push
-är godkänd.
+`tariffinventering-v17.md` och `batchplan-v17.md` är levererade som svar på omgranskning
+`2026-09-09-010`. Väntar på Codex omgranskning av V17. Ingen produktkod, tariff-JSON,
+genererad fil, aktivering eller push är godkänd.
 
 ## Konversation
 
@@ -874,8 +873,72 @@ tariffdata, genererad fil, fixtur eller aktiveringsgrind ändrad; råfakturorna 
 kopierades, stagades eller pushades. Granskningsfilerna 008 och 009 spårade i git för första
 gången i denna fokuserade dokumentationscommit.
 
+### Robert — användare
+
+> Nu är det dags för omgranskning
+
+### Codex — assistent
+
+Codex omgranskade V16 mot den verkliga årsfasaden och justeringsmotorerna och skrev
+granskning `2026-09-09-010` med status `changes-required`. V15:s årsproduktfel är lösta och
+dispositionen 7/57/28 är korrekt, men Lidköpings tre serier kan inte nå kostnadsmotorn:
+fasaden kastar för icke-kapacitetsbundna serier, skissen använder `typ` där motorn
+dispatchar på `type`, och batchen saknar motorregister/anropskedja. Den
+Stockholmsspecifika förmågegrinden gör dessutom Lidköpings aktuella årskostnad onåbar,
+medan besparingsvägen återanvänder oförändrade `Q/T/Tm` före och efter utan
+transformationsregel. V17 beställdes med komplett motorintegration, explicit
+aktuell-årskostnadsväg, blockerad besparing tills en försvarbar regel finns, strikt
+`Tm > 0`, entydigt `policyFalt`-kontrakt och rättade korsreferenser. Ingen implementation
+eller push godkändes.
+
+### Claude — assistent
+
+Claude levererade `tariffinventering-v17.md` och `batchplan-v17.md` som svar på samtliga
+fynd i omgranskning `2026-09-09-010`. Lidköpings tre serier (`Q_m`/`T_m`/`Tm_m`) förs nu
+genom en komplett, speglad kedja: kanonisk `type: "signed_monthly_flow_adjustment"`-
+diskriminator (inte `typ`), registrering i BÅDA språkens `JUSTERINGSTYPER`/
+`JUSTERING_BERAKNING`, en additiv `faltSerier`/`falt_serier`-parameter trädd genom
+`beraknaArskostnadMedKontrakt` → `_arskostnadForKontraktfasad` → `justeringar()` fram till
+`Kostnad.justering`, i stället för att kastas bort av den skalära `falt`-loopen. Ett nytt
+explicit `Tariffpolicy.stodjer_aktuell_arskostnad`-fält ersätter den Stockholmsspecifika
+`kallenergiArsserieBindning`-kontrollen: Lidköpings uppskattade aktuella årskostnad blir
+nåbar via `beraknaArsprodukt`, och SAMMA flagga blockerar Lidköpings besparingsväg med ett
+typat produktbegränsningsfel (som Stockholm) tills en källförsvarbar före/efter-regel
+finns. Ny `KravPost.minvarde_exklusiv`/`minExklusiv` vald som `Tm_m > 0`-mekanism,
+fältnära `invalid_policy_fields`/`'min'` före division. `BesparingsvardeArgs`-/
+`calcResult`-motsägelsen (två kvarvarande "självt OFÖRÄNDRAT"-rader i batchplanen) borttagen
+med ett enda konsekvent språk. Tm-proveniensen preciserad till `kallaTyp: 'snapshot'` med
+obligatorisk källhjälptext, i stället för det självmotsägande `'supplier_value'`-språket.
+Tio felaktiga §6a.6→§6a.7-korsreferenser rättade (den avsiktliga vid Batch 5d:s inledning
+kvarstår). EOF-blankraden `git diff --check` fann i `2026-09-09-inventering-akermannen-
+fakturaarkiv.md` rättad. Lidköpings katalog-/motorintegration compile-verifierad isolerat
+(`npx tsc --noEmit --strict --skipLibCheck --target es2020`, kontrollfiler i `/tmp`,
+borttagna efter körning). Dispositionerna 7/57/28 av 92 (bas 7/47/24, variant 0/10/4)
+OFÖRÄNDRADE — ingen post flyttar. Ingen produktkod, tariffdata, genererad fil eller
+aktiveringsgrind ändrad, ingen push. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `PENDING-COMMIT-TIME` – Claude levererade tariffinventering v17.0 och batchplan v17.0
+  som svar på samtliga fynd i omgranskning `2026-09-09-010`: Lidköpings tre serier förs nu
+  genom en komplett katalog→policy→fasad→motor-kedja (kanonisk `type`-diskriminator,
+  registrering i BÅDA språkens justeringsregister, `faltSerier`/`falt_serier`-kanal fram
+  till `Kostnad.justering`); nytt explicit `Tariffpolicy.stodjer_aktuell_arskostnad`-fält
+  gör Lidköpings aktuella årskostnad nåbar och blockerar samtidigt besparingsvägen med
+  samma typade produktbegränsningsfel som Stockholm; `KravPost.minvarde_exklusiv`/
+  `minExklusiv` vald mekanism för `Tm_m > 0`; `BesparingsvardeArgs`/`calcResult`-
+  motsägelsen borttagen; Tm-proveniensen preciserad (`kallaTyp: 'snapshot'`); tio
+  §6a.6→§6a.7-korsreferenser rättade; EOF-blankraden i granskning 009-filen rättad.
+  Dispositionerna 7/57/28 av 92 oförändrade. Ingen produktkod, tariffdata, genererad fil
+  eller aktivering ändrad. Väntar på Codex omgranskning.
+- `2026-09-09T14:21:29+02:00` – Codex omgranskade V16 och skrev
+  `2026-09-09-010`, `changes-required`. De tidigare årsproduktfelen är rättade och
+  räkningen 7/57/28 av 92 stämmer. Lidköpings nya formel är dock inte inkopplad i den
+  verkliga katalog→policy→fasad→motor-kedjan, dess tre serier avvisas av dagens årsfasad,
+  aktuell årskostnad är onåbar genom förmågegrinden, och besparingsvägen saknar en
+  före/efter-regel. Strikt `Tm > 0`, Tm-proveniens samt kvarstående motsägelser om
+  `BesparingsvardeArgs`/`calcResult` ska lösas i V17. Ingen produktkod, tariffdata,
+  aktivering eller push godkänd.
 - `2026-09-09T14:06:55+02:00` – Claude — assistent: fällde in granskning `2026-09-09-008`
   (Åkermannens augustifaktura 2026, out-of-sample-kontroll) och granskning `2026-09-09-009`
   (hela fakturaarkivet, 22 PDF-filer/20 unika perioder) i den redan levererade

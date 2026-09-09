@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | v16 delivered, awaiting Codex-omgranskning; Lidköping approved (7/57/28 av 92); Åkermannen archive replayed | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | v17 levererad (körbar Lidköping-kedja, explicit förmågekontrakt, minExklusiv); väntar på Codex omgranskning; 7/57/28 av 92 kvarstår | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,13 +11,14 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v16 delivered, awaiting Codex-omgranskning; ingen implementation/push | Fullständig v1–v16-inventering, Lidköpingstillägg (7/57/28 av 92), Åkermannen-arkivkontroll och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | v17 levererad, väntar på Codex omgranskning; ingen implementation/push | Fullständig v1–v17-inventering, körbar Lidköping-kedja (7/57/28 av 92), Åkermannen-arkivkontroll och batchplan för samtliga möjliga fjärrvärmetariffer | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar
 
 | Gransknings-ID | Datum | Granskare | Omfattning | Bedömning | Dokument |
 | --- | --- | --- | --- | --- | --- |
+| `2026-09-09-010` | 2026-09-09 | Codex | Omgranskning av tariffinventering v16, batchplan v16 och dokumentationscommittarna `d63bcbb`/`d75ea6b` | V15-felen och 7/57/28-räkningen är rättade, men Lidköpings tre serier når inte verklig motor/fasad, aktuell årskostnad är onåbar, före/efter-regel och strikt Tm-grind saknas samt policyFalt-motsägelsen kvarstår; V17 krävs | [Öppna omgranskningen](reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v16.md) |
 | `2026-09-09-009` | 2026-09-09 | Codex | Hela Åkermannens Stockholm Exergi-arkiv januari 2025–augusti 2026 | 22 PDF-filer är 20 unika perioder; alla nya enkelfall och maj–juli-avräkningen matchar Python/TypeScript inom 2,4 öre; separat sanitiserad arkivfixtur krävs senare | [Öppna verifieringen](reviews/2026/09/2026-09-09-inventering-akermannen-fakturaarkiv.md) |
 | `2026-09-09-008` | 2026-09-09 | Codex | Brf Åkermannen 33:s Stockholm Exergi-faktura för augusti 2026 | Python, TypeScript och båda månadskontraktsvägarna matchar 14 849,95 kr exkl. moms; separat sanitiserad out-of-sample-fixtur rekommenderas senare | [Öppna verifieringen](reviews/2026/09/2026-09-09-verifiering-akermannen-augusti-2026.md) |
 | `2026-09-09-007` | 2026-09-09 | Codex | Omgranskning av tariffinventering v15, batchplan v15 och dokumentationscommit `2326adc` | V15 löser argumentbyggaren och parsergrindarna, men årsproduktens skiss ger fem typ-/signaturfel och `policyFalt` saknar en entydig transport; V16 krävs tillsammans med Lidköpingstillägget | [Öppna omgranskningen](reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v15.md) |
