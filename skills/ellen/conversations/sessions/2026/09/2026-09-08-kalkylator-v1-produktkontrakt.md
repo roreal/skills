@@ -1743,6 +1743,16 @@ orelaterade ospårade förslagsfilen — och därefter pusha `skills` → `enkey
 
 ## Ändringslogg
 
+- `2026-09-10T14:57:51+02:00` – Claude skapade den avgränsade slutloggcommiten
+  `skills@ca96a9a` (förälder `0b7e8b3`) med granskning `2026-09-10-008`, sessionslogg-,
+  handoff- och indexuppdateringar; den orelaterade ospårade förslagsfilen exkluderades
+  medvetet. Robert godkände push explicit ("Ja"). Claude pushade sedan, i ordningen
+  `skills` → `enkey-agents` → `neptune_academy`, och verifierade via `git ls-remote` att
+  respektive remote-HEAD exakt matchar de granskade hasharna: `skills@ca96a9a`,
+  `enkey-agents@45dd48a`, `neptune_academy@b03f4cc`. Ingen tariff aktiverad genom pushen;
+  disposition 7/57/28 av 92 oförändrad. Batch 0-grundinfrastrukturen är nu på
+  produktreponas `main`. Väntar på Roberts klartecken för nästa avgränsade tariffbatch
+  enligt den godkända V22-batchplanen.
 - `2026-09-10T14:31:08+02:00` – Codex slutgodkände Batch 0 i `2026-09-10-008`.
   Oberoende reproduktioner bekräftar att fria negativa/överstora kallenergiserier och
   fel-scopad seriebindning nu stoppas i båda språk. 401/486 tester, typkontroll, bygge

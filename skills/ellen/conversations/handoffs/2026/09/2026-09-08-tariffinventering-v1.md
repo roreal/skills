@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-approved-for-push
+status: batch0-pushed
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -76,7 +76,7 @@ batch0_fix7_neptune_academy_commit: "b03f4cc"
 batch0_fix7_delivered_at: "2026-09-10T14:14:25+02:00"
 batch0_fix7_reviewed_at: "2026-09-10T14:31:08+02:00"
 batch0_approved_at: "2026-09-10T14:31:08+02:00"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Codex slutgodkände Batch 0 i 2026-09-10-008 vid skills-basen 0b7e8b3 och de exakta produkt-HEAD:arna enkey-agents@45dd48a/neptune_academy@b03f4cc. Rättningsrunda 7 stänger fysikgrindens fria legacyväg och flyttar seriebindningens annual-scope-kontroll före statusreturen; oberoende reproduktioner och 401/486 tester, typkontroll, bygge och E2E är gröna. Claude får skapa en enda ren conversations-loggcommit ovanpå skills-basen och därefter pusha; produkt-HEAD:arna får inte ändras. Ingen tariffaktivering ingår. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
+scope: "Fullständig v1–v22-inventering och Batch 0-implementation, nu pushad. Codex slutgodkände Batch 0 i 2026-09-10-008 vid skills-basen 0b7e8b3 och de exakta produkt-HEAD:arna enkey-agents@45dd48a/neptune_academy@b03f4cc. Robert godkände push explicit; Claude skapade slutloggcommiten skills@ca96a9a och pushade skills/enkey-agents/neptune_academy i den ordningen, verifierat mot remote-HEAD via git ls-remote. Ingen tariffaktivering ingår. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Roberts klartecken för nästa avgränsade tariffbatch."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
 batch0_code_review_pending: false
