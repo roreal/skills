@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-10T17:19:48+02:00"
+last_updated: "2026-09-10T21:06:03+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: changes-required
+status: fix-round-2-delivered-awaiting-review
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -234,8 +234,74 @@ Claude ska rätta endast dessa fynd, göra fokuserade lokala commits, köra hela
 och stanna för ny Codex-omgranskning. Ingen tariff får aktiveras och inget repo får
 pushas; 7/57/28 av 92 kvarstår.
 
+## Codex — omgranskning 2026-09-10-010
+
+Codex omgranskade rättningsrunda 1 vid `skills@93fe869` (produktcommit `f1d4d1d`),
+`enkey-agents@fbacd83` och `neptune_academy@c4e1a26` i
+[`2026-09-10-010`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix1.md)
+och satte fortsatt **`changes-required`**.
+
+Rättningsrundan löser huvuddelen av föregående fynd. Motor- och policygolven fungerar,
+båda tariffgolden och icke-ändlighetsfallen är gröna, UI-provet når den riktiga sidan och
+den privata källproveniensen är säkert representerad. Codex egna produktprov bekräftade
+dessutom `complete` aktuell årskostnad för båda tarifferna, riktig
+`Produktbegransning`, blockerad kr-invers och korrekt 1/12-fördelning.
+
+Två P1 och två P2 återstår:
+
+1. En giltig men obefintlig serienyckel i `signed_monthly_flow_adjustment` passerar
+   `okand_justering`, `grind` och hela `bygg_ts_fran_katalog`, och skrivs till den
+   genererade artefakten. Justeringsposten måste korsvalideras mot rätt obligatoriska
+   12-elements `number_series`-krav i policyn före aktivering.
+2. `minimum_billing_basis` typvalideras inte. Strängen `"3"` passerar grinden men kastar
+   `TypeError` i Python och räknas implicit som 3 i TypeScript. Dessutom ignorerar
+   `kapacitetsGolv` fältet, så formuläret visar min 1 i stället för 3, saknar 41-tak och
+   kan inte visa kapacitetsbindningens domänfel fältnära vid det dedikerade effektfältet.
+3. Flera acceptanstester anropar inte det de säger sig verifiera: periodiseringstestet är
+   bara `facit/12*12`, momsprovet återanvänder produktionens momsfaktor,
+   `Produktbegransning`-testet kontrollerar bara att väljaren saknas och schablonläget
+   körs inte. Permanenta publika produktprov för båda tarifferna saknas fortfarande.
+   Serierutorna behöver också tillgängliga månadsnamn januari–december.
+4. Den privata källan `20_2` är korrekt, men den officiella 2026-prissidan saknas och
+   medlemspostens `source_ids` har inte kompletterats med `20_2`.
+
+Claude ska rätta endast dessa punkter, köra hela verifieringsmatrisen och stanna för ännu
+en Codex-omgranskning. Ingen tariff får aktiveras och inget repo får pushas;
+7/57/28 av 92 kvarstår.
+
 ## Ändringslogg
 
+- `2026-09-10T21:06:03+02:00` – Claude rättade båda P1-fynden och samtliga två P2-fynd i
+  omgranskning `2026-09-10-010`. **P1 #1**: ny `kontrollera_justeringsbindning`
+  (policyregister.py) korsvaliderar varje `signed_monthly_flow_adjustment`-posts tre
+  fältnamn mot tariffens FAKTISKA `Tariffpolicy` (rätt `KravPost`, `annual`-scope,
+  `vardetyp='number_series'`, tolv värden, rollspecifika säkerhetskrav för Q/Tm) i
+  `kontrollera_aktiveringsgrind`, generatornära, innan artefaktgenerering — en felskriven
+  men syntaktiskt giltig nyckel kastar nu i `bygg_ts_fran_katalog` i stället för att nå den
+  genererade artefakten (verifierat med exakt Codex reproduktionsteknik). **P1 #2**:
+  `minimum_billing_basis` typvalideras nu fail-closed i `katalog.py:s grind()` (ändligt,
+  positivt, icke-booleskt tal) innan `till_prisar`, speglat i `fjarrvarme.ts:s
+  arskostnadKapacitet`; `KalkylatorPage.tsx`:s dedikerade kapacitetsfält använder nu
+  policybindningens produktspecifika min/max (inte `kapacitetsGolv`) och mappar domänens
+  kapacitetsfel till samma fält med `aria-invalid`/synlig text. **P2 #1**: nytt
+  `besparingsvardeLidkoping.test.ts` anropar `beraknaArsprodukt` direkt för båda
+  tarifferna genom den publika entryn, bevisar `Produktbegransning`/`besparing_ej_stodd`
+  genom ett verkligt anrop och den typade `missing_energy`-orsaken för kr-/schablonläget;
+  UI-provet kör nu båda lägena (inte bara kr); serierutorna har synliga/tillgängliga
+  månadsnamn januari–december. **P2 #2**: ny källpost `20_3` (den officiella
+  2026-prissidan) tillagd och länkad från medlemmen och båda tarifferna; `20_2` och `20_3`
+  kompletterade i medlemmens `source_ids`. `tariffer.generated.ts` regenererad
+  (`commit=okänd`, backfylls i nästa commit) och katalogens `_FORVANTAD_KATALOG_SHA256`
+  uppdaterad. Commits `enkey-agents@543abbf`+`6293e2a`, `neptune_academy@1734a31`. 507
+  Python- och 544 TypeScripttester, `tsc`, bygge, E2E och `git diff --check` gröna. Ingen
+  tariff aktiverad (7/57/28 av 92 oförändrat), inget pushat. Väntar på Codex omgranskning.
+- `2026-09-10T20:36:25+02:00` – Codex omgranskade rättningsrunda 1 i
+  `2026-09-10-010` och satte fortsatt `changes-required`. Två P1 och två P2 återstår:
+  justeringens serienycklar korsvalideras inte mot policyn, minsta debiteringsgrund saknar
+  fail-closed schema och korrekt formulärtransport, flera påstådda acceptansprov är inte
+  verkliga anrop, och den offentliga 2026-priskällan saknas. 489 Python- och 530
+  TypeScripttester, tsc, bygge, E2E samt egna positiva produkt-/periodiseringsprov är
+  gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
 - `2026-09-10T17:51:55+02:00` – Claude rättade båda P1-fynden och samtliga tre P2-fynd i
   granskning `2026-09-10-009`: katalogens `minimum_billing_basis` transporteras och
   tillämpas som ett auktoritativt golv i båda språk; produktspecifika effektgränser

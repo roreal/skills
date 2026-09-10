@@ -3,18 +3,19 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-1-delivered-awaiting-review
+status: fix-round-2-delivered-awaiting-review
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-10-009"
+latest_review: "2026-09-10-010"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
+fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 baseline:
   skills_local: "f1d4d1d"
-  enkey_agents: "fbacd83"
-  neptune_academy: "c4e1a26"
+  enkey_agents: "6293e2a"
+  neptune_academy: "1734a31"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -157,3 +158,51 @@ och `git diff --check`. Gör fokuserade lokala commits per repo och rapportera e
 HEAD-hashar i sessionen. `investigation.status` ska vara kvar som aktiveringsspärr,
 ingen tariff får göras produktionsvalbar, inget repo får pushas och dispositionen
 7/57/28 av 92 ska förbli oförändrad. Stanna därefter för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-10-010 och rättningsrunda 2
+
+Rättningsrunda 1 är **inte slutgodkänd**. Full granskning och reproduktionsbevis finns i
+[`2026-09-10-010`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix1.md).
+Claude ska göra en andra, strikt avgränsad rättningsrunda:
+
+1. Korsvalidera varje `signed_monthly_flow_adjustment` mot tariffens verkliga policy i
+   aktiverings-/generatorpreflighten. Alla tre fältnycklar ska finnas som obligatoriska
+   `annual`-krav av typen `number_series` med exakt tolv värden; Q ska vara minst noll och
+   nätets Tm strikt större än noll samt attestationskrävd. Ett generatorprov där en nyckel
+   ändras till `felskriven_obefintlig_serie` ska kasta före artefaktgenerering.
+2. Validera `capacity.minimum_billing_basis` i kataloggrinden som ett ändligt, positivt,
+   icke-booleskt tal. Lägg mutationstest för minst sträng, bool, noll, negativt, NaN och
+   oändlighet. Python och TypeScript får inte divergera på data som grinden släpper igenom.
+3. Låt det dedikerade `kapacitetKw`-fältet använda kapacitetsbindningens tariffspecifika
+   min/max: 3–41 för 0–41 och minst 42 för 42+. Mappa bindningens `min`/`max`-fel till detta
+   fält med synlig text och `aria-invalid`; testa 2/3/41/42 respektive 41/42 genom den
+   publika produktentryn och den riktiga sidan. Band-ID ska fortsatt vara explicit.
+4. Ersätt de skenbara acceptansproven med verkliga anrop: riktig 1/12-motorväg i båda
+   språk, exakta oberoende momsbelopp, direkt `beraknaArsprodukt` för båda tarifferna,
+   direkt besparingsentry som kastar `Produktbegransning`, och separata kr-/schablonprov
+   med typad blockeringsorsak. Märk varje serieruta tillgängligt med januari–december och
+   testa månad, °C/m³-enhet och verklig hjälptext.
+5. Lägg den officiella sidan `https://lidkopingenergi.se/priser-2026-foretag/` som en egen
+   2026-källpost och länka den från medlemmen och båda tarifferna. Lägg även privata
+   `20_2` i medlemmens `source_ids`. Rå-PDF:en ska fortsatt vara utanför git.
+
+Kör full Python-/TypeScriptsvit, `tsc --noEmit`, produktionbygge, självbärande E2E och
+`git diff --check`. Gör fokuserade lokala commits per repo, uppdatera sessionen med exakta
+HEAD-hashar och stanna för ny Codex-omgranskning. Ingen aktivering, ingen push och ingen
+ändring av 7/57/28-dispositionen är tillåten.
+
+## Claude — rättningsrunda 2, 2026-09-10T21:06:03+02:00
+
+Samtliga fem punkter rättade. Kort sammanfattning (fullständig redogörelse i sessionens
+ändringslogg): en ny `kontrollera_justeringsbindning` korsvaliderar
+`signed_monthly_flow_adjustment`s tre fältnycklar mot tariffens faktiska `Tariffpolicy`
+generatornära (punkt 1); `minimum_billing_basis` typvalideras fail-closed i båda
+motorerna och kapacitetsfältet i UI:t använder nu policyns produktspecifika min/max med
+fältnära domänfel (punkterna 2–3); nya permanenta produktprov anropar
+`beraknaArsprodukt`/`beraknaBesparingsvarde` direkt för båda tarifferna med typade
+orsakskoder, och serierutorna har nu synliga/tillgängliga månadsnamn (punkt 4); den
+officiella 2026-prissidan är tillagd som källpost `20_3` och länkad från medlemmen och
+båda tarifferna (punkt 5). Commits: `enkey-agents@543abbf`+`6293e2a`,
+`neptune_academy@1734a31`. 507 Python- och 544 TypeScripttester, `tsc`, bygge, E2E och
+`git diff --check` gröna. Ingen tariff aktiverad, disposition 7/57/28 av 92 oförändrad,
+inget pushat. Stannar för ny Codex-omgranskning.

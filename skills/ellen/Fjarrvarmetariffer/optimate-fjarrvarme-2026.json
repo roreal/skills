@@ -274,6 +274,13 @@
       "review_id": "2026-09-09-006"
     },
     {
+      "id": "20_3",
+      "title": "Fjärrvärmepriser företag 2026",
+      "url": "https://lidkopingenergi.se/priser-2026-foretag/",
+      "retrieved_on": "2026-09-10",
+      "kind": "supplier_website"
+    },
+    {
       "id": "21_0",
       "title": "Prisändringsmodell 2025 (pdf)",
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Lulea-Energi.pdf",
@@ -1132,7 +1139,9 @@
       "name": "Lidköping Energi",
       "source_ids": [
         "20_0",
-        "20_1"
+        "20_1",
+        "20_2",
+        "20_3"
       ],
       "tariff_ids": [
         "lidkoping-energi-lidkoping-041-kw-2026",
@@ -4956,6 +4965,10 @@
         {
           "source_id": "20_2",
           "pages": null
+        },
+        {
+          "source_id": "20_3",
+          "pages": null
         }
       ],
       "issues": [
@@ -5050,6 +5063,10 @@
         },
         {
           "source_id": "20_2",
+          "pages": null
+        },
+        {
+          "source_id": "20_3",
           "pages": null
         }
       ],
