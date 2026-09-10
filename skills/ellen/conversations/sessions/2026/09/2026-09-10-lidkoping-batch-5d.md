@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-10T21:06:03+02:00"
+last_updated: "2026-09-10T21:41:53+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: fix-round-2-delivered-awaiting-review
+status: changes-required
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -269,8 +269,105 @@ Claude ska rätta endast dessa punkter, köra hela verifieringsmatrisen och stan
 en Codex-omgranskning. Ingen tariff får aktiveras och inget repo får pushas;
 7/57/28 av 92 kvarstår.
 
+## Codex — omgranskning 2026-09-10-011
+
+Codex omgranskade rättningsrunda 2 vid `skills@e769eec`,
+`enkey-agents@6293e2a` och `neptune_academy@b5d8466` i
+[`2026-09-10-011`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix2.md)
+och satte fortsatt **`changes-required`**.
+
+Katalog-/generatorgrindarna och källproveniensen är rättade, men
+`policyFranGenererad()` tappar `maxvarde` och `minvarde_exklusiv`. Codex reproducerade
+att 42 kW därför blir `complete` i 0–41-produkten och att Tm=0 passerar den fältnära
+kontrollen för att därefter ge ett otypat motorfel. 41 kW för 42+-produkten stoppas före
+policyn med `invalid_capacity` utan `ogiltigaFalt`, vilket gör den nya fältnära UI-raden
+onåbar. De permanenta produkt-/UI-proven går runt just dessa vägar; separata verkliga
+kr-/schablonprov, TypeScripts 1/12-anrop och faktiska månad/enhet/hjälptextassertions
+saknas också.
+
+Claude ska göra rättningsrunda 3 enligt handoffen, utan aktivering eller push. 507 Python-
+och 544 TypeScripttester, typkontroll, bygge och E2E var i övrigt gröna; dispositionen
+7/57/28 är oförändrad.
+
+## Claude — assistent, rättningsrunda 3
+
+Claude rättade båda P1-fynden och P2-fyndet i omgranskning `2026-09-10-011`, uteslutande
+i `neptune_academy` (Python-sidan hade inget motsvarande fel — Codex fynd var uttryckligen
+TypeScript-only).
+
+**P1 #1** (`policyFranGenererad()` tappade `maxvarde`/`minvarde_exklusiv`): lade till de
+två saknade fälten (`maxVarde: k.maxvarde ?? undefined`, `minExklusiv: k.minvarde_exklusiv
+?? undefined`) i den genererade krav-mappningen (`resultatkontrakt.ts`). Ny permanent
+regressionstest i `resultatkontrakt.test.ts` bevisar att hela gränsattributsmängden
+(`minvarde`, `minvarde_exklusiv`, `maxvarde`, `heltal`, `vardetyp`, kardinalitet,
+attestering) överlever snake_case → domänobjekt-konverteringen, och att transporten
+faktiskt PÅVERKAR beteendet (ett maxVarde-brott stoppas). Nya publika produktprov i
+`besparingsvardeLidkoping.test.ts` (genom `beraknaArsprodukt`, den genererade råpolicyns
+egen form) bevisar att 42 kW nu ger `KontraktBlockerat('invalid_policy_fields', {ogiltigaFalt:
+[{nyckel:'lidkoping_debiterbar_effekt_kw', orsak:'max'}]})` i stället för att tyst räknas,
+och att Tm=0 ger samma fältnära felmodell (`orsak:'min'`) i stället för ett rått Error.
+
+**P1 #2** (tidig kapacitetskontroll saknade fältdetalj): den tidiga
+`kapacitetKw < kapacitetGolv`-jämförelsen i både `beraknaArsprodukt` och
+`beraknaBesparingsvardeKontrakt` (`besparingsvarde.ts`) togs bort — den tidiga kontrollen
+stoppar nu bara verkliga typ-/numerikfel (icke-ändligt, icke-heltal); policyns
+`minVarde`/`maxVarde` på `kapacitetBindning`-kravet är den ENDA auktoritativa
+produktgränsen, kontrollerad av `forkontrolleraPolicyIndata` (som redan fanns och redan
+producerar fältnära `ogiltigaFalt`). Samma väg gäller nu 0–41 och 42+, precis som
+handoffen bad om. Den befintliga Sandviken-regressionen
+(`besparingsvardeSandviken.test.ts`) uppdaterad: decimal/icke-ändlig kapacitet ger
+fortfarande `invalid_capacity`, men ett heltal under golvet (2 kW, −5 kW) ger nu
+`invalid_policy_fields` med `ogiltigaFalt=[{nyckel:'debiterbar_effekt_kw', orsak:'min'}]`
+— samma blockering, bättre feldetalj, ingen ändrad tariffkostnad.
+
+**P2** (acceptansproven gick runt de två felaktiga vägarna): lade till hela den beställda
+gränsmatrisen (2/3/41/42 kW för 0–41-produkten, 41/42 kW för 42+-produkten) genom den
+PUBLIKA `beraknaArsprodukt`-entryn (inte en handbyggd camelCase-policy som redan fanns i
+`resultatkontrakt.lidkoping.test.ts` och som aldrig körde igenom `policyFranGenererad()`);
+separata `calcResultForOnskadTyp()`-prov för kr- OCH schablonläget med den typade
+`unsupported_input_mode`-orsaken; ett nytt TypeScriptprov som anropar den RIKTIGA
+periodiseringsmotorn `_manadskostnadForKontraktfasad` (motsvarigheten till Pythons
+`manadskostnad`, redan exporterad för just detta syfte) för var och en av tolv
+kalendermånader och summerar till årsbeloppet, för båda tarifferna; UI-provet
+(`KalkylatorPageLidkoping.test.tsx`) kompletterat med assertions för de faktiska
+januari–december-etiketterna (`jan`/`dec`, inte "värde 1"/"värde 12"), `aria-label`,
+`°C`-enheten och de exakta hjälptexterna ur policyregistret — koden renderade redan detta
+korrekt, men inget test bevisade det förrän nu. Kr-/schablon-UI-provet kontrollerar nu
+även den synliga, användarvända blockeringstexten, inte bara att inget resultat visas.
+
+**Commits**: `neptune_academy@98cf4a7345da92d5cc2b875e56d1e6aff5c81d0c`
+(2026-09-10T21:41:53+02:00), på `b5d8466` (oförändrad bas — inga ändringar krävdes i
+`enkey-agents` eller `skills`s katalog-/produktkod denna runda).
+
+**Tester**: 563 TypeScripttester (upp från 544; 19 nya), `tsc --noEmit` rent, produktionsbygge
+grönt (bygggenererade `dist`-ändringar återställda två gånger), `npm run test:e2e` grönt
+från rent läge, `git diff --check` rent. Python oförändrat (507 passed, ingen ändring
+krävdes). Ingen tariff aktiverad, disposition 7/57/28 av 92 oförändrad. Inget pushat.
+Stannar för Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T21:41:53+02:00` – Claude rättade båda P1-fynden och P2-fyndet i omgranskning
+  `2026-09-10-011`, enbart i `neptune_academy`: `policyFranGenererad()` transporterar nu
+  `maxVarde`/`minExklusiv` (ny regressionstest bevisar hela gränsattributsmängden
+  överlever generering); den tidiga kapacitetskontrollen i `beraknaArsprodukt`/
+  `beraknaBesparingsvardeKontrakt` stoppar bara typ-/numerikfel, policyns
+  `minVarde`/`maxVarde` är enda auktoritativa produktgräns (samma väg för 0–41 och 42+,
+  Sandviken-regressionen uppdaterad till den nya, mer detaljerade klassningen). Nya
+  permanenta prov genom den genererade råpolicyn och publik entry: hela gränsmatrisen
+  2/3/41/42 respektive 41/42 kW, Tm=0, båda kr-/schablonlägena med
+  `unsupported_input_mode`, TypeScripts riktiga 1/12-motor
+  (`_manadskostnadForKontraktfasad`), samt UI-provets januari–december-etiketter,
+  °C-enheter och verkliga hjälptexter. Commit `neptune_academy@98cf4a7`. 563
+  TypeScripttester (19 nya), `tsc`, bygge, E2E och `git diff --check` gröna; Python
+  oförändrat (507 passed). Ingen tariff aktiverad, 7/57/28 av 92 oförändrat, inget
+  pushat. Väntar på Codex omgranskning.
+
+- `2026-09-10T21:23:28+02:00` – Codex omgranskade rättningsrunda 2 i
+  `2026-09-10-011` och satte fortsatt `changes-required`. Två P1 återstår i den
+  genererade TypeScript-policyns gränstransport/fältnära kapacitetsväg samt P2-luckor i
+  de uttryckligt beställda produkt-, periodiserings- och UI-proven. 507/544 tester, tsc,
+  bygge och E2E gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
 - `2026-09-10T21:06:03+02:00` – Claude rättade båda P1-fynden och samtliga två P2-fynd i
   omgranskning `2026-09-10-010`. **P1 #1**: ny `kontrollera_justeringsbindning`
   (policyregister.py) korsvaliderar varje `signed_monthly_flow_adjustment`-posts tre
@@ -291,8 +388,9 @@ en Codex-omgranskning. Ingen tariff får aktiveras och inget repo får pushas;
   månadsnamn januari–december. **P2 #2**: ny källpost `20_3` (den officiella
   2026-prissidan) tillagd och länkad från medlemmen och båda tarifferna; `20_2` och `20_3`
   kompletterade i medlemmens `source_ids`. `tariffer.generated.ts` regenererad
-  (`commit=okänd`, backfylls i nästa commit) och katalogens `_FORVANTAD_KATALOG_SHA256`
-  uppdaterad. Commits `enkey-agents@543abbf`+`6293e2a`, `neptune_academy@1734a31`. 507
+  (`commit=okänd`, därefter backfylld i `b5d8466`) och katalogens
+  `_FORVANTAD_KATALOG_SHA256` uppdaterad. Commits
+  `enkey-agents@543abbf`+`6293e2a`, `neptune_academy@1734a31`+`b5d8466`. 507
   Python- och 544 TypeScripttester, `tsc`, bygge, E2E och `git diff --check` gröna. Ingen
   tariff aktiverad (7/57/28 av 92 oförändrat), inget pushat. Väntar på Codex omgranskning.
 - `2026-09-10T20:36:25+02:00` – Codex omgranskade rättningsrunda 1 i

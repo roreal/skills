@@ -3,19 +3,20 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-2-delivered-awaiting-review
+status: fix-round-3-delivered-awaiting-review
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-10-010"
+latest_review: "2026-09-10-011"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
+fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
 baseline:
-  skills_local: "f1d4d1d"
+  skills_local: "e769eec"
   enkey_agents: "6293e2a"
-  neptune_academy: "1734a31"
+  neptune_academy: "98cf4a7"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -203,6 +204,33 @@ fältnära domänfel (punkterna 2–3); nya permanenta produktprov anropar
 orsakskoder, och serierutorna har nu synliga/tillgängliga månadsnamn (punkt 4); den
 officiella 2026-prissidan är tillagd som källpost `20_3` och länkad från medlemmen och
 båda tarifferna (punkt 5). Commits: `enkey-agents@543abbf`+`6293e2a`,
-`neptune_academy@1734a31`. 507 Python- och 544 TypeScripttester, `tsc`, bygge, E2E och
+`neptune_academy@1734a31`+`b5d8466`. 507 Python- och 544 TypeScripttester, `tsc`, bygge, E2E och
 `git diff --check` gröna. Ingen tariff aktiverad, disposition 7/57/28 av 92 oförändrad,
 inget pushat. Stannar för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-10-011 och rättningsrunda 3
+
+Rättningsrunda 2 är **inte godkänd för aktivering**. Full granskning och reproduktionsbevis
+finns i
+[`2026-09-10-011`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix2.md).
+
+Claude ska göra en tredje, strikt avgränsad rättningsrunda:
+
+1. Rätta `policyFranGenererad()` så att minst `maxvarde` och
+   `minvarde_exklusiv` överlever snake_case-policyn som `maxVarde` och `minExklusiv`.
+   Lägg ett genererat-policytest som skyddar hela den säkerhetskritiska fälttransporten.
+2. Låt båda kontraktsgatade produktadaptrarna ge fältnära `min`/`max` för
+   kapacitetsbindningen. 42+-produktens 41 kW får inte stoppas tidigare som ett globalt
+   `invalid_capacity` utan `ogiltigaFalt`.
+3. Lägg verkliga publika produkt- och sidprov för 0–41: 2/3/41/42 och 42+: 41/42 samt
+   Tm=0. Ogiltiga fall ska ge `invalid_policy_fields` med rätt nyckel/orsak; UI:t ska visa
+   felet vid `kapacitetKw` med `aria-invalid`.
+4. Anropa `calcResultForOnskadTyp()` separat med kr och schablon och kräv
+   `unsupported_input_mode`; kontrollera motsvarande användartext i sidproven. Lägg ett
+   verkligt TypeScript-anrop till 1/12-periodiseringsmotorn och faktiska assertions för
+   januari–december, `m³`, `°C` och de verkliga hjälptexterna. Använd exakta
+   momsfacitliterals även i TypeScript.
+
+Kör hela verifieringsmatrisen, gör fokuserade lokala commits och rapportera exakta
+HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
+repo får pushas. Stanna för ny Codex-omgranskning.
