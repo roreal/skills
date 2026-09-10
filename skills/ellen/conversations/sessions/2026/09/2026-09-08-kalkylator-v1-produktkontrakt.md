@@ -1277,8 +1277,92 @@ Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. 
 Fokuserade lokala rättningscommits per produktrepo, plus denna sessionslogg-/handoff-/
 index-uppdatering i `skills`. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade `enkey-agents@714da6f` och `neptune_academy@b87ff58` i granskning
+`2026-09-10-002`: fortsatt **`changes-required`**. Nivå-ID/motortransport, elementvis
+numerisk validering, Python-`Literal` och generatorproveniens är rättade och ska bevaras;
+385 Python- och 439 TypeScripttester, typkontroll och bygge är gröna.
+
+Tre P1-fynd kvarstår. Den verkliga `KalkylatorPage`-kedjan saknar fortsatt
+metadata/parser/attestering/resultat. `argsFranInputs` har fel signatur och används inte av
+årskostnadsdispatchen, som därmed tappar `space_heat_excl_dhw`-uppskalningen och saknar den
+beslutade diskriminerade returtypen/fail-closed-resolvern. Ett okänt band-ID kastas dessutom
+generiskt i byggaren före den typade `okant_val`-förkontrollen; Pythonförkontrollen saknar
+prispost helt. Ett P2-fynd gäller att Pythonförkontrollens orsaksfält fortfarande är fri
+`str`.
+
+Det uppgivna DOM-infrastrukturhindret avvisas: Playwright 1.59.1 finns redan som direkt
+`devDependency`, och V22 tillåter React Testing Library eller motsvarande. Claude ska
+rätta endast fynden i `2026-09-10-002`, skapa fokuserade lokala commits och stanna för ny
+omgranskning. Ingen tariff är aktiverad, dispositionen 7/57/28 av 92 är oförändrad och
+ingen push är godkänd.
+
+### Claude — assistent
+
+Claude rättade samtliga tre P1-fynd och P2-fyndet i granskning `2026-09-10-002`.
+
+**P1 #1 (den verkliga UI-kedjan) — nu byggd:** `KalkylatorPage.tsx` har ett dynamiskt
+policyfältformulär härlett ur `policyFaltMetadataForPolicy`/`parsaPolicyIndata`
+(`resultatkontrakt.ts`), ett "aktuell årskostnad"-val som bara visas när
+`stodjerAktuellArskostnad(prisar)` är sant, och anropar `calcResultForOnskadTyp` i stället
+för `calcResult`, med en separat resultatsektion för `ArsprodukResultat`. Det uppgivna
+DOM-infrastrukturhindret var fel, precis som Codex sade — men `@playwright/test`
+(testramverket) fanns ändå inte installerat, bara den direkta `playwright`-dependencyn.
+Löst genom att skriva ett riktigt webbläsartest (`e2e/kalkylator.smoke.mjs`, `npm run
+test:e2e`) mot den byggda sidan med den redan nedladdade Chromium-drivrutinen direkt, utan
+att lägga till en ny beroende. Testet verifierar både riksgenomsnittets legacyväg (inga
+policy-UI-element visas) och Sandviken Energi, den enda LEVANDE kontraktsgated tariffen
+(kapacitetKw blir obligatoriskt, `onskadTyp`-valet är korrekt frånvarande, ett giltigt
+besparingsresultat renderas genom hela produktionskedjan).
+
+**P1 #2 (delad `argsFranInputs`) — rättad:** exporterad, tar bara `inputs` och är nu DEN
+ENDA ägaren av energi-scope-uppskalning/MWh-proveniens, använd av både `calcResult` och
+`calcResultForOnskadTyp` — stänger undervärderingsbuggen för `space_heat_excl_dhw`.
+`calcResultForOnskadTyp` returnerar nu `KalkylatorResultUnion`
+(`{typ:'fullstandig',resultat}|ArsprodukResultat`), kontrollerar `energySystem` före
+tariffuppslagning, och nya namngivna resolvrar `stodjerAktuellArskostnad`/
+`stodjerBesparing` delas mellan UI och domänlager.
+
+**P1 #3 (okänt band-ID) — rättad i båda språken:** `byggKontraktIndata` kastar inte
+längre ett generiskt `Error` — bygger alltid det typade indataobjektet och låter
+`forkontrolleraPolicyIndata`/`harledResultatstatus` klassificera ett okänt band som
+`KontraktBlockerat('invalid_policy_fields', okant_val)`, nåbart via båda publika
+produktvägarna. Python `forkontrollera_policy_indata` tar nu `prisar` och gör samma
+prispostmedvetna kontroll.
+
+**P2 #1 (Python-orsaksfältet) — rättad:** ny sluten `PolicyValideringsOrsak = Literal[...]`
+med samma åtta orsaker som TypeScript, använd i `_vardefel_for_krav` och
+`PolicyValideringsFel.orsak` i stället för fri `str`.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON eller genererad fil ändrad. 386 Pythontester gröna (385 tidigare + 1 ny), 446
+TypeScript-tester gröna (439 tidigare + 7 nya), `tsc --noEmit` rent, `npm run build`
+godkänt (`dist`-ändringar återställda efter kontroll), `git diff --check` rent i båda
+produktrepona, det riktiga Playwright-smoketestet grönt mot den byggda sidan. Fokuserade
+lokala commits: `enkey-agents@cddb367`, `neptune_academy@e993a5d`. Inget pushat. Väntar
+på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T09:16:43+02:00` – Claude rättade samtliga tre P1-fynd och P2-fyndet i
+  omgranskning `2026-09-10-002`. `enkey-agents@cddb367`: `forkontrollera_policy_indata` tar
+  nu `prisar` och klassificerar okänt band-ID som `okant_val`; ny sluten
+  `PolicyValideringsOrsak`-`Literal` ersätter fri `str`. `neptune_academy@e993a5d`: den
+  verkliga `KalkylatorPage`-kedjan byggd (dynamiskt policyfältformulär,
+  `onskadTyp`-val, `calcResultForOnskadTyp`, egen resultatsektion), `argsFranInputs(inputs)`
+  nu enda ägaren av energi-scope-uppskalning/MWh-proveniens (stänger
+  `space_heat_excl_dhw`-undervärderingsbuggen), `byggKontraktIndata` kastar inte längre
+  generiskt för okänt band-ID. Riktigt Playwright-smoketest tillagt
+  (`e2e/kalkylator.smoke.mjs`) mot riksgenomsnittet och Sandviken Energi. 386 Python- och
+  446 TypeScript-tester gröna, `tsc --noEmit` rent, produktionsbygge godkänt, `git diff
+  --check` rent i båda produktrepona. Ingen tariff aktiverad/flyttad, 7/57/28 av 92
+  oförändrat, ingen push. Väntar på Codex omgranskning.
+- `2026-09-10T08:44:17+02:00` – Codex omgranskade Batch 0-rättningarna i
+  `2026-09-10-002`: motor-/serie-/Literal-/proveniensdelarna godtas, men den verkliga
+  UI-kedjan, exakt delad `argsFranInputs`-/årskostnadsdispatch med korrekt energi-scope,
+  typad bandfelsväg och Pythons slutna felorsak kräver rättning. Playwright finns redan för
+  det avtalade riktiga sidtestet. Ingen tariffaktivering eller push; 7/57/28 av 92 kvarstår.
 - `2026-09-10T07:38:19+02:00` – Claude rättade P1 #2–#4 och P2 #1 i kodgranskning
   `2026-09-10-001` fullt ut, samt en del av P1 #1. `enkey-agents@714da6f`: `nivaer[].id`
   bevarat/validerat, `vald_niva_id` trådat genom motorn, `kapacitet_band_bindning`

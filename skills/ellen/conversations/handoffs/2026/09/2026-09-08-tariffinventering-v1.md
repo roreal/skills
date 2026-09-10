@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-fixes-delivered-awaiting-code-review
+status: batch0-fix2-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -50,13 +50,17 @@ batch0_reviewed_at: "2026-09-10T07:07:45+02:00"
 batch0_fix_enkey_agents_commit: "714da6fe12a8a6c171968e01eddefa50fedc0a0f"
 batch0_fix_neptune_academy_commit: "b87ff5853623b2c492cc56b91ba046920013caea"
 batch0_fix_delivered_at: "2026-09-10T07:38:19+02:00"
-latest_review: "2026-09-10-001"
+batch0_fix_reviewed_at: "2026-09-10T08:44:17+02:00"
+batch0_fix2_enkey_agents_commit: "cddb367594829d5ef708411ba0979e074e7e8c91"
+batch0_fix2_neptune_academy_commit: "e993a5d4a9f8e9c53dfda5f3b56721d2a4ea1a00"
+batch0_fix2_delivered_at: "2026-09-10T09:16:43+02:00"
+latest_review: "2026-09-10-002"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Codex granskning 2026-09-10-001 satte changes-required. P1 #2-#4 och P2 #1 rättade fullt ut; P1 #1 delvis (delad argsFranInputs/calcResultForOnskadTyp-väg klar och testad, men KalkylatorPage.tsx:s dynamiska policyfältsformulär och ett riktigt DOM-renderingstest saknar testinfrastruktur i repot och är inte byggda). Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Rättning mot Codex omgranskning 2026-09-10-002 levererad: verklig UI-kedja byggd i KalkylatorPage.tsx (dynamiskt policyfältformulär, onskadTyp-val, calcResultForOnskadTyp), argsFranInputs är nu den enda ägaren av energi-scope-uppskalning/MWh-proveniens, okänt band-ID klassificeras nu fältnära i båda språken, Python-orsaksfältet är en sluten Literal. Riktigt Playwright-smoketest tillagt (e2e/kalkylator.smoke.mjs). Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
 batch0_code_review_pending: true
-batch0_corrections_pending: true
+batch0_corrections_pending: false
 tariff_activation_allowed: false
 push_allowed: false
 deliverables:
@@ -1450,3 +1454,62 @@ kompilerande och testad — bara inte kopplad till sidans formulär än.
 
 Skapa denna commit som fokuserade lokala rättningscommits per produktrepo (ovan). Ingen
 push. Stannar för Codex omgranskning.
+
+## Codex omgranskade Batch 0-rättningarna, 2026-09-10T08:44:17+02:00
+
+Omgranskning `2026-09-10-002` sätter fortsatt **`changes-required`** för
+`enkey-agents@714da6f` och `neptune_academy@b87ff58`.
+
+Godkända delar att bevara: nivå-ID:n bevaras, valideras och styr båda motorerna;
+min/max/heltal kontrolleras elementvis inklusive exklusivt minimum; Pythonvarianten är en
+sluten `Literal`; generatorns verifierbara källcommit är återställd. 385 Python- och 439
+TypeScripttester, `tsc`, produktionsbygge och diffkontroller är gröna.
+
+Claude ska rätta följande utan tariffaktivering eller ändrad disposition:
+
+1. Bygg den verkliga `KalkylatorPage`-kedjan med obligatorisk metadata, strikt parser,
+   policyfält/attestering, fältnära fel och separat aktuell-årskostnadsresultat.
+2. Implementera V22:s exakta `argsFranInputs(inputs): Tariffberakningsunderlag`, använd den
+   från båda produkterna och bevara uppskalningen för `space_heat_excl_dhw`; inför
+   energisystemgrind, namngivna fail-closed-resolvers och diskriminerad returunion.
+3. Låt okänt band-ID nå den typade `okant_val`-förkontrollen före fasad/motor; spegla
+   prispostparametern och kontrollen i Python men behåll fasadens defense-in-depth-spärr.
+4. Typa `PolicyValideringsFel.orsak` i Python med samma slutna åttaorsaks-`Literal` som
+   TypeScript.
+
+Playwright 1.59.1 finns redan som direkt `devDependency`, så ett verkligt sid-/DOM-test
+saknar inte testinfrastruktur och kräver inget nytt beslut från Robert. Skapa fokuserade
+lokala rättningscommits per produktrepo, kör hela testmatrisen inklusive sidan och stanna
+för Codex omgranskning. Ingen push. Dispositionen är fortsatt 7/57/28 av 92.
+
+## Claude — rättning mot granskning 2026-09-10-002
+
+Claude levererade `enkey-agents@cddb367` och `neptune_academy@e993a5d`, som svar på
+samtliga tre P1-fynd och P2-fyndet.
+
+1. **Den verkliga `KalkylatorPage`-kedjan är byggd**: dynamiskt policyfältformulär härlett
+   ur ny `policyFaltMetadataForPolicy`/`parsaPolicyIndata` (`resultatkontrakt.ts`), ett
+   "aktuell årskostnad"-val (visas bara när `stodjerAktuellArskostnad(prisar)` är sant),
+   och sidan anropar nu `calcResultForOnskadTyp` i stället för `calcResult`, med en egen
+   resultatsektion för `ArsprodukResultat`. Testramverket `@playwright/test` fanns trots
+   allt inte installerat (bara den direkta `playwright`-dependencyn) — löst genom ett
+   fristående skript (`e2e/kalkylator.smoke.mjs`, `npm run test:e2e`) som använder den
+   redan nedladdade Chromium-drivrutinen direkt, utan ny beroende. Verifierar
+   riksgenomsnittets legacyväg och Sandviken Energi (den enda levande kontraktsgated
+   tariffen) genom hela produktionssidan.
+2. **`argsFranInputs(inputs)`** är nu den enda ägaren av energi-scope-uppskalning/MWh-
+   proveniens, exporterad och använd av både `calcResult` och `calcResultForOnskadTyp` —
+   stänger undervärderingsbuggen för `space_heat_excl_dhw`. `calcResultForOnskadTyp`
+   returnerar `KalkylatorResultUnion`, kontrollerar `energySystem` före tariffuppslagning,
+   och nya namngivna resolvrar `stodjerAktuellArskostnad`/`stodjerBesparing` delas mellan
+   UI och domänlager.
+3. **Okänt band-ID**: `byggKontraktIndata` kastar inte längre generiskt — bygger alltid
+   indataobjektet och låter `forkontrolleraPolicyIndata`/Python-motsvarigheten (som nu tar
+   `prisar`) klassificera det som `okant_val` innan fasad/motor.
+4. **Python `PolicyValideringsOrsak`**: ny sluten `Literal` med samma åtta orsaker som
+   TypeScript.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. 386 Python-
+och 446 TypeScript-tester gröna, `tsc --noEmit` rent, produktionsbygge godkänt (`dist`
+återställd), `git diff --check` rent i båda produktrepona, det riktiga
+Playwright-smoketestet grönt. Ingen push. Stannar för Codex omgranskning.
