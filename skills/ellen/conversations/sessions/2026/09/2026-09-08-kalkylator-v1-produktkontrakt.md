@@ -1669,8 +1669,77 @@ TypeScript-tester gröna (478 + 5 nya: 2 direkta fasadtest + 1 fri-legacyserie-t
 commits: `enkey-agents@289508c`, `neptune_academy@3340c91`. Inget pushat. Väntar på Codex
 omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade rättningsrunda 6 i
+[`2026-09-10-007`](../../../reviews/2026/09/2026-09-10-omgranskning-batch-0-fix6.md)
+och satte fortsatt **`changes-required`**. Fel scope avvisas nu i normalfallet, dubbla
+kallenergikällor avvisas och produktentryns fältnära omklassning är testad. 398 Python-
+och 483 TypeScripttester, typkontroll, bygge och E2E är gröna.
+
+Den fria legacyserien — som rättningen uttryckligen bevarar — går dock fortfarande
+förbi den fysiska kallenergigrinden. Direkta reproduktioner i båda språk med 150 MWh
+kall energi mot 100 MWh total energi per månad gav `complete/exact`, −390 000 kr i
+energidelen och −475 000 kr inklusive moms. Seriebindningens scope-kontroll ligger också
+efter statusens tidiga `blocked`-retur, så en felkonfigurerad policy kan först maskeras
+som saknad kundindata.
+
+Claude beställdes göra en sista avgränsad rättning: applicera samma min-/maxregel på den
+effektiva kallenergiserien oavsett källa, lägga fria negativa speglingstester och flytta
+scope-kontrollen före statusanropet. Ingen tariffaktivering eller push; 7/57/28 av 92
+oförändrat.
+
+### Claude — assistent
+
+Claude rättade P1- och P2-fyndet i granskning `2026-09-10-007` (rättningsrunda 6:s enda
+kvarvarande gap).
+
+**P1 (fri legacyserie kringgick fysikgrinden) — rättad, båda språk:** `0 <=
+kallenergi[m] <= mwh_per_manad[m]`/`mwhPerManad[m]` gällde tidigare bara grenen för
+`kallenergi_arsserie_bindning`/`kallenergiArsserieBindning`; det fria
+`mwh_kallt_per_manad`/`opts.mwhKalltPerManad`-argumentet gick oskyddat till motorn. Samma
+fysikgrind gäller nu vilken av de två ömsesidigt uteslutande källorna som faktiskt är satt
+— den policybundna serien fortsätter kasta `SeriebindningOgiltig` (fältnära, som förut),
+den fria vägen kastar ett vanligt `ValueError`/`Error` med parameteridentitet
+(`mwh_kallt_per_manad`/`mwhKalltPerManad`). Två nya speglade negativtest per språk
+(negativt element, element över månadens totalenergi) bevisar att den fria vägen nu
+blockeras exakt som den bundna, utan att bryta det redan gröna positiva legacytestet.
+
+**P2 #1 (scope-kontroll efter statusens tidiga retur) — rättad, båda språk:**
+`kallenergi_arsserie_bindning`/`kallenergiArsserieBindning`s `kravs_for`/`kravsFor`-
+kontroll flyttad till att ligga OMEDELBART efter `kapacitet_bindning`/`kapacitetBindning`s
+motsvarande kontroll — före `harled_resultatstatus`/`harledResultatstatus`, inte efter. Ett
+nytt test per språk bevisar detta explicit: en policy med en `monthly`-scopad
+seriebindning OCH medvetet saknad annan årsindata (t.ex. ingen kapacitetspost) kastar nu
+samma konfigurationsfel som förut — innan fixen hade den tidiga `blocked`-returen (saknad
+kapacitet) triggat FÖRST och maskerat felkonfigurationen som ofullständig kundindata.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON eller genererad artefakt ändrad (denna rättning rör bara fasadlogik i
+`resultatkontrakt.py`/`.ts`). 401 Pythontester gröna (398 tidigare + 3 nya), 486
+TypeScript-tester gröna (483 + 3 nya), `tsc --noEmit` rent, `npm run build` godkänt
+(`dist`-ändringar återställda), `git diff --check` rent i båda produktrepona,
+`e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server — grönt. Fokuserade lokala
+commits: `enkey-agents@45dd48a`, `neptune_academy@b03f4cc`. Inget pushat. Väntar på Codex
+omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T14:14:25+02:00` – Claude rättade P1- och P2-fyndet i granskning
+  `2026-09-10-007`: fysikgrinden `0 <= kallenergi[m] <= total[m]` gäller nu även det fria
+  `mwh_kallt_per_manad`/`mwhKalltPerManad`-legacyargumentet (inte bara den policybundna
+  serien), och seriebindningens `'annual'`-scope-kontroll flyttad till före
+  `harled_resultatstatus`/`harledResultatstatus` i stället för efter dess tidiga
+  `blocked`-retur. 401 Python- och 486 TypeScripttester gröna, typkontroll/bygge/E2E gröna,
+  `git diff --check` rent. Fokuserade lokala commits `enkey-agents@45dd48a`/
+  `neptune_academy@b03f4cc`. Ingen tariffaktivering eller push; disposition 7/57/28 av 92
+  oförändrad. Väntar på Codex omgranskning.
+- `2026-09-10T14:06:27+02:00` – Codex omgranskade Batch 0-rättningsrunda 6 i
+  `2026-09-10-007`. De tre beställda normalfallen är rättade och 398/483 tester,
+  typkontroll, bygge och E2E är gröna. Fortsatt `changes-required`: den fria
+  legacyserien kan fortfarande ge `complete/exact` och −475 000 kr inklusive moms genom
+  att kringgå fysikgrinden, och scope-kontrollen kan maskeras av statusens tidiga
+  `blocked`-retur. Ingen tariffaktivering eller push; 7/57/28 av 92 oförändrat.
 - `2026-09-10T13:58:16+02:00` – Claude rättade båda P1-fynden och lade produktentrytestet
   (P2 #1) i granskning `2026-09-10-006`: `kallenergi_arsserie_bindning`/
   `kallenergiArsserieBindning` kontrollerar nu `'annual'` i kravets omfattning innan den

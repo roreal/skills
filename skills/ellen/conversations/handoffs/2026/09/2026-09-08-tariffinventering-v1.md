@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-fix6-delivered-awaiting-review
+status: batch0-fix7-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -59,7 +59,7 @@ batch0_fix3_enkey_agents_commit: "5462753c6b6610e23605b716fd3a47c0cf6ccc51"
 batch0_fix3_neptune_academy_commit: "97f243c8912466f52a58ccb6bac27398e3d54c8c"
 batch0_fix3_delivered_at: "2026-09-10T11:54:21+02:00"
 batch0_fix3_reviewed_at: "2026-09-10T12:14:54+02:00"
-latest_review: "2026-09-10-006"
+latest_review: "2026-09-10-007"
 latest_source_review: "2026-09-09-009"
 batch0_fix4_delivered_at: "2026-09-10T12:52:47+02:00"
 batch0_fix4_reviewed_at: "2026-09-10T13:06:51+02:00"
@@ -70,7 +70,11 @@ batch0_fix5_reviewed_at: "2026-09-10T13:45:22+02:00"
 batch0_fix6_enkey_agents_commit: "289508cf8a214c3c09378a59e57d37f8585c5158"
 batch0_fix6_neptune_academy_commit: "3340c91f2b831b3112abadebe06f2a545ed2750c"
 batch0_fix6_delivered_at: "2026-09-10T13:58:16+02:00"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Claude rättade båda P1-fynden i granskning 2026-09-10-006 (annual-scope-kontroll för kallenergiArsserieBindning, avvisad dubbel policybunden+fri kallenergikälla) och lade det saknade produktentrytestet (P2 #1). 398 Python- och 483 TypeScripttester, typkontroll, bygge och E2E gröna, ingen katalog-JSON ändrad. Fortsatt ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
+batch0_fix6_reviewed_at: "2026-09-10T14:06:27+02:00"
+batch0_fix7_enkey_agents_commit: "45dd48a"
+batch0_fix7_neptune_academy_commit: "b03f4cc"
+batch0_fix7_delivered_at: "2026-09-10T14:14:25+02:00"
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Claude levererade rättningsrunda 7 mot granskning 2026-09-10-007: fysikgrinden 0<=kallenergi[m]<=totalenergi[m] gäller nu även det fria mwh_kallt_per_manad/mwhKalltPerManad-legacyargumentet (inte bara den policybundna serien), och seriebindningens 'annual'-scope-kontroll flyttad till före harled_resultatstatus/harledResultatstatus i stället för efter dess tidiga blocked-retur. 401 Python- och 486 TypeScripttester gröna. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
 batch0_code_review_pending: true
@@ -1772,3 +1776,58 @@ genererad artefakt ändrad (denna rättning rör bara fasadlogik). Fokuserade lo
 `enkey-agents@289508cf8a214c3c09378a59e57d37f8585c5158`,
 `neptune_academy@3340c91f2b831b3112abadebe06f2a545ed2750c`. Ingen tariff aktiverad eller
 flyttad; inget pushat. Väntar på Codex omgranskning.
+
+## Codex — omgranskning 2026-09-10-007
+
+Codex omgranskade `enkey-agents@289508c` och `neptune_academy@3340c91` i
+[`2026-09-10-007`](../../../reviews/2026/09/2026-09-10-omgranskning-batch-0-fix6.md)
+och satte fortsatt **`changes-required`**.
+
+De tre uttryckliga normalfallen i föregående granskning fungerar: fel scope avvisas när
+årsindatan är komplett, dubbla källor avvisas och produktentryn ger fältnära
+`KontraktBlockerat`. 398 Python- och 483 TypeScripttester, typkontroll, bygge och E2E är
+gröna.
+
+Den bevarade fria legacyserien passerar dock fortfarande motorn utan den fysiska
+`0 <= kallenergi[m] <= totalenergi[m]`-grinden. Direkt reproduktion i båda språk med
+150 MWh kall energi mot 100 MWh total energi per månad gav `complete/exact` och
+−475 000 kr inklusive moms. Den nya scope-kontrollen ligger dessutom efter statusens
+tidiga `blocked`-retur och kan därför maskeras som saknad kundindata.
+
+Claude ska göra en sista avgränsad rättning: validera den effektiva serien oavsett bunden
+eller fri källa, lägga fria min-/max-negativtester och flytta scope-kontrollen före
+statusanropet. Ingen tariffdata, disposition eller aktivering får ändras. Ingen push;
+7/57/28 av 92 kvarstår.
+
+## Claude — rättningsrunda 7 (2026-09-10T14:14:25+02:00)
+
+Claude rättade P1- och P2-fyndet i granskning `2026-09-10-007` ovanpå de befintliga
+rättningsrunda 6-committerna.
+
+**P1 (fri legacyserie kringgick fysikgrinden) — rättad, båda språk:** samma
+`0 <= kallenergi[m] <= mwh_per_manad[m]`/`mwhPerManad[m]`-grind som redan skyddade den
+policybundna `kallenergi_arsserie_bindning`/`kallenergiArsserieBindning`-serien gäller nu
+även det fria `mwh_kallt_per_manad`/`opts.mwhKalltPerManad`-legacyargumentet. Den
+policybundna vägen kastar fortsatt fältnära `SeriebindningOgiltig`; den fria vägen kastar
+ett vanligt `ValueError`/`Error` med tydlig parameteridentitet. Ömsesidighetskontrollen
+från förra rättningsrundan garanterar att högst en av de två grenarna körs, så ingen
+dubbelvalidering sker. Nya speglade negativtest (negativt element, element över samma
+månads totalenergi) för den fria vägen i båda språk; det befintliga positiva legacytestet
+utan policybindning kvarstår grönt.
+
+**P2 #1 (scope-kontroll efter statusens tidiga retur) — rättad, båda språk:**
+`kallenergi_arsserie_bindning`/`kallenergiArsserieBindning`s omfattningskontroll
+(`kravs_for`/`kravsFor` måste innehålla `'annual'`) flyttad till att ligga omedelbart efter
+`kapacitet_bindning`/`kapacitetBindning`s motsvarande kontroll — dvs. före
+`harled_resultatstatus`/`harledResultatstatus`, inte efter dess tidiga `blocked`-retur. Nytt
+test per språk med en `monthly`-scopad seriebindning OCH medvetet saknad annan årsindata
+bevisar att konfigurationsfelet nu kastas oavsett om övrig kundindata är komplett.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON eller genererad artefakt ändrad. 401 Pythontester (398+3), 486 TypeScript-
+tester (483+3), `tsc --noEmit`, `npm run build` (`dist` återställd) och `git diff --check`
+gröna i båda produktrepona; `e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server.
+Fokuserade lokala commits:
+`enkey-agents@45dd48a39ff9f01805847bfc4d3051d4a3a2581a`,
+`neptune_academy@b03f4cc2ac09ccc9711d9dc6ee566ac1a526852f`. Ingen tariff aktiverad; inget
+pushat. Väntar på Codex omgranskning.
