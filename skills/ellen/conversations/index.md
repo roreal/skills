@@ -2,7 +2,8 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Batch 0 pushad (skills@ca96a9a, enkey-agents@45dd48a, neptune_academy@b03f4cc), verifierat mot remote-HEAD; ingen tariffaktivering; 7/57/28; väntar på klartecken för nästa tariffbatch | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-10-001` | 2026-09-10 | Robert, Codex, Claude | Levererad: Batch 5d i `skills@d7eb655`/`enkey-agents@25b97ac`/`neptune_academy@760bf76`, 414/497 tester gröna, motorkedjan verifierad mot handräknat facit; ingen aktivering/push; väntar på Codex granskning | Två Lidköpingstariffer, signerad månadsvis nätmedelavkylningsjustering och aktuell uppskattad årskostnad | [Öppna sessionen](sessions/2026/09/2026-09-10-lidkoping-batch-5d.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Slutförd: Batch 0 pushad och verifierad; ingen tariffaktivering; 7/57/28; fortsättning i `2026-09-10-001` | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,7 +12,8 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | Batch 0 pushad; ingen tariffaktivering | Fullständig v1–v22-inventering plus pushad Batch 0-infrastruktur; nästa tariffbatch ska vara separat; 7/57/28 av 92 | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-10-001` | 2026-09-10 15:08 | omedelbart | Klar för lokal implementation; ingen aktivering/push | Batch 5d: exakt två Lidköpingstariffer, full katalog→policy→fasad→motor→UI-verifiering; stanna för Codex granskning | [Öppna överlämningen](handoffs/2026/09/2026-09-10-lidkoping-batch-5d.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | ersatt av `2026-09-10-001` | Slutförd: Batch 0 pushad; ingen tariffaktivering | Fullständig v1–v22-inventering plus pushad Batch 0-infrastruktur; fortsättning i separat Lidköping-batch; 7/57/28 av 92 | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar

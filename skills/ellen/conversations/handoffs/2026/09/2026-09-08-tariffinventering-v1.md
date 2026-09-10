@@ -3,7 +3,8 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-pushed
+status: completed-batch0-pushed
+superseded_by: "2026-09-10-001"
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -76,13 +77,13 @@ batch0_fix7_neptune_academy_commit: "b03f4cc"
 batch0_fix7_delivered_at: "2026-09-10T14:14:25+02:00"
 batch0_fix7_reviewed_at: "2026-09-10T14:31:08+02:00"
 batch0_approved_at: "2026-09-10T14:31:08+02:00"
-scope: "Fullständig v1–v22-inventering och Batch 0-implementation, nu pushad. Codex slutgodkände Batch 0 i 2026-09-10-008 vid skills-basen 0b7e8b3 och de exakta produkt-HEAD:arna enkey-agents@45dd48a/neptune_academy@b03f4cc. Robert godkände push explicit; Claude skapade slutloggcommiten skills@ca96a9a och pushade skills/enkey-agents/neptune_academy i den ordningen, verifierat mot remote-HEAD via git ls-remote. Ingen tariffaktivering ingår. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Roberts klartecken för nästa avgränsade tariffbatch."
-implementation_allowed: true
-approved_implementation_scope: "batch-0-infrastructure-only"
+scope: "Fullständig v1–v22-inventering och Batch 0-implementation, nu pushad. Codex slutgodkände Batch 0 i 2026-09-10-008 vid skills-basen 0b7e8b3 och de exakta produkt-HEAD:arna enkey-agents@45dd48a/neptune_academy@b03f4cc. Robert godkände push explicit; Claude skapade slutloggcommiten skills@ca96a9a och pushade skills/enkey-agents/neptune_academy i den ordningen, verifierat mot remote-HEAD via git ls-remote. Ingen tariffaktivering ingår. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Batch 0-kontrollpunkten är stängd; arbetet fortsätter i handoff 2026-09-10-001 för Lidköping Batch 5d."
+implementation_allowed: false
+approved_implementation_scope: "batch-0-completed; follow handoff 2026-09-10-001"
 batch0_code_review_pending: false
 batch0_corrections_pending: false
 tariff_activation_allowed: false
-push_allowed: true
+push_allowed: false
 deliverables:
   - "Fjarrvarmetariffer/tariffinventering-v1.md"
   - "Fjarrvarmetariffer/batchplan-v1.md"
