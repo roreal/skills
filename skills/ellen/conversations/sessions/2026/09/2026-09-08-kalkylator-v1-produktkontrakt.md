@@ -1611,8 +1611,84 @@ båda produktrepona, `e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad 
 grönt. Fokuserade lokala commits: `enkey-agents@cf00134`, `neptune_academy@2fef480`.
 Inget pushat. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade rättningsrunda 5 i
+[`2026-09-10-006`](../../../reviews/2026/09/2026-09-10-omgranskning-batch-0-fix5.md)
+och satte fortsatt **`changes-required`**. Den fysiska kallenergigrinden fungerar i båda
+språk, Python-spegeln och kalender-/konstruktorproven är rättade, och hela matrisen är
+grön: 395 Python- och 478 TypeScripttester, `tsc --noEmit`, bygge och E2E.
+
+Två delar av det uttryckliga P1-kontraktet återstår. En seriebindning vars `KravPost`
+endast gäller `monthly` konsumeras ändå av årsfasaden och ger `annual/exact/complete`;
+därmed undgår posten årsvalideringen. Policybunden och fri kallenergiserie accepteras
+dessutom samtidigt i båda språk, där den fria serien ignoreras tyst. Direkta
+reproduktioner gav komplett resultat i båda fallen. Produktwrapperns omklassning till
+fältnära `KontraktBlockerat` är implementerad men saknar test genom en publik
+produktentry.
+
+Claude beställdes lägga annual-scope-grinden, avvisa dubbla källor men bevara fri
+legacyserie utan bindning, samt testa den publika produktfelvägen. Ingen tariffaktivering
+eller push; disposition 7/57/28 av 92 oförändrad.
+
+### Claude — assistent
+
+Claude rättade båda P1-fynden och lade produktentrytestet (P2 #1) i granskning
+`2026-09-10-006`.
+
+**P1 #1 (seriebindning mot fel omfattning) — rättad, båda språk:** samma
+`kravs_for`/`kravsFor`-kontroll som redan finns för `kapacitet_bindning`/`kapacitetBindning`
+speglas nu för `kallenergi_arsserie_bindning`/`kallenergiArsserieBindning` — fasaden slår
+upp kravet bindningen pekar på och kastar ett konfigurationsfel (`ValueError`/`Error`,
+"måste gälla 'annual'") INNAN status eller kostnad skapas, om `'annual'` saknas i kravets
+omfattning. Ett negativt speglingstest i båda språk bevisar att ett `monthly`-scopat krav
+nu blockeras i stället för att ge `complete/exact`.
+
+**P1 #2 (dubbla kallenergikällor) — rättad, båda språk:** när `kallenergi_arsserie_
+bindning`/`kallenergiArsserieBindning` finns på policyn OCH ett fritt
+`mwh_kallt_per_manad`/`opts.mwhKalltPerManad`-argument samtidigt anges till samma anrop
+kastas nu ett tydligt konfigurationsfel ("ömsesidigt uteslutande") i stället för att tyst
+välja den policybundna serien. Det fria legacyargumentet fungerar fortsatt oförändrat när
+policyn INTE har någon seriebindning — verifierat med ett eget positivt test i båda språk.
+
+**P2 #1 (produktlagrets felväg otestad) — rättad:** nytt test i
+`besparingsvardeBatch0Produktentry.test.ts` med en syntetisk, seriebunden fixture
+(`kallenergi_arsserie_bindning`, `stodjer_aktuell_arskostnad: true`) anropad genom den
+PUBLIKA `beraknaArsprodukt`-entryn — bevisar att ett kallenergivärde över samma månads
+totalenergi ger `KontraktBlockerat('invalid_policy_fields')` med rätt nyckel och `orsak:
+'max'`, inte bara att den underliggande fasaden kastar `SeriebindningOgiltig`. Kompletterat
+med ett positivt fall för en giltig serie inom intervallet genom samma entry.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON eller genererad artefakt ändrad (denna rättning rör bara fasadlogik i
+`resultatkontrakt.py`/`.ts`). 398 Pythontester gröna (395 tidigare + 3 nya), 483
+TypeScript-tester gröna (478 + 5 nya: 2 direkta fasadtest + 1 fri-legacyserie-test +
+2 produktentrytest), `tsc --noEmit` rent, `npm run build` godkänt (`dist`-ändringar
+återställda två gånger), `git diff --check` rent i båda produktrepona,
+`e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server — grönt. Fokuserade lokala
+commits: `enkey-agents@289508c`, `neptune_academy@3340c91`. Inget pushat. Väntar på Codex
+omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T13:58:16+02:00` – Claude rättade båda P1-fynden och lade produktentrytestet
+  (P2 #1) i granskning `2026-09-10-006`: `kallenergi_arsserie_bindning`/
+  `kallenergiArsserieBindning` kontrollerar nu `'annual'` i kravets omfattning innan den
+  konsumeras (spegling av `kapacitet_bindning`s befintliga grind), och en samtidig
+  policybunden + fri kallenergikälla kastar ett konfigurationsfel i stället för att tyst
+  välja den policybundna serien (fri legacyserie fungerar fortfarande utan bindning). Nytt
+  test genom den publika `beraknaArsprodukt`-entryn bevisar att det fysiska maxfelet blir
+  `KontraktBlockerat('invalid_policy_fields')`. 398 Python- och 483 TypeScripttester gröna,
+  typkontroll/bygge/E2E gröna, `git diff --check` rent. Fokuserade lokala commits
+  `enkey-agents@289508c`/`neptune_academy@3340c91`. Ingen tariffaktivering eller push;
+  disposition 7/57/28 av 92 oförändrad. Väntar på Codex omgranskning.
+- `2026-09-10T13:45:22+02:00` – Codex omgranskade Batch 0-rättningsrunda 5 i
+  `2026-09-10-006`. Den fysiska kallenergigrinden, Python-spegeln samt kalender- och
+  konstruktorproven är godkända; 395/478 tester, typkontroll, bygge och E2E är gröna.
+  Fortsatt `changes-required`: årsfasaden accepterar en seriebindning som endast gäller
+  `monthly`, policybunden och fri kallenergiserie kan anges samtidigt och produktwrapperns
+  nya fältnära felklassning saknar publik entrytest. Ingen tariffaktivering eller push;
+  7/57/28 av 92 oförändrat.
 - `2026-09-10T13:30:48+02:00` – Claude rättade båda P1-fynden och båda P2-fynden i
   granskning `2026-09-10-005`: ny `SeriebindningOgiltig`-feltyp och en auktoritativ
   `0 <= kallenergi[m] <= mwhPerManad[m]`-grind i fasaden (båda språk, gäller även direkta
