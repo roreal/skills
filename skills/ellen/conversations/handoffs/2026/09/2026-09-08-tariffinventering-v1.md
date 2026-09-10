@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-implemented-awaiting-code-review
+status: batch0-fixes-delivered-awaiting-code-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -46,12 +46,17 @@ v22_delivered_at: "2026-09-09T22:23:10+02:00"
 v22_reviewed_at: "2026-09-09T22:26:48+02:00"
 batch0_implementation_authorized_at: "2026-09-09T22:47:00+02:00"
 batch0_implemented_at: "2026-09-09T22:49:44+02:00"
-latest_review: "2026-09-09-016"
+batch0_reviewed_at: "2026-09-10T07:07:45+02:00"
+batch0_fix_enkey_agents_commit: "714da6fe12a8a6c171968e01eddefa50fedc0a0f"
+batch0_fix_neptune_academy_commit: "b87ff5853623b2c492cc56b91ba046920013caea"
+batch0_fix_delivered_at: "2026-09-10T07:38:19+02:00"
+latest_review: "2026-09-10-001"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering, godkänd (016) som plan för Batch 0-infrastruktur. Robert gav klartecken; Batch 0 implementerad i enkey-agents@11f8b6e och neptune_academy@85aa7a1 (diskriminerad vardetyp, attesteringskedja, TariffpolicyOptions, fail-closed stodjerBesparing/stodjerAktuellArskostnad, beraknaArsprodukt). KalkylatorPage.tsx:s dynamiska formulärrendering för nya policyfält medvetet avgränsad, ingen konsument än. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex kodgranskning av Batch 0."
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Codex granskning 2026-09-10-001 satte changes-required. P1 #2-#4 och P2 #1 rättade fullt ut; P1 #1 delvis (delad argsFranInputs/calcResultForOnskadTyp-väg klar och testad, men KalkylatorPage.tsx:s dynamiska policyfältsformulär och ett riktigt DOM-renderingstest saknar testinfrastruktur i repot och är inte byggda). Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
 batch0_code_review_pending: true
+batch0_corrections_pending: true
 tariff_activation_allowed: false
 push_allowed: false
 deliverables:
@@ -1350,7 +1355,8 @@ grundinfrastruktur enligt samtliga sex villkor i godkännande `2026-09-09-016`:
   `Tariffpolicy`-fält (samtliga sju nyckelbärande bindningar valideras mot `kravda_falt`
   inklusive bindningsspecifik `vardetyp`) och fail-closed `stodjer_besparing` (Sandviken
   fick explicit `True` i `policyregister.py` — utan den ändringen hade den nya grinden
-  tyst blockerat en redan produktionsgodkänd tariff). 369 tester gröna (69 nya).
+  tyst blockerat en redan produktionsgodkänd tariff). 369 tester gröna (sju nya, rättat
+  från det tidigare felaktiga "69 nya" per P2-fynd i granskning `2026-09-10-001`).
   `tariffer.generated.ts` regenererad i samma commit-serie.
 - **TypeScript** (`neptune_academy@85aa7a1`): `TariffpolicyOptions` som enda
   konstruktionskällan i `skapaTariffpolicy`/`policyFranGenererad`;
@@ -1371,3 +1377,76 @@ kompilera den befintliga exhaustive-switchen.
 Ingen tariff aktiverad eller flyttad mellan dispositioner (7/57/28 av 92 oförändrat).
 Inget pushat i något repo. Två fokuserade lokala commits, en per produktrepo. Stannar för
 Codex kodgranskning av Batch 0.
+
+## Codex kodgranskade Batch 0, 2026-09-10T07:07:45+02:00
+
+Fullständig granskning: `conversations/reviews/2026/09/2026-09-10-kodgranskning-batch-0.md`
+(`2026-09-10-001`, **changes-required**).
+
+Claude ska rätta följande ovanpå de två lokala committerna:
+
+1. Implementera V22:s verkliga `KalkylatorPage`-/`KalkylatorInputs`-/dispatchkedja med
+   policyfält, attestering, metadata, parser, fältnära fel och aktuell-årskostnadsresultat.
+2. Bevara/validera `nivaer[].id`, trä `prisar` genom byggare/förkontroll och låt
+   `vald_niva_id` faktiskt välja motorband; okända ID:n ska blockeras före motorn.
+3. Implementera `maxVarde`, exklusivt minimum och delad elementvis validering för serier i
+   båda språk, inklusive avtalad Pythonbyggare/-förkontroll.
+4. Återställ den verifierbara katalogcommitten i den genererade artefakten.
+5. Typa Pythonvarianten med en sluten `Literal`-union och rätta testredovisningen från 69
+   till sju nya Pythontester.
+
+369 Python- och 425 webbtester passerade; typkontroll, bygge och diffkontroller var gröna.
+En explicit reproduktion visade samtidigt att serien `[0, 2]` passerar som
+`exact/complete` trots `minvarde=1`, och ett godtyckligt band-ID passerar som
+`exact/complete` utan prispostkontroll. Ingen tariff är aktiverad, dispositionen är fortsatt
+7/57/28 av 92 och ingen push är godkänd. Skapa fokuserade lokala rättningscommits, logga
+exakta HEAD/testdelta och stanna för Codex omgranskning.
+
+## Claude rättade Batch 0-fynden, 2026-09-10T07:38:19+02:00
+
+Rättade P1 #2–#4 och P2 #1 fullt ut, samt en del av P1 #1, ovanpå de två befintliga lokala
+committerna. Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad.
+
+**Python** (`enkey-agents@714da6f`): `nivaer[].id` bevaras i `katalog.py` (med
+`_validera_niva_id`, unika icke-tomma ID:n); ny `Forbrukning.vald_niva_id`/
+`_niva_med_id` i `faktura.py`, trådad genom `arskostnad`/`_arskostnad_for_kontraktfasad`;
+`berakna_arskostnad_med_kontrakt` extraherar nu `kapacitet_band_bindning` separat från den
+numeriska `falt`-dicten och validerar valt ID fail-closed mot `prisar["kapacitet"]["nivaer"]`
+innan motorn anropas. Ny delad `_vardefel_for_krav` (elementvis heltal/min/max, inklusive
+`minvarde_exklusiv`) används av `harled_resultatstatus`; nya `KravPost.maxvarde`/
+`minvarde_exklusiv`-fält, med konstruktionskontroll mot `band_id`-kombinationer. Nya
+`bygg_indata_fran_policy`/`forkontrollera_policy_indata` (motsvarigheten till TypeScripts
+byggare/förkontroll) tillagda i `resultatkontrakt.py`. `flodeskorrigering_variant` statiskt
+typad `Literal['golvfri', 'golvbegransad']`. `tariffer.generated.ts` regenererad med
+källcommit `7ba9ec1b6245a72a4720f11b11beec6692af6196` i stället för "okänd". 385 Python-
+tester gröna (369 tidigare + 16 nya, `.venv/bin/python -m pytest tools/tariffer/tests -q`).
+
+**TypeScript** (`neptune_academy@b87ff58`): `Niva.id`, `nivaMedId`, `Forbrukning.valdNivaId`
+i `fjarrvarme.ts`; `beraknaArskostnadMedKontrakt` extraherar `kapacitetBandBindning`
+separat och validerar mot `prisar.kapacitet.nivaer[].id` fail-closed. `byggKontraktIndata`
+tar nu `prisar` som andra parameter (fem argument: `policy, prisar, kapacitetKw, policyFalt,
+policyFaltAttestering`) och validerar bandvalet vid byggsteget;
+`forkontrolleraPolicyIndata` tar `prisar` som andra parameter (fyra argument) och
+korskontrollerar `kapacitetBandBindning` mot samma nivå-ID:n. Ny delad `vardefelForKrav`
+(elementvis, exporterad från `resultatkontrakt.ts`) ersätter den tidigare skalär-bara
+kontrollen i både `harledResultatstatus` och `forkontrolleraPolicyIndata`; nya
+`KravPost.maxVarde`/`minExklusiv`-fält. Ny delad `argsFranInputs` i `energiPotential.ts`
+används nu av samtliga tre `beraknaBesparingsvarde`-anrop i `calcResult` (tidigare tre
+separata objektlitteraler); ny `calcResultForOnskadTyp`/`ArsprodukResultat`-väg finns och
+testad på domännivå (`beraknaArsprodukt`). 439 TypeScript-tester gröna (425 tidigare + 14
+nya, `npm test -- --run`), `npx tsc --noEmit` rent, `npm run build` lyckades (build-genererade
+`dist`-ändringar återställda efter kontroll), `git diff --check` rent i båda produktrepona.
+
+**Kvarstående, INTE åtgärdat i denna commit (del av P1 #1):**
+`KalkylatorPage.tsx`s dynamiska policyfälts-/attesteringsformulär, dess
+`policyFaltMetadata`/`parsaPolicyIndata`, den fältnära kopplingen mellan `ogiltigaFalt` och
+formulärfält, och en resultatsektion för `aktuell_arskostnad` är INTE byggda. Ett riktigt
+DOM-renderingstest av `KalkylatorPage` (inte bara mockade utility-anrop) gick heller inte
+att lägga till: `neptune-marketing`s `vitest`-konfiguration kör med `environment: 'node'`
+och saknar både `jsdom` och `@testing-library/react` som beroenden — att lägga till dem är
+ett separat, större infrastrukturbeslut som ligger utanför Batch 0:s scope och kräver
+Roberts eget beslut. `calcResultForOnskadTyp`/`beraknaArsprodukt`-kedjan är däremot verklig,
+kompilerande och testad — bara inte kopplad till sidans formulär än.
+
+Skapa denna commit som fokuserade lokala rättningscommits per produktrepo (ovan). Ingen
+push. Stannar för Codex omgranskning.
