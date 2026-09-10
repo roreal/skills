@@ -4925,11 +4925,19 @@
           }
         ],
         "billing_basis_method": null,
-        "monthly_proration": null,
+        "monthly_proration": "1/12",
         "minimum_billing_basis": 3,
         "formula": "fixed + variable * billing_basis"
       },
-      "adjustments": [],
+      "adjustments": [
+        {
+          "type": "signed_monthly_flow_adjustment",
+          "faktor_n": 5,
+          "kund_volym_falt": "lidkoping_kund_volym_m3",
+          "kund_avkylning_falt": "lidkoping_kund_avkylning_c",
+          "nat_avkylning_falt": "lidkoping_nat_avkylning_c"
+        }
+      ],
       "source_refs": [
         {
           "source_id": "20_1",
@@ -4953,7 +4961,8 @@
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "lidkoping-energi-lidkoping-42-kw-2026",
@@ -5009,11 +5018,19 @@
           }
         ],
         "billing_basis_method": null,
-        "monthly_proration": null,
+        "monthly_proration": "1/12",
         "minimum_billing_basis": 3,
         "formula": "fixed + variable * billing_basis"
       },
-      "adjustments": [],
+      "adjustments": [
+        {
+          "type": "signed_monthly_flow_adjustment",
+          "faktor_n": 5,
+          "kund_volym_falt": "lidkoping_kund_volym_m3",
+          "kund_avkylning_falt": "lidkoping_kund_avkylning_c",
+          "nat_avkylning_falt": "lidkoping_nat_avkylning_c"
+        }
+      ],
       "source_refs": [
         {
           "source_id": "20_1",
@@ -5037,7 +5054,8 @@
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "lulea-energi-lulea-2026",
