@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-10T17:00:31+02:00"
+last_updated: "2026-09-10T17:19:48+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: delivered-awaiting-codex-review
+status: changes-required
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -146,8 +146,114 @@ oförändrat 7, `tariffer.generated.ts` listar fortsatt 7 godkända/71 filtrerad
 7 implementerade / 57 redo / 28 blockerade av 92 oförändrad. Inget repo pushat. Den
 orelaterade förslagsfilen och den råa leverantörs-PDF:en är inte stagade.
 
+## Claude — rättningsrunda 1, svar på kodgranskning 2026-09-10-009
+
+Rättade båda P1-fynden och samtliga tre P2-fynd i `2026-09-10-009`, ovanpå den granskade
+kedjan (`skills@0dbba6a`, `enkey-agents@25b97ac`, `neptune_academy@760bf76`). Fyra
+fokuserade lokala commits:
+
+- `skills@f1d4d1d8a013ea5d7b7079a5d50364e505be8893` (2026-09-10T17:50:01+02:00) — Lidköpings
+  katalogmetadata rättad (P2 #5): den inaktuella periodiseringsfrågan borttagen ur
+  `issues`/`investigation.conditions_sv` för båda tarifferna (monthly_proration är sedan
+  tidigare bekräftat `"1/12"` och nu testat); den relevanta noten om leverantörens
+  debiterbara effekt bevarad. Ny källpost `sources[].id: "20_2"` (leverantörssvaret
+  2026-09-09, datum/SHA-256/gransknings-ID, ingen rå PDF) länkad från båda tariffposterna.
+  `investigation.status` oförändrat `"utreds"`.
+- `enkey-agents@fbacd836a1f7aaa2e7b8c687d277ded464daf381` (2026-09-10T17:51:37+02:00) —
+  **P1 #1 (golv/gränser):** katalogens `minimum_billing_basis` transporteras nu genom
+  `till_prisar` som `min_debiteringsbas` och tillämpas som ett AUKTORITATIVT golv i
+  `_arskostnad_kapacitet`, oavsett numerisk nivå eller bekräftat band-ID (ny
+  `test_min_debiteringsbas.py`, fem tester direkt mot motorfunktionen). Policyregistrets
+  `lidkoping_debiterbar_effekt_kw`-krav har nu produktspecifika gränser via en parametriserad
+  `_lidkoping_krav(effekt_min, effekt_max)`: 0–41 kW-produkten `[3, 41]`, 42+-produkten
+  `[42, ∞)` — tidigare `minvarde=0` för båda, vilket gjorde 0–41-produktens golv
+  verkningslöst. **P1 #2 (schemavalidering):** `okand_justering` kräver nu ett ändligt,
+  positivt `faktor_n` samt tre icke-tomma, distinkta fältnamnsnycklar för
+  `signed_monthly_flow_adjustment`-poster, innan tariffen kan nå kostnadsberäkning — en
+  muterad `faktor_n=0` gav tidigare `complete` med nolljustering. **P2 #4 (golden/gräns):**
+  `test_lidkoping_signed_monthly_flow.py` parametriserad över BÅDA tarifferna: 42+-golden
+  (fast 66 984, energi 4 912, justering 150), summa inklusive moms, faktisk
+  1/12-periodisering, gränstester (2/3/41/42 kW för 0–41, 41/42 kW för 42+) och
+  icke-ändliga (`NaN`/`Infinity`) element i alla tre serietyperna. 489 tester gröna.
+- `neptune_academy@c4e1a265fbdb46001166cc56594cc9fe0fa7bd4d` (2026-09-10T17:51:55+02:00) —
+  TypeScript-spegling: `arskostnadKapacitet` exporterad och golvar nu basen på samma sätt
+  (ny `fjarrvarme.minDebiteringsbas.test.ts`). `resultatkontrakt.lidkoping.test.ts`
+  parametriserad över båda tarifferna med samma golden/moms/periodiserings-/gräns-/
+  icke-ändlighetstester som Python. **P2 #3 (produkt-/UI-bevis):** nytt
+  `KalkylatorPageLidkoping.test.tsx` — det uttryckligen beställda beviset genom den RIKTIGA
+  `KalkylatorPage`: en testlokal, Lidköping-formad prispost (tre 12-elementsserier,
+  obligatorisk Tm-attestering, bekräftat effektband) injicerad i den mockade
+  `tariffer.generated`-modulen (aldrig i den riktiga katalogen/artefakten — Lidköping
+  förblir `investigation.status="utreds"`). Verifierar: tre separata seriefältgrupper med
+  rätt enheter/hjälptexter renderas, submit utan Tm-attestering ger fältnära
+  "Kräver attestering av källan.", ett giltigt resultat visas efter attestering,
+  kr-inversion/schablon blockeras (samma generiska `unsupported_input_mode`-spärr som
+  övriga kontraktsgated tariffer), och ingen besparingsväljare visas (current-only). 530
+  tester, tsc, produktionsbygge och självbärande E2E (`npm run test:e2e`, kört fräscht utan
+  förstartad server) gröna.
+- `tariffer.generated.ts` regenererad från den granskade katalogbasen (`skills@f1d4d1d`):
+  ny källcommit/sha256-proveniens; `min_debiteringsbas: null` tillagt för de sju redan
+  godkända tarifferna (defense-in-depth-fält utan beteendeändring för dem). `git diff
+  --check` rent i båda produktrepona.
+
+**Bekräftelser:** ingen tariff aktiverad eller flyttad — `godkanda()`-antalet är
+oförändrat 7, `tariffer.generated.ts` listar fortsatt 7 godkända/71 filtrerade.
+Disposition 7 implementerade / 57 redo / 28 blockerade av 92 oförändrad. Inget repo
+pushat. Väntar på Codex omgranskning.
+
+## Codex — kodgranskning 2026-09-10-009
+
+Codex granskade den lokala Batch 5d-kedjan vid `skills@0dbba6a` (produktcommit
+`d7eb655`), `enkey-agents@25b97ac` och `neptune_academy@760bf76` i
+[`2026-09-10-009`](../../../reviews/2026/09/2026-09-10-kodgranskning-lidkoping-batch-5d.md)
+och satte **`changes-required`**.
+
+Den nya signerade månadsjusteringen fungerar i huvudfallet i båda motorerna, inklusive
+positiv avgift, noll och negativ kreditering. Oberoende goldenprov gav 14 358 kr exklusive
+moms för 0–41 kW-fallet och 72 046 kr för 42+-fallet. 414 Python- och 497
+TypeScripttester, typkontroll, bygge och befintligt E2E är gröna.
+
+Två P1 och tre P2 måste rättas före aktivering eller push:
+
+1. Katalogens `minimum_billing_basis: 3` tappas i `till_prisar`, den delade policyn har
+   `minvarde=0` och den publika årsprodukten accepterar därför 0–2 kW för 0–41-produkten.
+   Även de tariffspecifika produktgränserna 0–41 respektive 42+ måste gälla i den direkta
+   fasaden utan att det bekräftade band-ID:t räknas om.
+2. Den nya justeringstypens payload saknar fail-closed-schemavalidering. En muterad
+   `faktor_n=0` passerar i dag grinden och ger `complete` med nolljustering.
+3. De uttryckligen beställda proven genom `beraknaArsprodukt`, besparingsprodukten och den
+   verkliga `KalkylatorPage` saknas. Inaktiv tariff är inget hinder; en testlokal injektion
+   eller temporär genererad artefakt kan användas utan produktionsaktivering.
+4. Bara 0–41-tariffen har ett goldenfall. Lägg även 42+-facit, totalsummor inklusive moms,
+   faktisk 1/12-periodisering och icke-ändliga serievärden i båda språk.
+5. Katalogen säger fortfarande att periodisering saknas och hänvisar bara till en
+   2025-källa. Rensa den inaktuella texten och lägg icke-känslig proveniens för 2026-sidan
+   och leverantörssvaret; den råa PDF:en ska inte committas.
+
+Claude ska rätta endast dessa fynd, göra fokuserade lokala commits, köra hela testmatrisen
+och stanna för ny Codex-omgranskning. Ingen tariff får aktiveras och inget repo får
+pushas; 7/57/28 av 92 kvarstår.
+
 ## Ändringslogg
 
+- `2026-09-10T17:51:55+02:00` – Claude rättade båda P1-fynden och samtliga tre P2-fynd i
+  granskning `2026-09-10-009`: katalogens `minimum_billing_basis` transporteras och
+  tillämpas som ett auktoritativt golv i båda språk; produktspecifika effektgränser
+  (0–41 kW: [3,41], 42+ kW: [42,∞)) satta i policyregistret; `signed_monthly_flow_adjustment`
+  får fail-closed-schemavalidering (`faktor_n`, fältnamn); 42+-golden, moms, 1/12-periodisering
+  och icke-ändlighet testade i båda språk; ett riktigt UI-/produktbevis genom
+  `KalkylatorPage` (tre serier, Tm-attestering, blockerad kr/schablon, ingen
+  besparingsväljare) tillagt; katalogens periodiseringsfråga rensad och 2026-källan/
+  leverantörssvaret spårbart via en ny, icke-känslig källpost. Commits
+  `skills@f1d4d1d`, `enkey-agents@fbacd83`, `neptune_academy@c4e1a26`. 489 Python- och 530
+  TypeScripttester, tsc, bygge, E2E och `git diff --check` gröna. Ingen tariff aktiverad
+  (7/57/28 av 92 oförändrat), inget pushat. Väntar på Codex omgranskning.
+- `2026-09-10T17:19:48+02:00` – Codex granskade Batch 5d och satte
+  `changes-required` i granskning `2026-09-10-009`. Två P1 och tre P2 återstår:
+  minsta debiteringsgrund och produktgränser tappas, justeringspayloaden valideras inte,
+  verklig produkt-/UI-acceptans saknas, 42+-golden/moms/1/12/icke-ändlighetsprov saknas
+  samt katalogens periodiserings- och källmetadata är inaktuella. Ingen aktivering eller
+  push; 7/57/28 oförändrat.
 - `2026-09-10T17:00:31+02:00` – Claude levererade Batch 5d lokalt i tre fokuserade commits
   (`skills@d7eb655`, `enkey-agents@25b97ac`, `neptune_academy@760bf76`): Lidköpings
   `signed_monthly_flow_adjustment` når nu verkligen `Kostnad.justering` genom hela kedjan

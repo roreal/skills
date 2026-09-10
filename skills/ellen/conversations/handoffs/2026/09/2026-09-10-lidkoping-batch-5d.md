@@ -3,17 +3,18 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: delivered-awaiting-codex-review
+status: fix-round-1-delivered-awaiting-review
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
+latest_review: "2026-09-10-009"
+fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 baseline:
-  skills_local: "bac6f7f"
-  skills_origin: "ca96a9a"
-  enkey_agents: "45dd48a"
-  neptune_academy: "b03f4cc"
+  skills_local: "f1d4d1d"
+  enkey_agents: "fbacd83"
+  neptune_academy: "c4e1a26"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -122,3 +123,37 @@ indexet. Rapportera:
 När detta är levererat gör Codex en oberoende omgranskning. Aktivering/push kräver därefter
 en ny kontrollpunkt. Nästa köade kodbatch efter godkänd Lidköping är Batch 1: sex
 leverantörer enligt V22.
+
+## Codex — granskning 2026-09-10-009 och nästa rättningsrunda
+
+Batch 5d är **inte godkänd ännu**. Den fullständiga granskningen finns i
+[`2026-09-10-009`](../../../reviews/2026/09/2026-09-10-kodgranskning-lidkoping-batch-5d.md).
+Kärnformeln fungerar i båda språk, men Claude ska rätta följande avgränsade punkter på de
+redan levererade lokala commitkedjorna:
+
+1. Transportera och tillämpa `minimum_billing_basis` genom katalogformat, generator,
+   policy, publik produktentry och formulär. Kräv 3–41 kW för 0–41-produkten och minst
+   42 kW för 42+-produkten. Det leverantörsbekräftade band-ID:t ska fortsatt väljas
+   explicit och inte härledas ur kW-talet.
+2. Lägg fail-closed-validering av `signed_monthly_flow_adjustment`-payloaden: ändligt
+   positivt `faktor_n`, tre obligatoriska icke-tomma fältnycklar och kopplingsbarhet till
+   rätt obligatoriska tolvmånaderskrav. Lägg negativa katalogmutationstester.
+3. Lägg riktiga produktprov genom `beraknaArsprodukt` och besparingsentryn samt ett
+   renderingstest av den verkliga `KalkylatorPage`. Använd en isolerad testinjektion eller
+   temporär genererad katalogpost; aktivera inte tariffen i produktionsdata. Proven ska
+   omfatta MWh-only, blockerad kr-inversion/schablon, `Produktbegransning`, tre
+   januari–december-serier, enheter/hjälptexter, obligatorisk Tm-attestering, fältnära fel
+   och produktgränserna ovan.
+4. Gör testmatrisen verkligt tvåtariffad. Lägg oberoende golden för 42+ och verifiera båda
+   totalsummorna inklusive moms, faktisk 1/12-periodisering samt NaN/oändlighet i alla tre
+   serier i både Python och TypeScript. Facit finns i granskningen.
+5. Rätta katalogens interna motsägelse om saknad periodisering och lägg en icke-känslig
+   katalogproveniens för 2026-prissidan och leverantörssvaret (datum/hash/gransknings-ID).
+   Behåll den relevanta upplysningen om leverantörens debiterbara effekt. Den råa PDF:en
+   ska inte committas.
+
+Kör full Python- och TypeScript-svit, `tsc --noEmit`, produktionbygge, självbärande E2E
+och `git diff --check`. Gör fokuserade lokala commits per repo och rapportera exakta nya
+HEAD-hashar i sessionen. `investigation.status` ska vara kvar som aktiveringsspärr,
+ingen tariff får göras produktionsvalbar, inget repo får pushas och dispositionen
+7/57/28 av 92 ska förbli oförändrad. Stanna därefter för ny Codex-omgranskning.
