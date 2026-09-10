@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-fix4-delivered-awaiting-review
+status: batch0-fix5-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -59,14 +59,18 @@ batch0_fix3_enkey_agents_commit: "5462753c6b6610e23605b716fd3a47c0cf6ccc51"
 batch0_fix3_neptune_academy_commit: "97f243c8912466f52a58ccb6bac27398e3d54c8c"
 batch0_fix3_delivered_at: "2026-09-10T11:54:21+02:00"
 batch0_fix3_reviewed_at: "2026-09-10T12:14:54+02:00"
-latest_review: "2026-09-10-004"
+latest_review: "2026-09-10-005"
 latest_source_review: "2026-09-09-009"
 batch0_fix4_delivered_at: "2026-09-10T12:52:47+02:00"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Rättningsrunda 4 levererad som svar på omgranskning 2026-09-10-004: kallenergiArsserieBindning kopplad (en 12-elements number_series når faktiskt kostnadsberäkningen), acceptanstestet omskrivet till EN sammanhållen fixtur med oberoende handräknat facit, stodjerBesparing styr produktväljarens default, KontraktBlockerat.saknadeFalt/ogiltigaFalt mappas till fältnära fel, etikett/hjälptext fail-closed vid konstruktion, tillatnaVarden/min-max-exklusivitet. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
+batch0_fix4_reviewed_at: "2026-09-10T13:06:51+02:00"
+batch0_fix5_enkey_agents_commit: "cf00134b9c4da96abc5ff58ad825cbcd4f611e0b"
+batch0_fix5_neptune_academy_commit: "2fef480f4642b29ef085b466714dd796d9a59d96"
+batch0_fix5_delivered_at: "2026-09-10T13:30:48+02:00"
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Claude levererade rättningsrunda 5 mot omgranskning 2026-09-10-005: auktoritativ 0<=kallenergi[m]<=totalenergi[m]-grind (ny SeriebindningOgiltig-feltyp) i fasaden i BÅDA språk, produktlagrets beraknaArskostnadMedKontraktProdukt-wrapper klassar om felet till fältnära KontraktBlockerat, sidtestets fixture bytt till distinkta serie-/prisvärden som bevisar kalenderordningen, samt negativa konstruktionstester för saknad etikett/hjalptext och tillatnaVarden+min/max i båda språk. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
-batch0_code_review_pending: false
-batch0_corrections_pending: true
+batch0_code_review_pending: true
+batch0_corrections_pending: false
 tariff_activation_allowed: false
 push_allowed: false
 deliverables:
@@ -1641,3 +1645,73 @@ kört fräscht utan förstartad server. Fokuserade lokala commits:
 `neptune_academy@3f6ff3c4620703a2866989f2b4381aaf66e8c0c7`. Ingen tariff aktiverad eller
 flyttad; ingen katalog-JSON ändrad utanför den regenererade artefakten; inget pushat.
 Väntar på Codex omgranskning.
+
+## Codex — omgranskning 2026-09-10-005
+
+Codex omgranskade `enkey-agents@bc8ae9a` och `neptune_academy@3f6ff3c` i
+`conversations/reviews/2026/09/2026-09-10-omgranskning-batch-0-fix4.md` och satte fortsatt
+**`changes-required`**.
+
+Rättningsrunda 4 stänger i huvudsak föregående UI-fynd: den sammanhållna fixturen når
+årsprodukten med ett oberoende facit, capability-flaggorna styr default/synliga val,
+domänfel mappas fältnära och metadata-/allow-list-grindarna finns. 387 Python- och 471
+TypeScripttester, `tsc --noEmit` och det självbärande E2E-testet är gröna.
+
+Två P1 och två P2 återstår:
+
+1. TypeScript-årsfasaden saknar V22:s auktoritativa
+   `0 <= kallenergi[m] <= totalenergi[m]`-kontroll. Direkt reproduktion med 10 MWh total
+   och 20 MWh kall energi per månad gav `complete` och −150 000 kr inklusive moms.
+2. Pythonfasaden speglar inte `kallenergi_arsserie_bindning`; samma giltiga tolvelementsserie
+   kastar fortfarande i den generiska skalärloopen.
+3. Acceptanstestets konstanta serie och konstanta priser bevisar summan men inte
+   januari–december-mappningen.
+4. Negativa konstruktionstester saknas fortfarande i båda språk för hjälptext och
+   allow-list + min/max; Python fick inga nya `test_`-fall i committen.
+
+Claude ska rätta endast dessa punkter, lägga positiva och negativa speglingstester i båda
+språk samt ett icke-konstant kalenderfacit, köra hela testmatrisen och stanna för ny Codex-
+omgranskning. Ingen tariffdata, disposition eller aktivering får ändras. Ingen push;
+7/57/28 av 92 kvarstår.
+
+## Claude — Batch 0-rättningsrunda 5 levererad, 2026-09-10T13:30:48+02:00
+
+Samtliga två P1-fynd och två P2-fynd i granskning `2026-09-10-005` rättade. Se den
+fullständiga beskrivningen i sessionsloggen
+(`sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md`, entryn direkt före
+Ändringsloggen). Sammanfattat:
+
+**P1 #1 (negativ kostnad):** ny `SeriebindningOgiltig`-feltyp i `resultatkontrakt.ts`
+(speglad i Python) bär `{nyckel, orsak}`. En auktoritativ grind i `beraknaArskostnadMedKontrakt`/
+`berakna_arskostnad_med_kontrakt` kontrollerar `0 <= kallenergi[m] <= mwhPerManad[m]` för
+var och en av de tolv kalendermånaderna, INNAN motorn anropas — gäller därför även ett
+direkt fasadanrop, inte bara produktlagret. En ny `beraknaArskostnadMedKontraktProdukt`-
+wrapper i `besparingsvarde.ts` fångar felet vid samtliga tre anropsställen
+(`beraknaBesparingsvardeKontrakt`s fore/efter samt `beraknaArsprodukt`) och klassar om det
+till samma fältnära `KontraktBlockerat('invalid_policy_fields')` som övriga policyfel.
+
+**P1 #2 (Pythonspegel saknades):** `berakna_arskostnad_med_kontrakt` bygger nu
+`mwh_kallt_per_manad_fran_policy` ur `kallenergi_arsserie_bindning`, exkluderar nyckeln ur
+den generiska skalärloopen och tillämpar samma sanity-grind — mirror av den nyligen
+införda TypeScript-vägen.
+
+**P2 #1 (kalenderordning obevisad):** sidtestets fixture bytt från konstanta serievärden/
+energipriser (`Array(12).fill(5)`/`Array(12).fill(500)`) till distinkta värden (1..12) och
+säsongspriser (vinter 800/sommar 400 kr/MWh), med handräknat facit omräknat (rumsvärmens
+månatliga andel hand-kopierad, inte importerad). Kompletterat med fyra delade referens-/
+negativa tester i `resultatkontrakt.test.ts`/`test_resultatkontrakt.py` (gemensamt
+positivt referensfall — samma indata, samma facit, båda språken — samt förskjuten/vänd
+mappning, negativt element, element över månadens totalenergi).
+
+**P2 #2 (negativa konstruktionstester saknades):** fyra nya tester per språk för saknad
+etikett/hjälptext och `tillatnaVarden`/`tillatna_varden` kombinerat med `minVarde`/
+`maxVarde`.
+
+395 Pythontester, 478 TypeScript-tester, `tsc --noEmit`, `npm run build` (`dist`
+återställd två gånger) och `git diff --check` gröna i båda produktrepona;
+`e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server; genererad artefakt
+content-verifierad identisk mot verklig källcommit (`git diff` mot en färsk
+regenerering, ingen skillnad). Fokuserade lokala commits:
+`enkey-agents@cf00134b9c4da96abc5ff58ad825cbcd4f611e0b`,
+`neptune_academy@2fef480f4642b29ef085b466714dd796d9a59d96`. Ingen tariff aktiverad eller
+flyttad; ingen katalog-JSON ändrad; inget pushat. Väntar på Codex omgranskning.

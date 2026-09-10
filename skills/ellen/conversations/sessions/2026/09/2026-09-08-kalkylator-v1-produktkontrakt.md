@@ -1534,8 +1534,107 @@ mer omfattande), `tsc --noEmit` rent, `npm run build` godkänt (`dist`-ändringa
 commits: `enkey-agents@bc8ae9a`, `neptune_academy@3f6ff3c`. Inget pushat. Väntar på Codex
 omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade rättningsrunda 4 i
+[`2026-09-10-005`](../../../reviews/2026/09/2026-09-10-omgranskning-batch-0-fix4.md)
+och satte fortsatt **`changes-required`**. UI-/capability-/fältnära-felrättningarna och
+den ordinarie regressionsmatrisen (387 Python-, 471 TypeScripttester, `tsc --noEmit`,
+E2E) är gröna och godkända att bevara.
+
+Två P1 och två P2 återstod: (1) `beraknaArskostnadMedKontrakt` saknade en auktoritativ
+`0 <= kallenergi[m] <= mwhPerManad[m]`-grind — ett direkt, körbart reproduktionsfall med
+10 MWh total energi och 20 MWh kall energi per månad gav `complete` och −150 000 kr
+inklusive moms; (2) Pythonfasaden hade ingen motsvarighet till TypeScripts nyligen
+införda `kallenergiArsserieBindning`-gren, så en giltig 12-serie kastade `ValueError`;
+(3) acceptanstestets konstanta serievärden/energipriser bevisade bara summan, inte att
+serien band till RÄTT kalendermånad; (4) de begärda negativa konstruktionstesterna för
+saknad hjälptext och allow-list+min/max saknades fortfarande, och Python fick inga nya
+`test_`-funktioner i föregående commit. Claude beställdes rätta enbart dessa punkter,
+lägga delade positiva/negativa referenstester i båda språk och ett icke-konstant
+kalenderfacit, köra hela testmatrisen och stanna för ny omgranskning. Ingen tariffdata,
+disposition eller aktivering fick ändras; ingen push godkänd; 7/57/28 av 92 kvarstod.
+
+### Claude — assistent
+
+Claude rättade samtliga två P1-fynd och två P2-fynd i granskning `2026-09-10-005`.
+
+**P1 #1 (negativ kostnad) — rättad, båda språk:** ny `SeriebindningOgiltig`-feltyp
+(exporterad från `resultatkontrakt.ts`, mirror `SeriebindningOgiltig(ValueError)` i
+Python) bär `{nyckel, orsak}` — samma form som `PolicyValideringsFel`. En auktoritativ
+grind i `beraknaArskostnadMedKontrakt`/`berakna_arskostnad_med_kontrakt` loopar de tolv
+kalendermånaderna och kontrollerar `0 <= v <= mwhPerManad[m]` INNAN motorn
+(`_arskostnadForKontraktfasad`) anropas — gäller därför ett direkt fasadanrop, inte bara
+UI:t eller produktlagrets förkontroll (som saknar `mwhPerManad` och strukturellt inte kan
+uttrycka regeln). En ny `beraknaArskostnadMedKontraktProdukt`-wrapper i
+`besparingsvarde.ts` (använd av samtliga tre anropsställen: `beraknaBesparingsvardeKontrakt`s
+fore/efter, `beraknaArsprodukt`) fångar felet och klassar om det till samma fältnära
+`KontraktBlockerat('invalid_policy_fields', {ogiltigaFalt: [{nyckel, orsak}]})` som övriga
+policyfel — i stället för att låta det nå anroparen som ett otypat, generiskt fel.
+
+**P1 #2 (Pythonspegel saknades) — rättad:** `berakna_arskostnad_med_kontrakt` bygger nu
+`mwh_kallt_per_manad_fran_policy` ur `kallenergi_arsserie_bindning` (kräver annual-scope,
+exakt 12 element, mappar till månad 1–12, exkluderas ur den generiska `falt`-loopen precis
+som `kb`/`kbb`) och tillämpar samma sanity-grind som TypeScript. Policyns bundna serie
+vinner om ett fristående `mwh_kallt_per_manad`-argument också angetts (`or`-fallback,
+mirror av TypeScript).
+
+**P2 #1 (kalenderordning obevisad) — rättad:** `prispostHappy()`s `manadspriser` bytt
+från `Array(12).fill(500)` till en vinter-/sommartudelning (800/400 kr/MWh, hissad via
+`vi.hoisted` eftersom `vi.mock`-fabriken behöver värdet), och `SERIE_VARDEN` bytt från
+`Array(12).fill(5)` till tolv distinkta värden (1..12). Facit omräknat med
+`RUMSVARME_ANDEL_PER_MANAD`/`VARMVATTEN_ANDEL` hand-kopierade (INTE importerade) från
+`varmeprofil.ts`, summerade månadsvis mot de nya distinkta priserna — testet passerade
+(kostnadselementet renderade exakt det handräknade beloppet), vilket bekräftar att
+serien/priserna faktiskt binds kalendermånadsvis. Kompletterat med fyra delade
+referens-/negativa tester i `resultatkontrakt.test.ts` OCH `test_resultatkontrakt.py`:
+ETT gemensamt positivt referensfall (samma indata — `mwhPerManad=100` konstant, kall
+energi 1..12, pris `100×månad`, kapacitet 200 kW — samma handräknade facit 906 250 kr
+`summaInkl` i BÅDA språk), en förskjuten/vänd mappning som bevisligen ändrar resultatet,
+ett negativt element (`orsak: 'min'`) och ett element över månadens totalenergi
+(`orsak: 'max'`).
+
+**P2 #2 (negativa konstruktionstester saknades) — rättad, båda språk:** nya tester för
+saknad `hjalptext`/`hjälptext` (fanns redan för etikett) samt `tillatnaVarden`/
+`tillatna_varden` kombinerat med `minVarde`/`maxVarde` (både min- och maxfallet, båda
+språk) — fyra nya `test_`-funktioner i Python (0 föregående gång, trots att punkt 4 ovan
+explicit efterfrågade dem).
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON ändrad; genererad artefakt content-verifierad identisk mot en färsk
+regenerering med den verkliga källcommitten. 395 Pythontester gröna (387 tidigare + 8
+netto nya: 4 seriereferenstester + 4 negativa konstruktionstester), 478 TypeScript-tester
+gröna (475 + 3 nya: 2 allow-list + 1 hjälptext — seriereferenstesterna räknades redan i
+471→475-steget under rättningsrundan), `tsc --noEmit` rent, `npm run build` godkänt
+(`dist`-ändringar återställda två gånger under kontrollen), `git diff --check` rent i
+båda produktrepona, `e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server —
+grönt. Fokuserade lokala commits: `enkey-agents@cf00134`, `neptune_academy@2fef480`.
+Inget pushat. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T13:30:48+02:00` – Claude rättade båda P1-fynden och båda P2-fynden i
+  granskning `2026-09-10-005`: ny `SeriebindningOgiltig`-feltyp och en auktoritativ
+  `0 <= kallenergi[m] <= mwhPerManad[m]`-grind i fasaden (båda språk, gäller även direkta
+  fasadanrop); `beraknaArskostnadMedKontraktProdukt`-wrapper klassar om felet till fältnära
+  `KontraktBlockerat` vid alla tre anropsställen; Pythonfasaden speglar nu
+  `kallenergi_arsserie_bindning` fullt ut; sidtestets fixture bytt till distinkta
+  serie-/säsongsprisvärden (facit omräknat) som bevisar kalenderordningen, kompletterat med
+  fyra delade referens-/negativa tester i båda språk; fyra nya negativa
+  konstruktionstester för hjälptext och allow-list+min/max. 395 Python-, 478
+  TypeScript-tester, `tsc`, build, e2e och `git diff --check` gröna. Fokuserade lokala
+  commits `enkey-agents@cf00134`, `neptune_academy@2fef480`. Ingen tariffaktivering eller
+  push; disposition 7/57/28 av 92 oförändrad. Väntar på Codex omgranskning.
+- `2026-09-10T13:06:51+02:00` – Codex omgranskade Batch 0-rättningsrunda 4 i
+  `2026-09-10-005`: capability-default, fältnära domänfel, sammanhållet sidtest och
+  metadata-/allow-list-grindar är godkända att bevara; 387 Python- och 471
+  TypeScripttester, `tsc` och e2e är gröna. Direkt reproduktion visade dock att en
+  kallenergiserie på 20 MWh mot 10 MWh total månadsenergi returnerar `complete` och
+  −150 000 kr inklusive moms, eftersom V22:s `0 <= kallenergi[m] <= totalenergi[m]`-
+  kontroll saknas. Pythonfasaden speglar inte den nya bindningen och kastar samma giltiga
+  tolvelementsserie i skalärloopen. Kalenderordningen testas bara med konstanta värden/
+  priser och negativa konstruktionstester saknas för hjälptext samt allow-list + min/max.
+  Fortsatt `changes-required`; ingen tariffaktivering eller push, disposition 7/57/28.
 - `2026-09-10T12:52:47+02:00` – Claude rättade samtliga tre P1-fynd och två P2-fynd i
   granskning `2026-09-10-004`: `kallenergiArsserieBindning` kopplad så en 12-elements
   `number_series` faktiskt når kostnadsberäkningen, acceptanstestet omskrivet till EN
