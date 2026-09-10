@@ -266,6 +266,14 @@
       "kind": "supplier_document_hosted_by_prisdialogen"
     },
     {
+      "id": "20_2",
+      "title": "Lidköping Energi, skriftligt leverantörssvar 2026-09-09 (flödesjustering, effektmodell, periodisering)",
+      "retrieved_on": "2026-09-09",
+      "sha256": "93b47766933ba2cd6c841db982cc0981a4b44ec39fe08ff543b3c707746e8f34",
+      "kind": "supplier_email_response_private",
+      "review_id": "2026-09-09-006"
+    },
+    {
       "id": "21_0",
       "title": "Prisändringsmodell 2025 (pdf)",
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Lulea-Energi.pdf",
@@ -4944,11 +4952,14 @@
           "pages": [
             1
           ]
+        },
+        {
+          "source_id": "20_2",
+          "pages": null
         }
       ],
       "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -4958,8 +4969,7 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
         ]
       },
       "contract_required": true
@@ -5037,11 +5047,14 @@
           "pages": [
             1
           ]
+        },
+        {
+          "source_id": "20_2",
+          "pages": null
         }
       ],
       "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -5051,8 +5064,7 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
         ]
       },
       "contract_required": true
