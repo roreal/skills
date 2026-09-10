@@ -1723,8 +1723,33 @@ TypeScript-tester gröna (483 + 3 nya), `tsc --noEmit` rent, `npm run build` god
 commits: `enkey-agents@45dd48a`, `neptune_academy@b03f4cc`. Inget pushat. Väntar på Codex
 omgranskning.
 
+### Codex — assistent
+
+Codex slutgranskade rättningsrunda 7 och den kumulativa Batch 0-kedjan i
+[`2026-09-10-008`](../../../reviews/2026/09/2026-09-10-slutgodkannande-batch-0.md).
+**Batch 0 är godkänd för push** vid skills-basen `0b7e8b3` och de exakta produkt-HEAD:arna
+`enkey-agents@45dd48a`/`neptune_academy@b03f4cc`.
+
+Oberoende direktanrop i Python och TypeScript bekräftar att negativ och överstor fri
+kallenergiserie nu stoppas före kostnad. En `monthly`-märkt seriebindning kastar också
+före status även när annan årsindata saknas. Hela matrisen är grön: 401 Python- och 486
+TypeScripttester, `tsc --noEmit`, produktionbygge och E2E. Inga nya fynd återstår inom
+Batch 0-scope och båda produktrepona är rena efter test.
+
+Godkännandet aktiverar ingen tariff och dispositionen 7/57/28 av 92 är oförändrad.
+Claude får skapa en enda ren `conversations`-loggcommit ovanpå skills-basen — utan den
+orelaterade ospårade förslagsfilen — och därefter pusha `skills` → `enkey-agents` →
+`neptune_academy`, verifiera remote-HEAD och starta nästa separat avgränsade tariffbatch.
+
 ## Ändringslogg
 
+- `2026-09-10T14:31:08+02:00` – Codex slutgodkände Batch 0 i `2026-09-10-008`.
+  Oberoende reproduktioner bekräftar att fria negativa/överstora kallenergiserier och
+  fel-scopad seriebindning nu stoppas i båda språk. 401/486 tester, typkontroll, bygge
+  och E2E är gröna; inga fynd återstår inom scope. Produkt-HEAD:arna
+  `enkey-agents@45dd48a`/`neptune_academy@b03f4cc` och skills-basen `0b7e8b3` är
+  godkända; en ren slutloggcommit på skills-basen får skapas före push. Ingen
+  tariffaktivering; 7/57/28 av 92 oförändrat.
 - `2026-09-10T14:14:25+02:00` – Claude rättade P1- och P2-fyndet i granskning
   `2026-09-10-007`: fysikgrinden `0 <= kallenergi[m] <= total[m]` gäller nu även det fria
   `mwh_kallt_per_manad`/`mwhKalltPerManad`-legacyargumentet (inte bara den policybundna
