@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Rättning mot `2026-09-10-002` levererad: verklig UI-kedja byggd (policyfältformulär, onskadTyp, calcResultForOnskadTyp), argsFranInputs enda ägaren av scope-uppskalning, okänt band-ID klassificeras fältnära, Python-orsaksfält slutet; riktigt Playwright-smoketest tillagt; inga tariffer aktiverade/pushade; 7/57/28 av 92 kvarstår; väntar på Codex omgranskning | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
+| `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Rättningsrunda 3 (`enkey-agents@5462753`/`neptune_academy@97f243c`) levererad som svar på `2026-09-10-003`: prispostmedveten policyFaltMetadata, numerisk tillatnaVarden, strikta parsergrindar, ruta-per-serieelement, fältnära fel, nytt RTL-sidtest och självbärande e2e; väntar på Codex omgranskning; ingen aktivering/push; 7/57/28 | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
 | `2026-09-03-001` | 2026-09-03 | Robert, Codex, Claude | active | Projektintroduktion, säkerhetsfynd och tariffmotorplanen (uppgift 7 klar) | [Öppna sessionen](sessions/2026/09/2026-09-03-projektintroduktion-och-loggstruktur.md) |
@@ -11,13 +11,14 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | Rättning mot 2026-09-10-002 levererad (enkey-agents@cddb367, neptune_academy@e993a5d); väntar på Codex omgranskning; ingen aktivering/push | Fullständig v1–v22-inventering plus lokal Batch 0-kodimplementation; verklig UI-kedja, delad argsFranInputs, typad bandfelsväg och Python-orsaksLiteral levererade, 7/57/28 av 92 | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
+| `2026-09-08-001` | 2026-09-08 09:31 | omedelbart | Rättningsrunda 3 levererad; väntar på Codex omgranskning; ingen aktivering/push | Fullständig v1–v22-inventering plus lokal Batch 0-kodimplementation; V22:s generiska policy-UI-mekanism, RTL-sidtest och självbärande e2e klara, 7/57/28 av 92 | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
 ## Granskningsanteckningar
 
 | Gransknings-ID | Datum | Granskare | Omfattning | Bedömning | Dokument |
 | --- | --- | --- | --- | --- | --- |
+| `2026-09-10-003` | 2026-09-10 | Codex | Omgranskning av Batch 0-rättningsrunda 2 (`enkey-agents@cddb367`, `neptune_academy@e993a5d`) | Bandfel, scope och Python-typ är rättade; V22:s metadata/enum/serie/fältfel, exakta gemensamma underlag och ett sidtest som faktiskt provar policy-UI återstår; changes-required, ingen push | [Öppna omgranskningen](reviews/2026/09/2026-09-10-omgranskning-batch-0-fix2.md) |
 | `2026-09-10-002` | 2026-09-10 | Codex | Omgranskning av Batch 0-rättningarna (`enkey-agents@714da6f`, `neptune_academy@b87ff58`) | Motor, serievalidering, Literal och proveniens är rättade; verklig UI-kedja, korrekt args/dispatch/scope och typad bandfelsväg kvarstår; changes-required, ingen push | [Öppna omgranskningen](reviews/2026/09/2026-09-10-omgranskning-rattningar-batch-0.md) |
 | `2026-09-10-001` | 2026-09-10 | Codex | Kodgranskning av lokal Batch 0 (`enkey-agents@11f8b6e`, `neptune_academy@85aa7a1`) mot godkänd V22-plan | Tester och avgränsning är gröna, men verklig DTO-/UI-kedja, prispost-/motorbunden bandhantering, full serievalidering/Pythonspegling och generatorproveniens saknas; changes-required, ingen push | [Öppna kodgranskningen](reviews/2026/09/2026-09-10-kodgranskning-batch-0.md) |
 | `2026-09-09-016` | 2026-09-09 | Codex | Godkännande av tariffinventering v22, batchplan v22 och dokumentationscommittarna `a5729cb`/`ea917d7` | Båda P1-fynden är stängda; V22 godkänns med villkor för lokal Batch 0-infrastruktur, men kodstart inväntar Roberts klartecken och ingen tariffaktivering eller push ingår | [Öppna godkännandet](reviews/2026/09/2026-09-09-godkannande-tariffinventering-v22.md) |

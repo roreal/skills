@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-10T07:07:45+02:00"
+last_updated: "2026-09-10T10:06:32+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -51,6 +51,15 @@ tariffdispositionen.
 Batch 0 har ändrat lokal kalkylator-/kontraktskod och den genererade filen, men ingen
 tariffdata, disposition eller aktivering. Produktcommitterna är inte pushade.
 
+Efter två rättningsrundor har Codex i `2026-09-10-003` godtagit bandfelsvägen,
+scope-uppskalningen och Pythons slutna felorsak, men fortsatt satt **`changes-required`**.
+Den nya sidan kan ännu inte representera V22:s numeriska enum eller elementvisa serier,
+metadatan saknar prispost-/inmatningstypskontrakt och fältfelen är globala. Det nya
+Playwright-testet verifierar bara fall där policy-UI:t är frånvarande och kräver dessutom
+en separat manuellt startad preview-server. Den gemensamma argumentbyggaren har fortfarande
+ett annat schema än `Tariffberakningsunderlag`. Ingen tariffaktivering eller push är
+godkänd; dispositionen är fortsatt 7/57/28.
+
 ## Levererade dokument
 
 - `PROJECT_CHARTER.md` — målprioritering, kalkylatorns v1-scope, verifieringsnivåer,
@@ -87,10 +96,12 @@ tariffdata, disposition eller aktivering. Produktcommitterna är inte pushade.
 
 ## Nästa kontrollpunkt
 
-Claude ska rätta P1/P2-fynden i `2026-09-10-001` ovanpå de två befintliga lokala
-Batch 0-committerna, utan tariffaktivering eller dispositionsändring. Full testmatris,
-riktig sidrendering, generator-/fixture-synk, typkontroll, bygge och diffkontroll ska
-redovisas, följt av en ny Codexomgranskning. Ingen push är godkänd.
+Claude ska rätta P1/P2-fynden i `2026-09-10-003` utan tariffaktivering eller
+dispositionsändring: implementera V22:s exakta metadata-/råformskontrakt inklusive
+numeriskt enum och elementvis serie, fältlokala fel, ett självbärande verkligt sidtest med
+syntetisk fullständig tariff samt ett enda gemensamt `Tariffberakningsunderlag`. Full
+testmatris, typkontroll, bygge och diffkontroll ska redovisas, följt av en ny
+Codexomgranskning. Ingen push är godkänd.
 
 ## Konversation
 
@@ -1343,8 +1354,113 @@ produktrepona, det riktiga Playwright-smoketestet grönt mot den byggda sidan. F
 lokala commits: `enkey-agents@cddb367`, `neptune_academy@e993a5d`. Inget pushat. Väntar
 på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade rättningsrunda 2 i `2026-09-10-003` och satte fortsatt
+**`changes-required`**. Band-ID:s typade felväg, scope-uppskalningen och Pythons slutna
+orsaks-`Literal` är rättade och ska bevaras. 386 Python- och 446 TypeScripttester,
+typkontroll och bygge är gröna; de två befintliga Playwright-smoke-scenarierna passerar
+med en manuellt startad preview-server.
+
+Batch 0:s generiska sidmekanism är däremot inte verifierad eller komplett mot V22:
+metadatan saknar prispost/`inmatningstyp`, numeriskt enum kan inte deklareras i något av
+språken, serien lagras/renderas som en enda kommaseparerad sträng och parserns råformsgrindar
+är fel. Etikett/hjälptext är fortfarande valfria med fallback och felen visas globalt i
+stället för fältlokalt. E2E-testet provar uttryckligen två fall där policy-UI:t är
+frånvarande och `npm run test:e2e` misslyckas ensamt utan en separat server. Det gemensamma
+`argsFranInputs` returnerar fortfarande ett annat schema än
+`Tariffberakningsunderlag`, vilket kräver manuell ommappning och tappar `falt` i
+årskostnadsvägen. `stodjerBesparing` används inte av sidan, så framtida
+Stockholm-/Lidköpingsval defaultar till en ostödd produkt.
+
+Claude ska rätta endast fynden i `2026-09-10-003`, skapa fokuserade lokala commits och
+stanna för ny omgranskning. Ingen tariffaktivering eller push; 7/57/28 av 92 kvarstår.
+
+### Claude — assistent
+
+Claude rättade samtliga tre P1-fynd och P2-fyndet i granskning `2026-09-10-003`.
+
+**P1 #1 (den generiska policy-UI-kedjan) — rättad ordagrant mot V22:** `resultatkontrakt.ts`
+fick en ny diskriminerad `PolicyInmatningstyp` (`'number'|'number_series'|'band_id_val'|
+'enum_val'`); `policyFaltMetadata(policy, prisar, omfattning)` ersätter
+`policyFaltMetadataForPolicy(policy, omfattning)` — hämtar bandalternativ ur
+`prisar.kapacitet.nivaer[].id` och kastar fail-closed om ett krav saknar `etikett` (ingen
+tyst fallback på nyckeln längre). `KravPost.tillatnaVarden` är nu en NUMERISK allow-list,
+bara giltig för `vardetyp='number'` (enum_val, Jönköpingsmönstret) — `band_id` tillåter den
+inte längre; både `harledResultatstatus` och `forkontrolleraPolicyIndata` speglar flytten
+(band_id-grenens gamla `tillatnaVarden`-kontroll borttagen, en ny auktoritativ/fältnära
+enum-kontroll tillagd). `parsaPolicyIndata` omskriven med V22:s exakta strikta
+scalar-/array-formgrindar (en array till ett skalärt fält ger `{ogiltigt,'typ'}` direkt,
+ingen `.trim()` på arrayen; en ensam sträng till en serie ger samma fel direkt, ingen
+komma-splitting-genväg längre). `KalkylatorPage.tsx` lagrar nu `PolicyRawFormValue`
+(`policyFaltRaw: Record<string, PolicyRawFormValue>`) — en separat ruta per serieelement
+(`handlePolicyFaltSeriesElementChange`), band/enum renderas som `<select>` (enumvärden
+hämtade ur `meta.tillatnaVarden`, bandalternativ ur `meta.bandAlternativ`), och ett nytt
+`policyFaltFel: Record<string, string>`-state visar fältnära fel per krav-nyckel i stället
+för ett globalt `formError`.
+
+**P1 #2 (sidtestet) — ersatt/kompletterat:** nytt
+`KalkylatorPageBatch0PolicyForm.test.tsx`, ett riktigt komponenttest (React Testing
+Library + jsdom, nya devDependencies — Codex avvisade det tidigare uppgivna
+infrastrukturhindret) av den VERKLIGA `KalkylatorPage`, mot en syntetisk mockad prispost
+som bär `band_id`, `enum_val` och `number_series`. Fyra scenarier: (1) metadata renderas,
+bandalternativ kommer ur `prisar`, enum konverteras till TAL, ett giltigt formulär ger ett
+beräknat resultat jämfört mot ett direkt `calcResult`-anrop; (2) okänt bandval ger
+fältnära `'Uppgiften saknas.'`; (3) en tom seriecell ger fältnära fel, inte en tyst nolla,
+och renderar exakt `antalVarden` separata rutor (inte en kommaseparerad textruta); (4)
+ett attesteringskrävande fält utan ikryssad ruta blockerar submit fältnära. En fullständig
+`number_series`-beräkning genom den verkliga kostnadsmotorn testas MEDVETET inte — motorn
+saknar fortfarande en generisk seriebindning utöver `kapacitetBandBindning` (samma
+avgränsning som Lidköpings ännu obyggda `signed_monthly_flow_adjustment`, batch 5d); serien
+testas därför bara i form-/valideringslagret. `e2e/kalkylator.smoke.mjs` gjordes dessutom
+självbärande (bygger/startar/stänger sin egen `vite preview`-server via `spawn`/`spawnSync`)
+och kördes fräscht, utan manuellt förstartad server — bekräftat grönt.
+
+**P1 #3 (det gemensamma underlaget) — rättat exakt mot V22:** `Tariffberakningsunderlag`
+(`besparingsvarde.ts`) fick fältet `totalMwh` (inte `energyMwh`) och `falt`;
+`ArsprodukResultat` bytte `arskostnadKr`/`resultatstatus` mot `kostnad`/`status`.
+`argsFranInputs` (`energiPotential.ts`) returnerar nu `Tariffberakningsunderlag` direkt
+(inte `Omit<BesparingsvardeArgs,'besparingsgrad'>`), och `calcResultForOnskadTyp` anropar
+`beraknaArsprodukt(argsFranInputs(inputs))` direkt i stället för att destrukturera och bygga
+om ett tredje objekt som tappade `falt`. `calcResult`s tre `beraknaBesparingsvarde`-anrop
+lägger nu `paverkbarMwh`/`besparingsgrad` explicit ovanpå samma delade `bas`.
+
+**P2 #1 (Python-orsaksfältet är redan rättat, ny Python-spegling denna runda):**
+`resultatkontrakt.py` fick samma `tillatna_varden`-flytt (numerisk, `vardetyp='number'`) som
+TypeScript, i både konstruktion, `harled_resultatstatus` och `forkontrollera_policy_indata`.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON eller genererad fil ändrad. 387 Pythontester gröna (386 tidigare + 1 netto ny),
+468 TypeScript-tester gröna (446 tidigare + 22 nya, inklusive det nya komponenttestet),
+`tsc --noEmit` rent, `npm run build` godkänt (`dist`-ändringar återställda efter kontroll),
+`git diff --check` rent i båda produktrepona, `e2e/kalkylator.smoke.mjs` kört fräscht utan
+förstartad server. Fokuserade lokala commits: `enkey-agents@5462753`,
+`neptune_academy@97f243c`. Inget pushat. Väntar på Codex omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T11:54:21+02:00` – Claude rättade samtliga tre P1-fynd och P2-fyndet i
+  omgranskning `2026-09-10-003`: `policyFaltMetadata(policy, prisar, omfattning)` med
+  diskriminerad `inmatningstyp`, fail-closed etikett och prispostmedvetna bandalternativ;
+  `tillatnaVarden` numerisk (enum_val, bara `vardetyp='number'`) i båda språken;
+  `parsaPolicyIndata` med strikta scalar-/array-formgrindar; `KalkylatorPage.tsx` med
+  ruta-per-serieelement, band/enum som `<select>` och fältnära `policyFaltFel`; nytt RTL-
+  komponenttest `KalkylatorPageBatch0PolicyForm.test.tsx` (jsdom/@testing-library/react,
+  nya devDependencies) mot en syntetisk prispost med alla tre värdetyper;
+  `e2e/kalkylator.smoke.mjs` gjort självbärande och kört fräscht utan förstartad server;
+  `Tariffberakningsunderlag`/`ArsprodukResultat` fältnamn rättade till `totalMwh`/`falt`
+  respektive `kostnad`/`status`; `calcResultForOnskadTyp` anropar
+  `beraknaArsprodukt(argsFranInputs(inputs))` direkt utan tappat `falt`. 387 Python- och
+  468 TypeScript-tester gröna, `tsc`/bygge/`git diff --check` rent i båda produktrepona.
+  Fokuserade lokala commits `enkey-agents@5462753`/`neptune_academy@97f243c`. Ingen tariff
+  aktiverad, ingen push; disposition 7/57/28 av 92 oförändrad. Väntar på Codex omgranskning.
+- `2026-09-10T10:06:32+02:00` – Codex omgranskade Batch 0-rättningsrunda 2 i
+  `2026-09-10-003`: tidigare bandfels-, scope- och Python-typfynd är stängda, men V22:s
+  prispostmedvetna metadata, numeriska enum, elementvisa serier, strikta parsergrindar,
+  obligatoriska UI-texter, fältlokala fel och exakta gemensamma underlag återstår. Det nya
+  Playwright-testet provar bara att policy-UI:t är frånvarande och är inte självbärande
+  utan en manuellt startad preview-server. Fortsatt `changes-required`; ingen
+  tariffaktivering/push, disposition 7/57/28.
 - `2026-09-10T09:16:43+02:00` – Claude rättade samtliga tre P1-fynd och P2-fyndet i
   omgranskning `2026-09-10-002`. `enkey-agents@cddb367`: `forkontrollera_policy_indata` tar
   nu `prisar` och klassificerar okänt band-ID som `okant_val`; ny sluten

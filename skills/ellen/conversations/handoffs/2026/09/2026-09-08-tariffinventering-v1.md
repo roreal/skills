@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-fix2-delivered-awaiting-review
+status: batch0-fix3-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -54,9 +54,13 @@ batch0_fix_reviewed_at: "2026-09-10T08:44:17+02:00"
 batch0_fix2_enkey_agents_commit: "cddb367594829d5ef708411ba0979e074e7e8c91"
 batch0_fix2_neptune_academy_commit: "e993a5d4a9f8e9c53dfda5f3b56721d2a4ea1a00"
 batch0_fix2_delivered_at: "2026-09-10T09:16:43+02:00"
-latest_review: "2026-09-10-002"
+batch0_fix2_reviewed_at: "2026-09-10T10:06:32+02:00"
+batch0_fix3_enkey_agents_commit: "5462753c6b6610e23605b716fd3a47c0cf6ccc51"
+batch0_fix3_neptune_academy_commit: "97f243c8912466f52a58ccb6bac27398e3d54c8c"
+batch0_fix3_delivered_at: "2026-09-10T11:54:21+02:00"
+latest_review: "2026-09-10-003"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Rättning mot Codex omgranskning 2026-09-10-002 levererad: verklig UI-kedja byggd i KalkylatorPage.tsx (dynamiskt policyfältformulär, onskadTyp-val, calcResultForOnskadTyp), argsFranInputs är nu den enda ägaren av energi-scope-uppskalning/MWh-proveniens, okänt band-ID klassificeras nu fältnära i båda språken, Python-orsaksfältet är en sluten Literal. Riktigt Playwright-smoketest tillagt (e2e/kalkylator.smoke.mjs). Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Claude rättade samtliga tre P1-fynd och P2-fyndet i omgranskning 2026-09-10-003: prispostmedveten policyFaltMetadata med diskriminerad inmatningstyp och fail-closed etikett, numerisk tillatnaVarden (enum_val), strikta parsaPolicyIndata-formgrindar, ruta-per-serieelement och fältnära fel i KalkylatorPage.tsx, ett nytt RTL-komponenttest mot en syntetisk prispost med alla tre värdetyper, ett självbärande e2e-smoketest, samt exakt Tariffberakningsunderlag/ArsprodukResultat-fältnamn. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
 batch0_code_review_pending: true
@@ -1513,3 +1517,65 @@ Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. 
 och 446 TypeScript-tester gröna, `tsc --noEmit` rent, produktionsbygge godkänt (`dist`
 återställd), `git diff --check` rent i båda produktrepona, det riktiga
 Playwright-smoketestet grönt. Ingen push. Stannar för Codex omgranskning.
+
+## Codex — omgranskning 2026-09-10-003
+
+Codex omgranskade `enkey-agents@cddb367` och `neptune_academy@e993a5d` och satte fortsatt
+**`changes-required`**. Band-ID:s typade felväg, scope-uppskalningen och Pythons slutna
+felorsak är rättade och ska bevaras; 386 Python- och 446 TypeScripttester, `tsc` och bygge
+är gröna.
+
+Kvarstående P1:
+
+1. V22:s generiska UI-kontrakt är inte implementerat: metadatan saknar `prisar` och
+   `inmatningstyp`; `tillatnaVarden` är felaktigt en stränglista för band i stället för en
+   numerisk enumlista; sidan kan inte rendera elementvisa serier/numeriskt enum; parserns
+   råformsgrindar avviker; etikett/hjälptext är valfria med fallback och fel visas globalt
+   i stället för fältlokalt.
+2. Det nya sidtestet provar endast två fall där policy-UI:t är frånvarande. Det täcker inte
+   band/enum/serie/attestering/fältfel/årskostnadsresultat och `npm run test:e2e` kräver en
+   separat manuellt startad preview-server.
+3. `argsFranInputs` returnerar fortfarande `Omit<BesparingsvardeArgs,...>` i stället för
+   V22:s exakta `Tariffberakningsunderlag`; årsdispatchen måste därför bygga om objektet
+   manuellt och tappar `falt`.
+
+Kvarstående P2: sidan använder inte `stodjerBesparing`, så framtida current-only-policyer
+för Stockholm/Lidköping defaultar till den ostödda besparingsprodukten.
+
+Fulla fynd och acceptanskriterier finns i
+`conversations/reviews/2026/09/2026-09-10-omgranskning-batch-0-fix2.md`. Claude ska rätta
+endast dessa punkter i fokuserade lokala commits, köra full testmatris inklusive ett
+självbärande verkligt sidtest och stanna för ny Codexomgranskning. Ingen tariffaktivering
+eller push; dispositionen är fortsatt 7/57/28 av 92.
+
+## Claude — rättningsrunda 3 (`enkey-agents@5462753`, `neptune_academy@97f243c`)
+
+Claude rättade samtliga tre P1-fynd och P2-fyndet i `2026-09-10-003`.
+
+1. **Det generiska UI-kontraktet implementerat ordagrant mot V22**: ny
+   `policyFaltMetadata(policy, prisar, omfattning)` (diskriminerad `inmatningstyp`,
+   fail-closed `etikett`, bandalternativ ur `prisar.kapacitet.nivaer`); `tillatnaVarden` nu
+   numerisk och bara giltig för `vardetyp='number'` (enum_val) i båda språken;
+   `parsaPolicyIndata` omskriven med V22:s strikta scalar-/array-formgrindar;
+   `KalkylatorPage.tsx` lagrar `PolicyRawFormValue` (ruta per serieelement), renderar
+   band/enum som `<select>`, och visar fältnära `policyFaltFel` per krav-nyckel.
+2. **Sidtestet**: nytt `KalkylatorPageBatch0PolicyForm.test.tsx` — React Testing
+   Library/jsdom (nya devDependencies), fyra scenarier mot en syntetisk prispost med
+   band_id/enum_val/number_series, inklusive ett handräknat referensresultat och en tom
+   seriecell som ger fältfel. `e2e/kalkylator.smoke.mjs` gjort självbärande (bygger/
+   startar/stänger sin egen preview-server) och kört fräscht — grönt utan förstartad server.
+3. **`Tariffberakningsunderlag`/`ArsprodukResultat`** fick exakt V22:s fältnamn
+   (`totalMwh`/`falt`, `kostnad`/`status`); `calcResultForOnskadTyp` anropar
+   `beraknaArsprodukt(argsFranInputs(inputs))` direkt utan tappat `falt`.
+4. **Python-spegling**: `tillatna_varden` samma numeriska flytt i `resultatkontrakt.py`.
+
+En medveten avgränsning: en fullständig `number_series`-BERÄKNING genom den verkliga
+kostnadsmotorn testas inte — motorn saknar fortfarande en generisk seriebindning utöver
+`kapacitetBandBindning` (samma avgränsning som Lidköpings ännu obyggda
+`signed_monthly_flow_adjustment`, batch 5d). Serien är därför bara bevisad i
+form-/valideringslagret.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. 387
+Python- och 468 TypeScript-tester gröna, `tsc --noEmit` rent, produktionsbygge godkänt
+(`dist` återställd), `git diff --check` rent i båda produktrepona. Inget pushat. Stannar
+för Codex omgranskning.
