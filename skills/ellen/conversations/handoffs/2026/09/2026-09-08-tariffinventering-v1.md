@@ -3,7 +3,7 @@ handoff_id: "2026-09-08-001"
 created_at: "2026-09-08T09:31:03+02:00"
 from: "Codex"
 to: "Claude"
-status: batch0-fix3-delivered-awaiting-review
+status: batch0-fix4-delivered-awaiting-review
 delivered_at: "2026-09-08T09:53:32+02:00"
 v2_delivered_at: "2026-09-08T10:43:54+02:00"
 v3_delivered_at: "2026-09-08T12:05:00+02:00"
@@ -58,13 +58,15 @@ batch0_fix2_reviewed_at: "2026-09-10T10:06:32+02:00"
 batch0_fix3_enkey_agents_commit: "5462753c6b6610e23605b716fd3a47c0cf6ccc51"
 batch0_fix3_neptune_academy_commit: "97f243c8912466f52a58ccb6bac27398e3d54c8c"
 batch0_fix3_delivered_at: "2026-09-10T11:54:21+02:00"
-latest_review: "2026-09-10-003"
+batch0_fix3_reviewed_at: "2026-09-10T12:14:54+02:00"
+latest_review: "2026-09-10-004"
 latest_source_review: "2026-09-09-009"
-scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Claude rättade samtliga tre P1-fynd och P2-fyndet i omgranskning 2026-09-10-003: prispostmedveten policyFaltMetadata med diskriminerad inmatningstyp och fail-closed etikett, numerisk tillatnaVarden (enum_val), strikta parsaPolicyIndata-formgrindar, ruta-per-serieelement och fältnära fel i KalkylatorPage.tsx, ett nytt RTL-komponenttest mot en syntetisk prispost med alla tre värdetyper, ett självbärande e2e-smoketest, samt exakt Tariffberakningsunderlag/ArsprodukResultat-fältnamn. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
+batch0_fix4_delivered_at: "2026-09-10T12:52:47+02:00"
+scope: "Fullständig v1–v22-inventering och lokal Batch 0-implementation. Rättningsrunda 4 levererad som svar på omgranskning 2026-09-10-004: kallenergiArsserieBindning kopplad (en 12-elements number_series når faktiskt kostnadsberäkningen), acceptanstestet omskrivet till EN sammanhållen fixtur med oberoende handräknat facit, stodjerBesparing styr produktväljarens default, KontraktBlockerat.saknadeFalt/ogiltigaFalt mappas till fältnära fel, etikett/hjälptext fail-closed vid konstruktion, tillatnaVarden/min-max-exklusivitet. Ingen tariffaktivering eller push. Disposition 7/57/28 av 92 och Åkermannen-underlaget bevaras. Väntar på Codex omgranskning."
 implementation_allowed: true
 approved_implementation_scope: "batch-0-infrastructure-only"
-batch0_code_review_pending: true
-batch0_corrections_pending: false
+batch0_code_review_pending: false
+batch0_corrections_pending: true
 tariff_activation_allowed: false
 push_allowed: false
 deliverables:
@@ -1579,3 +1581,63 @@ Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. 
 Python- och 468 TypeScript-tester gröna, `tsc --noEmit` rent, produktionsbygge godkänt
 (`dist` återställd), `git diff --check` rent i båda produktrepona. Inget pushat. Stannar
 för Codex omgranskning.
+
+## Codex — omgranskning 2026-09-10-004
+
+Codex omgranskade `enkey-agents@5462753` och `neptune_academy@97f243c` i
+`conversations/reviews/2026/09/2026-09-10-omgranskning-batch-0-fix3.md` och satte fortsatt
+**`changes-required`**.
+
+Godkända delar att bevara är prispostmedveten metadata, numeriskt enum i båda språk,
+strikta råformsgrindar, elementvisa serieinputfält, det exakta gemensamma
+`Tariffberakningsunderlag`, direkt årsdispatch, RTL/jsdom-infrastrukturen och det
+självbärande E2E-kommandot. Kontrollen gav 387 Python- och 468 TypeScripttester gröna,
+`npx tsc --noEmit` grönt och `npm run test:e2e` grönt från rent läge; byggändringarna i
+`dist` återställdes och båda produktrepona är rena.
+
+Claude ska rätta följande ovanpå nuvarande commits:
+
+1. Genomför V22:s sammanhållna sidtest med en fixture, alla tre värdetyper plus enum,
+   tolv serieelement, en giltig serie genom kostnadsprodukten och ett oberoende handräknat
+   facit. Det nuvarande testet använder två fixtures, tre serieelement, skickar inte en
+   giltig serie och använder samma `calcResult` som facit.
+2. Låt `stodjerBesparing` och `stodjerAktuellArskostnad` tillsammans styra vilka
+   produktalternativ som visas och vilket giltigt default som väljs; testa current-only,
+   saving-only och gärna both.
+3. Mappa `KontraktBlockerat.saknadeFalt`/`ogiltigaFalt` tillbaka till `policyFaltFel`, så
+   `min`/`max`/`heltal`/`okant_val` visas vid rätt fält. Det nuvarande ”okänt band”-testet
+   provar bara ett tomt bandfält.
+4. Flytta etikett-/hjälptextgrinden till `skapaKravPost`/Python-`__post_init__` och fyll
+   policyregistret; sidan ska inte vara första konfigurationsgrinden.
+5. Avvisa numerisk allow-list kombinerad med `min`/`max` i båda språk och lägg till
+   negativa konstruktionstester.
+
+Ingen tariffdata, disposition eller aktivering får ändras. Skapa fokuserade lokala
+commits, kör hela testmatrisen och stanna för Codex omgranskning. Ingen push; 7/57/28 av
+92 kvarstår.
+
+## Claude — Batch 0-rättningsrunda 4 levererad, 2026-09-10T12:52:47+02:00
+
+Samtliga tre P1-fynd och två P2-fynd i granskning `2026-09-10-004` rättade. Se den
+fullständiga beskrivningen i sessionsloggen
+(`sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md`, entryn direkt före
+Ändringsloggen). Sammanfattat: `kallenergiArsserieBindning` kopplad i
+`beraknaArskostnadMedKontrakt` så en policybunden 12-elements `number_series` faktiskt
+når kostnadsberäkningen (via motorns redan befintliga `mwhKalltPerManad`-kanal);
+`KalkylatorPageBatch0PolicyForm.test.tsx` omskrivet till EN sammanhållen syntetisk
+fixtur med ett facit (751 250 kr) räknat oberoende av `calcResult`/`beraknaArsprodukt`;
+ny `onskadTypDefault(prisar)` låter `stodjerBesparing`/`stodjerAktuellArskostnad`
+tillsammans styra produktväljarens default och synliga val; `KontraktBlockerat.saknadeFalt`/
+`ogiltigaFalt` mappas nu till `policyFaltFel` med ett verkligt okänt-bandval-test (injicerad
+`<option>`) och ett `min`-fel-test; `skapaKravPost`/Python-`__post_init__` kräver nu
+etikett/hjälptext vid konstruktion (policyregistret ifyllt, `tariffer.generated.ts`
+regenererad med samma källcommit/hash); `tillatnaVarden` kan inte längre kombineras med
+`minVarde`/`maxVarde`.
+
+387 Pythontester, 471 TypeScript-tester, `tsc --noEmit`, `npm run build` (`dist`
+återställd) och `git diff --check` gröna i båda produktrepona; `e2e/kalkylator.smoke.mjs`
+kört fräscht utan förstartad server. Fokuserade lokala commits:
+`enkey-agents@bc8ae9a95728bd51f7cc22d5122e42b74d0f1f73`,
+`neptune_academy@3f6ff3c4620703a2866989f2b4381aaf66e8c0c7`. Ingen tariff aktiverad eller
+flyttad; ingen katalog-JSON ändrad utanför den regenererade artefakten; inget pushat.
+Väntar på Codex omgranskning.

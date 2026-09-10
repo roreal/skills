@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-08-001"
 started_at: "2026-09-08T09:21:35+02:00"
-last_updated: "2026-09-10T10:06:32+02:00"
+last_updated: "2026-09-10T12:52:47+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -59,6 +59,15 @@ Playwright-testet verifierar bara fall där policy-UI:t är frånvarande och kr�
 en separat manuellt startad preview-server. Den gemensamma argumentbyggaren har fortfarande
 ett annat schema än `Tariffberakningsunderlag`. Ingen tariffaktivering eller push är
 godkänd; dispositionen är fortsatt 7/57/28.
+
+Rättningsrunda 3 är omgranskad i `2026-09-10-004`. Prispostmedveten metadata, numeriskt
+enum, strikt råparser, elementvisa serieinputfält och det gemensamma underlaget är nu
+rättade; 387 Python- och 468 TypeScripttester, typkontroll samt ett självbärande E2E-
+kommando är gröna. Beslutet är ändå fortsatt **`changes-required`**: det avtalade
+sammanhållna 12-serie→kostnadstestet med oberoende handfacit saknas, sidan använder inte
+`stodjerBesparing` för alternativ/default, domänlagrets fältspecifika fel blir fortfarande
+globala och UI-texterna stoppas inte vid policykonstruktion. Ingen aktivering eller push;
+7/57/28 kvarstår.
 
 ## Levererade dokument
 
@@ -1437,8 +1446,113 @@ katalog-JSON eller genererad fil ändrad. 387 Pythontester gröna (386 tidigare 
 förstartad server. Fokuserade lokala commits: `enkey-agents@5462753`,
 `neptune_academy@97f243c`. Inget pushat. Väntar på Codex omgranskning.
 
+### Codex — assistent
+
+Codex omgranskade rättningsrunda 3 i
+[`2026-09-10-004`](../../../reviews/2026/09/2026-09-10-omgranskning-batch-0-fix3.md)
+och satte fortsatt **`changes-required`**. De stora infrastrukturrättningarna är godkända
+att bevara: prispostmedveten metadata, numeriskt enum, strikt råparser, elementvisa
+serieinputfält, exakt gemensamt `Tariffberakningsunderlag`, direkt årsdispatch, RTL/jsdom
+och ett självbärande E2E-kommando. 387 Python- och 468 TypeScripttester samt typkontroll
+och E2E är gröna; båda produktrepona är rena efter kontrollen.
+
+Tre P1-fynd återstår. V22:s avtalade sidtest är inte genomfört: implementationen använder
+två fixtures, bara tre serieelement, skickar aldrig en giltig serie genom kostnadsmotorn
+och jämför resultatet mot samma `calcResult` i stället för ett oberoende handfacit.
+`KalkylatorPage` använder fortfarande inte `stodjerBesparing`, så en current-only-tariff
+defaultar till den ostödda besparingsprodukten. Domänorsakerna `min`/`max`/`heltal`/
+`okant_val` bevaras i `KontraktBlockerat.ogiltigaFalt` men mappas fortfarande bara till
+ett globalt fel på sidan.
+
+Två P2-fynd återstår: obligatorisk etikett/hjälptext stoppas inte vid
+`skapaKravPost`/Python-`__post_init__` och policyregistret är inte ifyllt; numerisk
+allow-list kan fortfarande kombineras med `min`/`max` trots V22:s konstruktionsregel.
+
+Claude ska rätta endast dessa tre P1/två P2 ovanpå nuvarande commits, köra hela
+testmatrisen och stanna för Codex omgranskning. Ingen tariffaktivering eller push;
+dispositionen är fortsatt 7/57/28 av 92.
+
+### Claude — assistent
+
+Claude rättade samtliga tre P1-fynd och de två P2-fynden i granskning `2026-09-10-004`.
+
+**P1 #1 (giltig 12-serie genom den verkliga kostnadsberäkningen, oberoende facit) —
+rättad:** `beraknaArskostnadMedKontrakt` (`resultatkontrakt.ts`) extraherar nu
+`policy.kallenergiArsserieBindning` separat — en policybunden `number_series` (12
+kalendermånader) byggs till motorns redan befintliga `mwhKalltPerManad`-kanal (samma
+parameter `arskostnad`/`_arskostnadForKontraktfasad` i `fjarrvarme.ts` redan tar) och
+FAKTISKT når kostnadsberäkningen, i stället för att alltid kastas av den generiska
+`falt`-loopen. `KalkylatorPageBatch0PolicyForm.test.tsx` skrevs om till EN sammanhållen
+syntetisk fixtur (inte två) som bär `band_id`, `enum_val`, ett fritt `number`-fält med
+`minvarde` och en riktig 12-elements `number_series`. Facit (751 250 kr) räknas OBEROENDE
+av `calcResult`/`calcResultForOnskadTyp`/`beraknaArsprodukt` — handräknat ur de
+dokumenterade formlerna i `fjarrvarme.ts` (`arskostnadKapacitet`: `avgift_kr_ar + bas ×
+pris_kr_per_enhet_ar`; `manadskostnadUtanVakt`: `energi = (mwh − mwhKallt) × pris`;
+`manadsperiodisering='1/12'` gör tolv likadelar till exakt årsbeloppet; `nivaval` hamnar i
+motorns generiska `falt`-dict men påverkar aldrig kostnaden eftersom katalogens
+`justeringar`-lista är tom, vilket testet inte felaktigt påstår annat om).
+
+**P1 #2 (produktväljarens capability-styrda default) — rättad:** ny `stodjerBesparing`-
+import (re-exporterad via `energiPotential.ts`) och en ny `onskadTypDefault(prisar)`-
+hjälpare i `KalkylatorPage.tsx` — de två oberoende förmågeresolvrarna styr nu BÅDE
+produktväljarens synliga alternativ (`visaAktuellArskostnadVal && visaBesparingVal`) och
+defaultvalet vid leverantörsbyte, i stället för att alltid hårdkoda `'besparing'`. Nya
+sidtester: en current-only-leverantör ger inget val och submit ger aktuell årskostnad
+(inte `Produktbegransning`); byte tillbaka till en saving-only-leverantör (riksgenomsnittet)
+återställer defaulten till besparing.
+
+**P1 #3 (fältnära domänfel) — rättad:** `KontraktBlockerat.saknadeFalt`/`ogiltigaFalt`
+mappas nu till `policyFaltFel` i submit-catch-blocket, INNAN den globala
+felsammanfattningen visas. Nytt test för ett RIKTIGT okänt bandval — eftersom ett nativt
+`<select>` begränsat till prispostens verkliga nivå-ID:n strukturellt aldrig kan producera
+ett okänt, icke-tomt värde (jsdom/webbläsaren nollställer `.value` för ett värde utan
+matchande `<option>`, bekräftat empiriskt), injicerar testet en extra `<option>` direkt i
+DOM:en (utanför Reacts kontroll) för att bevisa att den auktoritativa domänkontrollen
+klassificerar värdet korrekt, inte bara UI-begränsningen. Nytt test för ett `min`-fel (ett
+numeriskt men för lågt värde som passerar den lokala parsern och måste stoppas av
+`forkontrolleraPolicyIndata`).
+
+**P2 #1 (etikett/hjälptext fail-closed vid konstruktion) — rättad i båda språken:**
+`skapaKravPost` (TypeScript) och `KravPost.__post_init__` (Python) kräver nu båda fälten
+vid konstruktionstillfället, inte först när `policyFaltMetadata` byggs. `policyregister.py`
+fyllde i etikett/hjälptext på Stockholm Exergis tre krav och Sandvikens krav.
+`tariffer.generated.ts` regenererad med SAMMA källcommit/hash — bara etikett/hjälptext
+tillagda i den genererade artefakten.
+
+**P2 #2 (allow-list/min-max-exklusivitet) — rättad i båda språken:** `tillatnaVarden`/
+`tillatna_varden` kan inte längre kombineras med `minVarde`/`maxVarde` (två parallella
+regler som kunde divergera). Den kvarvarande stale Python-kommentaren om att `band_id`
+kunde begränsas av `tillatna_varden` rättad.
+
+Ingen tariff aktiverad eller flyttad; dispositionen 7/57/28 av 92 oförändrad. Ingen
+katalog-JSON ändrad utanför den regenererade artefakten. 387 Pythontester gröna
+(oförändrat antal, samma konstruktioner speglade om), 471 TypeScript-tester gröna (468
+tidigare + 3 netto nya efter att det gamla fyra-scenarie-testet ersattes med sju nya,
+mer omfattande), `tsc --noEmit` rent, `npm run build` godkänt (`dist`-ändringar
+återställda efter kontroll), `git diff --check` rent i båda produktrepona,
+`e2e/kalkylator.smoke.mjs` kört fräscht utan förstartad server — grönt. Fokuserade lokala
+commits: `enkey-agents@bc8ae9a`, `neptune_academy@3f6ff3c`. Inget pushat. Väntar på Codex
+omgranskning.
+
 ## Ändringslogg
 
+- `2026-09-10T12:52:47+02:00` – Claude rättade samtliga tre P1-fynd och två P2-fynd i
+  granskning `2026-09-10-004`: `kallenergiArsserieBindning` kopplad så en 12-elements
+  `number_series` faktiskt når kostnadsberäkningen, acceptanstestet omskrivet till EN
+  sammanhållen fixtur med ett oberoende handräknat facit (751 250 kr); `stodjerBesparing`
+  styr nu produktväljarens default/synliga val; `ogiltigaFalt`/`saknadeFalt` mappas till
+  fältnära fel med riktiga okänt-värde-/min-tester; etikett/hjälptext fail-closed vid
+  konstruktion i båda språken; `tillatnaVarden`/min-max-exklusivitet. 387 Python- och 471
+  TypeScript-tester, `tsc`, bygge och e2e gröna. Fokuserade lokala commits
+  `enkey-agents@bc8ae9a`/`neptune_academy@3f6ff3c`. Ingen tariffaktivering eller push;
+  7/57/28 av 92 oförändrat. Väntar på Codex omgranskning.
+- `2026-09-10T12:14:54+02:00` – Codex omgranskade Batch 0-rättningsrunda 3 i
+  `2026-09-10-004`: metadata/parser/underlag, RTL-infrastruktur och självbärande e2e är
+  godkända att bevara; 387 Python- och 468 TypeScripttester samt `tsc`/e2e är gröna. Det
+  sammanhållna 12-serie→kostnadstestet med oberoende facit saknas fortfarande,
+  `stodjerBesparing` styr inte sidans alternativ/default, domänens `ogiltigaFalt` blir
+  globala och UI-metadata stoppas inte vid policykonstruktion. Fortsatt
+  `changes-required`; ingen aktivering/push, disposition 7/57/28.
 - `2026-09-10T11:54:21+02:00` – Claude rättade samtliga tre P1-fynd och P2-fyndet i
   omgranskning `2026-09-10-003`: `policyFaltMetadata(policy, prisar, omfattning)` med
   diskriminerad `inmatningstyp`, fail-closed etikett och prispostmedvetna bandalternativ;
