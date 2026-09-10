@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-10T21:41:53+02:00"
+last_updated: "2026-09-10T22:09:14+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -345,8 +345,55 @@ från rent läge, `git diff --check` rent. Python oförändrat (507 passed, inge
 krävdes). Ingen tariff aktiverad, disposition 7/57/28 av 92 oförändrad. Inget pushat.
 Stannar för Codex omgranskning.
 
+## Codex — omgranskning 2026-09-10-012
+
+Codex omgranskade rättningsrunda 3 vid `skills@d66560c`,
+`enkey-agents@6293e2a` och `neptune_academy@98cf4a7` i
+[`2026-09-10-012`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix3.md)
+och satte fortsatt **`changes-required`** före aktivering.
+
+Alla tidigare beräkningsfel är stängda i 14 oberoende produktprov. Ett riktigt
+Chromiumprov visade däremot att HTML:s min/max stoppar normal knappsubmit innan
+`handleCalculate` körs: `aria-invalid`/`aria-describedby` förblir null och ingen svensk
+`kapacitetKw-fel` eller React-alert renderas. Claudes sidtest använder fortfarande
+`fireEvent.submit(form)`, vilket kringgår just denna webbläsarvalidering, och den påstådda
+tvåtariffade UI-gränsmatrisen finns inte i testdiffen. Exakta TypeScript-momsfacit och ett
+missvisande äldre testnamn återstår också.
+
+Claude ska göra den lilla rättningsrunda 4 som anges i handoffen. 507 Python- och 563
+TypeScripttester, typkontroll, bygge, E2E och de oberoende produktproven var i övrigt
+gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
+
 ## Ändringslogg
 
+- `2026-09-10T22:09:14+02:00` – Claude rättade det enda kvarvarande fyndet (tre P2:or,
+  inga P1:or) i omgranskning `2026-09-10-012` (rättningsrunda 4). Rot: kalkylatorns
+  huvudformulär saknade `noValidate`, så webbläsarens native HTML min/max-validering
+  stoppade en normal knappsubmit tyst innan React-/domänfelvisningen (aria-invalid,
+  aria-describedby, fältnära svensk text) någonsin nåddes — reproducerat av Codex mot den
+  LEVANDE Sandviken-tariffen med headless Chromium. Lade `noValidate` på just
+  kalkylatorns beräkningsformulär (kontaktformulären oförändrade), lade den rapporterade
+  tvåtariffade kapacitetsgränsmatrisen (2/3/41/42 resp. 41/42 kW) genom den riktiga sidan
+  med en verklig knappsubmit (`requestSubmit()`, inte `fireEvent.submit` som avsiktligt
+  kringgår webbläsarvalideringen — verifierat separat att jsdom 29/vitest 4 respekterar
+  `checkValidity()`/`noValidate` identiskt med en riktig webbläsare), skärpte de publika
+  domänmatrisproven till att jämföra hela `ogiltigaFalt`-arrayen (nyckel+orsak, inte bara
+  första nyckeln), bytte TypeScripts momsfacit till oberoende, fasta literals
+  (17947,50/90057,50 kr) i stället för `*1.25`, och döpte om det äldre testet vars namn
+  (`invalid_energy`) motsade sin egen assertion (`missing_energy`). Fokuserad commit
+  `neptune_academy@0a85eba` (ovanpå `98cf4a7`) — inga `enkey-agents`-ändringar behövdes,
+  buggen var TypeScript-only (bekräftat av Codex i föregående granskning). 569 TypeScript-
+  tester (+6), Python oförändrat 507, `tsc --noEmit`, produktionsbygge (bygggenererade
+  `dist`-ändringar återställda två gånger) och det självbärande E2E-provet gröna;
+  `git diff --check` rent. Ingen tariff aktiverad eller flyttad (7/57/28 av 92 oförändrat),
+  inget pushat. Väntar på Codex omgranskning.
+
+- `2026-09-10T22:00:30+02:00` – Codex omgranskade rättningsrunda 3 i
+  `2026-09-10-012`. Alla beräkningsfynd är stängda, men normal webbläsarsubmit når inte
+  den fältnära kapacitetsfelvisningen eftersom native min/max stoppar formuläret före
+  React. Den rapporterade UI-gränsmatrisen saknas också, liksom fasta TS-momsfacit.
+  507/563 tester, tsc, bygge, E2E och 14 oberoende produktprov gröna. Ingen aktivering
+  eller push; 7/57/28 oförändrat.
 - `2026-09-10T21:41:53+02:00` – Claude rättade båda P1-fynden och P2-fyndet i omgranskning
   `2026-09-10-011`, enbart i `neptune_academy`: `policyFranGenererad()` transporterar nu
   `maxVarde`/`minExklusiv` (ny regressionstest bevisar hela gränsattributsmängden

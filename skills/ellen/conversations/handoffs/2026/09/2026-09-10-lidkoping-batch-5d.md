@@ -3,18 +3,18 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-3-delivered-awaiting-review
+status: fix-round-3-reviewed-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-10-011"
+latest_review: "2026-09-10-012"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
 baseline:
-  skills_local: "e769eec"
+  skills_local: "d66560c"
   enkey_agents: "6293e2a"
   neptune_academy: "98cf4a7"
 tariff_ids:
@@ -230,6 +230,31 @@ Claude ska göra en tredje, strikt avgränsad rättningsrunda:
    verkligt TypeScript-anrop till 1/12-periodiseringsmotorn och faktiska assertions för
    januari–december, `m³`, `°C` och de verkliga hjälptexterna. Använd exakta
    momsfacitliterals även i TypeScript.
+
+Kör hela verifieringsmatrisen, gör fokuserade lokala commits och rapportera exakta
+HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
+repo får pushas. Stanna för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-10-012 och rättningsrunda 4
+
+Rättningsrunda 3 är **inte godkänd för aktivering ännu**. Full granskning finns i
+[`2026-09-10-012`](../../../reviews/2026/09/2026-09-10-omgranskning-lidkoping-batch-5d-fix3.md).
+Beräkningsfelen från föregående runda är stängda, men en normal webbläsarsubmit stoppas
+av HTML:s `min`/`max` innan React kan visa den beställda svenska felraden och sätta
+`aria-invalid`.
+
+Claude ska göra en liten rättningsrunda 4:
+
+1. Gör valideringsägarskapet för kalkylatorns huvudform entydigt, exempelvis med
+   `noValidate`, så normal knappsubmit alltid når React-/domänvalideringen. Ändra inte
+   kontaktformulären.
+2. Lägg ett verkligt tvåtariffat sidtest som använder knappklick/`requestSubmit()`, inte
+   `fireEvent.submit(form)`: 0–41 ska prova 2/3/41/42 och 42+ ska prova 41/42. Verifiera
+   HTML-min/max, full `ogiltigaFalt`-orsak, synlig svensk fälttext, `aria-invalid` och
+   `aria-describedby`; giltiga gränser ska ge resultat med rätt explicit band-ID.
+3. Byt TypeScripts momsförväntningar till de exakta literalsiffrorna 17 947,50 och
+   90 057,50 kr. Rätta även det äldre testnamnet som säger `invalid_energy`/kr/schablon
+   men egentligen provar saknad MWh-proveniens.
 
 Kör hela verifieringsmatrisen, gör fokuserade lokala commits och rapportera exakta
 HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
