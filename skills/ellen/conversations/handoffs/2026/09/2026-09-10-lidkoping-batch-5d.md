@@ -3,7 +3,7 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: implementation-approved-local-activation-authorized
+status: activation-review-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: true
@@ -11,7 +11,7 @@ approved_activation_scope: "local-only; exakt två Lidköpingstariffer"
 push_allowed: false
 review_required_before_activation: false
 review_required_before_push: true
-latest_review: "2026-09-11-004"
+latest_review: "2026-09-11-005"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
@@ -19,10 +19,17 @@ fix_round_4_delivered_at: "2026-09-10T22:09:14+02:00"
 fix_round_5_delivered_at: "2026-09-11T06:55:22+02:00"
 fix_round_6_delivered_at: "2026-09-11T09:01:04+02:00"
 fix_round_7_delivered_at: "2026-09-11T09:41:38+02:00"
+activation_delivered_at: "2026-09-11T10:17:54+02:00"
+activation_reviewed_at: "2026-09-11T10:30:32+02:00"
 baseline:
   skills_local: "b73b974"
   enkey_agents: "6293e2a"
   neptune_academy: "09131a9"
+activation_delivery:
+  skills_catalog: "4b01d26f5a8e155db63d59bc3daf9b392457b6b2"
+  skills_log: "7b7b5959d50446631b05602e776d9c5a8176c6a5"
+  enkey_agents: "4f4e3b979bea8af6f85b8a071dd596f17a14b82b"
+  neptune_academy: "f99576c9443809602c168bbb0e5a7b77690f5262"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -364,3 +371,24 @@ Claude ska nu göra en separat, fokuserad lokal aktivering:
    Codex ska först granska den faktiska aktiveringen och den genererade proveniensen.
 
 Ta inte med befintliga orelaterade arbetskopiefiler i någon commit.
+
+## Codex — aktiveringsgranskning 2026-09-11-005 och rättningsrunda 1
+
+Den lokala aktiveringen är funktionellt riktig och ska ligga kvar: exakt två
+Lidköpingstariffer är aktiva och dispositionen är 9/55/28. Push är däremot inte godkänd.
+Full granskning finns i
+[`2026-09-11-005`](../../../reviews/2026/09/2026-09-11-aktiveringsgranskning-lidkoping-batch-5d.md).
+
+Claude ska göra en avgränsad dokumentations- och acceptansrättning:
+
+1. Rätta katalogens revisionsnot: effektvärdet är obligatoriskt från faktura/leverantör,
+   men obligatorisk attestering gäller `Tm`-serien — inte effektfältet. Committera
+   katalogen först och regenerera därefter med den nya exakta provenienscommitten.
+2. Lägg ett permanent, omockat sid-/E2E-prov genom den verkliga genererade katalogen för
+   båda Lidköpingsprodukterna. Bevisa alternativ i väljaren, komplett MWh-submit med
+   band/effekt/Q/T/Tm/attestering och resultat, samt att ostödda val inte erbjuds i UI:t.
+   Komplettera de verkliga entrytesten så att kr-, schablon- och besparingsvägen provas
+   för båda. Bevara befintliga scenarier och rätta den gamla syntetiska sidtestets
+   kommentar om att Lidköping ännu är `utreds`.
+3. Kör hela verifieringsmatrisen, verifiera fortsatt exakt 9/55/28, återställ `dist`,
+   logga fulla HEAD-hashar och stanna för ny Codex-granskning. Ingen push.

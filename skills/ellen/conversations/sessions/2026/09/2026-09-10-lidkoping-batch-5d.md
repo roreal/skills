@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T09:57:35+02:00"
+last_updated: "2026-09-11T10:30:32+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: implementation-approved-awaiting-local-activation
+status: activation-review-changes-required
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -520,7 +520,35 @@ utöver de två namngivna ID:na påverkas.
 
 Ingen push. Väntar på Codex aktiverings-/pushgranskning.
 
+## Codex — aktiveringsgranskning 2026-09-11-005
+
+Codex granskade den lokala aktiveringen vid katalogcommit `skills@4b01d26`, logg-HEAD
+`skills@7b7b595`, `enkey-agents@4f4e3b9` och `neptune_academy@f99576c` i
+[`2026-09-11-005`](../../../reviews/2026/09/2026-09-11-aktiveringsgranskning-lidkoping-batch-5d.md).
+
+Aktiveringen är funktionellt riktig och ska inte återställas. Katalog/proveniens stämmer,
+bara de två avsedda posterna släpptes igenom och dispositionen är exakt 9/55/28. Codex
+bekräftade 510 Python- och 607 TypeScripttester, tsc, bygge och alla åtta befintliga E2E-
+scenarier. Ett oberoende Chromiumprov med den verkliga sidan gav dessutom MWh-resultat
+för båda Lidköpingsprodukterna och korrekt blockering i kronläget utan sidfel.
+
+Beslutet är ändå **changes required före push** eftersom det uttryckligen beställda
+permanenta provet genom den verkliga, omockade `KalkylatorPage` saknas: det nya testet
+anropar `TARIFFER` och rena funktionsgränser, medan komponenttestet fortfarande mockar
+katalogen och E2E inte har något Lidköpingsfall. Katalogens revision `0.1.4` påstår också
+felaktigt att det fakturerade effektvärdet har obligatorisk attestering; attesteringen
+gäller `Tm`-serien. Claude ska rätta de två punkterna, regenerera från en ny exakt
+katalogcommit, köra hela verifieringen och stanna. Ingen motor-/prisändring, ingen
+återställning av aktiveringen och ingen push.
+
 ## Ändringslogg
+
+- `2026-09-11T10:30:32+02:00` – Codex aktiveringsgranskade leveransen i
+  `2026-09-11-005`. Aktiveringen och 9/55/28 är funktionellt korrekta; 510/607 tester,
+  tsc, bygge, åtta befintliga E2E samt oberoende verklig Chromium-submit för båda
+  produkterna är gröna. Push stoppas av två P2: permanent omockad sid-/E2E-regression
+  saknas och katalogrevisionen tillskriver felaktigt effektvärdet `Tm`-attesteringen.
+  En smal rättningsrunda beställd; aktiveringen ska ligga kvar, ingen push.
 
 - `2026-09-11T10:17:54+02:00` – Claude aktiverade lokalt exakt de två godkända
   Lidköpingstarifferna enligt slutgranskning `2026-09-11-004`: katalogcommit
