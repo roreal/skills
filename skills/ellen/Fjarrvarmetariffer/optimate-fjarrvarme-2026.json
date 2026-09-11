@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.5",
+  "schema_version": "0.1.6",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-11",
@@ -6634,9 +6634,7 @@
           ]
         }
       ],
-      "issues": [
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
-      ],
+      "issues": [],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
@@ -6645,7 +6643,7 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Batch 1-implementationen (contract_required, Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
         ]
       },
       "contract_required": true
@@ -6765,7 +6763,7 @@
         }
       ],
       "issues": [
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        "Kapacitetsdelens månadsvisa fördelning (monthly_proration) saknas eller behöver verifieras — påverkar bara en framtida månadsvis fakturaredovisning, inte den uppskattade årskostnaden (annual_forward), som är oberoende av proration."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -6775,7 +6773,8 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+          "Kapacitetsdelens månadsvisa fördelning är overifierad (blockerar bara en framtida manadskostnad/manadsuppdelning-väg).",
+          "Batch 1-implementationen (contract_required, Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
         ]
       },
       "contract_required": true
@@ -11144,6 +11143,14 @@
         "Örnsköldsvik: fast avgift i samtliga 16 effektband satt till verifierad noll (0), i enlighet med källunderlaget (30_0, godkänt 2026-09-04) — prislistan visar att tariffen enbart består av energi och kapacitet, ingen separat fast avgift. monthly_proration rättad från \"1/12\" till \"days_in_month/days_in_year\" (kalenderdagsviktning), enligt samma källunderlags anmärkning om katalogfel.",
         "contract_required=true satt för de sex Batch 1-tarifferna (karlstads-energi-karlstad-2026, sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026, vanerenergi-mariestad-och-toreboda-2026, ovik-energi-ornskoldsvik-2026, telge-nat-telge-foretag-och-bostadsrattsforeningar-2026, partille-energi-partille-2026), kopplade till nya Tariffpolicy-poster i enkey-agents/policyregister.py (annual_forward, MWh-only). Detta är en implementationsetapp — investigation.status och issues är OFÖRÄNDRADE för samtliga sex rader; ingen av dem blir valbar i den genererade artefakten förrän en separat, godkänd aktiveringsrunda rensar deras utredningsstatus. Övriga 72 katalogposters status är oförändrade.",
         "Öppen fråga, inte löst i denna revision: partille-energi-partille-2026s månadsperiodisering av kapacitetsdelen är fortsatt overifierad (verifieringslistan har inte kryssat av punkten) — battchplanens uppgift att Partille är källgodkänd med känd formel avser bara returtemperaturjusteringen (energi_MWh×7×avvikelse), inte kapacitetens periodisering. Flaggat för Codex granskning i stället för att gissa en regel."
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "revision": "0.1.6",
+      "changes": [
+        "Örnsköldsvik: den lösta issue-texten om fast avgift (nollan är nu verifierad, revision 0.1.5) tagen bort — den motsade de nya katalogbytesen. investigation.status=\"utreds\" kvarstår men villkorstexten anger nu bara att Batch 1-implementationen väntar på oberoende granskning/separat aktivering, inte en olöst sakfråga om nollan.",
+        "Partille: revisionsnotens formulering rättad. Kapacitetens månadsvisa fördelning (monthly_proration) är overifierad och blockerar en framtida manadskostnad/manadsuppdelning-väg, men INTE den uppskattade årskostnaden (annual_forward) — arskostnad-facaden är oberoende av monthly_proration. Partille kvarstår i Batch 1 med annual_forward och ingen gissad periodiseringsregel."
       ]
     }
   ],
