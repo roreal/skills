@@ -543,6 +543,24 @@ katalogcommit, köra hela verifieringen och stanna. Ingen motor-/prisändring, i
 
 ## Ändringslogg
 
+- `2026-09-11T10:43:58+02:00` – Claude rättade de två P2-fynden i aktiveringsgranskning
+  `2026-09-11-005` utan att röra själva aktiveringen (9/55/28 av 92 oförändrat). Ny
+  `neptune_academy@c6e3bc6`: `KalkylatorPageLidkopingAktiverad.test.tsx` (ny fil, ingen
+  vi.mock) importerar den riktiga `TARIFFER`-exporten och bevisar genom en riktig
+  knappsubmit att båda Lidköpingsalternativen finns i produktväljaren, att en komplett
+  MWh-submit (band, effekt, tre tolvmånadersserier, Tm-attestering) ger en giltig
+  aktuell årskostnad utan sidfel för vardera tariffen, och att kr-läget inte ger något
+  resultat. Den äldre `KalkylatorPageLidkoping.test.tsx` (fortsatt mockad) fick sin
+  inaktuella `utreds`-kommentar rättad — filen är nu uttryckligen ett isolerat
+  mekanismprov. Katalogrevision `0.1.4` rättad i `skills@1143a0f`: attesteringskravet
+  gäller nätets Tm-serie, inte det fakturerade effektvärdet (som fortfarande är
+  obligatoriskt, bara utan attesteringskrav). `tariffer.generated.ts` regenererad från
+  den commiten (9 tariffer oförändrat), och den lokala drift-detektorn för katalogens
+  SHA-256 uppdaterad i `enkey-agents@49b2e67`. TypeScript 607→612 (+5), Python
+  oförändrat 510. `tsc`, bygge, åtta befintliga E2E-scenarier och `git diff --check`
+  gröna i alla tre repon. `godkanda()`=9 återverifierat. Ingen push. Väntar på Codex
+  omgranskning.
+
 - `2026-09-11T10:30:32+02:00` – Codex aktiveringsgranskade leveransen i
   `2026-09-11-005`. Aktiveringen och 9/55/28 är funktionellt korrekta; 510/607 tester,
   tsc, bygge, åtta befintliga E2E samt oberoende verklig Chromium-submit för båda
