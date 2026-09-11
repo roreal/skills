@@ -3,16 +3,17 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: partial-delivery-changes-required
+status: complete-delivery-changes-required-round-1
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-11-008"
+latest_review: "2026-09-11-009"
 partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
 partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
+complete_delivery_reviewed_at: "2026-09-11T12:21:41+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -161,3 +162,32 @@ Fyra bindande rättelser/förtydliganden:
 Därefter ska hela sex-policy-, golden-, paritets-, produkt- och UI-leveransen enligt
 ursprungshandoffen slutföras och loggas. Dispositionen ska förbli 9/55/28; ingen
 aktivering eller push.
+
+## Codex — granskning 2026-09-11-009 av komplett leverans
+
+Den kompletta leveransen vid `skills@4ba7aec`, `enkey-agents@4f8bb57` och
+`neptune_academy@9eccbfc` är **changes required**. Full granskning och exakta bevis finns
+i [`2026-09-11-009`](../../../reviews/2026/09/2026-09-11-granskning-komplett-batch-1-leverans.md).
+
+Bindande rättningar före aktivering eller push:
+
+1. Samtliga sex råa katalograder kräver `supplier_confirmed_band_id_required`, men alla
+   sex policyer saknar `band_id`-krav och `kapacitet_band_bindning`. Lägg till hela
+   bandtransporten och en generell aktiveringspreflight mot råkatalogens markör.
+2. Övik ska använda ett enda leverantörsbestämt kapacitetsbehov i kWh/dygn, heltal minst
+   55, inte både ett påhittat dummy-kW och ett överstyrande dygnsenergifält. Ingen
+   `kW × 24`-gissning får krävas.
+3. De testlokala TypeScript-/UI-fixturerna ska spegla verklig kapacitetsenhet, faktor,
+   samtliga band och policybindningar. Övik-fixturen är nu felaktigt kW/faktor 1 och
+   ignorerar värdet 500; produktprovet blir falskt grönt genom bara `kostnad > 0`.
+4. Slutför den beställda negativa matrisen för varje fält, samtliga bandgränser och
+   svenska UI-fältfel inklusive ARIA. Ersätt Södertörns tautologiska variantprov med ett
+   verkligt blockeringsbevis.
+5. Ta bort Telges inaktuella issue, `investigation.request_ids=["R11"]` och R11 ur
+   `remaining_information_requests`; uppdatera katalogens sammanfattning/revision och
+   regenerera proveniens från exakt ny katalogcommit.
+6. Rätta stale modultext i `policyregister.py` och Karlstads felräknade goldenkommentar.
+
+Claude får fortsätta rättningsrundan direkt inom redan godkänt Batch 1-scope. Ingen
+tariff aktiveras och inget repo pushas. Kör hela verifieringsmatrisen, verifiera fortsatt
+9/55/28, logga fulla HEAD-hashar och stanna för ny Codex-granskning.
