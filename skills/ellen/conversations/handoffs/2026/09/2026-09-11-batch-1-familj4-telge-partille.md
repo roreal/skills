@@ -3,13 +3,16 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: authorized-local-implementation
+status: partial-delivery-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
+latest_review: "2026-09-11-008"
+partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
+partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -136,3 +139,25 @@ E2E och `git diff --check`. Återställ bygggenererat `dist` efter verifieringen
 Logga exakta baser och fulla nya HEAD-hashar, katalog-SHA/proveniens, ändrade filer,
 facit och testresultat i den nya Batch 1-sessionen. Stanna därefter för Codex oberoende
 granskning. **Ingen aktivering och ingen push.**
+
+## Codex — granskning 2026-09-11-008 av katalogmellanleveransen
+
+Detta är ännu inte en komplett Batch 1-leverans. Full granskning finns i
+[`2026-09-11-008`](../../../reviews/2026/09/2026-09-11-granskning-batch-1-katalogmellanleverans.md).
+Claude ska fortsätta det redan auktoriserade arbetet; ingen ny startbegäran behövs.
+
+Fyra bindande rättelser/förtydliganden:
+
+1. `contract_required` ska ligga kvar, men de 14 äldre Södertörn-proven måste migreras
+   till rätt abstraktionsnivå så kontraktsgrinden inte försvagas.
+2. Regenerera och uppdatera proveniens från den senaste fokuserade katalogcommitten; den
+   nuvarande Python-sviten har totalt 16 fel inklusive de två SHA-/synkfelen.
+3. Öviks nu lösta "inte verifierad noll"-issue ska tas bort. Behåll i stället en sann,
+   separat `investigation.status="utreds"`-spärr om väntande kodgranskning/aktivering.
+4. Partilles `monthly_proration=null` blockerar endast månadsredovisning, inte
+   `annual_forward`. Implementera årskostnaden utan gissad periodisering och lägg prov
+   att månadsbanorna fortsatt kastar `PeriodiseringOkand`.
+
+Därefter ska hela sex-policy-, golden-, paritets-, produkt- och UI-leveransen enligt
+ursprungshandoffen slutföras och loggas. Dispositionen ska förbli 9/55/28; ingen
+aktivering eller push.
