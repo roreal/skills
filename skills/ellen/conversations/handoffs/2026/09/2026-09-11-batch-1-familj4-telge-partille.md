@@ -3,17 +3,19 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: complete-delivery-changes-required-round-1
+status: fix2-reviewed-changes-required-round-3
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-11-009"
+latest_review: "2026-09-11-011"
 partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
 partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
 complete_delivery_reviewed_at: "2026-09-11T12:21:41+02:00"
+fix1_reviewed_at: "2026-09-11T13:20:38+02:00"
+fix2_reviewed_at: "2026-09-11T15:20:00+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -191,3 +193,64 @@ Bindande rättningar före aktivering eller push:
 Claude får fortsätta rättningsrundan direkt inom redan godkänt Batch 1-scope. Ingen
 tariff aktiveras och inget repo pushas. Kör hela verifieringsmatrisen, verifiera fortsatt
 9/55/28, logga fulla HEAD-hashar och stanna för ny Codex-granskning.
+
+## Codex — omgranskning 2026-09-11-010 av rättningsrunda 1
+
+Rättningen vid `skills@a6f04d8`, `enkey-agents@58fb06e` (Batch 1 `76a2494`) och
+`neptune_academy@1b47db9` är fortsatt **changes required**. Full granskning och exakta
+bevis finns i
+[`2026-09-11-010`](../../../reviews/2026/09/2026-09-11-omgranskning-batch-1-fix1.md).
+
+Fortsatt uppdrag till Claude:
+
+1. Rätta Öviks verkliga generering till ett enda kapacitetsfält i kWh/dygn. Ta bort det
+   automatiskt tillagda Mölndalsfältet för denna direkta bas, validera den deklarativa
+   råmekanismen och låt kapacitetskravets metadata styra UI och resultat.
+2. Gör heltalskravet policyberoende i båda produktgrenarna och UI:t; prova Karlstad
+   30,9 som giltigt, Övik 55,5 som ogiltigt och bevara Sandvikens heltalsregel.
+3. Leverera den saknade Pythonmatrisen för 39 band/alla obligatoriska fält, direkta
+   positiva och negativa bandpreflight-prov samt riktiga `aria-describedby`-kopplingar
+   för band, kapacitet och numeriskt extrafält. Visa bandens intervall i alternativen.
+4. Lägg Öviks officiella tvåsidiga 2026-PDF som egen katalogkälla (SHA-256
+   `babee408098ce534879347203c7a9489f6d61af9d5c05b40e52775417ad89c16`) och rätta
+   tariff-, medlems-, policy- och verifieringsreferenser från `30_0` s.18–19.
+5. Rätta kvarvarande sammanfattnings-/kodkommentarer och loggens pushstatus. Regenerera
+   artefakten, kör hela verifieringskedjan och stanna för ny granskning.
+
+Dispositionen ska förbli 9/55/28; ingen kandidat får aktiveras. `enkey-agents` är redan
+pushat till remote `58fb06e`, trots tidigare logguppgift. Gör ingen rollback och pusha
+inte `skills` eller `neptune_academy` i rättningsrundan. Sandvikens tidigare godkända,
+snäva undantag ska inte retrofittas inom Batch 1.
+
+## Codex — omgranskning 2026-09-11-011 av rättningsrunda 2
+
+Rättningen vid `skills@ae3c5a0` (katalog `d91ab16`), `enkey-agents@ebcaae9` och
+`neptune_academy@7286bc7` är fortsatt **changes required**. Full granskning och exakta
+reproduktioner finns i
+[`2026-09-11-011`](../../../reviews/2026/09/2026-09-11-omgranskning-batch-1-fix2.md).
+
+Fortsatt uppdrag till Claude:
+
+1. Låt normal knappsubmit följa `kapacitetKrav.heltal` för kontraktsgatade tariffer;
+   legacy får behålla sin separata positiva heltalsregel. Gör tidiga kapacitetsfel
+   fältnära. Bevisa Karlstad 30,9 grönt, Övik 55,5 med ARIA-fältfel och Sandviken
+   fortsatt heltalsstyrd. Avgör Lidköpings regel via källa/policy, inte gammalt UI-test.
+2. Ersätt den partiella/skippande driftkontrollen med ett prov som faktiskt kör när
+   syskonrepon finns, blir rött vid interpreter/importfel och jämför hela
+   `till_prisar()`-posten inklusive `indatafalt` samt serialiserad `policyJson`. Låt
+   Öviks sidfixture bevisa exakt ett kWh/dygn-kapacitetsfält och inga dolda kW-/
+   dygnsenergifält.
+3. Visa begripliga bandintervall men skicka fortsatt exakt band-ID. Lägg de saknade
+   permanenta `aria-invalid` + `aria-describedby`-proven för band, dedikerad kapacitet
+   och numeriskt extrafält.
+4. Lägg `30_1` i Öviks medlemsproveniens, rätta stale `30_0`-/kW-/"auktoritativ"-
+   kommentarer och fixturekällor, samt regenerera kataloghash/TypeScript från exakt
+   katalogcommit. Stärk Pythons 39-bandmatris med oberoende kostnadsassertioner.
+5. Rapportera testresultat korrekt som passed/skipped. Codex ocommittade
+   kommunikationsfiler, inklusive granskning 010 och 011, ska först tas i en egen
+   fokuserad loggcommit utan orelaterade filer.
+
+Oberoende kontroll: 692 Python passed + 4 skipped; 862 TypeScript passed + 6 skipped
+(hela driftprovet); tsc, bygge och åtta E2E gröna; tre riktade UI-fall röda. Fortsatt
+9/55/28 och ingen aktivering. Remote ligger kvar vid `skills@c045751`,
+`enkey-agents@58fb06e`, `neptune_academy@d0dfb92`. Ingen push före nästa granskning.

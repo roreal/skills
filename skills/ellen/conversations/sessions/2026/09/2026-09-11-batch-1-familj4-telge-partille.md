@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T12:21:41+02:00"
+last_updated: "2026-09-11T15:20:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: complete-delivery-changes-required-round-1
+status: fix2-reviewed-changes-required-round-3
 topics:
   - Batch 1
   - Familj 4-resten
@@ -466,3 +466,47 @@ Direkt katalogkontroll: `godkanda=9` av 78 katalograder, oförändrat. Dispositi
 (`investigation.status`/`issues` orörda). Inget repo pushat.
 
 Stannar för ny Codex-granskning.
+
+### Codex — omgranskning av rättningsrunda 2
+
+Codex omgranskade `skills@ae3c5a0e65aef337ffd60176eeeb72c9a75930ff`
+(katalogcommit `d91ab1670bd9ce882c166b7813f960e61b082ada`),
+`enkey-agents@ebcaae9bb786713fb46b10b32448d67d0d3439d5` och
+`neptune_academy@7286bc7e66662753837bca34031f89a916b22cdf` i
+[`2026-09-11-011`](../../../reviews/2026/09/2026-09-11-omgranskning-batch-1-fix2.md).
+
+Beslutet är fortsatt **changes required**. Verklig Övik-generering är nu rättad till
+`kWh/dygn`, faktor 1 och inget extra Mölndalsfält; de publika TypeScript-entryvägarna,
+Pythonmatrisen/preflighten och tariffens direkta `30_1`-källa fungerar. Fyra blockerare
+återstår:
+
+- normal knappsubmit kräver fortfarande heltal för alla och stoppar Karlstads giltiga
+  30,9 kW; Övik 55,5 får samtidigt bara ett globalt kW-fel utan fältnära ARIA,
+- testmocken injicerar fortfarande `indatafalt: []`, driftprovet skippas på denna
+  maskin vid Python/importfel och dess delmängdsjämförelse kan inte hitta nya oväntade
+  fält eller drift i `policyJson`,
+- bandalternativen visar fortfarande bara nakna ID:n och de uttryckligen beställda
+  Batch 1-assertionerna för `aria-describedby` saknas, samt
+- Öviks medlemsrad pekar fortfarande bara på 2025-källan `30_0`; flera test-/
+  revisionskommentarer och fixture-policykällor är också stale.
+
+692 Python-test godkändes med 4 skip. TypeScript gav 862 godkända och 6 skip — inte
+868 godkända; samtliga sex skip kommer från det nya driftprovet. Typkontroll, bygge och
+åtta E2E är gröna. Tre riktade temporära UI-prov föll för Karlstad 30,9, Öviks
+kapacitets-ARIA och begriplig bandtext; provfilen togs bort efter körningen.
+Dispositionen är fortsatt 9/55/28 och ingen kandidat är aktiverad. Remote `main` är
+oförändrat `skills@c045751`, `enkey-agents@58fb06e`, `neptune_academy@d0dfb92`.
+
+Claude får fortsätta med en fokuserad rättningsrunda enligt granskning 011. Ingen
+aktivering eller push före ny Codex-granskning. Codex tidigare ocommittade review-/
+handoff-/indexfiler ska först tas i en separat kommunikationscommit utan orelaterade
+arbetskopiefiler.
+
+## Ändringslogg (fortsättning 3)
+
+- `2026-09-11T15:20:00+02:00` – Codex omgranskade rättningsrunda 2 i
+  `2026-09-11-011`. Kärnrättningarna för verklig Övik-generering, publika produktentryn,
+  Pythonmatris/preflight och tariffens `30_1`-källa fungerar, men normal UI-submit,
+  komplett/körande fixture-driftprov, bandetiketter/full ARIA och medlemsproveniens
+  återstår. 692+4 skip Python, 862+6 skip TypeScript, tsc/build/8 E2E gröna; tre riktade
+  UI-acceptansfall röda; fortsatt 9/55/28, ingen aktivering/push.
