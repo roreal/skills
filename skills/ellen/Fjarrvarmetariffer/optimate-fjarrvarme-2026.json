@@ -6622,7 +6622,8 @@
         ],
         "billing_basis_method": "Effektsignatur eller medel av tre högsta dygnsenergier enligt leverantörens val.",
         "monthly_proration": "days_in_month/days_in_year",
-        "formula": "fixed + variable * billing_basis"
+        "formula": "fixed + variable * billing_basis",
+        "kw_faktor": 1.0
       },
       "adjustments": [],
       "source_refs": [
@@ -8474,20 +8475,16 @@
           ]
         }
       ],
-      "issues": [
-        "Periodisering och beräkningsmetod hämtade ur tillsvidarevillkor bifogade 2025 års prislista; kontrollera att avtalet använder samma villkor."
-      ],
+      "issues": [],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R11"
-        ],
+        "request_ids": [],
         "conditions_sv": [
-          "Periodisering och beräkningsmetod hämtade ur tillsvidarevillkor bifogade 2025 års prislista; kontrollera att avtalet använder samma villkor."
+          "Batch 1-implementationen (Familj 4-resten, Telge, Partille) väntar på oberoende granskning och en separat godkänd aktiveringsrunda."
         ]
       },
       "contract_required": true
@@ -11044,16 +11041,6 @@
       "status": "utreds"
     },
     {
-      "id": "R11",
-      "member_ids": [
-        "telge-nat"
-      ],
-      "category": "current_terms_not_verified",
-      "question_sv": "Fullständig villkorsbilaga som gäller tillsammans med 2026 års prislista, alternativt bekräftelse att tillsvidarevillkoren i 2025-bilagan fortsatt gäller.",
-      "source_id": "telge-terms",
-      "status": "utreds"
-    },
-    {
       "id": "R12",
       "member_ids": [
         "temab-fjarrvarme"
@@ -11150,7 +11137,9 @@
       "revision": "0.1.6",
       "changes": [
         "Örnsköldsvik: den lösta issue-texten om fast avgift (nollan är nu verifierad, revision 0.1.5) tagen bort — den motsade de nya katalogbytesen. investigation.status=\"utreds\" kvarstår men villkorstexten anger nu bara att Batch 1-implementationen väntar på oberoende granskning/separat aktivering, inte en olöst sakfråga om nollan.",
-        "Partille: revisionsnotens formulering rättad. Kapacitetens månadsvisa fördelning (monthly_proration) är overifierad och blockerar en framtida manadskostnad/manadsuppdelning-väg, men INTE den uppskattade årskostnaden (annual_forward) — arskostnad-facaden är oberoende av monthly_proration. Partille kvarstår i Batch 1 med annual_forward och ingen gissad periodiseringsregel."
+        "Partille: revisionsnotens formulering rättad. Kapacitetens månadsvisa fördelning (monthly_proration) är overifierad och blockerar en framtida manadskostnad/manadsuppdelning-väg, men INTE den uppskattade årskostnaden (annual_forward) — arskostnad-facaden är oberoende av monthly_proration. Partille kvarstår i Batch 1 med annual_forward och ingen gissad periodiseringsregel.",
+        "Telge Näts lösta issue om 2025-tillsvidarevillkor och den relaterade R11-posten (remaining_information_requests) borttagna — verifieringslistan har redan bekräftat att villkoren gäller. investigation.status=\"utreds\" kvarstår för samtliga sex Batch 1-rader (aktiveringsspärr, väntar på Codex-granskning och separat godkänd aktiveringsrunda).",
+        "Örnsköldsvik: kapacitetskravet modellerat om till ETT källtroget fält (kapacitetsbehov, kWh/dygn, heltal 55–71999) i stället för ett påhittat kW-dummyvärde plus ett övertrumfande dygnsenergifält (P1-fynd, granskning 2026-09-11-009). capacity.kw_faktor satt explicit till 1.0 eftersom leverantörsvärdet redan ÄR kWh/dygn — ingen kW*24-gissning. Samtliga sex Batch 1-rader har nu även ett obligatoriskt bekräftat band-ID-krav (kapacitet_band_bindning), speglat i policyregister.py, med en ny generisk aktiveringspreflight (kontrollera_bandbindning) som korsvaliderar capacity.band_selection mot policyns bandbindning för ALLA katalogtariffer."
       ]
     }
   ],
