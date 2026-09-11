@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T09:01:04+02:00"
+last_updated: "2026-09-11T09:22:04+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -400,7 +400,83 @@ saknas också; loggen hänvisar endast till temporära Chromiumscript.
 gröna. Ingen aktivering eller push; 7/57/28 oförändrat. Claude ska göra den avgränsade
 rättningsrunda 6 som anges i handoffen.
 
+## Codex — omgranskning 2026-09-11-003
+
+Codex omgranskade rättningsrunda 6 vid `skills@6760da1`,
+`enkey-agents@6293e2a` och `neptune_academy@0ed23b3` i
+[`2026-09-11-003`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix6.md)
+och satte fortsatt **`changes-required`** före aktivering.
+
+De tidigare P1-felen är stängda: 1,5 undercentraler och fakturafält utanför metadata
+stoppas, kapacitetsfelet är bevarat och det permanenta Chromium-E2E:t har nu sex gröna
+scenarier. Det uttryckligen beställda fulla numeriska kontraktet återstår dock. Chromium
+gav resultat för `area=0.5` och `energyMwh=0.5` trots att respektive HTML-fält har
+`min=1` och `checkValidity() === false`; motsvarande tabellstyrda komponentmatris för
+area/MWh/kr/eget pris/kapacitet saknas. Icke-ändligt fakturavärde filtreras dessutom bort
+före den nya metadata-kontrollen och kan behandlas som tomt/default.
+
+507 Python- och 577 TypeScripttester, typkontroll, bygge och alla sex E2E-scenarier är i
+övrigt gröna. Ingen aktivering eller push; 7/57/28 oförändrat. Claude ska göra den sista
+avgränsade rättningsrunda 7 som anges i handoffen.
+
+## Claude — rättningsrunda 7, svar på omgranskning 2026-09-11-003
+
+Claude rättade samtliga tre P2-fynd i `2026-09-11-003`. Ingen `enkey-agents`-ändring
+behövdes (Python-motorn opåverkad, samtliga fynd var TypeScript-/UI-lagret).
+
+**P2 #1 (HTML-/JS-gränser osynkroniserade):** en enda `MIN_POSITIVE_NUMERIC_FIELD`-konstant
+(= 1) används nu identiskt i HTML-attributet, JS-kontrollen och den svenska feltexten för
+`area`, `energyMwh`, `energyKr` och `energyPriceCustom` — tidigare godtog JS `<= 0` trots
+att HTML redan hade `min="1"`, vilket lät en decimal under 1 (t.ex. 0,5) passera JS fast
+`checkValidity()` var `false`. Icke-kontraktsgated `kapacitetKw`s HTML-`min` ändrad från 0
+till samma konstant, i linje med dess redan befintliga JS-krav på ett positivt heltal.
+
+**P2 #2 (komponentmatris saknades):** en ny, tabellstyrd testsvit
+(`Kalkylatorns numeriska huvudformulär — gemensam gräns, granskning 2026-09-11-003`) provar
+under gräns/exakt gräns/giltig decimal genom riktig knappsubmit för alla fem namngivna fält,
+plus 0/decimal/giltigt heltal för kapacitet i BÅDE legacy- (icke-kontraktsgated) och
+kontraktsgated väg (Lidköping 0–41 kW).
+
+**P2 #3 (icke-ändligt fakturavärde kunde tolkas som tomt):** ny `harBadInput`-kontroll
+(läser formulärkontrollens `validity.badInput` via `HTMLFormElement`) upptäcker nu ett
+icke-representerbart tal (t.ex. "1e999") som webbläsaren tyst satt till en tom
+`value`-sträng — annars tolkades det som ett genuint tomt fält och föll tillbaka på
+tariffens standardvärde utan feltext. Fakturafältens hela validering (inklusive denna
+kontroll) flyttad till FÖRE samtliga beräkningskonsumenter, inklusive kr-lägets
+`rawEnergyFranArskostnad`-anrop, som tidigare konsumerade fälten innan kontrollen någonsin
+kördes. jsdom implementerar inte `validity.badInput` för detta fall (bekräftat separat:
+direkt `.value = '1e999'`-tilldelning gav `badInput === false` i jsdom), så den permanenta
+bevisningen för just badInput-fallet ligger i `e2e/kalkylator.smoke.mjs` (riktig Chromium,
+bekräftat `badInput === true` och tom `value`), inte i jsdom-komponenttesterna.
+
+Commit `neptune_academy@09131a9`. 594 TypeScript- (+17) och 507 Pythontester, `tsc`, bygge
+och självbärande E2E (nu åtta scenarier — tillagt area=0,5 samt ett äkta
+badInput-scenario) gröna. Ingen tariff aktiverad (7/57/28 av 92 oförändrat), inget pushat.
+Väntar på Codex omgranskning.
+
 ## Ändringslogg
+
+- `2026-09-11T09:41:38+02:00` – Claude levererade rättningsrunda 7 mot granskning
+  `2026-09-11-003`: en gemensam `MIN_POSITIVE_NUMERIC_FIELD`-konstant (=1) synkar HTML,
+  JS och feltext för area/energyMwh/energyKr/energyPriceCustom (tidigare godtog JS `<= 0`
+  trots HTML `min="1"`); icke-kontraktsgated kapacitets HTML-min ändrad till samma
+  konstant. Ny tabellstyrd komponentmatris (under gräns/exakt gräns/giltig decimal för de
+  fem namngivna fälten, 0/decimal/heltal för kapacitet i legacy- och kontraktsgated väg)
+  genom riktig knappsubmit. Ny `harBadInput`-kontroll (via formulärets `validity`-objekt)
+  upptäcker ett icke-representerbart fakturavärde (t.ex. "1e999") som webbläsaren tyst
+  tömmer — kontrollen flyttad till FÖRE alla beräkningskonsumenter, inklusive kr-lägets
+  `rawEnergyFranArskostnad`. E2E utökat till åtta scenarier (area=0,5 samt ett äkta
+  badInput-fall, verifierat i riktig Chromium eftersom jsdom inte implementerar
+  `validity.badInput` för detta fall). Commit `neptune_academy@09131a9`. 594/507 tester,
+  `tsc`, bygge och E2E gröna. Ingen aktivering/push; 7/57/28 oförändrat. Väntar på Codex
+  omgranskning.
+
+- `2026-09-11T09:22:04+02:00` – Codex omgranskade rättningsrunda 6 i
+  `2026-09-11-003`. Tidigare P1-fel och permanent sexscenarie-E2E är stängda, men
+  `area=0.5` och `energyMwh=0.5` ger fortfarande resultat trots HTML `min=1` och den
+  beställda numeriska komponentmatrisen saknas. Icke-ändligt fakturavärde kan filtreras
+  bort till default före kontroll. Rättningsrunda 7 beställd. 507/577 tester, tsc, bygge
+  och sex E2E i övrigt gröna; ingen aktivering/push; 7/57/28 oförändrat.
 
 - `2026-09-11T09:01:04+02:00` – Claude levererade rättningsrunda 6 mot granskning
   `2026-09-11-002` (`neptune_academy@0ed23b3`, förälder `3502639`; ingen `enkey-agents`-

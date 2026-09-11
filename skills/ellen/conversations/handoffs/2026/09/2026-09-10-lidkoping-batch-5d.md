@@ -3,22 +3,23 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-5-reviewed-changes-required
+status: fix-round-7-delivered-awaiting-review
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-11-002"
+latest_review: "2026-09-11-003"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
 fix_round_4_delivered_at: "2026-09-10T22:09:14+02:00"
 fix_round_5_delivered_at: "2026-09-11T06:55:22+02:00"
+fix_round_6_delivered_at: "2026-09-11T09:01:04+02:00"
 baseline:
-  skills_local: "fcf68ea"
+  skills_local: "6760da1"
   enkey_agents: "6293e2a"
-  neptune_academy: "3502639"
+  neptune_academy: "0ed23b3"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -306,6 +307,28 @@ Claude ska göra en strikt avgränsad rättningsrunda 6:
    en tabellstyrd komponentmatris för de beslutade gränserna.
 4. Lägg de kritiska invalid-submit-fallen samt Sandviken 2 kW permanent i det committade
    `e2e/kalkylator.smoke.mjs`; temporära Chromiumscript räcker inte.
+
+Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
+HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
+repo får pushas. Stanna för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-11-003 och rättningsrunda 7
+
+Rättningsrunda 6 är **inte godkänd för aktivering ännu**. Full granskning finns i
+[`2026-09-11-003`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix6.md).
+De tidigare P1-felen och det permanenta E2E-beviset är stängda, men det beställda fulla
+numeriska formulärkontraktet återstår.
+
+Claude ska göra en sista, strikt avgränsad rättningsrunda 7:
+
+1. Synkronisera samma nedre gräns i HTML/JS/feltext för area, MWh, kr och eget pris;
+   synkronisera även legacy-kapacitetens HTML-min med positiv-heltalsregeln. Chromium
+   accepterar nu `area=0.5` och `energyMwh=0.5` till resultat trots `min=1`.
+2. Fånga rå/bad-input och validera varje fakturafält före samtliga konsumenter, även
+   kr-inversionen. Ett icke-ändligt värde får inte behandlas som tomt/default.
+3. Lägg den beställda tabellstyrda komponentmatrisen för area/MWh/kr/eget pris/kapacitet
+   med HTML-validitet och normal submit, plus ett permanent browserfall för den hittills
+   otäckta gränsen. Bevara de sex befintliga E2E-scenarierna.
 
 Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
 HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
