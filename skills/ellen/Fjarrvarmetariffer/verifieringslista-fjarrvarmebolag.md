@@ -461,7 +461,7 @@ för den planerade, ännu ej genomförda implementationen.
 ### Övik Energi
 
 - [x] **Örnsköldsvik** (`ovik-energi-ornskoldsvik-2026`)
-  - Källor: [officiell pris- och villkorssida 2026](https://www.ovikenergi.se/foretag-brf/fjarrvarme/priser-och-villkor), [officiell prislista för Örnsköldsviks tätort 2026 (PDF)](https://www.ovikenergi.se/download/18.22c9a27819936f83d5c305b2/1758525271448/Prislista%20giltig%20fr%C3%A5n%201%20jan%202026%20-%20n%C3%A4ringsidkare%20%C3%96rnsk%C3%B6ldsvik%20t%C3%A4tort.pdf) (`30_0` s.18,19)
+  - Källor: [officiell pris- och villkorssida 2026](https://www.ovikenergi.se/foretag-brf/fjarrvarme/priser-och-villkor), [officiell prislista för Örnsköldsviks tätort 2026 (PDF)](https://www.ovikenergi.se/download/18.22c9a27819936f83d5c305b2/1758525271448/Prislista%20giltig%20fr%C3%A5n%201%20jan%202026%20-%20n%C3%A4ringsidkare%20%C3%96rnsk%C3%B6ldsvik%20t%C3%A4tort.pdf) (`30_1` s.1,2 — rättat efter granskning 2026-09-11-010; `30_0` var Prisdialogens 2025-dokument, inte samma källa)
   - **✅ Källunderlag godkänt 2026-09-04, men katalogrättelse krävs.** Prislistan visar att tariffen enbart består av energi och kapacitet; `fixed: null` ska därför bli verifierad noll. Samtliga kapacitetsband, energipriser och metoder för kapacitetsbehov är publicerade.
   - **⚠️ Katalogfel:** `monthly_proration: "1/12"` ska ersättas med kalenderdagsviktning: årskostnaden delas med årets antal dygn och varje månadsfaktura belastas efter månadens antal dygn.
   - [x] `null` i fast avgift är verifierad noll; någon separat fast avgift finns inte.

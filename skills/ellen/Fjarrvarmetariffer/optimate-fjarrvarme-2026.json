@@ -361,6 +361,15 @@
       "kind": "supplier_document_hosted_by_prisdialogen"
     },
     {
+      "id": "30_1",
+      "title": "Prislista giltig från 1 jan 2026 - näringsidkare Örnsköldsvik tätort (pdf)",
+      "url": "https://www.ovikenergi.se/download/18.22c9a27819936f83d5c305b2/1758525271448/Prislista%20giltig%20fr%C3%A5n%201%20jan%202026%20-%20n%C3%A4ringsidkare%20%C3%96rnsk%C3%B6ldsvik%20t%C3%A4tort.pdf",
+      "retrieved_on": "2026-09-11",
+      "sha256": "babee408098ce534879347203c7a9489f6d61af9d5c05b40e52775417ad89c16",
+      "kind": "supplier_website",
+      "notes_sv": "Separat, verklig 2026-källa — inte samma dokument som 30_0 (Prisdialogens 2025-dokument), rättat efter granskning 2026-09-11-010."
+    },
+    {
       "id": "31_0",
       "title": "Prisändringsmodell 2025 (pdf)",
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Partille-Energi-2025.pdf",
@@ -6628,10 +6637,10 @@
       "adjustments": [],
       "source_refs": [
         {
-          "source_id": "30_0",
+          "source_id": "30_1",
           "pages": [
-            18,
-            19
+            1,
+            2
           ]
         }
       ],
@@ -10940,7 +10949,7 @@
       "Eskilstunas flödesformel",
       "Stockholm Exergis förtydligande prisvillkor"
     ],
-    "remaining_requests_note": "Kils momsfråga R01 är löst. R02–R11 avser generella prisvillkor och källor; R12–R15 kundparametrar eller särskilda kundgrupper. Samtliga kvarstående frågor har status utreds. Ytterligare villkor finns per tariff under investigation.conditions_sv."
+    "remaining_requests_note": "Kils momsfråga R01 är löst. R02–R10 avser generella prisvillkor och källor; R12–R15 kundparametrar eller särskilda kundgrupper (R11 är borttaget). Samtliga kvarstående frågor har status utreds. Ytterligare villkor finns per tariff under investigation.conditions_sv."
   },
   "remaining_information_requests": [
     {
