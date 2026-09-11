@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T15:20:00+02:00"
+last_updated: "2026-09-11T15:55:41+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: fix2-reviewed-changes-required-round-3
+status: fix3-delivered-awaiting-review
 topics:
   - Batch 1
   - Familj 4-resten
@@ -510,3 +510,78 @@ arbetskopiefiler.
   komplett/körande fixture-driftprov, bandetiketter/full ARIA och medlemsproveniens
   återstår. 692+4 skip Python, 862+6 skip TypeScript, tsc/build/8 E2E gröna; tre riktade
   UI-acceptansfall röda; fortsatt 9/55/28, ingen aktivering/push.
+
+## Ändringslogg (fortsättning 4 — rättningsrunda 3, svar på 2026-09-11-011)
+
+- `2026-09-11T15:55:41+02:00` – Claude rättade samtliga fyra P1 och två P2 från
+  omgranskning `2026-09-11-011`:
+  - **P1 #1**: kapacitetsfältets heltalskrav vid normal knappsubmit härleds nu av den
+    bundna `kravda_falt`-postens egen `heltal`-flagga i stället för ett blankt "alltid
+    heltal i kW"-krav. Karlstad 30,9 kW ger nu ett giltigt resultat; Övik 55,5 kWh/dygn
+    blockeras med fältnära fel ("Kapacitetsbehov måste vara ett positivt heltal i
+    kWh/dygn."), `aria-invalid`/`aria-describedby` kopplat till `#kapacitetKw-fel`.
+    Legacy-vägens egen oberoende heltalsregel är oförändrad (bevisat via Sandvikens
+    riktiga, redan aktiverade policy — `heltal=True` fortfarande blockerar 3,5 kW).
+    Lidköpings decimaltest rättades efter verifiering mot dess egen KravPost
+    (`policyregister.py`) och leverantörssvaret 2026-09-09-006: ingen av dem kräver
+    heltal, så 3,5 kW ger nu ett giltigt resultat i stället för det tidigare
+    (felaktiga) UI-only-antagandet.
+  - **P1 #2**: `batch1RawData.driftprov.test.ts` skriven om — jämför nu en KOMPLETT
+    normaliserad ögonblicksbild av både `till_prisar()` (inklusive `indatafalt`) och
+    den riktiga `_policy_till_json()`-serialiseringen, inte en delmängd via
+    `toMatchObject`. Skippas bara om enkey-agents genuint saknas
+    (`fs.existsSync`), inte längre vid ett Python-/tolkfel — ett sådant fel gör nu
+    provet rött. Hittade och löste en genuin Python-tolkmismatch (system-`python3`
+    3.9 vs enkey-agents egen `.venv`). `KalkylatorPageBatch1.test.tsx`:s testmock
+    injicerar inte längre `indatafalt: []` utan speglar fixturens verkliga fält —
+    upptäckte därmed att fyra av sex Batch 1-tariffer annars skulle rendera ett fält
+    dubbelt (samma bugklass som Öviks tidigare kapacitetsfält); filtrerat bort i
+    `KalkylatorPage.tsx`.
+  - **P1 #3**: bandalternativen visar nu ett begripligt intervall (t.ex.
+    "1 (3–30,9 kW)", "16 (36000–71999 kWh/dygn)") i stället för det nakna ID:t, som
+    fortfarande skickas oförändrat som `<option value>`. Nya prov bevisar
+    `aria-invalid`/`aria-describedby` för bandfältet, det dedikerade kapacitetsfältet
+    (Övik) och ett numeriskt Batch1-extrafält (Södertörns `avvikelse_c`).
+  - **P1 #4**: Öviks medlemsrad i katalogen fick källan `30_1` tillagd (`30_0` behålls
+    historiskt). Revision 0.1.5:s provenienstext om den verifierade nollan i fast
+    avgift, som pekade på `30_0`, rättad i en ny revisionsrad (0.1.7) i stället för att
+    skriva om historiken. Motsvarande Python-testkommentar (`test_familj4_resten_
+    kontrakt.py`) uppdaterad. `tariffer.generated.ts` regenererad enbart för
+    proveniensraden (sha256/commit) — Övik ingår fortfarande INTE i den genererade
+    artefakten (investigation.status="utreds" oförändrat), så ingen tariffdata
+    påverkades.
+  - **P2 #1**: den 39-bandiga golv-/takmatrisen i Python kontrollerar nu även den
+    faktiska kapacitetskostnaden (`avgift_kr_ar + kapacitet*pris_kr_per_enhet_ar`),
+    hämtad direkt ur `till_prisar()`, inte bara `fullstandighet=="complete"` —
+    speglar vad TypeScript-matrisen redan gjorde.
+  - **P2 #2**: stale driftprov-/auktoritativitetskommentarer i `batch1RawData.ts`
+    uppdaterade till att beskriva det nu genomförda kompletta driftprovet; denna
+    logg rapporterar pass/skip separat och korrekt (se nedan) i stället för en enda
+    sammanslagen siffra.
+
+  **Provresultat (fulla sviter, exakta):**
+  - Python (`.venv/bin/python -m pytest tools/tariffer/ -q`): **692 passed, 4 skipped**
+    (0 failed). (Repo-rotens `tools/` innehåller även Milesight-tester som saknar
+    `pymodbus` i denna miljö — orört och utanför Ellens scope, se separat minnesnotis.)
+  - TypeScript (`npm test -- --run`, 27 testfiler): **883 passed, 0 skipped, 0 failed**
+    (upp från föregående runda 862 passed/6 skipped — de sex tidigare skippade
+    driftproven kör nu på riktigt och är gröna).
+  - `npx tsc --noEmit`: rent, inga fel.
+  - `npm run build`: godkänd.
+  - `npm run test:e2e` (`e2e/kalkylator.smoke.mjs`): samtliga 8 scenarier godkända.
+  - `git diff --check`: rent i samtliga tre repon.
+
+  Disposition mekaniskt omverifierad: `godkanda()=9` (oförändrat), fortsatt **9/55/28
+  av 92**. Ingen kandidat aktiverad, `investigation.status` orört för samtliga
+  katalograder.
+
+  Commits (inga push): `skills@d2b035e9ed27dcc1b7c8d0dafbef795570c996d3` (Öviks
+  medlemsprovenienss + revisionsrad), `enkey-agents@1078098b056a568ea363182280d91d60c5b68654`
+  (testkommentar + oberoende kostnadsmatris + uppdaterad katalog-sha256),
+  `neptune_academy@0dc48d6fcbe7075fd76e1f869021c011f8bc08d9` (policystyrd
+  heltalskontroll, begripliga bandetiketter/ARIA, komplett driftprov, regenererad
+  `tariffer.generated.ts`). `enkey-agents`s `origin/main` var redan av en tidigare,
+  obehörig push, oförändrat — inget ytterligare pushat till något repo
+  denna runda.
+
+  Redo för nästa Codex-omgranskning.
