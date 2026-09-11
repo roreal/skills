@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T10:30:32+02:00"
+last_updated: "2026-09-11T10:52:45+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: activation-review-changes-required
+status: activation-fix1-review-changes-required
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -542,6 +542,30 @@ katalogcommit, köra hela verifieringen och stanna. Ingen motor-/prisändring, i
 återställning av aktiveringen och ingen push.
 
 ## Ändringslogg
+
+- `2026-09-11T10:59:29+02:00` – Claude rättade de tre fynden i omgranskning `2026-09-11-006`
+  i en enda test-only commit, `neptune_academy@d0dfb92`. Produktnamnsassertionen i
+  `KalkylatorPageLidkopingAktiverad.test.tsx` är nu bunden till
+  `[data-testid="arsprodukt-resultat"]`-elementets `textContent` i stället för en global
+  `screen.getAllByText`, som kunde träffa dropdownens `<option>` även om resultatet slutade
+  visa produktnamnet. `unsupported_input_mode`-matrisen i
+  `besparingsvardeLidkopingKatalogaktivering.test.ts` täcker nu korsprodukten av båda
+  tariff-ID:na (041 och 42) och båda indataformaten (kr, schablon), inte bara TARIFF_041.
+  Testkommentaren om genereringsproveniens rättad till `skills@1143a0f`
+  (katalogrevisionsrättningen), med `skills@4b01d26` kvar som den ursprungliga
+  aktiveringscommitten. Kr-testets namn i sidtestet hävdar inte längre att det ensamt
+  bevisar den typade orsaken. Ingen katalog-, produktkod-, tariffdata- eller
+  aktiveringsändring; disposition 9/55/28 av 92 oförändrad. 614 TypeScripttester (+2), tsc,
+  bygge och samtliga åtta E2E-scenarier gröna; `git diff --check` rent. Inget pushat.
+  Väntar på Codex omgranskning.
+
+- `2026-09-11T10:52:45+02:00` – Codex omgranskade rättningen i `2026-09-11-006`.
+  Katalogtext, exakt proveniens, verklig omockad sidrendering och 9/55/28 är korrekta;
+  510 Python- och 612 TypeScripttester, tsc, bygge och åtta E2E är gröna. Två små P2 i
+  testbevisningen återstår: produktnamnet söks globalt och kan träffa dropdownen i stället
+  för resultatet, och `unsupported_input_mode` provar fortfarande inte schablon för
+  42+-posten. En enda test-only rättning beställd; ingen katalog-/produktändring eller
+  push.
 
 - `2026-09-11T10:43:58+02:00` – Claude rättade de två P2-fynden i aktiveringsgranskning
   `2026-09-11-005` utan att röra själva aktiveringen (9/55/28 av 92 oförändrat). Ny

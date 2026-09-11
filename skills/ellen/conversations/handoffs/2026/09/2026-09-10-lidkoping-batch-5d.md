@@ -3,7 +3,7 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: activation-review-changes-required
+status: activation-fix1-review-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: true
@@ -11,7 +11,7 @@ approved_activation_scope: "local-only; exakt två Lidköpingstariffer"
 push_allowed: false
 review_required_before_activation: false
 review_required_before_push: true
-latest_review: "2026-09-11-005"
+latest_review: "2026-09-11-006"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
@@ -21,6 +21,8 @@ fix_round_6_delivered_at: "2026-09-11T09:01:04+02:00"
 fix_round_7_delivered_at: "2026-09-11T09:41:38+02:00"
 activation_delivered_at: "2026-09-11T10:17:54+02:00"
 activation_reviewed_at: "2026-09-11T10:30:32+02:00"
+activation_fix_1_delivered_at: "2026-09-11T10:43:58+02:00"
+activation_fix_1_reviewed_at: "2026-09-11T10:52:45+02:00"
 baseline:
   skills_local: "b73b974"
   enkey_agents: "6293e2a"
@@ -30,6 +32,11 @@ activation_delivery:
   skills_log: "7b7b5959d50446631b05602e776d9c5a8176c6a5"
   enkey_agents: "4f4e3b979bea8af6f85b8a071dd596f17a14b82b"
   neptune_academy: "f99576c9443809602c168bbb0e5a7b77690f5262"
+activation_fix_1_delivery:
+  skills_catalog: "1143a0fc255a9940cc92263f0915181f46275cd0"
+  skills_log: "183e4f24c0f0e48204604f38b4e5bad0e33b671e"
+  enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
+  neptune_academy: "c6e3bc60a76f641a3c1861903048743eea28db0c"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -392,3 +399,23 @@ Claude ska göra en avgränsad dokumentations- och acceptansrättning:
    kommentar om att Lidköping ännu är `utreds`.
 3. Kör hela verifieringsmatrisen, verifiera fortsatt exakt 9/55/28, återställ `dist`,
    logga fulla HEAD-hashar och stanna för ny Codex-granskning. Ingen push.
+
+## Codex — omgranskning 2026-09-11-006 och test-only rättningsrunda 2
+
+Katalogtexten, proveniensen, den verkliga sidrenderingen och dispositionen 9/55/28 är
+korrekta. Full omgranskning finns i
+[`2026-09-11-006`](../../../reviews/2026/09/2026-09-11-omgranskning-aktivering-lidkoping-batch-5d-fix1.md).
+Push är ännu inte godkänd på grund av två små luckor i det permanenta testbeviset.
+
+Claude ska göra en enda test-only commit i `neptune_academy`:
+
+1. Bind assertionen för produktnamnet till själva `arsprodukt-resultat`; dagens globala
+   `getAllByText` kan nöja sig med namnet i dropdownens `<option>`.
+2. Utöka den verkliga `unsupported_input_mode`-matrisen så att både `kr` och `schablon`
+   provas för både 0–41 kW och 42+ kW med exakt typad orsak. Besparing täcker redan båda.
+3. Rätta testets gamla genereringsproveniens `skills@4b01d26` till `skills@1143a0f` och
+   undvik testnamn som tillskriver sidprovet en typad orsak det inte kontrollerar.
+
+Ändra inte katalog, genererad fil, produktkod eller aktiveringsstatus. Kör full
+TypeScript-svit, typkontroll, bygge, E2E och `git diff --check`, återställ `dist`, logga
+full HEAD och stanna. Ingen push.
