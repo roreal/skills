@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.6",
+  "schema_version": "0.1.7",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-11",
@@ -1283,7 +1283,8 @@
       "id": "ovik-energi",
       "name": "Övik Energi",
       "source_ids": [
-        "30_0"
+        "30_0",
+        "30_1"
       ],
       "tariff_ids": [
         "ovik-energi-ornskoldsvik-2026"
@@ -11149,6 +11150,13 @@
         "Partille: revisionsnotens formulering rättad. Kapacitetens månadsvisa fördelning (monthly_proration) är overifierad och blockerar en framtida manadskostnad/manadsuppdelning-väg, men INTE den uppskattade årskostnaden (annual_forward) — arskostnad-facaden är oberoende av monthly_proration. Partille kvarstår i Batch 1 med annual_forward och ingen gissad periodiseringsregel.",
         "Telge Näts lösta issue om 2025-tillsvidarevillkor och den relaterade R11-posten (remaining_information_requests) borttagna — verifieringslistan har redan bekräftat att villkoren gäller. investigation.status=\"utreds\" kvarstår för samtliga sex Batch 1-rader (aktiveringsspärr, väntar på Codex-granskning och separat godkänd aktiveringsrunda).",
         "Örnsköldsvik: kapacitetskravet modellerat om till ETT källtroget fält (kapacitetsbehov, kWh/dygn, heltal 55–71999) i stället för ett påhittat kW-dummyvärde plus ett övertrumfande dygnsenergifält (P1-fynd, granskning 2026-09-11-009). capacity.kw_faktor satt explicit till 1.0 eftersom leverantörsvärdet redan ÄR kWh/dygn — ingen kW*24-gissning. Samtliga sex Batch 1-rader har nu även ett obligatoriskt bekräftat band-ID-krav (kapacitet_band_bindning), speglat i policyregister.py, med en ny generisk aktiveringspreflight (kontrollera_bandbindning) som korsvaliderar capacity.band_selection mot policyns bandbindning för ALLA katalogtariffer."
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "revision": "0.1.7",
+      "changes": [
+        "Örnsköldsvik (P1 #4, granskning 2026-09-11-011): medlemsradens source_ids bar bara 30_0 (Prisdialogens 2025-dokument) trots att tariffradens egna source_refs redan pekar mot 30_1 (Öviks officiella prislista giltig från 1 jan 2026, upptäckt och infogad i revision 0.1.5/0.1.6, granskning 2026-09-11-010). 30_1 tillagd i medlemsradens source_ids — 30_0 behålls som historisk källa. Revision 0.1.5:s formulering \"i enlighet med källunderlaget (30_0, godkänt 2026-09-04)\" om den verifierade nollan i fast avgift stod kvar oförändrad trots att den nuvarande officiella 2026-källan är 30_1; ingen ny sakuppgift, men provenance-referensen i den texten var vilseledande och rättas härmed till 30_1. Endast Örnsköldsviks medlemspost påverkas."
       ]
     }
   ],
