@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.3",
+  "schema_version": "0.1.4",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-06",
+  "as_of": "2026-09-11",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -4971,20 +4971,12 @@
           "pages": null
         }
       ],
-      "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-      ],
+      "issues": [],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -5070,20 +5062,12 @@
           "pages": null
         }
       ],
-      "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-      ],
+      "issues": [],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11136,6 +11120,15 @@
         "Sandvikens billing_basis_method och monthly_proration (days_in_month/days_in_year) angivna explicit; effektkravet är leverantörens fakturerade värde (supplier_value) tills en egen signaturberäkning implementeras.",
         "network_or_product satt till \"Helleverans\" (Delleverans är en separat, ej kartlagd taxa på samma sida) och display_produktnamn=true tillagt som ett nytt, explicit opt-in-fält för generatorns produktetikett — påverkar ingen annan tariff.",
         "contract_required=true satt för sandviken-energi-sandviken-normal-2026, kopplad till en Tariffpolicy i enkey-agents/policyregister.py (annual_forward, MWh-only-pilot)."
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "revision": "0.1.4",
+      "changes": [
+        "Lidköping Energi 0–41 kW och 42+ kW: investigation.status utreds avslutad efter Codex slutgranskning av Batch 5d-implementationen (2026-09-11-004), som föregicks av sju lokala rättningsrundor mot den kompletta signed_monthly_flow_adjustment-motorn (granskning 2026-09-09-006 löste källfrågorna för N=5, formel, periodisering och debiterbar-effekt-metod). Priser, band, formel, månadsperiodisering, minsta debiteringsgrund, obligatoriska Q/T/Tm-serier och attesteringskravet är oförändrade.",
+        "Issue-texten om debiterbar effekt/kapacitet rensad för båda posterna: kalkylatorns formulär kräver redan leverantörens fakturerade värde med obligatorisk attestering, exakt vad issuen bad om.",
+        "Endast dessa två tariff-ID:n påverkas. Övriga 76 katalogposters investigation-, issues- och produktionsstatus är oförändrade."
       ]
     }
   ],
