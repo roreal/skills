@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.4",
+  "schema_version": "0.1.5",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-11",
@@ -4652,7 +4652,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "kils-energi-kil-2026",
@@ -6525,102 +6526,102 @@
           {
             "id": "1",
             "source_interval": "55–1199",
-            "fixed": null,
+            "fixed": 0,
             "variable": 49.3
           },
           {
             "id": "2",
             "source_interval": "1200–1799",
-            "fixed": null,
+            "fixed": 0,
             "variable": 48.64
           },
           {
             "id": "3",
             "source_interval": "1800–2399",
-            "fixed": null,
+            "fixed": 0,
             "variable": 47.59
           },
           {
             "id": "4",
             "source_interval": "2400–2999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 46.66
           },
           {
             "id": "5",
             "source_interval": "3000–3599",
-            "fixed": null,
+            "fixed": 0,
             "variable": 45.87
           },
           {
             "id": "6",
             "source_interval": "3600–4199",
-            "fixed": null,
+            "fixed": 0,
             "variable": 45.21
           },
           {
             "id": "7",
             "source_interval": "4200–4799",
-            "fixed": null,
+            "fixed": 0,
             "variable": 44.69
           },
           {
             "id": "8",
             "source_interval": "4800–5999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 44.29
           },
           {
             "id": "9",
             "source_interval": "6000–7199",
-            "fixed": null,
+            "fixed": 0,
             "variable": 43.89
           },
           {
             "id": "10",
             "source_interval": "7200–8399",
-            "fixed": null,
+            "fixed": 0,
             "variable": 43.5
           },
           {
             "id": "11",
             "source_interval": "8400–10799",
-            "fixed": null,
+            "fixed": 0,
             "variable": 42.97
           },
           {
             "id": "12",
             "source_interval": "10800–13199",
-            "fixed": null,
+            "fixed": 0,
             "variable": 42.58
           },
           {
             "id": "13",
             "source_interval": "13200–17999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 42.18
           },
           {
             "id": "14",
             "source_interval": "18000–23999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 41.79
           },
           {
             "id": "15",
             "source_interval": "24000–35999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 41.39
           },
           {
             "id": "16",
             "source_interval": "36000–71999",
-            "fixed": null,
+            "fixed": 0,
             "variable": 40.99
           }
         ],
         "billing_basis_method": "Effektsignatur eller medel av tre högsta dygnsenergier enligt leverantörens val.",
-        "monthly_proration": "1/12",
+        "monthly_proration": "days_in_month/days_in_year",
         "formula": "fixed + variable * billing_basis"
       },
       "adjustments": [],
@@ -6646,7 +6647,8 @@
         "conditions_sv": [
           "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "partille-energi-partille-2026",
@@ -6775,7 +6777,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "piteenergi-pitea-centrala-natet-2026",
@@ -7676,7 +7679,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "stockholm-exergi-stockholm-exergi-normal-2026",
@@ -8486,7 +8490,8 @@
         "conditions_sv": [
           "Periodisering och beräkningsmetod hämtade ur tillsvidarevillkor bifogade 2025 års prislista; kontrollera att avtalet använder samma villkor."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026",
@@ -8975,7 +8980,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard-2026",
@@ -11129,6 +11135,15 @@
         "Lidköping Energi 0–41 kW och 42+ kW: investigation.status utreds avslutad efter Codex slutgranskning av Batch 5d-implementationen (2026-09-11-004), som föregicks av sju lokala rättningsrundor mot den kompletta signed_monthly_flow_adjustment-motorn (granskning 2026-09-09-006 löste källfrågorna för N=5, formel, periodisering och debiterbar-effekt-metod). Priser, band, formel, månadsperiodisering, minsta debiteringsgrund, obligatoriska Q/T/Tm-serier och attesteringskravet är oförändrade.",
         "Issue-texten om debiterbar effekt/kapacitet rensad för båda posterna: kalkylatorns formulär kräver redan leverantörens fakturerade effektvärde som obligatoriskt fält, hämtat från faktura eller leverantör, exakt vad issuen bad om. Den obligatoriska attesteringen gäller nätets Tm-serie, inte effektvärdet.",
         "Endast dessa två tariff-ID:n påverkas. Övriga 76 katalogposters investigation-, issues- och produktionsstatus är oförändrade."
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "revision": "0.1.5",
+      "changes": [
+        "Örnsköldsvik: fast avgift i samtliga 16 effektband satt till verifierad noll (0), i enlighet med källunderlaget (30_0, godkänt 2026-09-04) — prislistan visar att tariffen enbart består av energi och kapacitet, ingen separat fast avgift. monthly_proration rättad från \"1/12\" till \"days_in_month/days_in_year\" (kalenderdagsviktning), enligt samma källunderlags anmärkning om katalogfel.",
+        "contract_required=true satt för de sex Batch 1-tarifferna (karlstads-energi-karlstad-2026, sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026, vanerenergi-mariestad-och-toreboda-2026, ovik-energi-ornskoldsvik-2026, telge-nat-telge-foretag-och-bostadsrattsforeningar-2026, partille-energi-partille-2026), kopplade till nya Tariffpolicy-poster i enkey-agents/policyregister.py (annual_forward, MWh-only). Detta är en implementationsetapp — investigation.status och issues är OFÖRÄNDRADE för samtliga sex rader; ingen av dem blir valbar i den genererade artefakten förrän en separat, godkänd aktiveringsrunda rensar deras utredningsstatus. Övriga 72 katalogposters status är oförändrade.",
+        "Öppen fråga, inte löst i denna revision: partille-energi-partille-2026s månadsperiodisering av kapacitetsdelen är fortsatt overifierad (verifieringslistan har inte kryssat av punkten) — battchplanens uppgift att Partille är källgodkänd med känd formel avser bara returtemperaturjusteringen (energi_MWh×7×avvikelse), inte kapacitetens periodisering. Flaggat för Codex granskning i stället för att gissa en regel."
       ]
     }
   ],
