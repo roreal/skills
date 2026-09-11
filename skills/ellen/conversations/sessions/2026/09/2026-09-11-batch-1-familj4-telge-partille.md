@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T11:33:43+02:00"
+last_updated: "2026-09-11T11:57:07+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: partial-delivery-changes-required
+status: complete-delivery-awaiting-review
 topics:
   - Batch 1
   - Familj 4-resten
@@ -120,8 +120,79 @@ oförändrat för samtliga sex rader. Ingen annan tariff påverkad. Inget repo p
 Stannar här för Codex granskning av den kompletta Python-sidan och för besked om
 TypeScript/UI-acceptansen ska levereras som en egen, separat fortsättningsrunda.
 
+### Claude — assistent (fortsättning: TypeScript-/UI-acceptans)
+
+Claude fortsatte utan ny startbegäran och levererade den återstående TypeScript-/UI-
+acceptansen som handoffens punkt 5/6 efterfrågade, plus en genuin lucka som hittades under
+arbetet.
+
+**Genuin lucka hittad och åtgärdad (Python):** ingen av de sex policyerna hade
+`stodjer_aktuell_arskostnad=True` satt, trots att handoffen uttryckligen kräver att
+MWh-läget stödjer aktuell uppskattad årskostnad. `berakna_arskostnad_med_kontrakt`
+konsumerar inte flaggan (den styr bara TypeScript-produktlagrets kapacitetsval via
+`beraknaArsprodukt`), så Pythons egna goldenfall påverkades inte — men en framtida
+aktiverad produktkedja hade tyst saknat förmågan. Rättat i `policyregister.py` för samtliga
+sex, med ett nytt permanent test (`test_stodjer_aktuell_arskostnad_men_inte_besparing`)
+som bekräftar `stodjer_aktuell_arskostnad=True`/`stodjer_besparing=False` för alla sex.
+Commit: `enkey-agents@4f8bb57`.
+
+**TypeScript-/UI-acceptans** (`neptune_academy@9eccbfc`), tre nya testfiler, ingen
+produktkod ändrad:
+
+- `resultatkontrakt.batch1.test.ts` — mirrored motorkedja (`beraknaArskostnadMedKontrakt`/
+  `forkontrolleraPolicyIndata`/`harledResultatstatus`), sex oberoende handräknade
+  goldenfacit IDENTISKA med `test_familj4_resten_kontrakt.py` (Karlstad fast=14968.8/
+  energi=5358.0; Södertörn fast=18750/energi=4581/justering=77; VänerEnergi fast=9910/
+  energi=5927/justering=1740; Övik fast=24650/energi=5576.7; Telge fast=166100/
+  energi=5132/justering=9552; Partille fast=40930/energi=4443/justering=147), bandgränser,
+  negativa fältprov, Telges tre fält separat, Partilles annual/monthly-kontrakt.
+- `besparingsvardeBatch1.test.ts` — publik produktentry: `beraknaArsprodukt` ger ett
+  giltigt, positivt resultat för alla sex; besparingsvägen blockeras med
+  `Produktbegransning`/`besparing_ej_stodd`; `calcResultForOnskadTyp` blockerar kr/schablon
+  med `unsupported_input_mode` och ger ett giltigt resultat i mwh-läge.
+- `KalkylatorPageBatch1.test.tsx` — permanent, riktigt sidbevis (ingen `fireEvent.submit`,
+  bara `requestSubmit()` som respekterar native constraint validation, samma teknik som
+  Lidköpings P2-rättning 2026-09-11-001): tariffspecifika obligatoriska fält renderas med
+  rätt etiketter, giltig indata ger ett komplett resultat via normal knappsubmit, varje
+  saknat obligatoriskt fält blockerar separat med ett svenskt fältfel (`#policyfalt-
+  {nyckel}-fel`) och inget resultat. Bekräftar även att Södertörns kundvalda-effekt-variant
+  inte finns i leverantörslistan.
+
+Testlokala kandidatfixturer injicerade i den mockade `tariffer.generated`-modulen — samma
+teknik som Lidköpings pre-aktiveringsprov (`resultatkontrakt.lidkoping.test.ts`/
+`besparingsvardeLidkoping.test.ts`/`KalkylatorPageLidkoping.test.tsx`). De sex riktiga
+katalograderna förblir `investigation.status="utreds"`; en separat, senare godkänd
+aktiveringsrunda ska tillföra omockat bevis mot den verkliga genererade katalogen (samma
+mönster som Lidköpings `KalkylatorPageLidkopingAktiverad.test.tsx`).
+
+**Testresultat:**
+- `.venv/bin/python -m pytest tools/tariffer/tests -q -p no:cacheprovider`: **549 passed**
+  (var 543; +6 för det nya `stodjer_aktuell_arskostnad`-testet).
+- `npm test -- --run` (neptune-marketing): **26 testfiler, 681 tester passerade** (var
+  614; +67 nya: 18+30+19 i de tre nya filerna).
+- `npx tsc --noEmit`: godkänd.
+- `npm run build`: godkänd; bygggenererade `dist`-ändringar återställda.
+- `npm run test:e2e`: samtliga åtta befintliga scenarier passerade — ingen regression.
+- `git diff --check`: rent i båda produktrepona.
+
+**Disposition mekaniskt omverifierad**: `godkanda(katalog)` ger fortfarande exakt **9**.
+Ingen av de sex Batch 1-kandidaterna är valbar; `investigation.status="utreds"` oförändrat
+för samtliga sex. Ingen annan tariff påverkad. Inget repo pushat.
+
+Batch 1 är därmed komplett enligt handoff `2026-09-11-001` och granskning `2026-09-11-008`:
+sex policyer, katalogrättelser, Python-goldenfall, TypeScript-paritet, publik produktentry
+och permanent sidbevis. Stannar för Codex granskning.
+
 ## Ändringslogg
 
+- `2026-09-11T11:57:07+02:00` – Claude levererade TypeScript-/UI-acceptansen (handoffens
+  punkt 5/6): `resultatkontrakt.batch1.test.ts`, `besparingsvardeBatch1.test.ts`,
+  `KalkylatorPageBatch1.test.tsx` (`neptune_academy@9eccbfc`), samt en rättad genuin lucka
+  i Python — `stodjer_aktuell_arskostnad=True` saknades för samtliga sex policyer
+  (`enkey-agents@4f8bb57`). 549 Python- och 681 TypeScript-tester, `tsc`, bygge, E2E och
+  `git diff --check` gröna. Disposition fortsatt exakt 9/55/28 av 92, ingen tariff
+  aktiverad, inget pushat. Batch 1 komplett enligt handoff 2026-09-11-001 och granskning
+  2026-09-11-008. Stannar för Codex granskning.
 - `2026-09-11T11:43:45+02:00` – Claude levererade sex Tariffpolicy-kopplingar, katalog-
   texträttelser (Öviks lösta issue borttagen, Partilles revisionsnot rättad),
   `test_familj4_resten_kontrakt.py` (sex oberoende goldenfall, bandgränser, negativa
