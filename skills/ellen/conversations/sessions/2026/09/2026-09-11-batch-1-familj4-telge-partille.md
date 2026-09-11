@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T15:55:41+02:00"
+last_updated: "2026-09-11T16:11:24+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: fix3-delivered-awaiting-review
+status: fix3-reviewed-changes-required
 topics:
   - Batch 1
   - Familj 4-resten
@@ -585,3 +585,87 @@ arbetskopiefiler.
   denna runda.
 
   Redo för nästa Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-11-012 av rättningsrunda 3
+
+Codex omgranskade `skills@659d843` (katalog `d2b035e`),
+`enkey-agents@1078098` och `neptune_academy@0dc48d6` i
+[`2026-09-11-012`](../../../reviews/2026/09/2026-09-11-omgranskning-batch-1-fix3.md).
+
+Beslutet är fortsatt **changes required**, men nästan hela granskning 011 är stängd:
+69 riktade prov och full driftjämförelse kör utan skip, 883 TypeScript- och 692
+tariff-Pythontester är gröna, liksom typkontroll, bygge och åtta E2E-scenarier. Öviks
+proveniens, bandkostnadsmatris, dubblettfilter och ARIA fungerar.
+
+Två P1 återstår i kapacitetskontraktet:
+
+- React-sidan avvisar generellt `<=0` och sätter HTML-minimum till minst 1 även för
+  kontraktsgatade tariffer, trots att Telge och Partille uttryckligen har
+  `minvarde=0` och band som börjar vid 0. Direkta Python-/TypeScriptanrop med kompletta
+  underlag och 0 kW blir `complete`, medan normal UI-submit stoppas.
+- Telges källunderlag och katalog anger heltalsavrundad debiterbar effekt, men policyn
+  och fixturen sätter `heltal=false`. Ett komplett Telgefall med 100,5 kW blev därför
+  felaktigt `complete` i båda språk.
+
+Dessutom ska det missvisande DOM-testet för ”öppet” band ersättas med Partilles
+verkliga öppna band 7; formatteringskoden har redan ett korrekt enhetstest.
+
+Claude får göra en fokuserad rättningsrunda 4 enligt granskning 012. Ingen tariff får
+aktiveras och inget repo får pushas. Dispositionen ska fortsatt vara 9/55/28.
+
+## Ändringslogg (fortsättning 5)
+
+- `2026-09-11T16:11:24+02:00` – Codex omgranskade rättningsrunda 3 i
+  `2026-09-11-012`. Huvuddelen av 011 är stängd och 692+4 skip Python, 883+0 skip
+  TypeScript, tsc/build/8 E2E är gröna. Två policy/UI-motsägelser återstår: Telge och
+  Partille tillåter 0 i domänen men UI:t kräver minst 1; Telges källbelagda
+  heltalsavrundning saknas i policyn. Ett riktigt öppet Partilleband ska också provas i
+  DOM. Fortsatt 9/55/28, ingen aktivering/push.
+
+## Rättningsrunda 4 — leverans för granskning 2026-09-11-012
+
+`enkey-agents@cd4c2ce`, `neptune_academy@9379eda`.
+
+**P1 #1 (kapacitetsfältets hårdkodade `> 0`)**: den tidiga UI-kontrollen i
+`KalkylatorPage.tsx` särskiljer nu bara de policyer vars `minVarde` faktiskt är `<= 0`
+(i dag Telge och Partille) — där accepteras 0 kW genom en riktig knappsubmit, precis
+som domänlagret redan gjorde. Alla andra kontraktsgatade tariffer (Lidköping,
+Karlstad, Södertörn, VänerEnergi, Övik) behåller sin ursprungliga, oförändrade
+`> 0`-tröskel och faller vid behov igenom till domänlagrets etablerade
+"för lågt"/"för högt"-meddelanden — samma redan testade konvention som tidigare,
+inte en ny min/max-tolkning i UI-lagret. HTML-attributet `min` speglar nu policyns
+faktiska `minVarde` utan det tidigare `Math.max(1, ...)`-golvet.
+
+**P1 #2 (Telges källbelagda heltalskrav)**: `_familj4_kapacitet_krav` i
+`policyregister.py` har fått en valfri `heltal`-parameter, och Telges kapacitets-
+`KravPost` sätter nu `heltal=True` med källa uppdaterad till villkorens sida 3
+("Den debiterade effekten avrundas till närmaste heltal."). Grep mot
+`verifieringslista-fjarrvarmebolag.md` bekräftade att INGEN av de fem övriga
+kandidaterna (Karlstad, Södertörn, VänerEnergi, Partille, Övik har redan
+`heltal=True` sedan tidigare) har motsvarande källbelägg för sin egen kapacitetspost
+— bara Telge ändras. `batch1RawData.ts`:s Telge-fixture uppdaterad i exakt
+tecken-för-tecken synk (driftprovets `toEqual` mot den riktiga Python-katalogen).
+
+**P2 (öppet band, ej faktiskt provat)**: Karlstads band 5 och Öviks toppband
+namngavs om från "öppet band" till att beskriva vad de faktiskt är (STÄNGDA band med
+riktiga maxvärden); ett nytt DOM-test lades till för Partilles verkliga öppna
+toppband (7, `min=2501, max=null`), som visar `"7 (2501+ kW)"`.
+
+Nya/rättade tester: 0 kW för Telge/Partille ger `complete` genom en riktig
+knappsubmit (inkl. `min`-attributet), Telges 100,5 kW blockeras fältnära med rätt
+etikett/enhet/ARIA medan 100 kW går igenom, samt Python-sidans parametriserade
+heltalskrav- och minvarde=0-tester över samtliga sex kandidater. En felaktig egen
+testförväntan (`invalid_policy_fields` i stället för det redan etablerade
+`invalid_capacity` som `beraknaArsprodukts` tidiga kapacitetskontroll faktiskt kastar)
+upptäcktes och rättades under körning, inte i produktionskoden.
+
+Körda sviter: Python-tariffsviten 698 passed, 4 skipped (upp från 692+4);
+TypeScript-sviten 892 passed, 0 failed (27 filer); `tsc --noEmit` rent;
+produktionsbygge grönt (dist-artefakter återställda efteråt); den självständiga
+E2E-sviten (`e2e/kalkylator.smoke.mjs`, 8 scenarier) grön; `git diff --check` rent i
+både `enkey-agents` och `neptune_academy`. Disposition mekaniskt omverifierad:
+`godkanda()=9` (oförändrat), fortsatt **9/55/28 av 92**. Ingen av de sex kandidaterna
+är aktiverad. `enkey-agents` remote `main` fortsatt oförändrad vid `58fb06e1` (inte
+rört, inget pushat till något repo denna runda — endast lokala commits).
+
+Redo för nästa Codex-omgranskning.
