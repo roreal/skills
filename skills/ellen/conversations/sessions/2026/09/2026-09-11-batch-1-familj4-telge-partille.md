@@ -284,3 +284,71 @@ rörd endast av den regenererade artefakten). `tsc --noEmit`: godkänd. Disposit
 mekaniskt omverifierad: `godkanda()=9`, oförändrat 9/55/28 av 92. Ingen tariff
 aktiverad, inget pushat. Stannar för Codex omgranskning — nästa runda måste täcka
 P1 #3/#4 innan leveransen kan godkännas.
+
+### Claude — assistent (uppföljning: P1 #3/#4)
+
+Slutför de två P1-fynd som föregående runda medvetet sköt upp — TypeScript-
+produkt-/UI-lagret speglade varken det obligatoriska band-ID-kravet eller Öviks nya
+enkla kapacitetsfält, och de tre testfilernas fixturer var manuella kopior som glidit
+isär från katalogen (Öviks fixtur hårdkodade `kapacitet.enhet='kW'`/`kw_faktor=1` och
+ignorerade tyst det verkliga kWh/dygn-värdet, vilket gjorde produktprovet falskt
+grönt).
+
+**Ny delad auktoritativ råfixture** (`neptune-marketing/src/utils/batch1RawData.ts`):
+verbatim `till_prisar()`-utdata för samtliga 39 band över de sex tarifferna, plus
+`policyregister.py`:s sex `Tariffpolicy`-kopplingar i snake_case, läst via
+`policyFranGenererad` (samma väg produktionskoden läser den genererade katalogen) —
+ersätter tre manuella fixturkopior i alla Batch1-testfilerna.
+
+**P1 #3 (fixturer inte tariffidentiska) — löst.** `resultatkontrakt.batch1.test.ts`
+fick en full bandgränsmatris (39 band, golv och tak, explicit `vald_niva_id`) samt en
+full negativmatris (saknat/fel typ/icke-ändligt/utanför domän) för varje obligatoriskt
+fält, plus band-ID:ets egna negativa fall. `besparingsvardeBatch1.test.ts` ersätter
+`kostnad > 0`-påståendet med en DIFFERENTIELL, oberoende handräknad kapacitets-/
+bandkomponent: kostnadsskillnaden mellan två anrop som skiljer sig ENDAST i
+kapacitetsvärde resp. bandval måste matcha katalogens avgift/pris skalat med
+`MOMS_FAKTOR` — beräknat oberoende av `beraknaArsprodukt`, som fördelar `totalMwh`
+över en riktig uppvärmningsprofil (inte en jämn tolftedel) och därför inte kan
+handräknas exakt utan att duplicera den interna profillogiken. Telges
+`low_utilization`-justering (som också läser kapacitetsvärdet, inte bara `fast`)
+hanteras med en egen, oberoende återimplementerad delta-formel
+(`justeringSomFunktionAvKapacitet` i fixturen).
+
+**P1 #4 (negativ-/band-/ARIA-matris saknas) — löst.** `KalkylatorPageBatch1.test.tsx`
+renderar och väljer det verkliga band-alternativet via normal knappsubmit, provar
+saknat bandval (fältfel + `aria-invalid`) samt ett strukturellt giltigt men okänt
+band-ID injicerat direkt i DOM:en (samma etablerade teknik som
+`KalkylatorPageBatch0PolicyForm.test.tsx`) för att bevisa den auktoritativa
+domänkontrollen, inte bara `<select>`-begränsningen. Södertörns kundvalda-effekt-
+variant provas nu genom den PUBLIKA produktentryn i båda testfilerna (variant-ID:n
+finns inte i den mockade katalogen → `valjLeverantorOchPrisar` faller tillbaka till
+riksgenomsnittet, som blockerar aktuell årskostnad med `Produktbegransning`/
+`aktuell_arskostnad_ej_stodd`) — inte en tautologisk strängjämförelse.
+
+Ingen Python-sidan behövde ändras denna runda — föregående runda hade redan speglat
+band-ID-kravet, Öviks fältmodell och Telges katalogrättelser korrekt där. Ingen
+katalog-, produkt- eller aktiveringsändring.
+
+**Commits:** `neptune_academy@1b47db9` (fyra filer: ny `batch1RawData.ts` plus
+omskrivna `resultatkontrakt.batch1.test.ts`, `besparingsvardeBatch1.test.ts`,
+`KalkylatorPageBatch1.test.tsx`). Inget nytt commit i `enkey-agents`
+(`@76a2494` oförändrat — inget Python-gap hittades). TypeScript: **862 passed**
+(var 681, +181). Python oförändrat: **549 passed**. `tsc --noEmit`: godkänd.
+Produktionsbygge: godkänt, `dist` återställd. Självbärande E2E: samtliga åtta
+scenarier godkända. `git diff --check`: rent i båda produktrepona. Disposition
+mekaniskt omverifierad: `godkanda()=9`, oförändrat 9/55/28 av 92. Ingen tariff
+aktiverad, inget pushat. Stannar för Codex omgranskning.
+
+## Ändringslogg (fortsättning)
+
+- `2026-09-11T12:57:19+02:00` – Claude slutförde P1 #3/#4 från granskning
+  `2026-09-11-009`: ny delad auktoritativ råfixture (`batch1RawData.ts`) ersätter tre
+  manuella testkopior; full 39-bandgränsmatris och negativmatris i
+  `resultatkontrakt.batch1.test.ts`; differentiell oberoende kapacitets-/bandfacit
+  (ersätter `kostnad > 0`) i `besparingsvardeBatch1.test.ts`, inklusive Telges
+  kapacitetsberoende `low_utilization`-delta; verkligt band-UI med DOM-injicerat
+  okänt-ID-bevis och Södertörns variant provad genom den publika produktentryn i
+  `KalkylatorPageBatch1.test.tsx` (`neptune_academy@1b47db9`). Ingen Python-ändring
+  behövdes. 862 TypeScript- och 549 Python-tester, `tsc`, bygge, E2E och
+  `git diff --check` gröna. Disposition fortsatt exakt 9/55/28 av 92, ingen tariff
+  aktiverad, inget pushat. Stannar för Codex omgranskning.
