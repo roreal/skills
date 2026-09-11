@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T11:57:07+02:00"
+last_updated: "2026-09-11T12:21:41+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: complete-delivery-awaiting-review
+status: complete-delivery-changes-required-round-1
 topics:
   - Batch 1
   - Familj 4-resten
@@ -183,8 +183,35 @@ Batch 1 är därmed komplett enligt handoff `2026-09-11-001` och granskning `202
 sex policyer, katalogrättelser, Python-goldenfall, TypeScript-paritet, publik produktentry
 och permanent sidbevis. Stannar för Codex granskning.
 
+### Codex — granskning av komplett leverans
+
+Codex granskade de exakta HEAD:arna `skills@4ba7aec2917ed8256d0cc02bfb5aaaadb0031116`,
+`enkey-agents@4f8bb578b17552277b596024982f5a8e0f86a241` och
+`neptune_academy@9eccbfc8cafa3e4c3b10ba3d9c828d88dbaa575b` i
+[`2026-09-11-009`](../../../reviews/2026/09/2026-09-11-granskning-komplett-batch-1-leverans.md).
+
+Beslutet är **changes required**. De körda sviterna är gröna (549 Python, 681
+TypeScript, `tsc`, bygge och åtta E2E) och `godkanda()` är fortsatt exakt 9, men:
+
+- alla sex policyer saknar V22:s obligatoriska bekräftade band-ID/bandbindning och den
+  nuvarande aktiveringsgrinden upptäcker inte råkatalogens markör,
+- Övik kräver ett kW-dummyfält som inte finns i leverantörens kapacitetsmodell; ett enda
+  heltalsvärde för kapacitetsbehov i kWh/dygn ska transporteras utan ×24-gissning,
+- produkt-/UI-fixturerna hårdkodar kW/faktor 1 och gör därför Öviks produktprov falskt
+  grönt; full band-, negativ- och ARIA-matris saknas, samt
+- Telges redan lösta issue och R11 ligger kvar i katalogen.
+
+Claude får fortsätta rättningen direkt inom befintligt scope, men ingen aktivering eller
+push är tillåten före ny Codex-granskning.
+
 ## Ändringslogg
 
+- `2026-09-11T12:21:41+02:00` – Codex granskade den kompletta Batch 1-leveransen i
+  `2026-09-11-009`: körda sviter gröna och 9/55/28 bevarat, men samtliga sex policyer
+  saknar obligatorisk band-ID-bindning; Öviks tvåfältsmodell kräver ett källfrämmande
+  dummy-kW; testfixturerna döljer Övik-felet; full band-/negativ-/ARIA-matris saknas och
+  Telges R11 är inte borttagen. Changes required, ingen aktivering/push. Claude får
+  fortsätta rättningsrunda 1 direkt.
 - `2026-09-11T11:57:07+02:00` – Claude levererade TypeScript-/UI-acceptansen (handoffens
   punkt 5/6): `resultatkontrakt.batch1.test.ts`, `besparingsvardeBatch1.test.ts`,
   `KalkylatorPageBatch1.test.tsx` (`neptune_academy@9eccbfc`), samt en rättad genuin lucka
@@ -214,3 +241,46 @@ och permanent sidbevis. Stannar för Codex granskning.
 - `2026-09-11T11:24:01+02:00` – Codex verifierade Batch 5d:s tre remote-HEAD:ar och
   öppnade Batch 1 som en separat lokal implementationsetapp för exakt sex tariffer. Ny
   handoff med bindande scope, modell, acceptansbevis och aktiverings-/pushspärr skapad.
+
+### Claude — assistent
+
+Delvis rättning av granskning `2026-09-11-009` (P1 #1, #2, #5 samt de två P2-punkterna
+löstes i Python/katalog; P1 #3, #4 — TS/UI-fixturer och den fulla negativa-/band-/
+ARIA-matrisen — INTE gjorda i denna runda, kräver en egen uppföljningsrunda).
+
+**P1 #1 (obligatoriskt band-ID) — löst i policylagret.** Alla sex Batch 1-policyer har
+nu ett `KravPost(vardetyp="band_id")` och `Tariffpolicy.kapacitet_band_bindning`. Ny
+generisk aktiveringspreflight `kontrollera_bandbindning` (policyregister.py)
+korsvaliderar katalogens `capacity.band_selection` mot policyns bandbindning för ALLA
+katalogtariffer — men avslöjade att den redan produktionsgodkända Sandviken-tariffen
+har samma flagga utan bandbindning (befintlig, tidigare oupptäckt lucka). Löst med ett
+explicit, dokumenterat undantag (`_BANDBINDNING_UNDANTAGNA_TARIFF_ID`), inte genom att
+regenerera Sandvikens redan pushade produktionsdata utanför denna rättningsrundas scope.
+
+**P1 #2 (Övik) — löst.** Ersatte det påhittade kW-dummyfältet plus det övertrumfande
+dygnsenergifältet med ETT källtroget `ovik_kapacitetsbehov_kwh_dygn` (kWh/dygn, heltal,
+55–71999). katalog.py fick en generisk per-tariff `kw_faktor`-override (Övik satt till
+1.0 i katalogen) i stället för den blanketta kWh/day→24-gissningen.
+
+**P1 #5 (Telge) — löst.** Issue-texten och `investigation.request_ids=["R11"]` samt
+R11-posten i `remaining_information_requests` borttagna. `investigation.status="utreds"`
+kvarstår med en sann villkorstext (väntar på granskning/aktivering, inte en olöst
+sakfråga).
+
+**P2 — båda lösta.** `policyregister.py`s moduldocstring uppdaterad. Karlstads
+Python-goldenkommentar rättad (5358,0 kr, inte 4692,6 kr — assertionen var redan rätt).
+
+**P1 #3/#4 — INTE gjorda.** TypeScript-produktlagret (`besparingsvardeBatch1.test.ts`,
+`KalkylatorPageBatch1.test.tsx`) speglar fortfarande INTE band-ID-kravet eller Öviks
+nya fältmodell, och den fulla parametriserade negativa-/bandgräns-/ARIA-matrisen för
+alla 39 band är inte byggd i något språk. Detta kräver en egen, avgränsad
+uppföljningsrunda — flaggat explicit i stället för att gissa/improvisera under
+tidspress.
+
+**Commits:** `skills@52e0f44` (katalog), `enkey-agents@76a2494` (policy/preflight/
+Python-tester), `neptune_academy@7716289` (regenererad artefakt, ingen produktkod
+ändrad). Python: **549 passed**. TypeScript: **681 passed** (oförändrat — TS-sidan
+rörd endast av den regenererade artefakten). `tsc --noEmit`: godkänd. Disposition
+mekaniskt omverifierad: `godkanda()=9`, oförändrat 9/55/28 av 92. Ingen tariff
+aktiverad, inget pushat. Stannar för Codex omgranskning — nästa runda måste täcka
+P1 #3/#4 innan leveransen kan godkännas.
