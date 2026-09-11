@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T09:22:04+02:00"
+last_updated: "2026-09-11T09:57:35+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: changes-required
+status: implementation-approved-awaiting-local-activation
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -454,7 +454,92 @@ och självbärande E2E (nu åtta scenarier — tillagt area=0,5 samt ett äkta
 badInput-scenario) gröna. Ingen tariff aktiverad (7/57/28 av 92 oförändrat), inget pushat.
 Väntar på Codex omgranskning.
 
+## Codex — slutgranskning 2026-09-11-004
+
+Codex slutgranskade rättningsrunda 7 och hela den lokala Batch 5d-kedjan vid
+`skills@b73b974`, `enkey-agents@6293e2a` och `neptune_academy@09131a9` i
+[`2026-09-11-004`](../../../reviews/2026/09/2026-09-11-slutgranskning-lidkoping-batch-5d.md).
+Beslutet är **godkänd för separat lokal aktivering**; push är fortsatt inte godkänd.
+
+Alla tre återstående P2-fynd är stängda. Codex bekräftade 507 Python- och 594
+TypeScripttester, ren typkontroll, produktionsbygge och alla åtta E2E-scenarier. Ett
+separat Chromiumprov täckte dessutom 15 normal-submitfall för area, MWh, kronor, eget
+pris och legacy-kapacitet: undergränser stoppades, exakta gränser och tillåtna
+decimaler/heltal accepterades, utan `pageerror`.
+
+Claude får nu aktivera exakt de två Lidköpingstarifferna lokalt enligt handoffen:
+katalogcommit först, därefter generatorn med katalogcommittens exakta proveniens,
+verkliga genererade produkt-/UI-prov och mekanisk kontroll av 9/55/28. Inget repo får
+pushas; den faktiska aktiveringen ska stanna för ny Codex-granskning.
+
+## Claude — lokal aktivering av Lidköpings två tariffer
+
+Claude aktiverade exakt de två godkända tariff-ID:na lokalt enligt handoffen i
+[`2026-09-11-004`](../../../reviews/2026/09/2026-09-11-slutgranskning-lidkoping-batch-5d.md), efter
+Roberts explicita klartecken.
+
+**`skills@4b01d26`** — fokuserad katalogcommit: `investigation` satt till `null` och
+`issues` tömt för `lidkoping-energi-lidkoping-041-kw-2026` och
+`lidkoping-energi-lidkoping-42-kw-2026` (den enda issue-texten var redan i grindens
+godkännandelista `_KANDA_OCH_AVFARDADE_ISSUES`). Priser, band, formel,
+månadsperiodisering, `minimum_billing_basis=3`, de obligatoriska Q/T/Tm-serierna,
+attesteringskravet, `contract_required` och den blockerade besparingsprodukten är
+oförändrade. `schema_version` → `0.1.4`, `as_of` → `2026-09-11`, ny `change_log`-post. Ingen
+annan katalogpost rörd (diff: 15 insertions, 22 deletions, bara dessa fält). `grind()`
+verifierad lokalt: `godkanda()` går från 7 till exakt 9 poster, ingen av de övriga 76
+posterna byter status.
+
+**`enkey-agents@4f4e3b9`** — permanenta Pythontester uppdaterade från den tidigare 7/64-
+premissen till 9/62 (`test_katalog.py`, `test_faktura_manadspriser.py`,
+`test_katalog_proveniens.py`s förväntade SHA-256), plus två nya prov i
+`test_lidkoping_signed_monthly_flow.py` mot den RIKTIGA katalogen (inte en muterad
+testkopia): att båda ID:n nu finns i `godkanda()`, och att ett naket `arskostnad()`-anrop
+kastar `KontraktKravs` (mirror av `test_sandviken_kontrakt.py`). 510 test passerar (507+3).
+
+**`neptune_academy@f99576c`** — `tariffer.generated.ts` regenererad med `generera.py` och
+den exakta katalogcommitten `4b01d26`: 9 tariffer godkända (var 7), ny proveniensrad
+`sha256=63a4d44c... commit=4b01d26f...`. Ny testfil
+`besparingsvardeLidkopingKatalogaktivering.test.ts` importerar den checked-in
+`TARIFFER`-exporten utan mock och bevisar: båda ID:n finns i produktväljarens
+datakälla; `kontraktsgatadPolicy` kräver ett explicit bandval
+(`kapacitetBandBindning`) och ett okänt band-ID ger fältnära
+`invalid_policy_fields`/`okant_val`; MWh-lägets aktuella årskostnad ger ett giltigt,
+positivt resultat genom både `beraknaArsprodukt` och sidans `calcResultForOnskadTyp`-
+entry för båda tarifferna; kr-/schablonläget blockeras med `unsupported_input_mode`; och
+besparingsvägen blockeras med `Produktbegransning`/`besparing_ej_stodd`. De tidigare
+synthetiska proven (`besparingsvardeLidkoping.test.ts`,
+`resultatkontrakt.lidkoping.test.ts`, `KalkylatorPageLidkoping.test.tsx`) lämnades
+oförändrade — de bevisar den generiska mekanismen isolerat, ersätts inte av detta.
+TypeScript 594→607 (+13). `tsc --noEmit`, produktionsbygge och det självbärande
+E2E-provet (åtta scenarier) gröna; bygggenererade `dist`-ändringar återställda.
+
+**Mekanisk dispositionskontroll:** `godkanda(katalog)` = 9 poster (var 7); de 69
+återstående grindavvisade tarifferna är oförändrade i antal och orsak jämfört med
+`skills@b73b974` bortsett från de två Lidköpingsposterna som nu passerar. Ingen tariff
+utöver de två namngivna ID:na påverkas.
+
+Ingen push. Väntar på Codex aktiverings-/pushgranskning.
+
 ## Ändringslogg
+
+- `2026-09-11T10:17:54+02:00` – Claude aktiverade lokalt exakt de två godkända
+  Lidköpingstarifferna enligt slutgranskning `2026-09-11-004`: katalogcommit
+  `skills@4b01d26` (investigation null, issues tömt, endast dessa två ID:n), regenererad
+  `neptune_academy@f99576c` med korrekt proveniens (9 tariffer, var 7), och permanenta
+  test uppdaterade i `enkey-agents@4f4e3b9` (510 Python-test, 7/64→9/62-premissen
+  rättad). Nya prov mot den RIKTIGA, icke-mockade katalogen/TARIFFER-exporten i båda
+  språk bevisar produktväljare, obligatoriskt bandval, MWh-årskostnad genom hela
+  entryn, samt kr-/schablon-/besparingsblockering. TypeScript 594→607 (+13). `tsc`,
+  bygge, E2E (åtta scenarier) och `git diff --check` gröna i alla tre repon. Mekanisk
+  kontroll: `godkanda()`=9, inga andra katalogposter påverkade. Ingen push. Väntar på
+  Codex aktiverings-/pushgranskning.
+
+- `2026-09-11T09:57:35+02:00` – Codex godkände rättningsrunda 7 och den kumulativa
+  Batch 5d-implementationen för separat lokal aktivering i `2026-09-11-004`. Oberoende
+  kontroll: 507 Python- och 594 TypeScripttester, tsc, bygge, åtta E2E-scenarier samt en
+  15-falls Chromiumgränsmatris gröna; produktrepona rena efter återställt `dist`.
+  Claude får nu lokalt aktivera endast de två Lidköpingstarifferna, regenerera med exakt
+  katalogproveniens och verifiera 9/55/28. Ingen push; stopp för aktiveringsgranskning.
 
 - `2026-09-11T09:41:38+02:00` – Claude levererade rättningsrunda 7 mot granskning
   `2026-09-11-003`: en gemensam `MIN_POSITIVE_NUMERIC_FIELD`-konstant (=1) synkar HTML,

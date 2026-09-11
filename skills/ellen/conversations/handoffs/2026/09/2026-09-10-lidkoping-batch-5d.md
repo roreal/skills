@@ -3,23 +3,26 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-7-delivered-awaiting-review
+status: implementation-approved-local-activation-authorized
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
+approved_activation_scope: "local-only; exakt två Lidköpingstariffer"
 push_allowed: false
-review_required_before_activation: true
-latest_review: "2026-09-11-003"
+review_required_before_activation: false
+review_required_before_push: true
+latest_review: "2026-09-11-004"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
 fix_round_4_delivered_at: "2026-09-10T22:09:14+02:00"
 fix_round_5_delivered_at: "2026-09-11T06:55:22+02:00"
 fix_round_6_delivered_at: "2026-09-11T09:01:04+02:00"
+fix_round_7_delivered_at: "2026-09-11T09:41:38+02:00"
 baseline:
-  skills_local: "6760da1"
+  skills_local: "b73b974"
   enkey_agents: "6293e2a"
-  neptune_academy: "0ed23b3"
+  neptune_academy: "09131a9"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -333,3 +336,31 @@ Claude ska göra en sista, strikt avgränsad rättningsrunda 7:
 Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
 HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
 repo får pushas. Stanna för ny Codex-omgranskning.
+
+## Codex — slutgranskning 2026-09-11-004 och lokal aktiveringsetapp
+
+Rättningsrunda 7 och den kumulativa Batch 5d-implementationen är **godkända för lokal
+aktivering**. Full granskning och oberoende testbevis finns i
+[`2026-09-11-004`](../../../reviews/2026/09/2026-09-11-slutgranskning-lidkoping-batch-5d.md).
+Godkännandet gäller `skills@b73b974`, `enkey-agents@6293e2a` och
+`neptune_academy@09131a9`. Det är inte ett pushgodkännande.
+
+Claude ska nu göra en separat, fokuserad lokal aktivering:
+
+1. Avsluta endast utrednings-/issue-spärrarna för
+   `lidkoping-energi-lidkoping-041-kw-2026` och
+   `lidkoping-energi-lidkoping-42-kw-2026`. Bevara tariffdata, produktförmågor,
+   obligatoriska serier och attestering oförändrade.
+2. Committera katalogändringen i `skills` först. Regenerera sedan
+   `tariffer.generated.ts` via generatorn med just den katalogcommittens fulla hash;
+   den genererade filen får inte handredigeras.
+3. Uppdatera permanenta testpremisser från simulerat aktiverbar till verkligt aktiv och
+   bevisa båda posterna genom den genererade produktionskedjan och sidan. MWh-lägets
+   aktuella årskostnad ska fungera; kr, schablon och besparing ska fortsatt blockeras.
+4. Kör aktiveringspreflight, hela Python-/TypeScriptsviten, typkontroll, bygge, E2E och
+   `git diff --check`. Verifiera exakt **9/55/28 av 92** och att inga andra poster släppts
+   igenom. Återställ bygggenererat `dist`.
+5. Gör fokuserade lokala commits, logga fulla HEAD-hashar och stanna. **Pusha inget repo**;
+   Codex ska först granska den faktiska aktiveringen och den genererade proveniensen.
+
+Ta inte med befintliga orelaterade arbetskopiefiler i någon commit.
