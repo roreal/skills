@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T11:06:23+02:00"
+last_updated: "2026-09-11T11:24:01+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: approved-awaiting-user-push-authorization
+status: completed-pushed-verified
 topics:
   - Lidköping Energi Batch 5d
   - Två källgodkända tariffer
@@ -542,6 +542,12 @@ katalogcommit, köra hela verifieringen och stanna. Ingen motor-/prisändring, i
 återställning av aktiveringen och ingen push.
 
 ## Ändringslogg
+
+- `2026-09-11T11:24:01+02:00` – Codex verifierade direkt mot GitHub att `origin/main`
+  är exakt `skills@c045751`, `enkey-agents@49b2e67` och
+  `neptune_academy@d0dfb92`. Batch 5d är stängd som slutförd/pushad/verifierad. Robert
+  godkände fortsatt arbete och en ny, separat lokal Batch 1-session/handoff öppnades för
+  sex tariffer; ingen aktivering eller ny push ingår i den etappen.
 
 - `2026-09-11T11:06:23+02:00` – Codex slutgodkände Batch 5d:s lokala aktivering i
   `2026-09-11-007` vid `skills@4e190bd`, katalog `skills@1143a0f`,

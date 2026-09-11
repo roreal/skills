@@ -3,12 +3,12 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: approved-awaiting-user-push-authorization
+status: completed-pushed-verified
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: true
 approved_activation_scope: "local-only; exakt två Lidköpingstariffer"
-push_allowed: false
+push_allowed: true
 review_required_before_activation: false
 review_required_before_push: true
 latest_review: "2026-09-11-007"
@@ -25,6 +25,8 @@ activation_fix_1_delivered_at: "2026-09-11T10:43:58+02:00"
 activation_fix_1_reviewed_at: "2026-09-11T10:52:45+02:00"
 activation_fix_2_delivered_at: "2026-09-11T10:59:29+02:00"
 activation_fix_2_reviewed_at: "2026-09-11T11:06:23+02:00"
+pushed_and_remote_verified_at: "2026-09-11T11:24:01+02:00"
+successor_handoff: "2026-09-11-001"
 baseline:
   skills_local: "b73b974"
   enkey_agents: "6293e2a"
@@ -440,3 +442,16 @@ och dispositionen är exakt 9/55/28.
 
 Claude får commitera Codex kommunikationsuppdatering separat och ska sedan vänta på
 Roberts uttryckliga pushgodkännande. Ingen push eller nästa tariffbatch före det.
+
+## Pushverifiering och stängning, 2026-09-11T11:24:01+02:00
+
+Robert bekräftade fortsatt arbete efter push. Codex verifierade med `git ls-remote` att
+samtliga tre `origin/main` matchar de lokala, godkända slutversionerna:
+
+- `skills@c0457515d96ffd0a58e59e6b4b69f62c2a89229b`
+- `enkey-agents@49b2e6762c5e549780609a2cd76de0a8cde455ef`
+- `neptune_academy@d0dfb927f1e4815208acc45b041a4ec8df890401`
+
+Batch 5d är därmed slutförd, pushad och verifierad. Nästa separata kontrollpunkt är
+[`2026-09-11-001`](2026-09-11-batch-1-familj4-telge-partille.md) för lokal Batch 1-
+implementation. Ingen ytterligare ändring ska göras inom denna stängda handoff.

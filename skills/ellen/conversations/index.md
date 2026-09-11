@@ -2,7 +2,8 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-10-001` | 2026-09-10 | Robert, Codex, Claude | Batch 5d och exakt två lokalt aktiverade Lidköpingstariffer slutgodkända i Codex `2026-09-11-007`; 9/55/28, 510/614 tester, tsc, bygge och åtta E2E gröna; väntar på Roberts uttryckliga pushgodkännande | Två Lidköpingstariffer, signerad månadsvis nätmedelavkylningsjustering och aktuell uppskattad årskostnad | [Öppna sessionen](sessions/2026/09/2026-09-10-lidkoping-batch-5d.md) |
+| `2026-09-11-001` | 2026-09-11 | Robert, Codex, Claude | Auktoriserad lokal implementation; exakt sex tariffer; 9/55/28 ska bevaras; ingen aktivering eller push före Codex granskning | Batch 1: Familj 4-resten, Telge och Partille | [Öppna sessionen](sessions/2026/09/2026-09-11-batch-1-familj4-telge-partille.md) |
+| `2026-09-10-001` | 2026-09-10 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@c045751`, `enkey-agents@49b2e67`, `neptune_academy@d0dfb92`; 9/55/28 | Två Lidköpingstariffer, signerad månadsvis nätmedelavkylningsjustering och aktuell uppskattad årskostnad | [Öppna sessionen](sessions/2026/09/2026-09-10-lidkoping-batch-5d.md) |
 | `2026-09-08-001` | 2026-09-08 | Robert, Codex, Claude | Slutförd: Batch 0 pushad och verifierad; ingen tariffaktivering; 7/57/28; fortsättning i `2026-09-10-001` | Produktkontrakt, fullständig tariffinventering och batchplan | [Öppna sessionen](sessions/2026/09/2026-09-08-kalkylator-v1-produktkontrakt.md) |
 | `2026-09-06-002` | 2026-09-06 | Robert, Codex, Claude | completed — pushed | Implementation av Sandviken Energi efter godkännande 2026-09-06-006 | [Öppna sessionen](sessions/2026/09/2026-09-06-sandviken-implementation.md) |
 | `2026-09-04-001` | 2026-09-04 | Robert, Codex, Claude | active | Användbarhets- och funktionsutvärdering av kalkylatorn | [Öppna sessionen](sessions/2026/09/2026-09-04-kalkylatorutvardering.md) |
@@ -12,7 +13,8 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-10-001` | 2026-09-10 15:08 | väntar på användaren | Slutgodkänd i Codex `2026-09-11-007`; inga öppna fynd; push får ske först efter Roberts uttryckliga klartecken | Batch 5d: exakt två Lidköpingstariffer lokalt aktiva, 9/55/28; pushkontrollpunkt återstår | [Öppna överlämningen](handoffs/2026/09/2026-09-10-lidkoping-batch-5d.md) |
+| `2026-09-11-001` | 2026-09-11 11:24 | omedelbart | Claude får starta lokal implementation; stopp för Codex granskning före aktivering/push | Batch 1: exakt sex tariffer; återanvänd befintliga motorer; dispositionen kvar 9/55/28 | [Öppna överlämningen](handoffs/2026/09/2026-09-11-batch-1-familj4-telge-partille.md) |
+| `2026-09-10-001` | 2026-09-10 15:08 | slutförd | Slutgodkänd, pushad och verifierad mot tre remote-HEAD:ar | Batch 5d: exakt två Lidköpingstariffer aktiva; 9/55/28 | [Öppna överlämningen](handoffs/2026/09/2026-09-10-lidkoping-batch-5d.md) |
 | `2026-09-08-001` | 2026-09-08 09:31 | ersatt av `2026-09-10-001` | Slutförd: Batch 0 pushad; ingen tariffaktivering | Fullständig v1–v22-inventering plus pushad Batch 0-infrastruktur; fortsättning i separat Lidköping-batch; 7/57/28 av 92 | [Öppna överlämningen](handoffs/2026/09/2026-09-08-tariffinventering-v1.md) |
 | `2026-09-05-001` | 2026-09-05 13:37 | 2026-09-06 19:00 Europe/Stockholm | completed — pushed | Stockholm Exergi — validated månadsvis resultatkontrakt | [Öppna överlämningen](handoffs/2026/09/2026-09-05-paus-till-2026-09-06-1900.md) |
 
