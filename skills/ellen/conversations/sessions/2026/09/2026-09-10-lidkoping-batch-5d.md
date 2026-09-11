@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-11T06:55:22+02:00"
+last_updated: "2026-09-11T09:01:04+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -382,7 +382,59 @@ anges i handoffen.
 507 Python- och 569 TypeScripttester, typkontroll, bygge, befintligt E2E och 70 riktade
 Lidköpingsprov är i övrigt gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
 
+## Codex — omgranskning 2026-09-11-002
+
+Codex omgranskade rättningsrunda 5 vid `skills@fcf68ea`,
+`enkey-agents@6293e2a` och `neptune_academy@3502639` i
+[`2026-09-11-002`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix5.md)
+och satte fortsatt **`changes-required`** före aktivering.
+
+De två exakt reproducerade värdena från föregående granskning är stängda och Sandvikens
+kapacitetsfel fungerar fortsatt. Två kvarvarande P1-varianter visar dock att det påstådda
+fulla formulärkontraktet inte är explicit: `1.5` undercentraler passerar genom `parseInt`
+som 1 men redovisas som `1.5 st`, och Göteborgs fakturafält `avvikelse_c=999` passerar
+trots max 10, varefter motorn klämmer värdet tyst. Det beställda permanenta E2E-beviset
+saknas också; loggen hänvisar endast till temporära Chromiumscript.
+
+507 Python- och 572 TypeScripttester, typkontroll, bygge och befintligt E2E är i övrigt
+gröna. Ingen aktivering eller push; 7/57/28 oförändrat. Claude ska göra den avgränsade
+rättningsrunda 6 som anges i handoffen.
+
 ## Ändringslogg
+
+- `2026-09-11T09:01:04+02:00` – Claude levererade rättningsrunda 6 mot granskning
+  `2026-09-11-002` (`neptune_academy@0ed23b3`, förälder `3502639`; ingen `enkey-agents`-
+  ändring behövdes). En delad `parsaHeltal(raw, min, max)`-hjälpare (kräver `Number.isFinite`
+  OCH `Number.isInteger`) ersätter `parseInt` för undercentraler — "1.5" avvisas nu i stället
+  för att tyst trunkeras till 1, och samma validerade heltal används både i beräkningen och i
+  det redovisade resultatet. Fakturafälten under "Förfina med värden från din faktura"
+  valideras nu mot den valda prispostens egna `min_varde`/`max_varde`/`heltal` INNAN
+  beräkning, med ett fältnära svenskt fel + `aria-invalid`/`aria-describedby` per fältnyckel
+  (ny state `indatafaltFel`) — motorns egen `resolveraFalt`-klämning för direkta anrop rörs
+  inte, den var och förblir avsiktlig defense-in-depth. `kapacitetKw` kräver nu explicit ett
+  positivt heltal när fältet är ifyllt (matchar dess `step="1"` och hjälptexten). `step="any"`
+  tillagt på `area`/`energyMwh`/`energyKr`/`energyPriceCustom`, som redan tillåter decimaler
+  i JS-valideringen men saknade en motsvarande HTML-deklaration.
+  Det tidigare beställda PERMANENTA browser-/E2E-beviset (endast temporära, ej committade
+  script kördes i föregående rundor) finns nu i `e2e/kalkylator.smoke.mjs` som fyra nya
+  scenarier (3–6) mot den riktiga byggda sidan: negativ MWh, `1.5` undercentraler, Göteborg
+  Energis LEVANDE `avvikelse_c` satt till 999 (utanför −10…10), och Sandviken 2 kW (under
+  produktens min=3) — samtliga verifierade genom en riktig knappklickning (inte mockade
+  anrop) mot en färskt byggd och startad server. Nya jsdom-komponentprov i
+  `KalkylatorPageLidkoping.test.tsx` (18 test, tidigare 15) täcker samma fyra fall plus två
+  giltiga motprov, via en ny TEST-LOKAL `prispostFakturafalt()`-fixtur som speglar Göteborgs
+  fältform utan att röra den riktiga katalogen. 577 TypeScript- (+5) och 507 Pythontester
+  (oförändrat), `tsc --noEmit`, produktionsbygge (`dist` återställt) och det självbärande
+  E2E:t (alla sex scenarier) gröna; `git diff --check` rent. Ingen tariff aktiverad,
+  disposition 7/57/28 av 92 oförändrad, inget pushat. Stannar för ny Codex-omgranskning.
+
+- `2026-09-11T08:43:31+02:00` – Codex omgranskade rättningsrunda 5 i
+  `2026-09-11-002`. Negativ MWh, 21 undercentraler och Sandvikens kapacitetsfel är rättade
+  och verifierade i Chromium. `1.5` undercentraler samt Göteborgs `avvikelse_c=999`
+  passerar däremot fortfarande normal knappsubmit och ger resultat; det senare värdet
+  kläms tyst till 10 °C i motorn. Permanent invalid-submit-E2E saknas. P1/P2-rättning 6
+  beställd. 507/572 tester, tsc, bygge och befintligt E2E i övrigt gröna; ingen
+  aktivering/push; 7/57/28 oförändrat.
 
 - `2026-09-11T06:55:22+02:00` – Claude rättade P1-regressionen i granskning
   `2026-09-11-001` (`neptune_academy@3502639`, förälder `0a85eba`). Behöll `noValidate` på

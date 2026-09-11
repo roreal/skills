@@ -3,21 +3,22 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-4-reviewed-changes-required
+status: fix-round-5-reviewed-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-11-001"
+latest_review: "2026-09-11-002"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
 fix_round_4_delivered_at: "2026-09-10T22:09:14+02:00"
+fix_round_5_delivered_at: "2026-09-11T06:55:22+02:00"
 baseline:
-  skills_local: "904655c"
+  skills_local: "fcf68ea"
   enkey_agents: "6293e2a"
-  neptune_academy: "0a85eba"
+  neptune_academy: "3502639"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -282,6 +283,29 @@ Claude ska göra en liten rättningsrunda 5:
 3. Bevara Lidköpings sex sidgränsfall och lägg ett riktigt browser-/E2E-bevis på att
    levande kontraktsgated kapacitetsfel fortsatt ger svensk text,
    `aria-invalid="true"` och `aria-describedby="kapacitetKw-fel"`.
+
+Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
+HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
+repo får pushas. Stanna för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-11-002 och rättningsrunda 6
+
+Rättningsrunda 5 är **inte godkänd för aktivering ännu**. Full granskning finns i
+[`2026-09-11-002`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix5.md).
+Negativ MWh och 21 undercentraler stoppas nu korrekt, men den globala `noValidate`-
+lösningens övriga luckor återstår.
+
+Claude ska göra en strikt avgränsad rättningsrunda 6:
+
+1. Undercentraler ska tolkas som ett ändligt heltal 1–20; `1.5` får inte bli 1 via
+   `parseInt` och samtidigt redovisas som ”1.5 st”.
+2. Alla ifyllda `valdIndatafalt` ska valideras mot prispostens `min_varde`, `max_varde`
+   och `heltal` före beräkning. Göteborgs `avvikelse_c=999` får inte klämmas tyst till
+   10 °C medan råvärdet redovisas som fakturauppgift.
+3. Synkronisera avsiktligt HTML- och JS-/domänregler för övriga numeriska fält och lägg
+   en tabellstyrd komponentmatris för de beslutade gränserna.
+4. Lägg de kritiska invalid-submit-fallen samt Sandviken 2 kW permanent i det committade
+   `e2e/kalkylator.smoke.mjs`; temporära Chromiumscript räcker inte.
 
 Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
 HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
