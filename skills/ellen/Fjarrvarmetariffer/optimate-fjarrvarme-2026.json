@@ -11127,7 +11127,7 @@
       "revision": "0.1.4",
       "changes": [
         "Lidköping Energi 0–41 kW och 42+ kW: investigation.status utreds avslutad efter Codex slutgranskning av Batch 5d-implementationen (2026-09-11-004), som föregicks av sju lokala rättningsrundor mot den kompletta signed_monthly_flow_adjustment-motorn (granskning 2026-09-09-006 löste källfrågorna för N=5, formel, periodisering och debiterbar-effekt-metod). Priser, band, formel, månadsperiodisering, minsta debiteringsgrund, obligatoriska Q/T/Tm-serier och attesteringskravet är oförändrade.",
-        "Issue-texten om debiterbar effekt/kapacitet rensad för båda posterna: kalkylatorns formulär kräver redan leverantörens fakturerade värde med obligatorisk attestering, exakt vad issuen bad om.",
+        "Issue-texten om debiterbar effekt/kapacitet rensad för båda posterna: kalkylatorns formulär kräver redan leverantörens fakturerade effektvärde som obligatoriskt fält, hämtat från faktura eller leverantör, exakt vad issuen bad om. Den obligatoriska attesteringen gäller nätets Tm-serie, inte effektvärdet.",
         "Endast dessa två tariff-ID:n påverkas. Övriga 76 katalogposters investigation-, issues- och produktionsstatus är oförändrade."
       ]
     }
