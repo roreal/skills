@@ -3,20 +3,21 @@ handoff_id: "2026-09-10-001"
 created_at: "2026-09-10T15:08:01+02:00"
 from: "Codex"
 to: "Claude"
-status: fix-round-3-reviewed-changes-required
+status: fix-round-4-reviewed-changes-required
 implementation_allowed: true
 approved_implementation_scope: "batch-5d-lidkoping-local-implementation-only"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
-latest_review: "2026-09-10-012"
+latest_review: "2026-09-11-001"
 fix_round_1_delivered_at: "2026-09-10T17:51:55+02:00"
 fix_round_2_delivered_at: "2026-09-10T21:06:03+02:00"
 fix_round_3_delivered_at: "2026-09-10T21:41:53+02:00"
+fix_round_4_delivered_at: "2026-09-10T22:09:14+02:00"
 baseline:
-  skills_local: "d66560c"
+  skills_local: "904655c"
   enkey_agents: "6293e2a"
-  neptune_academy: "98cf4a7"
+  neptune_academy: "0a85eba"
 tariff_ids:
   - "lidkoping-energi-lidkoping-041-kw-2026"
   - "lidkoping-energi-lidkoping-42-kw-2026"
@@ -257,5 +258,31 @@ Claude ska göra en liten rättningsrunda 4:
    men egentligen provar saknad MWh-proveniens.
 
 Kör hela verifieringsmatrisen, gör fokuserade lokala commits och rapportera exakta
+HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
+repo får pushas. Stanna för ny Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-11-001 och rättningsrunda 5
+
+Rättningsrunda 4 är **inte godkänd för aktivering ännu**. Full granskning finns i
+[`2026-09-11-001`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix4.md).
+De beställda Lidköpingsrättningarna är korrekta, men `noValidate` på hela huvudformuläret
+har skapat en P1-regression: en normal Chromium-klickning med MWh `-5` och 21
+undercentraler gav ett färdigt resultat utan fel. Resultatet räknade på schablon men
+redovisade samtidigt ”Angiven av användaren (-5 MWh/år)”.
+
+Claude ska göra en liten rättningsrunda 5:
+
+1. Begränsa lösningen till kapacitetsfältet, lämpligen genom att återställa native
+   validering för huvudformen och använda en riktad `onInvalid`-hanterare för
+   `kapacitetKw` som visar samma svenska fältfel och ARIA. Om global `noValidate` behålls
+   måste i stället samtliga HTML-begränsningar speglas och testas i applikationslagret.
+2. Lägg normal-knappsubmit-regressioner för minst negativ MWh och fler än 20
+   undercentraler: båda ska stoppas utan resultat. Granska övriga `min`/`max`-/`step`-fält
+   som berörs av vald lösning.
+3. Bevara Lidköpings sex sidgränsfall och lägg ett riktigt browser-/E2E-bevis på att
+   levande kontraktsgated kapacitetsfel fortsatt ger svensk text,
+   `aria-invalid="true"` och `aria-describedby="kapacitetKw-fel"`.
+
+Kör hela verifieringsmatrisen, gör en fokuserad lokal commit och rapportera exakta
 HEAD-hashar. Ingen tariff får aktiveras, dispositionen 7/57/28 får inte ändras och inget
 repo får pushas. Stanna för ny Codex-omgranskning.

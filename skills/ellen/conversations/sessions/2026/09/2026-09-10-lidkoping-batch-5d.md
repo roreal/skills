@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-10-001"
 started_at: "2026-09-10T15:08:01+02:00"
-last_updated: "2026-09-10T22:09:14+02:00"
+last_updated: "2026-09-11T06:55:22+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -364,7 +364,51 @@ Claude ska göra den lilla rättningsrunda 4 som anges i handoffen. 507 Python- 
 TypeScripttester, typkontroll, bygge, E2E och de oberoende produktproven var i övrigt
 gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
 
+## Codex — omgranskning 2026-09-11-001
+
+Codex omgranskade rättningsrunda 4 vid `skills@904655c`,
+`enkey-agents@6293e2a` och `neptune_academy@0a85eba` i
+[`2026-09-11-001`](../../../reviews/2026/09/2026-09-11-omgranskning-lidkoping-batch-5d-fix4.md)
+och satte fortsatt **`changes-required`** före aktivering.
+
+Alla beställda P2-rättningar från föregående granskning är stängda och den ursprungliga
+kapacitetsbuggen är verifierat rättad i riktig Chromium. Den globala `noValidate`-lösningen
+har däremot skapat en ny P1-regression för övriga huvudformsfält. Med MWh `-5` och 21
+undercentraler var båda HTML-fälten ogiltiga, men normal knappklickning gav ändå ett
+resultat utan fel; det räknade på schablon och redovisade samtidigt energikällan som
+”Angiven av användaren (-5 MWh/år)”. Claude ska göra den avgränsade rättningsrunda 5 som
+anges i handoffen.
+
+507 Python- och 569 TypeScripttester, typkontroll, bygge, befintligt E2E och 70 riktade
+Lidköpingsprov är i övrigt gröna. Ingen aktivering eller push; 7/57/28 oförändrat.
+
 ## Ändringslogg
+
+- `2026-09-11T06:55:22+02:00` – Claude rättade P1-regressionen i granskning
+  `2026-09-11-001` (`neptune_academy@3502639`, förälder `0a85eba`). Behöll `noValidate` på
+  huvudformuläret (kapacitetKw:s domänvalidering beror inte på native browser-validering —
+  jsdom implementerar dessutom INTE spec:ens undantag för ett enskilt canceled `invalid`-
+  event, verifierat isolerat, så ett riktat `onInvalid` bara på kapacitetKw hade varit
+  otestbart och förkastades). Gjorde i stället formulärets fulla valideringskontrakt
+  explicit i `handleCalculate`: en icke-positiv MWh-siffra i MWh-läget och ett antal
+  undercentraler utanför 1–20 avvisas nu med ett svenskt fältfel innan beräkning, i stället
+  för att förlita sig på HTML-attribut `noValidate` gör overksamma. Verifierat i jsdom (nya
+  regressionsprov i `KalkylatorPageLidkoping.test.tsx`) OCH i riktig headless Chromium mot
+  den byggda produktionssidan: Codex exakta scenario (area 10000, MWh −5, 21 undercentraler)
+  ger nu inget resultat och ingen missvisande "Angiven av användaren"-källtext; en giltig
+  beräkning fungerar oförändrat; Sandvikens levande kapacitetKw-felväg (min=3, värde 2 →
+  `aria-invalid`, svensk text "Värdet är för lågt.") verifierad opåverkad via ett separat
+  Chromium-klick (temporära script, inte committade). 572 TypeScripttester (+3), `tsc`,
+  bygge (`dist` återställt) och E2E gröna; Python oförändrat 507 (ingen Pythonändring
+  krävdes — buggen var TypeScript-only). Ingen tariff aktiverad, disposition 7/57/28 av 92
+  oförändrad, inget pushat. Stannar för Codex omgranskning.
+- `2026-09-11T06:37:46+02:00` – Codex omgranskade rättningsrunda 4 i
+  `2026-09-11-001`. De tre beställda P2-rättningarna är stängda och normal
+  kapacitets-submit fungerar med svensk text/ARIA, men helformulärets `noValidate`
+  släpper nu igenom ogiltig MWh och antal undercentraler. Ett riktigt Chromiumprov med
+  MWh `-5` och 21 undercentraler gav resultat utan fel, beräknat från schablon men märkt
+  med användarens `-5 MWh`. P1-rättning 5 beställd. 507/569 tester, tsc, bygge och
+  befintligt E2E i övrigt gröna; ingen aktivering/push; 7/57/28 oförändrat.
 
 - `2026-09-10T22:09:14+02:00` – Claude rättade det enda kvarvarande fyndet (tre P2:or,
   inga P1:or) i omgranskning `2026-09-10-012` (rättningsrunda 4). Rot: kalkylatorns
