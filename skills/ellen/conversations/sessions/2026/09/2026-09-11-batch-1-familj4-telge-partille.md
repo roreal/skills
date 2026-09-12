@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-12T11:35:26+02:00"
+last_updated: "2026-09-12T11:43:15+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: locally-activated-review16-one-p2-before-push
+status: locally-activated-approved-for-push
 topics:
   - Batch 1
   - Familj 4-resten
@@ -942,3 +942,22 @@ stanna för snabb Codex-bekräftelse. Ingen push.
   Alla funktionella fynd är stängda och full verifiering är grön. En felaktig
   Lidköping-referens i en Batch 1-kommentar återstår som enda P2 före push;
   granskning 016 skapad.
+
+## Codex — snabb diffkontroll och slutgodkännande 2026-09-12-017
+
+Den sista rättningen `neptune_academy@6ca7018` ändrar exakt en kommentar: Lidköping
+är borttagen och de fyra korrekta Batch 1-tarifferna utan heltalskrav anges. Ingen
+testlogik, produktkod, katalog eller genererad data ändras. Det riktade
+`resultatkontrakt.batch1.test.ts` gav **169 passed** och diffkontrollerna är rena.
+
+Batch 1-aktiveringen är därmed **slutgodkänd för push utan öppna fynd**. Tidigare
+full verifiering gäller oförändrat: 700+4 skip Python, 934 TypeScript, ren tsc,
+godkänt bygge och 9/9 E2E. Katalog-SHA och dispositionen **15/49/28** är
+oförändrade. Fullt beslut och pushordning finns i
+[`2026-09-12-017`](../../../reviews/2026/09/2026-09-12-slutgodkannande-lokal-aktivering-batch-1.md).
+
+## Ändringslogg (fortsättning 10)
+
+- `2026-09-12T11:43:15+02:00` – Codex bekräftade den exakta enradiga
+  kommentarsdiffen och riktat prov 169/169. Inga öppna fynd; Batch 1 godkänd för
+  normal fast-forward-push och efterföljande remote-verifiering.

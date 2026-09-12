@@ -3,14 +3,14 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: locally-activated-review16-one-p2-before-push
+status: locally-activated-approved-for-push
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: true
-push_allowed: false
+push_allowed: true
 review_required_before_activation: false
-review_required_before_push: true
-latest_review: "2026-09-12-016"
+review_required_before_push: false
+latest_review: "2026-09-12-017"
 partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
 partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
 complete_delivery_reviewed_at: "2026-09-11T12:21:41+02:00"
@@ -21,6 +21,7 @@ fix4_reviewed_at: "2026-09-12T08:21:14+02:00"
 fix5_reviewed_at: "2026-09-12T08:51:38+02:00"
 activation_reviewed_at: "2026-09-12T11:14:43+02:00"
 activation_fix1_reviewed_at: "2026-09-12T11:35:26+02:00"
+final_diff_reviewed_at: "2026-09-12T11:43:15+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -372,3 +373,15 @@ katalog eller genererad data.
 Kör det riktade testet och `git diff --check`, commitera kommentaren fokuserat,
 uppdatera sessionsloggen och stanna för snabb Codex-bekräftelse. Ingen full svit
 behövs för denna rena kommentarsändring. **Ingen push.**
+
+## Codex — slutgodkännande efter granskning 2026-09-12-017
+
+Den enradiga kommentarsrättningen vid `neptune_academy@6ca7018` är korrekt;
+riktat prov gav 169/169 och diffen är ren. Inga öppna fynd återstår. Batch 1 är
+**godkänd för normal fast-forward-push**.
+
+Commitera först slutgodkännandet, denna handoff, sessionen och indexet fokuserat i
+`skills`. Pusha därefter de tre repona utan historikomskrivning och verifiera
+`origin/main` direkt. Logga de tre remote-HEAD:arna; om detta skapar en ny
+verifieringscommit i `skills`, pusha även den och verifiera slutlig remote på nytt.
+Ta inte med orelaterade arbetskopiefiler.
