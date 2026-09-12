@@ -486,11 +486,8 @@ verifierad modell blockeras, det gissas aldrig.
 
 - **De sex legacy-tarifferna samt Riksgenomsnittet:** mwh, kr och schablon fungerar redan
   (ingen kontraktsgated obligatorisk indata).
-- **`sundsvall-energi-indal-liden-och-lucksta-2026` (§4.1, batch 2):** samma som ovan — mwh,
-  kr OCH schablon, eftersom den aktiveras via den befintliga `EJ_TILLAMPLIG_KAPACITETSFORM`-
-  legacymekanismen och aldrig blir kontraktsgated (rättat i v4, granskning 2026-09-08-003,
-  P2 — v3 tillämpade nästa punkts regel på den av misstag).
-- **Sandviken och varje ÖVRIG `ready_to_implement`-tariff nedan (samtliga som blir
+- **Sandviken, `sundsvall-energi-indal-liden-och-lucksta-2026` och varje ÖVRIG
+  `ready_to_implement`-tariff nedan (samtliga som blir
   kontraktsgated via `POLICYREGISTER`, inklusive Stockholm Exergis årsprodukt):** mwh-läge
   kräver den obligatoriska indatan; kr och schablon blockeras tills en egen, verifierad
   invers/schablonmodell byggs och godkänns separat — detta gäller ÄVEN under

@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.8",
+  "schema_version": "0.1.9",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-12",
@@ -8105,7 +8105,9 @@
           1008
         ]
       },
-      "capacity": null,
+      "capacity": {
+        "type": "not_applicable"
+      },
       "adjustments": [],
       "source_refs": [
         {
@@ -8134,11 +8136,12 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R14"
-        ],
-        "conditions_sv": []
-      }
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 2-implementationen (contract_required, minimal Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
+        ]
+      },
+      "contract_required": true
     },
     {
       "id": "tekniska-verken-katrineholm-katrineholm-2026",
@@ -11035,13 +11038,14 @@
     },
     {
       "id": "R14",
-      "member_ids": [
-        "sundsvall-energi"
-      ],
       "category": "individual_contract",
       "question_sv": "Leveransvillkor för abonnemang från 2000 kW i Sundsvall/Matfors. Krävs endast för kunder i dessa grupper.",
       "source_id": "web-review-matfors-final",
-      "status": "utreds"
+      "status": "utreds",
+      "tariff_ids": [
+        "sundsvall-energi-sundsvall-normal-2026",
+        "sundsvall-energi-matfors-och-kvissleby-normal-2026"
+      ]
     },
     {
       "id": "R15",
