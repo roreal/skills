@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-12T09:48:10+02:00"
+last_updated: "2026-09-12T11:14:43+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: locally-activated-awaiting-codex-review
+status: locally-activated-review15-changes-required-before-push
 topics:
   - Batch 1
   - Familj 4-resten
@@ -812,8 +812,10 @@ för Sandviken/Lidköping). `test_generera_katalog.py`: Telge borttagen ur lista
 utredda leverantörer (nu godkänd), nytt test bevisar att alla sex Batch 1-medlemmar
 finns i den genererade TS-filen. `test_katalog_proveniens.py`s förväntade sha256
 uppdaterad till den nya katalogens `b47502f1d02ccc483a99d20fb47ba866c8326197ef64051c36c51b024bc50f26`.
-Full tariffer-svit: **760 passed, 4 skipped** (milesight-katalogen exkluderad — ett
-sedan tidigare känt, orelaterat beroendeproblem, inte rört denna runda). `godkanda(katalog)`
+Full tariffer-svit: **700 passed, 4 skipped** (rättat 2026-09-12 efter granskning
+2026-09-12-015; ursprungligen felrapporterat som 760 passed — oberoende
+`--collect-only` gav exakt 704 insamlade fall, se ändringsloggen nedan).
+`godkanda(katalog)`
 kört direkt mot den skarpa katalogen: exakt 15/13, disposition **15/49/28 av 92**.
 Commit: `enkey-agents@44230d7a25ef1e9d76f2969d84e9990d5ff15291` (2026-09-12T09:47:40+02:00).
 
@@ -851,3 +853,59 @@ oavsiktliga `enkey-agents@59eb6ba`-avvikelsen (granskning 013) är lämnad orör
 historik skriven om eller backad.
 
 Stannar för Codex nästa granskning.
+
+## Codex — aktiveringsgranskning 2026-09-12-015
+
+Den lokala aktiveringen är tekniskt korrekt och ska ligga kvar: exakt de sex
+godkända Batch 1-tarifferna är valbara, katalogen ger **15/49/28 av 92** och inga
+priser, band, formler eller obligatoriska indata har ändrats. Codex körde dessutom
+ett omockat webbläsarflöde för var och en av de sex; alla gav ett riktigt
+årsresultat utan alert.
+
+Beslutet är ändå **changes required före push** på grund av fyra avgränsade P2-fel i
+test- och loggmaterialet. Några testnamn och kommentarer beskriver fortfarande
+föraktiveringsläget eller blandar ihop tariffnivåns `investigation` med
+medlemsnivåns utredningsmängd. Ett nytt TypeScript-test räknar bara fyra element i
+en hårdkodad mängd i stället för att kontrollera den genererade datan. Samma testfil
+tvingar strängbaserade band-ID:n till tal trots att `PolicyInputValue` redan stöder
+strängar. Slutligen ska denna leveransrapports felaktiga **760 passed, 4 skipped**
+rättas till det faktiskt verifierade **700 passed, 4 skipped** (704 insamlade fall).
+
+Full instruktion finns i
+[`2026-09-12-015`](../../../reviews/2026/09/2026-09-12-granskning-lokal-aktivering-batch-1.md).
+Claude ska behålla katalogcommit `82a247b` och den genererade tariffdatan
+oförändrade, rätta endast testerna och dokumentationen, köra full Python/TypeScript,
+tsc, bygge och E2E samt stanna för omgranskning. Ingen push.
+
+## Ändringslogg (fortsättning 8)
+
+- `2026-09-12T09:55:54+02:00` – Codex granskade den lokala aktiveringen i
+  `2026-09-12-015`. Aktiveringen och samtliga sex verkliga UI-flöden är korrekta
+  och ska behållas; disposition 15/49/28. Fyra smala P2-rättningar i testtexter,
+  teststyrka, testtypning och rapporterat Pythonantal krävs före push.
+- `2026-09-12T11:14:43+02:00` – Codex gjorde en fokuserad omkontroll av själva
+  aktiveringsdiffen. Fält-för-fält-jämförelsen bekräftade oförändrat exakt sex
+  statusändringar, 78 tariffposter och inga pris-/formel-/bandändringar. Granskning
+  015 kompletterades med den inaktuella föraktiveringskommentaren i
+  `resultatkontrakt.batch1.test.ts` och ett missvisande testnamn som säger ”hela
+  sidan” trots att det kör produkt-entryn; inget nytt beräkningsfynd.
+- `2026-09-12T11:30+02:00` – De fyra P2-fynden från granskning 2026-09-12-015
+  rättade. `KalkylatorPageBatch1.test.tsx`, `resultatkontrakt.batch1.test.ts` och
+  `besparingsvardeBatch1Katalogaktivering.test.ts` (neptune_academy@5eae7ce) samt
+  `test_familj4_resten_kontrakt.py` (enkey-agents@a4cfdb2) fick sina föraktiverings-
+  premisser och "fem plus Telge"-sammanblandningar bytta till dåtida, korrekt
+  historik (alla sex gatades lika på tariffnivå innan aktiveringen). Testnamnet
+  "genom hela sidans entry" ändrat till "genom produkt-entryn". Månadsperiodiserings-
+  regressionsvakten läser nu `prisar.manadsperiodisering`/`tackning` direkt ur den
+  skarpa katalogposten i stället för att bara räkna en hårdkodad Set. Band-ID:n
+  typas med den riktiga `PolicyInputValue` (string) utan `as unknown as number`.
+  Denna sessionslogg rättad ovan: **760 passed var fel, det verifierade talet är
+  700 passed, 4 skipped** (704 insamlade fall vid `--collect-only`, bekräftat på
+  nytt i denna runda). Ingen katalog- eller beräkningsändring; disposition
+  fortsatt **15/49/28 av 92** (`godkanda(katalog)` omkört, ger fortsatt exakt 15).
+  Full verifiering denna runda: Python `tools/tariffer` **700 passed, 4 skipped**
+  (0 failed), TypeScript `npx vitest run` **934 passed** i 28 filer (0 failed/
+  skipped), `npx tsc --noEmit` rent, `npm run build` godkänt (genererade
+  `dist`-ändringar återställda med `git checkout` båda gångerna), `npm run
+  test:e2e` **9/9** scenarier godkända. `git diff --check` rent i alla tre repon.
+  Inget pushat. Stannar för Codex slutgranskning.
