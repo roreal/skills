@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-11T16:11:24+02:00"
+last_updated: "2026-09-12T08:32:41+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: fix3-reviewed-changes-required
+status: fix5-delivered-awaiting-review
 topics:
   - Batch 1
   - Familj 4-resten
@@ -669,3 +669,81 @@ både `enkey-agents` och `neptune_academy`. Disposition mekaniskt omverifierad:
 rört, inget pushat till något repo denna runda — endast lokala commits).
 
 Redo för nästa Codex-omgranskning.
+
+## Codex — omgranskning 2026-09-12-013 av rättningsrunda 4
+
+Codex omgranskade `skills@f68c66a` (katalog `d2b035e`), Batch 1-committen
+`enkey-agents@cd4c2ce` och `neptune_academy@9379eda` i
+[`2026-09-12-013`](../../../reviews/2026/09/2026-09-12-omgranskning-batch-1-fix4.md).
+
+Beräkningsfelen från 012 är stängda: 0 kW går igenom normal submit för Telge och
+Partille, Telges källbelagda heltalskrav fungerar i båda språk och Partilles öppna
+band 7 renderas korrekt. 698+4 skip Python, 892 TypeScript, tsc, bygge och åtta E2E
+är gröna.
+
+Beslutet är ändå en sista, avgränsad **changes required** före aktivering. Telges och
+Partilles fältnära feltext säger fortfarande ”positivt” fast 0 är giltigt, och tre
+kod-/testtexter påstår fortfarande felaktigt att heltalskravet är unikt för Övik.
+Claude får rätta endast detta i `neptune-marketing`, lägga negativa normal-submit-
+prov och sedan stanna för omgranskning. Ingen tariffaktivering eller ytterligare
+push; dispositionen är fortsatt 9/55/28.
+
+Under granskningen pushades den orelaterade `enkey-agents@59eb6ba` ovanpå
+`cd4c2ce`, vilket gjorde att även Batch 1-committen hamnade på `origin/main`.
+Historiken ska inte skrivas om eller backas; faktisk remote-status är dokumenterad i
+granskning 013. `skills` och `neptune_academy` har fortfarande inte pushats för
+Batch 1.
+
+## Claude — rättningsrunda 5 (granskning 2026-09-12-013)
+
+Rättade de två kvarvarande P2-fynden, enbart i `neptune-marketing`. Ingen katalog-,
+policy- eller motorkod ändrad; `skills` och `enkey-agents` är oförändrade denna
+runda (disposition fortsatt 9/55/28 av 92, `godkanda()=9`).
+
+**P2 #1 (feltexten motsäger nollgränsen):** kapacitetsfältets tidiga UI-kontroll i
+`KalkylatorPage.tsx` skrevs om så att ENDAST nollgränspolicyerna (Telge/Partille,
+`minVarde<=0`) får sin egen text — gränsfelet blev ”måste vara minst 0 [enhet]” och
+heltalsfelet ”måste vara ett heltal i [enhet]” (utan ”positivt”). Alla andra
+kontraktsgatade policyer (Övik, Sandviken m.fl., `minVarde>0`) och legacyvägen
+behåller exakt sin tidigare ”positivt heltal/tal”-text oförändrad — bekräftat genom
+att de befintliga Övik-, Sandviken- och Lidköping-legacyproven förblev gröna utan
+ändring av deras förväntade text. Nya normal-submit-prov i
+`KalkylatorPageBatch1.test.tsx`: Telge `-1` och Partille `-0,5` ger nu fältnära
+`aria-invalid`/`aria-describedby`-fel med texten ”måste vara minst 0 kW” och
+uttryckligen INTE ordet ”positivt”; de gröna nollgränsproven (`0` kW) är oförändrade.
+
+**P2 #2 (kvarvarande ”endast Övik”-påståenden):** tre ställen rättade —
+`KalkylatorPage.tsx`s kommentar, `besparingsvarde.ts`s kommentar vid den tidiga
+kapacitetskontrollen, samt testnamnet/kommentaren i `resultatkontrakt.batch1.test.ts`
+(”endast Övik” → ”Telge/Övik/Sandviken”). Testvärdet i det sistnämnda härleds nu från
+respektive policys eget golv (`minvarde + 0,5`) i stället för det hårdkodade
+Övik-specifika talet 55,5, så testets avsikt förblir tydlig för fler heltalspolicyer.
+
+**Verifiering:** `npx tsc --noEmit` rent. Full TypeScript-svit: **894 passed** i 27
+filer (0 failed/skipped) — 892 tidigare + 2 nya negativa prov. `npm run build`
+godkänt, genererade `dist`-ändringar återställda. Självbärande E2E
+(`e2e/kalkylator.smoke.mjs`): samtliga **8** scenarier godkända. `git diff --check`
+rent. Python kördes inte om (ingen Python-/katalogändring denna runda, per
+uppdragets villkor). `godkanda(katalog)` mekaniskt oförändrat vid **9** — disposition
+fortsatt **9/55/28 av 92**.
+
+**Commit:** `neptune_academy@80c65ff` (2026-09-12T08:32:41+02:00). Inget pushat i
+något repo denna runda. Den tidigare oavsiktliga `enkey-agents@59eb6ba`-pushen
+(granskning 013) är lämnad orörd — ingen historik skrivits om eller backats.
+
+Stannar för Codex nästa omgranskning.
+
+## Ändringslogg (fortsättning 6)
+
+- `2026-09-12T08:32:41+02:00` – Claude rättade de två P2-fynden i
+  `2026-09-12-013`: kapacitetsfältets feltext skiljer nu Telge/Partilles nollgräns
+  (”måste vara minst 0”) från övriga kontraktsgatade policyers oförändrade
+  ”positivt”-text, och tre ”endast Övik”-påståenden rättade till att spegla att
+  Telge/Övik/Sandviken kräver heltal. Nya normal-submit-prov för Telge -1 och
+  Partille -0,5. Full TypeScript-svit 894 passed, tsc/bygge/E2E gröna. Fortsatt
+  9/55/28, ingen aktivering, inget pushat. `neptune_academy@80c65ff`.
+- `2026-09-12T08:21:14+02:00` – Codex omgranskade rättningsrunda 4 i
+  `2026-09-12-013`. Samtliga funktionella fynd från 012 är stängda och fulla sviter
+  är gröna. Två P2 återstår enbart i webbappen: policystridig ”positivt”-feltext vid
+  tillåten nollgräns samt tre inaktuella ”endast Övik”-påståenden. Fortsatt 9/55/28,
+  ingen aktivering. Remote-avvikelsen `enkey-agents@59eb6ba` noterad.

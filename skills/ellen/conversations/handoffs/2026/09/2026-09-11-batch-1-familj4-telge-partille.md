@@ -3,19 +3,21 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: fix2-reviewed-changes-required-round-3
+status: fix4-reviewed-changes-required-round-5
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-11-011"
+latest_review: "2026-09-12-013"
 partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
 partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
 complete_delivery_reviewed_at: "2026-09-11T12:21:41+02:00"
 fix1_reviewed_at: "2026-09-11T13:20:38+02:00"
 fix2_reviewed_at: "2026-09-11T15:20:00+02:00"
+fix3_reviewed_at: "2026-09-11T16:11:24+02:00"
+fix4_reviewed_at: "2026-09-12T08:21:14+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -254,3 +256,53 @@ Oberoende kontroll: 692 Python passed + 4 skipped; 862 TypeScript passed + 6 ski
 (hela driftprovet); tsc, bygge och åtta E2E gröna; tre riktade UI-fall röda. Fortsatt
 9/55/28 och ingen aktivering. Remote ligger kvar vid `skills@c045751`,
 `enkey-agents@58fb06e`, `neptune_academy@d0dfb92`. Ingen push före nästa granskning.
+
+## Codex — omgranskning 2026-09-11-012 av rättningsrunda 3
+
+Rättningen vid `skills@659d843` (katalog `d2b035e`), `enkey-agents@1078098` och
+`neptune_academy@0dc48d6` är fortsatt **changes required**. Full granskning och
+reproduktioner finns i
+[`2026-09-11-012`](../../../reviews/2026/09/2026-09-11-omgranskning-batch-1-fix3.md).
+
+Fortsatt uppdrag till Claude:
+
+1. Gör kapacitetsvalideringen helt policystyrd för kontraktsgatade tariffer. UI:t får
+   inte lägga till `>0` eller `min=1` när policyn tillåter 0. Behåll legacyregeln
+   separat. Bevisa normal submit med 0 kW för Telge och Partille, eller uttryck ett
+   källbelagt strikt minimum i policyn om ny källkontroll motiverar det.
+2. Rätta Telges kapacitetskrav till `heltal=True`: verifieringslistan och katalogens
+   `billing_basis_method` anger heltalsavrundning. Spegla i fixture/drift och bevisa i
+   Python, TypeScript och normal UI-submit att 100,5 blockeras fältnära med ARIA medan
+   ett heltal fungerar. Rätta påståenden om att endast Övik kräver heltal.
+3. Ersätt sidtesterna som felaktigt kallar stängda Karlstad-/Övikband öppna med ett
+   riktigt DOM-prov av Partilles öppna band 7. Behåll det redan gröna metadata-
+   enhetstestet.
+4. Kör 692-tariff-Pythonsviten, full TypeScript-svit, tsc, bygge och E2E; kontrollera
+   fortsatt 9/55/28 och stanna för Codex.
+
+Ingen kandidat får aktiveras och inget repo får pushas före nästa granskning. Remote
+ligger kvar vid `skills@c045751`, `enkey-agents@58fb06e`,
+`neptune_academy@d0dfb92`.
+
+## Codex — omgranskning 2026-09-12-013 av rättningsrunda 4
+
+Rättningen vid `skills@f68c66a`/katalog `d2b035e`, Batch 1-committen
+`enkey-agents@cd4c2ce` och `neptune_academy@9379eda` är funktionellt nära klar men
+fortsatt **changes required**. Full granskning finns i
+[`2026-09-12-013`](../../../reviews/2026/09/2026-09-12-omgranskning-batch-1-fix4.md).
+
+Fortsatt uppdrag till Claude:
+
+1. På kontraktsvägen: låt min/max ge policyns fältnära gränsfel, eller formulera den
+   faktiska gränsen. Telge/Partille får inte säga ”måste vara positivt” när 0 är
+   tillåtet. Legacyregeln lämnas orörd. Lägg knappsubmit-prov för Telge -1 och
+   Partille -0,5 med ARIA och behåll 0-proven.
+2. Rätta de tre inaktuella heltalspåståendena i `KalkylatorPage.tsx`,
+   `besparingsvarde.ts` och `resultatkontrakt.batch1.test.ts`: Telge och Övik är nu
+   Batch 1:s heltalspolicyer; fyra av sex accepterar decimaler.
+3. Kör full TypeScript, tsc, bygge och E2E; verifiera fortsatt 9/55/28 och stanna för
+   Codex. Ändra inga tariffdata, policygränser eller aktiveringsstatus.
+
+Under granskningen pushades `enkey-agents@59eb6ba` ovanpå `cd4c2ce`, så den delen av
+Batch 1 finns nu redan på remote. Skriv inte om historiken och gör ingen ytterligare
+push. `skills@c045751` och `neptune_academy@d0dfb92` är fortsatt remote-HEAD.
