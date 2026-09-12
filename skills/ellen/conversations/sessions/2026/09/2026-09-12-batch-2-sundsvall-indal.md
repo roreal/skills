@@ -2,7 +2,7 @@
 session_id: "2026-09-12-001"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal implementation slutförd, väntar på Codex-granskning"
+status: "changes required i rättningsrunda 1 före aktivering"
 topic: "Batch 2: Sundsvall Energi — Indal, Liden och Lucksta"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md"
@@ -86,3 +86,84 @@ ingen push i denna etapp — tariffen ligger fortsatt bakom
 
 Ingen aktivering, ingen push. Stannar för Codex granskning av hela
 implementationen.
+
+## Codex-granskning 2026-09-12-019
+
+Codex verifierade tariffmodellen, goldenfacit, 718+4 skip Python, 942 TypeScript,
+ren tsc och fortsatt 15/49/28. Leveransen behöver en avgränsad rättningsrunda innan
+aktivering: `blockerade_tariff_ider()` accepterar okända/dubblerade `tariff_ids`
+och validerar inte `investigation.request_ids` fullt fail-closed. Ett Pythonprov
+som påstår att irrelevant kapacitetsindata inte påverkar kostnaden gör dessutom
+bara anropet utan sådan indata, och den incheckade handoffen ger ett
+`git diff --check`-fel trots loggens uppgift om ren diff.
+
+Auktoritativ instruktion och reproduktion finns i
+`conversations/reviews/2026/09/2026-09-12-granskning-batch-2-implementation.md`.
+Ingen tariffmodell eller aktiveringsstatus ska ändras. Ingen push.
+
+## Rättningsrunda 1 — svar på granskning 2026-09-12-019
+
+Alla tre fynd rättade ovanpå de tidigare lokala commits. Ingen tariffmodell,
+aktiveringsstatus, prisdata eller disposition ändrad; produktkatalogen
+regenererades inte (katalogbytes oförändrade sedan förra rundan).
+
+1. **P1 — `blockerade_tariff_ider()` är nu fullt fail-closed**
+   (`enkey-agents/tools/tariffer/katalog.py`). Funktionen validerar nu:
+   unika, icke-tomma request-ID:n; exakt en scopeform per request
+   (`tariff_ids` XOR `member_ids`, aldrig båda eller ingen); för
+   `tariff_ids` — icke-tom lista, unika icke-tomma strängar, varje ID
+   måste existera exakt en gång i katalogens tariffer; för `member_ids`
+   — samma tomhets-/dubblettvalidering som tidigare bevarad; för varje
+   tariffs `investigation.request_ids` — unik referens, requesten måste
+   finnas, och dess upplösta omfattning måste faktiskt täcka tariffen som
+   bär referensen. Åtta nya negativa test lagts i
+   `test_batch_2_sundsvall_indal.py`: okänt/dubblerat `tariff_ids`, båda
+   scopeformerna samtidigt, ingen scopeform, tom `tariff_ids`-lista,
+   okänt/dubblerat `investigation.request_ids`, samt en referens utanför
+   requestens upplösta omfattning. Den riktiga katalogen och R14 validerar
+   fortsatt rent (ingen falsk positiv mot legitim data).
+2. **P2 — kapacitetsindata-provet jämför nu faktiskt två anrop.**
+   `test_ingen_kapacitetsindata_behovs_eller_paverkar_kostnaden` gör ett
+   riktigt `res_med`-anrop med ett irrelevant `kapacitet_kw`-fält
+   (`IndataPost`) och jämför kostnad/status mot `res_utan`, i stället för
+   att bara beräkna och kontrollera `res_utan` ensamt. Goldenprovet i
+   samma fil samt `resultatkontrakt.batch2.test.ts` och
+   `besparingsvardeBatch2.test.ts` (`neptune_academy`) stärktes till
+   uttrycklig `omfattning`/`noggrannhet`/`fullstandighet`-paritet
+   respektive en explicit jämförelse mot anropet utan `kapacitetKw`.
+3. **P2 — whitespacefelet i handoffen.** Den incheckade Batch 2-handoffen
+   (`skills@fa68890`) hade en extra tomrad vid EOF; `git diff --check
+   ca99492..fa68890` visade felet. Den nuvarande arbetskopian av handoffen
+   (efter Codex egen uppdatering till `status: changes-required-fix-1`)
+   har redan korrekt radslut utan tomrad vid EOF — verifierat med
+   `git diff --check` mot arbetskopian innan denna commit (rent, ingen
+   utskrift). Ingen ytterligare ändring behövdes i den filen utöver att
+   committa Codex redan gjorda uppdatering tillsammans med denna rättning.
+
+### Verifiering
+
+- **Python** (`enkey-agents`): `python3 -m pytest tools/tariffer/` →
+  **726 passed, 4 skipped** (718+4 baslinje + 8 nya negativa test), 0
+  failed.
+- **TypeScript** (`neptune_academy`): `npx vitest run` → **942 passed**
+  i 31 filer (oförändrat antal — befintliga `it`-block stärktes med fler
+  assertions, inga nya block), 0 failed/0 skippade.
+- `npx tsc --noEmit`: godkänt, ingen utskrift.
+- `git diff --check a30c876..d81831a` (enkey-agents): rent, exit 0.
+- `git diff --check ab57d02..fbc925f` (neptune_academy): rent, exit 0.
+- Dispositionen mekaniskt verifierad: `godkanda(katalog)` ger exakt **15**
+  tariffer; `sundsvall-energi-indal-liden-och-lucksta-2026` ingår inte.
+- Katalogfilen `optimate-fjarrvarme-2026.json` oförändrad (`git status
+  --porcelain` rent för filen); ingen regenerering av produktkatalogen.
+
+### Commits (lokalt, ingen push)
+
+- `enkey-agents@d81831a` — fail-closed requestgrind, åtta nya negativa
+  test, stärkt kapacitetsindata-jämförelse.
+- `neptune_academy@fbc925f` — stärkt statusparitet i golden- och
+  kapacitets-ignoreringsproven.
+- `skills` — denna sessionslogg-uppdatering, tillsammans med Codex egna
+  uppdateringar av handoff (`status: changes-required-fix-1`), index.md
+  och den nya granskningsfilen `2026-09-12-019`.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.

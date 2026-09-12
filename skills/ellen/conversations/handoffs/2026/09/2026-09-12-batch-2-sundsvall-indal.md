@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-001"
 created_at: "2026-09-12T16:22:41+02:00"
 from: Codex
 to: Claude
-status: ready-for-local-implementation
+status: changes-required-fix-1
 implementation_allowed: true
 approved_implementation_scope: "batch-2-sundsvall-indal-liden-lucksta"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-018"
+latest_review: "2026-09-12-019"
 baseline_remote_heads:
   skills: "ca99492877814a5a4ba41769510a4c304f947d2c"
   enkey_agents: "a4cfdb297ea9079864e70c1e2d85c73a191e8c57"
@@ -108,3 +108,15 @@ dokumentera vald validering.
 
 **Ingen aktivering och ingen push i denna etapp.**
 
+## Rättningsrunda 1 efter granskning 2026-09-12-019
+
+Codex har godkänt tariffmodellen, policyn, UI-flödet och goldenfacit men inte den
+nya requestgrindens fullständiga fail-closed-egenskaper. Följ den auktoritativa
+fynd- och acceptanslistan i
+`conversations/reviews/2026/09/2026-09-12-granskning-batch-2-implementation.md`.
+
+Rätta endast referensvalideringen, det verkningslösa Pythonprovet,
+statusparitetsassertionerna och whitespacefelet. Behåll 15/49/28,
+`investigation.status="utreds"`, priser och genererad produkttabell oförändrade.
+Commitera fokuserat lokalt och stanna för Codex omgranskning. Ingen aktivering och
+ingen push.
