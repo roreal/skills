@@ -384,3 +384,47 @@ forwarding enligt granskning `2026-09-12-027`.
 
 Ingen Python-, katalog-, pris-, generator- eller dispositionsändring. Fortsatt
 **16/48/28**, ingen aktivering och ingen push; stanna för Codex slutgranskning.
+
+## Rättningsrunda 4 — svar på granskning 2026-09-12-027
+
+TypeScript-only, per granskningens exakta scope. `enkey-agents@f0a030f` oförändrad —
+ingen Python-, katalog-, pris- eller generatorändring krävdes.
+
+`neptune_academy@c174180`:
+
+1. **P1 — källperiodens format valideras nu i produktfasaden, inte bara UI:t.**
+   Ny delad orsak `PolicyValideringsOrsak='period'`. `forkontrolleraPolicyIndata`
+   kontrollerar generiskt (aldrig tariff-ID-specifikt) att ett fält med
+   `matchningMotManad` bär ett giltigt `ÅÅÅÅ-MM` (`arGiltigManadsperiod`) och att ett
+   fält med `kalperiodDefinition` utan `matchningMotManad` bär ett giltigt
+   `ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD`-intervall (`arGiltigKalperiod`) — ett brott ger samma typade
+   `KontraktBlockerat('invalid_policy_fields')` som övriga policyfel, INNAN kostnad
+   beräknas. `harledResultatstatus` fick motsvarande kontroll som sista, auktoritativa
+   försvarslinje mot ett direkt fasadanrop som kringgår produktlagret helt — scopad till
+   fallet `ar === undefined || manad === undefined` (årsanropet, som aldrig hade
+   formatet kontrollerat) för att INTE påverka den redan etablerade, delade
+   testvektorkontrakten (`resultatkontraktVektorer.test.ts`) för `matchningMotManad`
+   MED ar/manad, som legitimt använder `ÅÅÅÅ-MM` matchat mot månad — det upptäcktes en
+   första körning bröt just den vektorn och rättades genom att smalna kontrollen till
+   exakt den okontrollerade luckan.
+2. Kraftringens fixture i `besparingsvardeBatch3.test.ts` rättad från `'2026-01'` till
+   det verkliga `'2026-01-01/2026-02-28'`. Nya prov via DEN FAKTISKA publika
+   `beraknaArsprodukt`-vägen bevisar: `2026-01` ensamt blockeras
+   (`invalid_policy_fields`/`period`), ett omvänt intervall blockeras likaså, en saknad
+   period blockeras, och det fulla korrekta intervallet ger `snapshot/complete`. Ett
+   separat prov via `byggKontraktIndata` bevisar att `'2026-01-01/2026-02-28'` når
+   `IndataPost.observeradPeriod` bokstavligen oförändrat.
+3. `KalkylatorPage.tsx`: `policyFelText` fick fallet `'period'`.
+
+**Verifiering:**
+- TypeScript full svit: **1004 passed** i 36 filer (997 tidigare + 7 nya).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd bundelstorleksvarning.
+- E2E mot det isolerade bygget (`vite preview --outDir dist-eval` + `E2E_BASE_URL`):
+  **10/10** befintliga scenarier godkända.
+- `git diff --check --cached`: rent.
+- `neptune-marketing/dist` orört genom hela rundan.
+- Disposition oförändrad (ingen katalogändring denna runda): fortsatt **16/48/28 av 92**.
+
+Ingen aktivering, ingen borttagning av R06/R10, ingen push. Stannar för Codex
+slutgranskning.
