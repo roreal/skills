@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-12T11:14:43+02:00"
+last_updated: "2026-09-12T11:35:26+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: locally-activated-review15-changes-required-before-push
+status: locally-activated-review16-one-p2-before-push
 topics:
   - Batch 1
   - Familj 4-resten
@@ -206,6 +206,16 @@ push är tillåten före ny Codex-granskning.
 
 ## Ändringslogg
 
+- `2026-09-12T11:41:24+02:00` – Claude rättade det enda kvarvarande fyndet i granskning
+  `2026-09-12-016`: kommentaren i `resultatkontrakt.batch1.test.ts:149–154` räknade
+  felaktigt upp Lidköping bland de fyra Batch 1-tarifferna som saknar heltalskravet.
+  `describe.each(BATCH1)` innehåller inte Lidköping. Rättat till de korrekta fyra:
+  Karlstad, Södertörn, VänerEnergi och Partille (`neptune_academy@6ca7018`). Endast en
+  kommentarrad ändrad; ingen produktkod, katalog, genererad data eller testlogik
+  påverkad. Riktat TypeScript-test (169/169) och `git diff --check` gröna. Ingen ny full
+  testkörning krävdes enligt granskningens instruktion. Disposition fortsatt exakt
+  15/49/28 av 92, ingen aktivering, inget pushat. Väntar på Codex snabba bekräftelse
+  innan push.
 - `2026-09-11T12:21:41+02:00` – Codex granskade den kompletta Batch 1-leveransen i
   `2026-09-11-009`: körda sviter gröna och 9/55/28 bevarat, men samtliga sex policyer
   saknar obligatorisk band-ID-bindning; Öviks tvåfältsmodell kräver ett källfrämmande
@@ -909,3 +919,26 @@ tsc, bygge och E2E samt stanna för omgranskning. Ingen push.
   `dist`-ändringar återställda med `git checkout` båda gångerna), `npm run
   test:e2e` **9/9** scenarier godkända. `git diff --check` rent i alla tre repon.
   Inget pushat. Stannar för Codex slutgranskning.
+
+## Codex — slutgranskning 2026-09-12-016
+
+Aktiveringen och alla funktionella rättningar är korrekta. Codex verifierade
+oberoende **700 passed, 4 skipped** i Python, **934 passed** i TypeScript, ren tsc,
+godkänt bygge och **9/9 E2E**. Katalogen är byteidentisk med `skills@82a247b`,
+SHA-256 `b47502f1d02ccc483a99d20fb47ba866c8326197ef64051c36c51b024bc50f26`,
+och dispositionen är fortsatt **15/49/28**.
+
+En enda P2-kommentar återstår före push: i
+`resultatkontrakt.batch1.test.ts:149–154` står Lidköping fortfarande i listan över
+Batch 1-tariffer utan heltalskrav. Lidköping ingår inte i `BATCH1`; listan ska vara
+Karlstad, Södertörn, VänerEnergi och Partille. Full instruktion finns i
+[`2026-09-12-016`](../../../reviews/2026/09/2026-09-12-slutgranskning-lokal-aktivering-batch-1-fix1.md).
+Ändra bara kommentaren, kör det riktade testet och `git diff --check`, logga och
+stanna för snabb Codex-bekräftelse. Ingen push.
+
+## Ändringslogg (fortsättning 9)
+
+- `2026-09-12T11:35:26+02:00` – Codex slutgranskade rättningen av granskning 015.
+  Alla funktionella fynd är stängda och full verifiering är grön. En felaktig
+  Lidköping-referens i en Batch 1-kommentar återstår som enda P2 före push;
+  granskning 016 skapad.

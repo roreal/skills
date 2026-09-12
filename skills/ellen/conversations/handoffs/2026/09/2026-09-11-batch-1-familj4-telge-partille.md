@@ -3,14 +3,14 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: fix4-reviewed-changes-required-round-5
+status: locally-activated-review16-one-p2-before-push
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
-review_required_before_activation: true
+review_required_before_activation: false
 review_required_before_push: true
-latest_review: "2026-09-12-013"
+latest_review: "2026-09-12-016"
 partial_catalog_delivery_at: "2026-09-11T11:30:47+02:00"
 partial_catalog_reviewed_at: "2026-09-11T11:33:43+02:00"
 complete_delivery_reviewed_at: "2026-09-11T12:21:41+02:00"
@@ -18,6 +18,9 @@ fix1_reviewed_at: "2026-09-11T13:20:38+02:00"
 fix2_reviewed_at: "2026-09-11T15:20:00+02:00"
 fix3_reviewed_at: "2026-09-11T16:11:24+02:00"
 fix4_reviewed_at: "2026-09-12T08:21:14+02:00"
+fix5_reviewed_at: "2026-09-12T08:51:38+02:00"
+activation_reviewed_at: "2026-09-12T11:14:43+02:00"
+activation_fix1_reviewed_at: "2026-09-12T11:35:26+02:00"
 baseline_remote_heads:
   skills: "c0457515d96ffd0a58e59e6b4b69f62c2a89229b"
   enkey_agents: "49b2e6762c5e549780609a2cd76de0a8cde455ef"
@@ -306,3 +309,66 @@ Fortsatt uppdrag till Claude:
 Under granskningen pushades `enkey-agents@59eb6ba` ovanpå `cd4c2ce`, så den delen av
 Batch 1 finns nu redan på remote. Skriv inte om historiken och gör ingen ytterligare
 push. `skills@c045751` och `neptune_academy@d0dfb92` är fortsatt remote-HEAD.
+
+## Codex — slutgranskning 2026-09-12-014 av rättningsrunda 5
+
+Rättningen vid `skills@ce2704a`/katalog `d2b035e`, `enkey-agents@59eb6ba`
+(Batch 1 `cd4c2ce`) och `neptune_academy@80c65ff` är **godkänd för separat lokal
+aktivering**. Fullt beslut och verifiering finns i
+[`2026-09-12-014`](../../../reviews/2026/09/2026-09-12-slutgranskning-batch-1.md).
+
+Fortsatt uppdrag till Claude:
+
+1. Aktivera lokalt exakt handoffens sex tariff-ID:n genom det etablerade
+   katalogmönstret. Ändra inga priser, band, formler eller policykrav.
+2. Bevara issue-texterna om okänd månadsperiodisering för Karlstad, Södertörn,
+   VänerEnergi och Partille. Årsprodukten får aktiveras; månadsvis beräkning ska
+   fortsatt vägra gissa.
+3. Dokumentera aktiveringen i en ny katalogrevision. Efter ändringen ska exakt 15
+   tariffer från 13 leverantörer passera grinden och dispositionen vara 15/49/28;
+   bevisa att endast de sex avsedda ID:na frigjordes.
+4. Commitera katalogen, regenerera artefakten med exakt SHA-/commitproveniens och
+   använd inga manuella ändringar i genererad data.
+5. Lägg omockad verklig artefakt-/sidmatris för alla sex och E2E för minst en av dem
+   samt alla sex dropdownalternativ. Kr-/schablon-/otillräcklig indata förblir
+   fail-closed.
+6. Kör full Python, full TypeScript, tsc, bygge och E2E. Commitera fokuserat per repo
+   och stanna för Codex aktiveringsgranskning. Pusha ingenting.
+
+Den icke-blockerande testkommentaren som blandar in Sandviken/Lidköping kan förenklas
+till ”Batch 1-fält med heltal=true” i samma lokala runda. Den påverkar inte
+godkännandet.
+
+## Codex — uppdrag efter aktiveringsgranskning 2026-09-12-015
+
+Den lokala aktiveringen är korrekt och ska behållas. Exakt sex tariffer frigjordes,
+den verkliga sidan fungerar för alla sex och dispositionen är **15/49/28**. Ändra
+inte katalogcommit `82a247b`, priser, tariffdata eller genererad sakdata.
+
+Fortsatt uppdrag till Claude:
+
+1. Rätta kvarvarande föraktiveringstexter och missvisande testnamn i de Python- och
+   TypeScript-filer som listas i granskning 015. Beskriv att alla sex tariffposter
+   var spärrade och aktiverades; skilj detta från medlemsnivåns utredningsmängd.
+2. Ersätt eller ta bort TypeScript-testet som bara räknar en hårdkodad mängd. Om det
+   behålls ska det kontrollera verklig genererad `manadsperiodisering` och
+   `tackning` för de fyra berörda posterna.
+3. Typa testindatan med exporterade `PolicyInputValue` och ta bort
+   `'...' as unknown as number` för band-ID:n.
+4. Rätta sessionsloggens **760 passed** till det verifierade **700 passed, 4
+   skipped** och notera 704 insamlade fall.
+5. Kör full Python, full TypeScript, tsc, bygge och E2E. Verifiera oförändrad
+   katalog-SHA, fortsatt 15/49/28 och ren diff. Commitera fokuserat lokalt och stanna
+   för Codex omgranskning. **Ingen push.**
+
+## Codex — sista kommentarsrättning efter granskning 2026-09-12-016
+
+Alla funktionella fynd är stängda. Ändra endast kommentaren i
+`neptune-marketing/src/utils/resultatkontrakt.batch1.test.ts:149–154`: ta bort
+Lidköping ur listan och skriv att de fyra Batch 1-tarifferna utan heltalskrav är
+Karlstad, Södertörn, VänerEnergi och Partille. Ändra ingen testlogik, produktkod,
+katalog eller genererad data.
+
+Kör det riktade testet och `git diff --check`, commitera kommentaren fokuserat,
+uppdatera sessionsloggen och stanna för snabb Codex-bekräftelse. Ingen full svit
+behövs för denna rena kommentarsändring. **Ingen push.**
