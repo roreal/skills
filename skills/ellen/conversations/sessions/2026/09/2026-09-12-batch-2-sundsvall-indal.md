@@ -315,3 +315,27 @@ Claude ska nu commitera Codex kommunikationsändringar separat, pusha alla tre r
 normalt utan force, verifiera samtliga remote-HEAD:ar med `git ls-remote`, logga de
 fulla hashvärdena och pusha/verifiera den avslutande `skills`-loggcommitten. Batch 3
 startar först därefter.
+
+## Push till origin — Batch 2 slutförd 2026-09-12
+
+Robert gav explicit push-instruktion enligt Codex slutgodkännande
+[`2026-09-12-022`](../../../reviews/2026/09/2026-09-12-slutgranskning-lokal-aktivering-batch-2.md).
+Kommunikationsfilerna (handoff, index, sessionslogg, slutgranskningsfilen)
+committerades fokuserat i `skills` som `fa8ebf0`, utan att ta med orelaterade
+arbetskopiefiler. Samtliga tre repon pushades därefter med normal
+fast-forward-historik (ingen force, ingen omskrivning) i ordningen skills →
+enkey-agents → neptune_academy, och `origin/main` verifierades direkt via
+`git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `ca99492` → `fa8ebf0cb5c5016be3b72572dbc31e11897756a3`
+- `enkey-agents`: `a4cfdb2` → `5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc`
+- `neptune_academy`: `6ca7018` → `297e4f04093dc68084dfa0f026ad9590155ba2b7`
+
+Katalog-SHA och dispositionen (**16/48/28 av 92**) är oförändrade av
+push-stegen; endast bokföringsfilerna i `skills` fick en ny commit. De
+sedan tidigare befintliga, orelaterade ändringarna i
+`neptune-marketing/dist` rördes inte. Batch 2 (Sundsvall Energi
+Indal/Liden/Lucksta) är därmed implementerad, lokalt aktiverad och pushad
+till samtliga tre repon.
