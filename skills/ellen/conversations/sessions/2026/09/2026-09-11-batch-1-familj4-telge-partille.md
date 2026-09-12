@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-11-001"
 started_at: "2026-09-11T11:24:01+02:00"
-last_updated: "2026-09-12T08:32:41+02:00"
+last_updated: "2026-09-12T09:48:10+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: fix5-delivered-awaiting-review
+status: locally-activated-awaiting-codex-review
 topics:
   - Batch 1
   - Familj 4-resten
@@ -747,3 +747,107 @@ Stannar för Codex nästa omgranskning.
   är gröna. Två P2 återstår enbart i webbappen: policystridig ”positivt”-feltext vid
   tillåten nollgräns samt tre inaktuella ”endast Övik”-påståenden. Fortsatt 9/55/28,
   ingen aktivering. Remote-avvikelsen `enkey-agents@59eb6ba` noterad.
+
+## Codex — slutgranskning 2026-09-12-014 av rättningsrunda 5
+
+Codex slutgranskade `skills@ce2704a`/katalog `d2b035e`,
+`enkey-agents@59eb6ba` (Batch 1 `cd4c2ce`) och `neptune_academy@80c65ff` i
+[`2026-09-12-014`](../../../reviews/2026/09/2026-09-12-slutgranskning-batch-1.md).
+
+Beslut: **implementationen är godkänd för separat lokal aktivering av exakt de sex
+Batch 1-tarifferna**. Båda P2 från 013 är stängda. Oberoende körning gav 698+4 skip
+Python, 894 TypeScript, 280 riktade Batch 1/UI/driftprov, rent tsc, grönt bygge och
+åtta gröna E2E-scenarier. Alla sex är fortfarande `utreds` och
+`godkanda(katalog)=9`, alltså har ingen aktivering skett före beslutet.
+
+Claude får nu göra en fokuserad lokal aktiveringsrunda. Kända issue-texter om okänd
+månadsperiodisering ska bevaras och månadsprodukten fortsatt vara fail-closed;
+godkännandet gäller uppskattad annual_forward-årskostnad. Efter aktivering ska exakt
+15 tariffer från 13 leverantörer passera grinden och dispositionen vara 15/49/28.
+Genererad artefakt, omockat sexleverantörsprov och E2E ska verifieras före ny Codex-
+granskning. Ingen push.
+
+## Ändringslogg (fortsättning 7)
+
+- `2026-09-12T08:51:38+02:00` – Codex slutgodkände Batch 1-implementationen i
+  `2026-09-12-014` för separat lokal aktivering av exakt sex tariffer. Full verifiering
+  grön; fortsatt 9/55/28 före aktivering. Månadsperiodiseringsfrågor ska bevaras,
+  annual_forward får aktiveras, ingen push före aktiveringsgranskning.
+
+## Leveransrapport — lokal aktiveringsrunda (granskning 2026-09-12-014)
+
+Claude (fork) genomförde den av Codex godkända, av Robert klartecknade
+("Ja gå vidare") aktiveringsrundan enligt granskningens åttastegsuppdrag. Samtliga
+steg genomförda; ingen push i något repo.
+
+**1–3, katalog (`skills`):** `investigation` satt till `null` för exakt de sex
+namngivna tariff-ID:na (Karlstads Energi, Södertörns Fjärrvärme, VänerEnergi, Övik
+Energi, Telge Nät, Partille Energi), enligt Lidköping-mönstret. Priser, band,
+formler, kapacitetsbaser och obligatoriska fält oförändrade. De kända
+"Månadsperiodisering saknas"-issue-texterna för Karlstad, Södertörn, VänerEnergi och
+Partille bevarade i sak (blockerar fortsatt en framtida
+manadskostnad/manadsuppdelning-väg, inte den godkända uppskattade årskostnaden).
+Avvikelse med motivering: Partilles issue-text var innan aktiveringen formulerad på
+ett sätt som INTE matchade `katalog.grind()`s godkännandelista
+(`_KANDA_OCH_AVFARDADE_ISSUES`) — den skulle ha stoppats som "okänd issue" så snart
+investigation-spärren rensades, vilket hade gett 14/50/28 i stället för det begärda
+15/49/28 och tyst uteslutit en av de sex uttryckligen godkända tarifferna. Omformulerad
+till att börja med den godkännandelistade prefixen "Månadsperiodisering saknas",
+verifierat direkt mot `katalog.grind()` innan skrivning. `schema_version` 0.1.7→0.1.8,
+change_log-post tillagd. Commit: `skills@82a247bbf028dfb8ed7b23ef976f1909256d0e92`
+(2026-09-12T09:33:43+02:00).
+
+**4, permanenta katalogtester (`enkey-agents`):** `test_katalog.py` uppdaterad
+9→15 godkända / 7→13 medlemmar, med explicit bevis att samtliga sex nya finns med och
+att ingen sjunde tariff frigjorts (`len(godkanda(katalog))==15` och en mängdjämförelse
+av `member_id`). Nytt permanent test bevisar att de fyra tariffer med okänd
+`monthly_proration` fortsatt bär "Månadsperiodisering saknas"-texten. `utreds`-
+histogrammet uppdaterat 62→56. `test_familj4_resten_kontrakt.py`s
+`TestIngenAktivering` (som bevisade att aktivering INTE var godkänd) ersatt av
+`TestAktiveringBatch1`, som nu bevisar att den skett. `test_faktura_manadspriser.py`
+uppdaterad 9→15 med de sex nya kontraktsgatade ID:na tillagda i `KONTRAKTSGATADE`
+(samtliga sex har `contract_required: true`, verifierat mot katalogfilen — en naken
+`arskostnad`/`mwh_fran_arskostnad`-anrop ska kasta `KontraktKravs` för dem, precis som
+för Sandviken/Lidköping). `test_generera_katalog.py`: Telge borttagen ur listan över
+utredda leverantörer (nu godkänd), nytt test bevisar att alla sex Batch 1-medlemmar
+finns i den genererade TS-filen. `test_katalog_proveniens.py`s förväntade sha256
+uppdaterad till den nya katalogens `b47502f1d02ccc483a99d20fb47ba866c8326197ef64051c36c51b024bc50f26`.
+Full tariffer-svit: **760 passed, 4 skipped** (milesight-katalogen exkluderad — ett
+sedan tidigare känt, orelaterat beroendeproblem, inte rört denna runda). `godkanda(katalog)`
+kört direkt mot den skarpa katalogen: exakt 15/13, disposition **15/49/28 av 92**.
+Commit: `enkey-agents@44230d7a25ef1e9d76f2969d84e9990d5ff15291` (2026-09-12T09:47:40+02:00).
+
+**5, genererad TypeScript-artefakt (`neptune_academy`):** `tariffer.generated.ts`
+regenererad från exakt `skills@82a247b` med
+`python -m tools.tariffer.generera <fil> 82a247bbf028dfb8ed7b23ef976f1909256d0e92`
+(ingen manuell redigering). Proveniensraden bär katalogens verkliga sha256
+(`b47502f1…50f26`) och rätt commit-hash. 17 tariffer totalt (2 leverantörsfiler + 15 ur
+katalogen, upp från 9).
+
+**6, omockat acceptansprov (`neptune_academy`):** ny fil
+`src/utils/besparingsvardeBatch1Katalogaktivering.test.ts` (samma mönster som
+Lidköpings motsvarande aktiveringsprov), importerar den RIKTIGA checked-in
+`tariffer.generated.ts` utan `vi.mock`. Bevisar: alla sex finns i produktväljarens
+datakälla; MWh-lägets `calcResultForOnskadTyp` ger ett komplett `aktuell_arskostnad`-
+resultat > 0 utan schablonfallback för samtliga sex; kr-/schablon-lägena blockeras med
+`unsupported_input_mode`; besparingsvägen blockeras med `besparing_ej_stodd`. 37 nya
+testfall, samtliga gröna.
+
+**7, E2E och fulla sviter (`neptune_academy`):** `e2e/kalkylator.smoke.mjs` fick ett
+nionde scenario: bekräftar att alla sex Batch 1-leverantörer syns i den byggda
+sidans `#leverantorId`-dropdown, och kör ett fullständigt, giltigt MWh-flöde för
+Karlstads Energi (kapacitet + bandval) till ett riktigt renderat resultat. Körningar:
+`npx vitest run` → **931 passed** (28 filer, 0 failed/skipped); `npx tsc --noEmit` →
+rent; `npm run build` → godkänt (genererade `dist`-ändringar återställda med
+`git checkout` innan commit, för att inte blanda in orelaterat byggbrus); `npm run
+test:e2e` → **9/9** scenarier godkända, inklusive det nya.
+
+**8, commits:** `skills@82a247bbf028dfb8ed7b23ef976f1909256d0e92` (katalog, tidigare
+runda), `enkey-agents@44230d7a25ef1e9d76f2969d84e9990d5ff15291` (permanenta tester,
+2026-09-12T09:47:40+02:00), `neptune_academy@eb538a5bd5246d80f8a6473576dccf853d231e8d`
+(artefakt + acceptansprov + E2E, 2026-09-12T09:48:10+02:00), samt
+denna sessionsfilsuppdatering i `skills`. Inget pushat i något repo. Den tidigare
+oavsiktliga `enkey-agents@59eb6ba`-avvikelsen (granskning 013) är lämnad orörd — ingen
+historik skriven om eller backad.
+
+Stannar för Codex nästa granskning.
