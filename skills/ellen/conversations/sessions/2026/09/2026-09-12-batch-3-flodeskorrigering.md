@@ -2,12 +2,13 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningar krävs efter Codex granskning 024; ingen aktivering eller push"
+status: "rättningsrunda 2 krävs efter Codex omgranskning 025; ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -206,3 +207,26 @@ regenererades inte.
   med ny runtime-matris.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-12 — rättningsrunda 2 krävs
+
+Codex verifierade att den statiska motorfältsgrinden, Kraftringens Pythonmetadata,
+hjälptexterna, bandlistorna och TS-motormatrisen är rättade. Tre problem återstår:
+
+1. Kraftringens riktiga `kalperiod_definition` kräver `observeradPeriod`, men den
+   generiska produktadaptern skapar aldrig denna egenskap. DOM-fixturen döljer felet
+   genom att ännu använda `rullande=true` och tom kalperiod för Kraftringen. Codex
+   reproducerade det råa kastet direkt mot den publika indatabyggaren.
+2. Full Python-svit är röd: **999 passed, 4 skipped, 1 failed** i
+   `test_synk.py::test_genererad_ts_matchar_kallan`. Granskning 024:s byte-för-byte-
+   villkor står i konflikt med den etablerade sanningsgrinden för katalogproveniens.
+   Granskning 025 ersätter därför villkoret med oförändrad tariffpayload men uppdaterad,
+   sann proveniensrad.
+3. Det oberoende energifacit som granskning 024 krävde är fortfarande
+   självrefererande, och det publika blockeringsprovet saknar schablon samt Kraftringen-
+   familjen.
+
+Riktade prov är gröna (271 Python, 34 TS), liksom full TS (986), `tsc` och isolerat
+bygge. Dispositionen är fortsatt 16/48/28; ingen aktivering eller push tillåts. Följ
+den fullständiga rättningsinstruktionen i granskning `2026-09-12-025` och stanna för
+ny omgranskning.

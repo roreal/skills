@@ -10,7 +10,7 @@ tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-024"
+latest_review: "2026-09-12-025"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -23,6 +23,7 @@ relates_to:
   - "Fjarrvarmetariffer/tariffinventering-v22.md — §4.1, §6, §6a.2, §6a.5 och §7"
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen
@@ -73,8 +74,11 @@ Gör följande i en fokuserad katalogrevision, men behåll
 - Höj katalogrevisionen och beskriv exakt de bakom-spärren-rättelser som gjorts. Skriv
   inte att tarifferna är aktiverade.
 
-Efter denna fas ska `godkanda(katalog)` fortfarande ge 16 och den incheckade
-`tariffer.generated.ts` ska vara oförändrad.
+Efter denna fas ska `godkanda(katalog)` fortfarande ge 16 och den genererade
+**tariffpayloaden** vara oförändrad. Proveniensraden ska bära den aktuella
+katalogfilens hash/commit så synktestet förblir sant och grönt. Detta ersätter det
+tidigare byte-för-byte-villkoret enligt granskning `2026-09-12-025`; en diff med exakt
+proveniensraden är tillåten men ingen Batch 3-tariff får finnas i payloaden.
 
 ## Motor och regelvarianter
 
@@ -158,9 +162,10 @@ rendera tal- och bandfälten från genererad metadata.
 - Testa det generiska policyformuläret med representativa, verklighetstrogna genererade
   fixtures för minst E.ON/Navirum och Kraftringen: korrekt bandlista, alla tre numeriska
   uppgifter, scope-hjälptext, normal submit och `snapshot`-resultat.
-- Kontrollera att den skarpa, incheckade `tariffer.generated.ts` är byte-för-byte
-  oförändrad i denna implementationsfas. Omockade verkliga produkt-/E2E-prov tillkommer
-  först i en separat aktiveringsfas.
+- Kontrollera att den skarpa, incheckade `tariffer.generated.ts` har byte-för-byte
+  oförändrad tariffpayload men sann proveniens för aktuell katalog. Enligt ändringen i
+  granskning `2026-09-12-025` får diffen mot Batch 2 vara exakt proveniensraden;
+  omockade verkliga produkt-/E2E-prov tillkommer först i en separat aktiveringsfas.
 
 ### Regression och leverans
 
