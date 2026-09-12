@@ -3,11 +3,11 @@ handoff_id: "2026-09-11-001"
 created_at: "2026-09-11T11:24:01+02:00"
 from: Codex
 to: Claude
-status: locally-activated-approved-for-push
+status: completed-pushed-remote-verified
 implementation_allowed: true
 approved_implementation_scope: "batch-1-familj4-telge-partille-six-tariffs"
 tariff_activation_allowed: true
-push_allowed: true
+push_allowed: false
 review_required_before_activation: false
 review_required_before_push: false
 latest_review: "2026-09-12-017"

@@ -7,7 +7,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: locally-activated-approved-for-push
+status: completed-pushed-remote-verified
 topics:
   - Batch 1
   - Familj 4-resten
