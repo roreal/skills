@@ -961,3 +961,25 @@ oförändrade. Fullt beslut och pushordning finns i
 - `2026-09-12T11:43:15+02:00` – Codex bekräftade den exakta enradiga
   kommentarsdiffen och riktat prov 169/169. Inga öppna fynd; Batch 1 godkänd för
   normal fast-forward-push och efterföljande remote-verifiering.
+
+## Push till origin — Batch 1 slutförd 2026-09-12
+
+Robert gav explicit push-instruktion enligt Codex slutgodkännande
+[`2026-09-12-017`](../../../reviews/2026/09/2026-09-12-slutgodkannande-lokal-aktivering-batch-1.md).
+Kommunikationsfilerna (handoff, index, sessionslogg, slutgodkännandegranskningen)
+committerades fokuserat i `skills` som `2a75b9d`, utan att ta med orelaterade
+arbetskopiefiler. Samtliga tre repon pushades därefter med normal
+fast-forward-historik (ingen force, ingen omskrivning) i ordningen skills →
+enkey-agents → neptune_academy, och `origin/main` verifierades direkt via
+`git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `c045751` → `2a75b9d81a6423813b0f6abf94ba8e01c880a073`
+- `enkey-agents`: `59eb6ba` → `a4cfdb297ea9079864e70c1e2d85c73a191e8c57`
+- `neptune_academy`: `d0dfb92` → `6ca7018a08067c5135cb7e36dfe2a630add3dd29`
+
+Katalog-SHA och dispositionen (**15/49/28 av 92**) är oförändrade av
+push-stegen; endast bokföringsfilerna i `skills` fick en ny commit. Batch 1
+(Karlstad, Södertörn/SFAB, VänerEnergi, Övik, Telge, Partille) är därmed
+implementerad, lokalt aktiverad och pushad till samtliga tre repon.
