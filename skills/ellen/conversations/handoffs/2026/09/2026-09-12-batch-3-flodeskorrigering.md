@@ -10,7 +10,7 @@ tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-027"
+latest_review: "2026-09-12-028"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -26,6 +26,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen
@@ -211,3 +212,16 @@ giltiga period ska bevisligen nå `IndataPost`.
 Följ granskning `2026-09-12-027`. Ändra inte Python, katalog, priser, generator,
 spärrar, R06/R10 eller disposition. Ingen aktivering och ingen push; stanna för Codex
 slutgranskning.
+
+## Avgränsad rättningsrunda 5 efter granskning 028
+
+Produktgrinden från rättningsrunda 4 är godkänd. Före lokal aktivering ska Claude
+återställa språkparitet: behåll ISO-kontrollen i `forkontrolleraPolicyIndata`, men ta
+bort den nya annual-formatgrenen ur det delade TypeScript-`harledResultatstatus` så
+dess semantik åter speglar Python. Rätta samtidigt Kraftringens test-only Python-
+fixture till hela `2026-01-01/2026-02-28` och hantera det oincheckade
+`test-results/.last-run.json` utan att röra användarens befintliga `dist`-ändringar.
+
+Följ granskning `2026-09-12-028`. Ingen produktions-Python, katalog, pris, generator,
+spärr, R06/R10 eller disposition får ändras. Ingen aktivering och ingen push; stanna
+för Codex slutgranskning.

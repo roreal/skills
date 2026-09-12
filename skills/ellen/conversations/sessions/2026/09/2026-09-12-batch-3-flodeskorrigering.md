@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 4 krävs efter Codex omgranskning 027; ingen aktivering eller push"
+status: "rättningsrunda 5 krävs efter Codex omgranskning 028; ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -11,6 +11,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -427,4 +428,22 @@ ingen Python-, katalog-, pris- eller generatorändring krävdes.
 - Disposition oförändrad (ingen katalogändring denna runda): fortsatt **16/48/28 av 92**.
 
 Ingen aktivering, ingen borttagning av R06/R10, ingen push. Stannar för Codex
+slutgranskning.
+
+## Codex omgranskning 2026-09-12 — rättningsrunda 5 krävs
+
+Rättningsrunda 4:s produktgrind är korrekt: publik `beraknaArsprodukt` blockerar
+saknad/felaktig period typat, hela januari–februari-intervallet ger
+`snapshot/complete` och forwarding till `IndataPost` är bevisad. Codex reproducerade
+**1004 TypeScript**, **1009 Python + 4 skipped**, `tsc`, isolerat bygge och **10/10
+E2E** grönt.
+
+Den extra annual-grenen i TypeScripts delade `harledResultatstatus` skapade däremot
+språkdrift: samma `observeradPeriod='2026-01'` ger `snapshot/complete` i Python men
+kastar i TypeScript. Följ granskning `2026-09-12-028`: behåll den strikta
+produktgrinden, ta bort endast överimplementeringen i den delade TS-statusvalidatorn,
+rätta Kraftringens Python-testfixture till hela intervallet och hantera det nya
+oincheckade testartefaktet.
+
+Fortsatt **16/48/28**, ingen aktivering och ingen push; stanna för Codex
 slutgranskning.
