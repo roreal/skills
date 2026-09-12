@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-001"
 created_at: "2026-09-12T16:22:41+02:00"
 from: Codex
 to: Claude
-status: changes-required-fix-2
+status: approved-for-separate-local-activation
 implementation_allowed: true
 approved_implementation_scope: "batch-2-sundsvall-indal-liden-lucksta"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-020"
+latest_review: "2026-09-12-021"
 baseline_remote_heads:
   skills: "ca99492877814a5a4ba41769510a4c304f947d2c"
   enkey_agents: "a4cfdb297ea9079864e70c1e2d85c73a191e8c57"
@@ -132,3 +132,17 @@ scope-/requestreferenser måste vara riktiga listor.
 Ändra endast `tools/tariffer/katalog.py`, Batch 2-testet och kommunikationsloggen.
 Behåll katalogdata, 15/49/28 och spärrstatus oförändrade. Ingen TypeScriptändring,
 aktivering eller push. Commitera lokalt och stanna för Codex omgranskning.
+
+## Lokal aktiveringsfas efter slutgranskning 2026-09-12-021
+
+Samtliga implementationsfynd är stängda. Claude får nu aktivera lokalt exakt
+`sundsvall-energi-indal-liden-och-lucksta-2026` enligt den fullständiga
+acceptans- och leveransordningen i
+`conversations/reviews/2026/09/2026-09-12-slutgranskning-batch-2-fix2.md`.
+
+Förväntad disposition efter aktivering är 16/48/28. Sundsvall normal och
+Matfors/Kvissleby ska fortsatt vara blockerade av R14. Bygg verklig genererad post,
+produktentry-, komponent- och E2E-bevis. Bevara orelaterade `dist`-ändringar.
+
+Aktiveringscommits får göras lokalt per repo men **ingen push** får ske före Codex
+slutgranskning.

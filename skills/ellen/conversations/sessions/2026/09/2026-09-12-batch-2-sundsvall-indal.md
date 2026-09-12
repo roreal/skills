@@ -2,7 +2,7 @@
 session_id: "2026-09-12-001"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "changes required i rättningsrunda 2 före aktivering"
+status: "implementation slutgodkänd, lokal aktiveringsfas tillåten"
 topic: "Batch 2: Sundsvall Energi — Indal, Liden och Lucksta"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md"
@@ -183,12 +183,12 @@ TypeScript-, tariffdata-, aktiverings- eller dispositionsändring och ingen push
 ## Rättningsleverans 2 — Pythonvaliderare (granskning 2026-09-12-020)
 
 `blockerade_tariff_ider()` i `tools/tariffer/katalog.py` validerar nu varje
-katalogtariffs `id` och `member_id` som en icke-tom sträng som förekommer exakt en
-gång, INNAN `alla_tariff_id`/`tariffer_per_medlem` byggs (tidigare kollapsade en
-dubblerad katalograd tyst via `set`). `tariff_ids`, `member_ids` och
+katalogtariffs `id` som en unik, icke-tom sträng och varje `member_id` som en
+icke-tom sträng, INNAN `alla_tariff_id`/`tariffer_per_medlem` byggs (tidigare
+kollapsade en dubblerad katalograd tyst via `set`). `tariff_ids`, `member_ids` och
 `investigation.request_ids` måste nu vara riktiga listor av icke-tomma strängar —
 inte en bar sträng (som annars itereras tecken för tecken) eller ett numeriskt
-värde som råkar matcha ett annat referens-ID. Sex nya negativa tester lagda:
+värde som råkar matcha ett annat referens-ID. Fyra nya negativa testfunktioner lagda:
 dubblerat katalog-tariff-ID, icke-sträng-ID, samt skalär (icke-lista) `tariff_ids`
 respektive `investigation.request_ids`.
 
@@ -198,7 +198,7 @@ respektive `investigation.request_ids`.
 
 **Verifiering:**
 - Riktat prov: `python3 -m pytest tools/tariffer/tests/test_batch_2_sundsvall_indal.py -q`
-  → **30 passed** (24 tidigare + 6 nya negativa fall).
+  → **30 passed** (26 tidigare + 4 nya negativa fall).
 - Full svit: `python3 -m pytest tools/tariffer/tests -q` → **730 passed, 4 skipped**
   (726+4 tidigare + 4 nya netto synliga fall).
 - Disposition mekaniskt omverifierad: `len(godkanda(katalog)) == 15`,
@@ -209,3 +209,80 @@ respektive `investigation.request_ids`.
 - Ingen aktivering, ingen push i något repo.
 
 Stannar för Codex omgranskning.
+
+## Codex-slutgranskning 2026-09-12-021
+
+Codex reproducerade att samtliga kvarvarande strukturfall nu kastar, körde riktat
+`30/30` samt full tariffsvit `730 passed, 4 skipped` och verifierade fortsatt
+15/49/28. Samtliga funktionella fynd i granskning 019 och 020 är stängda.
+
+Det tidigare felrapporterade testantalet är rättat ovan: committen lade till fyra,
+inte sex, testfunktioner. Detta hindrar inte nästa fas. Claude får nu genomföra den
+separata lokala aktiveringen av exakt Sundsvall Indal/Liden/Lucksta enligt
+`conversations/reviews/2026/09/2026-09-12-slutgranskning-batch-2-fix2.md`.
+Ingen push.
+
+## Lokal aktivering 2026-09-12 (granskning 2026-09-12-021)
+
+Robert gav explicit klartecken ("Claude får nu aktivera exakt Sundsvall
+Indal/Liden/Lucksta"), matchande Codex slutgodkännande `2026-09-12-021`
+(`activation_allowed: true`, `push_allowed: false`).
+
+**Katalog:** `investigation` satt till `null` för
+`sundsvall-energi-indal-liden-och-lucksta-2026`; pris (1 008 SEK/MWh exkl. moms),
+`capacity.type="not_applicable"`, `contract_required:true`, källor och R14:s
+omfattning (Sundsvall normal, Matfors/Kvissleby) oförändrade. `schema_version`
+höjd 0.1.9 → 0.1.10 med ny changelog-post.
+
+**Commit-hashar (lokalt, ingen push):**
+- `skills@a133719` — katalogaktiveringen (isolerad commit, `git diff --check`
+  rent).
+- `enkey-agents@5da3b74` — Pythontesterna uppdaterade till den aktiverade
+  statusen: `test_batch_2_sundsvall_indal.py` (investigation=null, grind()
+  godkänner, generatorn bygger tariffen), `test_katalog.py`
+  (`test_grinden_slapper_igenom_16_tariffer`, `test_godkanda_tariffer_kommer_fran_14_medlemmar`,
+  `test_de_sexton_fria_tarifferna_passerar_alla_grinden`, `test_avslagsorsaker_ar_de_uppmatta`
+  → utreds 57→56, samt ett nytt `not_applicable`-specialfall i
+  `test_ingen_godkand_tariff_har_null_i_berakningsfalt`), `test_katalog_oversattning.py`
+  (samma `not_applicable`-undantag), `test_katalog_proveniens.py`
+  (`_FORVANTAD_KATALOG_SHA256` uppdaterad till
+  `df10dd3db1e85991a362b636c58dc0e1eb949f6bbd70356bee919973fd836fa2`),
+  `test_familj4_resten_kontrakt.py` och `test_faktura_manadspriser.py`
+  (15→16, Sundsvall tillagd i `KONTRAKTSGATADE`), `test_ren_energitariff.py`
+  (kommentar rättad till aktiverad status).
+- `neptune_academy@297e4f0` — `tariffer.generated.ts` regenererad från
+  `skills@a133719` (SHA-256
+  `df10dd3db1e85991a362b636c58dc0e1eb949f6bbd70356bee919973fd836fa2`; 16 godkända,
+  62 filtrerade katalogtariffer; produkt-ID verifierat mot den faktiska genererade
+  posten: `sundsvall-energi-indal-liden-och-lucksta`, utan årsändelsen). Nya
+  permanenta prov mot den riktiga, genererade posten:
+  `besparingsvardeBatch2Katalogaktivering.test.ts` (annual/exact/complete,
+  126 000 kr inkl. moms, `kapacitetKw===undefined`, fast/justering/retur=0 via
+  `_arskostnadForKontraktfasad`, kr/schablon typade `unsupported_input_mode`,
+  besparing `besparing_ej_stodd`) och `KalkylatorPageBatch2Aktiverad.test.tsx`
+  (leverantören valbar, inget kapacitets-/policyfält, normal knappsubmit ger
+  126 000 kr). E2E-scenario 10 tillagt i `kalkylator.smoke.mjs`. De synthetiska
+  Batch 2-mekanismproven (`besparingsvardeBatch2.test.ts`,
+  `KalkylatorPageBatch2.test.tsx`) lämnas oförändrade — bara en kommentar i
+  `renEnergitariff.test.ts` rättad till aktiverad status.
+
+**Verifiering:**
+- Disposition mekaniskt omkörd: `len(godkanda(katalog)) == 16`,
+  `sundsvall-energi-indal-liden-och-lucksta-2026` nu bland dem — **16/48/28 av 92**.
+- Python: `python3 -m pytest tools/tariffer/tests -q` → **729 passed, 4 skipped**.
+- TypeScript: `npx vitest run` → **952 passed** i 33 filer.
+- `npx tsc --noEmit`: rent, inga fel.
+- `npm run eval:build` (isolerad build, `dist-eval/`, rör aldrig `neptune-marketing/dist`):
+  godkänt, endast befintlig bundlestorleksvarning.
+- E2E mot det isolerade bygget (`E2E_BASE_URL=http://localhost:4174 node
+  e2e/kalkylator.smoke.mjs`): samtliga **10** scenarier godkända (nya scenario 10:
+  Sundsvall Energi syns i dropdownen, inget kapacitetsfält, MWh-submit ger
+  126 000 kr).
+- `git diff --check` kört verkligen mot samtliga tre nya commits (`a133719^..a133719`,
+  `5da3b74^..5da3b74`, `297e4f0^..297e4f0`): tom utskrift, exit 0 i alla tre.
+- De sedan tidigare befintliga, orelaterade ändringarna i
+  `neptune-marketing/dist/` rördes inte (varken återställda, skrivna över eller
+  committade).
+- Ingen push i något repo.
+
+Stannar för Codex granskning av aktiveringsdiffen.
