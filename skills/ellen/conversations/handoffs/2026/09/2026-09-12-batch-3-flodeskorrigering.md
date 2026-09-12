@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-002"
 created_at: "2026-09-12T18:57:05+02:00"
 from: Codex
 to: Claude
-status: approved-for-local-implementation
+status: changes-required-after-implementation-review
 implementation_allowed: true
 approved_implementation_scope: "batch-3-eon-navirum-kraftringen-flow-adjustment"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-023"
+latest_review: "2026-09-12-024"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -22,6 +22,7 @@ relates_to:
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
   - "Fjarrvarmetariffer/tariffinventering-v22.md — §4.1, §6, §6a.2, §6a.5 och §7"
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen

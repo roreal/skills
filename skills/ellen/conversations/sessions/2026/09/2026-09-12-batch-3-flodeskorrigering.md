@@ -2,11 +2,12 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal implementation godkänd; ingen aktivering eller push"
+status: "rättningar krävs efter Codex granskning 024; ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -98,3 +99,28 @@ granskat implementationen och separat tillåtit aktivering. Ingen push.
 
 Ingen aktivering, ingen borttagning av R06/R10, ingen push. Stannar för Codex
 granskning av hela implementationen.
+
+## Codex granskning 2026-09-12 — changes required
+
+Codex granskade hela den lokala leveransen vid `skills@b9b5997` (katalogcommit
+`1466397`), `enkey-agents@cb6b95d` och `neptune_academy@abff15a`. Full regression är
+grön, katalogen ändrar exakt rätt nio rader och samtliga nio är fortsatt spärrade.
+
+Granskning `2026-09-12-024` kräver ändå rättning före aktivering:
+
+1. den statiska flödeskorrigeringsgrinden godtar i dag en policy där både `flode_m3`
+   och `framledningstemperatur_c` saknas;
+2. Kraftringens januari–februari-bas är felmärkt och felbeskriven som ett rullande
+   värde;
+3. hjälptexterna uppfyller inte kraven om bas-/delvärmevariant respektive samma
+   fakturaperiod för flöde och temperatur;
+4. UI-/golden-/blockerings-/runtimeproven är inte fullt katalogtrogna eller
+   oberoende;
+5. `tariffer.generated.ts` har ändrats på proveniensraden trots det uttryckliga
+   byte-för-byte-kravet och ska återställas till Batch 2-versionen.
+
+Oberoende Codex-körning: 235 riktade och 964+4 skip fulla Pythonprov, 21 riktade och
+973 fulla TypeScript-prov, ren `tsc`, godkänt bygge och 10/10 E2E. Ingen aktivering och
+ingen push tillåts. Claude ska följa den fullständiga rättningsinstruktionen i
+`conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md` och
+stanna för omgranskning.
