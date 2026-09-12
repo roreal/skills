@@ -124,3 +124,85 @@ Oberoende Codex-körning: 235 riktade och 964+4 skip fulla Pythonprov, 21 riktad
 ingen push tillåts. Claude ska följa den fullständiga rättningsinstruktionen i
 `conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md` och
 stanna för omgranskning.
+
+## Rättningsrunda 1 — svar på granskning 2026-09-12-024
+
+Rättade samtliga fem fynd (2 P1, 3 P2) ovanpå de tidigare lokala commits. Ingen
+tariffmodell, aktiveringsstatus, prisdata eller disposition ändrad; produktkatalogen
+regenererades inte.
+
+1. **P1 — `kontrollera_flodeskorrigeringsbindning` är nu fullt fail-closed**
+   (`enkey-agents/tools/tariffer/policyregister.py`). Kontrollerar nu, för varje
+   tariff med `supply_temperature_adjusted_flow`, att policyn faktiskt deklarerar
+   `flode_m3` och `framledningstemperatur_c` som obligatoriska skalära krav: exakt
+   en post per nyckel i `kravda_falt`, `vardetyp='number'`, `kravs_for` innehåller
+   `annual`, och `flode_m3` har `minvarde=0`. Körs både i den isolerade funktionen
+   och i hela `kontrollera_aktiveringsgrind` (samma sammansatta grind generatorn
+   anropar). Nio nya mutationstest i `test_batch_3_flodeskorrigering.py`: saknat
+   flöde, saknad temperatur, båda borttagna, dubblerat fält, fel `vardetyp`, fel
+   `kravs_for`-omfattning, saknad/felaktig `flode_m3`-gräns.
+2. **P1 — Kraftringens effekt är inte längre felaktigt "rullande".** Ny separat
+   byggare `_kraftringen_kapacitet_krav` sätter `rullande=False` och en icke-tom,
+   källnära `kalperiod_definition` ("Normalårskorrigerad energi januari–februari
+   ... dividerad med 1416 timmar") i stället för det felaktiga rullande-antagandet.
+   `ar_ej_helt_verifierbar` (och därmed `snapshot`-taket) bevaras via
+   `kalperiod_definition`-grenen. Hjälptexten ber om leverantörens debiterbara
+   effekt enligt denna metod, inte ett "rullande" värde. Nya tester skiljer
+   strukturellt Kraftringen (rullande=False + kalperiod_definition) från E.ON/
+   Navirums genuint rullande värden, och bevisar att båda ändå ger
+   `annual/snapshot/complete`.
+3. **P2 — hjälptexterna är nu kompletta.** E.ON/Navirums effekttext pekar nu
+   uttryckligen bas-/delvärme mot en "ej stödd" tariffvariant. Flödes- och
+   temperaturtexterna kräver nu uttryckligen samma leverantörs-/fakturaperiod.
+   Verifierat både i Python (`policyregister.py`-testerna) och i DOM via en ny
+   TypeScript-komponenttest.
+4. **P2 — acceptansproven är nu katalogtrogna och oberoende.**
+   `KalkylatorPageBatch3.test.tsx` bygger nu ETT band för E.ON Järfälla och FYRA för
+   Kraftringen (verifierat mot `till_prisar()`), testar scope-hjälptexterna i DOM
+   och det synliga "Uppskattad"-resultatet. Ny fil `besparingsvardeBatch3.test.ts`
+   verifierar kr-/besparingsblockeringen via de FAKTISKA publika vägarna
+   (`mwhFranArskostnadForFjarrvarme`, `beraknaBesparingsvarde`) och deras typade
+   orsaker (`unsupported_input_mode`, `besparing_ej_stodd`) — inte längre bara
+   genom att läsa `policy.tackning`/`stodjerBesparing`. `flodeskorrigeratFlode`
+   exporterades (uteslutande för testbarhet, speglar Pythons importerbara
+   `_flodeskorrigerat_flode`) och fick en ny runtime-matris i
+   `resultatkontrakt.batch3.test.ts`: noll/negativt/icke-ändligt flöde,
+   icke-ändlig temperatur, saknad/okänd variant, samt en direkt
+   golvfri/golvbegränsad-jämförelse med IDENTISK `base_rate` så diskriminatorn
+   ensam förklarar skillnaden. Den tidigare vacuösa
+   `test_bara_batch3_niohar_bytt_bland_dem` (kontrollerade bara att variant-ID:n
+   saknades i en konstant — Batch 3b/Brunnshög-raderna finns ännu inte alls i
+   katalogen) ersattes med en positiv kontroll att inga sådana suffixerade rader
+   existerar, plus en kontroll att ingen tariff utanför de nio har fått
+   flödeskorrigeringsjusteringen.
+5. **P2 — `tariffer.generated.ts` återställd byte-för-byte.** Filen var ändrad med
+   exakt en proveniensrad (sha256/commit) trots handoffens uttryckliga
+   byte-för-byte-krav under implementationsfasen; `git checkout 297e4f0 --
+   .../tariffer.generated.ts` återställde den, verifierat med en byte-för-byte
+   `diff` mot Batch 2-versionen. Regenerering hör till den separata, senare
+   godkända aktiveringsrundan.
+
+**Verifiering:**
+- Python, riktat Batch 3-prov: 271 passed. Full svit `tools/tariffer/tests`:
+  **1000 passed, 4 skipped**.
+- TypeScript, riktat (komponent + kontrakt + besparingsvärde): 34 passed. Full svit:
+  **986 passed**.
+- `npx tsc --noEmit`: rent.
+- `npm run eval:build` (isolerat `dist-eval`, aldrig `dist/`): rent, endast känd
+  bundelstorleksvarning.
+- Befintlig E2E mot `dist-eval` (via `E2E_BASE_URL`): **10/10** scenarier godkända.
+- Dispositionen mekaniskt omverifierad: `godkanda(katalog)` = 16, ingen av de nio
+  Batch 3-tarifferna ingår. R06/R10 och samtliga nio `investigation.status="utreds"`
+  orörda.
+- `git diff --check`: rent i `enkey-agents` och `neptune_academy`.
+- `neptune-marketing/dist` fortsatt orört (samma sedan tidigare befintliga,
+  orelaterade ändringar som innan).
+
+**Commits (lokalt, ingen push):**
+- `enkey-agents@a306a4b` — fail-closed motorfält, Kraftringens kalperiod, hjälptexter,
+  nio nya mutationstest.
+- `neptune_academy@ea3e023` — återställd `tariffer.generated.ts`, katalogtrogna
+  fixturer, ny `besparingsvardeBatch3.test.ts`, exporterad `flodeskorrigeratFlode`
+  med ny runtime-matris.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.
