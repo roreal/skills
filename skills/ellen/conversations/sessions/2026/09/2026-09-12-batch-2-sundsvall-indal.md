@@ -2,7 +2,7 @@
 session_id: "2026-09-12-001"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal aktivering slutgodkänd för push; remote-verifiering återstår"
+status: "slutförd, pushad och remote-verifierad"
 topic: "Batch 2: Sundsvall Energi — Indal, Liden och Lucksta"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md"
