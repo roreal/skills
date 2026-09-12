@@ -10,7 +10,7 @@ tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-025"
+latest_review: "2026-09-12-026"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -24,6 +24,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen
@@ -181,3 +182,18 @@ rendera tal- och bandfälten från genererad metadata.
 
 **Ingen aktivering, ingen borttagning av R06/R10, ingen ändring av skarp genererad
 tariffdata och ingen push.**
+
+## Avgränsad rättningsrunda 3 efter granskning 026
+
+Rättningsrunda 2 stänger granskning 025:s fyra ursprungliga fynd och dess fullsviter är
+reproducerat gröna. Före aktivering återstår exakt två TypeScript-fynd:
+
+1. skilj en generell `kalperiodDefinition`-källperiod från
+   `matchningMotManad`-formatet `ÅÅÅÅ-MM`; Kraftringens period ska sanningsenligt täcka
+   januari–februari och samma värde ska nå `IndataPost`;
+2. rensa `policyFaltPerioderRaw` och `kapacitetObserveradPeriodRaw` vid leverantörsbyte
+   och byte bort från fjärrvärme, med DOM-regressionsprov.
+
+Följ granskning `2026-09-12-026` ordagrant. Ändra inte Python, katalog, priser,
+generatorpayload, spärrar, R06/R10 eller disposition. Ingen aktivering och ingen push;
+stanna för ny Codex-granskning.

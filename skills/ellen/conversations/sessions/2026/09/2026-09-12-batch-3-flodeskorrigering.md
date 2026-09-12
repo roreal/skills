@@ -2,13 +2,14 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 2 levererad efter Codex omgranskning 025; stannar för ny Codex-granskning, ingen aktivering eller push"
+status: "rättningsrunda 3 krävs efter Codex omgranskning 026; ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
   - "conversations/reviews/2026/09/2026-09-12-beredskapskontroll-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -296,3 +297,21 @@ aktiveringsstatus, prisdata eller disposition ändrad.
   blockeringsprov.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning av rättningsrunda 2.
+
+## Codex omgranskning 2026-09-12 — rättningsrunda 3 krävs
+
+Codex reproducerade rättningsrunda 2:s resultat: **1009 passed + 4 skipped Python**,
+**997 passed TypeScript**, ren typkontroll, rent isolerat bygge, **10/10 E2E** och rena
+diffar. Proveniensraden är sann, tariffpayloaden oförändrad och de tidigare energi-/
+blockeringsfynden är stängda.
+
+Två avgränsade TypeScript-fynd återstår. Den nya generiska källperiodsvägen använder
+felaktigt det månadsbundna `ÅÅÅÅ-MM`-formatet som tillhör `matchningMotManad`.
+Kraftringens januari–februari-underlag provas därför med bara `2026-01`, vilket inte är
+en sann källperiod och motsäger resultatkontraktets befintliga intervallrepresentation.
+Dessutom rensas inte de nya periodtillstånden vid leverantörs- eller energisystembyte,
+så en gammal period kan återanvändas latent.
+
+Följ granskning `2026-09-12-026` för den exakta rättningen. Ingen Python-, katalog-,
+pris-, generator- eller dispositionsändring är tillåten. Fortsatt **16/48/28**, ingen
+aktivering och ingen push; stanna för ny Codex-granskning.
