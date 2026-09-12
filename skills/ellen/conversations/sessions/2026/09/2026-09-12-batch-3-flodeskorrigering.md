@@ -315,3 +315,54 @@ så en gammal period kan återanvändas latent.
 Följ granskning `2026-09-12-026` för den exakta rättningen. Ingen Python-, katalog-,
 pris-, generator- eller dispositionsändring är tillåten. Fortsatt **16/48/28**, ingen
 aktivering och ingen push; stanna för ny Codex-granskning.
+
+## Rättningsrunda 3 — svar på granskning 2026-09-12-026
+
+Båda TypeScript-fynden rättade ovanpå de tidigare lokala commits. Ingen Python-,
+katalog-, pris-, generator- eller dispositionsändring gjordes — diffen är begränsad
+till fyra filer i `neptune_academy`.
+
+1. **P1 — `kalperiodDefinition`-källperiod separerad från `matchningMotManad`s
+   ÅÅÅÅ-MM.** `resultatkontrakt.ts` fick en ny exporterad `arGiltigKalperiod`
+   (kräver `ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD` med två kalenderriktiga datum där startdatumet
+   inte ligger efter slutdatumet — samma intervallform som redan används i
+   `resultatkontrakt.test.ts`, t.ex. `2025-05-01/2026-04-30`) och
+   `PolicyFaltMetadata.kravsManadsmatchning` (härledd ur `KravPost.matchningMotManad`,
+   aldrig tariff-ID). `KalkylatorPage.tsx` väljer nu format generiskt: `ÅÅÅÅ-MM`
+   (`arGiltigManadsperiod`) bara när `matchningMotManad` är satt, annars
+   `arGiltigKalperiod` för en fritt formulerad källperiod. Kraftringens
+   dedikerade kapacitetsperiodfält och etikett/hjälptext uppdaterade till
+   `ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD`. `KalkylatorPageBatch3.test.tsx`s Kraftringen-fixture och
+   DOM-prov skickar nu hela `2026-01-01/2026-02-28`-perioden i stället för bara
+   `2026-01`; nya regressionsprov bevisar att en enda kalendermånad (`2026-01`) och
+   en felaktig intervallordning (`2026-02-28/2026-01-01`) båda avvisas med
+   fältnära svenskt fel.
+2. **P2 — periodtillstånd rensas nu leverantörsbundet.** `handleFormChange` rensar
+   `policyFaltPerioderRaw` och `kapacitetObserveradPeriodRaw` i båda befintliga
+   återställningsgrenarna (leverantörsbyte, byte bort från fjärrvärme) — samma
+   princip som redan gällde `policyFaltRaw`/`policyFaltAttesteringState`/
+   `policyFaltFel`. Två nya DOM-regressionsprov bevisar att Kraftringens ifyllda
+   källperiod töms och submit blockeras tills perioden anges igen, både vid
+   leverantörsbyte bort och tillbaka, och vid byte bort från fjärrvärme.
+
+**Verifiering:**
+- TypeScript (fyra ändrade filer i `neptune_academy`): full svit **1000 passed** i
+  36 filer (997 tidigare + 3 nya: en enda-kalendermånad-avvisning, två
+  periodrensningsprov). `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd
+  bundelstorleksvarning.
+- Befintlig E2E mot det isolerade bygget (`vite preview --outDir dist-eval` +
+  `E2E_BASE_URL`): samtliga **10/10** scenarier godkända.
+- `git diff --check --cached`: rent.
+- Python och `enkey-agents` orörda av denna rättningsrunda — ingen ny körning
+  behövdes (diffen ligger helt inom TypeScript-UI/kontrakt/test i
+  `neptune_academy`, mekaniskt bekräftat via `git status`).
+- `neptune-marketing/dist` orört under hela rundan (en tidigare, orelaterad
+  ändring av `dist/index.html` från innan denna rättningsrunda kvarstår oberörd).
+
+**Commit (lokalt, ingen push):**
+- `neptune_academy@1209f3d` — separerad källperiodsrepresentation, generisk
+  formatval, periodrensning vid leverantörs-/energisystembyte, nya DOM-
+  regressionsprov.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning av rättningsrunda 3.
