@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 2 krävs efter Codex omgranskning 025; ingen aktivering eller push"
+status: "rättningsrunda 2 levererad efter Codex omgranskning 025; stannar för ny Codex-granskning, ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -230,3 +230,69 @@ Riktade prov är gröna (271 Python, 34 TS), liksom full TS (986), `tsc` och iso
 bygge. Dispositionen är fortsatt 16/48/28; ingen aktivering eller push tillåts. Följ
 den fullständiga rättningsinstruktionen i granskning `2026-09-12-025` och stanna för
 ny omgranskning.
+
+## Rättningsrunda 2 — svar på granskning 2026-09-12-025
+
+Alla fyra fynd rättade ovanpå de tidigare lokala commits. Ingen tariffmodell,
+aktiveringsstatus, prisdata eller disposition ändrad.
+
+1. **P1 — Kraftringens `observeradPeriod`-adapterlucka.** `byggIndataFranPolicy`/
+   `byggKontraktIndata` (`besparingsvarde.ts`) har fått nya, generiska, additiva
+   parametrar (`policyFaltPerioder`/`kapacitetObserveradPeriod`) som sätter
+   `IndataPost.observeradPeriod` när ett krav bär `kalperiodDefinition` — styrt helt
+   av metadata, aldrig av tariff-ID. Trådat vidare genom
+   `Tariffberakningsunderlag`/`BesparingsvardeArgs`/`KalkylatorInputs`/
+   `argsFranInputs`. `KalkylatorPage.tsx` renderar nu ett dedikerat period-fält
+   (ÅÅÅÅ-MM) bredvid det generiska policyfältet OCH bredvid den dedikerade
+   `kapacitetKw`-inmatningen (Kraftringens fall — kravet ligger på den bundna
+   kapacitetsposten, inte i det generiska policyFalt-loopet), med fältnära svensk
+   validering (`arGiltigManadsperiod`, ny export i `resultatkontrakt.ts`) INNAN
+   domänlagret når `harledResultatstatus` — ett saknat/felformaterat värde ger nu
+   ett svenskt fältfel i stället för ett rått kast. `KalkylatorPageBatch3.test.tsx`s
+   Kraftringen-fixture bär nu policyns VERKLIGA `rullande=false`/
+   `kalperiod_definition` (inte längre en fejkad E.ON-liknande rullande-fixture) och
+   ett nytt describe-block bevisar normal submit med period (`snapshot`-resultat),
+   saknad period (fältfel, inget kast) och felformaterad period (fältfel).
+2. **P1 — full Pythonsvit röd efter proveniensåterställningen.** Regenererade
+   `tariffer.generated.ts` mot den oförändrade Batch 3-katalogen
+   (`skills@1466397cbec680a64e392e13937579dc960442af`) via den riktiga generatorn
+   (`python -m tools.tariffer.generera <fil> 1466397...`) — diffen mot Batch 2-
+   versionen är nu exakt den enda proveniensraden (sha256=`7eef339c...` commit=
+   `1466397...`), precis som granskning 025 kräver. `test_synk.py` är åter grönt.
+3. **P2 — energipristestet är nu oberoende.** `test_fel_energipris_fangas` jämför
+   nu mot ett handräknat, oberoende `_ENERGI_ARSBELOPP_FACIT_100MWH` (samma nio
+   belopp som granskning 025 anger: 44 375 / 38 000 / 40 525 / 41 416,67 / 61 316,67
+   kr) i stället för att räkna om facit ur samma `prisar`-objekt som motorn
+   använder. Ett nytt test, `test_manadspriserna_ar_kallverifierade`, pinnar
+   dessutom radens tolv källpriser separat, så ett förändrat säsongspris med samma
+   årsmedel fångas oberoende av jämnfördelningsprovet ovan.
+4. **P2 — publikt blockeringsprov nu tabellstyrt över båda familjerna.**
+   `besparingsvardeBatch3.test.ts` skrevs om till `describe.each` över en E.ON- och
+   en Kraftringen-fixture (Kraftringens fixture bär dess verkliga
+   `kalperiod_definition`), med fyra prov per familj: `beraknaArsprodukt` lyckas,
+   kr-läget blockeras (`calcResultForOnskadTyp`, `unsupported_input_mode`),
+   SCHABLONläget blockeras (samma väg, tidigare helt saknat), och besparingsvägen
+   blockeras (`beraknaBesparingsvarde`, `besparing_ej_stodd`).
+
+**Verifiering:**
+- Python: `tools/tariffer` → **1009 passed, 4 skipped** (1000+4 föregående + 9 nya:
+  ett nytt källpristest per tariff-ID).
+- TypeScript: full svit → **997 passed** i 36 filer (986 föregående + 11 nya: 2
+  `policyFaltMetadata`, 4 `KalkylatorPageBatch3`, 5 `besparingsvardeBatch3`).
+  `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`, aldrig den riktiga `dist/`): godkänt,
+  endast känd bundelstorleksvarning.
+- Befintlig E2E mot det isolerade bygget (`vite preview --outDir dist-eval` +
+  `E2E_BASE_URL`): samtliga **10/10** scenarier godkända.
+- Dispositionen mekaniskt omverifierad: fortsatt **16/48/28 av 92**. Inga av de nio
+  finns i den skarpa produktväljaren.
+- `git diff --check --cached`: rent i båda repona (körd, inte bara påstådd).
+- `neptune-marketing/dist` orört under hela rundan.
+
+**Commits (lokalt, ingen push):**
+- `enkey-agents@f0a030f` — oberoende energifacit + källprisprov.
+- `neptune_academy@46e6b51` — observeradPeriod-adaptern, regenererad
+  `tariffer.generated.ts` (proveniens uppdaterad, payload oförändrad), tabellstyrt
+  blockeringsprov.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning av rättningsrunda 2.
