@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-001"
 created_at: "2026-09-12T16:22:41+02:00"
 from: Codex
 to: Claude
-status: changes-required-fix-1
+status: changes-required-fix-2
 implementation_allowed: true
 approved_implementation_scope: "batch-2-sundsvall-indal-liden-lucksta"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-019"
+latest_review: "2026-09-12-020"
 baseline_remote_heads:
   skills: "ca99492877814a5a4ba41769510a4c304f947d2c"
   enkey_agents: "a4cfdb297ea9079864e70c1e2d85c73a191e8c57"
@@ -120,3 +120,15 @@ statusparitetsassertionerna och whitespacefelet. Behåll 15/49/28,
 `investigation.status="utreds"`, priser och genererad produkttabell oförändrade.
 Commitera fokuserat lokalt och stanna för Codex omgranskning. Ingen aktivering och
 ingen push.
+
+## Rättningsrunda 2 efter omgranskning 2026-09-12-020
+
+Rättningsrunda 1 stängde granskning 019:s reproduktioner och TypeScriptdelen är
+godkänd. Slutför nu endast Pythonvalideringen enligt
+`conversations/reviews/2026/09/2026-09-12-omgranskning-batch-2-fix1.md`:
+katalogens tariff-ID:n måste vara unika, alla ID:n måste vara icke-tomma strängar och
+scope-/requestreferenser måste vara riktiga listor.
+
+Ändra endast `tools/tariffer/katalog.py`, Batch 2-testet och kommunikationsloggen.
+Behåll katalogdata, 15/49/28 och spärrstatus oförändrade. Ingen TypeScriptändring,
+aktivering eller push. Commitera lokalt och stanna för Codex omgranskning.

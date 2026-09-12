@@ -2,7 +2,7 @@
 session_id: "2026-09-12-001"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "changes required i rättningsrunda 1 före aktivering"
+status: "changes required i rättningsrunda 2 före aktivering"
 topic: "Batch 2: Sundsvall Energi — Indal, Liden och Lucksta"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md"
@@ -167,3 +167,45 @@ regenererades inte (katalogbytes oförändrade sedan förra rundan).
   och den nya granskningsfilen `2026-09-12-019`.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex-omgranskning 2026-09-12-020
+
+Codex verifierade att rättningsrunda 1 stänger granskning 019:s konkreta fall och att
+`726 passed, 4 skipped` Python, `942 passed` TypeScript samt ren tsc gäller. Ett
+kvarvarande P1-fall finns i samma referenskontrakt: katalogtariffernas ID:n samlas i en
+`set`, så dubbla katalog-ID:n kollapsar och godtas trots kravet “finns exakt en gång”.
+Numeriska ID:n godtas också när de matchar, trots kravet på icke-tomma strängar.
+
+Rättningsrunda 2 är avgränsad till strukturvalidering och negativa Pythonprov enligt
+`conversations/reviews/2026/09/2026-09-12-omgranskning-batch-2-fix1.md`. Ingen
+TypeScript-, tariffdata-, aktiverings- eller dispositionsändring och ingen push.
+
+## Rättningsleverans 2 — Pythonvaliderare (granskning 2026-09-12-020)
+
+`blockerade_tariff_ider()` i `tools/tariffer/katalog.py` validerar nu varje
+katalogtariffs `id` och `member_id` som en icke-tom sträng som förekommer exakt en
+gång, INNAN `alla_tariff_id`/`tariffer_per_medlem` byggs (tidigare kollapsade en
+dubblerad katalograd tyst via `set`). `tariff_ids`, `member_ids` och
+`investigation.request_ids` måste nu vara riktiga listor av icke-tomma strängar —
+inte en bar sträng (som annars itereras tecken för tecken) eller ett numeriskt
+värde som råkar matcha ett annat referens-ID. Sex nya negativa tester lagda:
+dubblerat katalog-tariff-ID, icke-sträng-ID, samt skalär (icke-lista) `tariff_ids`
+respektive `investigation.request_ids`.
+
+- `enkey-agents@12c5c6d` — endast `tools/tariffer/katalog.py` och
+  `tools/tariffer/tests/test_batch_2_sundsvall_indal.py` ändrade, enligt granskning
+  020:s Pythonavgränsning.
+
+**Verifiering:**
+- Riktat prov: `python3 -m pytest tools/tariffer/tests/test_batch_2_sundsvall_indal.py -q`
+  → **30 passed** (24 tidigare + 6 nya negativa fall).
+- Full svit: `python3 -m pytest tools/tariffer/tests -q` → **730 passed, 4 skipped**
+  (726+4 tidigare + 4 nya netto synliga fall).
+- Disposition mekaniskt omverifierad: `len(godkanda(katalog)) == 15`,
+  `sundsvall-energi-indal-liden-och-lucksta-2026` fortsatt inte bland dem.
+- `git diff --check --cached` (kört i `enkey-agents` mot de två stagade filerna
+  före commit): tom utskrift, exit 0 — verkligen kört, inte bara påstått.
+- Ingen TypeScript-ändring, ingen ny TypeScript-commit.
+- Ingen aktivering, ingen push i något repo.
+
+Stannar för Codex omgranskning.
