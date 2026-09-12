@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.9",
+  "schema_version": "0.1.10",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-12",
@@ -8134,13 +8134,6 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 2-implementationen (contract_required, minimal Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
-        ]
-      },
       "contract_required": true
     },
     {
@@ -11133,6 +11126,14 @@
         "Lokal aktivering (granskning 2026-09-12-014, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för de sex Batch 1-tarifferna karlstads-energi-karlstad-2026, sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026, vanerenergi-mariestad-och-toreboda-2026, ovik-energi-ornskoldsvik-2026, telge-nat-telge-foretag-och-bostadsrattsforeningar-2026 och partille-energi-partille-2026. Priser, band, formler, kapacitetsbaser och obligatoriska fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för samtliga sex, inte en gissad eller schablonberäknad månadsredovisning.",
         "De kända issue-texterna om overifierad månadsperiodisering för Karlstad, Södertörn, VänerEnergi och Partille är bevarade oförändrade i sak — de blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg men inte den nu aktiverade årsprodukten. Partilles issue-text omformulerad (samma sakinnehåll som revision 0.1.6) för att uttryckligen matcha samma kända, godkännandelistade mönster (\"Månadsperiodisering saknas\") som de tre andra — den tidigare formuleringen (\"Kapacitetsdelens månadsvisa fördelning...\") hade annars stoppats av grindens okänd-issue-kontroll så snart investigation-spärren rensades.",
         "Örnsköldsvik och Telge Näts investigation-block innehöll bara villkorstexten om väntande granskning/aktivering (inga separata issue-poster) — den texten försvinner nu tillsammans med hela investigation-blocket, i linje med samma mönster som Lidköpings tidigare aktivering. Övriga 72 katalogposters status, priser och villkor är oförändrade. Ingen tariff utöver dessa sex bytte status i denna revision."
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "revision": "0.1.10",
+      "changes": [
+        "Lokal aktivering (granskning 2026-09-12-021, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för sundsvall-energi-indal-liden-och-lucksta-2026. Pris (1 008 SEK/MWh exklusive moms, samtliga tolv månader), capacity.type=\"not_applicable\", contract_required:true, källor och övriga fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för denna tariff, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparing.",
+        "R14 pekar fortsatt på exakt sundsvall-energi-sundsvall-normal-2026 och sundsvall-energi-matfors-och-kvissleby-normal-2026 — dessa två tariffer är oförändrade och förblir blockerade. Ingen tariff utöver Indal/Liden/Lucksta bytte status i denna revision."
       ]
     }
   ],
