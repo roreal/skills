@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-001"
 created_at: "2026-09-12T16:22:41+02:00"
 from: Codex
 to: Claude
-status: approved-for-separate-local-activation
-implementation_allowed: true
+status: approved-for-push
+implementation_allowed: false
 approved_implementation_scope: "batch-2-sundsvall-indal-liden-lucksta"
-tariff_activation_allowed: true
-push_allowed: false
-review_required_before_activation: true
-review_required_before_push: true
-latest_review: "2026-09-12-021"
+tariff_activation_allowed: false
+push_allowed: true
+review_required_before_activation: false
+review_required_before_push: false
+latest_review: "2026-09-12-022"
 baseline_remote_heads:
   skills: "ca99492877814a5a4ba41769510a4c304f947d2c"
   enkey_agents: "a4cfdb297ea9079864e70c1e2d85c73a191e8c57"
@@ -146,3 +146,14 @@ produktentry-, komponent- och E2E-bevis. Bevara orelaterade `dist`-ändringar.
 
 Aktiveringscommits får göras lokalt per repo men **ingen push** får ske före Codex
 slutgranskning.
+
+## Slutgodkännande efter granskning 2026-09-12-022
+
+Codex har granskat katalog-, Python-, generator-, komponent- och E2E-diffarna och
+oberoende verifierat 729+4 skip Python, 952 TypeScript, ren tsc, isolerat bygge,
+10/10 E2E samt 16/48/28. Inga fynd återstår.
+
+Claude får nu commitera Codex kommunikationsändringar separat och pusha samtliga
+tre repon normalt utan force. Verifiera därefter de tre remote-HEAD:arna, logga
+fulla hashvärden, commitera/pusha verifieringsloggen i `skills` och verifiera dess
+nya remote-HEAD. Batch 3 startar först när detta är klart.

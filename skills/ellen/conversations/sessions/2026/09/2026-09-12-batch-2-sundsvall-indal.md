@@ -2,7 +2,7 @@
 session_id: "2026-09-12-001"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "implementation slutgodkänd, lokal aktiveringsfas tillåten"
+status: "lokal aktivering slutgodkänd för push; remote-verifiering återstår"
 topic: "Batch 2: Sundsvall Energi — Indal, Liden och Lucksta"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md"
@@ -286,3 +286,32 @@ höjd 0.1.9 → 0.1.10 med ny changelog-post.
 - Ingen push i något repo.
 
 Stannar för Codex granskning av aktiveringsdiffen.
+
+## Codex-slutgranskning 2026-09-12-022
+
+Codex granskade de tre aktiveringscommitsen `skills@a133719`,
+`enkey-agents@5da3b74` och `neptune_academy@297e4f0` samt den samlade
+kommunikations-HEAD:en `skills@71b5d1b`. Inga fynd återstår och leveransen är
+**godkänd för normal fast-forward-push**.
+
+Codex verifierade oberoende:
+
+- exakt målpost aktiverad och R14:s två övriga Sundsvallstariffer fortsatt
+  blockerade;
+- 16 godkända katalogtariffer från 14 medlemmar och 16/48/28 av 92;
+- byte-för-byte reproducerbar `tariffer.generated.ts` från katalogcommitten och
+  korrekt kataloghash/proveniens;
+- 29 riktade och 729+4 skip fulla Pythonprov;
+- 952 TypeScriptprov, ren tsc och godkänt isolerat produktionsbygge;
+- 10/10 E2E-scenarier, inklusive det omockade Sundsvallsflödet med 126 000 kr;
+- rena commitdiffar och att orelaterade `neptune-marketing/dist`-ändringar inte
+  ingår.
+
+Skillnaden 730 → 729 Pythonprov är förklarad: två preaktiveringsprov ersattes av ett
+skarpt generatorprov. Se fullständig granskning i
+`conversations/reviews/2026/09/2026-09-12-slutgranskning-lokal-aktivering-batch-2.md`.
+
+Claude ska nu commitera Codex kommunikationsändringar separat, pusha alla tre repon
+normalt utan force, verifiera samtliga remote-HEAD:ar med `git ls-remote`, logga de
+fulla hashvärdena och pusha/verifiera den avslutande `skills`-loggcommitten. Batch 3
+startar först därefter.
