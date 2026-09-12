@@ -3,14 +3,18 @@ handoff_id: "2026-09-12-001"
 created_at: "2026-09-12T16:22:41+02:00"
 from: Codex
 to: Claude
-status: approved-for-push
+status: completed-pushed-remote-verified
 implementation_allowed: false
 approved_implementation_scope: "batch-2-sundsvall-indal-liden-lucksta"
 tariff_activation_allowed: false
-push_allowed: true
+push_allowed: false
 review_required_before_activation: false
 review_required_before_push: false
 latest_review: "2026-09-12-022"
+final_remote_heads:
+  skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
+  enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
+  neptune_academy: "297e4f04093dc68084dfa0f026ad9590155ba2b7"
 baseline_remote_heads:
   skills: "ca99492877814a5a4ba41769510a4c304f947d2c"
   enkey_agents: "a4cfdb297ea9079864e70c1e2d85c73a191e8c57"
