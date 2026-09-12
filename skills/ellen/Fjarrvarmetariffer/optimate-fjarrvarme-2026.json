@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.10",
+  "schema_version": "0.1.11",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-12",
@@ -1985,7 +1985,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -1993,7 +1993,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 108.17
           }
         ],
@@ -2018,9 +2018,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2032,11 +2030,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026",
@@ -2072,7 +2069,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2080,7 +2077,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 101.57
           }
         ],
@@ -2105,9 +2102,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2119,11 +2114,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "e-on-malmo-malmo-och-burlov-bostader-2026",
@@ -2159,7 +2153,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2167,11 +2161,11 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 101.43
           }
         ],
-        "billing_basis_method": "Effektsignatur vid -15 °C, rullande 12 månader; uppdateras månadsvis.",
+        "billing_basis_method": "Effektsignatur vid -8 °C, rullande 12 månader; uppdateras månadsvis.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2192,9 +2186,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2206,11 +2198,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026",
@@ -2246,7 +2237,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2254,11 +2245,11 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 95.1
           }
         ],
-        "billing_basis_method": "Effektsignatur vid -15 °C, rullande 12 månader; uppdateras månadsvis.",
+        "billing_basis_method": "Effektsignatur vid -8 °C, rullande 12 månader; uppdateras månadsvis.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2279,9 +2270,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2293,11 +2282,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026",
@@ -2333,7 +2321,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2341,7 +2329,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 97.38
           }
         ],
@@ -2366,9 +2354,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2380,11 +2366,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026",
@@ -2420,7 +2405,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2428,7 +2413,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 95.77
           }
         ],
@@ -2453,9 +2438,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2467,11 +2450,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026",
@@ -2507,7 +2489,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2515,7 +2497,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 102.38
           }
         ],
@@ -2540,9 +2522,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2554,11 +2534,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026",
@@ -2594,7 +2573,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "month",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -2602,7 +2581,7 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 97.91
           }
         ],
@@ -2627,9 +2606,7 @@
         }
       ],
       "issues": [
-        "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -2641,11 +2618,10 @@
           "R10"
         ],
         "conditions_sv": [
-          "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "eskilstuna-energi-och-miljo-eskilstuna-2026",
@@ -4813,7 +4789,7 @@
       "capacity": {
         "type": "selected_band_affine",
         "basis_unit": "kW",
-        "rate_period": null,
+        "rate_period": "year",
         "band_selection": "supplier_confirmed_band_id_required",
         "fixed_unit": "SEK",
         "variable_unit": "SEK/kW",
@@ -4821,25 +4797,25 @@
           {
             "id": "1",
             "source_interval": "≤100",
-            "fixed": null,
+            "fixed": 0,
             "variable": 1280
           },
           {
             "id": "2",
             "source_interval": "≤650",
-            "fixed": null,
+            "fixed": 0,
             "variable": 1232
           },
           {
             "id": "3",
             "source_interval": "≤1000",
-            "fixed": null,
+            "fixed": 0,
             "variable": 1181
           },
           {
             "id": "4",
             "source_interval": ">1000",
-            "fixed": null,
+            "fixed": 0,
             "variable": 1132
           }
         ],
@@ -4869,9 +4845,7 @@
         }
       ],
       "issues": [
-        "Nätavgränsning, effektprisperiod och flödeskorrektion behöver bekräftas. Intervallen är kumulativa övre gränser i källan.",
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -4887,11 +4861,10 @@
           "R06"
         ],
         "conditions_sv": [
-          "Nätavgränsning, effektprisperiod och flödeskorrektion behöver bekräftas. Intervallen är kumulativa övre gränser i källan.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "lidkoping-energi-lidkoping-041-kw-2026",
@@ -11134,6 +11107,15 @@
       "changes": [
         "Lokal aktivering (granskning 2026-09-12-021, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för sundsvall-energi-indal-liden-och-lucksta-2026. Pris (1 008 SEK/MWh exklusive moms, samtliga tolv månader), capacity.type=\"not_applicable\", contract_required:true, källor och övriga fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för denna tariff, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparing.",
         "R14 pekar fortsatt på exakt sundsvall-energi-sundsvall-normal-2026 och sundsvall-energi-matfors-och-kvissleby-normal-2026 — dessa två tariffer är oförändrade och förblir blockerade. Ingen tariff utöver Indal/Liden/Lucksta bytte status i denna revision."
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "revision": "0.1.11",
+      "changes": [
+        "Batch 3 lokal implementation (handoff 2026-09-12-002, godkänd av Codex, beredskapskontroll 2026-09-12-023): katalogrättelser BAKOM kvarstående spärr för de nio raderna e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026, e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026, e-on-malmo-malmo-och-burlov-bostader-2026, e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026 och kraftringen-kraftringen-2026. E.ON/Navirums åtta rader fick capacity.fixed=0 och capacity.rate_period=\"month\"; Kraftringen fick capacity.fixed=0 på alla fyra band och capacity.rate_period=\"year\". Samtliga nio fick contract_required:true. investigation.status=\"utreds\" är OFÖRÄNDRAT på alla nio — ingen tariff aktiveras i denna revision, disposition kvarstår 16/48/28 av 92.",
+        "Malmö/Burlövs två rader fick capacity.billing_basis_method rättad från -15 °C till -8 °C (Järfälla och båda Navirumnäten ligger kvar vid -15 °C, källverifierat per rad).",
+        "Issue-texterna om okänd effektprisperiod/flödesformel och null i fast avgift är borttagna för samtliga nio, eftersom de rättelserna ovan faktiskt löser dem. Den kända issue-texten om saknad månadsperiodisering är oförändrad kvar på alla nio — den blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg, inte den framtida årsprodukten. R06 och R10 samt de nio radernas investigation.request_ids är OFÖRÄNDRADE i denna revision; de rörs först vid en separat, godkänd aktiveringsrunda."
       ]
     }
   ],
