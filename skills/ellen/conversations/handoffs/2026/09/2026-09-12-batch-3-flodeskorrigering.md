@@ -10,7 +10,7 @@ tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-12-026"
+latest_review: "2026-09-12-027"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -25,6 +25,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen
@@ -197,3 +198,16 @@ reproducerat gröna. Före aktivering återstår exakt två TypeScript-fynd:
 Följ granskning `2026-09-12-026` ordagrant. Ändra inte Python, katalog, priser,
 generatorpayload, spärrar, R06/R10 eller disposition. Ingen aktivering och ingen push;
 stanna för ny Codex-granskning.
+
+## Avgränsad rättningsrunda 4 efter granskning 027
+
+Rättningsrunda 3:s UI- och statefynd är stängda. Före lokal aktivering återstår en
+enda kontraktslucka: den nya ISO-intervallgrinden måste även ligga i den publika
+TypeScript-produktfasaden, inte bara i `KalkylatorPage`. Den nuvarande publika
+Kraftringen-fixturen med gamla `2026-01` ska ersättas av hela
+`2026-01-01/2026-02-28`; saknad/felaktig period ska blockeras typat, och exakt samma
+giltiga period ska bevisligen nå `IndataPost`.
+
+Följ granskning `2026-09-12-027`. Ändra inte Python, katalog, priser, generator,
+spärrar, R06/R10 eller disposition. Ingen aktivering och ingen push; stanna för Codex
+slutgranskning.

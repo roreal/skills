@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 3 krävs efter Codex omgranskning 026; ingen aktivering eller push"
+status: "rättningsrunda 4 krävs efter Codex omgranskning 027; ingen aktivering eller push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -10,6 +10,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-granskning-batch-3-implementation.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix1.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
+  - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -366,3 +367,20 @@ till fyra filer i `neptune_academy`.
   regressionsprov.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning av rättningsrunda 3.
+
+## Codex omgranskning 2026-09-12 — rättningsrunda 4 krävs
+
+Codex verifierade att rättningsrunda 3 stänger båda granskning 026-fynden i UI:t:
+Kraftringens hela januari–februari-intervall accepteras, felaktiga intervall avvisas och
+periodstate rensas vid leverantörs-/energisystembyte. **1000 TypeScript**, `tsc`,
+isolerat bygge och **10/10 E2E** är gröna.
+
+En produktkontraktslucka återstår. `arGiltigKalperiod` körs bara i sidan, medan
+`beraknaArsprodukt` fortfarande godtar gamla `2026-01` som en komplett Kraftringen-
+källperiod. Det publika Batch 3-provet skickar fortfarande just detta värde och blir
+grönt. Lägg samma generiska periodgrind i TypeScript-produktlagret, blockera
+saknad/ogiltig period typat, uppdatera fixturen till hela intervallet och bevisa exakt
+forwarding enligt granskning `2026-09-12-027`.
+
+Ingen Python-, katalog-, pris-, generator- eller dispositionsändring. Fortsatt
+**16/48/28**, ingen aktivering och ingen push; stanna för Codex slutgranskning.
