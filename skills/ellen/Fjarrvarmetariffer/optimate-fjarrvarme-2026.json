@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.7",
+  "schema_version": "0.1.8",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-11",
+  "as_of": "2026-09-12",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -4656,13 +4656,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6650,13 +6644,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 1-implementationen (contract_required, Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6774,20 +6762,13 @@
         }
       ],
       "issues": [
-        "Kapacitetsdelens månadsvisa fördelning (monthly_proration) saknas eller behöver verifieras — påverkar bara en framtida månadsvis fakturaredovisning, inte den uppskattade årskostnaden (annual_forward), som är oberoende av proration."
+        "Månadsperiodisering saknas eller behöver verifieras för kapacitetsdelen (monthly_proration) — det blockerar bara en framtida manadskostnad/manadsuppdelning-väg, inte den uppskattade årskostnaden (annual_forward), som är oberoende av periodiseringen."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Kapacitetsdelens månadsvisa fördelning är overifierad (blockerar bara en framtida manadskostnad/manadsuppdelning-väg).",
-          "Batch 1-implementationen (contract_required, Tariffpolicy) väntar på Codex oberoende granskning och en separat, godkänd aktiveringsrunda."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -7683,13 +7664,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -8490,13 +8465,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 1-implementationen (Familj 4-resten, Telge, Partille) väntar på oberoende granskning och en separat godkänd aktiveringsrunda."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -8980,13 +8949,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11157,6 +11120,15 @@
       "revision": "0.1.7",
       "changes": [
         "Örnsköldsvik (P1 #4, granskning 2026-09-11-011): medlemsradens source_ids bar bara 30_0 (Prisdialogens 2025-dokument) trots att tariffradens egna source_refs redan pekar mot 30_1 (Öviks officiella prislista giltig från 1 jan 2026, upptäckt och infogad i revision 0.1.5/0.1.6, granskning 2026-09-11-010). 30_1 tillagd i medlemsradens source_ids — 30_0 behålls som historisk källa. Revision 0.1.5:s formulering \"i enlighet med källunderlaget (30_0, godkänt 2026-09-04)\" om den verifierade nollan i fast avgift stod kvar oförändrad trots att den nuvarande officiella 2026-källan är 30_1; ingen ny sakuppgift, men provenance-referensen i den texten var vilseledande och rättas härmed till 30_1. Endast Örnsköldsviks medlemspost påverkas."
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "revision": "0.1.8",
+      "changes": [
+        "Lokal aktivering (granskning 2026-09-12-014, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för de sex Batch 1-tarifferna karlstads-energi-karlstad-2026, sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026, vanerenergi-mariestad-och-toreboda-2026, ovik-energi-ornskoldsvik-2026, telge-nat-telge-foretag-och-bostadsrattsforeningar-2026 och partille-energi-partille-2026. Priser, band, formler, kapacitetsbaser och obligatoriska fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för samtliga sex, inte en gissad eller schablonberäknad månadsredovisning.",
+        "De kända issue-texterna om overifierad månadsperiodisering för Karlstad, Södertörn, VänerEnergi och Partille är bevarade oförändrade i sak — de blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg men inte den nu aktiverade årsprodukten. Partilles issue-text omformulerad (samma sakinnehåll som revision 0.1.6) för att uttryckligen matcha samma kända, godkännandelistade mönster (\"Månadsperiodisering saknas\") som de tre andra — den tidigare formuleringen (\"Kapacitetsdelens månadsvisa fördelning...\") hade annars stoppats av grindens okänd-issue-kontroll så snart investigation-spärren rensades.",
+        "Örnsköldsvik och Telge Näts investigation-block innehöll bara villkorstexten om väntande granskning/aktivering (inga separata issue-poster) — den texten försvinner nu tillsammans med hela investigation-blocket, i linje med samma mönster som Lidköpings tidigare aktivering. Övriga 72 katalogposters status, priser och villkor är oförändrade. Ingen tariff utöver dessa sex bytte status i denna revision."
       ]
     }
   ],
