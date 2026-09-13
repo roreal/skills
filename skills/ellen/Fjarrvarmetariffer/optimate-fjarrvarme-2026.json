@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.12",
+  "schema_version": "0.1.13",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-12",
+  "as_of": "2026-09-13",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -40,11 +40,12 @@
     ],
     "currency_precision": "Decimalaritmetik; avrundning enligt leverantörsvillkor, ej generell avrundning per delsteg.",
     "freshness": "Årsetikett räcker inte. Dokument kan innehålla föreslagna priser eller äldre deltabeller; status följer innehållet. Nya revisioner måste kontrolleras före produktionsaktivering.",
-    "investigation_status": "utreds: frågor/villkor kvarstår; detta innebär inte aktiv utredning eller automatisk bevakning. lost: den enskilda frågan är löst, inte att hela tariffen är produktionsklar."
+    "investigation_status": "utreds: frågor/villkor kvarstår; detta innebär inte aktiv utredning eller automatisk bevakning. lost: den enskilda frågan är löst, inte att hela tariffen är produktionsklar.",
+    "variant_of": "tariffs[].variant_of, när satt, pekar på tariffs[].id för samma produkts fullvärmebasrad. Föräldern måste finnas, ha samma member_id och price_year, och får inte själv vara en variant (ingen kedjning). Prissättande fält dupliceras från föräldern; enda avsedda skillnaden är effektens billing_basis_method (leverantörens 36-månadersvärde i stället för -15/-8 °C-signaturen) samt id/etikett/spärrstatus."
   },
   "coverage_summary": {
     "member_registry_entries": 53,
-    "tariffs": 78,
+    "tariffs": 86,
     "members_with_energy_rates": 53,
     "members_missing_final_rates": [],
     "price_status_counts": {
@@ -54,7 +55,8 @@
     "information_request_status_counts": {
       "utreds": 14,
       "lost": 1
-    }
+    },
+    "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
   },
   "sources": [
     {
@@ -90,12 +92,28 @@
       "kind": "supplier_document_hosted_by_prisdialogen"
     },
     {
+      "id": "03_1",
+      "title": "Jämför fjärrvärmepriser — Bro, Bålsta, Järfälla, Kungsängen 2026 (pdf)",
+      "url": "https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf",
+      "retrieved_on": "2026-09-13",
+      "sha256": "e5a7077e00ea472893e963d297bfc529279039a01e529f0921c50dfb091f02c6",
+      "kind": "supplier_website_or_linked_document"
+    },
+    {
       "id": "04_0",
       "title": "Prisändringsmodell 2025 (pdf)",
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Eon-Malmo.pdf",
       "retrieved_on": "2026-09-02",
       "sha256": "d0d8c23114a3d4526ba9ffb8a680fac5e0dee1d13624d151934a173f1e795d9f",
       "kind": "supplier_document_hosted_by_prisdialogen"
+    },
+    {
+      "id": "04_1",
+      "title": "Jämför fjärrvärmepriser — Malmö 2026 (pdf)",
+      "url": "https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf",
+      "retrieved_on": "2026-09-13",
+      "sha256": "1d40ad5071cece0758a6114bc029cd021727ea177aade502018caa696ae62730",
+      "kind": "supplier_website_or_linked_document"
     },
     {
       "id": "05_0",
@@ -321,12 +339,28 @@
       "kind": "supplier_document_hosted_by_prisdialogen"
     },
     {
+      "id": "25_1",
+      "title": "Jämför fjärrvärmepriser — Norrköping, Söderköping 2026 (pdf)",
+      "url": "https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf",
+      "retrieved_on": "2026-09-13",
+      "sha256": "3801badb7056e16cf3b4cc91812a758bb6034ac9580839e0474de4246fcb33ba",
+      "kind": "supplier_website_or_linked_document"
+    },
+    {
       "id": "26_0",
       "title": "Prisändringsmodell 2025 (pdf)",
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Eon-Navirum-Orebro.pdf",
       "retrieved_on": "2026-09-02",
       "sha256": "fae7724e8647366e07ee62daf8b59447d0815bc03fe64f2f677df319df555b12",
       "kind": "supplier_document_hosted_by_prisdialogen"
+    },
+    {
+      "id": "26_1",
+      "title": "Jämför fjärrvärmepriser — Hallsberg, Kumla, Örebro 2026 (pdf)",
+      "url": "https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf",
+      "retrieved_on": "2026-09-13",
+      "sha256": "dabff0f18cee6170d98193964097196c7bce5a0d653be530e6fac00a2312e78a",
+      "kind": "supplier_website_or_linked_document"
     },
     {
       "id": "27_0",
@@ -916,7 +950,8 @@
       "id": "e-on-jarfalla",
       "name": "E.ON - Järfälla",
       "source_ids": [
-        "03_0"
+        "03_0",
+        "03_1"
       ],
       "tariff_ids": [
         "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026",
@@ -929,7 +964,8 @@
       "id": "e-on-malmo",
       "name": "E.ON - Malmö",
       "source_ids": [
-        "04_0"
+        "04_0",
+        "04_1"
       ],
       "tariff_ids": [
         "e-on-malmo-malmo-och-burlov-bostader-2026",
@@ -1217,7 +1253,8 @@
       "id": "navirum-energi-norrkoping-och-soderkoping",
       "name": "Navirum Energi - Norrköping och Söderköping",
       "source_ids": [
-        "25_0"
+        "25_0",
+        "25_1"
       ],
       "tariff_ids": [
         "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026",
@@ -1230,7 +1267,8 @@
       "id": "navirum-energi-orebro-kumla-och-hallsberg",
       "name": "Navirum Energi - Örebro, Kumla och Hallsberg",
       "source_ids": [
-        "26_0"
+        "26_0",
+        "26_1"
       ],
       "tariff_ids": [
         "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026",
@@ -1954,7 +1992,7 @@
     {
       "id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026",
       "member_id": "e-on-jarfalla",
-      "network_or_product": "Järfälla och Upplands-Bro – Bostäder",
+      "network_or_product": "Järfälla och Upplands-Bro – Bostäder – Fullvärme",
       "customer_scope": [
         "residential_buildings"
       ],
@@ -2011,9 +2049,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "03_0",
+          "source_id": "03_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2028,9 +2067,94 @@
       "contract_required": true
     },
     {
+      "id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026--bas-delvarme",
+      "member_id": "e-on-jarfalla",
+      "network_or_product": "Järfälla och Upplands-Bro – Bostäder – Bas-/delvärme",
+      "customer_scope": [
+        "residential_buildings"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          673,
+          673,
+          673,
+          280,
+          280,
+          280,
+          280,
+          280,
+          280,
+          280,
+          673,
+          673
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 108.17
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 10.25,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "03_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026"
+    },
+    {
       "id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026",
       "member_id": "e-on-jarfalla",
-      "network_or_product": "Järfälla och Upplands-Bro – Övriga fastigheter",
+      "network_or_product": "Järfälla och Upplands-Bro – Övriga fastigheter – Fullvärme",
       "customer_scope": [
         "non_residential_business"
       ],
@@ -2087,9 +2211,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "03_0",
+          "source_id": "03_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2104,9 +2229,94 @@
       "contract_required": true
     },
     {
+      "id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026--bas-delvarme",
+      "member_id": "e-on-jarfalla",
+      "network_or_product": "Järfälla och Upplands-Bro – Övriga fastigheter – Bas-/delvärme",
+      "customer_scope": [
+        "non_residential_business"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          673,
+          673,
+          673,
+          280,
+          280,
+          280,
+          280,
+          280,
+          280,
+          280,
+          673,
+          673
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 101.57
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 10.25,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "03_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026"
+    },
+    {
       "id": "e-on-malmo-malmo-och-burlov-bostader-2026",
       "member_id": "e-on-malmo",
-      "network_or_product": "Malmö och Burlöv – Bostäder",
+      "network_or_product": "Malmö och Burlöv – Bostäder – Fullvärme",
       "customer_scope": [
         "residential_buildings"
       ],
@@ -2163,9 +2373,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "04_0",
+          "source_id": "04_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2180,9 +2391,94 @@
       "contract_required": true
     },
     {
+      "id": "e-on-malmo-malmo-och-burlov-bostader-2026--bas-delvarme",
+      "member_id": "e-on-malmo",
+      "network_or_product": "Malmö och Burlöv – Bostäder – Bas-/delvärme",
+      "customer_scope": [
+        "residential_buildings"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          618,
+          618,
+          618,
+          210,
+          210,
+          210,
+          210,
+          210,
+          210,
+          210,
+          618,
+          618
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 101.43
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.39,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "04_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "e-on-malmo-malmo-och-burlov-bostader-2026"
+    },
+    {
       "id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026",
       "member_id": "e-on-malmo",
-      "network_or_product": "Malmö och Burlöv – Övriga fastigheter",
+      "network_or_product": "Malmö och Burlöv – Övriga fastigheter – Fullvärme",
       "customer_scope": [
         "non_residential_business"
       ],
@@ -2239,9 +2535,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "04_0",
+          "source_id": "04_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2256,9 +2553,94 @@
       "contract_required": true
     },
     {
+      "id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026--bas-delvarme",
+      "member_id": "e-on-malmo",
+      "network_or_product": "Malmö och Burlöv – Övriga fastigheter – Bas-/delvärme",
+      "customer_scope": [
+        "non_residential_business"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          618,
+          618,
+          618,
+          210,
+          210,
+          210,
+          210,
+          210,
+          210,
+          210,
+          618,
+          618
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 95.1
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.39,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "04_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026"
+    },
+    {
       "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026",
       "member_id": "navirum-energi-norrkoping-och-soderkoping",
-      "network_or_product": "Norrköping och Söderköping – Bostäder",
+      "network_or_product": "Norrköping och Söderköping – Bostäder – Fullvärme",
       "customer_scope": [
         "residential_buildings"
       ],
@@ -2315,9 +2697,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "25_0",
+          "source_id": "25_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2332,9 +2715,94 @@
       "contract_required": true
     },
     {
+      "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026--bas-delvarme",
+      "member_id": "navirum-energi-norrkoping-och-soderkoping",
+      "network_or_product": "Norrköping och Söderköping – Bostäder – Bas-/delvärme",
+      "customer_scope": [
+        "residential_buildings"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          603,
+          603,
+          603,
+          264,
+          264,
+          264,
+          264,
+          264,
+          264,
+          264,
+          603,
+          603
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 97.38
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.75,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "25_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026"
+    },
+    {
       "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026",
       "member_id": "navirum-energi-norrkoping-och-soderkoping",
-      "network_or_product": "Norrköping och Söderköping – Övriga fastigheter",
+      "network_or_product": "Norrköping och Söderköping – Övriga fastigheter – Fullvärme",
       "customer_scope": [
         "non_residential_business"
       ],
@@ -2391,9 +2859,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "25_0",
+          "source_id": "25_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2408,9 +2877,94 @@
       "contract_required": true
     },
     {
+      "id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026--bas-delvarme",
+      "member_id": "navirum-energi-norrkoping-och-soderkoping",
+      "network_or_product": "Norrköping och Söderköping – Övriga fastigheter – Bas-/delvärme",
+      "customer_scope": [
+        "non_residential_business"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          603,
+          603,
+          603,
+          264,
+          264,
+          264,
+          264,
+          264,
+          264,
+          264,
+          603,
+          603
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 95.77
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.75,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "25_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026"
+    },
+    {
       "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026",
       "member_id": "navirum-energi-orebro-kumla-och-hallsberg",
-      "network_or_product": "Örebro, Kumla och Hallsberg – Bostäder",
+      "network_or_product": "Örebro, Kumla och Hallsberg – Bostäder – Fullvärme",
       "customer_scope": [
         "residential_buildings"
       ],
@@ -2467,9 +3021,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "26_0",
+          "source_id": "26_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2484,9 +3039,94 @@
       "contract_required": true
     },
     {
+      "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026--bas-delvarme",
+      "member_id": "navirum-energi-orebro-kumla-och-hallsberg",
+      "network_or_product": "Örebro, Kumla och Hallsberg – Bostäder – Bas-/delvärme",
+      "customer_scope": [
+        "residential_buildings"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          616,
+          616,
+          616,
+          270,
+          270,
+          270,
+          270,
+          270,
+          270,
+          270,
+          616,
+          616
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 102.38
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.42,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "26_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026"
+    },
+    {
       "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026",
       "member_id": "navirum-energi-orebro-kumla-och-hallsberg",
-      "network_or_product": "Örebro, Kumla och Hallsberg – Övriga fastigheter",
+      "network_or_product": "Örebro, Kumla och Hallsberg – Övriga fastigheter – Fullvärme",
       "customer_scope": [
         "non_residential_business"
       ],
@@ -2543,9 +3183,10 @@
       ],
       "source_refs": [
         {
-          "source_id": "26_0",
+          "source_id": "26_1",
           "pages": [
-            4
+            1,
+            2
           ]
         }
       ],
@@ -2558,6 +3199,91 @@
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": null,
       "contract_required": true
+    },
+    {
+      "id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026--bas-delvarme",
+      "member_id": "navirum-energi-orebro-kumla-och-hallsberg",
+      "network_or_product": "Örebro, Kumla och Hallsberg – Övriga fastigheter – Bas-/delvärme",
+      "customer_scope": [
+        "non_residential_business"
+      ],
+      "price_year": 2026,
+      "valid_from": null,
+      "valid_to": null,
+      "price_status": "published_2026",
+      "vat_basis": "excluded",
+      "currency": "SEK",
+      "energy": {
+        "type": "monthly",
+        "unit": "SEK/MWh",
+        "rates": [
+          616,
+          616,
+          616,
+          270,
+          270,
+          270,
+          270,
+          270,
+          270,
+          270,
+          616,
+          616
+        ]
+      },
+      "capacity": {
+        "type": "selected_band_affine",
+        "basis_unit": "kW",
+        "rate_period": "month",
+        "band_selection": "supplier_confirmed_band_id_required",
+        "fixed_unit": "SEK",
+        "variable_unit": "SEK/kW",
+        "bands": [
+          {
+            "id": "1",
+            "source_interval": "Alla",
+            "fixed": 0,
+            "variable": 97.91
+          }
+        ],
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "monthly_proration": null,
+        "formula": "fixed + variable * billing_basis"
+      },
+      "adjustments": [
+        {
+          "type": "supply_temperature_adjusted_flow",
+          "base_rate": 9.42,
+          "unit": "SEK/m3",
+          "correction_formula": null
+        }
+      ],
+      "source_refs": [
+        {
+          "source_id": "26_1",
+          "pages": [
+            1,
+            2
+          ]
+        }
+      ],
+      "issues": [
+        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+      ],
+      "production_ready": false,
+      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "component_completeness": "not_certified",
+      "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
+      "investigation": {
+        "status": "utreds",
+        "request_ids": [],
+        "conditions_sv": [
+          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+        ]
+      },
+      "contract_required": true,
+      "variant_of": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026"
     },
     {
       "id": "eskilstuna-energi-och-miljo-eskilstuna-2026",
@@ -11030,6 +11756,16 @@
         "Lokal aktivering (granskning 2026-09-13-029, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för de nio Batch 3-tarifferna e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026, e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026, e-on-malmo-malmo-och-burlov-bostader-2026, e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026 och kraftringen-kraftringen-2026. Priser, band, formler, kapacitetsbaser och obligatoriska fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för samtliga nio, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparingsprodukten.",
         "R06 (kraftringen) och R10 (e-on-jarfalla, e-on-malmo, navirum-energi-norrkoping-och-soderkoping, navirum-energi-orebro-kumla-och-hallsberg) är borttagna ur remaining_information_requests efter mekanisk kontroll att deras medlemsscope exakt täcktes av dessa nio rader och att ingen kvarvarande tariff refererade dem. De nio radernas investigation.request_ids försvinner samtidigt med hela investigation-blocket.",
         "De kända issue-texterna om overifierad månadsperiodisering är bevarade oförändrade i sak på alla nio — de blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg, inte den nu aktiverade årsprodukten. Ingen tariff utöver dessa nio bytte status i denna revision."
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "revision": "0.1.13",
+      "changes": [
+        "Batch 3b lokal implementation (handoff 2026-09-13-001, godkänd av Codex, beredskapskontroll 2026-09-13-035): åtta nya bas-/delvärmevariantrader materialiserade i katalogen (<bas-id>--bas-delvarme) för E.ON Järfälla, E.ON Malmö/Burlöv, Navirum Norrköping/Söderköping och Navirum Örebro/Kumla/Hallsberg, vardera med explicit variant_of mot sin fullvärmebasrad. Varje variant duplicerar basens prissättande fält (energi, kapacitetsband, adjustments, medlem, kundscope, prisår) och ändrar bara capacity.billing_basis_method till leverantörens redan beräknade 36-månadersregel (medelvärdet av de tre högsta dygnsmedeleffekterna senaste 36 månaderna inkl. fakturamånaden), sätter contract_required:true och en ren lokal investigation.status=\"utreds\"-implementationsspärr utan extern informationsförfrågan. godkanda(katalog) förblir exakt 25; dispositionen kvarstår 25/39/28 av 92 under implementationsfasen.",
+        "Källproveniens: fyra nya officiella 2026-källposter (03_1, 04_1, 25_1, 26_1) hämtade direkt från eon.se 2026-09-13 med verklig SHA-256, en per E.ON/Navirum-nät. Berörda medlemmars source_ids samt samtliga åtta bastariffers OCH åtta varianters source_refs pekar nu på sidorna 1-2 av rätt _1-källa. De historiska _0-källorna (2025 års dokument) bevaras oförändrade som proveniens för tidigare granskning.",
+        "De åtta befintliga bastarifferna fick sin network_or_product-etikett kompletterad med \" – Fullvärme\" för att vara entydig mot den nya \" – Bas-/delvärme\"-variantetiketten i samma leverantörslista. Inga bastariff-ID:n, priser eller policyvärden ändrades.",
+        "coverage_summary.tariffs höjd från 78 till 86 (78 bastariffer + 8 materialiserade varianter) — en levande omfattningssiffra, skild från projektets frusna kontrollmängd 92 som är oförändrad."
       ]
     }
   ],
