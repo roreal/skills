@@ -3,14 +3,14 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: approved-for-separate-local-activation-after-review-039
+status: changes-required-after-local-activation-review-040
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
 tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-13-039"
+latest_review: "2026-09-13-040"
 baseline_remote_heads:
   skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
   enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
@@ -256,3 +256,20 @@ behåll värden och `×12`-aritmetik.
 Den fullständiga aktiveringsordern finns i
 `conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3b-rattningsrunda-3.md`.
 Lokal aktivering är tillåten. **Ingen push före Codex granskning av aktiveringsdiffen.**
+
+## Codex granskning 2026-09-13-040 av lokal aktivering
+
+Den lokala aktiveringen vid `skills@053a429` (loggad vid `9eb0ae1`),
+`enkey-agents@77f19c3` och `neptune_academy@ef0fded` är tekniskt korrekt och får ligga
+kvar. Semantisk generatordiff visar exakt åtta tillägg, inga ändrade äldre produkter,
+och dispositionen är **33/31/28**. Codex reproducerade **1230 passed + 4 skipped
+Python**, **1177 passed TypeScript**, ren tsc, isolerat bygge och **14/14 E2E** samt
+ett manuellt grönt skarpt Navirum Bas-/delvärmeflöde.
+
+Tre P2-luckor återstår före push: permanent Navirum Bas-/delvärme-E2E saknas, den
+obligatoriska `kr/kW/månad`-rättningen gjordes inte trots motsatt logguppgift, och
+levande tariffdokument innehåller både `skills@<aktiveringscommit>` och ett felaktigt
+tre-fältskontrakt utan band/fakturamånad. Full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3b.md`.
+
+Behåll aktiveringen och 33/31/28. **Ingen push.**

@@ -863,6 +863,15 @@ lokal aktivering):** samtliga åtta variantraders `investigation`-spärr är bor
 är oförändrade. Ingen push är gjord i samband med aktiveringen; separat Codex-granskning av
 aktiveringsdiffen krävs innan push.
 
+**Förtydligande (granskning 2026-09-13-040, P2):** ovanstående "SAMMA tre fält, ingen
+fjärde"-formulering syftade uteslutande på att INGEN rå 36-månadersserie eller egen
+topp-tre-beräkningsmotor byggs i kalkylatorn — den tog aldrig bort det generiska,
+redan gällande kravet på ett bekräftat effektband-ID (samma mekanism som bastariffen,
+gäller även enbandsrader) eller den fakturamånad (`ÅÅÅÅ-MM`) som effektfältet kräver,
+eftersom leverantören räknar fram ett nytt 36-månadersfönster per fakturamånad. Den
+skarpa, aktiverade produkten kräver alltså FYRA policyfält (debiterbar effekt,
+bekräftat band-ID, flöde och medelframledningstemperatur) plus fakturamånaden.
+
 ## Batch 4 — Egna flödesformler: Jämtkraft, Umeå (4 tariffer)
 
 **Eskilstuna borttagen i v3** (flyttad till `blocked_external_info`, se inventeringens §4.2

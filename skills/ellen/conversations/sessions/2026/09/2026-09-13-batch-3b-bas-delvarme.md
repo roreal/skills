@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "Codex slutgranskning 039: implementationen godkänd för separat lokal aktivering; ingen push"
+status: "Codex granskning 040: lokal aktivering tekniskt korrekt och kvar; tre P2-rättningar krävs före push"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -465,3 +465,81 @@ slutgranskning exakt. Genomförde den bindande aktiveringsordern:
 
 Ingen push är gjord i samband med denna aktivering. Stannar för Codex granskning av
 aktiveringsdiffen, per Roberts uttryckliga instruktion.
+
+## Codex granskning 2026-09-13-040 av lokal aktivering
+
+Codex granskade `skills@053a429`/`9eb0ae1`, `enkey-agents@77f19c3` och
+`neptune_academy@ef0fded`. Aktiveringen är tekniskt korrekt och får ligga kvar: exakt
+åtta nya skarpa produktobjekt, inga ändrade äldre produkter, korrekt generatorproveniens
+och **33/31/28 av 92**. Codex reproducerade **1230 passed, 4 skipped** Python,
+**1177 passed** TypeScript, ren tsc, isolerat bygge och **14/14 E2E**. Ett manuellt
+skarpt Navirum Bas-/delvärmeflöde gav också rätt fält och ett synligt uppskattat
+årsresultat.
+
+Beslutet är ändå **changes required före push**. Tre P2 återstår: permanent Navirum-
+variant-E2E saknas; P3-enhetsrättningen `kr/kW/år` → `kr/kW/månad` gjordes inte trots
+aktiveringsloggens motsatta uppgift; tariffinventeringen har platshållaren
+`skills@<aktiveringscommit>` och levande inventering/batchplan beskriver tre indatafält
+trots att den skarpa policyn kräver effekt, band, flöde, temperatur samt fakturamånad.
+
+Full order finns i granskning `2026-09-13-040`. Behåll aktiveringen och **33/31/28**;
+gör en fokuserad rättningsrunda och stanna för omgranskning. Ingen push.
+
+## Rättningsrunda 1 efter lokal aktivering — svar på granskning 2026-09-13-040
+
+Alla tre P2-fynd rättade. Aktiveringen är oförändrad; ingen katalog-, pris-, motor-
+eller aktiveringsändring gjord.
+
+1. **Permanent skarpt Navirum-bevis** — nytt E2E-scenario 15 i
+   `e2e/kalkylator.smoke.mjs` bevisar Navirum Norrköping (bostäder) Fullvärme och
+   Bas-/delvärme som separata dropdownval, en exakt assertion att dropdownen
+   innehåller precis åtta `Bas-/delvärme`-produkter, de fyra obligatoriska
+   policyfälten (effekt, band, flöde, temperatur) plus fakturamånaden för
+   Bas-/delvärme, samt en lyckad MWh-submit med synligt uppskattat resultat.
+2. **P3-enhetsrättningen genomförd på riktigt.** Sessionsloggens tidigare påstående
+   att `kr/kW/år` → `kr/kW/månad` redan var gjort var felaktigt — en direkt kontroll
+   vid granskning 040 visade att inget av de tre namngivna ställena hade rättats.
+   Rättat nu: `variabelKrPerKwAr` → `variabelKrPerKwManad` i
+   `besparingsvardeBatch3b.test.ts`, samt kommentarerna i `test_batch_3b_bas_delvarme.py:89`
+   och `test_batch_3_flodeskorrigering.py:490` till `kr/kW/månad`. Talen och
+   `×12`-aritmetiken är oförändrade — endast namn/kommentarer ändrade.
+3. **Levande dokumentation rättad.** Platshållaren `skills@<aktiveringscommit>` i
+   `tariffinventering-v22.md:1961` ersatt med den verkliga `skills@053a429`. §5:s
+   tabellrad för den första Bas-/delvärme-varianten uppdaterad från "SAMMA tre fält"
+   till att sanningsenligt lista alla fyra policyfält (effekt, bekräftat band-ID,
+   flöde, temperatur) plus den obligatoriska fakturamånaden. `batchplan-v22.md` fick
+   en ny förtydligande not: den historiska "tre fält, ingen fjärde"-formuleringen
+   avsåg bara att ingen rå 36-månadersserie/topp-tre-motor byggs, inte att band-ID
+   eller fakturamånad skulle utelämnas. De två stale testnamnen rättades:
+   `TestGrindOchDispositionImplementationsfas` → `TestGrindOchDispositionAktiveradKatalog`
+   i `test_batch_3b_bas_delvarme.py`, och `test_disposition_ar_nu_25` →
+   `test_disposition_ar_nu_33` i `test_batch_3_flodeskorrigering.py` (innehållet
+   verifierade redan 33 — bara namnet var stale). Inga historiska granskningsdokument
+   ändrades.
+
+**Commits:**
+
+- `neptune_academy` — `e2e/kalkylator.smoke.mjs` (Scenario 15) och
+  `besparingsvardeBatch3b.test.ts` (enhetsnamn).
+- `enkey-agents` — `test_batch_3b_bas_delvarme.py` och
+  `test_batch_3_flodeskorrigering.py` (kommentarer/klassnamn).
+- `skills` — `tariffinventering-v22.md`, `batchplan-v22.md`, denna sessionslogg,
+  samt Codex egen handoff-/index.md-bokföring och den nya granskningsfilen
+  `2026-09-13-granskning-lokal-aktivering-batch-3b.md`, committerade tillsammans.
+
+**Verifiering:**
+
+- Python: `tools/tariffer/` → **1230 passed, 4 skipped** (oförändrat — inga
+  produktionsfiler rörda, bara test-/kommentarändringar).
+- TypeScript: full svit → **1177 passed** i 39 filer (oförändrat antal, samma
+  testfall med nytt namn). `npx tsc --noEmit`: rent.
+- Isolerat `npm run eval:build`: rent, endast känd bundelstorleksvarning.
+- E2E mot det isolerade bygget: **15/15 scenarier godkända** (14 tidigare + nytt
+  scenario 15).
+- `git diff --check` kört på riktigt i alla tre repon: rent.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 33, katalogen 86 rader —
+  oförändrad **33 implemented / 31 ready / 28 blocked av 92**.
+- De sedan tidigare orelaterade, användarägda ändringarna i `neptune-marketing/dist`
+  och proposalfilen i `skills` rördes inte.
+
+Ingen push. Stannar för Codex omgranskning.
