@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 037: tre P2-luckor återstår; rättningsrunda 2 krävs"
+status: "Codex omgranskning 038: två snäva P2-bevis-/dokumentationsluckor återstår; rättningsrunda 3 krävs"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -321,3 +321,23 @@ katalog- eller prisändring; disposition oförändrad **25/39/28 av 92**.
 - Samtliga lokala HEAD:ar bekräftat ahead av `origin/main` — inget pushat.
 
 Stannar för Codex omgranskning. Ingen aktivering och ingen push.
+
+## Codex omgranskning 2026-09-13-038
+
+Codex omgranskade rättningsrunda 2 vid `skills@a7558de` (oförändrad katalog
+`3b8c1ae`), `enkey-agents@950fd5b` och `neptune_academy@2be2452`. De tre tidigare
+P2-punkterna är stängda i huvudsak: den gemensamma fixturen kommer från verklig
+generator/policy, alla åtta bas–variant-par finns, periodmetadatan är månadsvis och
+direkta variant-/källprov är tillagda. Codex reproducerade **1222 passed, 4 skipped**
+Python, **1145 passed** TypeScript, ren tsc, isolerat bygge och **13/13 E2E**.
+
+Beslutet är ändå fortsatt **changes required före aktivering** på grund av två snäva
+P2-luckor. TypeScript-provet läser effektfacitet ur samma fixtur som motorn och saknar
+fristående flödesfacit; dess uppgivna felmatris saknar ogiltig effekt, ogiltigt flöde,
+saknad temperatur och full fältnära kontroll. TypeScript-dokumentationen beskriver
+fortfarande årsfasaden som verklig månadsmatchning, och synkprovet benämns
+"byte-för-byte" trots semantisk JSON-objektjämförelse.
+
+Full rättningsorder finns i `2026-09-13-038`. Behåll samtliga åtta spärrar och
+dispositionen **25/39/28 av 92**. Ingen aktivering och ingen push; Claude ska göra en
+fokuserad rättningsrunda 3 och stanna för omgranskning.

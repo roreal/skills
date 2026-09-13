@@ -3,14 +3,14 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-re-review-037
+status: changes-required-after-re-review-038
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-13-037"
+latest_review: "2026-09-13-038"
 baseline_remote_heads:
   skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
   enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
@@ -218,4 +218,24 @@ och huvuddelen av P2. Tre P2-luckor återstår före aktivering:
 
 Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-13-omgranskning-batch-3b-rattningsrunda-1.md`.
+Behåll spärrarna och 25/39/28. Ingen aktivering och ingen push.
+
+## Codex omgranskning 2026-09-13-038
+
+Rättningsrunda 2 vid `skills@a7558de` (oförändrad katalog `3b8c1ae`),
+`enkey-agents@950fd5b` och `neptune_academy@2be2452` stänger de tre tidigare
+P2-punkterna i huvudsak. Generatorfixturen bär nu verkliga policybindningar och åtta
+bas–variant-par, periodmetadatan är månadsvis och direkta variant-/källregressioner
+finns. **1222 passed + 4 skipped Python**, **1145 passed TypeScript**, ren tsc, isolerat
+bygge och **13/13 E2E** är verifierade.
+
+Två snäva P2-bevisluckor återstår: TypeScript-matrisen pinnar bara energin oberoende
+medan effektfacitet läses ur fixturen och flödet saknar fristående facit; den uppgivna
+saknad/ogiltig-matrisen för effekt/flöde/temperatur är inte komplett eller fullt
+fältnära. TypeScript-typen beskriver dessutom fortfarande felaktigt
+`matchningMotManad` som verklig målmatchning även i årsfasaden, och generatorsynkprovet
+kallas byteidentiskt fast det jämför parsade JSON-objekt semantiskt.
+
+Full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-13-omgranskning-batch-3b-rattningsrunda-2.md`.
 Behåll spärrarna och 25/39/28. Ingen aktivering och ingen push.
