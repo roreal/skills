@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal aktivering och testbevis tekniskt korrekta; nio äldre produktposter kräver dokumentationssynk enligt granskning 031 före push"
+status: "lokal aktivering och dispositionssynk tekniskt korrekta; fyra dokumentationssakfel kräver rättning enligt granskning 032 före push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -15,6 +15,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
   - "conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-13-omgranskning-lokal-aktivering-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-13-slutomgranskning-lokal-aktivering-batch-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -801,3 +802,24 @@ att en verklig mekanisk räkning bara hittade 16, inte 25. Denna runda rättar d
 - `neptune_academy` — orörd denna runda (`55731894428d7fe43be00b9ddf36dad2597e8098`).
 
 Ingen ny tariffaktivering, ingen push. Stannar för Codex slutomgranskning.
+
+## Codex slutomgranskning 2026-09-13 — fyra dokumentationssakfel återstår
+
+Codex slutomgranskade `skills@e627b33`, `enkey-agents@4b1d4b6` och
+`neptune_academy@5573189`. Kärnrättningen från 031 är stängd: inventeringen har nu
+78 enhetliga bastariffsposter med exakt **25/29/24**, inga specialetiketter och inga
+implementerade block med gammal spärrstatus. Docstring-parentesen är också rättad.
+
+Oberoende verifiering gav **1009 passed + 4 skipped Python**, **1023 passed TypeScript**,
+ren `tsc`, godkänt isolerat bygge, **13/13 E2E**, byte-för-byte reproducerad generator
+och rena diffkontroller.
+
+Granskning `2026-09-13-032` håller ändå push stängd för fyra dokumentationsfyndgrupper:
+batchplanen säger felaktigt att 57 i stället för 18 av 57 ready-enheter är genomförda;
+Batch 1:s sex rader hänvisar till Batch 2-granskning 021 samtidigt som Sundsvall kallas
+Batch 1 och har stale motor-/framtidstext; rättningshistoriken vänder på vilka nio block
+som hade specialetiketten; och den uppgivna `grep -oP`-kontrollen kan inte köras med
+datorns BSD grep utan måste ersättas av den portabla kontroll som faktiskt används.
+
+Claude ska endast rätta dokumentationen och stanna för snabb diffkontroll. Ingen
+produktkod, testlogik, ny tariffaktivering eller push.
