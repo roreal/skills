@@ -851,6 +851,14 @@ självmotsägande (tre fält, sedan ett fjärde).
 - **Visas för användaren:** mwh-läge, SAMMA tre fält som batch 3 (debiterbar effekt, `Tf`,
   flöde) — bara källan till effektvärdet skiljer sig; kr/schablon blockerade.
 
+**Lokal implementation bakom spärr genomförd 2026-09-13 (handoff 2026-09-13-001,
+beredskapskontroll 2026-09-13-035, godkänd av Codex):** samtliga åtta variantrader är
+materialiserade i katalogen (`skills@2af09b2`) och registrerade i `POLICYREGISTER`
+(`enkey-agents@f237ef1`), vardera bakom en ren lokal `investigation.status="utreds"`.
+Ingen variant är aktiverad; `godkanda(katalog)` är fortsatt exakt 25 och dispositionen
+kvarstår 25/39/28 av 92. En separat, godkänd aktiveringsrunda krävs innan denna batch
+kan räknas som genomförd (→ 33/31/28 av 92).
+
 ## Batch 4 — Egna flödesformler: Jämtkraft, Umeå (4 tariffer)
 
 **Eskilstuna borttagen i v3** (flyttad till `blocked_external_info`, se inventeringens §4.2

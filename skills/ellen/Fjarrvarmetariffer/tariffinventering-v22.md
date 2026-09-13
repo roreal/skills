@@ -1948,6 +1948,20 @@ aldrig `exact` — samma klassificering som huvudfallet.
 — flyttad från blockerad), 4 `blocked_external_info` (Södertörn, Kraftringen Brunnshög,
 Tekniska Verken Linköping lågtemperatur, Finspångs spetsvärmetillägg).
 
+**Batch 3b — lokal implementation bakom spärr genomförd 2026-09-13 (handoff
+2026-09-13-001, beredskapskontroll 2026-09-13-035, katalogcommit
+`skills@2af09b2`):** samtliga åtta E.ON-/Navirum-varianter ovan är nu materialiserade
+som riktiga, räknade katalograder (`<bas-id>--bas-delvarme`) med explicit `variant_of`
+mot sin fullvärmebasrad, egen `Tariffpolicy` i `POLICYREGISTER`, och ett generiskt
+`_stabilt_tariff_id`-stöd i generatorn. Källhänvisningen är samtidigt uppdaterad från
+`_0` (2025 års dokument) till en ny, officiell 2026-källpost `_1` per nät (03_1/04_1/
+25_1/26_1, hämtad direkt från eon.se 2026-09-13). Dispositionen ovan (`ready_to_implement`)
+är MEDVETET oförändrad — implementationen aktiverar ingenting; `godkanda(katalog)`
+är fortsatt exakt 25 och katalogen har växt från 78 till 86 poster (78 bastariffer + 8
+materialiserade varianter, se `Frusen kontrollmängd`-avsnittet för att detta inte rör
+kontrollmängden 92). En separat, godkänd aktiveringsrunda krävs innan disposition
+flyttas till 33/31/28 av 92.
+
 ## 6. Sammansatt aktiveringspreflight — samtliga 45 `ready`-ID:n (granskning 2026-09-08-005/-006/-007, P1)
 
 En bar `grind()`-körning bevisar bara STEG 2 av en riktig aktivering. `grind()` har inget

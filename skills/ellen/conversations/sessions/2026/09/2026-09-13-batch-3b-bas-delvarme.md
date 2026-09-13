@@ -2,34 +2,127 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "aktiv — lokal implementation godkänd, ingen aktivering eller push"
-topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter med 36-månaders leverantörseffekt"
+status: "implementation levererad lokalt, stannar för Codex granskning"
+topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
   - "conversations/reviews/2026/09/2026-09-13-beredskapskontroll-batch-3b.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3b"
 ---
 
-# Session: Batch 3b — E.ON/Navirum bas-/delvärme
+# Session: Batch 3b — E.ON/Navirums bas-/delvärmevarianter
 
-## Startbeslut 2026-09-13
+## Uppdrag
 
-Robert meddelade att Batch 3 är slutförd och pushad samt att Claude väntar på nästa
-handoff. Codex verifierade samtliga tre `origin/main` mot lokal HEAD:
+Robert gav explicit klartecken ("Claude kan börja Batch 3b nu") för att starta
+implementationen enligt Codex auktoritativa handoff `2026-09-13-001` och
+beredskapskontroll `2026-09-13-035`. Ingen aktivering och ingen push i denna
+etapp — samtliga åtta varianter ligger bakom en ren lokal
+`investigation.status="utreds"`-implementationsspärr.
 
-- `skills@19c68fe95e52492b58cc24965ef39a1083a655c8`
-- `enkey-agents@4b1d4b6d78c010a4722f54df833ab7903431e9dc`
-- `neptune_academy@55731894428d7fe43be00b9ddf36dad2597e8098`
+## Implementation
 
-Batch 3 är därmed stängd vid **25 implemented / 39 ready / 28 blocked av 92**.
+1. **Katalog** (`skills@2af09b2`): åtta nya variantrader
+   (`<bas-id>--bas-delvarme`) för E.ON Järfälla (bostäder/övriga), E.ON
+   Malmö/Burlöv (bostäder/övriga), Navirum Norrköping/Söderköping
+   (bostäder/övriga) och Navirum Örebro/Kumla/Hallsberg (bostäder/övriga).
+   Varje variant bär explicit `variant_of` mot sin fullvärmebasrad och
+   duplicerar basens prissättande fält byte-/värdemässigt (energi,
+   kapacitetsband, `adjustments`, medlem, kundscope, prisår) — enda
+   avsedda skillnaden är `capacity.billing_basis_method`, som nu beskriver
+   leverantörens redan beräknade 36-månadersregel (medelvärdet av de tre
+   högsta dygnsmedeleffekterna senaste 36 månaderna inkl. fakturamånaden).
+   `contract_required:true` och en ren implementationsspärr utan extern
+   informationsförfrågan på alla åtta. De åtta befintliga bastarifferna
+   fick sin `network_or_product`-etikett kompletterad med " – Fullvärme"
+   för att vara entydig mot den nya " – Bas-/delvärme"-variantetiketten i
+   samma leverantörslista — inga bastariff-ID:n eller priser ändrades.
+2. **Källproveniens**: fyra nya officiella 2026-källposter (`03_1`, `04_1`,
+   `25_1`, `26_1`) hämtade direkt från eon.se 2026-09-13 via en riktig
+   webbläsarsession (Cloudflare-skyddade PDF:er som `curl` inte kunde
+   hämta), med verklig SHA-256 beräknad i sidans egen kontext
+   (`crypto.subtle.digest`). Berörda medlemmars `source_ids` samt
+   samtliga åtta bastariffers OCH åtta varianters `source_refs` pekar nu
+   på sidorna 1–2 av rätt `_1`-källa. De historiska `_0`-källorna (2025
+   års dokument) är oförändrade som proveniens.
+3. **Generatorns stabila variant-ID** (`enkey-agents@f237ef1`):
+   `_stabilt_tariff_id` utökad generiskt så att årtalssuffixet strippas
+   mitt i strängen för en variant (`...-2026--bas-delvarme` blir
+   `...--bas-delvarme`), inte bara vid slutet. En bas och dess variant kan
+   därför aldrig kollidera eller tappa suffixet; regeln beror bara på
+   tariffens eget `id`/`price_year`, inte på katalogens array-ordning.
+4. **`variant_of`-validering** (`enkey-agents@f237ef1`): ny generisk
+   `valider_variant_lankar(katalog)`, anropad från `godkanda()` innan
+   grinden filtrerar något. En tariff med `variant_of` måste peka på en
+   existerande, icke-kedjad förälder med samma `member_id`/`price_year` —
+   annars kastar den fail-closed. Föräldern härleds aldrig ur
+   ID-suffixet.
+5. **Tariffpolicyer** (`enkey-agents@f237ef1`): åtta nya
+   `Tariffpolicy`-poster via en parametriserad
+   `_batch3b_variant_policy`-byggare. Samma golvfria flödeskorrigering,
+   flöde/temperatur-krav och obligatoriska bekräftade band-ID som
+   respektive bastariff — bara kapacitetskravets källa/hjälptext skiljer
+   (`_batch3b_kapacitet_krav`: `supplier_value`, `rullande=True`, ingen
+   egen 36-månaders tidsserie eller topp-tre-beräkning i kalkylatorn).
+6. **Generator/proveniens** (`neptune_academy@6ce65e8`): regenererade
+   `tariffer.generated.ts` mot `skills@2af09b2` med sann
+   sha256/commit-proveniens. Diffen ändrar bara proveniensraden och de
+   åtta befintliga produkternas etikett (" – Fullvärme"-suffixet) — ingen
+   `--bas-delvarme`-post finns i den skarpa payloaden ännu; produktantal,
+   ID:n och alla pris-/policyvärden är oförändrade.
+7. **Komponentprov** (`neptune_academy@6ce65e8`): nytt
+   `KalkylatorPageBatch3b.test.tsx` med injicerad Fullvärme- och
+   Bas-/delvärme-kandidat: exakt de fyra policyfälten, källnära
+   36-månadershjälptext respektive den befintliga fullvärmetexten, normal
+   MWh-submit till ett synligt snapshot-resultat, och ett produktbyte
+   mellan de två som INTE tyst återanvänder effekt/band/period under fel
+   policynyckel.
+8. **E2E-etiketträttning** (`neptune_academy@6ce65e8`): de befintliga
+   E2E-scenarierna 12/13 (E.ON Järfälla, Navirum Norrköping) valde
+   tidigare leverantör via en exakt etikettsträng — rättad till den nya,
+   korrekta " – Fullvärme"-formen. Oförändrad testlogik.
+9. **Dokumentation** (`skills@2af09b2` + separat commit): `batchplan-v22.md`
+   och `tariffinventering-v22.md` §5 fick en implementationsstatusnot som
+   beskriver det faktiska läget bakom spärren, UTAN att flytta de åtta
+   `ready_to_implement`-dispositionerna till `implemented` — det sker
+   först i en separat, godkänd aktiveringsrunda.
 
-Codex gjorde därefter beredskapskontroll `2026-09-13-035` och öppnade denna separata
-Batch 3b-session. Claude får implementera lokalt exakt de åtta källkända
-`--bas-delvarme`-varianterna enligt handoff `2026-09-13-001`. Leverantörens redan
-beräknade debiterbara månadseffekt används som snapshot; ingen egen 36-månadersmotor
-byggs.
+## Verifiering
 
-Implementationen ska materialisera varianterna bakom en lokal spärr, rätta 2026-
-källproveniens, skapa policyer och testbevis samt behålla **25/39/28**. Aktivering,
-skarpa nya produktposter och push är inte godkända. Claude ska commitera fokuserat
-lokalt och stanna för Codex granskning.
+- **Python**: 1145 passed, 4 skipped (1009 baslinje + 136 nya
+  Batch 3b-tester i `test_batch_3b_bas_delvarme.py`), 0 failed.
+  `git diff --check` rent.
+- **TypeScript**: 1028 passed i 38 filer (1023 baslinje + 5 nya), 0
+  failed/0 skippade. `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd
+  bundelstorleksvarning.
+- **E2E** mot det isolerade bygget: samtliga **13/13** scenarier godkända,
+  inklusive de rättade scenario 12/13 (E.ON/Navirum).
+- **Mekanisk kontroll**: `godkanda(katalog)` == 25 (oförändrat). Katalogen
+  har 86 poster (78 bastariffer + 8 materialiserade varianter). Ingen av
+  de åtta variantraderna finns bland `godkanda()`s resultat eller i den
+  skarpa genererade payloaden. Dispositionen är oförändrad **25/39/28 av
+  92**.
+- **Isolerad katalogkopia** med exakt Batch 3b-spärrarna rensade i
+  minnet genererar exakt åtta nya, unika, årsoberoende produkt-ID:n och
+  totalt 33 katalogprodukter (35 med de två leverantörsfilerna) — den
+  riktiga, incheckade katalogen och payloaden rörs inte av det testet.
+- Golden: vid samma MWh/effekt/band/flöde/temperatur ger variant och
+  bastariff identiska kostnadsdelar (fast/energi/justering) — oberoende
+  handräknat facit, samma katalogpriser som Batch 3:s redan verifierade
+  facit.
+
+## Commits (lokalt, ingen push)
+
+- `skills@2af09b2` — katalogmaterialisering av de åtta varianterna,
+  källproveniens, Fullvärme-etiketter, `coverage_summary`.
+- `enkey-agents@f237ef1` — stabilt variant-ID, `variant_of`-validering,
+  åtta policyer, nya/rättade tester.
+- `neptune_academy@6ce65e8` — regenererad `tariffer.generated.ts`, nytt
+  komponentprov, E2E-etiketträttning.
+- `skills` (dokumentationscommit) — implementationsstatusnot i
+  `batchplan-v22.md`/`tariffinventering-v22.md` §5, denna sessionsfil,
+  `index.md`.
+
+Ingen aktivering, ingen push. Stannar för Codex granskning av hela
+implementationen.
