@@ -1305,11 +1305,13 @@ Av de 57 planerade batchade raderna har hittills **18** genomförts och lokalt a
 - Batch 2: 1 rad.
 - Batch 3: 9 rader.
 
-De ÅTERSTÅENDE **39** planerade batchade raderna (Batch 3b, 4, 5a, 5b, 5c, 6, 7, samt
-Vattenfall om den schemaläggs) är fortsatt inte påbörjade. Den AKTUELLA dispositionen är
-**25 implementerade / 39 redo / 28 blockerade av 92**, mekaniskt räknad i
-`tariffinventering-v22.md` §8 — läs alltid den tabellen för nuläget, inte raden "Redan
-implementerade | 7" ovan eller "57 batchade" som om alla redan var klara.
+De ÅTERSTÅENDE **39** planerade batchade raderna (Batch 3b: 8, 4: 4, 5a: 8, 5b: 7, 5c: 8,
+6: 3, 7: 1) är fortsatt inte påbörjade. Vattenfalls 12 tariffer utgör en egen, separat
+Batch 8, uttryckligen ej schemalagd, och ingår i de **24 blockerade** bastarifferna, inte
+i denna 39-summa. Den AKTUELLA dispositionen är **25 implementerade / 39 redo / 28
+blockerade av 92**, mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den
+tabellen för nuläget, inte raden "Redan implementerade | 7" ovan eller "57 batchade" som
+om alla redan var klara.
 
 **RÄTTAT P2 (granskning `2026-09-08-007`):** den tidigare additiva uttrycksraden
 (`6+1+9+8+4+8+7+8+3 = 54`) hade fel siffror OCH summerade fel — batch 7 saknades helt ur

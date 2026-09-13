@@ -756,10 +756,12 @@ aktiveringen ska ligga kvar. Ingen ny tariffaktivering och ingen push.
 ## Rättningsrunda 2 — svar på granskning 2026-09-13-031
 
 **Rättelse av föregående rundas påstående:** rättningsrunda 1 (ovan) sade att dokumentet
-"mekaniskt ger 25/29/24 bas" efter dess dokumentationscommit. Det var inte sant — den
-gav de nio Batch 3-raderna fältnamnet `**Disposition (rättad 2026-09-13, Batch
-3-dokumentationsrättning):**` i stället för det enhetliga `**Disposition:**`, vilket gjorde
-att en verklig mekanisk räkning bara hittade 16, inte 25. Denna runda rättar det faktiskt.
+"mekaniskt ger 25/29/24 bas" efter dess dokumentationscommit. Det var inte sant — vid
+`skills@cffbc5e` hade de nio ÄLDRE Lidköping-/Batch 1-/Batch 2-raderna fått fältnamnet
+`**Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):**` i stället för det
+enhetliga `**Disposition:**` (Batch 3:s egna nio rader hade redan det enhetliga
+fältnamnet), vilket gjorde att en verklig mekanisk räkning bara hittade 16, inte 25.
+Denna runda rättar det faktiskt.
 
 1. **P1 — nio ÄLDRE, tidigare aktiverade block synkade (inte Batch 3:s egna).** Batch 3:s
    nio rader hade REDAN det enhetliga fältnamnet `- **Disposition:**` och synkat innehåll
@@ -912,3 +914,39 @@ Vattenfall, vars 12 tariffer uttryckligen ligger bland de 24 blockerade bastarif
 Claude ska rätta endast dessa två meningar, köra den portabla räkningen och
 `git diff --check`, committa lokalt och stanna. Ingen produktkod, full testkörning, ny
 aktivering eller push.
+
+## Rättningsrunda 4 — svar på granskning 2026-09-13-033
+
+Rättade exakt de två meningarna Codex pekade ut, inget annat.
+
+1. **Rättningsrunda 2:s inledningsstycke rättat.** Det gamla stycket sade felaktigt att
+   rättningsrunda 1 gav Batch 3:s nio rader specialetiketten
+   `**Disposition (rättad ...):**`. I själva verket var det de nio ÄLDRE
+   Lidköping-/Batch 1-/Batch 2-raderna som fick etiketten vid `skills@cffbc5e`; Batch 3:s
+   egna nio hade redan det enhetliga fältnamnet. Stycket skriver nu detta korrekt, i linje
+   med punkt 1 direkt under.
+2. **Batchplanens Vattenfall-mening rättad.** `batchplan-v22.md` sade att de 39
+   återstående ready-raderna omfattade "samt Vattenfall om den schemaläggs". Summan 39 är
+   exakt Batch 3b (8) + 4 (4) + 5a (8) + 5b (7) + 5c (8) + 6 (3) + 7 (1). Vattenfalls 12
+   tariffer är en egen Batch 8, ej schemalagd, och ingår i de 24 blockerade
+   bastarifferna. Meningen skriver nu ut delsummorna och placerar Vattenfall uttryckligen
+   bland de 24 blockerade, inte bland de 39 redo.
+
+### Verifiering
+
+- Portabel dispositionsräkning (`grep -cE`/`sed`/`sort`/`uniq -c` mot
+  `^\- \*\*Disposition:\*\*` i `tariffinventering-v22.md`): **78 rader totalt, 25
+  implemented_source_verified_annual / 29 ready_to_implement / 24 blocked_external_info**
+  — oförändrat, matchar §8 och `godkanda(katalog)`==25.
+- `git diff --check --cached` (skills, de två ändrade filerna): rent, inget utfall.
+- Inga produkt- eller testfiler ändrade; fullsviter kördes inte om enligt granskning
+  033:s uttryckliga instruktion.
+
+### Commits (lokalt, ingen push)
+
+- `skills` — rättning av rättningsrunda 2:s inledningsstycke i sessionsloggen samt
+  Vattenfall-meningen i `Fjarrvarmetariffer/batchplan-v22.md` (två textfel från
+  granskning 033).
+- `enkey-agents` och `neptune_academy` — orörda denna runda.
+
+Ingen ny tariffaktivering, ingen push. Stannar för Codex slutliga push-godkännande.
