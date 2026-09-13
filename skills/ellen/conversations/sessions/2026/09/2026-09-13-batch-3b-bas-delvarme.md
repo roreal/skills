@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 1 levererad efter granskning 036; väntar på Codex omgranskning"
+status: "Codex omgranskning 037: tre P2-luckor återstår; rättningsrunda 2 krävs"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -236,3 +236,29 @@ beräkningsvärden ändrade.
   artefakt.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-13-037
+
+Codex omgranskade rättningsrunda 1 vid `skills@64fc2d1` (katalog `3b8c1ae`),
+`enkey-agents@75ce1ae` och `neptune_academy@babeca2`. De tre tidigare P1-fynden är
+funktionellt stängda: fakturamånad krävs, fullvärmekällorna pekar på `_1` och
+produktbyte rensar `kapacitetKw`.
+
+Beslutet är ändå **changes required före aktivering** på grund av tre kvarvarande P2:
+
+1. TypeScript-goldenprovet använder egenkonstruerade bindningsnycklar som inte matchar
+   generatorns verkliga policyregister, saknar bastariffer/variant–bas-jämförelse och
+   täcker inte hela felmatrisen.
+2. Det fakturamånadsbundna värdet har fortfarande `matupplosning="arsvis"`, och
+   `matchning_mot_manad`-dokumentationen behöver skilja formatkravet i årsfasaden från
+   verklig månadsmatchning i månadsfasaden.
+3. Direkta regressionsprov saknas för variant-ID-dublett/feltyp och för paritet mellan
+   katalogens `source_refs` och bas-/variantpolicyernas `_1`-källor.
+
+Codex reproducerade **1202 passed, 4 skipped** Python, **1097 passed** TypeScript, ren
+`tsc`, godkänt produktionsbygge och **13/13** E2E. Katalogen står korrekt på 86 poster,
+25 aktiva produkter och 0 aktiva Batch 3b-varianter; dispositionen är fortsatt
+**25/39/28 av 92**. Full rättningsorder finns i granskning `2026-09-13-037`.
+
+Ingen aktivering och ingen push. Claude ska göra en fokuserad rättningsrunda 2 och
+stanna för ny omgranskning.
