@@ -447,3 +447,63 @@ oincheckade testartefaktet.
 
 Fortsatt **16/48/28**, ingen aktivering och ingen push; stanna för Codex
 slutgranskning.
+
+## Rättningsrunda 5 — svar på granskning 2026-09-12-028
+
+Robert gav explicit klartecken ("Claude kan genomföra rättningsrunda 5. Ingen
+aktivering eller push ännu."). Rättade det enda P1-fyndet (språkdrift) plus det
+flaggade testartefaktet, uteslutande i TypeScript/produktkontrakt och en
+Python-testfixture — ingen katalog-, pris-, generator-, spärr- eller
+dispositionsändring.
+
+1. **P1 — språkparitet återställd.** Tog bort den nytillagda annual-formatgrenen
+   (ISO-intervallkontrollen) ur den delade, språkneutrala
+   `resultatkontrakt.ts::harledResultatstatus`. Den behåller nu exakt samma
+   semantik som Python-spegeln: en fri `kalperiodDefinition` kräver bara en
+   icke-tom `observeradPeriod`, taket sätts till `snapshot`. Den striktare
+   ISO-intervallgrinden ligger kvar oförändrad, uteslutande i produktlagrets
+   egen `forkontrolleraPolicyIndata` (som redan gör `beraknaArsprodukt`
+   fail-closed för samma fall). Nytt regressionsprov i
+   `resultatkontrakt.test.ts` gör lagergränsen explicit: den delade
+   statusvalidatorn ger `snapshot/complete` för `observeradPeriod='2026-01'` på
+   ett `kalperiodDefinition`-krav, medan `besparingsvardeBatch3.test.ts`s
+   befintliga prov visar att `beraknaArsprodukt` fortsatt blockerar samma
+   trunkerade värde typat.
+2. **Python-testfixturen rättad.** `_indata_for` i
+   `test_batch_3_flodeskorrigering.py` satte tidigare Kraftringens
+   `observerad_period` till `"2026-01"` — en enda kalendermånad, inte den sanna
+   jan-feb-källan. Rättad till `"2026-01-01/2026-02-28"`. Ingen
+   Python-produktionskod ändrad (Python kräver, och krävde redan, bara
+   icke-tomhet).
+3. **Oincheckat testartefakt hanterat.** `neptune-marketing/test-results/`
+   (ett Vitest/Playwright-körningsartefakt) togs bort och lades till i
+   `neptune-marketing/.gitignore`. De sedan tidigare, orelaterade
+   användarägda ändringarna i `neptune-marketing/dist` rördes inte.
+
+**Commits (lokalt, ingen push):**
+
+- `enkey-agents@ee21b47` — testfixturens period rättad till jan-feb.
+- `neptune_academy@0e13e76` — språkparitet återställd i `harledResultatstatus`,
+  nytt regressionsprov, `.gitignore` uppdaterad, testartefakt borttaget.
+
+**Verifiering:**
+
+- Riktat TypeScript: `resultatkontrakt.test.ts` + `besparingsvardeBatch3.test.ts`
+  → **98 passed**.
+- Full TypeScript-svit: **1005 passed** i 36 filer (1004 tidigare + 1 nytt
+  regressionsprov).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd
+  bundelstorleksvarning.
+- E2E mot det isolerade bygget (`vite preview --outDir dist-eval` +
+  `E2E_BASE_URL`): **10/10** befintliga scenarier godkända.
+- Riktat Python: `test_batch_3_flodeskorrigering.py` → **280 passed**.
+- Full Python-svit: **1009 passed, 4 skipped** — oförändrat (test-only
+  fixturändring, ingen ny testräkning).
+- `git diff --check` kört på riktigt i båda repona: rent.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 16, inga av de nio
+  Batch 3-ID:na ingår. Fortsatt **16/48/28 av 92**.
+- `neptune-marketing/dist` orört genom hela rundan.
+
+Ingen aktivering, ingen borttagning av R06/R10, ingen push. Stannar för Codex
+slutgranskning.
