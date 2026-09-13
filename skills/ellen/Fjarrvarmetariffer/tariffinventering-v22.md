@@ -871,7 +871,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `17_1` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Normalprislista-Karlstads-Energi-AB-20260101.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_KARLSTAD_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -1137,7 +1137,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `30_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Naringsfastighet-Ovik-Energi.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_OVIK_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -1156,7 +1156,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `31_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Partille-Energi-2025.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_PARTILLE_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -1251,7 +1251,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `37_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-SFAB.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_SODERTORN_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -1289,14 +1289,14 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `39_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodellen-2025-Sundsvall.pdf); `web-review-matfors-final` (https://sundsvallenergi.se/paket/foretag---fjarrvarme/2022-08-15-matfors); `web-review-sundsvall-flow` (https://sundsvallenergi.se/images/200.4b4928d418529a086ba40321/1674462914778/Fl%C3%B6despremie.JPG)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 2 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Motorstatus:** Ren månadsprissatt energitariff (`energy.type: "monthly"`, 1 008 SEK/MWh alla tolv månader), ingen kapacitetsdel (`capacity.type: "not_applicable"`) och inga justeringar
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_SUNDSVALL_INDAL_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_batch_2_sundsvall_indal.py`)
 - **UI-status:** valbar i kalkylatorn
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Ingen utöver energimängd (MWh).
-- **Inmatningslägen:** **RÄTTAT P1 (granskning `2026-09-08-006`) — mwh ENDAST; kr och schablon BLOCKERAS.** v5/v6:s "alla tre lägen via legacy-vägen" var strukturellt fel: tariff-ID:t `sundsvall-energi-indal-liden-och-lucksta-2026` finns INTE i `LEGACY_UNDANTAGNA_TARIFF_ID` (verifierat: bara de sex ursprungliga uppgift-7-tarifferna står i den frozensetten) — `bygg_ts_fran_katalog()` hade KASTAT om tariffen byggts på legacy-vägen utan `contract_required`/policy. Den ska i stället kontraktsgatas med samma minimala mönster som Sandviken: `contract_required: true` + en `Tariffpolicy` med `capacity.type: not_applicable` (inga kapacitetsbundna krav). Kontraktsgated betyder MWh-only (§2:s generella regel), samma blockering av kr/schablon som alla andra `ready_to_implement`-rader.
+- **Inmatningslägen:** **mwh ENDAST; kr och schablon BLOCKERAS** (P1, granskning `2026-09-08-006`, genomfört). v5/v6:s "alla tre lägen via legacy-vägen" var strukturellt fel: tariff-ID:t `sundsvall-energi-indal-liden-och-lucksta-2026` finns INTE i `LEGACY_UNDANTAGNA_TARIFF_ID` (verifierat: bara de sex ursprungliga uppgift-7-tarifferna står i den frozensetten) — `bygg_ts_fran_katalog()` hade kastat om tariffen byggts på legacy-vägen utan `contract_required`/policy. Tariffen är kontraktsgated med samma minimala mönster som Sandviken: `contract_required: true` + en `Tariffpolicy` med `capacity.type: not_applicable` (inga kapacitetsbundna krav) är satta. Kontraktsgated betyder MWh-only (§2:s generella regel), samma blockering av kr/schablon som alla andra aktiverade rader.
 - **Tariffamilj/adapter:** Ren energitariff — Sandviken-mönstret (minimal kontraktsgated policy, `capacity.type: not_applicable`), INTE legacy-vägen
 - **Kvarstående arbete:** Inget. `capacity.type: "not_applicable"`, `contract_required: true` och den minimala `Tariffpolicy` är satta; R14 är omscopad till exakt de två fortsatt blockerade Sundsvall-tarifferna (`sundsvall-energi-sundsvall-normal-2026`, `sundsvall-energi-matfors-och-kvissleby-normal-2026`) via `blockerade_tariff_ider`. Kronor, schablon och besparingsprodukten förblir blockerade.
 - **Disposition:** `implemented_source_verified_annual`
@@ -1346,7 +1346,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `telge-attachment` (https://www.telge.se/foretag/fjarrvarme-energi/kundservice/fjarrvarmepris/); `telge-terms` (https://www.prisdialogen.se/wp-content/uploads/2020/11/TN-prislista-fjarrvarme-2025_Foretag.pdf)
 - **Giltighet:** valid_from=2026-01-01, valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_TELGE_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -1422,7 +1422,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `46_0` (https://vanerenergi.se/fjarrvarme/priser-fjarrvarme-foretag-2026, PDF: https://vanerenergi.se/download/18.76bfc4fd19a0f6d5c0785f/1761289418005/Pris%C3%A4ndringsmodellen%20Mariestad%20T%C3%B6reboda%20%202026-2028.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-021`, pushad)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad via Batch 1 (aktiveringsgranskning `2026-09-12-014`, pushad)
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi), i produktion
 - **Kontraktsstatus:** i `POLICYREGISTER` (`_VANERENERGI_POLICY`)
 - **Teststatus:** tariffspecifika automattester finns (`test_familj4_resten_kontrakt.py`)
@@ -4723,15 +4723,18 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 **Rättat 2026-09-13 (Batch 3-dokumentationsrättning, granskning `2026-09-13-030`/`-031`,
 P1):** tabellen ovan visade tidigare den frusna v22-planeringsbaslinjen (7/57/28) och hade
 inte räknats om sedan v22 skrevs, trots fyra genomförda aktiveringar sedan dess (Lidköping
-5d, Batch 1, Batch 2, Batch 3). Ett första rättningsförsök (granskning `2026-09-13-030`)
-gav de nio Batch 3-raderna ett avvikande fältnamn (`**Disposition (rättad ...):**`
-i stället för det enhetliga `**Disposition:**`), vilket gjorde att en mekanisk räkning bara
-hittade 16 aktiva rader och att samma nio Batch-3-block dessutom fortfarande beskrev det
-gamla föraktiveringstillståndet (katalogstatus/motorstatus/kontraktsstatus/teststatus/
-UI-status/kvarstående arbete). Omgranskning `2026-09-13-031` upptäckte att SAMMA typ av
-dubbel sanning oberoende av detta redan fanns för nio ANDRA, tidigare aktiverade rader
-(Lidköpings två, Batch 1:s sex, Batch 2:s en) som aldrig fått sina block synkade när DE
-aktiverades. Samtliga 25 nu aktiva bastariffers `**Disposition:**`-rader i §3–4 använder nu
+5d, Batch 1, Batch 2, Batch 3). Batch 3:s nio rader fick redan i den FÖRSTA rättningen
+(svar på granskning `2026-09-13-030`) det enhetliga fältnamnet `**Disposition:**` och
+synkroniserat, verkligt aktiverat innehåll. Samma granskning avslöjade dock att SAMMA typ av
+dubbel sanning oberoende redan fanns sedan tidigare för nio ANDRA rader — Lidköpings två,
+Batch 1:s sex och Batch 2:s en — som ALDRIG fått sina block synkade när DE aktiverades:
+dessa nio hade i stället fått ett avvikande fältnamn (`**Disposition (rättad ...):**`
+i stället för det enhetliga `**Disposition:**`) och beskrev fortfarande sina gamla
+föraktiveringstillstånd (katalogstatus/motorstatus/kontraktsstatus/teststatus/UI-status/
+kvarstående arbete). En mekanisk räkning hittade därför bara 16 aktiva rader i stället för
+25. Rättningscommit `03b8d72` synkade dessa nio ÄLDRE block (Lidköping/Batch 1/Batch 2) —
+Batch 3:s nio block var redan korrekta sedan föregående rättningsrunda. Samtliga 25 nu
+aktiva bastariffers `**Disposition:**`-rader i §3–4 använder nu
 det enhetliga fältnamnet med värdet `implemented_source_verified_annual`, och varje sådant
 block beskriver det verkliga, aktiverade tillståndet (registrerad i `POLICYREGISTER`,
 tariffspecifika automattester, valbar i kalkylatorn, faktisk kvarvarande produktbegränsning

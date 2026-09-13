@@ -760,21 +760,30 @@ gav de nio Batch 3-raderna fältnamnet `**Disposition (rättad 2026-09-13, Batch
 3-dokumentationsrättning):**` i stället för det enhetliga `**Disposition:**`, vilket gjorde
 att en verklig mekanisk räkning bara hittade 16, inte 25. Denna runda rättar det faktiskt.
 
-1. **P1 — nio Batch 3-block + nio ANDRA tidigare aktiverade block synkade.** Utöver
-   Batch 3:s nio rader (som fick sitt fältnamn återställt till `- **Disposition:**`)
-   visade det sig att exakt samma dubbla sanning oberoende redan fanns för Lidköpings två
-   tariffer, Batch 1:s sex (Karlstad, Övik, Partille, Södertörn, Telge, VänerEnergi) och
-   Batch 2:s en (Sundsvall Indal/Liden/Lucksta) — deras block hade aldrig synkats när DE
-   aktiverades i tidigare rundor av denna session. Samtliga 18 block i
-   `tariffinventering-v22.md` §3–4 är nu rättade så att Katalogstatus/Motorstatus/
+1. **P1 — nio ÄLDRE, tidigare aktiverade block synkade (inte Batch 3:s egna).** Batch 3:s
+   nio rader hade REDAN det enhetliga fältnamnet `- **Disposition:**` och synkat innehåll
+   sedan föregående rättningsrunda — de behövde ingen ändring här. Det visade sig i stället
+   att exakt samma dubbla sanning oberoende redan fanns för Lidköpings två tariffer,
+   Batch 1:s sex (Karlstad, Övik, Partille, Södertörn, Telge, VänerEnergi) och Batch 2:s en
+   (Sundsvall Indal/Liden/Lucksta) — dessa nio ÄLDRE block hade fått ett avvikande fältnamn
+   (`**Disposition (rättad ...):**`) och beskrev fortfarande sina gamla
+   föraktiveringstillstånd, eftersom de aldrig synkats när DE aktiverades i tidigare rundor
+   av denna session. Samtliga 9 äldre block i `tariffinventering-v22.md` §3–4 är nu rättade
+   (fältnamnet återställt till `- **Disposition:**`) så att Katalogstatus/Motorstatus/
    Kontraktsstatus/Teststatus/UI-status och Kvarstående arbete beskriver det verkliga,
    aktiverade läget (verifierat mot verklig `POLICYREGISTER`, verkliga testfiler och
    `investigation: null` i katalogens JSON — inte antaget), i stället för det gamla
-   föraktiveringstillståndet. Mekanisk räkning: `grep -oP '^- \*\*Disposition:\*\* `[a-z_]+`'`
-   ger nu exakt **25 implemented / 29 ready / 24 blocked** (78 rader totalt), matchande
-   §8:s tabell (25/0, 29/10, 24/4 → 25/39/28 av 92) och katalogens `godkanda(katalog)`==25.
-   `batchplan-v22.md`s sammanfattningstabell fick en tydlig frusen-baslinje-not direkt
-   under tabellen så att "Redan implementerade: 7" inte längre kan läsas som nuläge.
+   föraktiveringstillståndet. Tillsammans med Batch 3:s redan korrekta nio ger detta 18
+   nysynkade block totalt. Mekanisk räkning: `grep -cE '^\- \*\*Disposition:\*\*'` gav 78
+   rader; `grep -E '^\- \*\*Disposition:\*\*' | sed -E 's/^- \*\*Disposition:\*\* `([a-z_]+)`.*$/\1/' | sort | uniq -c`
+   gav exakt **25 implemented_source_verified_annual / 29 ready_to_implement / 24
+   blocked_external_info** (78 rader totalt), matchande §8:s tabell (25/0, 29/10, 24/4 →
+   25/39/28 av 92) och katalogens `godkanda(katalog)`==25. (Den tidigare loggade
+   `grep -oP`-kontrollen kan inte köras på denna dators BSD-grep — `-P` stöds inte — och är
+   ersatt av ovanstående portabla `grep -E`/`sed`-kommando, som verifierats fungera.)
+   `batchplan-v22.md`s sammanfattningstabell fick en tydlig not som anger att endast 18 av
+   de 57 planerade batchade raderna hittills är genomförda, inte alla 57, så att "Redan
+   implementerade: 7" eller "57 batchade" inte längre kan läsas som nuläge.
 2. **P2 — stale docstring-parentes borttagen.** `test_de_tjugofem_fria_tarifferna_
    passerar_alla_grinden` nämnde fortfarande "namnet är historiskt kvar från när talet
    var sexton" trots att namnet redan bytts. Rent kommentarsfel, ingen testlogik ändrad.
@@ -823,3 +832,65 @@ datorns BSD grep utan måste ersättas av den portabla kontroll som faktiskt anv
 
 Claude ska endast rätta dokumentationen och stanna för snabb diffkontroll. Ingen
 produktkod, testlogik, ny tariffaktivering eller push.
+
+## Rättningsrunda 3 — svar på slutomgranskning 2026-09-13-032
+
+Rättade exakt de fyra dokumentationsfynden i granskning `032`, allt i `skills` (ingen
+produktkod, testlogik, ny aktivering eller push):
+
+1. **P1 — batchplanen överdrev genomförda rader.** `batchplan-v22.md`s not sa att alla
+   57 planerade batchade rader var genomförda. Rättat till att explicit ange **18 av de
+   57** (Lidköping 5d: 2, Batch 1: 6, Batch 2: 1, Batch 3: 9), med de återstående 39
+   planerade raderna (Batch 3b, 4, 5a, 5b, 5c, 6, 7, ev. Vattenfall) tydligt märkta som
+   ännu inte påbörjade. Nulägessumman 25/39/28 är oförändrad.
+2. **P2 — Batch 1/Batch 2-proveniens var omkastad.** Batch 1:s sex tariffposter
+   (Karlstad, Övik, Partille, Södertörn, Telge, VänerEnergi) hänvisade felaktigt till
+   Batch 2:s aktiveringsgranskning `2026-09-12-021` — rättat till Batch 1:s egen
+   `2026-09-12-014`. Sundsvall Indal/Liden/Lucksta sa "aktiverad via Batch 1" — rättat
+   till Batch 2 (behåller korrekt `2026-09-12-021`). Samma Sundsvall-block beskrev
+   motorn felaktigt som `selected_band_affine`; rättat mot den verkliga katalograden
+   (`energy.type: "monthly"`, 1 008 SEK/MWh alla tolv månader, `capacity.type:
+   "not_applicable"`, inga justeringar) till en ren månadsprissatt energitariff utan
+   kapacitetsdel. Samma blocks `Inmatningslägen`-stycke var skrivet i framtid ("Den ska
+   ... kontraktsgatas") trots att `contract_required: true` och policyn redan finns;
+   skrivet om till genomfört nuläge.
+3. **P2 — rättningshistoriken vände på vilka nio block som hade specialetiketten.**
+   Både `tariffinventering-v22.md` §8 och föregående rundas sessionslogg sa felaktigt att
+   Batch 3:s nio rader fick avvikelsen och att commit `03b8d72` synkade "Batch 3:s nio +
+   nio andra". I verkligheten hade Batch 3:s nio REDAN det enhetliga fältnamnet sedan
+   föregående rättningsrunda; det var de nio ÄLDRE raderna (Lidköping 5d:s två, Batch 1:s
+   sex, Batch 2:s en) som hade specialetiketten, och `03b8d72` synkade just DEM. Rättat i
+   båda dokumenten; den sammanfattande slutsatsen (18 nysynkade block totalt, nu enhetligt
+   fältnamn överallt) står kvar oförändrad.
+4. **P2 — den loggade mekaniska kontrollen körs inte på denna dator.** Föregående runda
+   loggade `grep -oP '^- \*\*Disposition:\*\* `[a-z_]+`'` som den körda kontrollen. BSD
+   grep på denna dator saknar `-P` och ger `grep: invalid option -- P`. Ersatt med det
+   verkligen körda, portabla kommandot:
+   `grep -cE '^\- \*\*Disposition:\*\*' Fjarrvarmetariffer/tariffinventering-v22.md` → **78**,
+   och `grep -E '^\- \*\*Disposition:\*\*' Fjarrvarmetariffer/tariffinventering-v22.md | sed -E 's/^- \*\*Disposition:\*\* `([a-z_]+)`.*$/\1/' | sort | uniq -c`
+   → **24 blocked_external_info / 25 implemented_source_verified_annual / 29
+   ready_to_implement**. Matchar §8:s tabell (25/0, 29/10, 24/4 → 25/39/28 av 92) och
+   katalogens `godkanda(katalog)`==25.
+
+### Verifiering
+
+- Portabel dispositionsräkning (körd på riktigt, ovan): 78 bastariffrader, exakt
+  25/29/24, ingen avvikande fältetikett kvar.
+- `git diff --check` på de tre ändrade filerna (`tariffinventering-v22.md`,
+  `batchplan-v22.md`, denna sessionslogg): rent, exit 0.
+- Ingen produktfil, testlogik eller genererad data ändrad denna runda — full
+  regressionskörning behövdes inte (Codex bekräftade i granskning 032 att detta räcker).
+  Senast verifierade fulla resultat (`skills@e627b33`/`enkey-agents@4b1d4b6`/
+  `neptune_academy@55731894`) gäller oförändrat: Python 1009 passed/4 skipped, TypeScript
+  1023 passed, ren tsc, 13/13 E2E.
+- Disposition oförändrad: **25 implementerade / 39 redo / 28 blockerade av 92**.
+
+### Commits (lokalt, ingen push)
+
+- `skills` — dokumentationsrättning i `Fjarrvarmetariffer/tariffinventering-v22.md`,
+  `Fjarrvarmetariffer/batchplan-v22.md` och denna sessionslogg (fyra fynd från
+  granskning 032).
+- `enkey-agents` och `neptune_academy` — orörda denna runda.
+
+Ingen ny tariffaktivering, ingen push. Stannar för Codex slutliga diff- och
+räkningskontroll.

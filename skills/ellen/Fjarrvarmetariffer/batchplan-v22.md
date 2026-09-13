@@ -1295,12 +1295,21 @@ i denna lista minskar därmed från 26 till 24.
 
 **Detta är den frusna v22-planeringsbaslinjen (2026-09-09), INTE nuläget.** Tabellen ovan
 visar VAD varje batch var tänkt att omfatta när planen skrevs (57 batchade + 24 + 4
-blockerade + 7 "redan implementerade" = 92) och ändras inte i efterhand. Lidköping 5d,
-Batch 1, Batch 2 och Batch 3 (57 batchade rader ovan) är nu genomförda och lokalt
-aktiverade — de har alltså flyttat från "batchad, redo" till `implemented_source_verified_
-annual`. Den AKTUELLA dispositionen är **25 implementerade / 39 redo / 28 blockerade av 92**,
-mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den tabellen för nuläget, inte
-raden "Redan implementerade | 7" ovan.
+blockerade + 7 "redan implementerade" = 92) och ändras inte i efterhand.
+
+Av de 57 planerade batchade raderna har hittills **18** genomförts och lokalt aktiverats
+— dessa har flyttat från "batchad, redo" till `implemented_source_verified_annual`:
+
+- Lidköping 5d: 2 rader.
+- Batch 1: 6 rader.
+- Batch 2: 1 rad.
+- Batch 3: 9 rader.
+
+De ÅTERSTÅENDE **39** planerade batchade raderna (Batch 3b, 4, 5a, 5b, 5c, 6, 7, samt
+Vattenfall om den schemaläggs) är fortsatt inte påbörjade. Den AKTUELLA dispositionen är
+**25 implementerade / 39 redo / 28 blockerade av 92**, mekaniskt räknad i
+`tariffinventering-v22.md` §8 — läs alltid den tabellen för nuläget, inte raden "Redan
+implementerade | 7" ovan eller "57 batchade" som om alla redan var klara.
 
 **RÄTTAT P2 (granskning `2026-09-08-007`):** den tidigare additiva uttrycksraden
 (`6+1+9+8+4+8+7+8+3 = 54`) hade fel siffror OCH summerade fel — batch 7 saknades helt ur
