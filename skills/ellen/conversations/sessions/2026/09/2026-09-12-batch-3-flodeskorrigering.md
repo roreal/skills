@@ -972,3 +972,27 @@ verifierades omedelbart före beslutet och är fast-forward-förfäder. Ingen fo
 orelaterade arbetskopiefiler. Efter push ska Claude verifiera alla tre remote-huvuden,
 logga slutliga hashar och vid behov pusha/verifiera en sista ren bokföringscommit i
 `skills`.
+
+## Push till origin — Batch 3 slutförd 2026-09-13
+
+Robert gav explicit push-instruktion enligt Codex slutgodkännande
+[`2026-09-13-034`](../../../reviews/2026/09/2026-09-13-slutgodkannande-lokal-aktivering-batch-3.md).
+Slutgodkännandet fanns redan committat i `skills@8d605a8` vid instruktionens
+mottagande. Samtliga tre repon pushades med normal fast-forward-historik
+(ingen force, ingen omskrivning) i ordningen skills → enkey-agents →
+neptune_academy, och `origin/main` verifierades direkt via `git ls-remote`
+mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `8cd8e6b` → `8d605a87b5ec4454a12efdfb5a5fed8f4cedc07d`
+- `enkey-agents`: `5beda01` → `4b1d4b6d78c010a4722f54df833ab7903431e9dc`
+- `neptune_academy`: `297e4f0` → `55731894428d7fe43be00b9ddf36dad2597e8098`
+
+Disposition efter push: **25 implemented / 39 ready / 28 blocked av 92**.
+De orelaterade, användarägda ändringarna i `neptune-marketing/dist` och den
+orelaterade proposalfilen i `skills` rördes inte. Batch 3 (E.ON Järfälla/
+Malmö, Navirum Norrköping/Söderköping och Örebro/Kumla/Hallsberg,
+Kraftringen — nio bastariffer) är därmed implementerad, aktiverad och
+pushad till samtliga tre repon. Batch 3 är slutförd; nästa tariffetapp
+startas först i en separat handoff.
