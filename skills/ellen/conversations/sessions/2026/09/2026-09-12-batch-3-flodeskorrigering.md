@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 5 krävs efter Codex omgranskning 028; ingen aktivering eller push"
+status: "rättningsrunda 5 slutgodkänd; exakt nio tariffer godkända för separat lokal aktivering; ingen push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -12,6 +12,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
+  - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -507,3 +508,20 @@ dispositionsändring.
 
 Ingen aktivering, ingen borttagning av R06/R10, ingen push. Stannar för Codex
 slutgranskning.
+
+## Codex slutgranskning 2026-09-13 — godkänd för lokal aktivering
+
+Codex reproducerade rättningsrunda 5:s resultat och stänger granskning 028:s sista
+fynd. TypeScript och Python har åter samma delade statussemantik, medan den strikta
+ISO-intervallkontrollen ligger kvar i produktfasaden. Python-fixturen är sanningsenlig,
+testartefaktet hanterat och inga katalog-, pris-, generator- eller spärrändringar har
+smugit in.
+
+Oberoende resultat: **1009 passed + 4 skipped Python**, **1005 passed TypeScript**,
+ren `tsc`, godkänt isolerat bygge, **10/10 E2E** och rena diffkontroller. Dispositionen
+är fortsatt **16/48/28** före aktivering.
+
+Granskning `2026-09-13-029` godkänner en separat lokal aktivering av exakt de nio
+Batch 3-bastarifferna. Claude ska följa granskningsrapportens bindande arbetsorder,
+nå **25/39/28**, prova verklig genererad/UI-väg och stanna för ny Codex-granskning.
+Ingen push är tillåten.

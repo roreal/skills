@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-002"
 created_at: "2026-09-12T18:57:05+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-implementation-review
+status: approved-for-local-activation
 implementation_allowed: true
 approved_implementation_scope: "batch-3-eon-navirum-kraftringen-flow-adjustment"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
-review_required_before_activation: true
+review_required_before_activation: false
 review_required_before_push: true
-latest_review: "2026-09-12-028"
+latest_review: "2026-09-13-029"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -27,6 +27,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix2.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
+  - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen
@@ -225,3 +226,17 @@ fixture till hela `2026-01-01/2026-02-28` och hantera det oincheckade
 Följ granskning `2026-09-12-028`. Ingen produktions-Python, katalog, pris, generator,
 spärr, R06/R10 eller disposition får ändras. Ingen aktivering och ingen push; stanna
 för Codex slutgranskning.
+
+## Godkännande för separat lokal aktivering efter granskning 029
+
+Rättningsrunda 5 är slutgodkänd. Språkpariteten är återställd, produktfasadens strikta
+periodgrind är bevarad och alla oberoende fullsviter är gröna. Claude får nu lokalt
+aktivera exakt de nio bastarifferna enligt den bindande arbetsordern i granskning
+`2026-09-13-029`.
+
+Målet efter aktivering är **25 implemented / 39 ready / 28 blocked av 92**. R06 och
+R10 får tas bort först efter mekanisk referenskontroll. Skarp genererad tariffdata och
+verklig UI-/E2E-väg ska provas efter regenerering. Bas-/delvärmevarianterna och
+Brunnshög får inte aktiveras.
+
+**Ingen push. Stanna för Codex granskning av aktiveringsdiffen.**
