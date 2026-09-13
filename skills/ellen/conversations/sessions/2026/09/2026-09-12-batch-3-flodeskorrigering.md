@@ -525,3 +525,92 @@ Granskning `2026-09-13-029` godkänner en separat lokal aktivering av exakt de n
 Batch 3-bastarifferna. Claude ska följa granskningsrapportens bindande arbetsorder,
 nå **25/39/28**, prova verklig genererad/UI-väg och stanna för ny Codex-granskning.
 Ingen push är tillåten.
+
+## Lokal aktivering 2026-09-13 — svar på granskning 2026-09-13-029
+
+Robert gav explicit klartecken ("Nästa steg är att Claude lokalt aktiverar exakt nio
+Batch 3-tariffer"), enligt Codex slutgranskning
+[`2026-09-13-029`](../../../reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md)
+(`status: approved-for-local-activation`, `activation_allowed: true`,
+`push_allowed: false`).
+
+**Katalog och request-scope (`skills`):**
+
+1. `investigation` satt till `null` (rensat) på samtliga nio Batch 3-tariffer
+   (E.ON Järfälla/Malmö bostäder+övriga fastigheter, Navirum
+   Norrköping/Söderköping och Örebro/Kumla/Hallsberg bostäder+övriga
+   fastigheter, Kraftringen). Priser, band, formler, kapacitetsbaser,
+   `contract_required` och de kända issue-texterna om saknad
+   månadsperiodisering är oförändrade i sak.
+2. R06 (kraftringen) och R10 (e-on-jarfalla, e-on-malmo,
+   navirum-energi-norrkoping-och-soderkoping,
+   navirum-energi-orebro-kumla-och-hallsberg) borttagna ur
+   `remaining_information_requests` efter mekanisk kontroll: dessa fem
+   medlemmar har vardera INGA andra tariffrader i katalogen än de nu
+   aktiverade nio — deras medlemsscope var alltså exakt täckt.
+3. Katalogens `schema_version` höjd 0.1.11 → 0.1.12 med en exakt
+   ändringslogg om aktiveringen.
+4. `tariffinventering-v22.md` och `batchplan-v22.md` uppdaterade: de nio
+   radernas `Disposition:`-fält flyttade till
+   `implemented_source_verified_annual`; §8 fick en korrigeringsnot om att
+   den frusna v22-baslinjen (7/57/28) inte räknats om löpande för tidigare
+   batcher (Lidköping 5d, Batch 1, Batch 2) och att den levande
+   dispositionen förs i katalogens eget `change_log` och sessionsloggarna
+   — en fullständig retroaktiv omräkning av §8-tabellen för samtliga
+   tidigare batcher låg utanför denna aktiveringsrundas omfattning.
+
+**Generator (`neptune_academy`):** `tariffer.generated.ts` regenererad från
+`skills@bcaa28b` (katalog-SHA-256 `536f9830...2afb7`) — **25 godkända, 53
+filtrerade**, exakt matchande arbetsorderns förväntning. Inga otillåtna
+varianter (Batch 3b bas-/delvärme, Kraftringens Brunnshög) förekommer i den
+genererade filen.
+
+**Pythontester (`enkey-agents`):** de tidigare pre-aktiveringsproven (kontroll
+att `investigation.status=="utreds"`, att `grind()` gav `"utreds"`, att R06/R10
+fanns kvar, att disposition var 16, att den skarpa katalogen INTE genererade
+Batch 3) är omskrivna till sin sanna, aktiverade motsats. Även de äldre,
+katalogbreda proven som hårdkodade "16"/"14 medlemmar"/den gamla kataloghashen
+(`test_katalog.py`, `test_katalog_proveniens.py`, `test_faktura_manadspriser.py`,
+`test_familj4_resten_kontrakt.py`, `test_batch_2_sundsvall_indal.py`) är rättade
+till 25/19/den nya hashen — samma mönster som efter Batch 1/2:s aktiveringar.
+
+**TypeScript-/UI-prov (`neptune_academy`):** nytt permanent
+`besparingsvardeBatch3Katalogaktivering.test.ts` mot den verkliga, checked-in
+`TARIFFER` (representativa E.ON Järfälla, Navirum Norrköping/Söderköping och
+Kraftringen): rätt effektband i den genererade postens nivåer, fullständig
+MWh-indata ger `annual/snapshot/complete` via den publika
+`beraknaArsprodukt`-entryn, kronor/schablon blockeras typat med
+`unsupported_input_mode`, besparingsvägen blockeras med
+`Produktbegransning/besparing_ej_stodd`. Nytt E2E-scenario 11 (Kraftringen)
+i `e2e/kalkylator.smoke.mjs`: leverantören syns i dropdownen, dedikerat
+källperiod-fält (`#kapacitetKw-period`) renderas, normal MWh-submit med hela
+januari–februari-perioden ger ett synligt uppskattningsresultat utan rått
+kast.
+
+**Verifiering:**
+
+- Python: `test_batch_3_flodeskorrigering.py` (280 passed) och full svit
+  **1009 passed, 4 skipped** (oförändrat antal — testfixar, inga nya fall).
+- TypeScript: full svit **1023 passed** i 37 filer (997 tidigare + 18 nya i
+  aktiveringsprovet + 8 justerade).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd
+  bundelstorleksvarning.
+- E2E mot det isolerade bygget (`vite preview --outDir dist-eval` +
+  `E2E_BASE_URL=http://localhost:4321`): **11/11 scenarier godkända**
+  (Scenario 1–10 oförändrade, nytt Scenario 11 för Kraftringen).
+- `git diff --check --cached` kört på riktigt i båda repona: rent.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = **25**, från
+  **19** medlemmar, `grind()`-orsaker `{utreds: 47, godkand: 25, energiform:
+  4, kapacitetsform: 2}`, summa 78. Dispositionen är nu **25 implemented /
+  39 ready / 28 blocked av 92**.
+- `neptune-marketing/dist` orört genom hela aktiveringsrundan.
+
+**Commits (lokalt, ingen push):**
+
+- `skills@bcaa28b` — katalogaktivering, tariffinventering/batchplan-uppdatering.
+- `enkey-agents@5ed21ab` — Pythontester rättade till aktiverad status.
+- `neptune_academy@46c4f8f` — regenererad `tariffer.generated.ts`, nytt
+  aktiveringsprov, nytt E2E-scenario 11.
+
+Ingen push. Stannar för Codex granskning av aktiveringsdiffen.
