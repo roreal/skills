@@ -809,6 +809,14 @@ Ligger FÖRST enligt överlämningens ordningsregel (ingen kund-/prospektpriorit
 - **Visas för användaren:** mwh-läge, tre obligatoriska fält; resultat märkt uppskattning
   (snapshot); kr/schablon blockerade.
 
+**Aktiverad 2026-09-13 (granskning `2026-09-13-029`, godkänd av Codex):** samtliga nio
+tariffer ovan är aktiverade lokalt för `annual_forward`. R06 och R10 är borttagna ur
+`remaining_information_requests`. Dispositionen går från 16/48/28 till **25/39/28 av 92**.
+Batch 3b:s åtta variantrader och Kraftringens Brunnshög-variant är oförändrade och förblir
+blockerade — de ingår inte i denna aktivering. Denna batchplan i övrigt beskriver
+implementationens ursprungliga PLAN och är inte omskriven i efterhand; §8 i
+`tariffinventering-v22.md` bär motsvarande korrigeringsnot.
+
 ## Batch 3b — E.ON/Navirums 36-månadersvariant (8 variantrader, EFTER batch 3)
 
 **Rättat i v4 (granskning 2026-09-08-003, P1):** v3 krävde felaktigt ett "36 månaders

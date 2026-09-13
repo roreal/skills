@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.11",
+  "schema_version": "0.1.12",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-12",
@@ -2024,15 +2024,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2108,15 +2100,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2192,15 +2176,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2276,15 +2252,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2360,15 +2328,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2444,15 +2404,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2528,15 +2480,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -2612,15 +2556,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R10"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -4855,15 +4791,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R06"
-        ],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10926,16 +10854,6 @@
       "status": "utreds"
     },
     {
-      "id": "R06",
-      "member_ids": [
-        "kraftringen"
-      ],
-      "category": "formula_missing",
-      "question_sv": "Hur används temperaturens korrigeringsfaktor på flödespriset? Behöver explicit slutformel samt effektprisets tidsenhet och periodisering.",
-      "source_id": "web-review-kraftringen-model",
-      "status": "utreds"
-    },
-    {
       "id": "R07",
       "member_ids": [
         "skelleftea-kraft"
@@ -10967,19 +10885,6 @@
       "category": "formula_missing",
       "question_sv": "Hur tillämpas volymrabatten: hela förbrukningen eller marginalintervall, och vilken historik bestämmer den? Behöver fullständiga villkor för rekommenderad effekt och månadsperiodisering.",
       "source_id": "web-review-vattenfall-model-current",
-      "status": "utreds"
-    },
-    {
-      "id": "R10",
-      "member_ids": [
-        "e-on-jarfalla",
-        "e-on-malmo",
-        "navirum-energi-norrkoping-och-soderkoping",
-        "navirum-energi-orebro-kumla-och-hallsberg"
-      ],
-      "category": "retrieval_incomplete",
-      "question_sv": "Aktuell prisbilaga och särskilda prisvillkor för respektive nät: effektprisets periodisering och temperaturkorrigerat flödespris. Leverantörens dynamiska prissidor kunde inte läsas fullständigt.",
-      "source_id": null,
       "status": "utreds"
     },
     {
@@ -11116,6 +11021,15 @@
         "Batch 3 lokal implementation (handoff 2026-09-12-002, godkänd av Codex, beredskapskontroll 2026-09-12-023): katalogrättelser BAKOM kvarstående spärr för de nio raderna e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026, e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026, e-on-malmo-malmo-och-burlov-bostader-2026, e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026 och kraftringen-kraftringen-2026. E.ON/Navirums åtta rader fick capacity.fixed=0 och capacity.rate_period=\"month\"; Kraftringen fick capacity.fixed=0 på alla fyra band och capacity.rate_period=\"year\". Samtliga nio fick contract_required:true. investigation.status=\"utreds\" är OFÖRÄNDRAT på alla nio — ingen tariff aktiveras i denna revision, disposition kvarstår 16/48/28 av 92.",
         "Malmö/Burlövs två rader fick capacity.billing_basis_method rättad från -15 °C till -8 °C (Järfälla och båda Navirumnäten ligger kvar vid -15 °C, källverifierat per rad).",
         "Issue-texterna om okänd effektprisperiod/flödesformel och null i fast avgift är borttagna för samtliga nio, eftersom de rättelserna ovan faktiskt löser dem. Den kända issue-texten om saknad månadsperiodisering är oförändrad kvar på alla nio — den blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg, inte den framtida årsprodukten. R06 och R10 samt de nio radernas investigation.request_ids är OFÖRÄNDRADE i denna revision; de rörs först vid en separat, godkänd aktiveringsrunda."
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "revision": "0.1.12",
+      "changes": [
+        "Lokal aktivering (granskning 2026-09-13-029, godkänd av Codex): investigation.status=\"utreds\" rensat (satt till null) för de nio Batch 3-tarifferna e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026, e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026, e-on-malmo-malmo-och-burlov-bostader-2026, e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026, navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026, navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026 och kraftringen-kraftringen-2026. Priser, band, formler, kapacitetsbaser och obligatoriska fält är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) för samtliga nio, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparingsprodukten.",
+        "R06 (kraftringen) och R10 (e-on-jarfalla, e-on-malmo, navirum-energi-norrkoping-och-soderkoping, navirum-energi-orebro-kumla-och-hallsberg) är borttagna ur remaining_information_requests efter mekanisk kontroll att deras medlemsscope exakt täcktes av dessa nio rader och att ingen kvarvarande tariff refererade dem. De nio radernas investigation.request_ids försvinner samtidigt med hela investigation-blocket.",
+        "De kända issue-texterna om overifierad månadsperiodisering är bevarade oförändrade i sak på alla nio — de blockerar fortsatt en framtida manadskostnad/manadsuppdelning-väg, inte den nu aktiverade årsprodukten. Ingen tariff utöver dessa nio bytte status i denna revision."
       ]
     }
   ],
