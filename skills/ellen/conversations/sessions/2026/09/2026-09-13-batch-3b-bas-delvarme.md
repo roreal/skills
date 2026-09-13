@@ -341,3 +341,57 @@ fortfarande årsfasaden som verklig månadsmatchning, och synkprovet benämns
 Full rättningsorder finns i `2026-09-13-038`. Behåll samtliga åtta spärrar och
 dispositionen **25/39/28 av 92**. Ingen aktivering och ingen push; Claude ska göra en
 fokuserad rättningsrunda 3 och stanna för omgranskning.
+
+## Rättningsrunda 3 — svar på granskning 2026-09-13-038
+
+Båda P2-fynden rättade. Ingen tariff-, pris-, motor- eller aktiveringsändring.
+
+1. **TypeScript-golden nu fullt oberoende, felmatrisen komplett.**
+   `besparingsvardeBatch3b.test.ts`s `FACIT` utökat med `variabelKrPerKwAr` och
+   `flodeBaseRate` (identiska litereade värden som Pythonsidans
+   `_KAPACITET_OCH_FLODE_FACIT`). `fast` beräknas nu `effekt × variabelKrPerKwAr × 12`
+   och `justering` med den golvfria formeln `flode_m3 × baseRate × (0,02×(Tf−60)+0,2)`
+   — bägge handräknade i testet, aldrig utlästa ur `variantPrisar`. Ett nytt
+   sanitetsprov verifierar dessutom att fixturen faktiskt bär dessa publicerade
+   priser (`pris_kr_per_enhet_ar === variabelKrPerKwAr×12`, `justeringar[0].base_rate
+   === flodeBaseRate`) innan de används som facit. Felmatrisen kompletterad med
+   ogiltig effekt (`invalid_capacity`), ogiltigt (negativt) flöde
+   (`invalid_policy_fields`/`flode_m3`/`min`) och saknad temperatur
+   (`missing_policy_fields`/`framledningstemperatur_c`); samtliga fall verifierar nu
+   `KontraktBlockerat`, exakt `orsak` och relevant `saknadeFalt`/`ogiltigaFalt`-nyckel
+   via en delad `forvantaBlockering`-hjälpfunktion, inte längre ett odetaljerat
+   `.toThrow()`.
+2. **Periodmetadata-dokumentation och testbenämning rättad.**
+   `KravPost.matchningMotManad`s kommentar i `resultatkontrakt.ts` skiljer nu
+   uttryckligen på ett verkligt månadsanrops målmatchning (matchad period HINDRAR
+   inte "exact") och en årsprodukts (Batch 3b:s) rena formatkrav utan mål-månad, som
+   INTE bevisar rätt fakturamånad och därför inte hindrar snapshot-taket när fältet
+   även bär en `kalperiodDefinition`. Pythonsidans `TestNeptuneFixturSynk`-testmetod
+   döptes om från `test_checkad_in_fixtur_ar_byte_for_byte_regenererbar` till
+   `..._semantiskt_regenererbar` (och motsvarande kommentarer i både Python- och
+   TypeScript-filen rättade) — provet gör en `json.loads`-objektjämförelse, inte en
+   rå bytejämförelse. **Rättelse av tidigare felaktigt påstående**: rättningsrunda
+   2:s loggpost ovan (rad 286–289) beskrev av misstag detta prov som en genuin
+   byte-för-byte-jämförelse; det gjorde det aldrig, bara den beskrivande texten var
+   fel.
+
+**Commit-hashar:**
+- `enkey-agents@09b0ef2` — testnamn/kommentarrättning (Python).
+- `neptune_academy@92de895` — utökat FACIT, komplett felmatris, dokumentationsrättning.
+
+**Verifiering:**
+- Riktat Batch 3b-TypeScript: 144 passed (upp från 121). Full TypeScript-svit: 1177
+  passed i 39 filer (upp från 1145). `npx tsc --noEmit`: godkänt.
+- Riktat Batch 3b-Python: 213 passed. Full Python-svit: **1222 passed, 4 skipped**
+  (oförändrat — inga produktionsändringar).
+- Generator-synk: `test_fixture_synkad_med_neptune_marknad`,
+  `test_fixturen_ar_identisk_i_bada_reponen`, `test_genererad_ts_matchar_kallan` samt
+  `TestNeptuneFixturSynk::test_checkad_in_fixtur_ar_semantiskt_regenererbar`: alla 4
+  godkända.
+- Isolerat `npm run eval:build`: godkänt, endast känd bundelstorleksvarning. E2E mot
+  det isolerade bygget: **13/13 scenarier godkända**.
+- `git diff --check` kört på riktigt i båda repona: rent.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 25, katalogen 86 rader —
+  oförändrat **25/39/28 av 92**.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.
