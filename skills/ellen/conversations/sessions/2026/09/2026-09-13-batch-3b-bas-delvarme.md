@@ -262,3 +262,62 @@ Codex reproducerade **1202 passed, 4 skipped** Python, **1097 passed** TypeScrip
 
 Ingen aktivering och ingen push. Claude ska göra en fokuserad rättningsrunda 2 och
 stanna för ny omgranskning.
+
+## Rättningsrunda 2 — svar på granskning 2026-09-13-037
+
+Alla tre kvarvarande P2-fynd rättade. Ingen aktivering, ingen tariffmodell-,
+katalog- eller prisändring; disposition oförändrad **25/39/28 av 92**.
+
+1. **Periodmetadata är nu sann.** `_batch3b_kapacitet_krav` i
+   `policyregister.py` fick `matupplosning` ändrad från felaktigt `"arsvis"` till
+   `"manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad"`.
+   `resultatkontrakt.py`s docstring för `matchning_mot_manad` förtydligar nu
+   explicit att flaggan betyder FORMAT+månadsmatchning vid ett månadsanrop men bara
+   ett strikt formatkrav i årsfasaden (ingen mål-månad att matcha mot). Ett nytt
+   metadataprov (`test_kapacitetskravet_beskriver_manadsvis_matupplosning_inte_arsvis`)
+   låser detta för alla åtta varianter.
+2. **TypeScript-goldenprovet är omskrivet till en riktig, generatorverifierad
+   fixtur.** Den tidigare mocken härledde bindningsnycklar genom att strängersätta
+   bindestreck i det yttre produkt-ID:t — fel regel, ingen bastariff, ingen
+   variant–bas-jämförelse. Ny checkad-in fixtur
+   `neptune_academy/.../__fixtures__/batch3bGenerated.json` är regenererad från en
+   isolerad katalogkopia (Batch 3b-spärrarna borttagna i minnet) plus de VERKLIGA
+   `POLICYREGISTER`-posterna — inte handbyggd. En ny Python-drift-vakt
+   (`TestNeptuneFixturSynk::test_checkad_in_fixtur_ar_byte_for_byte_regenererbar`)
+   regenererar och jämför fixturen byte för byte mot den checkade-in filen varje
+   körning, så en handbyggd TypeScript-fixture aldrig kan glida isär från den
+   riktiga serialiseringen utan att den svenska Pythonsidan failar rött.
+   Det omskrivna TypeScript-provet (`besparingsvardeBatch3b.test.ts`) jämför nu
+   variant mot bas för fast/energi/justering vid samma indata, och täcker fel
+   band-ID samt saknad/ogiltig effekt, period, flöde och temperatur — utöver de
+   redan fungerande kr-/schablon-/besparingsblockeringsproven.
+3. **Två saknade regressionsprov tillagda.** `TestVarianterLankar` i
+   `test_batch_3b_bas_delvarme.py` fick `test_dublett_forsalder_id_kastar` och
+   `test_feltypat_variant_of_kastar` (int och lista). Ett nytt tabellstyrt
+   käll-paritetsprov (`test_kalla_pekar_pa_ratt_2026_kalla_enligt_katalogens_
+   source_refs`) härleder förväntad käll-ID direkt ur katalogens `source_refs`
+   och kräver samma ID i respektive policykravs `kalla` — hårdkodar aldrig `_1`
+   på båda sidor.
+
+**Commit-hashar (lokalt, ingen push):**
+- `enkey-agents@950fd5b` — periodmetadata, nya regressions- och paritetsprov, ny
+  drift-vakt mot neptune_academys fixtur.
+- `neptune_academy@2be2452` — ny checkad-in fixtur `batch3bGenerated.json` samt
+  omskrivet TypeScript-goldenprov.
+
+**Verifiering:**
+- Python: `tools/tariffer` → **1222 passed, 4 skipped** (1202 tidigare + 19 nya +
+  1 ny drift-vakt).
+- TypeScript: full svit → **1145 passed** (39 filer). `tsc --noEmit`: rent.
+- `npm run eval:build` (isolerad `dist-eval`): rent, endast känd
+  bundelstorleksvarning.
+- E2E mot isolerat bygge (`vite preview --outDir dist-eval` + `E2E_BASE_URL`):
+  **13/13** scenarier godkända. Verklig `dist/` orörd genom hela rättningsrundan.
+- Generator-synk (`test_synk.py`): **2 passed**.
+- Mekanisk kontroll: `godkanda(katalog)` = 25, katalogen har 86 poster —
+  disposition oförändrad **25/39/28 av 92**.
+- `git diff --check` verkligen körd på båda commit-intervallen (`75ce1ae..950fd5b`
+  i enkey-agents, `babeca2..2be2452` i neptune_academy): rent.
+- Samtliga lokala HEAD:ar bekräftat ahead av `origin/main` — inget pushat.
+
+Stannar för Codex omgranskning. Ingen aktivering och ingen push.
