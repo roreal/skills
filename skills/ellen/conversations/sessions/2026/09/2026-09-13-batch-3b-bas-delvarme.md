@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "changes required efter Codex granskning 036; fortsatt bakom spärr"
+status: "rättningsrunda 1 levererad efter granskning 036; väntar på Codex omgranskning"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -161,3 +161,78 @@ som genomförd.
 De åtta `investigation.status="utreds"`-spärrarna ligger kvar och dispositionen är
 fortsatt **25/39/28 av 92**. Ingen aktivering och ingen push. Claude får göra en
 fokuserad lokal rättningsrunda och ska därefter stanna för Codex omgranskning.
+
+## Rättningsrunda 1 — svar på granskning 2026-09-13-036
+
+Alla sex fynd rättade. Tariffspärrarna, priserna och den skarpa produktmängden är
+oförändrade.
+
+**P1 #1 — fakturamånad.** `_batch3b_kapacitet_krav` (policyregister.py) bär nu en
+icke-tom `kalperiod_definition` och `matchning_mot_manad=True`. Den delade
+`harled_resultatstatus` prövar `matchning_mot_manad` bara mot ett anrops `ar`/`manad`,
+vilket årsfasaden aldrig skickar (samma mekanism granskning 028 redan fastslog) — en ny,
+additiv, per-fält kontroll lades därför direkt i `berakna_arskostnad_med_kontrakt`
+(FÖRE anropet till `harled_resultatstatus`, aldrig i den delade validatorn), som kräver
+och strikt ÅÅÅÅ-MM-formatvaliderar `observerad_period` för varje `matchning_mot_manad`-
+fält. Kraftringens (`matchning_mot_manad=False`) beteende är oförändrat — verifierat med
+ett dedikerat kontrollprov. TypeScript-sidan behövde ingen motsvarande kodändring:
+`forkontrolleraPolicyIndata` anropas redan från `beraknaArsprodukt`, så att sätta
+`matchningMotManad: true` i policyn (som når TypeScript automatiskt via
+`policyFranGenererad` när katalogen regenereras) räckte.
+
+**P1 #2 — källproveniens.** De åtta fullvärmepolicyernas 32 `kalla`-texter
+(`policyregister.py:678-871`) pekade fortfarande på `03_0`/`04_0`/`25_0`/`26_0` trots att
+katalogens bastariffer redan pekar på `_1`. Rättat till `_1` i en avgränsad
+sträng-substitution (verifierad att bara träffa dessa 32 rader). Variantens
+`billing_basis_method`-text ändrad från "effektsignatur" till "debiterbara effekt" för
+att inte blanda ihop fullvärmets regressionsmetod med det uppmätta 36-månadersmedlet.
+
+**P1 #3 — produktbyte.** `KalkylatorPage.tsx`s `handleFormChange` rensar nu
+`form.kapacitetKw` explicit när `leverantorId` ändras (utöver de fält som redan rensades).
+Komponentprovet utökat att fylla band/flöde/temperatur/period men medvetet LÄMNA effekten
+tom, bevisa att just den blockerar, och att återinmatning ger resultat — samt ett nytt
+prov för byte i motsatt riktning (variant → fullvärme).
+
+**P2 #1 — TypeScript-golden.** Ny fil `besparingsvardeBatch3b.test.ts`, tabellstyrd över
+alla åtta variant–bastariff-par, årsoberoende yttre produkt-ID:n (`...--bas-delvarme`,
+utan årtal — den interna `prisar.tariff_id` bär fortfarande årtalet), oberoende pinnade
+energi-/effektpriser (identiska med Pythonfacit), samt kr/schablon/besparingsblockering
+och saknad/felformaterad/giltig fakturamånad via de faktiska publika vägarna.
+
+**P2 #2 — levande katalogmetadata.** `coverage_summary.price_status_counts.published_2026`
+rättad till 86 (mekaniskt verifierat: alla 86 rader har `price_status="published_2026"`).
+Ett nytt Pythonprov räknar detta ur de verkliga tariffobjekten i stället för att lita på
+ett handskrivet tal. Paritetstestets `_TILLATNA_SKILLNADER` snävad från nio till fyra
+nycklar (id, variant_of, network_or_product, investigation) — verifierat att de fem
+borttagna nycklarna redan var lika för alla åtta par, ingen datamutation krävdes.
+
+**P2 #3 — driftsskydd.** `valider_variant_lankar` (katalog.py) bygger nu sitt id-index med
+explicit dublettkontroll (`raise` på dubblerat eller ogiltigt tariff-ID) i stället för en
+dict-literal som tyst kollapsade dubbletter. Det tidigare no-op-testet för omkastad
+katalogordning ersatt med ett verkligt generatorprov: aktiverar de åtta i en isolerad
+kopia, kör generatorn i original- och omkastad ordning, och jämför de PARSADE
+produktposterna (via en ny JSON-avparsande hjälpfunktion, inte textjämförelse) — nyckel
+för nyckel, innehåll för innehåll.
+
+**Regenererad artefakt.** `tariffer.generated.ts` regenererad mot `skills@3b8c1ae`
+(katalogens `effektsignatur`/`published_2026`-textfix). Diffen är exakt proveniensraden
+plus de 32 rättade `_1`-källtexterna — verifierat mekaniskt, inga priser/bindningar/
+beräkningsvärden ändrade.
+
+**Verifiering:**
+- Python: **1202 passed, 4 skipped** (1145+4 tidigare + 57 nya/rättade).
+- TypeScript: **1097 passed** i 39 filer (1028 tidigare + 69 nya).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build`: godkänt, endast känd bundelstorleksvarning.
+- E2E mot isolerat `dist-eval` (`E2E_BASE_URL`): **13/13 scenarier godkända**.
+- `git diff --check`: rent i alla tre repon.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 25, katalogen har 86 poster
+  — oförändrat.
+
+**Commits (lokalt, ingen push):**
+- `skills@3b8c1ae` — katalogtexträttning (effektsignatur, published_2026-summan).
+- `enkey-agents@75ce1ae` — fakturamånadskontroll, källproveniens, driftsskydd.
+- `neptune_academy@babeca2` — kapacitetKw-rensning, nytt TS-goldenprov, regenererad
+  artefakt.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.
