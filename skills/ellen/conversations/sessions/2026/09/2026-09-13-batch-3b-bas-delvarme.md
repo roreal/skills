@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 038: två snäva P2-bevis-/dokumentationsluckor återstår; rättningsrunda 3 krävs"
+status: "Codex slutgranskning 039: implementationen godkänd för separat lokal aktivering; ingen push"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -395,3 +395,21 @@ Båda P2-fynden rättade. Ingen tariff-, pris-, motor- eller aktiveringsändring
   oförändrat **25/39/28 av 92**.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex slutgranskning 2026-09-13-039
+
+Codex slutgranskade rättningsrunda 3 vid `skills@14cf1db` (oförändrad katalog
+`3b8c1ae`), `enkey-agents@09b0ef2` och `neptune_academy@92de895`. Båda P2-fynden i
+granskning 038 är stängda: fristående facit och full fältnära felmatris finns,
+års-/månadssemantiken är korrekt dokumenterad och synkprovet är sanningsenligt benämnt.
+
+Codex reproducerade **1222 passed, 4 skipped** Python, **1177 passed** TypeScript, ren
+tsc, isolerat bygge och **13/13 E2E**. Beslut: **godkänd för en separat lokal
+aktiveringsrunda**, men inte för push. Aktiveringen ska flytta exakt åtta varianter till
+implemented och ge **33/31/28 av 92**, regenerera exakt åtta nya skarpa produkt-ID:n,
+lägga permanenta E.ON-/Navirum-UI-bevis och stanna för ny Codex-granskning.
+
+En icke-blockerande P3 ska rättas i samma runda: testfacitets värden 108,17 osv. är
+`kr/kW/månad` och multipliceras korrekt med tolv; namn/kommentarer som säger
+`kr/kW/år` ska rättas utan att talen eller aritmetiken ändras. Full order finns i
+granskning `2026-09-13-039`. Ingen push.

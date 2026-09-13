@@ -3,14 +3,14 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-re-review-038
+status: approved-for-separate-local-activation-after-review-039
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-13-038"
+latest_review: "2026-09-13-039"
 baseline_remote_heads:
   skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
   enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
@@ -239,3 +239,20 @@ kallas byteidentiskt fast det jämför parsade JSON-objekt semantiskt.
 Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-13-omgranskning-batch-3b-rattningsrunda-2.md`.
 Behåll spärrarna och 25/39/28. Ingen aktivering och ingen push.
+
+## Codex slutgranskning 2026-09-13-039
+
+Rättningsrunda 3 vid `skills@14cf1db` (oförändrad katalog `3b8c1ae`),
+`enkey-agents@09b0ef2` och `neptune_academy@92de895` stänger granskning 038:s två
+P2-fynd. Codex reproducerade **1222 passed + 4 skipped Python**, **1177 passed
+TypeScript**, ren tsc, isolerat bygge och **13/13 E2E**. Inga blockerande fynd återstår
+i den spärrade implementationen.
+
+Batch 3b är därför **godkänd för en separat lokal aktiveringsrunda**, från 25/39/28
+till 33/31/28. En icke-blockerande men obligatorisk P3-rättning ska följa med:
+facitvärdena 108,17 osv. är `kr/kW/månad`, inte `kr/kW/år`; rätta namn/kommentarer men
+behåll värden och `×12`-aritmetik.
+
+Den fullständiga aktiveringsordern finns i
+`conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3b-rattningsrunda-3.md`.
+Lokal aktivering är tillåten. **Ingen push före Codex granskning av aktiveringsdiffen.**
