@@ -3,14 +3,14 @@ handoff_id: "2026-09-12-002"
 created_at: "2026-09-12T18:57:05+02:00"
 from: Codex
 to: Claude
-status: changes-required-before-push
+status: changes-required-before-push-review-031
 implementation_allowed: true
 approved_implementation_scope: "batch-3-eon-navirum-kraftringen-flow-adjustment"
 tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: false
 review_required_before_push: true
-latest_review: "2026-09-13-030"
+latest_review: "2026-09-13-031"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -29,6 +29,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
   - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
   - "conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-13-omgranskning-lokal-aktivering-batch-3.md"
 ---
 
 # Uppdrag till Claude: Batch 3 — E.ON, Navirum och Kraftringen

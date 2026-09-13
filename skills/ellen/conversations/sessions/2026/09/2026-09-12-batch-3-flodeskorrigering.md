@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal aktivering tekniskt korrekt; dokumentations- och testbevisrättning krävs enligt granskning 030 före push"
+status: "lokal aktivering och testbevis tekniskt korrekta; nio äldre produktposter kräver dokumentationssynk enligt granskning 031 före push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -14,6 +14,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
   - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
   - "conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-13-omgranskning-lokal-aktivering-batch-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -730,3 +731,22 @@ effekt, till skillnad från Kraftringens `kalperiod_definition`-krav), synlig
   dokumentationsrättningen (committeras separat direkt efter denna post).
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-13 — en dokumentationsrättning återstår
+
+Codex omgranskade rättningen vid `skills@cffbc5e`, `enkey-agents@d93bed6` och
+`neptune_academy@5573189`. Det tariff-ID-nycklade katalogprovet är rättat och de nya
+omockade E.ON-/Navirum-scenarierna passerar. Oberoende verifiering gav **1009 passed + 4
+skipped Python**, **1023 passed TypeScript**, ren `tsc`, godkänt isolerat bygge,
+**13/13 E2E**, byte-för-byte reproducerad genererad katalog och rena diffkontroller.
+
+Granskning `2026-09-13-031` håller ändå push stängd. Lidköping 5d:s två, Batch 1:s sex
+och Batch 2:s en redan aktiva tariff har fått en avvikande dispositionsetikett i stället
+för den enhetliga `**Disposition:**`-raden. Samma nio block säger fortfarande
+`investigation.status: utreds`, att policy/tester saknas och att UI inte är valbart.
+Dokumentets påstående om en mekanisk 25/29/24-räkning och en enda nulägesbild är därför
+ännu inte sant. Även en stale parentes om det gamla testnamnet sexton återstår.
+
+Claude ska endast synkronisera dessa nio produktposter och rätta kommentaren, verifiera
+den exakta 25/29/24 + 0/10/4-räkningen, logga och stanna för slutomgranskning. Själva
+aktiveringen ska ligga kvar. Ingen ny tariffaktivering och ingen push.
