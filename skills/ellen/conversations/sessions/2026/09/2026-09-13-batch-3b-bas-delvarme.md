@@ -413,3 +413,55 @@ En icke-blockerande P3 ska rättas i samma runda: testfacitets värden 108,17 os
 `kr/kW/månad` och multipliceras korrekt med tolv; namn/kommentarer som säger
 `kr/kW/år` ska rättas utan att talen eller aritmetiken ändras. Full order finns i
 granskning `2026-09-13-039`. Ingen push.
+
+## Lokal aktivering 2026-09-13 (granskning 2026-09-13-039, svar på Roberts godkännande)
+
+Robert gav explicit klartecken för aktivering ("Claude ska stanna efter den lokala
+aktiveringen för granskning av aktiveringsdiffen. Ingen push ännu."), matchande Codex
+slutgranskning exakt. Genomförde den bindande aktiveringsordern:
+
+1. **Katalog** (`skills@053a429`): `investigation` satt till `null` för samtliga åtta
+   Batch 3b-variantrader. Priser, band, formler, `variant_of` och källor oförändrade.
+   `tariffinventering-v22.md`/`batchplan-v22.md` uppdaterade: §5:s åtta tabellrader
+   flyttade till `implemented_source_verified_annual` samtidigt som deras `_0`-käll-
+   hänvisningar rättades till korrekta `_1`-referenser (kvarglömda efter implementations-
+   fasen); §8 mekaniskt omräknad till **33 implemented / 31 ready / 28 blocked av 92**
+   (bas 25/29/24 oförändrat + variant 8/2/4). Katalogen har fortsatt 86 fysiska poster.
+   Mekaniskt verifierat: `godkanda(katalog)` = 33.
+2. **Python-testsvit** (`enkey-agents@77f19c3`): sex testfiler uppdaterade till den
+   verkliga aktiverade katalogen — `test_katalog.py`s grindtest, avslagsorsaksräkning
+   och 33-fria-tariffer-nyckling, `test_katalog_proveniens.py`s förväntade kataloghash,
+   `test_batch_3_flodeskorrigering.py`s disposition/generatorprov, `test_batch_3b_bas_
+   delvarme.py`s hela `TestGrindOchDispositionImplementationsfas`-klass omskriven mot
+   den riktiga (inte längre isolerade) katalogen, `test_faktura_manadspriser.py`s
+   KONTRAKTSGATADE-undantag utökat med de åtta nya variant-ID:na.
+3. **Generator/produkt** (`neptune_academy@ef0fded`): `tariffer.generated.ts`
+   regenererad med `skills@053a429` som proveniens — 35 tariffer totalt (2
+   leverantörsfiler + 33 ur katalogen). Diffen mot föregående version är stor
+   (block-omordning vid infogning av åtta nya produkter), men verifierad semantiskt
+   genom hela testsviten: inga befintliga 25 produkters pris-/policyvärden ändrade.
+4. **E2E-scenario 14** (nytt, `neptune_academy@ef0fded`): bevisar mot den riktiga,
+   byggda sidan att E.ON Järfälla Fullvärme och Bas-/delvärme visas som två separata
+   val i leverantörsdropdownen, att effekt- och källperiodfälten INTE återanvänds vid
+   produktbyte (tomma efter byte), att saknad fakturamånad blockerar submit med ett
+   fältnära `#kapacitetKw-fel`-meddelande, och att giltig indata (effekt 120 kW, band
+   1, flöde 1500 m³, temperatur 62 °C, fakturamånad `2026-03`) ger ett synligt
+   uppskattat resultat.
+5. **P3-rättningen** (namn/kommentarer `kr/kW/år` → `kr/kW/månad`) ingick redan i den
+   föregående rättningsrundans commits — verifierad orörd, inga tal eller aritmetik
+   ändrade.
+
+**Verifiering:**
+- Python: `tools/tariffer` → **1230 passed, 4 skipped** (1222 tidigare + 8 nya/rättade).
+- TypeScript: full svit → **1177 passed i 39 filer**. `npx tsc --noEmit`: rent.
+- Isolerat `npm run eval:build`: godkänt, endast känd bundelstorleksvarning.
+- E2E mot det isolerade bygget: **14/14 scenarier godkända** (13 tidigare + nytt
+  scenario 14).
+- `git diff --check` kört på riktigt i båda repona: rent.
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 33, katalogen 86 rader —
+  **33 implemented / 31 ready / 28 blocked av 92**.
+- De sedan tidigare orelaterade, användarägda ändringarna i `neptune-marketing/dist`
+  och proposalfilen i `skills` rördes inte.
+
+Ingen push är gjord i samband med denna aktivering. Stannar för Codex granskning av
+aktiveringsdiffen, per Roberts uttryckliga instruktion.

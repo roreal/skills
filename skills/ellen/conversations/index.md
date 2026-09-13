@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-13-001` | 2026-09-13 | Robert, Codex, Claude | Slutgranskning 039: implementationen godkänd för separat lokal aktivering till 33/31/28; P3-enhetsnamn rättas i aktiveringsrundan; ingen push | Batch 3b: E.ON/Navirum bas-/delvärme | [Öppna sessionen](sessions/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
+| `2026-09-13-001` | 2026-09-13 | Robert, Codex, Claude | Lokal aktivering genomförd vid `skills@053a429`, `enkey-agents@77f19c3`, `neptune_academy@ef0fded`; 33/31/28; ingen push, stannar för Codex granskning av aktiveringsdiffen | Batch 3b: E.ON/Navirum bas-/delvärme | [Öppna sessionen](sessions/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
 | `2026-09-12-002` | 2026-09-12 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@19c68fe`, `enkey-agents@4b1d4b6`, `neptune_academy@5573189`; 25/39/28 | Batch 3: delad flödeskorrigeringsmotor | [Öppna sessionen](sessions/2026/09/2026-09-12-batch-3-flodeskorrigering.md) |
 | `2026-09-12-001` | 2026-09-12 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@8cd8e6b`, `enkey-agents@5da3b74`, `neptune_academy@297e4f0`; Sundsvall Indal/Liden/Lucksta aktiv och 16/48/28 | Batch 2: Sundsvall Energi — Indal, Liden och Lucksta | [Öppna sessionen](sessions/2026/09/2026-09-12-batch-2-sundsvall-indal.md) |
 | `2026-09-11-001` | 2026-09-11 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@ca99492`, `enkey-agents@a4cfdb2`, `neptune_academy@6ca7018`; exakt sex nya tariffer och 15/49/28 | Batch 1: Familj 4-resten, Telge och Partille | [Öppna sessionen](sessions/2026/09/2026-09-11-batch-1-familj4-telge-partille.md) |
@@ -16,7 +16,7 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-13-001` | 2026-09-13 20:48 | nu | Slutgranskning 039: godkänd för separat lokal aktivering av exakt åtta varianter till 33/31/28; ingen push före ny granskning | Batch 3b — E.ON/Navirums 36-månaders leverantörseffekt | [Öppna överlämningen](handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
+| `2026-09-13-001` | 2026-09-13 20:48 | slutförd lokal aktivering — väntar på Codex granskning av aktiveringsdiffen | Lokal aktivering genomförd vid `skills@053a429`, `enkey-agents@77f19c3`, `neptune_academy@ef0fded`; 33/31/28; ingen push ännu | Batch 3b — E.ON/Navirums 36-månaders leverantörseffekt | [Öppna överlämningen](handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
 | `2026-09-12-002` | 2026-09-12 18:57 | slutförd — pushad och remote-verifierad | Exakt nio Batch 3-bastariffer aktiva; slutstatus 25/39/28; ersatt av `2026-09-13-001` | Batch 3 — E.ON, Navirum och Kraftringen | [Öppna överlämningen](handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md) |
 | `2026-09-12-001` | 2026-09-12 16:22 | slutförd — pushad och remote-verifierad | Exakt Sundsvall Indal/Liden/Lucksta aktiv; slutstatus 16/48/28 | Batch 2 — ren energitariff samt tariffscopad requestinfrastruktur | [Öppna överlämningen](handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md) |
 | `2026-09-11-001` | 2026-09-11 11:24 | slutförd — pushad och remote-verifierad | Exakt sex annual_forward-tariffer aktiverade; slutstatus 15/49/28 | Batch 1: band-ID-bindning för alla sex, källtroget Övik-kontrakt, tariffidentiska fixturer/full acceptansmatris och borttagning av Telge R11 | [Öppna överlämningen](handoffs/2026/09/2026-09-11-batch-1-familj4-telge-partille.md) |
