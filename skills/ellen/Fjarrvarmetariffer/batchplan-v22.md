@@ -1293,6 +1293,15 @@ i denna lista minskar därmed från 26 till 24.
 | Redan implementerade | 7 | | |
 | **Totalt (bastariffer + varianter)** | **92** | | |
 
+**Detta är den frusna v22-planeringsbaslinjen (2026-09-09), INTE nuläget.** Tabellen ovan
+visar VAD varje batch var tänkt att omfatta när planen skrevs (57 batchade + 24 + 4
+blockerade + 7 "redan implementerade" = 92) och ändras inte i efterhand. Lidköping 5d,
+Batch 1, Batch 2 och Batch 3 (57 batchade rader ovan) är nu genomförda och lokalt
+aktiverade — de har alltså flyttat från "batchad, redo" till `implemented_source_verified_
+annual`. Den AKTUELLA dispositionen är **25 implementerade / 39 redo / 28 blockerade av 92**,
+mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den tabellen för nuläget, inte
+raden "Redan implementerade | 7" ovan.
+
 **RÄTTAT P2 (granskning `2026-09-08-007`):** den tidigare additiva uttrycksraden
 (`6+1+9+8+4+8+7+8+3 = 54`) hade fel siffror OCH summerade fel — batch 7 saknades helt ur
 uttrycket. Den korrekta, verifierade uppräkningen t.o.m. v15 (varje batchs egen
