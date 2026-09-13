@@ -3,14 +3,20 @@ handoff_id: "2026-09-12-002"
 created_at: "2026-09-12T18:57:05+02:00"
 from: Codex
 to: Claude
-status: approved-for-push-review-034
-implementation_allowed: true
+status: completed-pushed-remote-verified
+implementation_allowed: false
 approved_implementation_scope: "batch-3-eon-navirum-kraftringen-flow-adjustment"
-tariff_activation_allowed: true
-push_allowed: true
+tariff_activation_allowed: false
+push_allowed: false
 review_required_before_activation: false
 review_required_before_push: false
 latest_review: "2026-09-13-034"
+completed_at: "2026-09-13"
+superseded_by: "2026-09-13-001"
+final_remote_heads:
+  skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
+  enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
+  neptune_academy: "55731894428d7fe43be00b9ddf36dad2597e8098"
 baseline_remote_heads:
   skills: "8cd8e6bdf61253d852719698bbd882a8109e393f"
   enkey_agents: "5da3b74cc7b4a22c4ce268b5d3670465bd68e4cc"
@@ -263,3 +269,12 @@ Ingen ny tariff aktiveras. Kör om de föreskrivna kontrollerna och stanna för 
 omgranskning.
 
 **Ingen push.**
+
+## Slutstatus 2026-09-13
+
+Batch 3 är pushad med normal fast-forward-historik och remote-verifierad i samtliga tre
+repon. Den avslutande bokföringscommitten i `skills` är också pushad och verifierad:
+`skills@19c68fe`, `enkey-agents@4b1d4b6`, `neptune_academy@5573189`.
+
+Slutdispositionen är **25/39/28 av 92**. Denna handoff är stängd och ersatt av den
+separata Batch 3b-handoffen `2026-09-13-001`.

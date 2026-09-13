@@ -996,3 +996,15 @@ Malmö, Navirum Norrköping/Söderköping och Örebro/Kumla/Hallsberg,
 Kraftringen — nio bastariffer) är därmed implementerad, aktiverad och
 pushad till samtliga tre repon. Batch 3 är slutförd; nästa tariffetapp
 startas först i en separat handoff.
+
+## Avslutande bokföringsverifiering och nästa etapp 2026-09-13
+
+Codex verifierade på nytt att lokal HEAD och `origin/main` matchar i samtliga tre repon.
+Den avslutande sessions-/pushloggen ligger nu på den remote-verifierade
+`skills@19c68fe95e52492b58cc24965ef39a1083a655c8`; produktrepona ligger oförändrat på
+`enkey-agents@4b1d4b6d78c010a4722f54df833ab7903431e9dc` och
+`neptune_academy@55731894428d7fe43be00b9ddf36dad2597e8098`.
+
+Batch 3 är stängd. Nästa separata etapp är Batch 3b enligt handoff
+`conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md`; ingen Batch 3b-
+aktivering eller push ingår i startbeslutet.
