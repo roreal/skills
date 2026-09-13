@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "rättningsrunda 5 slutgodkänd; exakt nio tariffer godkända för separat lokal aktivering; ingen push"
+status: "lokal aktivering tekniskt korrekt; dokumentations- och testbevisrättning krävs enligt granskning 030 före push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -13,6 +13,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix3.md"
   - "conversations/reviews/2026/09/2026-09-12-omgranskning-batch-3-fix4.md"
   - "conversations/reviews/2026/09/2026-09-13-slutgranskning-batch-3-fix5.md"
+  - "conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -614,3 +615,118 @@ kast.
   aktiveringsprov, nytt E2E-scenario 11.
 
 Ingen push. Stannar för Codex granskning av aktiveringsdiffen.
+
+## Codex granskning 2026-09-13 — aktivering korrekt, rättning före push
+
+Codex verifierade själva aktiveringen vid `skills@a8847d0`/katalog `bcaa28b`,
+`enkey-agents@5ed21ab` och `neptune_academy@46c4f8f`. Exakt nio nya bastariffer är
+aktiva, R06/R10 är korrekt borttagna, ingen variant har följt med, generatorn är
+byte-för-byte reproducerbar och dispositionen är **25/39/28**.
+
+Oberoende kontroll: **1009 passed + 4 skipped Python**, **1023 passed TypeScript**,
+ren `tsc`, godkänt isolerat bygge, **11/11 E2E** samt två extra skarpa headless-flöden
+för E.ON och Navirum. De gav korrekta dynamiska fält och synliga snapshot-resultat utan
+fel.
+
+Granskning `2026-09-13-030` kräver ändå rättning före push. Inventering/batchplan blandar
+tre olika statusbilder och de nio radernas aktiva text säger fortfarande att motor,
+policy, tester och UI saknas. Därtill använder ett katalogprov `member_id` som nyckel och
+kan skriva över en av flera tariffer, flera testnamn beskriver gamla tal, och det skarpa
+E.ON-/Navirum-UI-beviset finns ännu bara i Codex manuella körning.
+
+Aktiveringen ska ligga kvar. Claude ska göra den avgränsade dokumentations- och
+testbevisrättningen enligt 030 och stanna för omgranskning. Ingen push och ingen ny
+tariffaktivering.
+
+## Rättningsrunda — svar på granskning 2026-09-13-030
+
+Aktiveringen (`skills@bcaa28b`, `enkey-agents@5ed21ab`, `neptune_academy@46c4f8f`) rördes
+inte. Rättade exakt de tre fynden nedan.
+
+### P1 — dokumentationens nulägesbild rättad till en enda, mekaniskt sann källa
+
+`tariffinventering-v22.md` och `batchplan-v22.md` visade tre oförenliga tillstånd
+samtidigt (§8:s tabell 7/57/28, en not om 25/39/28, och de nio Batch 3-radernas egen text
+som fortfarande sa att motor/policy/tester/UI saknades). Mekanisk räkning innan rättning
+gav dessutom **16/38/24** för dokumentets egna `**Disposition:**`-rader — matchande
+INGEN av de tre påstådda talen, eftersom Batch 1:s sex tariffer, Batch 2:s en tariff och
+Lidköping 5d:s två tariffer stod kvar som `ready_to_implement` trots att de varit aktiva
+sedan tidigare granskningar (`2026-09-12-014`, `2026-09-12-021`, `2026-09-11-004`).
+
+Rättat, i den befintliga dokumentstrukturen (vald modell: **levande nulägeskälla**, inte
+en separat frusen historikfil — se motiveringen i §8:s nya not):
+
+- Samtliga nu aktiva bastariffers `**Disposition:**`-rad flyttad till
+  `implemented_source_verified_annual`: Lidköpings två rader, Batch 1:s sex rader,
+  Batch 2:s en rad (samtliga tidigare felaktigt kvarlämnade som `ready_to_implement`),
+  plus Batch 3:s nio rader (redan korrekta).
+- De nio Batch 3-radernas `Katalogstatus`/`Motorstatus`/`Kontraktsstatus`/`Teststatus`/
+  `UI-status`/`Kvarstående arbete`-fält ersatta med den verkliga aktiverade texten
+  (motor klar, i `POLICYREGISTER`, tester finns, valbar i kalkylatorn — aktiverad lokalt,
+  ej pushad).
+- §8:s tabell uppdaterad till **25/29/24 bas + 0/10/4 variant = 25/39/28 av 92**, med en
+  ny not som förklarar rättningen och sätter skyldigheten framåt: flytta dispositionsraden
+  i SAMMA commit som aktiveringen loggas, räkna om §8 mekaniskt efter varje batch.
+- §4:s och §4.1/§4.2:s rubriker/inledning uppdaterade från v3-baslinjens statiska tal
+  till att peka på §8 för det aktuella läget.
+- `batchplan-v22.md`s inledning ("Ingen batch är påbörjad... 7/57/28") markerad
+  explicit som historisk (vid v22:s upprättande 2026-09-09) och kompletterad med den
+  aktuella dispositionen 25/39/28.
+- Mekanisk omräkning efter rättning: **25/29/24 bas = 78**, matchar §8 exakt.
+
+### P2 — katalogbrett grindprov rättat till tariff-ID-nyckling, fem stale testnamn rättade
+
+`test_de_sexton_fria_tarifferna_passerar_alla_grinden` (nu
+`test_de_tjugofem_fria_tarifferna_passerar_alla_grinden`) nycklade sitt resultat på
+`member_id`; medlemmar med flera godkända tariffer (Lidköping, E.ON, Navirum) lät den
+sist itererade tariffen tyst skriva över en tidigare i dict:en, trots att kommentaren
+påstod att båda kontrollerades. Nycklar nu på tariff-ID (alla 25 kontrolleras separat) och
+lägger en separat, uttrycklig medlemsmängdskontroll (exakt 19). Verifierat mot
+`blockerade_tariff_ider`/`grind()` direkt: samtliga 25 godkända tariff-ID:n ger `None`.
+
+Fem stale testnamn/docstring-korsreferenser rättade i samma commit:
+`test_grinden_slapper_igenom_16_tariffer` → `_25_tariffer`,
+`test_godkanda_tariffer_kommer_fran_14_medlemmar` → `_19_medlemmar`,
+`test_dispositionen_ar_16_48_28` (verifierade bara att Sundsvall Indal finns) →
+`test_sundsvall_indal_forblir_godkand_efter_senare_batcher`,
+`test_godkanda_ar_nu_exakt_sexton_och_omfattar_alla_sex` (verifierar bara Batch 1:s sex
+medlemskap) → `test_batch_1s_sex_tariffer_forblir_godkanda_efter_senare_batcher`, plus en
+kvarvarande docstring-hänvisning i `test_faktura_manadspriser.py`.
+
+### P2 — det skarpa E.ON-/Navirum-UI-beviset permanentat
+
+Lade E2E-scenario 12 (E.ON Järfälla, bostäder) och 13 (Navirum Norrköping, bostäder) i
+`e2e/kalkylator.smoke.mjs`, byggda mot de verkliga fältnycklarna i den incheckade
+`tariffer.generated.ts` (`eon_jarfalla_bostader_vald_niva_id`,
+`navirum_norrkoping_bostader_vald_niva_id`, delade `flode_m3`/
+`framledningstemperatur_c`). Bevisar för båda: rätt leverantör i dropdownen, kapacitets-,
+band-, flödes- och temperaturfält synliga, INGET dedikerat källperiod-fält (rullande
+effekt, till skillnad från Kraftringens `kalperiod_definition`-krav), synlig
+"fullvärmekund"-scopetext, och normal MWh-submit till ett synligt uppskattat
+(`snapshot`) resultat. Totalt **13** E2E-scenarier, matchar Codex förväntning exakt.
+
+### Verifiering
+
+- Python (`tools/tariffer/tests`): **1009 passed, 4 skipped** (oförändrat antal, endast
+  testnamn/nyckling ändrade).
+- TypeScript (full svit): **1023 passed** i 37 filer (oförändrat — inga komponent-/
+  utility-tester rörda denna runda).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd bundelstorleksvarning.
+- E2E mot isolerat bygge (`E2E_BASE_URL`): **13/13 scenarier godkända** (11 befintliga +
+  2 nya).
+- `git diff --check`: rent i samtliga tre repon (kört på riktigt, inte antaget).
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 25, oförändrad
+  **25/39/28 av 92**.
+- `neptune-marketing/dist`s sedan tidigare orelaterade ändringar rörda inte.
+
+### Commits (lokalt, ingen push)
+
+- `enkey-agents@d93bed6` — katalogbrett grindprov tariff-ID-nycklat, fem stale testnamn
+  rättade.
+- `neptune_academy@5573189` — E2E-scenario 12 (E.ON Järfälla) och 13 (Navirum
+  Norrköping) tillagda.
+- `skills` — denna sessionslogg samt `tariffinventering-v22.md`/`batchplan-v22.md`-
+  dokumentationsrättningen (committeras separat direkt efter denna post).
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.

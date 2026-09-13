@@ -562,17 +562,22 @@ verifierad modell blockeras, det gissas aldrig.
 - **Inmatningslägen:** mwh (obligatorisk effekt); kr och schablon blockerade (`unsupported_input_mode`/`missing_energy`/`invalid_energy`)
 - **Disposition:** `implemented_source_verified_annual`
 
-## 4. Per-produktmatris — samtliga 71 icke-implementerade tariffprodukter
+## 4. Per-produktmatris — 78 bastariffprodukter (§3–4 sammanräknat)
 
-En normaliserad post per unik tariff-ID (inte grupptext). 45 är `ready_to_implement` (§4.1),
-26 är `blocked_external_info` (§4.2) — Eskilstuna flyttad från redo till blockerad i v3
-(granskning 2026-09-08-002, P1: nätreferensen är inte verifierad, `ready` får inte vara
-villkorat av en framtida extern verifiering). Fälten följer exakt vad överlämning `2026-09-08-001`
+En normaliserad post per unik tariff-ID (inte grupptext). Vid v3 var 71 av de 78 raderna
+`ready_to_implement`/`blocked_external_info` (45/26) och resten (7) redan implementerade;
+Eskilstuna flyttades från redo till blockerad i v3 (granskning 2026-09-08-002, P1:
+nätreferensen är inte verifierad, `ready` får inte vara villkorat av en framtida extern
+verifiering). Rader flyttar disposition IN PLACE när de aktiveras (deras
+`**Disposition:**`-rad ändras till `implemented_source_verified_annual`) i stället för att
+fysiskt förflyttas ut ur §4.1/§4.2 till en egen "implementerad"-sektion — se §8 för den
+alltid aktuella, mekaniskt räknade totalen (**25 implemented / 29 ready / 24 blocked av 78
+bas**, rättat 2026-09-13). Fälten följer exakt vad överlämning `2026-09-08-001`
 begärde: leverantör, nät, produkt, kundkategori, prisår/giltighet+källa, käll-/katalog-/
 motor-/kontrakts-/test-/UI-status separat, årsreproducerbarhet, obligatorisk indata med
 fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, disposition.
 
-### 4.1 Redo att implementera (45 produkter)
+### 4.1 Redo att implementera (v3-baslinje 45 produkter; 29 kvarstår `ready_to_implement` per 2026-09-13, se §8)
 
 
 #### `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026`
@@ -638,16 +643,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `03_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. E.ON Järfälla (bostäder).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. E.ON Järfälla (bostäder).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -657,16 +662,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `03_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. E.ON Järfälla (övriga fastigheter).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. E.ON Järfälla (övriga fastigheter).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -676,16 +681,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `04_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. E.ON Malmö (bostäder, −15→−8 °C katalogrättelse).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. E.ON Malmö (bostäder, −15→−8 °C katalogrättelse).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -695,16 +700,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `04_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. E.ON Malmö (övriga fastigheter, −15→−8 °C katalogrättelse).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. E.ON Malmö (övriga fastigheter, −15→−8 °C katalogrättelse).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -876,7 +881,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4 — Sandviken-mönstret
 - **Kvarstående arbete:** `capacity.rate_period: month` — dela INTE årsavgiften med 12 automatiskt.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `kils-energi-kil-2026`
@@ -904,16 +909,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `19_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Kraftringens-Prisandringsmodell-2025.pdf); `web-review-kraftringen-model` (https://www.kraftringen.se/brf/varme-och-kylalosningar/fjarrvarme/fjarrvarmepriser/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "year"` satta på alla fyra band, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvbegränsad variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt (sann januari–februari-källperiod, INTE rullande) + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov inklusive periodhanteringen
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Bekräftat effektband-ID (`supplier_confirmed_band_id`, §6a.2 — en av de 42 raderna), debiterbar effekt (kW), förbrukningsvägd MÅNADSMEDEL-framledningstemperatur `Tf` (°C, fakturan/nätdata — formeln själv använder `Tf` varje månad, inte bara flödet) OCH flöde (m³, fakturan). Formeln `flöde_m3×10,40×max(0,2; 0,2+(Tf−60)×0,02)` känd (katalog) — GOLVBEGRÄNSAD, skild från E.ON/Navirums golvfria formel (§6a.5); Brunnshögs nätdel är en EGEN VARIANT, se särfallstabellen — endast ordinarie nät ingår här.
+- **Obligatorisk indata:** Bekräftat effektband-ID (`supplier_confirmed_band_id`, §6a.2 — en av de 42 raderna), debiterbar effekt (kW) enligt normalårskorrigerad energi januari–februari dividerad med 1416 timmar (icke-rullande, `kalperiod_definition` icke-tom), förbrukningsvägd MÅNADSMEDEL-framledningstemperatur `Tf` (°C, fakturan/nätdata — formeln själv använder `Tf` varje månad, inte bara flödet) OCH flöde (m³, fakturan). Formeln `flöde_m3×10,40×max(0,2; 0,2+(Tf−60)×0,02)` känd (katalog) — GOLVBEGRÄNSAD, skild från E.ON/Navirums golvfria formel (§6a.5); Brunnshögs nätdel är en EGEN VARIANT, se särfallstabellen — endast ordinarie nät ingår här.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Kraftringen — samma parametriserade motortyp som E.ON/Navirum, med `flodeskorrigering_variant: "golvbegransad"` som explicit, typad diskriminator (§6a.5) — INTE härledd implicit från leverantörs-ID
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` som en parametriserad motortyp delad med E.ON/Navirum, med Kraftringens regelvariant explicit diskriminerad (§6a.5). Bör byggas i SAMMA batch/commit som dem. Bandkontraktet (§6a.2) tillkommer som ett separat obligatoriskt fält. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1): `fixed: null` och `rate_period: null` — verifieringslistan anger redan `fixed: 0`, `rate_period: "year"`; sätt båda explicit. Golden-test: ett handräknat helår bekräftar att kapacitetsdelen inte periodiseras om (year, ingen ×12), att `fixed=0` inte tillför en dold stående kostnad, OCH att golvet vid exakt `Tf=60` ger faktorn `0,2` (§6a.5). YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Nätavgränsning, effektprisperiod och flödeskorrektion behöver bekräftas..." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden.
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn, katalogrättelsen, band-/period-kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push.
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -980,16 +985,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `25_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. Navirum Norrköping/Söderköping (bostäder).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. Navirum Norrköping/Söderköping (bostäder).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -999,16 +1004,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `25_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. Navirum Norrköping/Söderköping (övriga fastigheter).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. Navirum Norrköping/Söderköping (övriga fastigheter).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -1018,16 +1023,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `26_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. Navirum Örebro/Kumla/Hallsberg (bostäder).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. Navirum Örebro/Kumla/Hallsberg (bostäder).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -1037,16 +1042,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `26_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) — rättad till den aktuella officiella 2026-källan, granskning 2026-09-08-003 (v3 citerade av misstag 2025-URL:en)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04; teknisk-kartläggning v4)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (supply_temperature_adjusted_flow)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-13 (aktiveringsgranskning `2026-09-13-029`); `fixed: 0`/`rate_period: "month"` satta, den tidigare issue-raden borttagen
+- **Motorstatus:** klar — delad `supply_temperature_adjusted_flow`-motor (golvfri variant), Python och TypeScript, mekaniskt parade
+- **Kontraktsstatus:** i `POLICYREGISTER`, `annual_forward`, bekräftat band-ID + debiterbar effekt + flöde + `Tf`
+- **Teststatus:** tariffspecifika automattester i Python (`test_batch_3_flodeskorrigering.py`) och TypeScript (`resultatkontrakt.batch3.test.ts`, `besparingsvardeBatch3.test.ts`, `besparingsvardeBatch3Katalogaktivering.test.ts`, `KalkylatorPageBatch3.test.tsx`), permanenta katalogaktiveringsprov
+- **UI-status:** valbar i kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex slutgranskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW), medelframledningstemp `Tf` (°C) OCH flöde (`flode_m3`, m³) — alla tre fakturan/avtalet. Endast fullvärmekunder i denna disposition; 36-månadersmetoden för bas-/delvärmekunder är EN EGEN VARIANT, se särfallstabellen.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** E.ON/Navirum — rullande högutväxling, ny motortyp
-- **Kvarstående arbete:** `supply_temperature_adjusted_flow` finns INTE i JUSTERINGSTYPER — delad ny motorkod för samtliga åtta E.ON/Navirum-tariffer plus Kraftringen (samma typ). Resultat blir `noggrannhet: snapshot` (rullande effekt ersatt av ett enskilt leverantörsvärde), aldrig `exact`. KATALOGRÄTTELSE krävs FÖRE aktivering (granskning 2026-09-08-004, P1, gäller samtliga åtta E.ON/Navirum-rader): `fixed: null` och `rate_period: null` — verifieringslistan anger att ingen separat fast avgift finns och att effektpriset är per kW och MÅNAD; sätt `fixed: 0`, `rate_period: "month"`. Utan denna rättelse riskerar en framtida feltolkning en 12× fel årskostnad (motorn ×12:ar bara när rate_period="month"). Golden-test: ett handräknat helår bekräftar korrekt ×12-periodisering och att `fixed=0` inte tillför en dold stående kostnad. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "Effektprisets tidsenhet måste bekräftas. Flödespris korrigeras för framledningstemperatur; full formel saknas." är fullt löst av kombinationen `rate_period`-rättelsen ovan OCH den nya `supply_temperature_adjusted_flow`-motorn (batch 3) — TA BORT issue-raden. Navirum Örebro/Kumla/Hallsberg (övriga fastigheter).
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd månadsperiodisering blockerar fortsatt fakturagaranti/månadsredovisning och besparingsprodukten. Motorn (golvfri variant), katalogrättelsen, kontraktet och den fullständiga testsviten (inklusive Batch 3-omgranskningarna 024–030) är genomförda och lokalt committade — väntar på Codex granskning av aktiveringsdiffen före push. Navirum Örebro/Kumla/Hallsberg (övriga fastigheter).
 - **Disposition:** `implemented_source_verified_annual`
 
 
@@ -1142,7 +1147,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4 — Sandviken-mönstret
 - **Kvarstående arbete (utökat i v5):** Katalogrättelse krävs FÖRE aktivering: `fixed: null`→0, `monthly_proration`→kalenderdagsviktning. YTTERLIGARE KATALOGRÄTTELSE upptäckt av v5:s egen grindverifiering: `issues`-texten "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll" TAS BORT när `fixed:0` sätts — den är den precisa varning rättelsen besvarar, inte en kvarstående öppen fråga.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `partille-energi-partille-2026`
@@ -1161,7 +1166,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4-liknande — temperaturfält, redan stödd typ
 - **Kvarstående arbete:** Ingen ny motorkod (samma indatafält som Göteborg/Södertörn). v1 utelämnade felaktigt detta obligatoriska temperaturfält för Partille.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `piteenergi-norrfjarden-och-sjulnas-2026`
@@ -1256,7 +1261,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4 — Sandviken-mönstret + temperaturfält
 - **Kvarstående arbete:** `Tariffpolicy` (effekt) + befintligt `temperature_difference`-indatafält. Ingen ny motorkod för normalfallet.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `stockholm-exergi-stockholm-exergi-normal-2026`
@@ -1294,7 +1299,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** **RÄTTAT P1 (granskning `2026-09-08-006`) — mwh ENDAST; kr och schablon BLOCKERAS.** v5/v6:s "alla tre lägen via legacy-vägen" var strukturellt fel: tariff-ID:t `sundsvall-energi-indal-liden-och-lucksta-2026` finns INTE i `LEGACY_UNDANTAGNA_TARIFF_ID` (verifierat: bara de sex ursprungliga uppgift-7-tarifferna står i den frozensetten) — `bygg_ts_fran_katalog()` hade KASTAT om tariffen byggts på legacy-vägen utan `contract_required`/policy. Den ska i stället kontraktsgatas med samma minimala mönster som Sandviken: `contract_required: true` + en `Tariffpolicy` med `capacity.type: not_applicable` (inga kapacitetsbundna krav). Kontraktsgated betyder MWh-only (§2:s generella regel), samma blockering av kr/schablon som alla andra `ready_to_implement`-rader.
 - **Tariffamilj/adapter:** Ren energitariff — Sandviken-mönstret (minimal kontraktsgated policy, `capacity.type: not_applicable`), INTE legacy-vägen
 - **Kvarstående arbete (rättat i v7):** Sätt `capacity.type: "not_applicable"` på katalograden. Mekanismen (`EJ_TILLAMPLIG_KAPACITETSFORM`) är byggd och testad mot fixture sedan etapp 1–4 (2026-09-04), bara inte aktiverad mot denna rad. Sätt `contract_required: true` och registrera en minimal `Tariffpolicy` i `policyregister.py` (inga kravda_falt utöver den vanliga MWh-energin) — samma mönster Sandviken redan bevisat i produktion, ingen ny mekanism. INFORMATIONSFÖRFRÅGAN R14 (medlem `sundsvall-energi`) FÅR `tariff_ids` satt till de två `blocked_external_info`-tarifferna (`sundsvall-energi-sundsvall-normal-2026`, `sundsvall-energi-matfors-och-kvissleby-normal-2026` — Matfors hålls blockerad per granskning 2026-09-08-003, följer teknisk-kartläggning v4) i stället för det medlemsomfattande `member_ids` (§7) — INTE Indal/Liden/Lucksta, som frågan uttryckligen inte gäller. Grindtest: `grind(tariff, blockerade_tariff_ider)` på Indal/Liden/Lucksta ska passera EFTER denna omskopning, medan Sundsvall-normal/Matfors fortsatt blockeras via sina egna tariff-ID:n i `blockerade_tariff_ider`.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 2, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `tekniska-verken-katrineholm-katrineholm-2026`
@@ -1351,7 +1356,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4 — Sandviken-mönstret + låg utnyttjning + returtemp
 - **Kvarstående arbete (utökat i v5, granskning 2026-09-08-004, P1):** Alla tre justeringstyper redan i JUSTERINGSTYPER. `Tariffpolicy` med tre bundna fält, ingen ny motorkod. KATALOGRÄTTELSE: `issues`-texten är en INAKTUELL kontrollpost — verifieringslistan bekräftar redan att 2025-bilagans tillsvidarevillkor fortsatt gäller 2026. TA BORT issue-raden helt (inte normalisera — frågan är redan besvarad, inte bara känd). Informationsförfrågan R11 (medlem `telge-nat`) TAS BORT ur `remaining_information_requests` av samma skäl.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 
 #### `temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`
@@ -1427,9 +1432,9 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Familj 4 — Sandviken-mönstret + flöde
 - **Kvarstående arbete:** `volume` redan i JUSTERINGSTYPER och tillämpar redan hela året för denna tariff (inga säsongsmånader att missa). `Tariffpolicy` med två bundna fält.
-- **Disposition:** `ready_to_implement`
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (aktiverad via Batch 1, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
-### 4.2 Blockerade av extern information (26 produkter)
+### 4.2 Blockerade av extern information (v3-baslinje 26 produkter; 24 kvarstår `blocked_external_info` per 2026-09-13, se §8)
 
 Endast produkter där prisbestämningen själv är tvetydig, motsägs, eller där en obligatorisk
 prisdel helt saknar publicerat värde. Frågan i sista fältet är den som ska skickas till
@@ -1555,7 +1560,7 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 - **Inmatningslägen:** blockerade tills batch 5d är implementerad; därefter blockerat
   fail-closed per kundfall om någon av de tre 12-månadersserierna (`Q_m`, `T_m`, `Tm_m`)
   saknas eller har fel längd
-- **Disposition (ändrad i v16):** `ready_to_implement` (var `blocked_external_info`)
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (var `ready_to_implement` (ändrad i v16, var `blocked_external_info`) — aktiverad via Lidköping Batch 5d, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 #### `lidkoping-energi-lidkoping-42-kw-2026`
 - **Leverantör / nät / kundkategori:** Lidköping Energi — Lidköping 42+ kW — näring/brf
@@ -1578,7 +1583,7 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
   kundfall och fakturaverifiering.
 - **Inmatningslägen:** blockerade tills batch 5d är implementerad; därefter fail-closed per
   kundfall om `Q_m`/`T_m`/`Tm_m` saknas eller har fel längd
-- **Disposition (ändrad i v16):** `ready_to_implement` (var `blocked_external_info`)
+- **Disposition (rättad 2026-09-13, Batch 3-dokumentationsrättning):** `implemented_source_verified_annual` (var `ready_to_implement` (ändrad i v16, var `blocked_external_info`) — aktiverad via Lidköping Batch 5d, tidigare felaktigt kvarlämnad som `ready_to_implement`)
 
 #### `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026`
 - **Leverantör / nät / kundkategori:** Mälarenergi — Västerås och Hallstahammar, gruppanslutna småhus — näring/brf
@@ -4701,22 +4706,36 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 7 | 0 | 7 |
-| `ready_to_implement` | 47 | 10 | 57 |
+| `implemented_source_verified_annual` | 25 | 0 | 25 |
+| `ready_to_implement` | 29 | 10 | 39 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
 
-**Not (2026-09-13, aktivering `2026-09-13-029`):** tabellen ovan är den frusna v22-
-planeringsbaslinjen (7/57/28) och har inte räknats om löpande för varje sedan genomförd
-aktivering (Lidköping 5d, Batch 1, Batch 2, Batch 3) — den levande dispositionen förs i
-stället i katalogens eget `change_log` och i respektive batchs sessionslogg. Batch 3:s nio
-bastariffer ovan (§4.1) har fått sina egna `**Disposition:**`-rader flyttade till
-`implemented_source_verified_annual` som en direkt konsekvens av denna aktivering. Den
-verkliga, mekaniskt verifierade dispositionen efter Batch 3 är **25 implemented / 39 ready /
-28 blocked av 92** (se `skills/ellen/conversations/sessions/2026/09/2026-09-12-batch-3-
-flodeskorrigering.md`); en fullständig retroaktiv omräkning av tabellen ovan för samtliga
-tidigare batcher ligger utanför denna aktiveringsrundas omfattning.
+**Rättat 2026-09-13 (Batch 3-dokumentationsrättning, granskning `2026-09-13-030`, P1):**
+tabellen ovan visade tidigare den frusna v22-planeringsbaslinjen (7/57/28) och hade inte
+räknats om sedan v22 skrevs, trots fyra genomförda aktiveringar sedan dess (Lidköping 5d,
+Batch 1, Batch 2, Batch 3). Samtliga nu aktiva bastariffers `**Disposition:**`-rader i §3–4
+är rättade till `implemented_source_verified_annual` (Lidköping 5d:s två rader, Batch 1:s
+sex rader, Batch 2:s en rad, Batch 3:s nio rader — 2+6+1+9=18 nytillkomna sedan v22-
+baslinjens 7, totalt 25). Tabellen ovan är nu en mekanisk räkning av dokumentets egna
+`**Disposition:**`-rader (78 bastariffer + 14 varianttäckningskrav = 92), inte en separat
+skriven siffra. Räkningen matchar den katalog-mekaniskt verifierade dispositionen
+**25 implemented / 39 ready / 28 blocked av 92** (`godkanda(katalog)` == 25; se
+`skills/ellen/conversations/sessions/2026/09/2026-09-12-batch-3-flodeskorrigering.md`).
+
+**Vald dokumentationsmodell:** `tariffinventering-v22.md` och `batchplan-v22.md` förblir de
+levande nulägeskällorna för produktdispositionen — INTE frusna historiska planer med en
+separat live-statusfil. Detta är den mindre av de två vägar granskning `2026-09-13-030`
+gav (att flytta allt nuläge till en ny fristående fil hade krävt att skapa och länka en helt
+ny artefakt utan motsvarande vinst för ett dokument av denna storlek). Skyldigheten framåt:
+§8 ska räknas om mekaniskt (inte skrivas för hand) efter varje framtida batch-aktivering,
+och en batchs `**Disposition:**`-rad flyttas till `implemented_source_verified_annual` i
+SAMMA commit som aktiveringen loggas i sessionsfilen — inte skjutas upp till en senare
+dokumentationsrunda, vilket är exakt vad som orsakade denna P1-avvikelse (Lidköping 5d,
+Batch 1 och Batch 2:s rader hade blivit liggande omärkta i upp till fyra batcher). Katalogens
+`change_log` är den auktoritativa källan för VILKA fält som ändrades och NÄR; detta
+dokuments §8 är den auktoritativa källan för den aggregerade dispositionsräkningen.
 
 **Rättat i v16 (bedömning `2026-09-09-006`):** Lidköping Energis två bastariffer
 (`lidkoping-energi-lidkoping-041-kw-2026`, `lidkoping-energi-lidkoping-42-kw-2026`) flyttade

@@ -5,13 +5,18 @@ efterhand — kvar som historik), som svar på omgranskning
 [2026-09-09-015](../conversations/reviews/2026/09/2026-09-09-omgranskning-tariffinventering-v21.md)
 (`status: changes-required`, supersedes `2026-09-09-014`) av v21/`tariffinventering-v21.md`.
 Bygger på dispositionerna i
-[`tariffinventering-v22.md`](tariffinventering-v22.md) §4.1 (47 bastariffer) och §5 (10
-`ready_to_implement`-varianter), samt §6/§6a:s sammansatta aktiveringspreflight och §7:s
-`blockerade_tariff_ider`-baserade livscykel för informationsförfrågningar. Ingen batch är
-påbörjad, ingen tariff aktiveras — detta är ett förslag till Codex granskning och Roberts
-prioritering. Dispositionerna är OFÖRÄNDRADE sedan v16: **7 implementerade / 57 redo / 28
-blockerade / 92 totalt** — v22 rättar bara attesteringskontraktets enda-källa-egenskap och
-dokumentidentiteten, flyttar ingen post.
+[`tariffinventering-v22.md`](tariffinventering-v22.md) §4.1 (v3-baslinje 47 bastariffer) och
+§5 (10 `ready_to_implement`-varianter), samt §6/§6a:s sammansatta aktiveringspreflight och
+§7:s `blockerade_tariff_ider`-baserade livscykel för informationsförfrågningar. Vid
+UPPRÄTTANDET av v22 (2026-09-09) var ingen batch påbörjad och dispositionerna var
+OFÖRÄNDRADE sedan v16: 7 implementerade / 57 redo / 28 blockerade / 92 totalt — v22 rättade
+då bara attesteringskontraktets enda-källa-egenskap och dokumentidentiteten, flyttade ingen
+post. **Detta är historiskt.** Sedan har Batch 0 samt Lidköping 5d, Batch 1, Batch 2 och
+Batch 3 (se batch-avsnitten nedan och deras "Aktiverad"-noter) genomförts och aktiverats
+lokalt. Den AKTUELLA dispositionen per 2026-09-13 (aktiveringsgranskning `2026-09-13-029`,
+dokumentationsrättning `2026-09-13-030`) är **25 implementerade / 39 redo / 28 blockerade /
+92 totalt**, mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den tabellen för
+det aktuella läget, inte detta dokuments inledning eller historiska batchnoter.
 
 **Vad som är nytt i v22** (se granskning `2026-09-09-015` för fullständig motivering):
 
