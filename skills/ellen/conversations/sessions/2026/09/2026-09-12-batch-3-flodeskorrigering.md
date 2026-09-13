@@ -750,3 +750,54 @@ Dokumentets påstående om en mekanisk 25/29/24-räkning och en enda nulägesbil
 Claude ska endast synkronisera dessa nio produktposter och rätta kommentaren, verifiera
 den exakta 25/29/24 + 0/10/4-räkningen, logga och stanna för slutomgranskning. Själva
 aktiveringen ska ligga kvar. Ingen ny tariffaktivering och ingen push.
+
+## Rättningsrunda 2 — svar på granskning 2026-09-13-031
+
+**Rättelse av föregående rundas påstående:** rättningsrunda 1 (ovan) sade att dokumentet
+"mekaniskt ger 25/29/24 bas" efter dess dokumentationscommit. Det var inte sant — den
+gav de nio Batch 3-raderna fältnamnet `**Disposition (rättad 2026-09-13, Batch
+3-dokumentationsrättning):**` i stället för det enhetliga `**Disposition:**`, vilket gjorde
+att en verklig mekanisk räkning bara hittade 16, inte 25. Denna runda rättar det faktiskt.
+
+1. **P1 — nio Batch 3-block + nio ANDRA tidigare aktiverade block synkade.** Utöver
+   Batch 3:s nio rader (som fick sitt fältnamn återställt till `- **Disposition:**`)
+   visade det sig att exakt samma dubbla sanning oberoende redan fanns för Lidköpings två
+   tariffer, Batch 1:s sex (Karlstad, Övik, Partille, Södertörn, Telge, VänerEnergi) och
+   Batch 2:s en (Sundsvall Indal/Liden/Lucksta) — deras block hade aldrig synkats när DE
+   aktiverades i tidigare rundor av denna session. Samtliga 18 block i
+   `tariffinventering-v22.md` §3–4 är nu rättade så att Katalogstatus/Motorstatus/
+   Kontraktsstatus/Teststatus/UI-status och Kvarstående arbete beskriver det verkliga,
+   aktiverade läget (verifierat mot verklig `POLICYREGISTER`, verkliga testfiler och
+   `investigation: null` i katalogens JSON — inte antaget), i stället för det gamla
+   föraktiveringstillståndet. Mekanisk räkning: `grep -oP '^- \*\*Disposition:\*\* `[a-z_]+`'`
+   ger nu exakt **25 implemented / 29 ready / 24 blocked** (78 rader totalt), matchande
+   §8:s tabell (25/0, 29/10, 24/4 → 25/39/28 av 92) och katalogens `godkanda(katalog)`==25.
+   `batchplan-v22.md`s sammanfattningstabell fick en tydlig frusen-baslinje-not direkt
+   under tabellen så att "Redan implementerade: 7" inte längre kan läsas som nuläge.
+2. **P2 — stale docstring-parentes borttagen.** `test_de_tjugofem_fria_tarifferna_
+   passerar_alla_grinden` nämnde fortfarande "namnet är historiskt kvar från när talet
+   var sexton" trots att namnet redan bytts. Rent kommentarsfel, ingen testlogik ändrad.
+
+### Verifiering
+
+- Mekanisk dokumenträkning: **25/29/24 bas** (78 rader), inga avvikande fältnamn kvar.
+- Python (`tools/tariffer/tests`): **1009 passed, 4 skipped** (oförändrat — endast en
+  docstring ändrad).
+- TypeScript (full svit): **1023 passed** i 37 filer (oförändrat — ingen kod i
+  neptune_academy rörd denna runda).
+- `npx tsc --noEmit`: godkänt.
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd bundelstorleksvarning.
+- E2E mot isolerat bygge (`E2E_BASE_URL`): **13/13 scenarier godkända** (oförändrat).
+- `git diff --check`: rent i `skills` och `enkey-agents` (kört på riktigt).
+- Disposition mekaniskt omverifierad: `godkanda(katalog)` = 25, oförändrad
+  **25/39/28 av 92**.
+- `neptune-marketing/dist`s sedan tidigare orelaterade ändringar rörda inte.
+
+### Commits (lokalt, ingen push)
+
+- `skills@03b8d72` — `tariffinventering-v22.md`/`batchplan-v22.md`-dokumentationsrättningen
+  (18 block synkade, enhetligt Disposition-fältnamn, frusen-baslinje-not).
+- `enkey-agents@4b1d4b6` — stale docstring-parentes borttagen i `test_katalog.py`.
+- `neptune_academy` — orörd denna runda (`55731894428d7fe43be00b9ddf36dad2597e8098`).
+
+Ingen ny tariffaktivering, ingen push. Stannar för Codex slutomgranskning.
