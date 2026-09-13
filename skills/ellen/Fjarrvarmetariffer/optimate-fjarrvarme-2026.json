@@ -49,7 +49,7 @@
     "members_with_energy_rates": 53,
     "members_missing_final_rates": [],
     "price_status_counts": {
-      "published_2026": 78
+      "published_2026": 86
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
@@ -2112,7 +2112,7 @@
             "variable": 108.17
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2274,7 +2274,7 @@
             "variable": 101.57
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2436,7 +2436,7 @@
             "variable": 101.43
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2598,7 +2598,7 @@
             "variable": 95.1
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2760,7 +2760,7 @@
             "variable": 97.38
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -2922,7 +2922,7 @@
             "variable": 95.77
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -3084,7 +3084,7 @@
             "variable": 102.38
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -3246,7 +3246,7 @@
             "variable": 97.91
           }
         ],
-        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade effektsignatur, inte kalkylatorns.",
+        "billing_basis_method": "För kunder där en annan värmekälla levererar bas- eller delvärme: medelvärdet av de tre högsta dygnsmedeleffekterna (kW) under de senaste 36 månaderna, inklusive fakturamånaden — leverantörens egen, redan beräknade debiterbara effekt, inte kalkylatorns.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
