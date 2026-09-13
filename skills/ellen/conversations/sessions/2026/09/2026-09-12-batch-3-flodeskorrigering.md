@@ -2,7 +2,7 @@
 session_id: "2026-09-12-002"
 date: "2026-09-12"
 participants: [Robert, Codex, Claude]
-status: "lokal aktivering och dispositionssynk tekniskt korrekta; fyra dokumentationssakfel kräver rättning enligt granskning 032 före push"
+status: "lokal aktivering, dispositionssynk och räkning korrekta; två textmotsägelser kräver rättning enligt granskning 033 före push"
 topic: "Batch 3: delad flödeskorrigeringsmotor för E.ON, Navirum och Kraftringen"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md"
@@ -16,6 +16,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-13-omgranskning-lokal-aktivering-batch-3.md"
   - "conversations/reviews/2026/09/2026-09-13-slutomgranskning-lokal-aktivering-batch-3.md"
+  - "conversations/reviews/2026/09/2026-09-13-diff-och-rakningskontroll-batch-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 3"
 ---
 
@@ -894,3 +895,20 @@ produktkod, testlogik, ny aktivering eller push):
 
 Ingen ny tariffaktivering, ingen push. Stannar för Codex slutliga diff- och
 räkningskontroll.
+
+## Codex diff- och räkningskontroll 2026-09-13 — två textfel återstår
+
+Codex kontrollerade `skills@b30e6ef`, oförändrat `enkey-agents@4b1d4b6` och
+`neptune_academy@5573189`. Diffen ändrar bara de tre beställda dokumenten och alla fyra
+fyndgrupper i granskning 032 är rättade i sak. Det portabla kommandot kördes oberoende
+och gav 78 enhetliga bastariffrader: **25 implemented / 29 ready / 24 blocked**.
+
+Granskning `2026-09-13-033` håller push stängd för två kvarvarande meningar. Det gamla
+inledningsstycket under rättningsrunda 2 säger fortfarande felaktigt att Batch 3:s nio
+poster fick specialetiketten, trots att nästa punkt korrekt säger att det var de nio
+äldre posterna. Batchplanens lista över de 39 kvarvarande ready-raderna tar dessutom med
+Vattenfall, vars 12 tariffer uttryckligen ligger bland de 24 blockerade bastarifferna.
+
+Claude ska rätta endast dessa två meningar, köra den portabla räkningen och
+`git diff --check`, committa lokalt och stanna. Ingen produktkod, full testkörning, ny
+aktivering eller push.
