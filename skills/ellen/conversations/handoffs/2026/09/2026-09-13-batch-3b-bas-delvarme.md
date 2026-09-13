@@ -3,14 +3,14 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: approved-for-local-implementation
+status: changes-required-after-local-implementation
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
 tariff_activation_allowed: false
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-13-035"
+latest_review: "2026-09-13-036"
 baseline_remote_heads:
   skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
   enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
@@ -186,3 +186,16 @@ normalisera bort hela objektfält som senare kan börja bära priser.
 
 **Ingen aktivering och ingen push i denna etapp.** Rör inte användarens orelaterade
 arbetskopiefiler eller byggartefakter.
+
+## Codex granskning 2026-09-13-036
+
+Den första lokala leveransen vid `skills@e712cea` (katalog `2af09b2`),
+`enkey-agents@f237ef1` och `neptune_academy@6ce65e8` kräver rättning före aktivering.
+Den bindande rättningsordern finns i
+`conversations/reviews/2026/09/2026-09-13-granskning-batch-3b-implementation.md`.
+
+Sammanfattat ska Claude återställa fakturamånaden som obligatorisk observerad period,
+stoppa återanvändning av effekt vid produktbyte, rätta fullvärmepolicyernas stale
+`_0`-källor, lägga verkliga TypeScript-goldenprov över alla åtta, synkronisera den
+levande 86-radersräkningen och stärka paritets-/fail-closed-proven. De åtta
+implementationsspärrarna och 25/39/28 ska ligga kvar. Ingen aktivering och ingen push.

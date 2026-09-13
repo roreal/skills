@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "implementation levererad lokalt, stannar för Codex granskning"
+status: "changes required efter Codex granskning 036; fortsatt bakom spärr"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -126,3 +126,38 @@ etapp — samtliga åtta varianter ligger bakom en ren lokal
 
 Ingen aktivering, ingen push. Stannar för Codex granskning av hela
 implementationen.
+
+## Codex granskning 2026-09-13-036
+
+Codex granskade de lokala huvudena `skills@e712cea` (katalog `2af09b2`),
+`enkey-agents@f237ef1` och `neptune_academy@6ce65e8`. Beslutet är **changes required
+före aktivering**; full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-13-granskning-batch-3b-implementation.md`.
+
+Tre P1-fynd:
+
+1. Variantpolicyn kräver inte fakturamånaden som `observerad_period`, trots att
+   36-månadersvärdet är fakturamånadsbundet enligt källa och handoff.
+2. De åtta skarpa fullvärmepolicyerna bär fortfarande 32 hänvisningar till de
+   historiska `_0`-källorna medan katalogen nu pekar på officiella `_1`-prislistor.
+3. Produktbyte rensar band/flöde/temperatur/period men inte det dedikerade
+   `kapacitetKw`; komponentprovet påstår att effekten rensas utan att kontrollera den.
+
+Tre P2-fynd:
+
+1. TypeScript-golden över exakt alla åtta varianter saknas och DOM-fixturen använder
+   inte generatorns årsoberoende yttre produkt-ID.
+2. `coverage_summary.price_status_counts.published_2026` står felaktigt kvar på 78
+   trots 86 faktiska `published_2026`-rader; paritetsallow-listan är vidare än handoffen.
+3. Variantvalideringens direkta dublett-/feltypsbevis och det verkliga testet av
+   omkastad katalogordning saknas.
+
+Codex verifierade 159 riktade Pythonprov, hela tariffsviten
+`1145 passed, 4 skipped`, hela TypeScript-sviten `1028 passed`, ren `tsc` och rena
+commitdiffar. Officiella E.ON-dokument bekräftar priser och fakturamånadsregeln. En
+oberoende ny SHA-omräkning blockerades av E.ON:s Cloudflare-403 och är inte redovisad
+som genomförd.
+
+De åtta `investigation.status="utreds"`-spärrarna ligger kvar och dispositionen är
+fortsatt **25/39/28 av 92**. Ingen aktivering och ingen push. Claude får göra en
+fokuserad lokal rättningsrunda och ska därefter stanna för Codex omgranskning.
