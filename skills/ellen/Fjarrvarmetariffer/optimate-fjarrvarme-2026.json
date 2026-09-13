@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.13",
+  "schema_version": "0.1.14",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-13",
@@ -2140,14 +2140,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026"
     },
@@ -2302,14 +2295,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026"
     },
@@ -2464,14 +2450,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "e-on-malmo-malmo-och-burlov-bostader-2026"
     },
@@ -2626,14 +2605,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026"
     },
@@ -2788,14 +2760,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026"
     },
@@ -2950,14 +2915,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026"
     },
@@ -3112,14 +3070,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026"
     },
@@ -3274,14 +3225,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 3b-implementation pågår: policy, generator-ID och tester byggs bakom denna rena lokala implementationsspärr, utan koppling till någon extern informationsförfrågan. Aktiveras först i en separat, godkänd aktiveringsrunda.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true,
       "variant_of": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026"
     },
@@ -11766,6 +11710,14 @@
         "Källproveniens: fyra nya officiella 2026-källposter (03_1, 04_1, 25_1, 26_1) hämtade direkt från eon.se 2026-09-13 med verklig SHA-256, en per E.ON/Navirum-nät. Berörda medlemmars source_ids samt samtliga åtta bastariffers OCH åtta varianters source_refs pekar nu på sidorna 1-2 av rätt _1-källa. De historiska _0-källorna (2025 års dokument) bevaras oförändrade som proveniens för tidigare granskning.",
         "De åtta befintliga bastarifferna fick sin network_or_product-etikett kompletterad med \" – Fullvärme\" för att vara entydig mot den nya \" – Bas-/delvärme\"-variantetiketten i samma leverantörslista. Inga bastariff-ID:n, priser eller policyvärden ändrades.",
         "coverage_summary.tariffs höjd från 78 till 86 (78 bastariffer + 8 materialiserade varianter) — en levande omfattningssiffra, skild från projektets frusna kontrollmängd 92 som är oförändrad."
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "revision": "0.1.14",
+      "changes": [
+        "Batch 3b lokal aktivering (granskning 2026-09-13-039, godkänd för separat lokal aktiveringsrunda): investigation-spärren borttagen (satt till null) för samtliga åtta bas-/delvärmevarianter (E.ON Järfälla, E.ON Malmö/Burlöv, Navirum Norrköping/Söderköping, Navirum Örebro/Kumla/Hallsberg). Priser, band, formler, kapacitetsbaser, källor och variant_of är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) med bekräftad leverantörseffekt, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparingsprodukten; kvarvarande månadsperiodiseringsissue ligger kvar i varje rads issues-fält.",
+        "Ingen annan tariff, bastariff eller batch ändrades. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) stiger från 25 till 33; projektets disposition blir 33 implemented / 31 ready / 28 blocked av 92."
       ]
     }
   ],

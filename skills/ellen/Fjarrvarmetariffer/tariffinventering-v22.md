@@ -1928,14 +1928,14 @@ aldrig `exact` — samma klassificering som huvudfallet.
 
 | Variant-ID | Bastariff | Källa | Vad den kräver | Obligatorisk indata | Inmatningsläge | Batch | Disposition |
 |---|---|---|---|---|---|---|---|
-| `e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026--bas-delvarme` | `e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026` | `03_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) | 36-månadersmetoden för kunder med bas-/delvärmekälla i stället för fullvärme — leverantörens medelvärde av de TRE HÖGSTA DYGNSMEDELEFFEKTERNA (kW) senaste 36 månaderna inkl. fakturamånaden (verifieringslistan) | Debiterbar effekt (kW, fakturan — leverantörens 36-månadersberäkning, samma fält som huvudfallet men annan beräkningskälla), medelframledningstemp `Tf` (°C, fakturan, hör till den separata flödeskorrigeringen) OCH flöde (`flode_m3`, m³, fakturan) — SAMMA tre fält som bastariffens huvuddisposition | mwh; kr/schablon blockerade | 3b (efter batch 3) | `ready_to_implement` |
-| `e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026--bas-delvarme` | samma, övriga fastigheter | `03_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `e-on-malmo-malmo-och-burlov-bostader-2026--bas-delvarme` | samma, Malmö/Burlöv bostäder | `04_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026--bas-delvarme` | samma, övriga fastigheter | `04_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026--bas-delvarme` | samma | `25_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026--bas-delvarme` | samma | `25_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026--bas-delvarme` | samma | `26_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
-| `navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026--bas-delvarme` | samma | `26_0` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) | samma | samma | samma | 3b | `ready_to_implement` |
+| `e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026--bas-delvarme` | `e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026` | `03_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) | 36-månadersmetoden för kunder med bas-/delvärmekälla i stället för fullvärme — leverantörens medelvärde av de TRE HÖGSTA DYGNSMEDELEFFEKTERNA (kW) senaste 36 månaderna inkl. fakturamånaden (verifieringslistan) | Debiterbar effekt (kW, fakturan — leverantörens 36-månadersberäkning, samma fält som huvudfallet men annan beräkningskälla), medelframledningstemp `Tf` (°C, fakturan, hör till den separata flödeskorrigeringen) OCH flöde (`flode_m3`, m³, fakturan) — SAMMA tre fält som bastariffens huvuddisposition | mwh; kr/schablon blockerade | 3b (efter batch 3) | `implemented_source_verified_annual` |
+| `e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026--bas-delvarme` | samma, övriga fastigheter | `03_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--bro-balsta-jarfalla-kungsangen-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `e-on-malmo-malmo-och-burlov-bostader-2026--bas-delvarme` | samma, Malmö/Burlöv bostäder | `04_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026--bas-delvarme` | samma, övriga fastigheter | `04_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser-malmo-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026--bas-delvarme` | samma | `25_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026--bas-delvarme` | samma | `25_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--norrkoping-soderkoping-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026--bas-delvarme` | samma | `26_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
+| `navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026--bas-delvarme` | samma | `26_1` (https://www.eon.se/content/dam/eon-se/swe-documents/swe-jamfor-fjarrvarmepriser--hallsberg-kumla-orebro-2026.pdf) | samma | samma | samma | 3b | `implemented_source_verified_annual` |
 | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026--kundvald-effekt` | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026` | `sfab-prislista-2026` (https://sfab.se/media/33mnnexa/prislista-normal-2026.pdf) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 | Kundvald effekt (i stället för SFAB:s rekommenderade) med egen överuttagsavgift; formeln är inte kartlagd i detalj och skiljer sig från katalogschemats `capacity_overrun`-typ | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken exakt formel/sats gäller för överuttagsavgiften vid kundvald effekt, och skiljer den sig från standardschemats `capacity_overrun`?" |
 | `kraftringen-kraftringen-2026--brunnshog` | `kraftringen-kraftringen-2026` | `19_0` (https://www.kraftringen.se/brf/varme-och-kylalosningar/fjarrvarme/fjarrvarmepriser/) | Brunnshögs egen nätdel/prisstruktur, inte kartlagd — bara ordinarie nät är verifierat i §4.1 | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken är Brunnshögs egen prislista/formel, och skiljer den sig från Kraftringens ordinarie nät?" |
 | `tekniska-verken-linkoping-linkoping-2026--lagtemperatur` | `tekniska-verken-linkoping-linkoping-2026` | `41_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-for-Tekniska-verken-i-Linkoping-AB-Linkoping-2026.pdf) | Lågtemperaturleveransens egen tariffstruktur, inte kartlagd i detalj | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken är lågtemperaturleveransens fullständiga prisstruktur (kapacitet, energi, ev. justeringar)?" |
@@ -1950,17 +1950,23 @@ Tekniska Verken Linköping lågtemperatur, Finspångs spetsvärmetillägg).
 
 **Batch 3b — lokal implementation bakom spärr genomförd 2026-09-13 (handoff
 2026-09-13-001, beredskapskontroll 2026-09-13-035, katalogcommit
-`skills@2af09b2`):** samtliga åtta E.ON-/Navirum-varianter ovan är nu materialiserade
-som riktiga, räknade katalograder (`<bas-id>--bas-delvarme`) med explicit `variant_of`
+`skills@2af09b2`):** samtliga åtta E.ON-/Navirum-varianter ovan materialiserades som
+riktiga, räknade katalograder (`<bas-id>--bas-delvarme`) med explicit `variant_of`
 mot sin fullvärmebasrad, egen `Tariffpolicy` i `POLICYREGISTER`, och ett generiskt
-`_stabilt_tariff_id`-stöd i generatorn. Källhänvisningen är samtidigt uppdaterad från
+`_stabilt_tariff_id`-stöd i generatorn. Källhänvisningen uppdaterades samtidigt från
 `_0` (2025 års dokument) till en ny, officiell 2026-källpost `_1` per nät (03_1/04_1/
-25_1/26_1, hämtad direkt från eon.se 2026-09-13). Dispositionen ovan (`ready_to_implement`)
-är MEDVETET oförändrad — implementationen aktiverar ingenting; `godkanda(katalog)`
-är fortsatt exakt 25 och katalogen har växt från 78 till 86 poster (78 bastariffer + 8
-materialiserade varianter, se `Frusen kontrollmängd`-avsnittet för att detta inte rör
-kontrollmängden 92). En separat, godkänd aktiveringsrunda krävs innan disposition
-flyttas till 33/31/28 av 92.
+25_1/26_1, hämtad direkt från eon.se 2026-09-13).
+
+**Batch 3b — lokal aktivering genomförd 2026-09-13 (granskning `2026-09-13-039`,
+katalogcommit `skills@<aktiveringscommit>`):** samtliga åtta varianters
+`investigation`-spärr är borttagen (satt till `null`). Tabellens sista kolumn ovan
+visar därför nu `implemented_source_verified_annual`, och käll-ID:na i tabellen är
+rättade till respektive `_1`-källa (var tidigare kvarglömda `_0`-referenser efter
+implementationsfasen). Priser, band, formler och `variant_of` är oförändrade.
+`godkanda(katalog)` steg från 25 till 33; katalogen har fortsatt 86 poster
+(kontrollmängden 92 är oförändrad). Kvarvarande månadsperiodiseringsissue ligger kvar
+i varje rads `issues`-fält och blockerar fortsatt månadsredovisning, inte
+`annual_forward`. Ingen push är gjord i samband med denna aktivering.
 
 ## 6. Sammansatt aktiveringspreflight — samtliga 45 `ready`-ID:n (granskning 2026-09-08-005/-006/-007, P1)
 
@@ -4728,11 +4734,19 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 25 | 0 | 25 |
-| `ready_to_implement` | 29 | 10 | 39 |
+| `implemented_source_verified_annual` | 25 | 8 | 33 |
+| `ready_to_implement` | 29 | 2 | 31 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-13 (Batch 3b-aktivering, granskning `2026-09-13-039`):** samtliga åtta
+Batch 3b-variantraders (§5) `Disposition`-kolumn flyttades från `ready_to_implement` till
+`implemented_source_verified_annual` i SAMMA commit som katalogens `investigation`-spärr
+togs bort, per den skyldighet som antecknades nedan efter Batch 3-dokumentationsrättningen.
+Tabellen ovan är en mekanisk räkning; den matchar den katalog-mekaniskt verifierade
+dispositionen **33 implemented / 31 ready / 28 blocked av 92** (`godkanda(katalog)` == 33;
+se `skills/ellen/conversations/sessions/2026/09/2026-09-13-batch-3b-bas-delvarme.md`).
 
 **Rättat 2026-09-13 (Batch 3-dokumentationsrättning, granskning `2026-09-13-030`/`-031`,
 P1):** tabellen ovan visade tidigare den frusna v22-planeringsbaslinjen (7/57/28) och hade

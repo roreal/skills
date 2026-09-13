@@ -855,9 +855,13 @@ självmotsägande (tre fält, sedan ett fjärde).
 beredskapskontroll 2026-09-13-035, godkänd av Codex):** samtliga åtta variantrader är
 materialiserade i katalogen (`skills@2af09b2`) och registrerade i `POLICYREGISTER`
 (`enkey-agents@f237ef1`), vardera bakom en ren lokal `investigation.status="utreds"`.
-Ingen variant är aktiverad; `godkanda(katalog)` är fortsatt exakt 25 och dispositionen
-kvarstår 25/39/28 av 92. En separat, godkänd aktiveringsrunda krävs innan denna batch
-kan räknas som genomförd (→ 33/31/28 av 92).
+
+**Lokal aktivering genomförd 2026-09-13 (granskning 2026-09-13-039, godkänd för separat
+lokal aktivering):** samtliga åtta variantraders `investigation`-spärr är borttagen.
+`godkanda(katalog)` steg från 25 till 33; dispositionen är nu **33 implemented / 31 ready /
+28 blocked av 92**. Katalogen har fortsatt 86 fysiska poster. Priser, band och `variant_of`
+är oförändrade. Ingen push är gjord i samband med aktiveringen; separat Codex-granskning av
+aktiveringsdiffen krävs innan push.
 
 ## Batch 4 — Egna flödesformler: Jämtkraft, Umeå (4 tariffer)
 
@@ -1305,18 +1309,19 @@ i denna lista minskar därmed från 26 till 24.
 visar VAD varje batch var tänkt att omfatta när planen skrevs (57 batchade + 24 + 4
 blockerade + 7 "redan implementerade" = 92) och ändras inte i efterhand.
 
-Av de 57 planerade batchade raderna har hittills **18** genomförts och lokalt aktiverats
+Av de 57 planerade batchade raderna har hittills **26** genomförts och lokalt aktiverats
 — dessa har flyttat från "batchad, redo" till `implemented_source_verified_annual`:
 
 - Lidköping 5d: 2 rader.
 - Batch 1: 6 rader.
 - Batch 2: 1 rad.
 - Batch 3: 9 rader.
+- Batch 3b: 8 variantrader (aktiverade 2026-09-13, granskning `2026-09-13-039`).
 
-De ÅTERSTÅENDE **39** planerade batchade raderna (Batch 3b: 8, 4: 4, 5a: 8, 5b: 7, 5c: 8,
-6: 3, 7: 1) är fortsatt inte påbörjade. Vattenfalls 12 tariffer utgör en egen, separat
-Batch 8, uttryckligen ej schemalagd, och ingår i de **24 blockerade** bastarifferna, inte
-i denna 39-summa. Den AKTUELLA dispositionen är **25 implementerade / 39 redo / 28
+De ÅTERSTÅENDE **31** planerade batchade raderna (4: 4, 5a: 8, 5b: 7, 5c: 8, 6: 3, 7: 1)
+är fortsatt inte påbörjade. Vattenfalls 12 tariffer utgör en egen, separat Batch 8,
+uttryckligen ej schemalagd, och ingår i de **24 blockerade** bastarifferna, inte i denna
+31-summa. Den AKTUELLA dispositionen är **33 implementerade / 31 redo / 28
 blockerade av 92**, mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den
 tabellen för nuläget, inte raden "Redan implementerade | 7" ovan eller "57 batchade" som
 om alla redan var klara.
