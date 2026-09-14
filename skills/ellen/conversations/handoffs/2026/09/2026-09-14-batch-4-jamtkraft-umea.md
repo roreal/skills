@@ -3,17 +3,21 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: technically-approved-awaiting-robert-push-authorization-2026-09-14-010
+status: pushed-and-remote-verified
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: true
-push_allowed: false
+push_allowed: true
 review_required_before_activation: true
 review_required_before_push: true
 baseline_remote_heads:
   skills: "8b12daa9cbdb3f392bc6a5d20a32ae6f89f6c2b3"
   enkey_agents: "49f09078e6ed0acb0a7c05a104694110cf59b3e2"
   neptune_academy: "5e0d710f993b1058cf39c652eb45d171ca766406"
+final_remote_heads:
+  skills: "f9560e85132d45a5427acd7b4c3e68a20dc0d14f"
+  enkey_agents: "5d498cfab3f968af42ba60751b5143c6f96536e0"
+  neptune_academy: "ebe4d621ff800cab1f8248cd8e4e07ba042064fd"
 tariff_disposition_before: "33 implemented / 31 ready / 28 blocked av 92"
 tariff_disposition_during_implementation: "33 implemented / 31 ready / 28 blocked av 92"
 tariff_disposition_after_activation: "37 implemented / 27 ready / 28 blocked av 92"

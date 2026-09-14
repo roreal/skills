@@ -691,3 +691,24 @@ Batch 4 är därmed **tekniskt slutgodkänd för normal fast-forward-push efter 
 uttryckliga klartecken**. Bindande pushvillkor finns i
 `conversations/reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md`.
 Ingen push utfördes av Codex.
+
+## Push till origin — Batch 4 slutförd 2026-09-14
+
+Robert gav explicit push-instruktion enligt Codex tekniska slutgodkännande
+[`2026-09-14-010`](../../../reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md).
+Samtliga tre repon pushades med normal fast-forward-historik (ingen force,
+ingen omskrivning) i ordningen skills → enkey-agents → neptune_academy, och
+`origin/main` verifierades direkt via `git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `8b12daa` → `f9560e85132d45a5427acd7b4c3e68a20dc0d14f`
+- `enkey-agents`: `49f0907` → `5d498cfab3f968af42ba60751b5143c6f96536e0`
+- `neptune_academy`: `5e0d710` → `ebe4d621ff800cab1f8248cd8e4e07ba042064fd`
+
+Disposition efter push: **37 implemented / 27 ready / 28 blocked av 92**, 39
+skarpa produkter. De orelaterade, användarägda ändringarna i
+`neptune-marketing/dist`, `../milesight` och de otrackade `skills`-filerna
+rördes inte. Batch 4 (Jämtkraft Östersund/Frösön/Ås, Brunflo/Opevägen, Åre
+m.fl., samt Umeå Energi Enkel) är därmed implementerad, aktiverad och pushad
+till samtliga tre repon.
