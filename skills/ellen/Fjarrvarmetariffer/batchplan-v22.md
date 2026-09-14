@@ -1001,6 +1001,17 @@ Effekt/band är leverantörens/fakturans enda obligatoriska värde. Katalogens
   leverantören har bekräftat ska just den prisraden användas utan automatisk
   intervallöverprövning. Okänt ID ska alltid blockera.
 - **Visas för användaren:** mwh-läge, obligatorisk indata; kr/schablon blockerade.
+- **Implementationsstatus (2026-09-14, handoff `2026-09-14-002`):** samtliga åtta
+  katalorader har fått `contract_required:true` och en registrerad policy med exakt
+  de två fälten ovan; verklig 2026-källverifiering (webbsidor och de två officiella
+  PDF-källorna för Kil/TEMAB) genomförd på riktigt med verkliga SHA-256. R05 och R12
+  flyttade till `resolved_information_requests` (inte externt besvarade, men inte
+  längre produktblockerande — se inventeringens §7); R13 togs bort ur Söderhamns
+  `investigation.request_ids`. Ingen `investigation.status` ändrad — samtliga åtta
+  ligger fortsatt bakom en ren lokal implementationsspärr. Dispositionen är
+  oförändrad **37/27/28 av 92**; en isolerad kopia med exakt de åtta spärrarna
+  rensade ger 45 katalogprodukter. Aktivering (mål 45/19/28) är en separat,
+  ännu inte godkänd runda.
 
 ## Batch 5b — Leverantörsvärde, fullårsflöde (6 bastariffer + 1 varianttäckning)
 
