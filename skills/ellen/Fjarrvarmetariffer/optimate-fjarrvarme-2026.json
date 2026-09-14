@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.14",
+  "schema_version": "0.1.15",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-13",
+  "as_of": "2026-09-14",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -226,6 +226,14 @@
       "retrieved_on": "2026-09-02",
       "sha256": "d234a61d6e2f69935f91d77782ba486616779415ccad1e91bcfbe937738cc543",
       "kind": "supplier_document_hosted_by_prisdialogen"
+    },
+    {
+      "id": "15_1",
+      "title": "Prisändringsmodellen 2026-2028 (pdf)",
+      "url": "https://www.jamtkraft.se/wt/documents/519/Pris%C3%A4ndringsmodellen_2026-2028.pdf",
+      "retrieved_on": "2026-09-14",
+      "sha256": "a7451e8df9396079a0e6d3bb75c6d0517ecba424e8be94193925fd36dc43e995",
+      "kind": "supplier_website_or_linked_document"
     },
     {
       "id": "16_0",
@@ -784,14 +792,14 @@
       "id": "web-review-umea-terms",
       "title": "umea-terms",
       "url": "https://a.storyblok.com/f/162274/x/bed500e2ec/prisvillkor-fjarrvarme.pdf",
-      "retrieved_on": "2026-09-02",
+      "retrieved_on": "2026-09-14",
       "kind": "supplier_website_or_linked_document"
     },
     {
       "id": "web-review-umea-enkel",
       "title": "umea-enkel",
       "url": "https://www.umeaenergi.se/foretag/varme/priser/prisavtal-enkel",
-      "retrieved_on": "2026-09-02",
+      "retrieved_on": "2026-09-14",
       "kind": "supplier_website_or_linked_document"
     },
     {
@@ -1118,7 +1126,8 @@
       "id": "jamtkraft",
       "name": "Jämtkraft",
       "source_ids": [
-        "15_0"
+        "15_0",
+        "15_1"
       ],
       "tariff_ids": [
         "jamtkraft-ostersund-froson-as-2026",
@@ -4748,7 +4757,7 @@
             "variable": 1012
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Medelvärdet av de tre högsta uppmätta dygnsmedeleffekterna. Dygnsmedeleffekt = högsta uppmätta dygnsförbrukning delad med 24 timmar. Värdet gäller till en högre dygnsmedeleffekt uppmäts, dock högst 12 månader.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -4772,28 +4781,28 @@
       ],
       "source_refs": [
         {
-          "source_id": "15_0",
+          "source_id": "15_1",
           "pages": [
-            19
+            19,
+            20
           ]
         }
       ],
       "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
         "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
-      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "jamtkraft-brunflo-och-opevagen-2026",
@@ -4866,7 +4875,7 @@
             "variable": 1012
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Medelvärdet av de tre högsta uppmätta dygnsmedeleffekterna. Dygnsmedeleffekt = högsta uppmätta dygnsförbrukning delad med 24 timmar. Värdet gäller till en högre dygnsmedeleffekt uppmäts, dock högst 12 månader.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -4890,28 +4899,28 @@
       ],
       "source_refs": [
         {
-          "source_id": "15_0",
+          "source_id": "15_1",
           "pages": [
-            19
+            19,
+            20
           ]
         }
       ],
       "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
         "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
-      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026",
@@ -4984,7 +4993,7 @@
             "variable": 1012
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Medelvärdet av de tre högsta uppmätta dygnsmedeleffekterna. Dygnsmedeleffekt = högsta uppmätta dygnsförbrukning delad med 24 timmar. Värdet gäller till en högre dygnsmedeleffekt uppmäts, dock högst 12 månader.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -5008,28 +5017,28 @@
       ],
       "source_refs": [
         {
-          "source_id": "15_0",
+          "source_id": "15_1",
           "pages": [
-            19
+            19,
+            20
           ]
         }
       ],
       "issues": [
-        "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
         "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
       ],
       "production_ready": false,
-      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "jonkoping-energi-jonkoping-och-granna-2026",
@@ -9352,7 +9361,7 @@
             }
           ]
         },
-        "formula": "(fixed + variable * billing_basis) * B"
+        "formula": "fixed + variable * billing_basis"
       },
       "adjustments": [
         {
@@ -9391,11 +9400,9 @@
           "pages": null
         }
       ],
-      "issues": [
-        "Hela effektkostnaden multipliceras med B; gränser och normalårskorrigering måste mappas. Andra avtalsalternativ ingår inte."
-      ],
+      "issues": [],
       "production_ready": false,
-      "calculation_status": "requires_engine_mapping_and_invoice_validation",
+      "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "website_review": {
@@ -9405,10 +9412,9 @@
       "investigation": {
         "status": "utreds",
         "request_ids": [],
-        "conditions_sv": [
-          "Hela effektkostnaden multipliceras med B; gränser och normalårskorrigering måste mappas. Andra avtalsalternativ ingår inte."
-        ]
-      }
+        "conditions_sv": []
+      },
+      "contract_required": true
     },
     {
       "id": "vanerenergi-mariestad-och-toreboda-2026",
@@ -11718,6 +11724,16 @@
       "changes": [
         "Batch 3b lokal aktivering (granskning 2026-09-13-039, godkänd för separat lokal aktiveringsrunda): investigation-spärren borttagen (satt till null) för samtliga åtta bas-/delvärmevarianter (E.ON Järfälla, E.ON Malmö/Burlöv, Navirum Norrköping/Söderköping, Navirum Örebro/Kumla/Hallsberg). Priser, band, formler, kapacitetsbaser, källor och variant_of är oförändrade. Godkännandet avser kalkylatorns uppskattade årskostnad (annual_forward) med bekräftad leverantörseffekt, inte fakturagaranti, månadsredovisning, kronor, schablon eller besparingsprodukten; kvarvarande månadsperiodiseringsissue ligger kvar i varje rads issues-fält.",
         "Ingen annan tariff, bastariff eller batch ändrades. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) stiger från 25 till 33; projektets disposition blir 33 implemented / 31 ready / 28 blocked av 92."
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "revision": "0.1.15",
+      "changes": [
+        "Batch 4 (handoff 2026-09-14-001): Jämtkrafts tre rader (Östersund/Frösön/Ås, Brunflo/Opevägen, Åre m.fl.) och Umeå Energi Enkel fick contract_required:true inför en separat, ännu inte godkänd aktiveringsrunda. Ingen investigation.status ändrad — alla fyra ligger fortsatt bakom en ren lokal implementationsspärr.",
+        "Jämtkrafts capacity.billing_basis_method fylld med källverifierad text (medelvärdet av de tre högsta dygnsmedeleffekterna). Ny källpost 15_1 (officiell 2026-2028-prisändringsmodell, verklig SHA-256) läggs till; de tre radernas source_refs pekar nu på 15_1 sidorna 19-20 i stället för det historiska 2025-dokumentet 15_0, som bevaras oförändrat.",
+        "Jämtkrafts tidigare lösta issue-text om omappad effektmetod tas bort; den kvarstående upplysningen om overifierad månadsperiodisering ligger kvar och blockerar fortsatt bara månadsfaktura, inte annual_forward.",
+        "Umeå Energis web-review-källor (web-review-umea-enkel, web-review-umea-terms) återverifierade 2026-09-14 mot aktuella officiella sidor (bekräftat oförändrade 2026-priser, band och B-formel); retrieved_on uppdaterat."
       ]
     }
   ],
