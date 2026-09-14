@@ -2,7 +2,7 @@
 
 | Sessions-ID | Datum | Deltagare | Status | Ämne | Logg |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-14-001` | 2026-09-14 | Robert, Codex, Claude | Batch 4 godkänd för lokal implementation bakom spärr; ingen aktivering eller push; 33/31/28 | Batch 4: Jämtkrafts tre flödestariffer och Umeå Energi Enkel | [Öppna sessionen](sessions/2026/09/2026-09-14-batch-4-jamtkraft-umea.md) |
+| `2026-09-14-001` | 2026-09-14 | Robert, Codex, Claude | Lokal implementation bakom spärr levererad (`skills@c1d8320`, `enkey-agents@69b3060`, `neptune_academy@289b9c0`); inväntar Codex granskning; ingen aktivering eller push; 33/31/28 | Batch 4: Jämtkrafts tre flödestariffer och Umeå Energi Enkel | [Öppna sessionen](sessions/2026/09/2026-09-14-batch-4-jamtkraft-umea.md) |
 | `2026-09-13-001` | 2026-09-13 | Robert, Codex, Claude | Slutgodkänd, uttryckligen godkänd av Robert, pushad och remote-verifierad vid `skills@119f038`, `enkey-agents@49f0907`, `neptune_academy@5e0d710`; 33/31/28 | Batch 3b: E.ON/Navirum bas-/delvärme | [Öppna sessionen](sessions/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
 | `2026-09-12-002` | 2026-09-12 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@19c68fe`, `enkey-agents@4b1d4b6`, `neptune_academy@5573189`; 25/39/28 | Batch 3: delad flödeskorrigeringsmotor | [Öppna sessionen](sessions/2026/09/2026-09-12-batch-3-flodeskorrigering.md) |
 | `2026-09-12-001` | 2026-09-12 | Robert, Codex, Claude | Slutförd, pushad och remote-verifierad vid `skills@8cd8e6b`, `enkey-agents@5da3b74`, `neptune_academy@297e4f0`; Sundsvall Indal/Liden/Lucksta aktiv och 16/48/28 | Batch 2: Sundsvall Energi — Indal, Liden och Lucksta | [Öppna sessionen](sessions/2026/09/2026-09-12-batch-2-sundsvall-indal.md) |
@@ -17,7 +17,7 @@
 
 | Överlämnings-ID | Paus skapad | Återuppta tidigast | Status | Omfattning | Dokument |
 | --- | --- | --- | --- | --- | --- |
-| `2026-09-14-001` | 2026-09-14 08:16 | lokal implementation kan starta | Godkänd bakom spärr; aktivering och push ej godkända; stanna för Codex granskning | Batch 4 — tre Jämtkraftprodukter och Umeå Enkel, två flödesformler samt Umeås B | [Öppna överlämningen](handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md) |
+| `2026-09-14-001` | 2026-09-14 08:16 | levererad, inväntar Codex granskning | Godkänd bakom spärr; aktivering och push ej godkända; implementation levererad vid `skills@c1d8320`/`enkey-agents@69b3060`/`neptune_academy@289b9c0`, stanna för Codex granskning | Batch 4 — tre Jämtkraftprodukter och Umeå Enkel, två flödesformler samt Umeås B | [Öppna överlämningen](handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md) |
 | `2026-09-13-001` | 2026-09-13 20:48 | slutförd, auktoriserad, pushad och remote-verifierad | Remote `skills@119f038`, `enkey-agents@49f0907`, `neptune_academy@5e0d710`; alla fynd stängda och 33/31/28 | Batch 3b — E.ON/Navirums 36-månaders leverantörseffekt | [Öppna överlämningen](handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md) |
 | `2026-09-12-002` | 2026-09-12 18:57 | slutförd — pushad och remote-verifierad | Exakt nio Batch 3-bastariffer aktiva; slutstatus 25/39/28; ersatt av `2026-09-13-001` | Batch 3 — E.ON, Navirum och Kraftringen | [Öppna överlämningen](handoffs/2026/09/2026-09-12-batch-3-flodeskorrigering.md) |
 | `2026-09-12-001` | 2026-09-12 16:22 | slutförd — pushad och remote-verifierad | Exakt Sundsvall Indal/Liden/Lucksta aktiv; slutstatus 16/48/28 | Batch 2 — ren energitariff samt tariffscopad requestinfrastruktur | [Öppna överlämningen](handoffs/2026/09/2026-09-12-batch-2-sundsvall-indal.md) |

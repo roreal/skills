@@ -944,6 +944,17 @@ ett stabilt katalogvärde eller en fakturapost, till skillnad från Umeås stati
 - **Visas för användaren:** mwh-läge; Jämtkraft: effekt + flöde; Umeå: effekt + flöde + `B`;
   kr/schablon blockerade för alla fyra.
 
+**Implementationsstatus 2026-09-14 (handoff 2026-09-14-001):** planen ovan är genomförd i
+`enkey-agents@69b3060`/`neptune_academy@289b9c0`/`skills@c1d8320` — `flow_difference`,
+`asymmetric_flow_difference`, `kapacitet_multiplikator_bindning` och
+`kontrollera_kompositgrind` finns i Python och TypeScript, alla fyra `Tariffpolicy`-poster
+är registrerade, och Vattenfalls dynamiska `asymmetric_flow_difference`-rader (`reference:
+"network_average"`) förblir avvisade av samma schemakontroll. Samtliga fyra tariffer ligger
+fortsatt bakom `investigation.status="utreds"` — dispositionen är oförändrad **33/31/28 av
+92**, inte flyttad till implemented. En separat, godkänd aktiveringsrunda krävs innan
+`godkanda(katalog)` kan returnera dem (förväntat resultat efter en sådan aktivering:
+**37/27/28**).
+
 ## Batch 5a — Leverantörsvärde, ingen ytterligare justeringspost (8 tariffer)
 
 Effekt/band är leverantörens/fakturans enda obligatoriska värde. Katalogens

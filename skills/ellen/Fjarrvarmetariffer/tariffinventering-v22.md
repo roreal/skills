@@ -792,57 +792,57 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 #### `jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026`
 - **Leverantör / nät / kundkategori:** Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
-- **Primärkälla:** `15_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Jamtkraft.pdf)
+- **Primärkälla:** `15_1` (Jämtkrafts officiella prisändringsmodell 2026-2028, https://www.jamtkraft.se/wt/documents/519/Pris%C3%A4ndringsmodellen_2026-2028.pdf, sidorna 19-20, hämtad 2026-09-14). Det historiska `15_0` (2025-dokumentet) bevaras oförändrat.
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (flow_difference)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Motorstatus:** Implementerad bakom spärr (`flow_difference`, `justeringar.py`/`faktura.py`/`fjarrvarme.ts`, handoff 2026-09-14-001)
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER`, men tariffen förblir spärrad (`investigation.status: utreds`) till en separat, godkänd aktiveringsrunda
+- **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
+- **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Åre m.fl.).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
-- **Kvarstående arbete:** `flow_difference` finns INTE i JUSTERINGSTYPER — kräver ny motorkod i justeringar.py (speglad inline i fjarrvarme.ts) innan aktivering, trots att formeln och referensvärdet redan är kända och statiska.
+- **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.
 - **Disposition:** `ready_to_implement`
 
 
 #### `jamtkraft-brunflo-och-opevagen-2026`
 - **Leverantör / nät / kundkategori:** Jämtkraft — Brunflo och Opevägen — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
-- **Primärkälla:** `15_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Jamtkraft.pdf)
+- **Primärkälla:** `15_1` (Jämtkrafts officiella prisändringsmodell 2026-2028, https://www.jamtkraft.se/wt/documents/519/Pris%C3%A4ndringsmodellen_2026-2028.pdf, sidorna 19-20, hämtad 2026-09-14). Det historiska `15_0` (2025-dokumentet) bevaras oförändrat.
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (flow_difference)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Motorstatus:** Implementerad bakom spärr (`flow_difference`, `justeringar.py`/`faktura.py`/`fjarrvarme.ts`, handoff 2026-09-14-001)
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER`, men tariffen förblir spärrad (`investigation.status: utreds`) till en separat, godkänd aktiveringsrunda
+- **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
+- **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Brunflo/Opevägen).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
-- **Kvarstående arbete:** `flow_difference` finns INTE i JUSTERINGSTYPER — kräver ny motorkod i justeringar.py (speglad inline i fjarrvarme.ts) innan aktivering, trots att formeln och referensvärdet redan är kända och statiska.
+- **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.
 - **Disposition:** `ready_to_implement`
 
 
 #### `jamtkraft-ostersund-froson-as-2026`
 - **Leverantör / nät / kundkategori:** Jämtkraft — Östersund, Frösön, Ås — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
-- **Primärkälla:** `15_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Jamtkraft.pdf)
+- **Primärkälla:** `15_1` (Jämtkrafts officiella prisändringsmodell 2026-2028, https://www.jamtkraft.se/wt/documents/519/Pris%C3%A4ndringsmodellen_2026-2028.pdf, sidorna 19-20, hämtad 2026-09-14). Det historiska `15_0` (2025-dokumentet) bevaras oförändrat.
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (flow_difference)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Motorstatus:** Implementerad bakom spärr (`flow_difference`, `justeringar.py`/`faktura.py`/`fjarrvarme.ts`, handoff 2026-09-14-001)
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER`, men tariffen förblir spärrad (`investigation.status: utreds`) till en separat, godkänd aktiveringsrunda
+- **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
+- **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Östersund/Frösön/Ås).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
-- **Kvarstående arbete:** `flow_difference` finns INTE i JUSTERINGSTYPER — kräver ny motorkod i justeringar.py (speglad inline i fjarrvarme.ts) innan aktivering, trots att formeln och referensvärdet redan är kända och statiska.
+- **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.
 - **Disposition:** `ready_to_implement`
 
 
@@ -1402,17 +1402,17 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `45_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodellen_2025-Umea-Energi.pdf); `web-review-umea-terms` (https://a.storyblok.com/f/162274/x/bed500e2ec/prisvillkor-fjarrvarme.pdf); `web-review-umea-enkel` (https://www.umeaenergi.se/foretag/varme/priser/prisavtal-enkel)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE (asymmetric_flow_difference)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); `web-review-umea-terms`/`web-review-umea-enkel` återverifierade 2026-09-14 mot aktuella officiella sidor (oförändrade 2026-priser/band/B-formel)
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på en separat, godkänd aktiveringsrunda, inte på nytt leverantörsbesked
+- **Motorstatus:** Implementerad bakom spärr (`asymmetric_flow_difference` samt `kapacitet_multiplikator_bindning` för `B`, handoff 2026-09-14-001)
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (`_UMEA_ENKEL_POLICY`), men tariffen förblir spärrad (`investigation.status: utreds`) till en separat, godkänd aktiveringsrunda
+- **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit vid B=0,93/1/1,401, B=14-blockering, kompositgrind, isolerad 37-produktsräkning)
+- **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata (rättat i v7, §6a.2/§6a.3):** Bekräftat effektband-ID (`supplier_confirmed_band_id`, §6a.2 — verifierat: raden har `band_selection` PLUS `post_multiplier` samtidigt, kräver BÅDA nya kontraktsfälten), debiterbar effekt (kW), flöde okt–apr (m³, fakturan, `asymmetric_flow_difference`), OCH kapacitetsfaktorn `B` — katalogens `post_multiplier` är en piecewise-formel av kvoten `U = normalårskorrigerad_energi_dec_jan_feb / energi_sep_apr`, men bolagets normalårskorrigering är INTE publicerad, så `U` kan inte räknas ut ur rå mätdata. Valt kontrakt: leverantörens EGET redan beräknade `B`-värde (fakturan/leverantörsbesked) tas emot som ett obligatoriskt leverantörsvärde — INGEN kalkylatorberäkning av `U`/`B` från energidata. `Tariffpolicy.kapacitet_bindning` binder `billing_basis` (leverantörens årseffekt), `Tariffpolicy.kapacitet_band_bindning` binder det bekräftade bandet, och `Tariffpolicy.kapacitet_multiplikator_bindning` binder `B` (intervall `[0,93; 1,401]`, §6a.3).
 - **Inmatningslägen:** mwh (samtliga fält krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Umeå — ny motortyp `asymmetric_flow_difference`, bandkontraktet (§6a.2) OCH en arkitektoniskt separat `post_multiplier`-medveten kompositgrind (§6a.3, INTE en ändring av den nakna `grind()`)
-- **Kvarstående arbete (rättat i v7):** (1) `asymmetric_flow_difference` finns INTE i JUSTERINGSTYPER — byggs separat från Vattenfalls blockerade variant av samma typnamn (Umeås formel är komplett och byggbar, Vattenfalls är det inte). (2) **RÄTTAT P1 (granskning `2026-09-08-006`):** den NAKNA `grind()` ändras INTE och fortsätter avvisa `post_multiplier` för alla tariffer. I stället körs en NY, separat `kontrollera_kompositgrind(tariff, policy)` (§6a.3) EFTER `grind()`, som bara godkänner `post_multiplier` när `policy.kapacitet_multiplikator_bindning` är satt och verifierad. (3) Handräknade testfall vid `B=0,93`, `B=1,401` (§6a.3s omräknade tak, inte det tidigare gissade `1,4`) och en punkt mellan brytpunkterna — testet heter `B-intervall`, inte "U-intervall", eftersom motorn aldrig räknar `U`. Ett negativt test för `B=14` ska blockera via kompositgrinden. (4) Bandkontraktet (§6a.2) läggs till som ett fjärde, separat obligatoriskt fält. (5) Katalogradens `issues`-text ("Hela effektkostnaden multipliceras med B...") är fullt löst av leverantörsvärdekontraktet ovan — TA BORT issue-raden.
+- **Kvarstående arbete:** Motor (`asymmetric_flow_difference`), `kontrollera_kompositgrind` (strukturkontroll, körs av `katalog.py:godkanda()` efter den oförändrade nakna `grind()`), policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001) — inklusive B=0,93/1,401-gränsfallen och B=14-blockeringen via kontraktsförkontrollen. Den tidigare issue-texten om omappad B är borttagen. Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten (förväntat 37 katalogprodukter) och lägger omockade UI-/E2E-prov.
 - **Disposition:** `ready_to_implement`
 
 
