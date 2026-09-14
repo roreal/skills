@@ -566,8 +566,13 @@ den bindande ordern:
 
 ### Verifiering
 
-- **Python**: full svit **1271 passed, 4 skipped** (oförändrat testantal, endast
-  omräknade assertioner). `git diff --check`: rent.
+- **Python**: full svit **1271 passed, 4 skipped**. **Rättelse (granskning
+  2026-09-14-009, P3):** detta beskrevs felaktigt som "oförändrat testantal" —
+  föregående godkända läge (efter granskning 2026-09-14-008) hade **1272**
+  passerande prov. Ett prov (`test_isolerad_katalogkopia_med_fyra_sparrar_
+  rensade_ger_37`s icke-muteringsdel) togs faktiskt bort i denna aktiveringsdiff
+  och ersattes inte, vilket sänkte antalet med ett. Se rättningsrunda 1 nedan där
+  det återställs. `git diff --check`: rent.
 - **TypeScript**: full svit **1236 passed** i 42 filer (1221 + 15 nya). `npx tsc
   --noEmit`: rent.
 - **Isolerat `npm run eval:build`**: godkänt, endast känd bundelstorleksvarning.
@@ -607,3 +612,64 @@ Oberoende verifiering: 1271+4 skip Python, 1236 TypeScript, ren tsc, grönt eval
 noll ändrade äldre produkter. Bindande rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md`.
 Aktiveringen ska inte rullas tillbaka. **Ingen push.**
+
+## Rättningsrunda 1 — svar på granskning 2026-09-14-009
+
+Alla tre fynd rättade. Katalogen, den genererade artefakten och priserna är
+oförändrade — endast tester och dokumentation ändrades.
+
+1. **P1 — det beställda omockade skarpa produktbytesregressionsprovet är nu på
+   plats.** Nytt E2E-scenario 18 i `kalkylator.smoke.mjs` byter INOM SAMMA
+   sidladdning Umeå → Jämtkraft Östersund → Jämtkraft Brunflo (ett annat
+   Jämtkraft-ID) → Umeå. Efter varje byte asserteras att effekt, period, band
+   och B inte återanvänds och att otillämpliga fält (periodfält, B-fält, det
+   förra bandfältet) försvinner — inklusive `flode_okt_apr_m3`, som delar
+   samma policynyckel mellan alla fyra produkter och därför är den mest
+   sannolika platsen för en tyst regression. Efter det sista bytet (tillbaka
+   till Umeå) blockerar rensad obligatorisk indata submit med ett fältnära
+   `#kapacitetKw-fel` och korrekt `aria-invalid`/`aria-describedby`; giltig
+   indata ger därefter ett synligt uppskattat resultat.
+2. **P2 — `godkanda()`s icke-muteringsinvariant återställd** som ett eget,
+   dedikerat prov (`test_godkanda_muterar_inte_originalkatalogen`) mot den nu
+   aktiverade, verkliga katalogen och det explicita `POLICYREGISTER`: tar en
+   djup kopia, kör `godkanda()`, och asserterar att originalkatalogen är
+   bytemässigt oförändrad.
+3. **P2 — Batch 4:s levande "Obligatorisk indata"/"Visas för användaren" i
+   `batchplan-v22.md` rättade** till att uttryckligen nämna bekräftat band-ID
+   för båda familjerna och det dedikerade källperiod-fältet för Umeås
+   icke-rullande årseffekt.
+4. **P3 — dokumentationens felaktiga testpåståenden rättade**: den borttagna
+   "isolerad 37-produktsräkning" i `tariffinventering-v22.md` §6a.2/§6a.3
+   ersatt med en korrekt beskrivning (icke-muteringsinvarianten,
+   domän-/kontraktsnivåprovet, det nya permanenta E2E-produktbytesscenariot);
+   sessionsloggens felaktiga "oförändrat testantal"-påstående ovan rättat med
+   en explicit korrigeringsnot.
+
+### Commits (lokalt, ingen push)
+
+- `enkey-agents@5d498cf` — `test_godkanda_muterar_inte_originalkatalogen`
+  tillagt i `test_batch_4_jamtkraft_umea.py`.
+- `neptune_academy@ebe4d62` — E2E-scenario 18 tillagt i
+  `kalkylator.smoke.mjs`.
+- `skills` (denna commit) — `batchplan-v22.md`, `tariffinventering-v22.md`
+  och denna sessionslogg rättade.
+
+### Verifiering
+
+- **Python**: riktad Batch 4-fil **42 passed** (41 + 1 ny). Full svit **1272
+  passed, 4 skipped** (1271 + 1 återställd) — se rättelsenoten ovan om
+  föregående rundas felaktiga "oförändrat"-påstående.
+- **TypeScript**: full svit **1236 passed** i 42 filer (oförändrat — inga nya
+  testfiler, bara E2E-scriptet ändrat). `npx tsc --noEmit`: rent.
+- **Isolerat `npm run eval:build`**: godkänt, endast känd bundelstorleksvarning.
+- **E2E** mot isolerat bygge: samtliga **18/18** scenarier godkända, inklusive
+  det nya produktbytesscenariot (18).
+- **Generatorsynk**: `test_synk.py` **2 passed**, oförändrat.
+- **Mekaniskt verifierat**: katalogen har fortfarande 86 poster,
+  `godkanda(katalog)`==37, skarp payload fortfarande 39 produkter totalt,
+  disposition oförändrad **37 implemented / 27 ready / 28 blocked av 92**.
+  Katalogen och den genererade artefakten rördes inte i denna rättningsrunda.
+- `git diff --check`: rent i alla tre repon. Orelaterad arbetskopiesmuts
+  (`neptune-marketing/dist`, `../milesight`, otrackade `skills`-filer) orörd.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.

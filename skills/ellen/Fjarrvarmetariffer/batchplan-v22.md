@@ -921,9 +921,11 @@ ett stabilt katalogvärde eller en fakturapost, till skillnad från Umeås stati
   (m³, `months: [1,2,3,4,10,11,12]`, 7 månader) — TRE obligatoriska fält, inte två (rättat,
   granskning 2026-09-14-005: batchplanens formulering "samma tre fält, ingen fjärde" avsåg
   aldrig att band-ID:t skulle utelämnas, bara att ingen fjärde/rå 36-månadersfältet skulle
-  läggas till). Umeå (rättat i v7): bekräftat effektband-ID (§6a.2), debiterbar effekt,
-  flöde okt–apr, OCH kapacitetsfaktorn `B` (leverantörens eget redan beräknade värde) —
-  FYRA obligatoriska fält.
+  läggas till). Umeå (rättat i v7, kompletterat granskning 2026-09-14-009): bekräftat
+  effektband-ID (§6a.2), debiterbar årseffekt, flöde okt–apr, kapacitetsfaktorn `B`
+  (leverantörens eget redan beräknade värde) — FYRA obligatoriska policyfält — OCH ett
+  femte, dedikerat källperiod-fält (ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD) för de tre föregående
+  kalenderåren, eftersom Umeås årseffekt INTE är rullande (till skillnad från Jämtkrafts).
 - **Filer:** katalograder ×4, `justeringar.py` (två nya formler, speglade inline i
   `fjarrvarme.ts` — ingen separat `justeringar.ts` finns), NY funktion
   `kontrollera_kompositgrind()`, den rättade `godkanda()`-tvåpassloopen (§6a.3 — den nakna
@@ -946,7 +948,9 @@ ett stabilt katalogvärde eller en fakturapost, till skillnad från Umeås stati
   (det andra grindpasset fångar den); samma test upprepat med en okänd justeringstyp i
   stället för en issue; samt ett test att `godkanda(katalog, policyregister=X)` skiljer sig
   från `godkanda(katalog)` när `X` saknar Umeås policy.
-- **Visas för användaren:** mwh-läge; Jämtkraft: effekt + flöde; Umeå: effekt + flöde + `B`;
+- **Visas för användaren (rättat granskning 2026-09-14-009):** mwh-läge; Jämtkraft: effekt +
+  bekräftat band + flöde, inget periodfält (rullande effekt); Umeå: effekt + bekräftat band +
+  flöde + `B` + ett dedikerat källperiod-fält (treårig kalenderperiod, icke-rullande effekt);
   kr/schablon blockerade för alla fyra.
 
 **Lokal aktivering genomförd 2026-09-14 (granskning `2026-09-14-008`, godkänd för separat
