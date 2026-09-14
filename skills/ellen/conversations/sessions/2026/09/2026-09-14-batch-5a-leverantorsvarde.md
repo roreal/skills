@@ -210,9 +210,26 @@ Alla tre P1-fynd, alla tre P2-fynd och P3-fyndet rättade.
    `json.dump(indent=2, ensure_ascii=False)`; diffen mot `cb55614` (basen före
    Batch 5a) är nu 176 rader, inte 23 000+.
 
-**Verifiering:** Python full svit **1410 passed, 4 skipped** (var 1392+4).
-TypeScript full svit **1335 passed** i 45 filer (var 1271). `npx tsc --noEmit`:
-rent. Mekaniskt: katalog 86 poster, `godkanda(katalog)`==37, isolerad kopia med
-åtta spärrar rensade ger 45. Disposition oförändrad **37/27/28 av 92**.
+**Verifiering:** Python full svit **1411 passed, 4 skipped** (var 1392+4, +19
+nya prov). TypeScript full svit **1335 passed** i 45 filer (var 1271, +64 nya).
+`npx tsc --noEmit`: rent. Isolerat `npm run eval:build`: godkänt, endast känd
+bundelstorleksvarning. Mekaniskt: katalog 86 poster, `godkanda(katalog)`==37,
+isolerad kopia med åtta spärrar rensade ger 45. Disposition oförändrad
+**37/27/28 av 92**.
+
+**Commits (lokalt, ingen push):**
+
+- `skills@caa5dd6` — katalogets `rullande`-korrigering (samma
+  investigation-spärrar), Kils frysta officiella källa, R12/R13-resolutioner,
+  åtta synkade inventeringsrader, verifieringslistans Skövde/Katrineholm/Kil,
+  återställd tvåstegsindentering.
+- `enkey-agents@674a057` — `_familj4_kapacitet_krav`s `rullande`-parameter,
+  `_familj4_band_id_krav`s `etikett`/`hjalptext`-parameter, full
+  band-/felmatris, riktiga `harled_resultatstatus`-kr/schablon-prov,
+  uppdaterad katalog-SHA-konstant.
+- `neptune_academy@c6c50a9` — `batch5aRawData.ts`/`.driftprov.test.ts`,
+  ombyggd `resultatkontrakt.batch5a.test.ts`, ny
+  `KalkylatorPageBatch5a.test.tsx`, regenererad `tariffer.generated.ts`
+  (diffen är exakt proveniensraden).
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
