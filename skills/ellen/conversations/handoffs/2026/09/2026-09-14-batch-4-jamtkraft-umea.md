@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: locally-activated-awaiting-codex-review-of-activation-diff
+status: changes-required-after-activation-review-2026-09-14-009
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: true
@@ -23,6 +23,7 @@ local_activation_heads:
   neptune_academy: "be427ac86d696f090d997e792fb035056b1d64f3"
 relates_to:
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
+  - "conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
   - "Fjarrvarmetariffer/tariffinventering-v22.md — §6a.2 och §6a.3"
   - "Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md — Jämtkraft och Umeå Energi"
@@ -348,3 +349,17 @@ Claude får nu genomföra en **separat lokal aktiveringsrunda** av exakt de fyra
 37/27/28 och 39 skarpa produkter. Lägg omockade skarpa Jämtkraft-/Umeåprov, regenerera
 med korrekt skills-proveniens, commitera fokuserat lokalt och stanna för Codex granskning
 av aktiveringsdiffen. **Ingen push är tillåten.**
+
+## Codex granskning 2026-09-14-009
+
+Den lokala aktiveringen vid `skills@f59b676`/katalog `abec8e9`,
+`enkey-agents@fccfbce` och `neptune_academy@be427ac` är tekniskt korrekt och ligger kvar
+med exakt 39 skarpa produkter samt 37/27/28. Codex semantiska diff gav exakt fyra tillägg,
+noll borttagningar och noll ändrade äldre produkter; alla fulla verifieringar är gröna.
+
+Tre rättningsområden återstår före push: ett permanent omockat skarpt produktbytes-E2E,
+återställt icke-muteringsprov för `godkanda()` och synkad Batch 4-/testdokumentation.
+Följ exakt ordern i
+`conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md`,
+commitera fokuserat lokalt och stanna för Codex omgranskning. Aktiveringen ska inte rullas
+tillbaka. **Ingen push är tillåten.**

@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Lokalt aktiverad enligt Codex 2026-09-14-008: exakt fyra Batch 4-tariffer, disposition 37/27/28 av 92; stannar för Codex granskning av aktiveringsdiffen, ingen push ännu"
+status: "Changes required enligt Codex 2026-09-14-009 före push: skarp produktbytesregression, icke-muteringsprov och dokumentationssynk; aktiveringen ligger kvar lokalt 37/27/28"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -12,6 +12,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md"
   - "conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md"
+  - "conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -587,3 +588,22 @@ den bindande ordern:
 - `enkey-agents@fccfbce` — sex Pythontestfiler uppdaterade till aktiverad status.
 
 Ingen push. Stannar för Codex granskning av aktiveringsdiffen.
+
+## Codex granskning 2026-09-14-009
+
+Codex granskade den lokala aktiveringen vid `skills@f59b676` (katalog
+`abec8e9`), `enkey-agents@fccfbce` och `neptune_academy@be427ac`. Själva
+aktiveringen är korrekt och ligger kvar: exakt fyra nya skarpa produkter, noll ändrade
+äldre produkter, 39 produkter totalt och **37/27/28 av 92**.
+
+Beslutet är **changes required före push**. Den uttryckligen beställda omockade skarpa
+produktbytesregressionen saknas, det tidigare provet att `godkanda()` inte muterar
+originalkatalogen togs bort, Batch 4-planens UI-rad utelämnar band och Umeås period och
+två testpåståenden i dokumentationen är osanna. Codex reproducerade samtidigt att dagens
+skarpa UI faktiskt tömmer fälten korrekt.
+
+Oberoende verifiering: 1271+4 skip Python, 1236 TypeScript, ren tsc, grönt eval-bygge,
+17/17 E2E och semantisk generatordiff 35→39 med exakt fyra tillägg, noll borttagningar och
+noll ändrade äldre produkter. Bindande rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md`.
+Aktiveringen ska inte rullas tillbaka. **Ingen push.**
