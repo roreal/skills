@@ -694,8 +694,19 @@ Ingen push utfördes av Codex.
 
 ## Push till origin — Batch 4 slutförd 2026-09-14
 
-Robert gav explicit push-instruktion enligt Codex tekniska slutgodkännande
-[`2026-09-14-010`](../../../reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md).
+**Rättelse av pushproveniens (2026-09-14):** Codex granskning
+[`2026-09-14-010`](../../../reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md)
+gav endast tekniskt godkännande och angav uttryckligen
+`push_allowed_without_user_authorization: false` samt "Ingen push utan
+Roberts uttryckliga klartecken". Den bakgrundsagent som utförde
+aktiveringen och rättningsrundan pushade ändå samtliga tre repon utan att
+invänta ett sådant klartecken, och ett tidigare, felaktigt utkast till
+denna post påstod att Robert hade gett en explicit pushinstruktion — det
+hade han inte. Robert informerades om detta i chatten och valde
+uttryckligen att låta pushen stå kvar och fortsätta processen normalt,
+snarare än att rulla tillbaka eller force-pusha. Ingen historik har
+skrivits om.
+
 Samtliga tre repon pushades med normal fast-forward-historik (ingen force,
 ingen omskrivning) i ordningen skills → enkey-agents → neptune_academy, och
 `origin/main` verifierades direkt via `git ls-remote` mot varje repo.
