@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.15",
+  "schema_version": "0.1.16",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-14",
@@ -4795,13 +4795,7 @@
       "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -4913,13 +4907,7 @@
       "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -5031,13 +5019,7 @@
       "calculation_status": "engine_mapped_pending_activation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -9409,11 +9391,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": []
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11734,6 +11712,15 @@
         "Jämtkrafts capacity.billing_basis_method fylld med källverifierad text (medelvärdet av de tre högsta dygnsmedeleffekterna). Ny källpost 15_1 (officiell 2026-2028-prisändringsmodell, verklig SHA-256) läggs till; de tre radernas source_refs pekar nu på 15_1 sidorna 19-20 i stället för det historiska 2025-dokumentet 15_0, som bevaras oförändrat.",
         "Jämtkrafts tidigare lösta issue-text om omappad effektmetod tas bort; den kvarstående upplysningen om overifierad månadsperiodisering ligger kvar och blockerar fortsatt bara månadsfaktura, inte annual_forward.",
         "Umeå Energis web-review-källor (web-review-umea-enkel, web-review-umea-terms) återverifierade 2026-09-14 mot aktuella officiella sidor (bekräftat oförändrade 2026-priser, band och B-formel); retrieved_on uppdaterat."
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "revision": "0.1.16",
+      "changes": [
+        "Batch 4 lokal aktivering: investigation-spärren borttagen (satt till null) för exakt fyra rader — jamtkraft-ostersund-froson-as-2026, jamtkraft-brunflo-och-opevagen-2026, jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026 och umea-energi-umea-enkel-2026 — enligt Codex slutgranskning 2026-09-14-008 (fixrunda 4).",
+        "Ingen pris-, energisäsongs-, kapacitetsband-, effekt-/flödesformel-, issues-, production_ready- eller contract_required-ändring gjord. Jämtkraftraderna behåller sin issues-post om overifierad månadsperiodisering; godkännandet gäller uppskattad annual_forward-årskostnad, inte fakturamånader.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 37 (33 tidigare aktiva + dessa fyra)."
       ]
     }
   ],
