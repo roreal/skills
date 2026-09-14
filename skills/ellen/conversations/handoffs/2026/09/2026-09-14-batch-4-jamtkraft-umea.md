@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-review-2026-09-14-005
+status: changes-required-after-review-2026-09-14-006
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: false
@@ -295,5 +295,24 @@ dokumentationssynk återstår.
 
 Följ exakt rättningsordning i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md`, behåll alla
+fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
+omgranskning. Ingen aktivering och ingen push är godkänd.
+
+## Codex omgranskning 2026-09-14-006
+
+Rättningsrunda 2 vid `skills@62b0bc9`, `enkey-agents@5a56c27` och
+`neptune_academy@8e5bb96` är omgranskad. Multiplikatorns exakta struktur, policyintervall
+och direkta talintervall är stängda; andra passet, produktbyte och statusbevis är också
+gröna. Fyra avgränsade rättningar återstår före aktivering:
+
+1. återställ Jämtkrafts tre verifieringsposter från felaktiga 36 månader/fakturamånad till
+   källans och policyns senaste 12 månader;
+2. gör saknad bunden effekt till ett faktiskt svenskt `#kapacitetKw-fel` med ARIA i både
+   Jämtkrafts och Umeås komponentprov;
+3. assertera explicit de synliga enheterna `kW` och `m³`;
+4. avvisa `bool`/icke-numerisk kapacitetsmultiplikator i Pythons direkta motorvakt.
+
+Följ exakt reproduktion och rättningsordning i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md`. Behåll alla
 fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
 omgranskning. Ingen aktivering och ingen push är godkänd.

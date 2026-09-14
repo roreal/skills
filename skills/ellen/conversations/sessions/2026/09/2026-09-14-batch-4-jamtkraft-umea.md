@@ -2,13 +2,14 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Rättningsrunda 2 levererad (skills@2716a0f, enkey-agents@5a56c27, neptune_academy@8e5bb96) — svar på granskning 2026-09-14-005; ingen aktivering eller push; stannar för Codex omgranskning"
+status: "Changes required enligt Codex 2026-09-14-006: rätta Jämtkrafts felaktiga 36-månaderstext, tom effekts fältnära fel/enhetsprov och Pythons bool-vakt; ingen aktivering eller push; 33/31/28"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
   - "conversations/reviews/2026/09/2026-09-14-granskning-batch-4-implementation.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md"
+  - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -363,3 +364,21 @@ Riktad Batch 4-svit: **47 Python** (41 tidigare + 6 nya), **29 TypeScript**
 **1218 passed** i 41 filer. `npx tsc --noEmit`: rent. Disposition mekaniskt
 omverifierad: `godkanda(katalog)` fortsatt 33, katalogen 86 poster, dispositionen
 **33/31/28 av 92**. Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-14-006
+
+Codex omgranskade rättningsrunda 2 vid `skills@62b0bc9`, `enkey-agents@5a56c27` och
+`neptune_academy@8e5bb96`. Beslut: **changes required före aktivering**. Den exakta
+multiplikatorbindningen, motorintervallet, andra-pass-regressionerna, produktbytet och
+statusbeviset är stängda. Rättningsrundan skrev däremot felaktigt om Jämtkrafts verifierade
+12-månadersregel till E.ON/Navirums 36-månadersregel inklusive fakturamånad i alla tre
+verifieringsposter. UI-proven medger fortfarande att tom obligatorisk effekt saknar
+kalkylatorns fältnära `#kapacitetKw-fel`, och de påstådda `kW`-/`m³`-assertionerna testar
+inte enheterna. Ett direkt Python-motoranrop accepterar dessutom
+`kapacitet_multiplikator=True` som B=1 medan TypeScript och kontraktslagret avvisar bool.
+
+Oberoende verifiering: 1271+4 skip i tariffsviten, 1218 TypeScript, tsc, produktions- och
+eval-bygge samt 15/15 E2E är gröna. Katalogen har 86 poster, `godkanda()` 33, inga Batch
+4-ID:n är aktiva och generatorsynken består. Bindande rättningsordning finns i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md`. Spärrarna
+och 33/31/28 ligger kvar; ingen aktivering eller push är godkänd.
