@@ -2,7 +2,7 @@
 session_id: "2026-09-14-002"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Lokal implementation levererad; UI-komponentprov (handoff punkt 6.3) inte gjort — flaggat öppet för Codex granskning. Ingen aktivering, ingen push."
+status: "Codex granskning 2026-09-14-012: changes required före aktivering; exact-statusväg, UI-/drift-/bandtest, Kil-proveniens och levande dokumentation ska rättas. Ingen aktivering eller push; 37/27/28 består."
 topic: "Batch 5a: åtta leverantörsvärdestariffer (C4, Kil, Skövde, Trollhättan, Katrineholm, Öresundskraft Totalvärme, Söderhamn, TEMAB)"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-5a-leverantorsvarde.md"
@@ -134,3 +134,28 @@ i stället för att tysta det.
 
 Ingen aktivering, ingen push. Stannar för Codex granskning av hela
 implementationen.
+
+## Codex granskning 2026-09-14-012
+
+Codex granskade den lokala leveransen vid `skills@527c4bb` (leveranslogg
+`skills@8ef55d0`), `enkey-agents@e401147` och `neptune_academy@5e4a24e`.
+Bedömningen är **changes required före aktivering**.
+
+Det allvarligaste reproducerade fyndet är att samtliga åtta policyer returnerar
+`annual/exact/complete` om de två leverantörsvärdena anges med
+`kvalitet="verified"`. Handoffens produktkontrakt kräver alltid `snapshot`, aldrig
+`exact`; leveransens golden blir snapshot endast därför att kvalitet lämnas tom.
+Det riktiga UI-komponentprovet saknas som redan flaggat, och TypeScriptfixturen är
+inte maskinellt bunden till Pythons verkliga kandidatdata samt använder fel
+defaultminimum för fyra tariffer. Full band-/felmatris, Kil-PDF:ens officiella
+källfrysning, de åtta levande inventeringsraderna och requestdokumentationen måste
+också rättas. Katalogens oavsiktliga helomformatering ska återställas.
+
+Oberoende verifiering: 1392+4 skip Python, 1271 TypeScript, ren tsc och grönt
+eval-bygge. 86 katalogposter, 37 godkända katalogprodukter och 39 skarpa produkter
+består; isolerad verklig generering med exakt de åtta spärrarna rensade lyckas och
+ger 47 totalprodukter. Ingen implementation ändrades av Codex, ingen spärr rensades
+och ingen push gjordes.
+
+Fullständiga fynd och bindande rättningsordning finns i
+[`2026-09-14-012`](../../../reviews/2026/09/2026-09-14-granskning-batch-5a-implementation.md).
