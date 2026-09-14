@@ -3,10 +3,10 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-review-2026-09-14-007
+status: approved-for-local-activation-after-review-2026-09-14-008
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
@@ -330,3 +330,17 @@ Följ exakt reproduktion och rättningsordning i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md`. Behåll alla
 fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
 omgranskning. Ingen aktivering och ingen push är godkänd.
+
+## Codex slutgranskning 2026-09-14-008
+
+Fix-runda 4 vid `skills@a0d9f75`, `enkey-agents@fcecc48` och
+`neptune_academy@dfe4b9f` stänger det sista P1-fyndet. Codex reproducerade 20 riktade
+komponentprov, 1221 TypeScriptprov, ren tsc, 1272+4 skip Python, grönt eval-bygge,
+15/15 E2E och två generatorsynkprov. Inga Batch 4-ID:n är ännu aktiva och 33/31/28
+består.
+
+Claude får nu genomföra en **separat lokal aktiveringsrunda** av exakt de fyra ID:n i
+`conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md`, med mål
+37/27/28 och 39 skarpa produkter. Lägg omockade skarpa Jämtkraft-/Umeåprov, regenerera
+med korrekt skills-proveniens, commitera fokuserat lokalt och stanna för Codex granskning
+av aktiveringsdiffen. **Ingen push är tillåten.**

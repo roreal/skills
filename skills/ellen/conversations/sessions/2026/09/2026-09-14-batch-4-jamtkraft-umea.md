@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Changes required enligt Codex 2026-09-14-007: Umeås komponentkandidat måste spegla verklig kalenderperiod/rullande/etikett och testa periodfältet; ingen aktivering eller push; 33/31/28"
+status: "Slutgodkänd enligt Codex 2026-09-14-008 för separat lokal aktivering av exakt fyra Batch 4-tariffer till 37/27/28; push ej tillåten"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -11,6 +11,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md"
+  - "conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -498,3 +499,20 @@ passed. Mekaniskt verifierat: katalogen har 86 poster, `godkanda(katalog)`==33,
 disposition oförändrad **33/31/28 av 92**. `git diff --check`: rent (bortsett
 från den sedan tidigare orelaterade `neptune-marketing/dist`, som inte rörts).
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex slutgranskning 2026-09-14-008
+
+Codex slutgranskade fix-runda 4 vid `skills@a0d9f75`, oförändrat
+`enkey-agents@fcecc48` och `neptune_academy@dfe4b9f`. Det sista P1-fyndet är stängt:
+Umeåmocken speglar nu den verkliga treåriga kalenderdefinitionen, `rullande:false`, exakt
+etikett/hjälptext och periodfältets renderings-, fel-, submit- och produktbytesvägar.
+
+Codex reproducerade 20 riktade komponentprov, 1221 TypeScriptprov, ren tsc, 1272+4 skip
+Python, grönt eval-bygge, 15/15 E2E och två generatorsynkprov. Katalogen har fortfarande
+86 poster, `godkanda()` 33, inga Batch 4-ID:n är aktiva och dispositionen är 33/31/28.
+
+Batch 4 är därmed **godkänd för en separat lokal aktiveringsrunda** av exakt tre
+Jämtkraftprodukter och Umeå Enkel. Bindande aktiveringsorder finns i
+`conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md`. Målet är
+37/27/28 och 39 skarpa produkter. **Ingen push före ny Codex-granskning av
+aktiveringsdiffen.**
