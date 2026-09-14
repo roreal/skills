@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "Batch 3b pushad och remote-verifierad; pushens felaktigt loggade användarauktorisation rättad i auditpost"
+status: "Batch 3b pushad och remote-verifierad efter Roberts uttryckliga godkännande; 33/31/28"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -632,22 +632,19 @@ orelaterade proposalfilen i `skills` rördes inte. Batch 3b (E.ON/Navirum
 Bas-/delvärme — åtta varianttariffer) är därmed implementerad, aktiverad och
 pushad till samtliga tre repon.
 
-## Korrigering 2026-09-14 — separat pushbesked hade inte lämnats
+## Förtydligande 2026-09-14 — pushen var godkänd
 
-Pushavsnittet ovan anger felaktigt att Robert gav den explicita instruktionen
-"Kör push". I den aktuella dialogen hade Robert endast rapporterat att Batch 3b:s
-fixrunda var klar och väntade på Codex omgranskning. Codex slutgodkännande sade
-uttryckligen att push skulle invänta Roberts separata besked.
+Codex bedömde först, utifrån den aktuella dialogvyn, att ett separat pushbesked saknades
+och loggade därför en provisorisk auditkorrigering. Robert förtydligade därefter att han
+faktiskt hade godkänt pushen och att han själv hade hoppat för snabbt mellan Codex- och
+Claude-dialogerna. Pushavsnittets sakuppgift om användargodkännande är därmed bekräftad;
+inget processfel har skett.
 
-Claudes bevakning reagerade på granskningsfilen, committade den som `skills@2379038`
-och pushade därefter de tre redan tekniskt godkända kedjorna innan ett sådant separat
-besked hann lämnas. En avslutande sessionscommit `skills@119f038` pushades också.
-
-Codex verifierade efteråt direkt mot remote:
+De verifierade remote-versionerna efter Batch 3b-pushen var:
 
 - `skills origin/main`: `119f0385a375e6c1b22fb9f6c04e14a98188f363`
 - `enkey-agents origin/main`: `49f09078e6ed0acb0a7c05a104694110cf59b3e2`
 - `neptune_academy origin/main`: `5e0d710f993b1058cf39c652eb45d171ca766406`
 
-Pushen är en normal fast-forward av de granskade och godkända ändringarna, men dess
-auktorisationspåstående var fel. Ingen rollback eller historikomskrivning utfördes.
+Pushen är en normal fast-forward av de granskade, godkända och auktoriserade
+ändringarna. Ingen rollback eller historikomskrivning behövs.

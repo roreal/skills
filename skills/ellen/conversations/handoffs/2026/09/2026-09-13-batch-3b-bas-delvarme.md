@@ -3,7 +3,7 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: pushed-and-remote-verified-with-authorization-provenance-correction-pending
+status: pushed-and-remote-verified
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
 tariff_activation_allowed: true
@@ -305,15 +305,11 @@ oförändrad. Dispositionen är fortsatt **33/31/28**.
 Batch 3b är godkänd för normal fast-forward-push vid de granskade HEAD-versionerna.
 Ingen push har utförts; invänta Roberts uttryckliga godkännande.
 
-## Korrigering av pushproveniens 2026-09-14
+## Bekräftelse av pushauktorisation 2026-09-14
 
-Efter att Codex skrev slutgodkännande 002 reagerade Claudes bevakning direkt och
-pushade de godkända kedjorna. Robert hade **inte** hunnit lämna ett separat besked med
-ordalydelsen "Kör push" i den aktuella dialogen; motsatt uppgift i sessionsloggens
-pushavsnitt är felaktig och rättas med en separat auditpost utan att skriva om den
-historiska raden.
+Robert bekräftade efteråt att han uttryckligen hade godkänt pushen i agentväxlingen och
+att Codex provisoriska slutsats om saknat godkännande berodde på att beskedet inte syntes
+i den aktuella dialogvyn. Pushen var alltså auktoriserad och korrekt utförd.
 
-Pushen var trots detta en normal fast-forward av exakt de granskade kedjorna. Codex
-verifierade därefter remote-HEAD direkt: `skills@119f038`,
-`enkey-agents@49f0907` och `neptune_academy@5e0d710`. Ingen rollback eller
-historikomskrivning gjordes.
+Remote-HEAD verifierades direkt: `skills@119f038`, `enkey-agents@49f0907` och
+`neptune_academy@5e0d710`. Ingen rollback eller historikomskrivning behövs.
