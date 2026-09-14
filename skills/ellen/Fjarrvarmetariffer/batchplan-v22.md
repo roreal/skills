@@ -915,10 +915,14 @@ ett stabilt katalogvärde eller en fakturapost, till skillnad från Umeås stati
   `"network_average"`, dynamisk — Umeås är ett statiskt tal; koden får inte dela logik som
   antar det ena för det andra utan en explicit typkontroll). Umeås `issues`-text ("Hela
   effektkostnaden multipliceras med B...") TAS BORT — löst av A/B-kontraktet.
-- **Obligatorisk indata:** Jämtkraft (tre tariffer): debiterbar effekt + flöde oktober–april
-  (m³, `months: [1,2,3,4,10,11,12]`, 7 månader). Umeå (rättat i v7): bekräftat effektband-ID
-  (§6a.2), debiterbar effekt, flöde okt–apr, OCH kapacitetsfaktorn `B` (leverantörens eget
-  redan beräknade värde) — FYRA obligatoriska fält.
+- **Obligatorisk indata:** Jämtkraft (tre tariffer): bekräftat effektband-ID (allow-list per
+  tariff, `supplier_confirmed_band_id`) + debiterbar effekt + flöde oktober–april
+  (m³, `months: [1,2,3,4,10,11,12]`, 7 månader) — TRE obligatoriska fält, inte två (rättat,
+  granskning 2026-09-14-005: batchplanens formulering "samma tre fält, ingen fjärde" avsåg
+  aldrig att band-ID:t skulle utelämnas, bara att ingen fjärde/rå 36-månadersfältet skulle
+  läggas till). Umeå (rättat i v7): bekräftat effektband-ID (§6a.2), debiterbar effekt,
+  flöde okt–apr, OCH kapacitetsfaktorn `B` (leverantörens eget redan beräknade värde) —
+  FYRA obligatoriska fält.
 - **Filer:** katalograder ×4, `justeringar.py` (två nya formler, speglade inline i
   `fjarrvarme.ts` — ingen separat `justeringar.ts` finns), NY funktion
   `kontrollera_kompositgrind()`, den rättade `godkanda()`-tvåpassloopen (§6a.3 — den nakna

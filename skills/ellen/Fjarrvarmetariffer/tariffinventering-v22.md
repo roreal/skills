@@ -801,7 +801,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
 - **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Åre m.fl.).
+- **Obligatorisk indata:** TRE tariffspecifika fält — debiterbar effekt (kW), bekräftat effektband-ID (allow-list) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Åre m.fl.).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
 - **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.
@@ -820,7 +820,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
 - **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Brunflo/Opevägen).
+- **Obligatorisk indata:** TRE tariffspecifika fält — debiterbar effekt (kW), bekräftat effektband-ID (allow-list) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Brunflo/Opevägen).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
 - **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.
@@ -839,7 +839,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Teststatus:** `test_batch_4_jamtkraft_umea.py`/`resultatkontrakt.batch4.test.ts` (golden-facit genom den verkliga kontraktsfasaden, felvägar, Vattenfall-regression)
 - **UI-status:** inte valbar i kalkylatorn ännu — implementationsfasen omfattar inte aktivering eller skarp UI-exponering
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Debiterbar effekt (kW) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Östersund/Frösön/Ås).
+- **Obligatorisk indata:** TRE tariffspecifika fält — debiterbar effekt (kW), bekräftat effektband-ID (allow-list) OCH flöde okt–apr (m³, fakturan). Formeln `3×(flöde_m3 − 19×energi_MWh)` är känd (katalog), referensvärdet 19 m³/MWh är redan ett statiskt katalogvärde (Östersund/Frösön/Ås).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Jämtkraft — ny motortyp `flow_difference`
 - **Kvarstående arbete:** Motor, policy och katalogproveniens är klara och testade bakom spärren (handoff 2026-09-14-001). Kvar: en separat, godkänd lokal aktiveringsrunda som tar bort `investigation.status`, regenererar den skarpa artefakten och lägger omockade UI-/E2E-prov.

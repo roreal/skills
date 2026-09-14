@@ -293,3 +293,73 @@ E2E och byte-identisk 35-produktsgenerator. Det ändrar inte det reproducerade P
 Bindande rättningsordning finns i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md`. Spärrarna och
 33/31/28 ligger kvar; ingen aktivering eller push är godkänd.
+
+**Rättelse av rättningsrunda 1:s slutsats** (granskning 2026-09-14-005): rubriken
+"Alla fyra bindande fynden (tre P1, ett P2) rättade" ovan var för stark. Granskning
+004 hade fyra P1-rubriker (multiplikatorbindning, kompositgrindstruktur,
+justeringsschema-validering, saknat UI-/produktbytesprov) plus en sammansatt P2
+(dokumentationssynk). Multiplikatorbindningen visade sig INTE vara fullt stängd —
+se rättningsrunda 2 nedan — och dokumentationssynken var öppen. Behåll ovanstående
+punkter 1–3 som en beskrivning av VAD som ändrades i den commiten, inte som ett
+påstående att alla fynd då var stängda.
+
+## Rättningsrunda 2 — svar på granskning 2026-09-14-005
+
+Två kvarvarande fynd stängda. Katalog, tariffdata, priser och tariffspärrar
+oförändrade — samtliga fyra `investigation.status="utreds"` och dispositionen
+fortsatt **33/31/28 av 92**.
+
+1. **P1 — multiplikatorns "exakta" deskriptor och direkta motorvakt var fortfarande
+   öppna** (`enkey-agents@5a56c27`, `neptune_academy@8e5bb96`). `multiplikator_typ()`
+   extraherade tidigare en REDUCERAD kandidat och kastade tyst bort okända nycklar
+   på toppnivå och i varje `pieces`-post — båda extra-nyckelfallen matchade
+   fortfarande. Kompositgrinden krävde inte att policyfältets `minvarde`/`maxvarde`
+   var EXAKT det källpinnade `[0.93, 1.401]`. Motorn (Python och TypeScript)
+   kontrollerade bara att `multiplikator_typ` RÅKADE vara en sträng och att talet
+   var ändligt — accepterade därför både ett påhittat typ-ID och ett värde utanför
+   intervallet.
+
+   Rättat: `_KANDA_MULTIPLIKATORER` bär nu `{"shape": …, "interval": …}`, där
+   `interval` kommer från en enda ny konstant `MULTIPLIKATOR_GRANSVARDEN`
+   (`faktura.py` — den lägsta modulen i importgrafen, för att undvika en cirkulär
+   import mot `policyregister.py`, som i sin tur importerar den för sin
+   intervallkontroll). `multiplikator_typ()` kräver nu EXAKTA nyckelmängder
+   (`set(...) != {...}` avvisar direkt) för både `post_multiplier` och varje
+   `pieces`-post. `kontrollera_kompositgrind` korsvaliderar policyfältets
+   `minvarde`/`maxvarde` mot samma `MULTIPLIKATOR_GRANSVARDEN[typ]`. Motorn
+   (`_arskostnad_kapacitet`/`arskostnadKapacitet`) kräver nu att typ-ID:t finns i
+   `MULTIPLIKATOR_GRANSVARDEN` OCH att värdet ligger inom dess intervall — även vid
+   ett direkt anrop. Reproducerat och bekräftat blockerat: giltig Umeåmarkör +
+   direkt `B=14` (gav tidigare 285 334 kr) och `multiplikator_typ="arbitrary"` +
+   `B=0.5` (gav tidigare 10 190,50 kr) kastar nu båda. Gränserna 0,93/1,401 själva
+   fungerar fortfarande.
+2. **P2 — kandidat-UI-provet gjorde inte alla påstådda assertioner**
+   (`neptune_academy@8e5bb96`). `KalkylatorPageBatch4.test.tsx` räknar nu exakt antalet
+   synliga policyfält (2 för Jämtkraft, 3 för Umeå, utöver `#kapacitetKw`), pinnar
+   etiketter/enheter, och har fältspecifika `-fel`-prov för saknat/ogiltigt band,
+   flöde, B samt ogiltig (negativ) effekt — inte bara "inget resultat visas" för de
+   fall det inte har någon dedikerad fältnära text (helt tomt `#kapacitetKw` hoppar
+   över den tidiga UI-genvägen och faller igenom utan egen `-fel`-sträng, samma
+   etablerade mönster som Umeås ursprungliga "saknad B"-test). Statusdimensionen
+   `annual/snapshot/complete` bevisas EXPLICIT i `resultatkontrakt.batch4.test.ts`
+   (redan befintliga assertions mot `res.status.*`) — nya kommentarer i båda
+   filerna pekar korsvis på varandra så det är tydligt vilken del som bevisar
+   vilken statusdimension, i stället för att komponentprovets svaga
+   "uppskattad"-textsträng felaktigt påstods bevisa den.
+3. **P2 — beställda andra-pass-regressioner och levande dokumentationssynk**
+   (`enkey-agents@5a56c27`, `skills@<denna commit>`). Två nya tester
+   (`test_kompositgrindens_andra_pass_avvisar_dold_okand_issue`/`..._justering`)
+   bevisar att en giltig multiplikatorbindning inte kan dölja en okänd `issue`
+   eller okänd justeringstyp för `godkanda()`s andra pass. `verifieringslista-
+   fjarrvarmebolag.md` (Jämtkraft ×3 och Umeå) är omskriven till sant nuläge: `15_1`
+   sidorna 19–20 i stället för `15_0` s.18–19, "implementerat bakom spärr" i stället
+   för "måste mappas", och Umeå-blocket säger nu explicit "direkt A och direkt B,
+   aldrig U" i stället för "leverantörens A och B/U". `tariffinventering-v22.md`
+   (rad ~804/823/842) och `batchplan-v22.md` (rad ~918) är rättade till TRE
+   tariffspecifika Jämtkraft-fält (effekt, bekräftat band-ID, flöde), inte två.
+
+Riktad Batch 4-svit: **47 Python** (41 tidigare + 6 nya), **29 TypeScript**
+(23 tidigare + 6 nya). Full Python: **1271 passed, 4 skipped**. Full TypeScript:
+**1218 passed** i 41 filer. `npx tsc --noEmit`: rent. Disposition mekaniskt
+omverifierad: `godkanda(katalog)` fortsatt 33, katalogen 86 poster, dispositionen
+**33/31/28 av 92**. Ingen aktivering, ingen push. Stannar för Codex omgranskning.
