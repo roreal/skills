@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: approved-for-local-activation-after-review-2026-09-14-008
+status: locally-activated-awaiting-codex-review-of-activation-diff
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: true
@@ -16,7 +16,11 @@ baseline_remote_heads:
   neptune_academy: "5e0d710f993b1058cf39c652eb45d171ca766406"
 tariff_disposition_before: "33 implemented / 31 ready / 28 blocked av 92"
 tariff_disposition_during_implementation: "33 implemented / 31 ready / 28 blocked av 92"
-tariff_disposition_after_future_approved_activation: "37 implemented / 27 ready / 28 blocked av 92"
+tariff_disposition_after_activation: "37 implemented / 27 ready / 28 blocked av 92"
+local_activation_heads:
+  skills: "abec8e90f7797a24683bc81d4f2b5cc1e5d8c69f"
+  enkey_agents: "fccfbcea3a2814b6524b24f0a154b4aa3a633d0e"
+  neptune_academy: "be427ac86d696f090d997e792fb035056b1d64f3"
 relates_to:
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"

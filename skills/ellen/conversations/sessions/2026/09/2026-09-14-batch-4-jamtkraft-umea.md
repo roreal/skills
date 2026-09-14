@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Slutgodkänd enligt Codex 2026-09-14-008 för separat lokal aktivering av exakt fyra Batch 4-tariffer till 37/27/28; push ej tillåten"
+status: "Lokalt aktiverad enligt Codex 2026-09-14-008: exakt fyra Batch 4-tariffer, disposition 37/27/28 av 92; stannar för Codex granskning av aktiveringsdiffen, ingen push ännu"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -516,3 +516,74 @@ Jämtkraftprodukter och Umeå Enkel. Bindande aktiveringsorder finns i
 `conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md`. Målet är
 37/27/28 och 39 skarpa produkter. **Ingen push före ny Codex-granskning av
 aktiveringsdiffen.**
+
+## Lokal aktivering 2026-09-14
+
+Robert gav explicit klartecken ("Nästa steg är att aktivera tre Jämtkrafttariffer
+och Umeå Enkel; före push krävs en ny Codex-granskning av aktiveringsdiffen.")
+enligt Codex slutgranskning `2026-09-14-008`. Aktiveringen genomfördes exakt enligt
+den bindande ordern:
+
+1. **Katalog** (`skills@abec8e9`): satte endast `investigation` till `null` för de
+   fyra raderna `jamtkraft-ostersund-froson-as-2026`,
+   `jamtkraft-brunflo-och-opevagen-2026`,
+   `jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026` och
+   `umea-energi-umea-enkel-2026`. Inga priser, energisäsonger, kapacitetsband,
+   effekt-/flödesformler, `issues`, `production_ready` eller `contract_required`
+   ändrades. Jämtkraftradernas `issues`-post om overifierad månadsperiodisering
+   ligger kvar oförändrad — godkännandet gäller uppskattad `annual_forward`-
+   årskostnad, inte fakturamånader. Katalogens `schema_version` höjd till
+   `0.1.16` med en fokuserad `change_log`-post. Katalogen har fortsatt 86
+   fysiska poster; `godkanda(katalog)` ger nu mekaniskt verifierat **37**.
+2. **Generator** (`neptune_academy@be427ac`): `tariffer.generated.ts` regenererad
+   mot exakt `skills@abec8e9`. Semantisk diff bekräftar: **39** produkter totalt
+   (37 katalog + 2 leverantörsfiler), exakt de fyra nya produkt-ID:na tillagda,
+   **noll** ändrade av de 35 tidigare aktiva produkternas pris-/policy-/
+   kostnadsdata. Umeås post bär den verkliga treåriga `kalperiod_definition`,
+   `multiplikator_typ: "umea_enkel_b"` och ger `annual/snapshot/complete`.
+3. **Pythontester** (`enkey-agents@fccfbce`): sex testfiler uppdaterade till
+   aktiverad status —
+   `test_batch_4_jamtkraft_umea.py` (implementationsspärrsprov ersatta med prov
+   mot den verkliga aktiverade katalogen, samma mönster som Batch 3b:s aktivering),
+   `test_katalog.py` (37 godkända, 21 medlemmar, "utreds" 47→43, "kapacitetsformel
+   med multiplikator" 0→1 — Umeås nakna `grind()` utan policyregister känner inte
+   till dess `post_multiplier`, till skillnad från `godkanda()`),
+   `test_batch_3_flodeskorrigering.py`, `test_batch_3b_bas_delvarme.py`,
+   `test_faktura_manadspriser.py` och `test_katalog_proveniens.py` (ny
+   katalog-SHA-256).
+4. **Nya permanenta omockade prov** (`neptune_academy@be427ac`):
+   `besparingsvardeBatch4Katalogaktivering.test.ts` mot den skarpa `TARIFFER`:
+   dropdownens fyra produkter, Jämtkrafts tre policyfält utan periodkrav, Umeås
+   fyra policyfält med treårig period och B-faktor, giltig MWh-submit ger
+   `annual/snapshot/complete`, kronor/schablon/besparing blockeras typat mot
+   den skarpa posten.
+5. **Nya permanenta E2E-scenarier 16–17** (`neptune_academy@be427ac`,
+   `e2e/kalkylator.smoke.mjs`): dropdownen innehåller alla fyra Batch 4-produkter;
+   Jämtkraft visar rätt effekt-/band-/flödesfält utan periodfält och ger en
+   synlig uppskattning; Umeå visar effekt-/period-/band-/flödes-/B-fält, saknad
+   period blockerar submit, giltig period+indata ger en synlig uppskattning.
+
+### Verifiering
+
+- **Python**: full svit **1271 passed, 4 skipped** (oförändrat testantal, endast
+  omräknade assertioner). `git diff --check`: rent.
+- **TypeScript**: full svit **1236 passed** i 42 filer (1221 + 15 nya). `npx tsc
+  --noEmit`: rent.
+- **Isolerat `npm run eval:build`**: godkänt, endast känd bundelstorleksvarning.
+- **E2E** mot isolerat bygge: samtliga **17/17** scenarier godkända, inklusive de
+  två nya (16: Jämtkraft, 17: Umeå).
+- **Generatorsynk**: `test_synk.py` **2 passed**.
+- **Mekaniskt verifierat**: katalogen har 86 poster, `godkanda(katalog)`==37,
+  skarp payload har 39 produkter totalt, disposition **37 implemented / 27
+  ready / 28 blocked av 92**.
+- De sedan tidigare orelaterade ändringarna i `neptune-marketing/dist` och den
+  orelaterade proposalfilen i `skills` rördes inte.
+
+### Commits (lokalt, ingen push)
+
+- `skills@abec8e9` — katalogaktivering.
+- `neptune_academy@be427ac` — regenererad `tariffer.generated.ts`, nya omockade
+  aktiveringsprov, nya E2E-scenarier 16–17.
+- `enkey-agents@fccfbce` — sex Pythontestfiler uppdaterade till aktiverad status.
+
+Ingen push. Stannar för Codex granskning av aktiveringsdiffen.

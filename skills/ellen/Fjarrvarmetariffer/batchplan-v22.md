@@ -11,12 +11,13 @@ Bygger på dispositionerna i
 UPPRÄTTANDET av v22 (2026-09-09) var ingen batch påbörjad och dispositionerna var
 OFÖRÄNDRADE sedan v16: 7 implementerade / 57 redo / 28 blockerade / 92 totalt — v22 rättade
 då bara attesteringskontraktets enda-källa-egenskap och dokumentidentiteten, flyttade ingen
-post. **Detta är historiskt.** Sedan har Batch 0 samt Lidköping 5d, Batch 1, Batch 2 och
-Batch 3 (se batch-avsnitten nedan och deras "Aktiverad"-noter) genomförts och aktiverats
-lokalt. Den AKTUELLA dispositionen per 2026-09-13 (aktiveringsgranskning `2026-09-13-029`,
-dokumentationsrättning `2026-09-13-030`) är **25 implementerade / 39 redo / 28 blockerade /
-92 totalt**, mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den tabellen för
-det aktuella läget, inte detta dokuments inledning eller historiska batchnoter.
+post. **Detta är historiskt.** Sedan har Batch 0 samt Lidköping 5d, Batch 1, Batch 2,
+Batch 3, Batch 3b och Batch 4 (se batch-avsnitten nedan och deras "Aktiverad"-noter)
+genomförts och aktiverats lokalt. Den AKTUELLA dispositionen per 2026-09-14 (Batch 4:s
+lokala aktivering, inväntar Codex granskning av aktiveringsdiffen) är **37
+implementerade / 27 redo / 28 blockerade / 92 totalt**, mekaniskt räknad i
+`tariffinventering-v22.md` §8 — läs alltid den tabellen för det aktuella läget, inte
+detta dokuments inledning eller historiska batchnoter.
 
 **Vad som är nytt i v22** (se granskning `2026-09-09-015` för fullständig motivering):
 
@@ -948,16 +949,17 @@ ett stabilt katalogvärde eller en fakturapost, till skillnad från Umeås stati
 - **Visas för användaren:** mwh-läge; Jämtkraft: effekt + flöde; Umeå: effekt + flöde + `B`;
   kr/schablon blockerade för alla fyra.
 
-**Implementationsstatus 2026-09-14 (handoff 2026-09-14-001):** planen ovan är genomförd i
-`enkey-agents@69b3060`/`neptune_academy@289b9c0`/`skills@c1d8320` — `flow_difference`,
-`asymmetric_flow_difference`, `kapacitet_multiplikator_bindning` och
-`kontrollera_kompositgrind` finns i Python och TypeScript, alla fyra `Tariffpolicy`-poster
-är registrerade, och Vattenfalls dynamiska `asymmetric_flow_difference`-rader (`reference:
-"network_average"`) förblir avvisade av samma schemakontroll. Samtliga fyra tariffer ligger
-fortsatt bakom `investigation.status="utreds"` — dispositionen är oförändrad **33/31/28 av
-92**, inte flyttad till implemented. En separat, godkänd aktiveringsrunda krävs innan
-`godkanda(katalog)` kan returnera dem (förväntat resultat efter en sådan aktivering:
-**37/27/28**).
+**Lokal aktivering genomförd 2026-09-14 (granskning `2026-09-14-008`, godkänd för separat
+lokal aktivering):** samtliga fyra tariffraders `investigation`-spärr är borttagen
+(`skills@abec8e9`). `flow_difference`, `asymmetric_flow_difference`,
+`kapacitet_multiplikator_bindning` och `kontrollera_kompositgrind` finns i Python och
+TypeScript (`enkey-agents@fccfbce`/`neptune_academy@be427ac`), alla fyra
+`Tariffpolicy`-poster är registrerade, och Vattenfalls dynamiska
+`asymmetric_flow_difference`-rader (`reference: "network_average"`) förblir avvisade av
+samma schemakontroll. Priser, energisäsonger, kapacitetsband, formler och `contract_required`
+är oförändrade. `godkanda(katalog)` returnerar nu mekaniskt verifierat **37**; dispositionen
+är **37 implementerade / 27 redo / 28 blockerade av 92**. Ingen push är gjord i samband med
+aktiveringen; separat Codex-granskning av aktiveringsdiffen krävs innan push.
 
 ## Batch 5a — Leverantörsvärde, ingen ytterligare justeringspost (8 tariffer)
 
@@ -1333,7 +1335,7 @@ i denna lista minskar därmed från 26 till 24.
 visar VAD varje batch var tänkt att omfatta när planen skrevs (57 batchade + 24 + 4
 blockerade + 7 "redan implementerade" = 92) och ändras inte i efterhand.
 
-Av de 57 planerade batchade raderna har hittills **26** genomförts och lokalt aktiverats
+Av de 57 planerade batchade raderna har hittills **30** genomförts och lokalt aktiverats
 — dessa har flyttat från "batchad, redo" till `implemented_source_verified_annual`:
 
 - Lidköping 5d: 2 rader.
@@ -1341,11 +1343,13 @@ Av de 57 planerade batchade raderna har hittills **26** genomförts och lokalt a
 - Batch 2: 1 rad.
 - Batch 3: 9 rader.
 - Batch 3b: 8 variantrader (aktiverade 2026-09-13, granskning `2026-09-13-039`).
+- Batch 4: 4 rader (Jämtkraft ×3, Umeå Enkel; lokalt aktiverade 2026-09-14, granskning
+  `2026-09-14-008`; inväntar Codex granskning av aktiveringsdiffen före push).
 
-De ÅTERSTÅENDE **31** planerade batchade raderna (4: 4, 5a: 8, 5b: 7, 5c: 8, 6: 3, 7: 1)
-är fortsatt inte påbörjade. Vattenfalls 12 tariffer utgör en egen, separat Batch 8,
+De ÅTERSTÅENDE **27** planerade batchade raderna (5a: 8, 5b: 7, 5c: 8, 6: 3, 7: 1) är
+fortsatt inte påbörjade. Vattenfalls 12 tariffer utgör en egen, separat Batch 8,
 uttryckligen ej schemalagd, och ingår i de **24 blockerade** bastarifferna, inte i denna
-31-summa. Den AKTUELLA dispositionen är **33 implementerade / 31 redo / 28
+27-summa. Den AKTUELLA dispositionen är **37 implementerade / 27 redo / 28
 blockerade av 92**, mekaniskt räknad i `tariffinventering-v22.md` §8 — läs alltid den
 tabellen för nuläget, inte raden "Redan implementerade | 7" ovan eller "57 batchade" som
 om alla redan var klara.
