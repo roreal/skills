@@ -451,3 +451,50 @@ Oberoende verifiering: 1272+4 skip i tariffsviten, 1219 TypeScript, tsc, eval-by
 inga Batch 4-ID:n är aktiva och 33/31/28 består. Bindande rättningsordning finns i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md`. Ingen
 aktivering och ingen push är godkänd.
+
+## Rättningsrunda 4 — svar på granskning 2026-09-14-007
+
+Rättade exakt det enda P1-fyndet: Umeås testfixtur i
+`KalkylatorPageBatch4.test.tsx` fick sin kapacitetskravsobjekt ändrat till att
+källverifierat, ordagrant matcha den riktiga `policyregister.py:_umea_kapacitet_krav`
+(icke-tom treårig `kalperiod_definition`, `rullande=false`, etiketten
+`Debiterbar årseffekt (A)`). Literalen upprepas i testfilen (inte delad via en
+modulnivåkonstant) för att undvika samma `vi.mock`-TDZ-fälla filens övriga
+literaler redan dokumenterar.
+
+Lade fyra nya/utökade prov:
+
+1. period-renderingsprov: `#kapacitetKw-period` visas med korrekt etikett
+   ("Källperiod debiterbar effekt avser (ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD)") och den
+   fullständiga hjälptexten ur den riktiga `kalperiod_definition`.
+2. saknad period blockerar submit fältnära via `#kapacitetKw-fel`/ARIA, delat
+   med kapacitetsfältets felyta (samma mönster som övriga period-krav i
+   `KalkylatorPage.tsx`).
+3. ogiltigt periodformat blockerar submit fältnära med rätt felbeskrivning
+   (`ÅÅÅÅ-MM-DD/ÅÅÅÅ-MM-DD`).
+4. normal submit med giltig treårsperiod (`2023-01-01/2025-12-31`) ger ett
+   synligt uppskattat resultat.
+5. produktbytesprov: perioden visas (tom) efter byte Jämtkraft→Umeå, och
+   försvinner helt (inte bara töms) efter byte Umeå→Jämtkraft — även om
+   användaren byter tillbaka till Umeå igen.
+
+De fem tidigare Umeå-submit-testen (B utanför intervall, saknad B, saknat band,
+saknat flöde) fyller nu även periodfältet innan submit, eftersom perioden annars
+skulle blockera FÖRE de fält testet faktiskt avser att pröva (kapacitets-/
+periodkontrollen i `KalkylatorPage.tsx` körs innan den generiska
+policyfält-loopen).
+
+**Commit:** `neptune_academy@dfe4b9f` — enda ändrade fil:
+`neptune-marketing/src/pages/KalkylatorPageBatch4.test.tsx`. `skills` och
+`enkey-agents` oförändrade denna runda.
+
+**Verifiering:** riktad TypeScript (Batch 4-filen) **20 passed** (18 tidigare + 2
+nya). Full TypeScript-svit **1221 passed** i 41 filer (1219 + 2 nya). `npx tsc
+--noEmit`: rent. Full Python-svit oförändrad **1272 passed, 4 skipped** (ingen
+produktionskod rörd denna runda). Isolerat `npm run eval:build`: godkänt, endast
+känd bundelstorleksvarning. E2E mot isolerat bygge: **15/15** scenarier godkända
+(Batch 4 förblir spärrad, avsiktligt inget nytt scenario). Generatorsynk: 2
+passed. Mekaniskt verifierat: katalogen har 86 poster, `godkanda(katalog)`==33,
+disposition oförändrad **33/31/28 av 92**. `git diff --check`: rent (bortsett
+från den sedan tidigare orelaterade `neptune-marketing/dist`, som inte rörts).
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.
