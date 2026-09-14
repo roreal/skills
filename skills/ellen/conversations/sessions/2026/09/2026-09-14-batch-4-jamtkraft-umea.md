@@ -382,3 +382,54 @@ eval-bygge samt 15/15 E2E är gröna. Katalogen har 86 poster, `godkanda()` 33, 
 4-ID:n är aktiva och generatorsynken består. Bindande rättningsordning finns i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md`. Spärrarna
 och 33/31/28 ligger kvar; ingen aktivering eller push är godkänd.
+
+## Rättningsrunda 3 — svar på granskning 2026-09-14-006
+
+Rättade det ena P1-fyndet och de tre P2-fynden.
+
+1. **P1 — Jämtkrafts felaktiga 36-månadersregel rättad till den verifierade
+   12-månadersregeln.** `verifieringslista-fjarrvarmebolag.md` rad 135/140/145 sa
+   felaktigt att debiteringseffekten byggde på "de senaste 36 månaderna inklusive
+   fakturamånaden" och krävde en bekräftad fakturamånad — detta var E.ON/Navirums
+   Batch 3b-regel, inte Jämtkrafts. Jämtkrafts officiella prisändringsmodell
+   2026–2028 (tryckt sida 11/20) samt den redan implementerade
+   `_jamtkraft_kapacitet_krav`-policyn (`policyregister.py:942-959`, `kalperiod_definition=""`,
+   inget `kravsObserveradPeriod`) anger båda 12 månader utan fakturamånadskrav.
+   Koden var alltid korrekt — bara dokumentationstexten (kopierad in av misstag från
+   fel tariffamilj i en tidigare runda) var fel. Rättade alla tre rader till "de
+   senaste 12 månaderna" utan fakturamånad/tidsserie.
+2. **P2 — tom obligatorisk effekt ger nu kalkylatorns fältnära svenska fel.**
+   `KalkylatorPage.tsx` skippade tidigare all validering för ett HELT tomt
+   `#kapacitetKw` (bara guarded av `!== ''`) och föll igenom till domänlagrets
+   `KontraktBlockerat('missing_capacity')`, som inte sätter `saknadeFalt` — bara den
+   generiska HTML-`required`-blockeringen skyddade fältet. Lade en explicit
+   `else`-gren för tomt värde (för kontraktsgatade tariffer) som sätter
+   `#kapacitetKw-fel`, `aria-invalid` och `aria-describedby`, precis som band/flöde.
+   Uppdaterade båda Batch 4-testen (Jämtkraft och Umeå) att assertera detta explicit
+   i stället för bara "inget resultat visas".
+3. **P2 — enhetsproven pinnar nu faktiskt `kW`/`m³`.** Testet sökte tidigare bara
+   delar av hjälptexten. Lade explicita assertioner på de fullständiga etiketterna
+   `Debiterbar effekt (kW)`, `Debiterbar årseffekt A (kW)` och
+   `Flöde 1 oktober–30 april (m³)`.
+4. **P2 — Pythons bool-glipa i den direkta motorvakten stängd.** `math.isfinite()`
+   godtog `bool` (int-underklass i Python) som `kapacitet_multiplikator`; ett direkt
+   anrop med `True` gav 20 381 kr i stället för att kastas. Avvisar nu bool explicit
+   före isfinite-kontrollen. TypeScript var redan korrekt
+   (`Number.isFinite(true)===false`) — lade en explicit bekräftande TS-test.
+
+**Commit-hashar:**
+- `enkey-agents@fcecc48` — `faktura.py`s bool-avvisning + direkt Pythonregressionstest.
+- `neptune_academy@fa872c4` — `KalkylatorPage.tsx`s tom-effekt-fältfel, Batch 4-testens
+  fältnära/enhets-/bool-assertioner.
+- (skills-commit för denna post och `verifieringslista-fjarrvarmebolag.md` följer.)
+
+**Verifiering:** riktad Python 42 passed (Batch 4-filen), full Python **1272 passed,
+4 skipped**. Riktad TypeScript 42 passed, full TypeScript **1219 passed** i 41 filer.
+`npx tsc --noEmit`: rent. Isolerat `npm run eval:build`: godkänt, endast känd
+bundelstorleksvarning. E2E mot isolerat bygge: **15/15** scenarier godkända (Batch 4
+förblir spärrad, avsiktligt inget nytt scenario). Generatorsynk: 2 passed. Mekaniskt
+verifierat: katalogen har 86 poster, `godkanda(katalog)`==33, inga Batch 4-ID:n bland
+de godkända. Disposition oförändrad **33/31/28 av 92**. `git diff --check`: rent i alla
+tre repon (bortsett från den sedan tidigare orelaterade `../milesight`-submodulpekaren
+och `neptune-marketing/dist`, ingen av vilka rörts). Ingen aktivering, ingen push.
+Stannar för Codex omgranskning.
