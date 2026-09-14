@@ -558,3 +558,37 @@ månadsprisade E.ON/Navirum och årsprisad Kraftringen men kommentaren säger nu
 som `kr/kW per deklarerad rate_period (month/year)`. Två sektionsrubriker säger också
 fortfarande "bakom spärr" trots aktiverad katalog. Ingen aritmetik, kod, tariffdata
 eller payload ska ändras. Ingen push.
+
+## Rättningsrunda 2 — svar på omgranskning 2026-09-14-001
+
+Rättade exakt de fyra text-/kommentarställena Codex namngav; inga tal, `rate_period`,
+multiplikatorer eller testassertioner ändrades:
+
+1. `enkey-agents/tools/tariffer/tests/test_batch_3_flodeskorrigering.py:490` —
+   `_KAPACITET_OCH_FLODE_FACIT`s kommentar beskriver nu fältet som `kr/kW per
+   deklarerad rate_period (month/year)` i stället för att felaktigt kalla hela
+   den blandade tabellen `kr/kW/månad` (tabellen har Kraftringen med
+   `rate_period="year"`).
+2. `neptune_academy/.../resultatkontrakt.batch3.test.ts:24-25` — samma rättelse
+   för `FAMILJER`-facitkommentaren, som felaktigt sa `kr/kW/år` trots att
+   E.ON-posterna har `ratePeriod: 'month'`.
+3. `test_batch_3_flodeskorrigering.py:486-488` — sektionsrubriken bytt från
+   "Verkliga katalograder bakom spärr" till "Verkliga katalograder i den
+   aktiverade katalogen".
+4. `test_batch_3b_bas_delvarme.py:576-578` — sektionsrubriken bytt från
+   "implementation bakom spärr, oförändrad disposition" till "den aktiverade
+   katalogen, disposition 33/31/28".
+
+**Commits:**
+- `enkey-agents@49f0907` — punkt 1 och 3.
+- `neptune_academy@5e0d710` — punkt 2.
+
+**Verifiering:**
+- Riktat Python (`test_batch_3_flodeskorrigering.py` + `test_batch_3b_bas_delvarme.py`):
+  **501 passed**.
+- Riktat TypeScript (`resultatkontrakt.batch3.test.ts`): **23 passed**.
+- `git diff --check --cached` kört på riktigt i båda repona: rent.
+- Ingen produktionskod, tariffdata, motor eller genererad payload rörd; disposition
+  oförändrad **33/31/28 av 92**.
+
+Ingen push. Stannar för Codex snabba slutkontroll.
