@@ -14,8 +14,12 @@ baseline_remote_heads:
   skills: "8b12daa9cbdb3f392bc6a5d20a32ae6f89f6c2b3"
   enkey_agents: "49f09078e6ed0acb0a7c05a104694110cf59b3e2"
   neptune_academy: "5e0d710f993b1058cf39c652eb45d171ca766406"
-final_remote_heads:
+final_functional_heads:
   skills: "f9560e85132d45a5427acd7b4c3e68a20dc0d14f"
+  enkey_agents: "5d498cfab3f968af42ba60751b5143c6f96536e0"
+  neptune_academy: "ebe4d621ff800cab1f8248cd8e4e07ba042064fd"
+post_close_remote_heads_verified_before_batch_5a:
+  skills: "13b2a4ffc4520b7ebaca10eaa2efe0eb548259ff"
   enkey_agents: "5d498cfab3f968af42ba60751b5143c6f96536e0"
   neptune_academy: "ebe4d621ff800cab1f8248cd8e4e07ba042064fd"
 tariff_disposition_before: "33 implemented / 31 ready / 28 blocked av 92"

@@ -976,12 +976,18 @@ Effekt/band är leverantörens/fakturans enda obligatoriska värde. Katalogens
   `oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026`,
   `soderhamn-nara-soderhamn-taxa-11-och-12-2026`,
   `temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`.
-- **Obligatorisk indata:** debiterbar effekt/band (fakturan) — för C4 dessutom det NYA
-  `supplier_confirmed_band_id`-fältet (inventeringens §6a.2): exakt 500 kW är den
-  uttryckligen osäkra gränsen (band 5 `200–499` vs band 6 `>500`), så automatisk
-  bandvalsautomatik (`_niva()`) accepteras INTE — kunden bekräftar band-ID direkt, och
-  motorn validerar att det bekräftade ID:t faktiskt täcker det angivna kW-talet innan
-  beräkning. KATALOGRÄTTELSE: C4, Kils (`kils-energi-kil-2026`, dessutom `fixed:0` på alla
+- **Obligatorisk indata (rättat 2026-09-14, beredskapskontroll `2026-09-14-011`):**
+  debiterbar effekt OCH leverantörens bekräftade band-ID (fakturan/avtalet) för samtliga
+  åtta rader. Alla åtta bär redan katalogmarkören
+  `band_selection="supplier_confirmed_band_id_required"` och ska därför använda det
+  befintliga bandkontraktet från §6a.2. Exakt 500 kW är C4:s uttryckligen osäkra gräns
+  (band 5 `200–499` mot band 6 `>500`), så automatisk bandvalsautomatik (`_niva()`)
+  accepteras INTE. Det bekräftade band-ID:t väljer prisraden direkt och får inte
+  överprövas genom att jämföras med ett maskinellt tolkat `source_interval`; ett saknat,
+  tomt eller okänt ID blockerar däremot. Den tidigare texten om att motorn skulle kräva
+  att valt ID "täcker" kW-talet motsade katalogens normativa integrationskontrakt och
+  inventeringens §6a.2, som uttryckligen skapades för att leverantörens besked ska vinna i
+  just tvetydiga gränsfall. KATALOGRÄTTELSE: C4, Kils (`kils-energi-kil-2026`, dessutom `fixed:0` på alla
   fyra band) och TEMAB (`temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`) har var
   sin `issues`-text som INTE matchar grindens godkännandelista — normaliseras till den
   redan kända typen "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad;
@@ -991,7 +997,9 @@ Effekt/band är leverantörens/fakturans enda obligatoriska värde. Katalogens
   `remaining_information_requests` (R13 TAS BORT — Söderhamn passerar redan grinden,
   leverantörens debiterbara effekt används, se inventeringens §7).
 - **Teststrategi:** en samlad `test_leverantorsvarde_batch5a_kontrakt.py`/`.ts`, golden-värde
-  per tariff, C4:s 500 kW-gränsblockering testad explicit.
+  per tariff. För C4 ska 500 kW utan bekräftat band-ID blockera; med ett känt ID som
+  leverantören har bekräftat ska just den prisraden användas utan automatisk
+  intervallöverprövning. Okänt ID ska alltid blockera.
 - **Visas för användaren:** mwh-läge, obligatorisk indata; kr/schablon blockerade.
 
 ## Batch 5b — Leverantörsvärde, fullårsflöde (6 bastariffer + 1 varianttäckning)

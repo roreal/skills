@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Tekniskt slutgodkänd enligt Codex 2026-09-14-010; Batch 4 ligger lokalt 37/27/28 och inväntar Roberts uttryckliga pushgodkännande"
+status: "Slutförd och remote-verifierad; funktionell Batch 4-head skills@f9560e8, efterföljande rättelselogg skills@13b2a4f; enkey-agents@5d498cf och neptune_academy@ebe4d62"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -723,3 +723,18 @@ skarpa produkter. De orelaterade, användarägda ändringarna i
 rördes inte. Batch 4 (Jämtkraft Östersund/Frösön/Ås, Brunflo/Opevägen, Åre
 m.fl., samt Umeå Energi Enkel) är därmed implementerad, aktiverad och pushad
 till samtliga tre repon.
+
+### Efterföljande bokföringsverifiering före Batch 5a
+
+Codex verifierade 2026-09-14 på nytt de faktiska remote-huvudena med
+`git ls-remote`, efter de två efterföljande loggcommittarna. `origin/main` var då:
+
+- `skills@13b2a4ffc4520b7ebaca10eaa2efe0eb548259ff` — den funktionella
+  slutgodkännandecommiten är `f9560e8`; `8159378` bokför remote-huvudena och
+  `13b2a4f` rättar den felaktiga uppgiften om pushauktorisation;
+- `enkey-agents@5d498cfab3f968af42ba60751b5143c6f96536e0`;
+- `neptune_academy@ebe4d621ff800cab1f8248cd8e4e07ba042064fd`.
+
+Det finns alltså ingen opushad Batch 4-kod. Robert har efter information om den
+för tidiga pushen valt att låta den publicerade historiken stå kvar. Batch 5a får
+därför använda dessa tre remote-huvuden som sin bas.
