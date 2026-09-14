@@ -586,7 +586,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `00_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Boras.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** NYTT MOTORARBETE — ny kapacitetsform `heterogeneous_bands` + optional_environmental_addon
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -605,7 +605,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `borlange-web` (https://www.borlange-energi.se/kontakta-oss/priser/fjarrvarmepris-for-naringsidkare)
 - **Giltighet:** valid_from=2026-01-01, valid_to=2026-12-31
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -624,11 +624,11 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `02_0` (https://www.prisdialogen.se/wp-content/uploads/2025/08/Prisandringsmodell-2026-C4-Energi.pdf); `web-review-c4-current` (https://c4energi.se/foretag/varmekyla/priservillkor.793.html)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `c4_debiterbar_effekt_kw/c4_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effektgrupp (fakturan/avtalet) — automatisk gruppindelning vid gränsen (501 kW Borlänge, 500 kW C4) BLOCKERAS.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
@@ -719,7 +719,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `06_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Falu-Energi-och-Vatten.pdf); `web-review-falu-final` (https://fev.se/varme--kyla/fjarrvarme/avtal-och-priser-foretag.html)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -738,7 +738,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `06_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Falu-Energi-och-Vatten.pdf); `web-review-falu-final` (https://fev.se/varme--kyla/fjarrvarme/avtal-och-priser-foretag.html)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -757,7 +757,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `07_1` (https://www.prisdialogen.se/wp-content/uploads/2025/10/Normalprislista-Finspang-2025.pdf); `web-review-finspang-final` (https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** NYTT MOTORARBETE — ny kapacitetsform `piecewise_polynomial` + conditional_flow
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -776,7 +776,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `11_0` (https://www.prisdialogen.se/wp-content/uploads/2023/10/Prisandringsmodell-2025-Habo-Energi.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -852,7 +852,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `16_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Jonkoping-Energi-2025-till-2026-Prisandringsmodell.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — lokalt implementerad bakom spärr (handoff 2026-09-14-002, granskning 2026-09-14-012); väntar på en separat, ännu inte godkänd aktiveringsrunda
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
 - **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
 - **Teststatus:** inga tariffspecifika automattester ännu
@@ -887,14 +887,14 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 #### `kils-energi-kil-2026`
 - **Leverantör / nät / kundkategori:** Kils Energi — Kil — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
-- **Primärkälla:** `18_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-for-fjarrvarme-i-Kils-Energi-AB-2025.pdf); `web-review-kil-vat` (https://kilsenergi.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Kils_Energi_normalprislista.pdf); `kil-user-supplied-pricelist` ((url saknas))
+- **Primärkälla:** `web-review-kil-vat` (Kils Energis officiella Fjärrvärmeavgifter 2026, normalprislista bilaga 2, hämtad 2026-09-14; https://kilsenergi.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Kils_Energi_normalprislista.pdf). Det historiska `18_0` (2025-dokumentet från Prisdialogen) och `kil-user-supplied-pricelist` (identisk bytes, bekräftad via SHA-256) bevaras som historik/stöd.
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `kil_debiterbar_effekt_kw/kil_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
@@ -1120,9 +1120,9 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `oresund_totalvarme_effekt_kw/oresund_totalvarme_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
@@ -1215,9 +1215,9 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `skovde_debiterbar_effekt_kw/skovde_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
@@ -1234,11 +1234,11 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `soderhamn_anslutningseffekt_kw/soderhamn_vald_taxa_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
+- **Obligatorisk indata:** Leverantörens anslutningseffekt (fakturan) OCH bekräftad TAXA (10/11/12/13). Automatiskt taxaval BLOCKERAS — leverantören/fakturan anger taxan.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
 - **Kvarstående arbete:** Ingen ny motorkod (redan stödd `selected_band_affine` + ev. säsongsenergi).
@@ -1310,9 +1310,9 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `katrineholm_effektsignatur_kw/katrineholm_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
@@ -1367,11 +1367,11 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `temab_debiteringseffekt_kw/temab_vald_taxa_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
+- **Obligatorisk indata:** Leverantörens debiteringseffekt/anslutningsvärde (fakturan) OCH bekräftad TAXA (1/2/3). Automatiskt taxaval BLOCKERAS — leverantören/fakturan anger taxan.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
 - **Kvarstående arbete (utökat i v5, granskning 2026-09-08-004, P1):** Ingen ny motorkod (redan stödd `selected_band_affine` + ev. säsongsenergi). KATALOGRÄTTELSE av `issues`: ersätt nuvarande text med den redan godkända issue-typen "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde" — R12:s egen text medger redan att "annars räcker leverantörens debiterbara effekt". Informationsförfrågan R12 (medlem `temab-fjarrvarme`) TAS BORT — bolaget har bara denna enda tariff.
@@ -1386,9 +1386,9 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** registrerad i `POLICYREGISTER` (behind-the-gate; `godkanda(katalog)` returnerar inte raden ännu)
+- **Teststatus:** `test_leverantorsvarde_batch5a_kontrakt.py` / `resultatkontrakt.batch5a.test.ts` (golden-facit, bandmatris, felvägar; nycklar `trollhattan_debiterbar_effekt_kw/trollhattan_vald_niva_id`)
+- **UI-status:** inte valbar i kalkylatorn ännu — aktiveras i en separat, godkänd runda
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)

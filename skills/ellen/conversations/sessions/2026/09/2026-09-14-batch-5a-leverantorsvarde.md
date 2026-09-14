@@ -159,3 +159,60 @@ och ingen push gjordes.
 
 Fullständiga fynd och bindande rättningsordning finns i
 [`2026-09-14-012`](../../../reviews/2026/09/2026-09-14-granskning-batch-5a-implementation.md).
+
+## Rättningsrunda 1 — svar på granskning 2026-09-14-012
+
+Alla tre P1-fynd, alla tre P2-fynd och P3-fyndet rättade.
+
+1. **P1 — `exact`-buggen stängd för samtliga åtta.** `_familj4_kapacitet_krav`
+   fick ett explicit, default-`False` `rullande`-parameter (samma
+   gissar-inte-mönster som `heltal`). Källverifierat per leverantör och satt
+   `True` för alla åtta: C4 och Trollhättan säger redan "senaste 12
+   månaderna"/"rullande" i sin egen källtext; Skövde och Söderhamn är
+   rullande 3-årsmedel som uppdateras årligen; Kils officiella normalprislista
+   (bilaga 2, "Effektreglering", avsnittet "Övriga") anger uttryckligen att
+   kundens abonnerade effekt omprövas varje kalenderår (verifierat direkt mot
+   den lokala PDF-filen med `pdftotext`); Öresundskrafts källtext nämner en
+   "historikperiod"; Katrineholms effektsignatur och TEMAB:s kategoritalsmetod
+   är båda per definition regressions-/historikbaserade och recalculeras
+   löpande. Nya Python- och TypeScript-prov ger explicit `verified`-kvalitet
+   på alla fält och asserterar att utfallet ändå är `annual/snapshot/complete`.
+2. **P1 — det riktiga UI-komponentprovet byggt.** Ny
+   `KalkylatorPageBatch5a.test.tsx` (C4 + Söderhamn, 11 prov): rätt
+   fält/enheter, tom/icke-ändlig/under-minimum-effekt, tomt/okänt band/taxa,
+   giltig submit, produktbyte i båda riktningarna. Samma runda fixade
+   `_familj4_band_id_krav`s hårdkodade `etikett="Effektband"` (nu ett explicit
+   parametervärde, default oförändrat) — Söderhamn/TEMAB får nu `etikett="Taxa"`.
+3. **P1 — TypeScriptfixturen bunden till källan.** Ny `batch5aRawData.ts`
+   (VERBATIM export av `till_prisar()`/`_policy_till_json()`-utdata) plus
+   `batch5aRawData.driftprov.test.ts` (samma mönster som Batch 1:s,
+   `execFileSync` mot enkey-agents, `toEqual`). `resultatkontrakt.batch5a.test.ts`
+   byggd om att konsumera fixturen via `policyFranGenererad` i stället för en
+   handskriven, frikopplad kopia; golden-facit förblir oberoende handräknat.
+4. **P2 — full band-/felmatris i båda språken.** Python: nya bandgränsprov för
+   Kil, Katrineholm, Öresundskraft och TEMAB (utöver de redan gröna Trollhättan/
+   Söderhamn); under-minimum-prov för C4/Kil/Skövde/Katrineholm;
+   `test_kr_och_schablon_blockeras` anropar nu verkliga `harled_resultatstatus`
+   med `annual_inverse`/`monthly_invoice` i stället för att bara läsa
+   `policy.tackning`. TypeScript: samma icke-ändlig-/under-minimum-/
+   kr-schablon-genom-riktig-väg-prov tillagda i den ombyggda testfilen.
+5. **P2 — Kils källa fryst, dokumentation synkad.** Katalogens
+   `web-review-kil-vat` fick riktig titel/kind/`retrieved_on=2026-09-14`/SHA-256
+   (verifierad mot lokal PDF-fil); Kils policy pekar nu dit i stället för det
+   historiska `18_0`/användarfilen. R12/R13 fick var sin tariffkorrekta
+   `resolution_sv` (var kopierad C4-text); testnamnet rättat till
+   "…r05_r12_r13_flyttade_till_resolved" med explicit R13-assertion. Samtliga
+   åtta rader i `tariffinventering-v22.md` fick synkad Katalogstatus/
+   Kontraktsstatus/Teststatus/UI-status; verifieringslistans Skövde-,
+   Katrineholm- och Kil-poster uppdaterade med aktuell källa och
+   implementationsstatus.
+6. **P3 — katalogens formatering återställd.** Skrevs om via
+   `json.dump(indent=2, ensure_ascii=False)`; diffen mot `cb55614` (basen före
+   Batch 5a) är nu 176 rader, inte 23 000+.
+
+**Verifiering:** Python full svit **1410 passed, 4 skipped** (var 1392+4).
+TypeScript full svit **1335 passed** i 45 filer (var 1271). `npx tsc --noEmit`:
+rent. Mekaniskt: katalog 86 poster, `godkanda(katalog)`==37, isolerad kopia med
+åtta spärrar rensade ger 45. Disposition oförändrad **37/27/28 av 92**.
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.

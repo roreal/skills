@@ -164,11 +164,11 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 ### Kils Energi
 
 - [ ] **Kil** (`kils-energi-kil-2026`)
-  - Källor: [officiell pris- och informationssida](https://kilsenergi.kil.se/kils-energi/fjarrvarme/varme-och-varmvatten-till-konkurrenskraftiga-priser), [officiell normalprislista 2026 (PDF)](https://bolag.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Fj%C3%A4rrv%C3%A4rmeavgifter%202026%20normalprislista.pdf) (`18_0` s.17, `web-review-kil-vat` s.4–5 och `kil-user-supplied-pricelist`)
-  - **🟡 Godkänt för årsberäkning 2026-09-04 endast med avtalets kategorital eller leverantörens effektvärde.** Energipris, effektpriser och momsgrund stämmer. Effektbehovet beräknas som årsförbrukning `W` dividerad med avtalat kategorital `n`; källan anger 2 500 som normalt värde för hyres- och mindre affärslokaler men detta får inte antas för alla kunder. Publicerade årsexempel verifierar att ingen separat fast avgift tillkommer.
-  - [x] Metod för debiterbar effekt är verifierad men kräver kundens avtalade kategorital; uppdatera `billing_basis_method` och använd leverantörsvärdet när kategoritalet saknas.
+  - Källor: [officiell pris- och informationssida](https://kilsenergi.kil.se/kils-energi/fjarrvarme/varme-och-varmvatten-till-konkurrenskraftiga-priser), [officiell normalprislista 2026, bilaga 2 (PDF)](https://bolag.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Fj%C3%A4rrv%C3%A4rmeavgifter%202026%20normalprislista.pdf) — frusen som `web-review-kil-vat`, verklig SHA-256 `d8bb87ca07f92ea90a7165d4453384be32ac84cc99e60c8a0a9705caf5bb6e32`, hämtad 2026-09-14 (Batch 5a, handoff 2026-09-14-002); `18_0` (2025-dokument) och `kil-user-supplied-pricelist` (identiska bytes) bevaras som historik/stöd.
+  - **🟡 Godkänt för årsberäkning, lokalt implementerad bakom spärr 2026-09-14 (Batch 5a, granskning 2026-09-14-012).** Energipris, effektpriser och momsgrund (inklusive moms, `vat_basis=included`) stämmer. Prislistans avsnitt "Effektreglering" (Övriga) anger att kundens abonnerade effekt omprövas varje kalenderår — kalkylatorn tar leverantörens redan fastställda effekt/band för det aktuella året och räknar aldrig fram den själv från kategorital eller rå förbrukning.
+  - [x] Metod för debiterbar effekt är källverifierad som ett årligen omräknat leverantörsvärde (inte ett kategoritalsberäknat värde) — kräver leverantörens debiterbara effekt och bekräftat effektband (`kil_debiterbar_effekt_kw`/`kil_vald_niva_id`); `rullande=True` ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-14-012, P1).
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
-  - [x] `null` i fast avgift kan ersättas med verifierad noll.
+  - [x] `fixed:0` verifierat mot prislistans "Fast avgift"-kolumn (separat, oberoende av effektavgiften).
 
 ### Kraftringen
 
@@ -312,8 +312,9 @@ för den planerade, ännu ej genomförda implementationen.
 ### Skövde Energi
 
 - [ ] **Skövde** (`skovde-energi-skovde-2026`)
-  - Källa: [officiell fjärrvärmetaxa 2026 inklusive moms](https://skovdeenergi.se/fjarrvarme/priser-avgifter/taxa-fjarrvarme-2026-inklusive-moms/) (`35_0` s.13)
-  - **🟡 Godkänt för årsberäkning 2026-09-04.** Katalogens momsexkluderade energipriser och effektpris motsvarar exakt de officiella beloppen dividerade med 1,25. Effektgrunden och månadsvis debitering är bekräftade, men källan anger inte uttryckligen hur årsavgiften fördelas mellan månaderna.
+  - Källa: [officiell fjärrvärmetaxa 2026 inklusive moms](https://skovdeenergi.se/fjarrvarme/priser-avgifter/taxa-fjarrvarme-2026-inklusive-moms/) (`35_0` s.13, `web-review-skovde-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
+  - **🟡 Godkänt för årsberäkning, lokalt implementerad bakom spärr 2026-09-14 (Batch 5a, granskning 2026-09-14-012).** Katalogens momsexkluderade energipriser och effektpris motsvarar exakt de officiella beloppen dividerade med 1,25. Effektgrunden är leverantörens prisgrundande effekt (medel av tre föregående års högsta dygnsmedeleffekter, uppdateras januari) — kalkylatorn tar leverantörens redan beräknade värde.
+  - [x] Effektgrundens rullande 3-årssemantik verifierad; `rullande=True` i policyn ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-14-012, P1).
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 
 ### Sundsvall Energi
@@ -352,9 +353,9 @@ för den planerade, ännu ej genomförda implementationen.
 ### Tekniska Verken - Katrineholm
 
 - [ ] **Katrineholm** (`tekniska-verken-katrineholm-katrineholm-2026`)
-  - Källa: [officiell prislista och prismodell för företag 2026](https://tekniskaverken.se/foretag/fjarrvarme/priser) (`40_0` s.3 och `web-review-tekniska-verken-2026`)
-  - **🟡 Godkänt för årsberäkning 2026-09-04 med leverantörens effektsignatur och effektgrupp.** Den aktuella sidan bekräftar årsavgifter, effektpriser och energipriset 609 kr/MWh. Effektsignaturen är dygnsenergi/24, regressionsberäknad från 1 november–31 mars vid −17,7 °C och debiteringen använder medelvärdet av de två senaste årens signaturer. Effektpriset kalenderdagsfördelas, men sidan säger bara att den separata årsavgiften faktureras månadsvis; dess exakta månadsfördelning framgår inte. Intervallen 5–50, 51–250 osv. lämnar dessutom luckor om signaturen inte är heltalsavrundad.
-  - [x] Metod för debiterbar effekt är verifierad; använd ändå leverantörens effektsignatur och effektgrupp tills avrundnings-/intervallregeln är bekräftad.
+  - Källa: [officiell prislista och prismodell för företag 2026](https://tekniskaverken.se/foretag/fjarrvarme/priser) (`40_0` s.3, `web-review-katrineholm-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
+  - **🟡 Godkänt för årsberäkning, lokalt implementerad bakom spärr 2026-09-14 (Batch 5a, granskning 2026-09-14-012).** Den aktuella sidan bekräftar årsavgifter, effektpriser och energipriset 609 kr/MWh. Effektsignaturen är dygnsenergi/24, regressionsberäknad från 1 november–31 mars vid −17,7 °C och debiteringen använder medelvärdet av de två senaste årens signaturer — kalkylatorn tar leverantörens redan beräknade signatur och rör aldrig rådata. Effektpriset kalenderdagsfördelas, men sidan säger bara att den separata årsavgiften faktureras månadsvis; dess exakta månadsfördelning framgår inte.
+  - [x] Metod för debiterbar effekt är verifierad; leverantörens effektsignatur och bekräftat effektband/-grupp är obligatoriska policyfält (`katrineholm_effektsignatur_kw`/`katrineholm_vald_niva_id`). `rullande=True` ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-14-012, P1).
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 
 ### Tekniska Verken - Linköping
