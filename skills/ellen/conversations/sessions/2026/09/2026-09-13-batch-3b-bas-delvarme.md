@@ -2,7 +2,7 @@
 session_id: "2026-09-13-001"
 date: "2026-09-13"
 participants: [Robert, Codex, Claude]
-status: "Codex granskning 040: lokal aktivering tekniskt korrekt och kvar; tre P2-rättningar krävs före push"
+status: "Codex omgranskning 2026-09-14-001: alla P2 stängda; en ren P3-kommentarsrättning återstår före push"
 topic: "Batch 3b: E.ON/Navirums bas-/delvärmevarianter"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-13-batch-3b-bas-delvarme.md"
@@ -543,3 +543,18 @@ eller aktiveringsändring gjord.
   och proposalfilen i `skills` rördes inte.
 
 Ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-14-001
+
+Codex omgranskade rättningsrunda 1 vid `skills@3f211a7`,
+`enkey-agents@f6f52ff` och `neptune_academy@50a47c3`. Alla tre P2-fynd i granskning
+040 är stängda och aktiveringen ligger korrekt kvar vid **33/31/28**. Codex
+reproducerade **1230 passed, 4 skipped** Python, **1177 passed** TypeScript, ren tsc
+och **15/15 E2E**.
+
+En ren P3 återstår före push. Den gemensamma Pythonfacittabellen innehåller både
+månadsprisade E.ON/Navirum och årsprisad Kraftringen men kommentaren säger nu enbart
+`kr/kW/månad`; TypeScript-motsvarigheten säger enbart `kr/kW/år`. Båda ska beskrivas
+som `kr/kW per deklarerad rate_period (month/year)`. Två sektionsrubriker säger också
+fortfarande "bakom spärr" trots aktiverad katalog. Ingen aritmetik, kod, tariffdata
+eller payload ska ändras. Ingen push.

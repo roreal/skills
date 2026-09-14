@@ -3,14 +3,14 @@ handoff_id: "2026-09-13-001"
 created_at: "2026-09-13T20:48:10+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-local-activation-review-040
+status: one-p3-required-after-re-review-2026-09-14-001
 implementation_allowed: true
 approved_implementation_scope: "batch-3b-eon-navirum-bas-delvarme-36-month-supplier-value"
 tariff_activation_allowed: true
 push_allowed: false
 review_required_before_activation: true
 review_required_before_push: true
-latest_review: "2026-09-13-040"
+latest_review: "2026-09-14-001"
 baseline_remote_heads:
   skills: "19c68fe95e52492b58cc24965ef39a1083a655c8"
   enkey_agents: "4b1d4b6d78c010a4722f54df833ab7903431e9dc"
@@ -273,3 +273,18 @@ tre-fältskontrakt utan band/fakturamånad. Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-13-granskning-lokal-aktivering-batch-3b.md`.
 
 Behåll aktiveringen och 33/31/28. **Ingen push.**
+
+## Codex omgranskning 2026-09-14-001
+
+Rättningsrunda 1 vid `skills@3f211a7`, `enkey-agents@f6f52ff` och
+`neptune_academy@50a47c3` stänger samtliga funktionella/P2-fynd i granskning 040.
+Codex reproducerade **1230 passed + 4 skipped Python**, **1177 passed TypeScript**, ren
+tsc och **15/15 E2E**. Aktiveringen ligger korrekt kvar vid **33/31/28**.
+
+En ren P3 återstår före push: de blandade Batch 3-facittabellerna innehåller både
+`rate_period=month` och `rate_period=year`, men Pythonkommentaren kallar allt månad och
+TypeScript-kommentaren allt år. Två testsektionsrubriker säger också fortfarande
+"bakom spärr". Full minimal order finns i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-lokal-aktivering-batch-3b-fix1.md`.
+
+Ingen kod/data/aritmetik ska ändras. **Ingen push.**
