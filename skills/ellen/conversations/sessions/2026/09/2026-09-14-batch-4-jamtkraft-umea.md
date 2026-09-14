@@ -2,12 +2,13 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Rättningsrunda 1 efter granskning 2026-09-14-004 klar; stannar för Codex omgranskning"
+status: "Changes required efter Codex omgranskning 2026-09-14-005; ingen aktivering eller push"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
   - "conversations/reviews/2026/09/2026-09-14-granskning-batch-4-implementation.md"
+  - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -277,3 +278,18 @@ dispositionen fortsatt **33/31/28 av 92**.
   ingen befintlig `dist/`-smuts rörd).
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-14-005
+
+Codex omgranskade rättningsrunda 1 vid `skills@2ea4ae2`, `enkey-agents@dd51562` och
+`neptune_academy@dd0ebaf`. Beslut: **changes required före aktivering**. Jämtkraftvägen,
+flödesjusteringsschemat och produktbytet är stängda, men multiplikatorn accepterar fortfarande
+extra struktur, fel policyintervall, ett godtyckligt typ-ID och direkt `B=14`. Kandidat-UI-
+provet behöver pinna de enheter/status/fältnära fel som det påstår, två andra-pass-prov
+saknas och verifieringslistan/inventeringen/batchplanen är fortfarande osynkade.
+
+Full verifiering är grön: 1266+4 skip Python, 1207 TypeScript, tsc, isolerat bygge, 15/15
+E2E och byte-identisk 35-produktsgenerator. Det ändrar inte det reproducerade P1-fyndet.
+Bindande rättningsordning finns i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md`. Spärrarna och
+33/31/28 ligger kvar; ingen aktivering eller push är godkänd.

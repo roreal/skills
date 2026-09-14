@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-review-2026-09-14-004
+status: changes-required-after-review-2026-09-14-005
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: false
@@ -284,3 +284,16 @@ komposit- och justeringsscheman strikt fail-closed, lägga det beställda verkli
 provet inklusive produktbyte och synka levande dokumentation. Spärrarna och 33/31/28 ska
 ligga kvar. Ingen aktivering och ingen push är godkänd; stanna efter fokuserade lokala
 commits för Codex omgranskning.
+
+## Codex omgranskning 2026-09-14-005
+
+Rättningsrunda 1 vid `skills@2ea4ae2`, `enkey-agents@dd51562` och
+`neptune_academy@dd0ebaf` är omgranskad. Jämtkraftreproduktionen, unit/formula-schemat och
+produktbytet är stängda, men multiplikatorns exakta struktur/policyintervall/direkta
+motorintervall är fortfarande öppna. UI-assertioner, tvåpassregressioner och levande
+dokumentationssynk återstår.
+
+Följ exakt rättningsordning i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md`, behåll alla
+fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
+omgranskning. Ingen aktivering och ingen push är godkänd.
