@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Changes required enligt Codex 2026-09-14-006: rätta Jämtkrafts felaktiga 36-månaderstext, tom effekts fältnära fel/enhetsprov och Pythons bool-vakt; ingen aktivering eller push; 33/31/28"
+status: "Changes required enligt Codex 2026-09-14-007: Umeås komponentkandidat måste spegla verklig kalenderperiod/rullande/etikett och testa periodfältet; ingen aktivering eller push; 33/31/28"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -10,6 +10,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-14-granskning-batch-4-implementation.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-1.md"
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md"
+  - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -433,3 +434,20 @@ de godkända. Disposition oförändrad **33/31/28 av 92**. `git diff --check`: r
 tre repon (bortsett från den sedan tidigare orelaterade `../milesight`-submodulpekaren
 och `neptune-marketing/dist`, ingen av vilka rörts). Ingen aktivering, ingen push.
 Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-14-007
+
+Codex omgranskade rättningsrunda 3 vid `skills@910a3fc`, `enkey-agents@fcecc48` och
+`neptune_academy@fa872c4`. De fyra fynden i granskning 006 är stängda och oberoende
+verifierade. Beslutet är ändå **changes required före aktivering** eftersom Umeås
+komponentkandidat inte motsvarar den verkliga serialiserade policyn: testet sätter tom
+`kalperiod_definition`, `rullande:true` och en fabricerad etikett, medan
+`POLICYREGISTER`/generatorn ger en treårig kalenderdefinition, `rullande:false` och
+`Debiterbar årseffekt (A)`. Testets normal-submit slipper därför det verkliga obligatoriska
+`#kapacitetKw-period`-fältet och kan bli falskt grönt.
+
+Oberoende verifiering: 1272+4 skip i tariffsviten, 1219 TypeScript, tsc, eval-bygge,
+15/15 E2E och två generatorsynkprov är gröna. Katalogen har 86 poster, `godkanda()` 33,
+inga Batch 4-ID:n är aktiva och 33/31/28 består. Bindande rättningsordning finns i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md`. Ingen
+aktivering och ingen push är godkänd.

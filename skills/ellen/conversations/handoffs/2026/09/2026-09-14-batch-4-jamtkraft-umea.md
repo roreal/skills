@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-review-2026-09-14-006
+status: changes-required-after-review-2026-09-14-007
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: false
@@ -314,5 +314,19 @@ gröna. Fyra avgränsade rättningar återstår före aktivering:
 
 Följ exakt reproduktion och rättningsordning i
 `conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-2.md`. Behåll alla
+fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
+omgranskning. Ingen aktivering och ingen push är godkänd.
+
+## Codex omgranskning 2026-09-14-007
+
+Rättningsrunda 3 vid `skills@910a3fc`, `enkey-agents@fcecc48` och
+`neptune_academy@fa872c4` är omgranskad. Granskning 006:s fyra fynd är stängda. Ett
+aktiveringsblockerande kandidatprov återstår: Umeåmocken måste använda den verkliga
+serialiserade policyns icke-tomma treårsdefinition, `rullande:false` och exakta etikett.
+Testa att periodfältet visas, att saknad/ogiltig period ger fältnära fel/ARIA, att giltig
+period ger normal submit och att perioden rensas vid produktbyte.
+
+Följ exakt reproduktion och rättningsordning i
+`conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md`. Behåll alla
 fyra tariffspärrar och 33/31/28, commitera fokuserat lokalt och stanna för ny Codex
 omgranskning. Ingen aktivering och ingen push är godkänd.
