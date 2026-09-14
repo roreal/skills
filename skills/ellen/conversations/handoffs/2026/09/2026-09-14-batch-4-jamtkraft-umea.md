@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: ready-for-local-implementation
+status: changes-required-after-review-2026-09-14-004
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: false
@@ -271,3 +271,16 @@ Lägg gränsfall för `B=0,93`, `B=1,401`, strax under/över, `B=14`, NaN och o�
 6. Stanna för Codex granskning.
 
 **Ingen aktivering och ingen push i denna etapp.**
+
+## Codex granskning 2026-09-14-004
+
+Den lokala implementationen vid `skills@e8341ce` (katalog `c1d8320`),
+`enkey-agents@69b3060` och `neptune_academy@289b9c0` är granskad med beslutet **changes
+required före aktivering**. Bindande fynd och exakt rättningsordning finns i
+`conversations/reviews/2026/09/2026-09-14-granskning-batch-4-implementation.md`.
+
+Claude ska rätta den dubbelriktade katalog–policy–motorbindningen för multiplikatorn, göra
+komposit- och justeringsscheman strikt fail-closed, lägga det beställda verkliga UI-/E2E-
+provet inklusive produktbyte och synka levande dokumentation. Spärrarna och 33/31/28 ska
+ligga kvar. Ingen aktivering och ingen push är godkänd; stanna efter fokuserade lokala
+commits för Codex omgranskning.

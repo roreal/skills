@@ -2,11 +2,12 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Lokal implementation bakom spärr klar; stannar för Codex granskning"
+status: "Rättningsrunda 1 efter granskning 2026-09-14-004 klar; stannar för Codex omgranskning"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
+  - "conversations/reviews/2026/09/2026-09-14-granskning-batch-4-implementation.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -46,6 +47,14 @@ testresultat här och stanna för Codex granskning.
   Pythonmotorn avfördes efter kontroll av de exakta källraderna; endast en addition finns.
 - `2026-09-14` – Robert gav explicit klartecken ("Claude kan börja arbeta från handoffen
   nu") att starta implementationen.
+- `2026-09-14` – Codex granskade leveransen vid `skills@e8341ce` (katalog
+  `skills@c1d8320`), `enkey-agents@69b3060` och `neptune_academy@289b9c0`. Beslut:
+  **changes required före aktivering** enligt granskning `2026-09-14-004`. Reproducerade
+  blockerare är en odubbelriktad multiplikatorbindning som kan multiplicera en
+  Jämtkraftkostnad, en kompositgrind som accepterar godtycklig multiplikatorstruktur,
+  flödesvalidatorer som ignorerar enhet/formel samt det saknade verkliga UI-/E2E-provet.
+  Fullsviterna är gröna (1259+4 skip Python, 1194 TypeScript, tsc och isolerat bygge), men
+  spärrarna och 33/31/28 ligger kvar; ingen aktivering eller push är godkänd.
 
 ## Uppdrag
 
@@ -177,10 +186,10 @@ implementationsspärr.
 
 Handoffens acceptanspunkt 8 ("ett riktigt komponent-/E2E-prov med injicerad kandidat
 för Jämtkraft och Umeå som visar rätt fält, enheter, normal submit och
-`annual/snapshot/complete`") är **inte** genomförd i denna runda — tid/omfattning
+`annual/snapshot/complete`") var **inte** genomförd i denna runda — tid/omfattning
 räckte inte till ett UI-komponenttest i denna leverans, utöver de rena kontrakts-/
-motorproven ovan. Detta bör lösas i en fokuserad uppföljning innan aktivering, eller
-tas upp av Codex som ett fynd i granskningen.
+motorproven ovan. Codex tog upp detta som P1 #4 i granskning 2026-09-14-004; stängt
+i rättningsrunda 1 nedan.
 
 ## Commits (lokalt, ingen push)
 
@@ -190,7 +199,81 @@ tas upp av Codex som ett fynd i granskningen.
   strikt kompositgrind, fyra Tariffpolicy-poster, nya/rättade tester.
 - `neptune_academy@289b9c0` — TypeScript-spegel av motorn och multiplikatorn,
   regenererad `tariffer.generated.ts`, nytt speglat testfil.
-- `skills` (dokumentationscommit, denna) — `tariffinventering-v22.md`/
+- `skills` (dokumentationscommit) — `tariffinventering-v22.md`/
   `batchplan-v22.md` implementationsstatus, denna sessionsfil, `index.md`.
 
-Ingen aktivering, ingen push. Stannar för Codex granskning av hela implementationen.
+Ingen aktivering, ingen push. Stannade för Codex granskning av hela implementationen
+— se granskning `2026-09-14-004`.
+
+## Rättningsrunda 1 — svar på granskning 2026-09-14-004
+
+Alla fyra bindande fynden (tre P1, ett P2) rättade. Katalogen, tariffdata, priser och
+tariffspärrar oförändrade — samtliga fyra `investigation.status="utreds"` och
+dispositionen fortsatt **33/31/28 av 92**.
+
+1. **P1 — dubbelriktad multiplikatorbindning** (`enkey-agents@dd51562`).
+   `till_prisar` (katalog.py) transporterar nu en explicit
+   `kapacitet.multiplikator_typ`-markör till `prisar`, satt bara när
+   `capacity.post_multiplier` matchar exakt en post i den nya, källpinnade
+   `policyregister._KANDA_MULTIPLIKATORER`. Motorn (`_arskostnad_kapacitet` i
+   faktura.py, `arskostnadKapacitet` i fjarrvarme.ts) vägrar nu en
+   `kapacitet_multiplikator` om denna markör saknas — även vid ett direkt
+   motoranrop som kringgår hela aktiveringsgrinden. `kontrollera_aktiveringsgrind`
+   kör dessutom `kontrollera_kompositgrind` för VARJE tariff vars policy eller
+   katalograd nämner en multiplikator, i båda riktningarna. Codex reproduktion (en
+   syntetisk `kapacitet_multiplikator_bindning` på en Jämtkraft-policy, som saknar
+   `post_multiplier` helt) kastar nu `ValueError` i stället för att halvera
+   kapacitetskostnaden tyst — verifierat manuellt mot exakt Codex reproduktion.
+2. **P1 — kompositgrinden accepterade godtycklig struktur** (samma commit).
+   `kontrollera_kompositgrind` kräver nu att `capacity.post_multiplier` matchar
+   exakt en av `_KANDA_MULTIPLIKATORER` (Umeås enda källverifierade B-formel:
+   `name="B"`, exakt `input_U` och fyra exakta `pieces`). Codex reproduktionsstruktur
+   (`{"name":"X","input_U":"anything","pieces":[...]}`) avvisas nu.
+3. **P1 — justeringsschemat ignorerade unit/formula** (samma commit).
+   `_valid_flow_difference`/`_valid_asymmetric_flow_difference` (justeringar.py)
+   validerar nu en sluten nyckelmängd, ett pinnat `unit="SEK/m3"` och (för
+   `flow_difference`) ett `formula` härlett från postens egna `rate`/
+   `reference_m3_per_MWh`. Codex reproduktion (byt båda fälten till `"WRONG"`)
+   avvisas nu för båda typerna; en injicerad, källmässigt obefintlig
+   `formula`-nyckel på `asymmetric_flow_difference` avvisas som en oväntad nyckel.
+4. **P1 — saknat verkligt UI-/produktbytesprov** (`neptune_academy@dd0ebaf`).
+   Ny `KalkylatorPageBatch4.test.tsx`: injicerar en Umeå- och två Jämtkraft-
+   kandidater via `vi.mock('../data/tariffer.generated')`, bevisar korrekta
+   fält/enheter/etiketter för båda familjerna, en normal MWh-submit till ett
+   synligt uppskattat resultat, samt produktbyte Jämtkraft↔Jämtkraft och
+   Jämtkraft↔Umeå som INTE tyst återanvänder effekt (`#kapacitetKw`), band eller
+   det MEDVETET delade `flode_okt_apr_m3`-fältet — `handleFormChange` nollställer
+   hela `policyFaltRaw`-objektet vid varje leverantörsbyte, oavsett nyckelnamn.
+5. **P2 #4 — generatorns sluträkning** (`enkey-agents@dd51562`).
+   `generera.py:main()` skickar nu explicit `policyregister=POLICYREGISTER` till
+   den avslutande `godkanda(katalog)`-räkningen, samma register
+   `bygg_ts_fran_katalog` de facto redan använde.
+
+**Nya commit-hashar:**
+- `enkey-agents@dd51562` — multiplikatorbindning, kompositgrind, justeringsschema,
+  generatorns explicita register, sju nya negativa test.
+- `neptune_academy@dd0ebaf` — motorförsvar mot multiplikator utan markör, ny
+  `KalkylatorPageBatch4.test.tsx` (10 test).
+
+**Verifiering:**
+- Python: `tools/tariffer/tests` → **1266 passed, 4 skipped** (1259+4 skip baslinje +
+  7 nya).
+- TypeScript: `vitest run` → **1207 passed** i 41 filer (1194 baslinje + 13 nya:
+  3 direkta motorförsvarsprov, 10 i `KalkylatorPageBatch4.test.tsx`).
+  `npx tsc --noEmit`: godkänt (efter borttagning av två oanvända testkonstanter).
+- `npm run eval:build` (isolerat `dist-eval`): godkänt, endast känd
+  bundelstorleksvarning.
+- `node e2e/kalkylator.smoke.mjs` mot det isolerade bygget: samtliga **15/15**
+  befintliga scenarier godkända (inget nytt Batch 4-scenario — de fyra raderna är
+  fortfarande spärrade och kommer omockas i den senare aktiveringsrundan).
+- Generatorsynk: en fristående regenerering av `tariffer.generated.ts` mot
+  `skills@c1d83200c08903610e28ac20c504d748dd067081` är **byte-för-byte identisk**
+  med den incheckade filen — fortsatt 35 produkter totalt (33 katalog + 2
+  leverantörsfiler), inga Batch 4-ID:n läckta.
+- Mekanisk kontroll: `godkanda(katalog)` == 33, katalogen har fortsatt 86 poster.
+  Dispositionen är oförändrad **33/31/28 av 92**.
+- `git diff --check` rent i båda repona (endast Python-/TypeScript-källfiler och
+  denna sessionsfil ändrade — inget katalog-/prisdata, inga orelaterade filer,
+  ingen befintlig `dist/`-smuts rörd).
+
+Ingen aktivering, ingen push. Stannar för Codex omgranskning.
