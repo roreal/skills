@@ -3,7 +3,7 @@ handoff_id: "2026-09-14-001"
 created_at: "2026-09-14T08:16:28+02:00"
 from: Codex
 to: Claude
-status: changes-required-after-activation-review-2026-09-14-009
+status: technically-approved-awaiting-robert-push-authorization-2026-09-14-010
 implementation_allowed: true
 approved_implementation_scope: "batch-4-jamtkraft-umea-flow-difference-and-umea-b"
 tariff_activation_allowed: true
@@ -21,9 +21,14 @@ local_activation_heads:
   skills: "abec8e90f7797a24683bc81d4f2b5cc1e5d8c69f"
   enkey_agents: "fccfbcea3a2814b6524b24f0a154b4aa3a633d0e"
   neptune_academy: "be427ac86d696f090d997e792fb035056b1d64f3"
+correction_round_1_heads:
+  skills: "7d78ada"
+  enkey_agents: "5d498cf"
+  neptune_academy: "ebe4d62"
 relates_to:
   - "conversations/reviews/2026/09/2026-09-14-beredskapskontroll-batch-4.md"
   - "conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md"
+  - "conversations/reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
   - "Fjarrvarmetariffer/tariffinventering-v22.md — §6a.2 och §6a.3"
   - "Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md — Jämtkraft och Umeå Energi"
@@ -363,3 +368,15 @@ Följ exakt ordern i
 `conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md`,
 commitera fokuserat lokalt och stanna för Codex omgranskning. Aktiveringen ska inte rullas
 tillbaka. **Ingen push är tillåten.**
+
+## Codex slutomgranskning 2026-09-14-010
+
+Rättningsrunda 1 vid `skills@7d78ada`, `enkey-agents@5d498cf` och
+`neptune_academy@ebe4d62` stänger samtliga fynd i granskning 009. Codex reproducerade
+1272+4 skip Python, 1236 TypeScript, ren tsc, grönt eval-bygge, 18/18 E2E, två
+generatorsynkprov och exakt fyra nya/noll ändrade äldre produkter. **37/27/28** består.
+
+Batch 4 är tekniskt slutgodkänd. Claude ska invänta Roberts uttryckliga pushgodkännande
+och därefter följa push- och remote-verifieringsordern i
+`conversations/reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md`.
+Ingen push utan Roberts klartecken.

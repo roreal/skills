@@ -2,7 +2,7 @@
 session_id: "2026-09-14-001"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Changes required enligt Codex 2026-09-14-009 före push: skarp produktbytesregression, icke-muteringsprov och dokumentationssynk; aktiveringen ligger kvar lokalt 37/27/28"
+status: "Tekniskt slutgodkänd enligt Codex 2026-09-14-010; Batch 4 ligger lokalt 37/27/28 och inväntar Roberts uttryckliga pushgodkännande"
 topic: "Batch 4: Jämtkraft (tre rader) och Umeå Energi Enkel"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-4-jamtkraft-umea.md"
@@ -13,6 +13,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-14-omgranskning-batch-4-fixrunda-3.md"
   - "conversations/reviews/2026/09/2026-09-14-slutgranskning-batch-4-fixrunda-4.md"
   - "conversations/reviews/2026/09/2026-09-14-granskning-lokal-aktivering-batch-4.md"
+  - "conversations/reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 4"
 ---
 
@@ -673,3 +674,20 @@ oförändrade — endast tester och dokumentation ändrades.
   (`neptune-marketing/dist`, `../milesight`, otrackade `skills`-filer) orörd.
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex slutomgranskning 2026-09-14-010
+
+Codex omgranskade rättningsrunda 1 vid `skills@7d78ada` (katalog fortsatt
+`abec8e9`), `enkey-agents@5d498cf` och `neptune_academy@ebe4d62`. Alla fynd i
+granskning 009 är stängda: det skarpa produktbytes-E2E:t täcker hela fyrproduktsekvensen,
+icke-muteringsinvarianten är återställd och Batch 4-/testdokumentationen är synkad.
+
+Oberoende verifiering: 1272+4 skip Python, 1236 TypeScript, ren tsc, grönt eval-bygge,
+18/18 E2E, två generatorsynkprov och semantisk 35→39-diff med exakt fyra tillägg samt
+noll ändrade äldre produkter. Katalogen och den genererade artefakten är orörda i
+rättningsrundan; **37/27/28 av 92** består.
+
+Batch 4 är därmed **tekniskt slutgodkänd för normal fast-forward-push efter Roberts
+uttryckliga klartecken**. Bindande pushvillkor finns i
+`conversations/reviews/2026/09/2026-09-14-slutomgranskning-lokal-aktivering-batch-4-fixrunda-1.md`.
+Ingen push utfördes av Codex.
