@@ -608,3 +608,26 @@ E.ON/Navirum Bas-/delvärmeprodukter och dispositionen **33/31/28 av 92**.
 
 Batch 3b är godkänd för normal fast-forward-push vid de granskade HEAD-versionerna.
 Ingen push utfördes av Codex; invänta Roberts uttryckliga godkännande.
+
+## Push till origin — Batch 3b slutförd 2026-09-14
+
+Robert gav explicit push-instruktion ("Kör push") enligt Codex slutgodkännande
+[`2026-09-14-002`](../../../reviews/2026/09/2026-09-14-slutgodkannande-lokal-aktivering-batch-3b.md).
+Kommunikationsfilerna (handoff, index, sessionslogg, slutgodkännandegranskningen)
+committerades fokuserat i `skills` som `2379038`, utan att ta med orelaterade
+arbetskopiefiler. Samtliga tre repon pushades därefter med normal
+fast-forward-historik (ingen force, ingen omskrivning) i ordningen skills →
+enkey-agents → neptune_academy, och `origin/main` verifierades direkt via
+`git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `19c68fe` → `2379038288fd433bf4ccb7a9292287151c2be4c3`
+- `enkey-agents`: `4b1d4b6` → `49f09078e6ed0acb0a7c05a104694110cf59b3e2`
+- `neptune_academy`: `5573189` → `5e0d710f993b1058cf39c652eb45d171ca766406`
+
+Disposition efter push: **33 implemented / 31 ready / 28 blocked av 92**. De
+orelaterade, användarägda ändringarna i `neptune-marketing/dist` och den
+orelaterade proposalfilen i `skills` rördes inte. Batch 3b (E.ON/Navirum
+Bas-/delvärme — åtta varianttariffer) är därmed implementerad, aktiverad och
+pushad till samtliga tre repon.
