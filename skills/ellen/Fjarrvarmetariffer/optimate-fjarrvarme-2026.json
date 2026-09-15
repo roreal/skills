@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.19",
+  "schema_version": "0.1.20",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-15",
@@ -1911,14 +1911,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -3534,13 +3527,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -3657,14 +3644,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -4255,13 +4235,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -5197,13 +5171,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6310,13 +6278,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11735,6 +11697,15 @@
         "R04 (Borlange, september-oktober 559 kr/MWh) och R15 (Falu ytterorter, >500 kW specialavtal) flyttade till resolved_information_requests: inte externt besvarade i alla detaljer, men inte langre produktblockerande eftersom kontraktet kraver leverantorens bekraftade band-ID/varde. Falu tatorts felaktiga medlemsvida R15-koppling borttagen.",
         "Kallproveniens uppdaterad (retrieved_on=2026-09-15) for Borlange, Falu, Mjolby; nya kallposter haboenergi-web, jonkopingenergi-web-priser och jonkopingenergi-web-effekt tillagda och kopplade till respektive medlem/tariff.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel- eller aktiveringsandring gjord. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 45 tills en separat, godkand aktiveringsrunda."
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "revision": "0.1.20",
+      "changes": [
+        "Batch 5b lokal aktivering: investigation-sparren borttagen (satt till null) for exakt sex rader - borlange-energi-borlange-2026, falu-energi-vatten-falun-2026, falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026, habo-energi-habo-2026, mjolby-svartadalen-energi-mjolby-2026 och jonkoping-energi-jonkoping-och-granna-2026 - enligt Codex slutgranskning 2026-09-15-015.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, issues-, production_ready- eller contract_required-andring gjord. Samtliga sex behaller sina kvarvarande manadsperiodiseringsissues; godkannandet galler uppskattad annual_forward-arskostnad fran leverantorens effekt/effektsignatur, bekraftat band och fakturans fullarsflode - Jonkoping dessutom med den inbyggda metered_access_fee-kostnadsdelen (0/10/25/50 kr per central/manad). Godkannandet galler inte fakturaexakt manadsberakning, kronor-/schabloninmatning eller besparingsprodukten.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 51 (45 tidigare aktiva + dessa sex)."
       ]
     }
   ],
