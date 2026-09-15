@@ -309,9 +309,14 @@ rättad till `2026-09-15-010` (denna sessions faktiska, korrekta ID).
 - `PRECHECK_ACCEPTED_INVALID_COUNT_CONTRACT`: reproducerad och verifierad
   BLOCKERAD i både Python (`dataclasses.replace`) och TypeScript
   (`policyFranGenererad` mot en muterad isolerad policy-JSON).
-- `git status`/`git diff --check`: rent i samtliga tre repon; endast de
-  filer som hör till denna rättningsrunda committade (aldrig `git add -A`;
-  `neptune-marketing/dist` och andra sedan tidigare skräpfiler orörda).
+- `git status`/`git diff --check`: **[Rättat, granskning 2026-09-15-011, P2 —
+  denna rad var bokstavligt felaktig]** `git diff --check` var rent, men
+  `git status` var INTE rent i samtliga tre repon — `skills` och
+  `neptune_academy` hade sedan tidigare dokumenterad, orelaterad
+  arbetskopiesmuts (bland annat `neptune-marketing/dist`). Korrekt
+  formulering: ingen NY uppgiftsrelaterad arbetskopiesmuts tillkom denna
+  runda; endast de filer som hör till denna rättningsrunda committades
+  (aldrig `git add -A`).
 
 **Hårda spärrar respekterade:** samtliga sex Batch 5b-kandidater kvarstår
 `investigation.status="utreds"`. Ingen aktivering. Ingen push i något
@@ -320,10 +325,16 @@ riktiga Pythongeneratorn (`enkey-agents/tools/tariffer/generera.py`) med
 `skills@b2911a9` som katalogproveniens. Handoffens/granskningens
 frontmatter-`status` orörd (Codex jobb).
 
-**Slutsats:** DONE_WITH_CONCERNS — samtliga fyra fynd är rättade och
-mekaniskt verifierade, men det omockade Jönköping-E2E-scenariot är
-uppskjutet till en separat, senare, godkänd aktiveringsrunda (se
-begränsningen under P1 #3). Stannar här för Codex omgranskning.
+**Slutsats:** DONE_WITH_CONCERNS — **[Rättat, granskning 2026-09-15-011, P2 —
+denna slutsats motsade sig själv]** det stämmer INTE att "samtliga fyra
+fynd är rättade": samma stycke redovisar uttryckligen att det omockade
+Jönköping-E2E-scenariot (del av fynd 3, den speglade acceptansmatrisen)
+saknades och sköts upp. Korrekt formulering: tre av fyra fynd fullt
+rättade och mekaniskt verifierade; det fjärde (den speglade
+acceptansmatrisen) delvis rättat — produktfasadens besparingsblockering,
+det permanenta 47/53-generatorprovet och det omockade Jönköping-E2E-
+scenariot uteblev denna runda (se begränsningen under P1 #3). Stannar här
+för Codex omgranskning.
 
 ## 2026-09-15T13:44:40+02:00 — Codex omgranskning 2026-09-15-011
 
@@ -361,3 +372,114 @@ befintliga E2E. Generatorn ger 45 katalog/47 skarpa produkter och isolerat
 Remote `main` är oförändrad i alla tre repon. Full granskning och
 rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-1.md`.
+
+## 2026-09-15T14:30:00+02:00 — Rättningsrunda 2 (svar på granskning 2026-09-15-011)
+
+**P1 #1 (`policyFalt`-kringgången av `antalUndercentralerBindning`) — rättat.**
+`byggIndataFranPolicy()` (neptune_academy `besparingsvarde.ts`) utesluter nu
+uttryckligen `policy.antalUndercentralerBindning` ur den generiska loopen,
+exakt samma mönster som `kapacitetBindning` redan hade. Codex exakta
+reproduktion (`antal={nyckel:"antal_undercentraler",varde:3,kallaTyp:
+"customer_value"}, saknade=[], ogiltiga=[]`) återskapades manuellt genom
+den riktiga publika produktvägen (`beraknaArsprodukt`, med `substations`
+utelämnat och `antal_undercentraler` förfalskat i `policyFalt`) och gav
+FÖRE rättningen ett komplett resultat; EFTER rättningen kastar den
+riktiga förkontrollen `KontraktBlockerat('missing_policy_fields',
+{saknadeFalt: ['antal_undercentraler', ...]})` — reproducerad OCH
+verifierad blockerad. Permanent regressionstest:
+`besparingsvardeBatch5b.test.ts` (ny fil).
+
+**P1 #2 (duplicerad `metered_access_fee`) — rättat.**
+`kontrollera_accessavgiftsbindning()` (enkey-agents `policyregister.py`)
+kräver nu `len(poster) == 1`. Codex exakta reproduktion
+(`PRECHECK_ACCEPTED_DUPLICATE_ACCESS`) återskapades manuellt: en
+katalogkopia med en andra, identisk `metered_access_fee`-post gav FÖRE
+rättningen ingen kastad `ValueError` genom den riktiga
+`kontrollera_aktiveringsgrind()`; EFTER rättningen kastar den, med
+`ValueError`-meddelande som nämner `metered_access_fee` — reproducerad
+OCH verifierad blockerad. Permanent negativt mutationsprov:
+`TestAccessavgiftUnikDupliceringsSpärr` i
+`test_leverantorsvarde_batch5b_kontrakt.py`.
+
+**P1 #3 (ofullständig speglad acceptansmatris) — rättat.**
+Pythonfilen expanderad 52→109 test (full band-/flödes-/felmatris för
+alla sex tariffer, kr/schablon-blockering, permanent generatorprov
+`TestGeneratorLaserSkarpOchIsoleradProduktrakning` som parserar utdata
+och låser 47 skarpa/0 Batch 5b-ID:n samt 51 isolerade/alla sex Batch
+5b-ID:n). TypeScript-provet "via den riktiga produktvägen" var
+missvisande namngivet (anropade bara `harledResultatstatus` direkt) —
+namnet rättat till att beskriva vad det faktiskt provar; den RIKTIGA
+produktvägen (`beraknaArsprodukt`/`calcResultForOnskadTyp`/
+`beraknaBesparingsvarde`, inklusive `besparing_ej_stodd`) provas nu i
+den nya `besparingsvardeBatch5b.test.ts`, mot en isolerad, mekaniskt
+driftkontrollerad kandidatpayload (`batch5bGenerated.json`, ny
+Python-driftprov `TestNeptuneFixturSynk`). React-kr/schablon-blockeringen
+utökad till Jönköping i `KalkylatorPageBatch5b.test.tsx` (tidigare bara
+Borlänge). Det omockade Jönköping-E2E-scenariot (Scenario 20,
+`kalkylator.smoke.mjs`, opt-in via `E2E_ISOLERAD_BATCH5B=1`) kördes
+manuellt denna runda mot en temporärt utbytt `tariffer.generated.ts` i
+en fristående kopia av arbetsträdet (aldrig den incheckade filen — dess
+SHA-1 verifierad oförändrad före/efter): alla 20 scenarier godkända,
+inklusive Jönköping med 2 undercentraler och 25 kr accessval genom hela
+produktionskedjan till en synlig uppskattning.
+
+**P2 (dokumentations-/sessionssanning) — rättat.**
+`tariffinventering-v22.md` §7: "8 tas bort" rättat till "6 tas bort"
+(6+2+2=10, matchar de 10 tabellraderna — den tidigare texten summerade
+till 12); "SAMTLIGA 14 requests nedan" förtydligat till att tabellen
+bara visar de 10 av 14 som berör `ready`-rader. Denna sessionslogg:
+raden "`git status`/`git diff --check`: rent i samtliga tre repon" och
+slutsatsen "samtliga fyra fynd är rättade" i föregående rundas post
+rättade in-place med markerade korrigeringar (`git status` var inte
+rent — skills/neptune_academy hade sedan tidigare orelaterad
+arbetskopiesmuts; bara tre av fyra fynd var fullt rättade, det fjärde
+delvis).
+
+**Verifiering:**
+- Python (`tools/tariffer/tests`, hela sviten): **1584 passed, 4 skipped**
+  (1527 baseline + 56 Batch 5b-matrisexpansion + 1 ny driftprov).
+- TypeScript (`npx vitest run`, hela sviten): **1643 passed** (51 testfiler,
+  upp från 49).
+- `npx tsc --noEmit`: rent.
+- Isolerat produktionsbygge (`npm run eval:build`, mot den RIKTIGA,
+  oförändrade katalogen): grönt, 971 moduler.
+- E2E (`kalkylator.smoke.mjs`): **20/20** — 19 befintliga oförändrade
+  (standardkörning, real katalog) + det nya Scenario 20 (Jönköping,
+  körs manuellt med `E2E_ISOLERAD_BATCH5B=1` mot en temporärt utbytt,
+  aldrig committad `tariffer.generated.ts` i en fristående kopia av
+  arbetsträdet).
+- Mekanisk räkningsgrind: `godkanda(katalog)` = 45 (oförändrat, ingen
+  Batch 5b-läcka), `tariffer.generated.ts` = 47 produkter, SHA-1
+  oförändrad. Isolerad aktiveringskopia ger `godkanda` = 51 (45+6), 53
+  produkter, alla sex Batch 5b-ID:n närvarande.
+- Båda Codex-exploiterna reproducerade OCH verifierade blockerade (se
+  P1 #1/#2 ovan).
+- `git status`/`git diff --check`: `git diff --check` rent i alla tre
+  repon. `git status`: enkey-agents helt rent (bara de två avsedda
+  filerna); skills/neptune_academy hade INGEN NY uppgiftsrelaterad
+  arbetskopiesmuts denna runda (bara sedan tidigare dokumenterad,
+  orelaterad smuts — `../milesight`-submodulmarkören i skills,
+  ingenting nytt i neptune_academy efter att `dist/`-byggartefakterna
+  från denna körnings egna testkörningar återställdes med `git
+  checkout -- dist/`).
+
+**Hårda spärrar respekterade:** samtliga sex Batch 5b-kandidater kvarstår
+`investigation.status="utreds"`. Disposition oförändrad 45/19/28 av 92.
+Ingen aktivering. Ingen push i något repo. `tariffer.generated.ts`
+aldrig handredigerad och aldrig committerad i ändrat skick — den enda
+gången filen tillfälligt fick ett annat innehåll var i en fristående
+kopia av arbetsträdet utanför Git, aldrig i den riktiga
+arbetskatalogen. Handoffens/granskningens frontmatter-`status` orörd
+(Codex jobb).
+
+**Commit-hashar (denna rättningsrunda):**
+- `enkey-agents@1415940` — "Rätta P1: kräv exakt en
+  metered_access_fee-post i aktiveringsgrinden"
+- `neptune_academy@cfd8e3e` — "Rätta P1: utesluter
+  antalUndercentralerBindning ur den generiska policyFalt-kartan"
+- `skills` — denna commit (se `git log -1` i detta repo)
+
+**Slutsats:** DONE — samtliga tre P1-fynd och P2-fyndet från granskning
+2026-09-15-011 är rättade och mekaniskt verifierade, inklusive det
+tidigare uppskjutna omockade Jönköping-E2E-scenariot. Ingen aktivering,
+ingen push. Stannar här för Codex omgranskning.

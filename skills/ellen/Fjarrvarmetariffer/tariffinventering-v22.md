@@ -4721,16 +4721,22 @@ LADDNINGSTILLFÄLLET. Resultatet är EN mängd av bara tariff-ID:n, aldrig en bl
 tariff- och medlems-ID:n. `grind()`s signatur byts till `grind(tariff: dict, blockerade:
 set[str]) -> str | None` (§6, steg 2), och dess enda jämförelse blir `tariff.get("id") in
 blockerade` — en enda, entydig strängjämförelse, ingen specialkod för att skilja ID-typer
-åt. Samma representation används för SAMTLIGA 14 requests nedan — inget "eller", ingen
-`oppna_tariff_ider`/`grind()`-signaturkrock kvar i arbetsordern.
+åt. Samma representation används för SAMTLIGA 14 `remaining_information_requests` i
+katalogen — inget "eller", ingen `oppna_tariff_ider`/`grind()`-signaturkrock kvar i
+arbetsordern. Tabellen nedan visar bara de 10 av dessa 14 som berör minst en av de 45
+`ready`-raderna (rättar felaktigt "nedan"-syftning, granskning 2026-09-15-011, P2) — de
+övriga 4 (R02, R07, R08, R09) gäller enbart redan `blocked_external_info`-tariffer och
+listas inte här.
 
 Katalogen hade vid den här etappens start (granskning 2026-09-08-005/-006/-007) 14
 `remaining_information_requests` totalt. De 10 nedan berör minst en av de 45 `ready`-raderna
 — övriga 4 (R02, R07, R08, R09) gäller enbart redan `blocked_external_info`-tariffer och
-rörs inte av denna etapp. Efter att nedanstående dispositioner tillämpats (8 TAS BORT, 2
-FLYTTAS till `resolved_information_requests`, 2 får `tariff_ids` begränsat men kvarstår)
-har katalogen 6 `remaining_information_requests` kvar (R02, R03, R07, R08, R09, R14) —
-den aktuella siffran per granskning `2026-09-15-009`.
+rörs inte av denna etapp. Efter att nedanstående dispositioner tillämpats (6 TAS BORT, 2
+FLYTTAS till `resolved_information_requests`, 2 får `tariff_ids` begränsat men kvarstår —
+6 + 2 + 2 = 10, exakt de 10 berörda raderna nedan; rättar felaktig aritmetik "8 tas bort"
+i en tidigare version av detta stycke, granskning 2026-09-15-011, P2) har katalogen 6
+`remaining_information_requests` kvar (R02, R03, R07, R08, R09, R14) — den aktuella
+siffran per granskning `2026-09-15-009`.
 
 | ID | Medlem(mar) | Fråga | Disposition (EN livscykel per request) | Motivering |
 |---|---|---|---|---|
