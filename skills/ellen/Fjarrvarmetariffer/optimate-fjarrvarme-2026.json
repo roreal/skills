@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.17",
+  "schema_version": "0.1.18",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-14",
+  "as_of": "2026-09-15",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -2004,14 +2004,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -5356,14 +5349,7 @@
         "source_filename": "Kils_Energi_normalprislista.pdf",
         "amount_handling": "Published amounts retained including VAT; no VAT conversion applied."
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6940,13 +6926,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -8032,13 +8012,7 @@
       },
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -8134,13 +8108,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -8808,14 +8776,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -9144,13 +9105,7 @@
       "review_notes": [
         "Styrelsefastställd taxa anger 832 SEK/MWh; ersätter tidigare avrundningskonflikt i prisändringsmodellen."
       ],
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -9252,13 +9207,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11725,6 +11674,15 @@
         "Batch 5a (handoff 2026-09-14-002): contract_required:true satt på åtta rader (C4 Kristianstad, Kils Energi Kil, Skövde Energi, Trollhättan Energi, Tekniska verken Katrineholm, Öresundskraft Helsingborg Totalvärme (central installerad före 2024), Söderhamn Nära taxa 10-13, TEMAB Tierp/Karlholmsbruk/Örbyhus) inför en separat, ännu inte godkänd aktiveringsrunda. Ingen investigation.status ändrad — alla åtta ligger fortsatt bakom en ren lokal implementationsspärr.",
         "Kils fyra band fick fixed:0 (var null, dvs ej separat angiven) och R05/R12/R13 flyttades till resolved_information_requests: frågorna är inte externt besvarade men är inte längre produktblockerande eftersom kalkylatorn nu kräver leverantörens obligatoriska värde i stället för att härleda gränsen/kategorital/index. Den exakta C4-gränsen vid 500 kW är INTE verifierad.",
         "Reell källverifiering 2026-09-14: C4, Skövde, Trollhättan, Katrineholm, Öresundskraft och Söderhamns aktuella webbsidor samt Kils och TEMABs officiella PDF:er hämtades på riktigt (verkliga SHA-256 för PDF-källorna) och bekräftade ordagrant katalogens lagrade 2026-priser, band och momsgrund. retrieved_on uppdaterat för web-review-c4-current, web-review-trollhattan-final, web-review-soderhamn-final, web-review-temab-final och oresund-web; nya källposter web-review-skovde-current och web-review-katrineholm-current tillagda. Historiska 2025-poster (02_0, 35_0, 44_0, 40_0, 29_0, 36_1, 18_0) bevarade oförändrade som historik."
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "revision": "0.1.18",
+      "changes": [
+        "Batch 5a lokal aktivering: investigation-sparren borttagen (satt till null) for exakt atta rader - c4-energi-kristianstad-2026, kils-energi-kil-2026, skovde-energi-skovde-2026, trollhattan-energi-trollhattan-2026, tekniska-verken-katrineholm-katrineholm-2026, oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026, soderhamn-nara-soderhamn-taxa-11-och-12-2026 och temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026 - enligt Codex slutgranskning 2026-09-15-004.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, issues-, production_ready- eller contract_required-andring gjord. Samtliga atta behaller sina kvarvarande manadsperiodiseringsissues; godkannandet galler uppskattad annual_forward-arskostnad, inte fakturamanader, kronor, schablon eller besparingsprodukten.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 45 (37 tidigare aktiva + dessa atta)."
       ]
     }
   ],

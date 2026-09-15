@@ -1012,6 +1012,12 @@ Effekt/band är leverantörens/fakturans enda obligatoriska värde. Katalogens
   oförändrad **37/27/28 av 92**; en isolerad kopia med exakt de åtta spärrarna
   rensade ger 45 katalogprodukter. Aktivering (mål 45/19/28) är en separat,
   ännu inte godkänd runda.
+- **Aktiveringsstatus (2026-09-15, Codex slutgranskning `2026-09-15-004`):**
+  `investigation` satt till `null` för samtliga åtta rader. Inga priser, band,
+  formler, issues, `production_ready` eller `contract_required` ändrade.
+  Dispositionen är nu **45/19/28 av 92**; den skarpa genererade filen ger 47
+  produkter totalt (45 katalog + 2 leverantörsfiler). Aktiveringen är lokal och
+  ännu inte pushad — väntar på Codex granskning av aktiveringsdiffen.
 
 ## Batch 5b — Leverantörsvärde, fullårsflöde (6 bastariffer + 1 varianttäckning)
 
