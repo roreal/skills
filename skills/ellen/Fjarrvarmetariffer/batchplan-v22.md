@@ -1077,8 +1077,10 @@ standardvärde, okänt val blockerar, ingen dubblettprodukt.
   bekräftat band/helårsflöde (Jönköping dessutom `metered_access_fee`) — INTE fakturaexakt
   månadskalkyl, kr/schablon-indata eller besparingsprodukt. Dispositionen är nu **51
   implemented / 13 ready / 28 blocked av 92**; den skarpa genererade filen ger 53 produkter
-  totalt (51 katalog + 2 leverantörsfiler). Aktiveringen är lokal och ännu inte pushad —
-  väntar på Codex granskning av aktiveringsdiffen.
+  totalt (51 katalog + 2 leverantörsfiler). Aktiveringen är pushad och remote-verifierad
+  2026-09-15 vid `skills@df41660`, `enkey-agents@5eaca3c` och
+  `neptune_academy@28ae629`. Batch 5b är därmed avslutad; nästa avgränsade steg är
+  Batch 5c bakom oförändrade produktionsspärrar.
 
 ## Batch 5c — Leverantörsvärde, säsongsflöde (8 tariffer, kräver `months`-motorsemantik)
 

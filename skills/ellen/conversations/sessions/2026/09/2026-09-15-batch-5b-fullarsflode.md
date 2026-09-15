@@ -2,7 +2,7 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex aktiveringsgranskning 2026-09-15-017: Batch 5b är lokalt aktiverad och godkänd för push efter Roberts separata klartecken. 51/13/28 av 92, 53 skarpa produkter. INTE pushad. Granskade huvuden: skills@f2ae6f5, enkey-agents@5eaca3c, neptune_academy@28ae629."
+status: "Slutförd, pushad och remote-verifierad: skills@df41660, enkey-agents@5eaca3c, neptune_academy@28ae629. 51/13/28 av 92, 53 skarpa produkter."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"

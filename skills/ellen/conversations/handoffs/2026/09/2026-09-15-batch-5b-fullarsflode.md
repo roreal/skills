@@ -3,17 +3,21 @@ handoff_id: "2026-09-15-001"
 created_at: "2026-09-15T10:57:00+02:00"
 from: Codex
 to: Claude
-status: activated-locally-reviewed-awaiting-push-authorization
+status: completed-pushed-and-remote-verified
 implementation_allowed: true
 approved_implementation_scope: "batch-5b-six-full-year-volume-tariffs-and-jonkoping-access-coverage"
 tariff_activation_allowed: true
-push_allowed: false
+push_allowed: true
 review_required_before_activation: false
 review_required_before_push: false
 baseline_remote_heads:
   skills: "cd0bdb2e4fa33b753305d8983fda952aab43afdc"
   enkey_agents: "4d5f8a66e68ff4439ed379377d456230938962df"
   neptune_academy: "6331f27420c10e7104b002d97ad7ba67bb647040"
+completed_remote_heads:
+  skills: "df41660620f572b5b22d7dd27332c68b1be62049"
+  enkey_agents: "5eaca3c4f3eafb3c7065319803592abe062f49ae"
+  neptune_academy: "28ae62945ed50b23cffadd5a7b3070cc2d5c41ae"
 tariff_disposition_before: "45 implemented / 19 ready / 28 blocked av 92"
 tariff_disposition_during_implementation: "45 implemented / 19 ready / 28 blocked av 92"
 tariff_disposition_after_activation: "51 implemented / 13 ready / 28 blocked av 92"
