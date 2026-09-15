@@ -51,7 +51,7 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 
 ### C4 Energi
 
-- [x] **Kristianstad** (`c4-energi-kristianstad-2026`)
+- [ ] **Kristianstad** (`c4-energi-kristianstad-2026`)
   - Källor: [officiell prislista och villkor 2026](https://www.c4energi.se/foretag/fjarrvarme/priser-och-villkor/), [Prisdialogens prisändringsmodell 2026 (PDF)](https://www.prisdialogen.se/wp-content/uploads/2025/08/Prisandringsmodell-2026-C4-Energi.pdf) (`02_0` s.8, `web-review-c4-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004) endast med leverantörens effektgrupp.** Energiperioder, årsformler, effektbelopp och effektgrund stämmer med katalogen. Automatisk gruppindelning vid 500 kW är inte godkänd.
   - [x] Metod för debiterbar effekt kräver leverantörens debiterbara effekt och bekräftat effektband (`c4_debiterbar_effekt_kw`/`c4_vald_niva_id`). Källan anger "senaste 12 månaderna" som en löpande, uppdaterad period — policyn har `rullande=True` utan `takad_till_snapshot`, som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-001/-002, P1).
@@ -164,7 +164,7 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 
 ### Kils Energi
 
-- [x] **Kil** (`kils-energi-kil-2026`)
+- [ ] **Kil** (`kils-energi-kil-2026`)
   - Källor: [officiell pris- och informationssida](https://kilsenergi.kil.se/kils-energi/fjarrvarme/varme-och-varmvatten-till-konkurrenskraftiga-priser), [officiell normalprislista 2026, bilaga 2 (PDF)](https://bolag.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Fj%C3%A4rrv%C3%A4rmeavgifter%202026%20normalprislista.pdf) — frusen som `web-review-kil-vat`, verklig SHA-256 `d8bb87ca07f92ea90a7165d4453384be32ac84cc99e60c8a0a9705caf5bb6e32`, hämtad 2026-09-14 (Batch 5a, handoff 2026-09-14-002); `18_0` (2025-dokument) och `kil-user-supplied-pricelist` (identiska bytes) bevaras som historik/stöd.
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Energipris, effektpriser och momsgrund (inklusive moms, `vat_basis=included`) stämmer. Prislistans avsnitt "Effektreglering" (Övriga) anger att kundens abonnerade effekt omprövas varje kalenderår — kalkylatorn tar leverantörens redan fastställda effekt/band för det aktuella året och räknar aldrig fram den själv från kategorital eller rå förbrukning.
   - [x] Metod för debiterbar effekt är källverifierad som ett årligen omräknat leverantörsvärde (inte ett kategoritalsberäknat värde) — kräver leverantörens debiterbara effekt och bekräftat effektband (`kil_debiterbar_effekt_kw`/`kil_vald_niva_id`); `rullande=False` med ett explicit `takad_till_snapshot=True`-tak ger `annual/snapshot/complete`, inte `exact` — källan beskriver en fast, årsvis omräkning (varje nytt kalenderår), inte ett kontinuerligt rullande värde (granskning 2026-09-15-001/-002, P1).
@@ -312,7 +312,7 @@ för den planerade, ännu ej genomförda implementationen.
 
 ### Skövde Energi
 
-- [x] **Skövde** (`skovde-energi-skovde-2026`)
+- [ ] **Skövde** (`skovde-energi-skovde-2026`)
   - Källa: [officiell fjärrvärmetaxa 2026 inklusive moms](https://skovdeenergi.se/fjarrvarme/priser-avgifter/taxa-fjarrvarme-2026-inklusive-moms/) (`35_0` s.13, `web-review-skovde-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Katalogens momsexkluderade energipriser och effektpris motsvarar exakt de officiella beloppen dividerade med 1,25. Effektgrunden är leverantörens prisgrundande effekt (medel av tre föregående års högsta dygnsmedeleffekter, uppdateras januari) — kalkylatorn tar leverantörens redan beräknade värde.
   - [x] Effektgrundens treårsbas (medel av tre föregående års högsta dygnsmedeleffekter, uppdateras en gång per år i januari) är källverifierad; policyn har `rullande=False` med ett explicit `takad_till_snapshot=True`-tak — en fast, årligen omräknad grund, inte ett kontinuerligt rullande värde — som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-001/-002, P1).
@@ -331,7 +331,7 @@ för den planerade, ännu ej genomförda implementationen.
 
 ### Söderhamn Nära
 
-- [x] **Söderhamn företag, taxa 10–13** (`soderhamn-nara-soderhamn-taxa-11-och-12-2026`)
+- [ ] **Söderhamn företag, taxa 10–13** (`soderhamn-nara-soderhamn-taxa-11-och-12-2026`)
   - Källa: [officiell prislista för företag 2026](https://www.soderhamnnara.se/sidor/fjarrvarme/foretagskunder/priser-foretag.html) (`36_1` s.1, `web-review-soderhamn-final` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Taxa 10–13, fasta årsavgifter, effektformler och energipris stämmer med katalogen. Sidan bekräftar månadsdebitering men inte explicit fördelning av årsbeloppen; använd leverantörens anslutningseffekt.
   - [x] Metod för debiterbar effekt kräver leverantörens anslutningseffekt (medel av tre års normalårskorrigerad förbrukning, index) och bekräftad taxa (`soderhamn_anslutningseffekt_kw`/`soderhamn_vald_taxa_id`). Detta är en fast, årsvis omräknad grund — policyn har `rullande=False` med ett explicit `takad_till_snapshot=True`-tak, som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-001/-002, P1).
@@ -346,7 +346,7 @@ för den planerade, ännu ej genomförda implementationen.
 
 ### TEMAB Fjärrvärme
 
-- [x] **Tierp, Karlholmsbruk och Örbyhus** (`temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`)
+- [ ] **Tierp, Karlholmsbruk och Örbyhus** (`temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`)
   - Källa: [officiell styrelsefastställd taxa för fjärrvärmeleveranser 2026 (PDF)](https://temab.tierp.se/download/18.7fa3d20319a7bbd966d1fe/1763023016779/Taxa%20f%C3%B6r%20Fj%C3%A4rrv%C3%A4rmeleveranser%202026.pdf) (`43_0` s.18 och `web-review-temab-final` s.3–4 — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Villkorat godkänt, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004) endast med TEMAB:s fastställda debiteringseffekt eller anslutningsvärde.** Alla prisbelopp, intervall, momsgrund och kalenderdagsperiodisering stämmer. Taxan säger att kategoritalsmetoden används men publicerar varken kategorital eller vilken energihistorik som ingår; vid nyanslutning eller när metoden inte passar används anslutningsvärdet.
   - [x] Fast avgift periodiseras efter `days_in_month/365` under 2026 och energi efter uppmätt månadsförbrukning.
@@ -355,7 +355,7 @@ för den planerade, ännu ej genomförda implementationen.
 
 ### Tekniska Verken - Katrineholm
 
-- [x] **Katrineholm** (`tekniska-verken-katrineholm-katrineholm-2026`)
+- [ ] **Katrineholm** (`tekniska-verken-katrineholm-katrineholm-2026`)
   - Källa: [officiell prislista och prismodell för företag 2026](https://tekniskaverken.se/foretag/fjarrvarme/priser) (`40_0` s.3, `web-review-katrineholm-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Den aktuella sidan bekräftar årsavgifter, effektpriser och energipriset 609 kr/MWh. Effektsignaturen är dygnsenergi/24, regressionsberäknad från 1 november–31 mars vid −17,7 °C och debiteringen använder medelvärdet av de två senaste årens signaturer — kalkylatorn tar leverantörens redan beräknade signatur och rör aldrig rådata. Effektpriset kalenderdagsfördelas, men sidan säger bara att den separata årsavgiften faktureras månadsvis; dess exakta månadsfördelning framgår inte.
   - [x] Metod för debiterbar effekt är verifierad; leverantörens effektsignatur och bekräftat effektband/-grupp är obligatoriska policyfält (`katrineholm_effektsignatur_kw`/`katrineholm_vald_niva_id`). Medelvärdet av de två senaste årens signaturer är en fast, årsvis omräkning — policyn har `rullande=False` med ett explicit `takad_till_snapshot=True`-tak, som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-001/-002, P1).
@@ -378,7 +378,7 @@ för den planerade, ännu ej genomförda implementationen.
 
 ### Trollhättan Energi
 
-- [x] **Trollhättan** (`trollhattan-energi-trollhattan-2026`)
+- [ ] **Trollhättan** (`trollhattan-energi-trollhattan-2026`)
   - Källa: [officiell prislista och prismodell för företag 2026](https://www.trollhattanenergi.se/foretag/fjarrvarme/) (`44_0` s.7, `web-review-trollhattan-final` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Tre energisäsonger, effektgruppernas fasta och rörliga årsdelar samt regeln för prisgrundande effekt stämmer med katalogen.
   - [x] Metod för debiterbar effekt kräver leverantörens debiterbara effekt och bekräftat effektband (`trollhattan_debiterbar_effekt_kw`/`trollhattan_vald_niva_id`). Källan anger en rullande 12-månadersperiod (med bevarande av äldre värde vid milt väder) — policyn har `rullande=True` utan `takad_till_snapshot`, som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-001/-002, P1).
@@ -454,7 +454,7 @@ för den planerade, ännu ej genomförda implementationen.
   - Källa: [officiell prislista för företagskund 2026](https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/) (`29_0` s.19)
   - **🟡 Godkänt för årsberäkning 2026-09-04.** Effektformel och -grupper, energisäsonger och vinterflöde överensstämmer med katalogen. Använd effektvärdet från leverantörens faktura och leverantörens band vid exakta tabellgränser.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
-- [x] **Helsingborg Totalvärme, central installerad före 2024** (`oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026`)
+- [ ] **Helsingborg Totalvärme, central installerad före 2024** (`oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026`)
   - Källa: [officiell prislista för företagskund 2026](https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/) (`29_0` s.20, `oresund-web` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning, lokalt aktiverat 2026-09-15 (Batch 5a, granskning 2026-09-15-004).** Målgruppen, effektformeln, vinterenergipriset och övriga energisäsonger överensstämmer med katalogen. Använd fakturans effektvärde och leverantörens band.
   - [x] Metod för debiterbar effekt kräver leverantörens A-värde (senaste faktura) och bekräftat effektband (`oresund_totalvarme_effekt_kw`/`oresund_totalvarme_vald_niva_id`). Källan anger ingen omräkningsperiod eller historikfönster för A — policyn har därför `rullande=False` med ett konservativt `takad_till_snapshot=True`-tak (ett ogenomskinligt, inte ett bevisat fast, kalenderårsunderlag), som ger `annual/snapshot/complete`, inte `exact` (granskning 2026-09-15-002, P1/P2).

@@ -4734,11 +4734,21 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 29 | 8 | 37 |
-| `ready_to_implement` | 25 | 2 | 27 |
+| `implemented_source_verified_annual` | 37 | 8 | 45 |
+| `ready_to_implement` | 17 | 2 | 19 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-15 (Batch 5a-aktivering, granskning `2026-09-15-006`):** samtliga åtta
+Batch 5a-bastariffers (§3–4) `Disposition`-kolumn flyttades från `ready_to_implement` till
+`implemented_source_verified_annual` i SAMMA commit som katalogens `investigation`-spärr
+togs bort (`skills@d0d775d`), enligt skyldigheten som antecknades nedan efter Batch
+4-aktiveringen. Tabellen ovan är en mekanisk räkning; den matchar den katalog-mekaniskt
+verifierade dispositionen **45 implemented / 19 ready / 28 blocked av 92**
+(`godkanda(katalog, policyregister=POLICYREGISTER)` == 45; se
+`skills/ellen/conversations/sessions/2026/09/2026-09-14-batch-5a-leverantorsvarde.md`).
+Batch 5a har inga varianter, så varianttabellens 8/2/4 = 14 är oförändrad.
 
 **Rättat 2026-09-14 (Batch 4-aktivering, granskning `2026-09-14-008`):** samtliga fyra
 Batch 4-bastariffers (§3–4) `Disposition`-kolumn flyttades från `ready_to_implement` till

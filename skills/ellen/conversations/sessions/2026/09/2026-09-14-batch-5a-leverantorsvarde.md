@@ -627,3 +627,49 @@ Fullständiga fynd och rättningsordning finns i
 [`2026-09-15-006`](../../../reviews/2026/09/2026-09-15-granskning-lokal-aktivering-batch-5a.md).
 
 Ingen implementation ändrades av Codex.
+
+## Rättningsrunda för granskning 2026-09-15-006 (dokumentation, ingen push)
+
+Rättade exakt de två fynden ovan. Aktiveringen, katalogen, generatorn och
+TypeScript rördes inte i denna runda.
+
+- `Fjarrvarmetariffer/tariffinventering-v22.md` §8 uppdaterad från Batch 4:s
+  bas 29/25/24 (summa 37/27/28) till den mekaniskt räknade bas 37/17/24
+  (summa 45/19/28), med en ny Batch 5a-aktiveringsnot placerad före den
+  äldre Batch 4-noten. Mekanisk räkning bekräftad direkt: 78 enhetliga
+  `**Disposition:**`-rader ger exakt 37/17/24, och §5:s 14 varianttabellrader
+  ger fortsatt oförändrat 8/2/4.
+- `enkey-agents/tools/tariffer/tests/test_leverantorsvarde_batch5a_kontrakt.py`
+  fick en ny testklass `TestParagraf8DispositionssyncMotDokumentet` (4 nya
+  test) som räknar dokumentets 78 bas- och 14 variantrader mekaniskt och
+  jämför mot §8:s tabell samt mot `godkanda(katalog, policyregister=...)` —
+  denna typ av §8-drift fångades inte av det tidigare exakt-åtta-statustestet,
+  som bara verifierar Batch 5a:s egna rader.
+- `Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md`: de åtta Batch
+  5a-radernas HUVUDrutor återställda från `[x]` till `[ ]` (Kristianstad,
+  Kil, Skövde, Söderhamn, TEMAB/Tierp, Katrineholm, Trollhättan, Öresund
+  Totalvärme). De nya, sanna aktiveringsstatustexterna och samtliga
+  underliggande `[x]`/`[ ]`-delvillkor lämnades oförändrade — bekräftat exakt
+  åtta radändringar i `git diff`.
+
+**Rättelse av det tidigare aktiveringsrapportens påstående:** ett tidigare
+skede i denna sessionslogg beskrev aktiveringen som att ha satt "åtta
+kryssade huvudrutor" i verifieringslistan. Det var en sammanblandning av
+produktaktivering (att en tariff nu är valbar och ger ett uppskattat
+`annual_forward`-resultat) med listans egen definition av en ikryssad
+huvudrad (att SAMTLIGA ursprungliga verifieringsvillkor är lösta). Ingen av
+de åtta har det — var och en har minst ett kvarstående öppet villkor
+(månadsperiodisering för sju av dem, samt C4:s exakt-500-kW-gräns och
+TEMAB:s kategoritalsfråga). Batch 4:s Jämtkraft-prejudikat följer samma
+mönster: aktiverad status skrivs som egen text, huvudrutan förblir okryssad
+tills de underliggande villkoren faktiskt är lösta.
+
+**Verifiering:** riktad `test_leverantorsvarde_batch5a_kontrakt.py` (inkl.
+de fyra nya §8-synktesten): **203 passed**. Full Python-svit oförändrad.
+`git diff --check`: rent. Inga otillhörande arbetskopiefiler eller
+`neptune-marketing/dist`-ändringar rörda. Ingen katalog-, generator- eller
+TypeScript-ändring i denna runda. Ingen aktivering, ingen push.
+
+Fullständiga fynd finns i
+[`2026-09-15-006`](../../../reviews/2026/09/2026-09-15-granskning-lokal-aktivering-batch-5a.md).
+Stannar för Codex omgranskning.
