@@ -2,7 +2,7 @@
 session_id: "2026-09-15-002"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Implementerad lokalt bakom spärr, INTE aktiverad, INTE pushad. skills@73f3035, enkey-agents@5f1529f, neptune_academy@3bd4d5d. Väntar på Codex kodgranskning."
+status: "Codex granskning 2026-09-15-009: changes required före aktivering. INTE aktiverad, INTE pushad. skills@73f3035, enkey-agents@5f1529f, neptune_academy@3bd4d5d."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
@@ -192,3 +192,26 @@ kontrakt/motor, TypeScript-spegling, tester, räkningsgrind) är fullständig
 och verifierad, men `KalkylatorPage.tsx`-UI:t och ett äkta Jönköping-E2E-
 scenario är uppskjutna till aktiveringsrundan (se begränsning ovan).
 Stannar här för Codex kodgranskning.
+
+## Codex granskning 2026-09-15T12:15:06+02:00
+
+Granskning `2026-09-15-009`: **changes required före aktivering; ingen
+push.** Motorformeln, spärrarna och räkningsgrindarna är i huvudsak rätt,
+men begränsningen ovan kan inte skjutas till aktiveringsrundan. Den verkliga
+produktadaptern märker båda nya `customer_value`-fälten som
+`supplier_value`, transporterar inte globala `substations` och filtrerar
+inte bort antalsbindningen från det generiska UI:t. Jönköping skulle därför
+blockera och samtidigt visa ett dubblerat antal-fält.
+
+Accessavgiftens deskriptor refererar inte explicit sina två fält och den
+statiska preflighten korsvaliderar inte annual/1–20/exakt kundkälla för
+antalet; Codex reproducerade att ett monthly/0–999/blandkällkontrakt
+accepterades. Handoffens speglade TypeScript-/React-/E2E-/band-/felmatris
+saknas också. Katalogens requesträkning och de levande inventeringsavsnitten
+är osynkade.
+
+Full verifiering: 1527 passed/4 skipped Python, 1497 TypeScript, ren tsc,
+grönt isolerat bygge och 19/19 befintliga E2E; generatorn ger 45/47 och
+isolerat 51/53 utan läckage. Grönt befintligt testläge stänger inte de
+otestade/ej implementerade produktvägarna. Full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-15-granskning-batch-5b-implementation.md`.
