@@ -865,7 +865,8 @@
       "url": "https://kilsenergi.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Kils_Energi_normalprislista.pdf",
       "retrieved_on": "2026-09-14",
       "kind": "supplier_official_pricelist_pdf",
-      "sha256": "d8bb87ca07f92ea90a7165d4453384be32ac84cc99e60c8a0a9705caf5bb6e32"
+      "sha256": "d8bb87ca07f92ea90a7165d4453384be32ac84cc99e60c8a0a9705caf5bb6e32",
+      "note": "Rättning, granskning 2026-09-15-001 (P2 #2): handoffens URL (https://bolag.kil.se/download/18.1b9e2707199c916c9d91010c/1761112730710/Fj%C3%A4rrv%C3%A4rmeavgifter%202026%20normalprislista.pdf) och denna URL är två olika värdaliaser för exakt samma dokument — bekräftat byteidentiska via sha256 ovan (hämtade och hashade separat 2026-09-14). Denna URL bevaras oförändrad; ingen om-hämtning eller URL-byte krävs."
     },
     {
       "id": "web-review-c4-current",

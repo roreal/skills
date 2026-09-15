@@ -52,7 +52,7 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 ### C4 Energi
 
 - [ ] **Kristianstad** (`c4-energi-kristianstad-2026`)
-  - Källor: [officiell prislista och villkor 2026](https://www.c4energi.se/foretag/fjarrvarme/priser-och-villkor/), [Prisdialogens prisändringsmodell 2026 (PDF)](https://www.prisdialogen.se/wp-content/uploads/2025/08/Prisandringsmodell-2026-C4-Energi.pdf) (`02_0` s.8)
+  - Källor: [officiell prislista och villkor 2026](https://www.c4energi.se/foretag/fjarrvarme/priser-och-villkor/), [Prisdialogens prisändringsmodell 2026 (PDF)](https://www.prisdialogen.se/wp-content/uploads/2025/08/Prisandringsmodell-2026-C4-Energi.pdf) (`02_0` s.8, `web-review-c4-current` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning 2026-09-04 endast med leverantörens effektgrupp.** Energiperioder, årsformler, effektbelopp och effektgrund stämmer med katalogen. Automatisk gruppindelning vid 500 kW är inte godkänd.
   - [ ] Exakt 500 kW saknar entydig grupp i publicerad tabell. Energienheten har verifierats på aktuell webbplats.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
@@ -331,7 +331,7 @@ för den planerade, ännu ej genomförda implementationen.
 ### Söderhamn Nära
 
 - [ ] **Söderhamn företag, taxa 10–13** (`soderhamn-nara-soderhamn-taxa-11-och-12-2026`)
-  - Källa: [officiell prislista för företag 2026](https://www.soderhamnnara.se/sidor/fjarrvarme/foretagskunder/priser-foretag.html) (`36_1` s.1)
+  - Källa: [officiell prislista för företag 2026](https://www.soderhamnnara.se/sidor/fjarrvarme/foretagskunder/priser-foretag.html) (`36_1` s.1, `web-review-soderhamn-final` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning 2026-09-04.** Taxa 10–13, fasta årsavgifter, effektformler och energipris stämmer med katalogen. Sidan bekräftar månadsdebitering men inte explicit fördelning av årsbeloppen; använd leverantörens anslutningseffekt.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 
@@ -345,7 +345,7 @@ för den planerade, ännu ej genomförda implementationen.
 ### TEMAB Fjärrvärme
 
 - [ ] **Tierp, Karlholmsbruk och Örbyhus** (`temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026`)
-  - Källa: [officiell styrelsefastställd taxa för fjärrvärmeleveranser 2026 (PDF)](https://temab.tierp.se/download/18.7fa3d20319a7bbd966d1fe/1763023016779/Taxa%20f%C3%B6r%20Fj%C3%A4rrv%C3%A4rmeleveranser%202026.pdf) (`43_0` s.18 och `web-review-temab-final` s.3–4)
+  - Källa: [officiell styrelsefastställd taxa för fjärrvärmeleveranser 2026 (PDF)](https://temab.tierp.se/download/18.7fa3d20319a7bbd966d1fe/1763023016779/Taxa%20f%C3%B6r%20Fj%C3%A4rrv%C3%A4rmeleveranser%202026.pdf) (`43_0` s.18 och `web-review-temab-final` s.3–4 — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Villkorat godkänt 2026-09-04 endast med TEMAB:s fastställda debiteringseffekt eller anslutningsvärde.** Alla prisbelopp, intervall, momsgrund och kalenderdagsperiodisering stämmer. Taxan säger att kategoritalsmetoden används men publicerar varken kategorital eller vilken energihistorik som ingår; vid nyanslutning eller när metoden inte passar används anslutningsvärdet.
   - [x] Fast avgift periodiseras efter `days_in_month/365` under 2026 och energi efter uppmätt månadsförbrukning.
   - [ ] Beräkna inte debiteringseffekten automatiskt utan bolagets värde; begär kategorital och historikperiod om metoden ska implementeras.
@@ -376,7 +376,7 @@ för den planerade, ännu ej genomförda implementationen.
 ### Trollhättan Energi
 
 - [ ] **Trollhättan** (`trollhattan-energi-trollhattan-2026`)
-  - Källa: [officiell prislista och prismodell för företag 2026](https://www.trollhattanenergi.se/foretag/fjarrvarme/) (`44_0` s.7)
+  - Källa: [officiell prislista och prismodell för företag 2026](https://www.trollhattanenergi.se/foretag/fjarrvarme/) (`44_0` s.7, `web-review-trollhattan-final` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning 2026-09-04.** Tre energisäsonger, effektgruppernas fasta och rörliga årsdelar samt regeln för prisgrundande effekt stämmer med katalogen.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 
@@ -451,7 +451,7 @@ för den planerade, ännu ej genomförda implementationen.
   - **🟡 Godkänt för årsberäkning 2026-09-04.** Effektformel och -grupper, energisäsonger och vinterflöde överensstämmer med katalogen. Använd effektvärdet från leverantörens faktura och leverantörens band vid exakta tabellgränser.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 - [ ] **Helsingborg Totalvärme, central installerad före 2024** (`oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026`)
-  - Källa: [officiell prislista för företagskund 2026](https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/) (`29_0` s.20)
+  - Källa: [officiell prislista för företagskund 2026](https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/) (`29_0` s.20, `oresund-web` — återverifierad 2026-09-14, Batch 5a, handoff 2026-09-14-002)
   - **🟡 Godkänt för årsberäkning 2026-09-04.** Målgruppen, effektformeln, vinterenergipriset och övriga energisäsonger överensstämmer med katalogen. Använd fakturans effektvärde och leverantörens band.
   - [ ] Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.
 - [ ] **Ängelholm normal** (`oresundskraft-angelholm-normal-2026`)

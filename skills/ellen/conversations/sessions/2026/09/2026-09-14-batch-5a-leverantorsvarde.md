@@ -33,9 +33,14 @@ implementationsspärr. Ingen ny motorkod: alla åtta rader använder redan
     (1 677/488, 4 193/433, 31 448/348) och kalenderdagsperiodisering.
 - **C4, Skövde, Trollhättan, Katrineholm, Öresundskraft, Söderhamn**:
   aktuella officiella webbsidor hämtade via WebFetch. Samtliga bekräftade
-  katalogens lagrade 2026-priser, band och momsgrund ordagrant (inklusive
-  C4:s fortsatt tvetydiga 500 kW-gräns, Kils moms-inklusive-status via
-  Skövdes vat_conversion-källfigurer 628/458/200 och 1 605 kr/kW/år).
+  katalogens lagrade 2026-priser, band och momsgrund ordagrant, inklusive
+  C4:s fortsatt tvetydiga 500 kW-gräns.
+- **Rättelse (granskning 2026-09-15-001, P2 #2):** föregående mening
+  blandade av misstag ihop Kils och Skövdes proveniens i en gemensam
+  sats. Kils `vat_basis="included"` bekräftades mot Kils EGEN frusna
+  officiella PDF (inte Skövdes källa). Skövdes `vat_conversion`-figurer
+  (628/458/200 och 1 605 kr/kW/år) hör uteslutande till Skövdes egen
+  webbsida och avser Skövdes prisomräkning, inte Kils momsstatus.
 
 ## Katalogrättelser bakom spärr (`skills@527c4bb`)
 
@@ -52,11 +57,15 @@ implementationsspärr. Ingen ny motorkod: alla åtta rader använder redan
 - **Skövde, Trollhättan, Katrineholm, Öresundskraft**: endast
   `contract_required:true` och proveniens — inga pris-/band-/formel-/
   momsändringar.
-- `remaining_information_requests`: R05, R12 flyttade till
-  `resolved_information_requests` med en explicit not att frågorna inte är
-  externt besvarade men inte längre produktblockerande, och att den exakta
-  C4-gränsen vid 500 kW INTE är verifierad. R13 helt borttagen (Söderhamns
-  egen rad hade ingen kvarvarande hängande referens att flytta separat).
+- `remaining_information_requests`: R05, R12 OCH R13 flyttade till
+  `resolved_information_requests` med en explicit, tariffkorrekt
+  `resolution_sv` per ärende — det att frågorna inte är externt besvarade
+  men inte längre produktblockerande, och att den exakta C4-gränsen vid
+  500 kW respektive Söderhamns byggnadstypsindex INTE är verifierade.
+  **Rättelse (granskning 2026-09-15-001, P2 #2):** en tidigare version av
+  denna rad påstod felaktigt att R13 var "helt borttagen" — den ligger
+  faktiskt kvar, korrekt flyttad till `resolved_information_requests`,
+  precis som R05/R12.
 - Källproveniens: `retrieved_on` uppdaterat till 2026-09-14 för
   `web-review-c4-current`, `web-review-trollhattan-final`,
   `web-review-soderhamn-final`, `web-review-temab-final` och `oresund-web`;
