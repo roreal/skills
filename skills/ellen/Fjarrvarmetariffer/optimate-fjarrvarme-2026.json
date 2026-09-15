@@ -53,7 +53,7 @@
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
-      "utreds": 14,
+      "utreds": 6,
       "lost": 1
     },
     "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
@@ -713,7 +713,7 @@
     },
     {
       "id": "web-review-falu-final",
-      "title": "falu-final",
+      "title": "Värme och kyla, fjärrvärme, avtal och priser för företag",
       "url": "https://fev.se/varme--kyla/fjarrvarme/avtal-och-priser-foretag.html",
       "retrieved_on": "2026-09-15",
       "kind": "supplier_website_or_linked_document"
@@ -755,7 +755,7 @@
     },
     {
       "id": "web-review-mjolby-final",
-      "title": "mjolby-final",
+      "title": "Fjärrvärme, priser för företag",
       "url": "https://mse.se/foretag/fjarrvarme/priser",
       "retrieved_on": "2026-09-15",
       "kind": "supplier_website_or_linked_document"
@@ -933,7 +933,7 @@
     },
     {
       "id": "haboenergi-web",
-      "title": "Fjärrvärme, varme och miljö för foretag",
+      "title": "Fjärrvärme, värme och miljö för företag",
       "url": "https://www.haboenergi.se/varme-miljo-foretag/",
       "retrieved_on": "2026-09-15",
       "kind": "supplier_website"
@@ -5168,7 +5168,9 @@
             10,
             11,
             12
-          ]
+          ],
+          "price_field": "access_pris_kr_per_central_manad",
+          "count_field": "antal_undercentraler"
         }
       ],
       "source_refs": [
@@ -11496,7 +11498,7 @@
       "Eskilstunas flödesformel",
       "Stockholm Exergis förtydligande prisvillkor"
     ],
-    "remaining_requests_note": "Kils momsfråga R01 är löst. R02–R10 avser generella prisvillkor och källor; R12–R15 kundparametrar eller särskilda kundgrupper (R11 är borttaget). Samtliga kvarstående frågor har status utreds. Ytterligare villkor finns per tariff under investigation.conditions_sv."
+    "remaining_requests_note": "Kvarstående frågor är R02, R03, R07, R08, R09 och R14 (R01/R04–R06/R10/R12/R13/R15 är lösta eller borttagna, R11 är borttaget), samtliga med status utreds. Ytterligare villkor finns per tariff under investigation.conditions_sv."
   },
   "remaining_information_requests": [
     {

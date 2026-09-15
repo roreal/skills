@@ -627,16 +627,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `borlange-web` (https://www.borlange-energi.se/kontakta-oss/priser/fjarrvarmepris-for-naringsidkare)
 - **Giltighet:** valid_from=2026-01-01, valid_to=2026-12-31
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_BORLANGE_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001)
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5b_kontrakt.py`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effektgrupp (fakturan/avtalet) — automatisk gruppindelning vid gränsen (501 kW) BLOCKERAS. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering) — inte bara effektgruppen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (som Borås effektgrupp)
-- **Kvarstående arbete:** Ingen ny motorkod — `volume` gäller alla tolv månader (inget säsongsarbete krävs). `Tariffpolicy` med leverantörsvärde-krav OCH ett nytt obligatoriskt flödesfält.
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -741,16 +741,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `06_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Falu-Energi-och-Vatten.pdf); `web-review-falu-final` (https://fev.se/varme--kyla/fjarrvarme/avtal-och-priser-foretag.html)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_FALUN_YTTERORTER_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001; `KravPost.maxvarde=500` mekaniskt fail-closed)
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5b_kontrakt.py`, inklusive `TestFaluYtterorterMaxvarde500`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Bekräftat effektband-ID (`supplier_confirmed_band_id`, §6a.2 — en av de 42 raderna). Automatisk bandval BLOCKERAS strukturellt via bandkontraktet. DESSUTOM `KravPost.maxvarde=500` (§6a.1 — publicerad prislista täcker bara till och med 500 kW, mekaniskt fail-closed över gränsen) OCH prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående) + bandkontraktet (§6a.2) + `KravPost.maxvarde` (§6a.1)
-- **Kvarstående arbete (utökat i v5, granskning 2026-09-08-004, P1 och P2/fail-closed-krav 6):** Ingen ny motorkod — `volume` gäller alla tolv månader. Bara ett nytt synligt, obligatoriskt flödesfält i `Tariffpolicy`/UI. KATALOGRÄTTELSE av `issues`: ersätt nuvarande text med "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad ovanför 500 kW; publicerad prislista täcker endast till och med 500 kW — begränsa beräkningen till detta intervall, hantera högre effekt som specialavtal (fail-closed, ingen automatisk extrapolering över gränsen)." Informationsförfrågan R15 (medlem `falu-energi-vatten`, avgränsad till just ytterorterna >500 kW) TAS BORT ur `remaining_information_requests` — dess fråga täcks nu av den normaliserade issue-texten ovan. Falu-Falun (`falu-energi-vatten-falun-2026`) delar medlem men har ingen egen öppen fråga och berörs inte.
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogrättelsen av `issues`, kontraktet (`KravPost.maxvarde=500`) och testsviten är genomförda och lokalt committade. Informationsförfrågan R15 (medlem `falu-energi-vatten`, avgränsad till ytterorterna >500 kW) är FLYTTAD till `resolved_information_requests` (granskning `2026-09-15-008`) — inte externt besvarad i alla detaljer, men inte längre produktblockerande eftersom kontraktet mekaniskt spärrar över 500 kW. Falu-Falun (`falu-energi-vatten-falun-2026`) delar medlem men har ingen egen öppen fråga och berörs inte. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -760,16 +760,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `06_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Falu-Energi-och-Vatten.pdf); `web-review-falu-final` (https://fev.se/varme--kyla/fjarrvarme/avtal-och-priser-foretag.html)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_FALUN_TATORT_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001)
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5b_kontrakt.py`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
-- **Kvarstående arbete:** Ingen ny motorkod — `volume` gäller alla tolv månader för denna tariff (inget säsongs-/`months`-arbete krävs, till skillnad från §4.1-tarifferna med säsongsflöde). Bara ett nytt synligt, obligatoriskt flödesfält i `Tariffpolicy`/UI.
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -798,16 +798,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `11_0` (https://www.prisdialogen.se/wp-content/uploads/2023/10/Prisandringsmodell-2025-Habo-Energi.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_HABO_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001)
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5b_kontrakt.py`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
-- **Kvarstående arbete:** Ingen ny motorkod — `volume` gäller alla tolv månader för denna tariff (inget säsongs-/`months`-arbete krävs, till skillnad från §4.1-tarifferna med säsongsflöde). Bara ett nytt synligt, obligatoriskt flödesfält i `Tariffpolicy`/UI.
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -874,16 +874,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `16_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Jonkoping-Energi-2025-till-2026-Prisandringsmodell.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester, INKLUSIVE den inbyggda accessavgiften) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
+- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi) + ny sluten justeringstyp `metered_access_fee` (`justeringar.py`/`faktura.py`/`fjarrvarme.ts`)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_JONKOPING_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001) — accessvalet (`access_pris_kr_per_central_manad`) och undercentralsantalet (`antal_undercentraler_bindning`, delar kalkylatorns globala `substations`-fält) är BÅDA obligatoriska policybundna fält på samma rad, inte en separat produkt/variant
+- **Teststatus:** tariffspecifika automattester finns, inklusive accessavgiften (Python: `test_leverantorsvarde_batch5b_kontrakt.py::TestJonkopingsAccessavgift`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`), inklusive accessvalets fyra begripliga etiketter och det globala substations-fältets återanvändning
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering, 3,7 SEK/m³) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1). Den avtalsberoende accessavgiften (0/10/25/50 kr/mån) ingår INTE i denna disposition — se specialvariant i §5.
+- **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering, 3,7 SEK/m³) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1). DESSUTOM den avtalsberoende accessavgiften (0/10/25/50 kr/central/månad, ett aktivt val krävs — även 0 måste väljas uttryckligen) OCH antal undercentraler (kalkylatorns globala fält, 1–20) — inbyggd i SAMMA katalograd, ingen separat produkt/variant.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
-- **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
-- **Kvarstående arbete:** Ingen ny motorkod — `volume` gäller alla tolv månader (inget säsongsarbete krävs). Bara ett nytt synligt, obligatoriskt flödesfält i `Tariffpolicy`/UI. Accessavgiften byggs INTE i denna delbatch.
+- **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående) + `metered_access_fee`
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn, katalogen, kontraktet (inklusive accessavgiften) och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -988,16 +988,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Primärkälla:** `23_0` (https://www.prisdialogen.se/wp-content/uploads/2022/10/Prisandringsmodell-for-MSE-i-Mjolby-2025.pdf); `web-review-mjolby-final` (https://mse.se/foretag/fjarrvarme/priser)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
+- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — implementationen (motor/kontrakt/tester) är klar; väntar på Codex-granskning av rättningsrundan och Roberts aktiveringsbeslut, inte på nytt leverantörsbesked
 - **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_MJOLBY_POLICY`, implementerad lokalt bakom spärr, handoff 2026-09-15-001)
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5b_kontrakt.py`; TypeScript: `resultatkontrakt.batch5b.test.ts`, `batch5bRawData.driftprov.test.ts`, `KalkylatorPageBatch5b.test.tsx`)
+- **UI-status:** inte valbar i den skarpa kalkylatorn ännu (väntar på aktivering); isolerat, generatordrivet komponentprov finns (`KalkylatorPageBatch5b.test.tsx`)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Prisgrundande effekt/band (fakturan). Automatisk bandval BLOCKERAS — leverantören/fakturan anger bandet. DESSUTOM prissatt flöde i m³ hela året (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
-- **Kvarstående arbete:** Ingen ny motorkod — `volume` gäller alla tolv månader för denna tariff (inget säsongs-/`months`-arbete krävs, till skillnad från §4.1-tarifferna med säsongsflöde). Bara ett nytt synligt, obligatoriskt flödesfält i `Tariffpolicy`/UI.
+- **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
 - **Disposition:** `ready_to_implement`
 
 
@@ -4724,9 +4724,13 @@ blockerade` — en enda, entydig strängjämförelse, ingen specialkod för att 
 åt. Samma representation används för SAMTLIGA 14 requests nedan — inget "eller", ingen
 `oppna_tariff_ider`/`grind()`-signaturkrock kvar i arbetsordern.
 
-Katalogen har 14 `remaining_information_requests` totalt. De 10 nedan berör minst en av de
-45 `ready`-raderna — övriga 4 (R02, R07, R08, R09) gäller enbart redan
-`blocked_external_info`-tariffer och rörs inte av denna etapp.
+Katalogen hade vid den här etappens start (granskning 2026-09-08-005/-006/-007) 14
+`remaining_information_requests` totalt. De 10 nedan berör minst en av de 45 `ready`-raderna
+— övriga 4 (R02, R07, R08, R09) gäller enbart redan `blocked_external_info`-tariffer och
+rörs inte av denna etapp. Efter att nedanstående dispositioner tillämpats (8 TAS BORT, 2
+FLYTTAS till `resolved_information_requests`, 2 får `tariff_ids` begränsat men kvarstår)
+har katalogen 6 `remaining_information_requests` kvar (R02, R03, R07, R08, R09, R14) —
+den aktuella siffran per granskning `2026-09-15-009`.
 
 | ID | Medlem(mar) | Fråga | Disposition (EN livscykel per request) | Motivering |
 |---|---|---|---|---|
@@ -4741,9 +4745,14 @@ Katalogen har 14 `remaining_information_requests` totalt. De 10 nedan berör min
 | R14 | `sundsvall-energi` | Leveransvillkor för abonnemang från 2000 kW i Sundsvall/Matfors. Krävs endast för kunder i dessa grupper. | **`tariff_ids` sätts** till de två `blocked_external_info`-tarifferna (`sundsvall-normal`, `matfors-och-kvissleby`) | `indal-liden-och-lucksta` (ren energitariff, ingen effektdel alls) är inte berörd av frågan — request-posten begränsas, `member_ids` tas bort samtidigt. |
 | R15 | `falu-energi-vatten` | Prisgrupp över 500 kW i Bjursås, Grycksbo, Sundborn eller Svärdsjö, endast om sådana kunder ingår. | **FLYTTAD till `resolved_information_requests`** (granskning `2026-09-15-008`, inte helt borttagen) | Löses mekaniskt av `KravPost.maxvarde=500` på ytterorternas rad (§6a.1), inte av att frågan externt besvarats. Falun berörs inte, hade en felaktig medlemsvid koppling till samma fråga och den kopplingen är borttagen från Faluns katalograd. |
 
-**Sammanfattning:** 8 förfrågningar (`R04, R05, R06, R11, R12, R13, R15`, plus R10 utan
-begränsning) TAS BORT helt — deras frågor är redan besvarade av verifieringslistan eller
-löses mekaniskt av ett nytt kontraktsfält (§6a), inte av request-processen. 2 förfrågningar
+**Sammanfattning (rättad, granskning `2026-09-15-009`, P2 — v22 blandade tidigare ihop
+"TAS BORT helt" med "FLYTTAD till `resolved_information_requests`" trots att R04/R15:s egna
+raddisposition ovan redan korrekt sa FLYTTAD):** 6 förfrågningar (`R05, R06, R11, R12, R13`,
+plus R10 utan begränsning) TAS BORT helt — deras frågor är redan besvarade av
+verifieringslistan eller löses mekaniskt av ett nytt kontraktsfält (§6a), inte av
+request-processen. 2 förfrågningar (`R04, R15`) FLYTTAS till `resolved_information_requests`
+(granskning `2026-09-15-008`) — inte externt besvarade i alla detaljer, men inte längre
+produktblockerande (se respektive raddisposition ovan). 2 förfrågningar
 (`R03, R14`) FÅR `tariff_ids` satt till exakt de `blocked_external_info`-tariffer frågan
 gäller, så `blockerade_tariff_ider(katalog)` (**rättat P2, granskning `2026-09-08-007`**: v7
 skrev av misstag kvar det borttagna v6-namnet `oppna_tariff_ider()` här — den faktiska
