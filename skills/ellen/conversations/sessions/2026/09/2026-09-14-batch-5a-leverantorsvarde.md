@@ -2,7 +2,7 @@
 session_id: "2026-09-14-002"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Codex granskning 2026-09-14-012: changes required före aktivering; exact-statusväg, UI-/drift-/bandtest, Kil-proveniens och levande dokumentation ska rättas. Ingen aktivering eller push; 37/27/28 består."
+status: "Codex omgranskning 2026-09-15-001: changes required före aktivering; källosann rullande-metadata, frikopplat/ofullständigt UI-prov, fel inventeringsrader och ofullständig bandmatris ska rättas. Ingen aktivering eller push; 37/27/28 består."
 topic: "Batch 5a: åtta leverantörsvärdestariffer (C4, Kil, Skövde, Trollhättan, Katrineholm, Öresundskraft Totalvärme, Söderhamn, TEMAB)"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-5a-leverantorsvarde.md"
@@ -233,3 +233,35 @@ isolerad kopia med åtta spärrar rensade ger 45. Disposition oförändrad
   (diffen är exakt proveniensraden).
 
 Ingen aktivering, ingen push. Stannar för Codex omgranskning.
+
+## Codex omgranskning 2026-09-15-001
+
+Codex omgranskade rättningsrunda 1 vid `skills@caa5dd6` (slutlig logghead
+`skills@82e774b`), `enkey-agents@674a057` och `neptune_academy@c6c50a9`.
+Bedömningen är fortsatt **changes required före aktivering**.
+
+Rundan stänger generatorbindningen för TypeScriptfixturen, Kils källfrysning,
+R12/R13-resolutionerna, verklig taxaetikett i policyn och katalogens formatering.
+Fyra huvudproblem återstår:
+
+1. `snapshot` har framtvingats genom `rullande=True` på alla åtta, trots att Kil,
+   Skövde, Katrineholm och Söderhamn uttryckligen bygger på fasta årsunderlag och
+   övriga inte alla har källstöd för kontinuerlig omräkning. Källsann metadata och
+   ett explicit policytak för uppskattad `snapshot` krävs.
+2. UI-provet handbygger policy/prispost i stället för att använda den
+   generatorbundna fixturen, saknar kronor-/schablonflöden och dess `abc`-fall
+   normaliseras till tomt i `type=number` i stället för att bevisa icke-ändligt tal.
+3. Inventeringen märker sju orelaterade tariffer som Batch 5a-implementerade och
+   lämnar sju riktiga Batch 5a-raders katalogstatus stale.
+4. Den uppgivna fulla bandmatrisen saknar fortfarande senare band i Python och
+   motsvarande matris helt i TypeScript. Äldre motsägelsefulla sessionsmeningar och
+   fem osynkade verifieringsposter återstår också.
+
+Oberoende verifiering: 140 riktade Pythonprov; tariffprojektets fulla scope
+1411 passed/4 skipped; 99 riktade och 1335 fulla TypeScriptprov; ren tsc, grönt
+eval-bygge och rena commitdiffar. Katalogen är fortsatt 86/37, exakt de åtta
+spärrarna består och den skarpa filen har 39 produkter utan Batch 5a. Ingen
+implementation ändrades av Codex, ingen aktivering eller push godkändes.
+
+Fullständiga fynd och bindande rättningsordning finns i
+[`2026-09-15-001`](../../../reviews/2026/09/2026-09-15-omgranskning-batch-5a-fixrunda-1.md).
