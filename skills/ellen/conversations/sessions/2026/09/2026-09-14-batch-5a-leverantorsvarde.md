@@ -2,7 +2,7 @@
 session_id: "2026-09-14-002"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 2026-09-15-001: changes required före aktivering; källosann rullande-metadata, frikopplat/ofullständigt UI-prov, fel inventeringsrader och ofullständig bandmatris ska rättas. Ingen aktivering eller push; 37/27/28 består."
+status: "Rättningsrunda 4 levererad (neptune_academy@a8063c3): policyFranGenererad skiljer nu omission från explicit null för rullande/takadTillSnapshot. Väntar på Codex omgranskning 2026-09-15-003. Ingen aktivering eller push; 37/27/28 består."
 topic: "Batch 5a: åtta leverantörsvärdestariffer (C4, Kil, Skövde, Trollhättan, Katrineholm, Öresundskraft Totalvärme, Söderhamn, TEMAB)"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-5a-leverantorsvarde.md"
@@ -467,3 +467,45 @@ Fullständigt fynd och rättningsordning finns i
 
 Ingen implementation ändrades av Codex. Ingen aktivering eller push är
 godkänd.
+
+## Rättningsrunda 4 — svar på granskning 2026-09-15-003
+
+Rättade exakt det enda kvarvarande fyndet, isolerat till TypeScript:
+`policyFranGenererad()` i `resultatkontrakt.ts:472,485` använde
+`k.rullande ?? false` respektive `k.takad_till_snapshot ?? false`, vilket
+gjorde att både utelämnat fält och explicit JSON-`null` blev samma giltiga
+`false` innan `skapaKravPost()`s strikta typkontroll fick se värdet.
+
+Rättade adaptern till `k.rullande === undefined ? false : k.rullande`
+(motsvarande för `takad_till_snapshot`) — utelämning defaultar fortfarande
+till `false`, men ett explicit `null` når nu fram som `null` och fångas av
+den redan befintliga `typeof !== 'boolean'`-kontrollen i `skapaKravPost()`.
+
+Reproducerade Codex exakta exploit direkt mot `policyFranGenererad()` före
+rättningen (`null` accepterades och blev `false`) och bekräftade efteråt att
+`null` nu kastar för båda fälten, medan utelämning fortfarande defaultar
+korrekt. Lade en ny testsvit i
+`resultatkontrakt.batch5a.test.ts` — "policyFranGenererad skiljer omission
+från explicit null" — med separata prov per fält för utelämnat/false/true/
+sträng/tal/null. Rättade samtidigt de två testhygienfynden: "default false
+tillåter exact-vägen" och "explicit true ger ... snapshot" anropar nu den
+riktiga `harledResultatstatus()` med `kvalitet='verified'`-indata i stället
+för att återimplementera dess booleska uttryck inline.
+
+**Commit:** `neptune_academy@a8063c3` (2 filer:
+`resultatkontrakt.ts`, `resultatkontrakt.batch5a.test.ts`). Ingen ändring i
+`skills` eller `enkey-agents` denna runda — fyndet var TypeScript-isolerat
+och Python behövde inte ändras.
+
+Oberoende verifiering: riktad TypeScript-testfil **159 passed** (var 147,
++12 nya), full TypeScript-svit **1424 passed** i 45 filer (var 1412, +12
+nya), ren `tsc --noEmit`, grönt isolerat eval-bygge (endast känd
+bundelstorleksvarning). Python full svit **1471 passed, 4 skipped**
+(oförändrat — snabb regressionskontroll enligt Codex instruktion, ingen
+Pythonändring krävdes). Mekaniskt: katalog 86 fysiska poster, `godkanda()`
+== 37, exakt de åtta Batch 5a-raderna fortsatt `contract_required=true`/
+`production_ready=false`/`investigation.status="utreds"`. Skarp genererad
+payload (`tariffer.generated.ts`) helt orörd — bekräftat via `git status`.
+`git diff --check`: rent i neptune_academy.
+
+Ingen aktivering, ingen push. Väntar på Codex omgranskning.
