@@ -441,3 +441,29 @@ Batch 5a-ID:n). `git diff --check`: rent i alla tre repon. Katalogen
 och den skarpa artefakten ändrades inte i denna rättningsrunda.
 
 Ingen aktivering, ingen push. Väntar på Codex omgranskning.
+
+## Codex omgranskning 2026-09-15-003
+
+Codex omgranskade rättningsrunda 3 vid `skills@4224747`,
+`enkey-agents@73bc461` och `neptune_academy@da022b0`. Bedömningen är fortsatt
+**changes required före aktivering**, nu endast för en smal TypeScriptgräns.
+
+C4:s entydiga bandmatris, 2+6-metadatafördelningen, Pythonvalideringen,
+källsemantiken och verifieringslistan är rättade. Full verifiering är grön:
+1471 passed/4 skipped Python, 1412 TypeScript, ren tsc, grönt eval-bygge och
+rena diffar. Katalogen/spärrarna är oförändrade, skarp generering har 39
+produkter och dispositionen är 37/27/28.
+
+Det enda blockerande fyndet är att `policyFranGenererad()` använder
+`k.takad_till_snapshot ?? false` och `k.rullande ?? false`. Strängar och tal
+avvisas nu korrekt, men explicit JSON-`null` maskeras till `false` innan den
+strikta konstruktorn nås. Codex reproducerade att `null` accepteras, i direkt
+motsättning till leveransloggens påstående att `null` kastar vid båda publika
+gränserna. Rätta adaptern så bara utelämnat/`undefined` defaultar, och lägg test
+direkt via `policyFranGenererad()`.
+
+Fullständigt fynd och rättningsordning finns i
+[`2026-09-15-003`](../../../reviews/2026/09/2026-09-15-omgranskning-batch-5a-fixrunda-3.md).
+
+Ingen implementation ändrades av Codex. Ingen aktivering eller push är
+godkänd.
