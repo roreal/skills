@@ -355,3 +355,89 @@ katalogkopian (verifierad semantiskt identisk i övrigt). `batch1RawData.ts`
 - `git diff --check`: rent i alla tre repon.
 
 Ingen aktivering, ingen push. Väntar på Codex' nästa omgranskning.
+
+## Codex omgranskning 2026-09-15-002
+
+Codex omgranskade rättningsrunda 2 vid `skills@ed2a63c` (leveranslogg
+`skills@58f2515`), `enkey-agents@c99ff79` och
+`neptune_academy@4f62fe8`. Bedömningen är fortsatt **changes required före
+aktivering**.
+
+De tidigare huvudproblemen kring falsk rullande-metadata, generatorfrikopplad
+UI-mock och fel inventeringsrader är stängda. Full verifiering är grön:
+1439 passed/4 skipped Python, 1381 TypeScript, ren tsc, grönt eval-bygge och
+rena diffar. Katalogen är fortsatt 86/37, exakt åtta Batch 5a-spärrar består,
+skarp generering har 39 produkter och dispositionen är 37/27/28.
+
+Fyra avgränsade rättningar återstår:
+
+1. Det nya snapshot-taket är inte runtime-slutet/fail-closed. Strängen
+   `"false"` accepteras i både Python och genererad JSON→TypeScript och ger
+   tyst `annual/snapshot/complete`. Strikt boolesk validering och generiska
+   språkparitetsprov krävs.
+2. C4:s enda tvetydiga punkt, 500 kW, används felaktigt som skäl att utelämna
+   samtliga andra, entydiga C4-bandgränser ur båda testmatriserna.
+3. Verifieringslistan fick källannotationer men inte lokal implementationsstatus
+   för fem poster och innehåller fortfarande tre inaktuella
+   `rullande=True`-förklaringar.
+4. Kontrakts-/policytexten påstår utan tillräckligt källstöd att Öresunds och
+   TEMAB:s värden är fasta, periodiskt/årsvis omräknade. Snapshot-taket bör
+   beskrivas generellt som en konservativ maxnoggrannhet för ogenomskinliga
+   leverantörsvärden, om inget nytt officiellt periodstöd tillförs.
+
+Fullständiga fynd och bindande rättningsordning finns i
+[`2026-09-15-002`](../../../reviews/2026/09/2026-09-15-omgranskning-batch-5a-fixrunda-2.md).
+
+Ingen implementation ändrades av Codex. Ingen aktivering eller push är
+godkänd.
+
+## Rättningsrunda 3 — svar på omgranskning 2026-09-15-002
+
+Alla fyra fynd rättade.
+
+1. **P1 stängd** (`enkey-agents@73bc461`, `neptune_academy@da022b0`):
+   `KravPost.takad_till_snapshot`/`takadTillSnapshot` och `rullande`
+   valideras nu som strikt boolean vid konstruktion i båda språk —
+   strängar, tal och `None`/`null` kastar i stället för att
+   sanningskonverteras. Reproducerade Codex exakta exploit
+   (`takad_till_snapshot="false"` → `str` → tyst `annual/snapshot/complete`)
+   i båda språk och bekräftade att den nu blockeras. Nya prov: default
+   `false` tillåter `exact`-vägen, explicit `true` ger
+   `ar_ej_helt_verifierbar`/`arEjHeltVerifierbar`, fel typ kastar,
+   `rullande`+tak samtidigt kastar. Ett nytt 2+6-metadataprov pinnar
+   exakt att C4/Trollhättan är rullande utan tak och de sex andra har
+   tak utan rullande — inte bara slutordet `snapshot`.
+2. **P2 stängd**: C4:s entydiga bandpunkter (band 2 vid 3/49, band 3 vid
+   50/99, band 4 vid 100/199, band 5 vid 200/499, en punkt i band 6 över
+   500) lagda i båda språks bandmatriser med oberoende handräknat
+   facit. Band 1 (0–2 kW) dokumenterat som onåbart via policyns
+   verifierade minimum (3 kW) och testas medvetet inte.
+3. **P2 stängd** (`skills` — denna commit): samtliga åtta poster i
+   `verifieringslista-fjarrvarmebolag.md` synkade med "lokalt
+   implementerad bakom spärr 2026-09-14" och den faktiska
+   rullande/tak-metadatan per leverantör. De tre inaktuella
+   `rullande=True`-förklaringarna (Kil, Skövde, Katrineholm) rättade
+   till `rullande=False` + `takad_till_snapshot=True`.
+4. **P2 stängd**: `KravPost.takad_till_snapshot`-dokumentationen i båda
+   språk beskriver nu generellt en konservativ maxnoggrannhet för
+   otillräckligt verifierbar period, i stället för ett gemensamt "fast
+   kalenderårsunderlag" för alla sex. Öresunds `kalla`-text i
+   `policyregister.py` rättad — källan styrker bara att A står på
+   senaste fakturan, ingen omräkningsperiod. Kil/Skövde/Katrineholm/
+   Söderhamn har verkligt källstöd för "fast kalenderårsunderlag" och
+   är oförändrade. `batch5aRawData.ts` regenererad från enkey-agents'
+   verkliga `till_prisar()`/`_policy_till_json()` efter Öresund-
+   rättningen; diffen är exakt den ändrade textraden.
+
+Oberoende verifiering: full Python-svit **1471 passed, 4 skipped** (var
+1439+4, +32 nya), full TypeScript-svit **1412 passed** i 45 filer (var
+1381, +31 nya), ren `tsc`, grönt isolerat eval-bygge (endast känd
+bundelstorleksvarning), generatorsynk **2 passed**. Mekaniskt: katalog
+86 fysiska poster, `godkanda(katalog, policyregister=POLICYREGISTER)`
+== 37, exakt de åtta Batch 5a-raderna fortsatt
+`contract_required=true`/`production_ready=false`/
+`investigation.status="utreds"`. Skarp genererad payload orörd (0
+Batch 5a-ID:n). `git diff --check`: rent i alla tre repon. Katalogen
+och den skarpa artefakten ändrades inte i denna rättningsrunda.
+
+Ingen aktivering, ingen push. Väntar på Codex omgranskning.
