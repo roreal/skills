@@ -605,11 +605,13 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 > `falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026`,
 > `habo-energi-habo-2026`, `mjolby-svartadalen-energi-mjolby-2026`,
 > `jonkoping-energi-jonkoping-och-granna-2026`):** samtliga sex är nu
-> **implementerade lokalt** (`Disposition: implemented_source_verified_annual`,
-> `Kontraktsstatus: registrerad i POLICYREGISTER`, INTE aktiverad —
-> `investigation.status` kvarstår `"utreds"`). Per-tariffstyckena nedan är
-> ORÖRDA planeringssnapshots (skrivna innan implementationen) och listar
-> fortfarande "ej i POLICYREGISTER ännu"/"Disposition: ready_to_implement" —
+> **AKTIVERADE** (2026-09-15, Codex slutgranskning `2026-09-15-015`, Roberts
+> uttryckliga klartecken "Ja starta"): `Disposition: implemented_source_verified_annual`,
+> `Kontraktsstatus: registrerad i POLICYREGISTER`, katalogens `investigation`
+> är `null` för samtliga sex (`skills@c2fcdd9`) — INTE längre `"utreds"`. Per-
+> tariffstyckena nedan är ORÖRDA planeringssnapshots (skrivna innan
+> implementationen) och listar fortfarande "ej i POLICYREGISTER ännu"/
+> "Disposition: ready_to_implement"/`investigation.status: utreds` —
 > läs dem som historisk kontext, inte aktuell status. Tre rättelser överstyr
 > texten nedan (se granskning `2026-09-15-008` för fullständig motivering):
 > (1) samtliga sex, inte bara Borlänge, kräver ett BEKRÄFTAT effektband-ID;
@@ -637,7 +639,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (som Borås effektgrupp)
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `c4-energi-kristianstad-2026`
@@ -751,7 +753,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående) + bandkontraktet (§6a.2) + `KravPost.maxvarde` (§6a.1)
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogrättelsen av `issues`, kontraktet (`KravPost.maxvarde=500`) och testsviten är genomförda och lokalt committade. Informationsförfrågan R15 (medlem `falu-energi-vatten`, avgränsad till ytterorterna >500 kW) är FLYTTAD till `resolved_information_requests` (granskning `2026-09-15-008`) — inte externt besvarad i alla detaljer, men inte längre produktblockerande eftersom kontraktet mekaniskt spärrar över 500 kW. Falu-Falun (`falu-energi-vatten-falun-2026`) delar medlem men har ingen egen öppen fråga och berörs inte. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `falu-energi-vatten-falun-2026`
@@ -770,7 +772,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `finspangs-tekniska-verk-finspang-2026`
@@ -808,7 +810,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026`
@@ -884,7 +886,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående) + `metered_access_fee`
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn, katalogen, kontraktet (inklusive accessavgiften) och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `karlstads-energi-karlstad-2026`
@@ -998,7 +1000,7 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret (fristående)
 - **Kvarstående arbete:** Inget för denna implementationsomgång — motorn (befintlig), katalogen, kontraktet och testsviten är genomförda och lokalt committade. Väntar på Codex granskning av rättningsrundan (granskning 2026-09-15-009) före ett separat, godkänt aktiveringsbeslut.
-- **Disposition:** `ready_to_implement`
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026`
@@ -4771,11 +4773,22 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 37 | 8 | 45 |
-| `ready_to_implement` | 17 | 2 | 19 |
+| `implemented_source_verified_annual` | 43 | 8 | 51 |
+| `ready_to_implement` | 11 | 2 | 13 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-15 (Batch 5b-aktivering, granskning `2026-09-15-015`, Roberts
+uttryckliga klartecken "Ja starta"):** samtliga sex Batch 5b-bastariffers (§3–4)
+`Disposition`-kolumn flyttades från `ready_to_implement` till
+`implemented_source_verified_annual` i SAMMA commit som katalogens `investigation`-spärr
+togs bort (`skills@c2fcdd9`), enligt skyldigheten som antecknades nedan efter Batch
+5a-aktiveringen. Jönköpings `metered_access_fee` är en räknad variant inbyggd i
+bastariffen, inte en egen katalograd — endast de sex bastarifferna flyttar. Tabellen ovan
+är en mekanisk räkning; den matchar den katalog-mekaniskt verifierade dispositionen
+**51 implemented / 13 ready / 28 blocked av 92** (`godkanda(katalog, policyregister=POLICYREGISTER)`
+== 51). Varianttabellens 8/2/4 = 14 är oförändrad.
 
 **Rättat 2026-09-15 (Batch 5a-aktivering, granskning `2026-09-15-006`):** samtliga åtta
 Batch 5a-bastariffers (§3–4) `Disposition`-kolumn flyttades från `ready_to_implement` till

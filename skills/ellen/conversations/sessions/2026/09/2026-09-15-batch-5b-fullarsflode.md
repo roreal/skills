@@ -864,3 +864,102 @@ produktlogik ändras.
 Inget pushat, i något repo. Alla sex kandidater ligger kvar bakom
 `utreds`. Dispositionen är oförändrad: 45/19/28 av 92; skarp/isolerad
 produktmängd 47/53. Stannar här för Codex omgranskning.
+
+## Aktivering (2026-09-15, efter Codex slutgranskning `2026-09-15-015`
+och Roberts uttryckliga klartecken "Ja starta")
+
+Exakt de sex godkända Batch 5b-kandidaterna aktiverade — Borlänge Energi,
+Falu Energi & Vatten (tätort och ytterorter), Habo Energi,
+Mjölby–Svartådalen Energi och Jönköping Energi (med den inbyggda,
+räknade `metered_access_fee`-accessavgiften). Ingen annan tariffs status
+eller data ändrad.
+
+**1. Katalogaktivering.** `investigation` satt till `null` för exakt de
+sex tariff-ID:na i `optimate-fjarrvarme-2026.json`; `schema_version`
+0.1.19 → 0.1.20 med ny `change_log`-post. Diff: 16 insertions/45
+deletions — verifierat fokuserad, ingen mass-omformatering.
+`godkanda(katalog, policyregister=POLICYREGISTER)`: 45 → 51, alla sex
+bekräftat närvarande. Committat: `skills@c2fcdd9`.
+
+**2. Generatorregenerering.** Lokaliserade den riktiga generatorn
+(`enkey-agents/tools/tariffer/generera.py`, körs som
+`python -m tools.tariffer.generera <mål> [skills-commit]`) och körde den
+mot den nu aktiverade katalogen med `skills@c2fcdd9` som
+proveniens-commit. Resultat: `tariffer.generated.ts` skrivs om med
+53 tariffer (2 leverantörsfiler + 51 ur katalogen). Mekanisk diff av den
+parsade `TARIFFER`-ordboken (gammal vs ny, `json.loads` på
+regexextraherad text, INTE handjämförelse): **exakt 6 tillagda nycklar
+(de sex Batch 5b-produkterna), 0 borttagna, 0 ändrade bland de
+kvarvarande 47** — bevisar att aktiveringen inte rörde någon äldre
+produkt. Committat: `neptune_academy@28ae629`.
+
+**3. Dispositionsuppdatering.** Löste den dokumenterade avvikelsen mellan
+handoffens ursprungliga `52/12/28`-antagande och granskning `015`s
+`51/13/28`: mekaniskt bekräftat via `godkanda()` att **51/13/28 är
+korrekt** — handoffens `52/12/28` byggde på ett felaktigt antagande att
+Jönköpings inbyggda accessavgift skulle räknas som en egen
+täckningspost. Uppdaterat:
+- `batchplan-v22.md`: ny "Aktiveringsstatus"-sektion under Batch 5b,
+  disposition 51/13/28, 53 skarpa produkter.
+- `tariffinventering-v22.md`: §8-tabellen omräknad (bas
+  43/11/24, variant oförändrat 8/2/4, summa 51/13/28), de sex
+  Batch 5b-tarifferna `**Disposition:**`-rader flyttade från
+  `ready_to_implement` till `implemented_source_verified_annual`,
+  blockquote-statusnoten uppdaterad från "implementerade lokalt, INTE
+  aktiverad" till "AKTIVERADE".
+- `conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md`:
+  ny §7 "Aktiveringsrapport" i brödtexten (frontmatter oförändrad per
+  instruktion — aldrig redigera gransknings-/handoff-frontmatter själv).
+- Permanenta räkningsprov i `enkey-agents` (`test_katalog.py` — grind
+  38→50/29→29 utreds→godkänd samt medlemsantal 29→34,
+  `test_katalog_proveniens.py` sha256-hash, `test_batch_3/_3b/_4`,
+  `test_faktura_manadspriser.py` KONTRAKTSGATADE, `test_leverantors-
+  varde_batch5a_kontrakt.py`) och `neptune_academy`
+  (`tariffer.generated.batch5b.test.ts`) uppdaterade till 51/53.
+  Committat: `enkey-agents@5eaca3c`.
+
+**4. Scenario 20 flyttad till normalsviten.** `e2e/kalkylator.smoke.mjs`:
+det tidigare `if (KOR_ISOLERAD_BATCH5B)`-villkoret runt Jönköping-
+scenariot är borttaget — scenariot körs nu OVILLKORLIGT, precis som
+scenario 1–19, eftersom Jönköping är skarp. `KOR_ISOLERAD_BATCH5B`/
+`E2E_ISOLERAD_BATCH5B` lämnas kvar oanvänd som dokumenterat mönster; den
+isolerade harnessen `batch5b-isolated-e2e.mjs`/
+`npm run test:e2e:batch5b-isolated` är OFÖRÄNDRAD och fungerar fortsatt
+(kör nu bara samma redan-skarpa scenario en gång till i sin egen
+tillfälliga kopia) — bevarad för framtida, ännu ej godkända batcher.
+Committat i samma `neptune_academy@28ae629` som generatorregenereringen.
+
+**Fullständig verifieringssekvens:**
+- Python-tariffsvit: **1606 passed, 4 skipped** (upp från 1608+4 skip
+  före aktivering minus de borttagna dubbelprovet-raderna i den
+  omskrivna `TestGeneratorLaser...`-klassen, plus nya/ändrade prov —
+  mekaniskt räknat av pytest, ingen handjustering).
+- TypeScript (`vitest`): **1643 passed** i 51 testfiler.
+- `npx tsc --noEmit`: rent.
+- `npm run test:e2e` (normal svit, mot skarp `dist`): **scenario 1–20
+  gröna** — Scenario 20 körs nu i normalsviten och passerar, INTE
+  längre "korrekt överhoppat".
+- `npm run test:e2e:batch5b-isolated` (regressionskontroll av den
+  bevarade isolerade harnessen): **20/20 gröna**, samma slutmeddelande
+  som tidigare — mekanismen fungerar fortsatt oförändrad.
+- `npm run test:e2e:batch5b-isolated:port-conflict`: **grönt** —
+  fail-closed-ordningen fortsatt intakt.
+- `git diff --check`: rent i samtliga tre repons ändrade filer.
+- `neptune-marketing/dist/`: orört av denna aktivering utöver vad
+  `npm run test:e2e`/`npm run build` legitimt skriver om (sedan tidigare
+  dokumenterad, orelaterad arbetskopiestatus — Robert/Codex: regenererbar
+  byggoutput, aldrig committad, rörs inte ytterligare).
+
+**Committat lokalt, fokuserat (ingen `git add -A`, inget under `dist/`):**
+- `skills@c2fcdd9` — katalogaktivering (`optimate-fjarrvarme-2026.json`).
+- `enkey-agents@5eaca3c` — permanenta räkningsprov uppdaterade till
+  51/53.
+- `neptune_academy@28ae629` — `tariffer.generated.ts` regenererad,
+  `tariffer.generated.batch5b.test.ts` uppdaterad, Scenario 20 flyttad
+  till normalsviten i `kalkylator.smoke.mjs`.
+- `skills` (denna commit) — `batchplan-v22.md`, `tariffinventering-v22.md`,
+  handoff-brödtext, denna sessionsfil, `conversations/index.md`.
+
+**Inget pushat, i något repo.** Push-behörighet ligger kvar hos Robert i
+chatten — dagens klartecken omfattade uttryckligen bara aktivering, inte
+push. Stannar här för Codex granskning av aktiveringsdiffen.

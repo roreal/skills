@@ -226,4 +226,27 @@ produktionsbygge, full E2E och `git diff --check` i berörda repon. Redovisa
 exakta testantal och fokuserade commit-hashar. Rör inte användarägda
 oannonserade filer eller `neptune-marketing/dist`.
 
+## 7. Aktiveringsrapport (2026-09-15, efter Codex slutgranskning
+`2026-09-15-015` och Roberts uttryckliga klartecken "Ja starta")
+
+Denna sektions §6-disposition `52/12/28` (och frontmatterns
+`tariff_disposition_after_future_approved_activation`, samma tal) visade
+sig INTE mekaniskt korrekt — den byggde på ett antagande att den inbyggda
+accessavgiften skulle räknas som en egen täckningspost. Den mekaniskt
+räknade (`godkanda(katalog, policyregister=POLICYREGISTER)`) dispositionen
+efter aktivering är i stället **51 implemented / 13 ready / 28 blocked av
+92**, exakt matchande Codex slutgranskning `2026-09-15-015`s tal. Skarpa
+produkter: **53** (51 katalog + 2 leverantörsfiler), mekaniskt parsat ur
+den genererade `TARIFFER`-ordboken.
+
+Frontmatterns fält (skrivna av Codex, ej ändrade här) lämnas oförändrade
+per instruktion — läs `51/13/28` som det korrekta, mekaniskt bekräftade
+talet framåt, inte handoffens ursprungliga `52/12/28`.
+
+Aktivering utförd: `investigation` satt till `null` för exakt de sex
+namngivna tarifferna (`skills@c2fcdd9`), `tariffer.generated.ts`
+regenererad från den riktiga generatorn (`enkey-agents@5eaca3c`,
+`neptune_academy@28ae629`) — mekaniskt diffat: exakt sex nya produkter,
+noll ändrade äldre. Ingen push.
+
 Stanna därefter för Codex kodgranskning. Ingen aktivering och ingen push.

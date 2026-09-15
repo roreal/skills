@@ -1069,6 +1069,16 @@ standardvärde, okänt val blockerar, ingen dubblettprodukt.
 - **Visas för användaren:** mwh-läge, effekt/band + flöde (Jönköping dessutom det
   obligatoriska accessavgiftsvalet, INGET separat antal-undercentraler-fält); kr/schablon
   blockerade.
+- **Aktiveringsstatus (2026-09-15, Codex slutgranskning `2026-09-15-015`, Roberts
+  uttryckliga klartecken "Ja starta"):** `investigation` satt till `null` för samtliga sex
+  rader (`skills@c2fcdd9`). Inga priser, band, formler, issues, `production_ready` eller
+  `contract_required` ändrade; samtliga sex behåller sina månadsperiodiseringsfrågor.
+  Godkännandet omfattar uppskattad `annual_forward`-kostnad via leverantörens effekt/
+  bekräftat band/helårsflöde (Jönköping dessutom `metered_access_fee`) — INTE fakturaexakt
+  månadskalkyl, kr/schablon-indata eller besparingsprodukt. Dispositionen är nu **51
+  implemented / 13 ready / 28 blocked av 92**; den skarpa genererade filen ger 53 produkter
+  totalt (51 katalog + 2 leverantörsfiler). Aktiveringen är lokal och ännu inte pushad —
+  väntar på Codex granskning av aktiveringsdiffen.
 
 ## Batch 5c — Leverantörsvärde, säsongsflöde (8 tariffer, kräver `months`-motorsemantik)
 
