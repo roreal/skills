@@ -1,8 +1,8 @@
 ---
-session_id: "2026-09-15-002"
+session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex granskning 2026-09-15-009: changes required före aktivering. INTE aktiverad, INTE pushad. skills@73f3035, enkey-agents@5f1529f, neptune_academy@3bd4d5d."
+status: "Rättningsrunda 1 (svar på granskning 2026-09-15-009) levererad och lokalt committad — väntar på Codex omgranskning. INTE aktiverad, INTE pushad. skills@b2911a9, enkey-agents@213c10f, neptune_academy@1e57a16."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
@@ -215,3 +215,111 @@ grönt isolerat bygge och 19/19 befintliga E2E; generatorn ger 45/47 och
 isolerat 51/53 utan läckage. Grönt befintligt testläge stänger inte de
 otestade/ej implementerade produktvägarna. Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-15-granskning-batch-5b-implementation.md`.
+
+## Rättningsrunda 1 (svar på granskning 2026-09-15-009), 2026-09-15
+
+Samtliga fyra fynd (tre P1 + ett sammansatt P2) rättade. Nya commit-hashar:
+`skills@b2911a9`, `enkey-agents@213c10f`, `neptune_academy@1e57a16`.
+
+**P1 #1 (Jönköpings produktväg producerar inget resultat) — rättat.**
+`besparingsvarde.ts::byggIndataFranPolicy` hårdkodade `kallaTyp:
+'supplier_value'` på VARJE generiskt fält; en ny `kallaTypForKrav(krav)`
+härleder källtypen generiskt ur `krav.tillatnaKallor` (aldrig
+tariff-ID-specifikt). `Tariffberakningsunderlag`/`BesparingsvardeArgs` fick
+ett `substations?: number`-fält; `energiPotential.ts::argsFranInputs` (DEN
+ENDA byggaren för båda publika produktvägarna) skickar nu igenom
+`inputs.substations`, och `byggKontraktIndata` injicerar det som
+`customer_value` i `antalUndercentralerBindning`.
+`resultatkontrakt.ts::policyFaltMetadata` filtrerar nu även ut
+`antalUndercentralerBindning` (återanvänder det globala `#substations`-
+fältet, precis som `kapacitetBindning`). Nytt `varden_etiketter`/
+`vardenEtiketter`-fält på `KravPost` (båda språk) ger Jönköpings fyra
+accessval begripliga etiketter i `KalkylatorPage.tsx`s `enum_val`-rendering
+i stället för det nakna talet.
+
+**P1 #2 (metered_access_fee inte fail-closed) — rättat.**
+`Tariffpolicy.__post_init__` (Python) och `skapaTariffpolicy` (TypeScript)
+skärpta till EXAKT `tillatna_kallor=('customer_value',)`, `'annual'` i
+`kravs_for` och `minvarde=1`/`maxvarde=20` för
+`antal_undercentraler_bindning`. `kontrollera_accessavgiftsbindning`
+skriven om till att bara verifiera att katalogens `price_field`/
+`count_field` matchar policyns bindning (den strukturella gränsen ligger
+nu vid konstruktion). `justeringar.py::_valid_metered_access_fee` kräver
+explicita `price_field`/`count_field`-nycklar i katalogpostens payload;
+`faktura.py::_accessavgift`/`fjarrvarme.ts::accessavgift` läser nycklarna
+dynamiskt i stället för hårdkodade literaler.
+
+Codex exakta reproducerade exploit (`kravs_for=('monthly',)` + blandade
+källor `customer_value`+`supplier_value` + intervall 0–999) har verifierats
+manuellt BLOCKERAD i båda språk, både var för sig per dimension (scope,
+källtyp, intervall) och som den fullständiga kombinerade muteringen.
+`PRECHECK_ACCEPTED_INVALID_COUNT_CONTRACT` kan inte längre reproduceras.
+
+**P1 #3 (speglad acceptansmatris) — rättat, med en dokumenterad
+begränsning.** Ny `batch5bRawData.ts` (VERBATIM export av
+`till_prisar()`/`_policy_till_json()`, driftkontrollerad mot enkey-agents
+i `batch5bRawData.driftprov.test.ts`, 12 test), `resultatkontrakt.batch5b.test.ts`
+(112 test: golden per tariff, exakt `delta_m3 × rate`-bevis via ett andra
+flödesvärde, komplett bandmatris — samtliga band-ID för alla sex tariffer
+— missing/tomt/okänt band, missing/negativt/över-tak flöde, Falu
+ytterorters maxvarde=500, Jönköpings fyra accessvärden plus
+substansantal 0/21/decimal/NaN/±Infinity, kr/schablon/monthly_invoice-
+blockering för samtliga sex) och `KalkylatorPageBatch5b.test.tsx` (11 test,
+riktig DOM-rendering: Borlänge och Jönköping, accessvalets fyra begripliga
+etiketter, produktbyte Borlänge↔Jönköping som rensar tariffspecifika fält
+men BEVARAR det globala `#substations`-värdet). Speglar
+`test_leverantorsvarde_batch5b_kontrakt.py` (Python, 52 test, oförändrad
+sedan förra rundan). **Begränsning som INTE kunde stängas i denna runda:**
+ett omockat Jönköping-E2E-scenario i `kalkylator.smoke.mjs` kräver att
+tariffen faktiskt är valbar i den riktiga, checkade `tariffer.generated.ts`
+— det kräver aktivering, som denna runda uttryckligen förbjuds från att
+göra. E2E-scenariot läggs till i en separat, senare, godkänd
+aktiveringsrunda (samma mönster som Batch 1–5a: deras E2E-scenarion
+tillkom EFTER respektive aktivering, inte före).
+
+**P2 (katalog-/dokumentationssync) — rättat.**
+`coverage_summary.information_request_status_counts.utreds` 14→6,
+`remaining_requests_note` omskriven till att räkna upp de sex faktiska
+kvarstående frågorna (R02, R03, R07, R08, R09, R14). Källtitlarna för
+`web-review-falu-final`, `web-review-mjolby-final` och `haboenergi-web`
+rättade (saknade svenska tecken/generisk slug-titel). De sex Batch
+5b-tariffernas `Kontraktsstatus`/`Teststatus`/`UI-status`/`Kvarstående
+arbete` i `tariffinventering-v22.md` uppdaterade till att spegla den
+faktiska implementationen (i `POLICYREGISTER`, tester finns) i stället för
+"väntar på denna implementationsomgång"; §7-sammanfattningens felaktiga
+kategorisering av R04/R15 som "TAS BORT" rättad till "FLYTTADE till
+`resolved_information_requests`" (matchar deras egna raddispositioner).
+Den duplicerade sessions-ID:n `2026-09-15-002` i `conversations/index.md`
+rättad till `2026-09-15-010` (denna sessions faktiska, korrekta ID).
+
+**Verifiering:**
+- Python: `1527 passed, 4 skipped` (`tools/tariffer/tests`, hela sviten).
+- TypeScript: `1632 passed` (`npx vitest run`, hela sviten — 49 testfiler).
+- `tsc --noEmit`: rent.
+- Isolerat produktionsbygge (`vite build`): grönt (971 moduler).
+- E2E (`kalkylator.smoke.mjs`): 19/19 befintliga scenarion godkända,
+  oförändrat (inget nytt Jönköping-scenario denna runda, se begränsningen
+  ovan).
+- Mekanisk räkningsgrind: `godkanda(katalog)` = 45 (oförändrat, ingen
+  Batch 5b-läcka), `tariffer.generated.ts` = 47 produkter (oförändrat).
+  Isolerad aktiveringskopia (de sex spärrarna borttagna) ger `godkanda` =
+  51 (45+6), verifierat direkt mot `godkanda()` OCH mot den befintliga
+  `test_isolerad_aktiveringskopia_ger_51_katalogprodukter`.
+- `PRECHECK_ACCEPTED_INVALID_COUNT_CONTRACT`: reproducerad och verifierad
+  BLOCKERAD i både Python (`dataclasses.replace`) och TypeScript
+  (`policyFranGenererad` mot en muterad isolerad policy-JSON).
+- `git status`/`git diff --check`: rent i samtliga tre repon; endast de
+  filer som hör till denna rättningsrunda committade (aldrig `git add -A`;
+  `neptune-marketing/dist` och andra sedan tidigare skräpfiler orörda).
+
+**Hårda spärrar respekterade:** samtliga sex Batch 5b-kandidater kvarstår
+`investigation.status="utreds"`. Ingen aktivering. Ingen push i något
+repo. `tariffer.generated.ts` aldrig handredigerad — regenererad via den
+riktiga Pythongeneratorn (`enkey-agents/tools/tariffer/generera.py`) med
+`skills@b2911a9` som katalogproveniens. Handoffens/granskningens
+frontmatter-`status` orörd (Codex jobb).
+
+**Slutsats:** DONE_WITH_CONCERNS — samtliga fyra fynd är rättade och
+mekaniskt verifierade, men det omockade Jönköping-E2E-scenariot är
+uppskjutet till en separat, senare, godkänd aktiveringsrunda (se
+begränsningen under P1 #3). Stannar här för Codex omgranskning.
