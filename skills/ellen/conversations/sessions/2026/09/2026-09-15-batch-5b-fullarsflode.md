@@ -2,13 +2,14 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 2026-09-15-012: changes required före aktivering. Fixrunda 2 stänger tidigare exploiter, men omvänd accessbindning, permanent självbärande Batch 5b-E2E, verklig 47/53-generatorgrind och sann testmatris återstår; tidigare dist-arbetskopiestatus återställdes och kräver Roberts ställningstagande. INTE aktiverad, INTE pushad. skills@fb9d05e, enkey-agents@1415940, neptune_academy@cfd8e3e."
+status: "Codex omgranskning 2026-09-15-013: changes required före aktivering. Tariff-/accesslogiken och 47/53-räkningen är rättade; exakt isolerat npm-kommando faller på hårdkodat Python 3.9, delta×rate saknar ännu Falu ytterorter och E2E-harnesset behöver köras helt ur tempkopian med fail-closed serverstart. dist är enligt Roberts beslut regenererbar byggoutput. INTE aktiverad, INTE pushad. skills@e2e4e2f, enkey-agents@30ffc74, neptune_academy@3f49941."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
   - "conversations/reviews/2026/09/2026-09-15-beredskapskontroll-batch-5b.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-1.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-2.md"
+  - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-3.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
 ---
 
@@ -613,3 +614,39 @@ helt orörd denna runda (utöver den engångshändelse som beskrivs ovan,
 vilken INTE återställdes); dess avvikelsestatus är olöst och medvetet
 uppskjuten till Codex bedömning i nästa granskningsrunda. Ingen
 aktivering, ingen push. Stannar här för Codex omgranskning.
+
+## 2026-09-15T19:13:49+02:00 — Codex omgranskning 2026-09-15-013
+
+Codex har omgranskat fixrunda 3 vid `skills@e2e4e2f`,
+`enkey-agents@30ffc74` och `neptune_academy@3f49941`. Beslut:
+**changes required före aktivering; ingen push**.
+
+Tariff-/produktlogiken från föregående granskning är stängd. Borttagen
+accessdeskriptor stoppas dubbelriktat, Jönköpings kostnadsprov innehåller
+de fulla 900 kronorna, generatorprovet parserar och låser 47/53 och det
+nya isolerade E2E-harnesset kan köra 20/20 utan att röra det riktiga
+trädets käll- eller `dist/`-filer.
+
+Tre avgränsade verifieringsfynd återstår:
+
+1. Exakt `npm run test:e2e:batch5b-isolated` faller från
+   `neptune-marketing`, eftersom Node hårdkodar `python3` som där blir
+   Python 3.9.6. Med projektets Python 3.14 först i `PATH` passerar samma
+   harness 20/20. Pythonvalet ska göras explicit och självbärande.
+2. Delta×flödespristestet omfattar fortfarande fem kandidater och saknar
+   Falu ytterorter med 3,5 kr/m³, trots påståendet om alla sex.
+3. Kandidatbygget kommer ur `git archive HEAD`, men smoke-drivern tas från
+   den verkliga arbetskopian och serverns tidiga exit/portkonflikt är inte
+   blockerande. Kör även drivern ur tempkopian och gör startup fail-closed.
+
+Roberts tidigare besked är nu avgjort och inbakat: `dist/` är
+regenererbar/förkastbar byggoutput och inte källans sanningskälla. Den
+aktuella byggdiffen ska inte committas; framtida prov använder
+`dist-eval/` eller temporär katalog.
+
+Oberoende verifiering: **1607 passed, 4 skipped** Python; **1643 passed**
+TypeScript; ren `tsc`; grönt isolerat bygge; standard-E2E scenario 1–19
+grönt med 20 överhoppat; isolerad E2E 20/20 med explicit Python 3.14 men
+det exakta npm-kommandot faller på Python 3.9.6. Remote `main` är
+oförändrad i alla tre repon. Full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-3.md`.
