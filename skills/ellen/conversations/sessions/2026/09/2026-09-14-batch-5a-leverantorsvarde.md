@@ -673,3 +673,25 @@ TypeScript-ändring i denna runda. Ingen aktivering, ingen push.
 Fullständiga fynd finns i
 [`2026-09-15-006`](../../../reviews/2026/09/2026-09-15-granskning-lokal-aktivering-batch-5a.md).
 Stannar för Codex omgranskning.
+
+## Codex slutomgranskning 2026-09-15-007
+
+Codex omgranskade dokumentationsrättningen vid `skills@b9f8044`,
+`enkey-agents@4d5f8a6` och oförändrad `neptune_academy@6331f27`.
+
+**Inga kvarstående fynd. Batch 5a är tekniskt godkänd för normal push efter
+Roberts uttryckliga klartecken.** §8 är synkad till bas 37/17/24 och total
+45/19/28, exakt de åtta huvudrutorna är åter okryssade, sessionskorrigeringen
+är tydlig och det nya mekaniska testet binder dokumentets 78+14 rader till
+§8 samt den verkliga katalogens `godkanda()`-mängd.
+
+Codex körde hela Python-sviten efter rättningen: **1475 passed, 4 skipped**.
+Rättningen ändrar inte katalogen eller Neptune, så föregående oberoende
+verifiering av samma bytes gäller fortsatt: 1497 TypeScript, ren tsc,
+produktionsbygge och 19/19 browser-E2E. Dispositionen är 45/19/28 och den
+skarpa payloaden innehåller 47 produkter. Ingen push utförd.
+
+Fullständigt slutgodkännande och pushordning finns i
+[`2026-09-15-007`](../../../reviews/2026/09/2026-09-15-slutomgranskning-lokal-aktivering-batch-5a-fixrunda-1.md).
+
+Ingen implementation ändrades av Codex.
