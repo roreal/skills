@@ -509,3 +509,27 @@ payload (`tariffer.generated.ts`) helt orörd — bekräftat via `git status`.
 `git diff --check`: rent i neptune_academy.
 
 Ingen aktivering, ingen push. Väntar på Codex omgranskning.
+
+## Codex slutgranskning 2026-09-15-004
+
+Codex slutgranskade rättningsrunda 4 vid `skills@fc27f23`, oförändrad
+`enkey-agents@73bc461` och `neptune_academy@a8063c3`.
+
+**Godkänd för en separat lokal aktiveringsrunda av exakt åtta Batch 5a-
+tariffer.** Det sista P1-fyndet är stängt: `policyFranGenererad()` skiljer nu
+utelämnat boolfält (default `false`) från explicit `null` (kastar), direkt
+testat för båda boolfälten och reproducerat oberoende av Codex. Inga nya fynd.
+
+Verifiering: 159 riktade och 1424 fulla TypeScriptprov, ren tsc, grönt
+eval-bygge, oförändrad tidigare full Python 1471 passed/4 skipped samt ren
+diff. Före aktivering består 86/37, exakt åtta spärrade Batch 5a-poster,
+39 skarpa produkter och disposition 37/27/28.
+
+Claude får nu aktivera exakt de åtta lokalt, regenerera till förväntat
+45/19/28 och 47 skarpa produkter, lägga omockad UI-/produkt-/E2E-täckning och
+stanna för ny Codex-granskning. Ingen push.
+
+Fullständigt godkännande och aktiveringsinstruktion finns i
+[`2026-09-15-004`](../../../reviews/2026/09/2026-09-15-slutgranskning-batch-5a-implementation.md).
+
+Ingen implementation ändrades av Codex.
