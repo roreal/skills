@@ -996,3 +996,24 @@ kommunikationsbokföring; ingen kalkylator-, tariff- eller testkod ändrades.
 Remote `main` är oberoende verifierad med `git ls-remote` och ligger kvar
 vid baslinjerna `skills@cd0bdb2`, `enkey-agents@4d5f8a6` och
 `neptune_academy@6331f27`; ingen Batch 5b-commit är pushad.
+
+## Push till origin — Batch 5b slutförd 2026-09-15
+
+Robert gav explicit push-instruktion enligt Codex slutgodkännande
+[`2026-09-15-017`](../../../reviews/2026/09/2026-09-15-granskning-batch-5b-aktivering.md).
+Samtliga tre repon pushades med normal fast-forward-historik (ingen force,
+ingen omskrivning) i ordningen skills → enkey-agents → neptune_academy, och
+`origin/main` verifierades direkt via `git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `cd0bdb2` → `9451f9b0c9564fda398e5e0ccd2bedcad8bea0cb`
+- `enkey-agents`: `4d5f8a6` → `5eaca3c4f3eafb3c7065319803592abe062f49ae`
+- `neptune_academy`: `6331f27` → `28ae62945ed50b23cffadd5a7b3070cc2d5c41ae`
+
+Disposition efter push: **51 implemented / 13 ready / 28 blocked av 92**,
+53 skarpa produkter. De orelaterade, användarägda ändringarna i
+`neptune-marketing/dist` (regenererbar byggutdata) och stray untracked-filer
+i `skills` rördes inte. Batch 5b (Borlänge, Falu tätort, Falu ytterorter,
+Habo, Mjölby, Jönköping med inbyggd accessavgift) är därmed implementerad,
+aktiverad och pushad till samtliga tre repon.
