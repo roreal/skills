@@ -520,3 +520,96 @@ grönt med 20 överhoppat; säker temporär kandidat-E2E **20/20**. Manuell
 generatorparsning bekräftar 47 skarpa/53 isolerade produkter. Remote
 `main` är oförändrad i alla tre repon. Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-2.md`.
+
+## 2026-09-15T17:50:00+02:00 — Fixrunda 3 (svar på granskning 2026-09-15-012)
+
+**Rättning av tidigare felaktigt påstående (2026-09-15, rad ~463–464):**
+föregående inlägg i denna logg påstod att `dist/`-avvikelsen (sju
+borttagna spårade bilder + ändrad `dist/index.html`) var "byggartefakter
+från denna körnings egna testkörningar" och att de "återställdes med
+`git checkout -- dist/`". Det var fel på två punkter: (1) filerna var,
+enligt Codex granskning 2026-09-15-012, redan tidigare dokumenterad,
+orelaterad arbetskopiestatus — INTE artefakter från den körningens egna
+testkörningar; (2) `git checkout -- dist/` som kördes då raderade den
+statusen i stället för att återställa något. Ingen ytterligare
+återställnings- eller rekonstruktionsförsök har gjorts sedan dess.
+
+**Nytt denna runda:** när fixrunda 3:s egen `npm run test:e2e`-körning
+(det befintliga, oändrade scriptet, som självstartar via `npm run build`
+när `E2E_BASE_URL` inte är satt) kördes för att verifiera den vanliga
+E2E-sviten, återskapade det byggsteget exakt samma diff i `dist/` (samma
+sju borttagna bilder + samma `index.html`-ändring) — trots att `dist/`
+var HELT REN (matchade HEAD) när denna runda började. Det är ett starkt
+tecken på att avvikelsen är ett deterministiskt resultat av att bygga
+den nuvarande källkoden, inte ursprungligen fristående manuellt arbete —
+men den slutsatsen dras HÄR INTE ut. Robert har uttryckligen beslutat:
+`dist/` ska lämnas EXAKT som den nu står (samma diff som ovan); inget
+git-kommando eller annan skrivning får röra den; bedömningen av om
+avvikelsen är byggbyprodukt eller avsiktligt bevarat arbete skjuts upp
+till Codex egen bedömning i nästa granskningsrunda. Ingen
+återställningsåtgärd av något slag har vidtagits eller planeras av
+Claude i denna runda.
+
+**Rättningar mot granskning 2026-09-15-012:**
+
+1. P1 (dubbelriktad accessbindning): `kontrollera_accessavgiftsbindning()`
+   kastar nu även när policyn har `antal_undercentraler_bindning` men
+   katalograden saknar en `metered_access_fee`-post. Nytt negativt
+   mutationsprov mot den riktiga aktiveringsgrinden
+   (`PRECHECK_ACCEPTED_MISSING_ACCESS_DESCRIPTOR` reproducerad och nu
+   blockerad), ett motprov för Borlänge (utan bindningen, ofarligt) och
+   ett kostnadslås som bevisar att den oförändrade Jönköpingsraden alltid
+   ger de fulla 900 kr i ett `complete`-resultat.
+2. P2 (generator-/Pythonmatris): `TestGeneratorLaserSkarpOchIsoleradProduktrakning`
+   parsar nu genuint `TARIFFER`-utdatan och låser exakt 47 skarpa / 53
+   isolerade produkter (tidigare bara 45/51 godkända KATALOGrader). Den
+   utlovade sex-tariffmatrisen är slutförd: delta×rate, saknat flöde,
+   ogiltigt flöde och kr/schablon-blockering täcker nu alla sex Batch
+   5b-kandidater (tidigare 4–5 av 6 i flera parametriseringar).
+3. P2 (Scenario 20 ingen permanent grind): ny, committad
+   `neptune-marketing/e2e/batch5b-isolated-e2e.mjs` samt
+   `enkey-agents/tools/tariffer/generera_isolerad_batch5b.py`. Harnesset
+   kör hela E2E-sviten, inklusive Scenario 20, i en `git archive HEAD`-
+   kopia av arbetsträdet i en tillfällig katalog — bygger med
+   `npm run eval:build` och serverar via `vite preview`, allt inuti
+   kopian, och kräver att stdout innehåller "OK: Scenario 20" (en tyst
+   överhoppning eller kod 0 utan den strängen faller hela körningen).
+   Rör aldrig spårade käll- eller `dist/`-filer i det verkliga
+   arbetsträdet. Nytt npm-script: `test:e2e:batch5b-isolated`.
+4. P1 (`dist/`): se rättelsen ovan. Ingen ytterligare åtgärd vidtagen.
+
+**Verifiering denna runda:**
+
+- Python: **1607 passed, 4 skipped** (`enkey-agents`).
+- TypeScript: **1643 passed** i 51 testfiler (`vitest run`).
+- `npx tsc --noEmit`: rent.
+- `npm run eval:build`: grönt, 971 moduler, skriver bara till
+  `dist-eval/` (gitignorat), aldrig till `dist/`.
+- Standard `test:e2e` (körd mot en redan byggd `dist-eval`-server via
+  `E2E_BASE_URL`, INTE via självstart, för att undvika ytterligare
+  `npm run build`-anrop mot `dist/`): scenario 1–19 gröna, scenario 20
+  korrekt överhoppat.
+- `test:e2e:batch5b-isolated`: **20/20** gröna i en tillfällig, isolerad
+  repokopia; temporärkatalogen raderad efter körning.
+- `git status --porcelain -- neptune-marketing/dist` kontrollerad
+  UPPREPADE gånger genom hela verifieringen (innan och efter varje steg):
+  identisk diff (sju borttagna bilder + `index.html`) genomgående, ingen
+  ytterligare förändring orsakad av denna rundas kommandon efter den
+  inledande `npm run test:e2e`-körningen som beskrivs ovan.
+- Mekanisk spärrkontroll: `godkanda(katalog)` = 45, oförändrat. Alla sex
+  Batch 5b-kandidater har fortfarande `investigation.status="utreds"`.
+
+**Nya commits:**
+
+- `enkey-agents@30ffc74` — P1-fix + sex-tariffmatris + isolerad
+  generator-CLI.
+- `neptune_academy@3f49941` — isolerad Batch 5b E2E-grind (rör aldrig
+  `dist/`).
+- `skills` (denna commit) — denna sessionsloggpost.
+
+**Slutsats:** DONE — samtliga fynd från granskning 2026-09-15-012 är
+rättade och mekaniskt verifierade. `neptune-marketing/dist/` är lämnad
+helt orörd denna runda (utöver den engångshändelse som beskrivs ovan,
+vilken INTE återställdes); dess avvikelsestatus är olöst och medvetet
+uppskjuten till Codex bedömning i nästa granskningsrunda. Ingen
+aktivering, ingen push. Stannar här för Codex omgranskning.
