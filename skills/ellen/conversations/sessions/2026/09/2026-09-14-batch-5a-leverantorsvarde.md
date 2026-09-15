@@ -2,7 +2,7 @@
 session_id: "2026-09-14-002"
 date: "2026-09-14"
 participants: [Robert, Codex, Claude]
-status: "Rättningsrunda 4 levererad (neptune_academy@a8063c3): policyFranGenererad skiljer nu omission från explicit null för rullande/takadTillSnapshot. Väntar på Codex omgranskning 2026-09-15-003. Ingen aktivering eller push; 37/27/28 består."
+status: "Aktiverad lokalt (Robert: \"Ja starta\", Codex slutgranskning 2026-09-15-004): investigation satt till null för alla åtta. Disposition nu 45/19/28 av 92, 47 skarpa produkter. skills@d0d775d, enkey-agents@3218d13, neptune_academy@6331f27. Ingen push."
 topic: "Batch 5a: åtta leverantörsvärdestariffer (C4, Kil, Skövde, Trollhättan, Katrineholm, Öresundskraft Totalvärme, Söderhamn, TEMAB)"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-14-batch-5a-leverantorsvarde.md"
@@ -533,3 +533,68 @@ Fullständigt godkännande och aktiveringsinstruktion finns i
 [`2026-09-15-004`](../../../reviews/2026/09/2026-09-15-slutgranskning-batch-5a-implementation.md).
 
 Ingen implementation ändrades av Codex.
+
+## Aktivering — svar på slutgranskning 2026-09-15-004
+
+Robert gav explicit klartecken ("Ja starta") att aktivera exakt de åtta Batch
+5a-tariffernas `investigation` (satt till `null`) enligt Codex' numrerade
+aktiveringsordning. Endast `investigation` ändrades — priser, band, formler,
+`issues`, `production_ready` och `contract_required` orörda (verifierat mot
+det etablerade Batch 4-aktiveringsprejudikatet `abec8e9`).
+
+**Katalog (`skills@d0d775d`):** `optimate-fjarrvarme-2026.json` (`investigation:
+null` för alla åtta, `schema_version` 0.1.17→0.1.18, ny `change_log`-post),
+`tariffinventering-v22.md` (64 rader, 8×4, Katalogstatus/Kontraktsstatus/UI-status/
+Disposition per rad), `verifieringslista-fjarrvarmebolag.md` (åtta kryssade
+checkboxar + statustext), `batchplan-v22.md` (ny aktiveringsstatus-punkt).
+`git diff --stat`: 80 rader i katalogfilen, fokuserat.
+
+**Regenerering (`enkey-agents` → `neptune_academy@6331f27`):**
+`tariffer.generated.ts` regenererad via `python3 -m tools.tariffer.generera`
+mot `skills@d0d775d`: **47 tariffer** (2 leverantörsfiler + 45 ur katalogen).
+Ny proveniens: `sha256=cf55632bb...` `commit=d0d775d1f4...`. Semantisk diff
+(JSON-parsning av gamla/nya `TARIFFER`-objekten): `added` = exakt de åtta nya
+ID:na, `removed` = `[]`, `changed` = `[]` — bevisar mekaniskt att endast nya
+rader tillkom.
+
+**Ny permanent unmockad täckning (`neptune_academy@6331f27`):**
+`besparingsvardeBatch5aKatalogaktivering.test.ts` (samma mönster som Batch
+3/4-motsvarigheterna, importerar riktiga `TARIFFER`) — **73 passed**. Nytt
+E2E-scenario 19 i `e2e/kalkylator.smoke.mjs` (C4 + Söderhamn, dropdown,
+fält-rensning vid produktbyte, giltig submit) — körd mot isolerat
+`npm run eval:build`/`vite preview` (`dist-eval`, aldrig riktiga `dist/`):
+**19/19 scenarier godkända**.
+
+**Python (`enkey-agents@3218d13`):** 27 pytest-fel som en direkt, väntad
+konsekvens av att `investigation` flippades till `null` för åtta tidigare
+"utreds"-rader — räknade om hårdkodade tal (37→45 godkända tariffer, 21→29
+medlemmar), lade till de åtta i `grind()`-facit och `KONTRAKTSGATADE`-listor,
+bytte namn på tester vars namn bar det gamla talet, och uppdaterade
+`test_katalog_proveniens.py`s katalog-SHA-256. Inget hand-typat: samtliga tal
+verifierade via riktiga `godkanda()`/`grind()`-anrop mot den skarpa katalogen.
+
+**Verifiering (körd på riktigt):**
+- Python: `pytest tools/tariffer/tests` → **1471 passed, 4 skipped**, 0 failed.
+- TypeScript: `vitest run` → **1497 passed** i 46 filer, 0 failed.
+- `npx tsc --noEmit`: rent.
+- Isolerat `npm run eval:build`: rent, endast känd bundelstorleksvarning.
+- E2E (`e2e/kalkylator.smoke.mjs` mot isolerad preview): **19/19 godkända**.
+- Mekaniskt: `godkanda(katalog, policyregister=POLICYREGISTER)` == **45**;
+  skarp genererad payload == **47** produkter (verifierat via Node/JSON-parsning
+  av `tariffer.generated.ts`); disposition **45/19/28 av 92** (batchplanens
+  dokumenterade tal, oförändrat av denna aktivering utöver Batch 5a:s eget
+  bidrag). `production_ready` och `contract_required` oförändrade för alla
+  åtta (fortsatt `false`/`true`). `git diff --check`: rent i alla tre repon.
+
+**Commits (lokalt, ingen push):**
+
+- `skills@d0d775d` — `investigation: null` för alla åtta, synkad
+  inventering/verifieringslista/batchplan.
+- `enkey-agents@3218d13` — pytest-räkningar/namn/SHA uppdaterade efter
+  aktiveringen.
+- `neptune_academy@6331f27` — regenererad `tariffer.generated.ts`, ny
+  Katalogaktivering-testfil, nytt E2E-scenario 19.
+
+Alla tre repon förblir strikt före sina fjärror (`ahead`, ingen `push`
+utförd, verifierat via `git log`/`git status -sb`). Ingen push under denna
+aktiveringsrunda — kräver ett separat, explicit klartecken från Robert.
