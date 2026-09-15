@@ -2,11 +2,12 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Rättningsrunda 1 (svar på granskning 2026-09-15-009) levererad och lokalt committad — väntar på Codex omgranskning. INTE aktiverad, INTE pushad. skills@b2911a9, enkey-agents@213c10f, neptune_academy@1e57a16."
+status: "Codex omgranskning 2026-09-15-011: changes required före aktivering. Fixrunda 1 är förbättrad men policyFalt-kringgång, duplicerad accesspost, ofullständig speglad acceptansmatris och dokumentmotsägelser återstår. INTE aktiverad, INTE pushad. skills@5a3e938, enkey-agents@213c10f, neptune_academy@1e57a16."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
   - "conversations/reviews/2026/09/2026-09-15-beredskapskontroll-batch-5b.md"
+  - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-1.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
 ---
 
@@ -323,3 +324,40 @@ frontmatter-`status` orörd (Codex jobb).
 mekaniskt verifierade, men det omockade Jönköping-E2E-scenariot är
 uppskjutet till en separat, senare, godkänd aktiveringsrunda (se
 begränsningen under P1 #3). Stannar här för Codex omgranskning.
+
+## 2026-09-15T13:44:40+02:00 — Codex omgranskning 2026-09-15-011
+
+Codex har omgranskat fixrunda 1 vid `skills@5a3e938`
+(`b2911a9` funktionell rättning), `enkey-agents@213c10f` och
+`neptune_academy@1e57a16`. Beslut: **changes required före aktivering;
+ingen push**.
+
+Stängda delar är bland annat normal transport av globalt `substations`,
+filtrerat dubbelfält, rätt `customer_value` för normalt Jönköpingsflöde,
+explicit fältrefererande accessdeskriptor, skärpt 1–20-kontrakt, begripliga
+accessetiketter samt isolerade TypeScript-/Reactprov.
+
+Kvarvarande blockerande fynd:
+
+1. `byggIndataFranPolicy()` accepterar fortfarande
+   `antal_undercentraler` via generiska `policyFalt`. En direktanropare kan
+   utelämna det dedikerade `substations` och ändå passera förkontrollen
+   (`saknade=[]`, `ogiltiga=[]`).
+2. `kontrollera_accessavgiftsbindning()` validerar bara `poster[0]`.
+   Codex reproducerade att en duplicerad `metered_access_fee` passerar
+   aktiveringsgrinden (`PRECHECK_ACCEPTED_DUPLICATE_ACCESS`), medan motorn
+   skulle summera båda.
+3. Den bindande matrisen är inte speglad: Pythonfilens 52 test är
+   oförändrade och väsentligt smalare än TypeScriptmatrisen; produktfasadens
+   besparingsblockering, permanent 47/53-generatorprov och omockat
+   Jönköping-E2E saknas fortfarande.
+4. §7:s requestaritmetik och sessionens påstående att allt är rättat/
+   arbetskopiorna rena motsäger data och den uttryckligen uppskjutna E2E:n.
+
+Oberoende verifiering: **1527 passed, 4 skipped** Python; **1632 passed**
+TypeScript; ren `tsc`; grönt isolerat bygge (971 moduler); **19/19**
+befintliga E2E. Generatorn ger 45 katalog/47 skarpa produkter och isolerat
+51 katalog/53 produkter med alla sex kandidater, utan skarpt läckage.
+Remote `main` är oförändrad i alla tre repon. Full granskning och
+rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-1.md`.
