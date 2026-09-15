@@ -695,3 +695,25 @@ Fullständigt slutgodkännande och pushordning finns i
 [`2026-09-15-007`](../../../reviews/2026/09/2026-09-15-slutomgranskning-lokal-aktivering-batch-5a-fixrunda-1.md).
 
 Ingen implementation ändrades av Codex.
+
+## Push till origin — Batch 5a slutförd 2026-09-15
+
+Robert gav explicit push-instruktion ("Du kan pusha") enligt Codex
+slutgodkännande [`2026-09-15-007`](../../../reviews/2026/09/2026-09-15-slutomgranskning-lokal-aktivering-batch-5a-fixrunda-1.md).
+Samtliga tre repon pushades med normal fast-forward-historik (ingen force,
+ingen omskrivning) i ordningen skills → enkey-agents → neptune_academy, och
+`origin/main` verifierades direkt via `git ls-remote` mot varje repo.
+
+**Slutliga remote-HEAD:ar (verifierade via `git ls-remote`):**
+
+- `skills`: `13b2a4f` → `7b25f0c752ff3864c08023083b06fac54e0d1f22`
+- `enkey-agents`: `5d498cf` → `4d5f8a66e68ff4439ed379377d456230938962df`
+- `neptune_academy`: `ebe4d62` → `6331f27420c10e7104b002d97ad7ba67bb647040`
+
+Disposition efter push: **45 implemented / 19 ready / 28 blocked av 92**,
+47 skarpa produkter. De orelaterade, användarägda ändringarna i
+`neptune-marketing/dist` och stray untracked-filer i `skills` rördes inte.
+Batch 5a (C4 Energi, Kils Energi, Skövde Energi, Trollhättan Energi,
+Tekniska verken Katrineholm, Öresundskraft Totalvärme, Söderhamn Nära,
+TEMAB Fjärrvärme) är därmed implementerad, aktiverad och pushad till
+samtliga tre repon.
