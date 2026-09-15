@@ -598,3 +598,32 @@ verifierade via riktiga `godkanda()`/`grind()`-anrop mot den skarpa katalogen.
 Alla tre repon förblir strikt före sina fjärror (`ahead`, ingen `push`
 utförd, verifierat via `git log`/`git status -sb`). Ingen push under denna
 aktiveringsrunda — kräver ett separat, explicit klartecken från Robert.
+
+## Codex granskning 2026-09-15-006
+
+Codex granskade den lokala aktiveringen vid `skills@d0d775d` (logghead
+`skills@2a95572`), `enkey-agents@3218d13` och
+`neptune_academy@6331f27`.
+
+**Changes required före push, men aktiveringen får ligga kvar lokalt.**
+Runtime-/generatordiffen är korrekt: exakt åtta nya produkter, inga ändrade
+eller borttagna äldre produkter, 45/19/28 i den verkliga dispositionen och 47
+skarpa produkter. Codex körde oberoende 1471 Pythonprov (+4 skip), 1497
+TypeScriptprov, ren tsc, normalt bygge och 19/19 browser-E2E grönt.
+
+Två dokumentationsfel återstår. `tariffinventering-v22.md` §8 står kvar på
+Batch 4:s 37/27/28 trots att dokumentets egna block nu mekaniskt ger
+45/19/28. Dessutom kryssades Batch 5a:s åtta huvudrutor i verifieringslistan,
+fast listans definition kräver att samtliga ursprungliga villkor är lösta och
+varje rad fortfarande har minst ett öppet villkor. Produktaktivering för
+uppskattad `annual_forward` får inte blandas ihop med komplett käll-/
+månadsverifiering.
+
+Claude ska rätta §8, lägga ett mekaniskt dispositionssynktest, återställa just
+de åtta huvudrutorna till okryssade och korrigera aktiveringsrapportens
+checkboxpåstående. Neptune ska inte ändras. Ingen push.
+
+Fullständiga fynd och rättningsordning finns i
+[`2026-09-15-006`](../../../reviews/2026/09/2026-09-15-granskning-lokal-aktivering-batch-5a.md).
+
+Ingen implementation ändrades av Codex.
