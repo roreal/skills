@@ -2,7 +2,7 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 2026-09-15-014: changes required före aktivering. Tariff-/produktlogik, Pythonval, Falu-matris, 47/53 och normal isolerad E2E är stängda; portkonfliktsspärren har en reproducerad readiness/exit-race och smoke-filens manuella filbytesguide är stale. INTE aktiverad, INTE pushad. skills@7043143, enkey-agents@18022c1, neptune_academy@b54329b."
+status: "Codex slutgranskning 2026-09-15-015: samtliga fynd stängda; Batch 5b är godkänd för separat lokal aktivering av exakt sex efter Roberts uttryckliga klartecken. INTE aktiverad, INTE pushad. skills@cab9dff, enkey-agents@18022c1, neptune_academy@c8554bd."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
@@ -11,6 +11,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-2.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-3.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-4.md"
+  - "conversations/reviews/2026/09/2026-09-15-slutgranskning-batch-5b-fixrunda-5.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
 ---
 
@@ -720,6 +721,34 @@ push.
 Inget pushat, i något repo. Alla sex kandidater ligger kvar bakom
 `utreds`. Dispositionen är oförändrad: 45/19/28 av 92; skarp/isolerad
 produktmängd 47/53. Stannar här för Codex omgranskning.
+
+## 2026-09-15T20:01:15+02:00 — Codex slutgranskning 2026-09-15-015
+
+Codex har slutgranskat fixrunda 5 vid `skills@cab9dff`, oförändrat
+`enkey-agents@18022c1` och `neptune_academy@c8554bd`. Beslut: **samtliga
+fynd är stängda; godkänd för en separat lokal aktivering av exakt sex
+Batch 5b-kandidater efter Roberts uttryckliga klartecken. Ingen aktivering
+eller push har utförts.**
+
+Portkonfliktsspärren väntar nu på den startade Viteprocessens egen
+ANSI-normaliserade readiness-signal. Codex körde det permanenta negativa
+provet: upptagen port gav `Port 4174 is already in use` och stoppade före
+Scenario 1. Fri port gav 20/20 genom exakt
+`npm run test:e2e:batch5b-isolated`. Den manuella filbytesguiden är borta
+och standard-E2E hänvisar till den säkra kandidatvägen.
+
+Oberoende verifiering: **1608 passed, 4 skipped** Python; **1643 passed**
+TypeScript; ren `tsc`; grönt `dist-eval`-bygge; standard-E2E scenario 1–19
+grönt; isolerad E2E **20/20**; portkonfliktsprov grönt före smoke.
+`enkey-agents`, `neptune_academy` och `dist/` är rena, inga testportar
+ligger kvar. Remote `main` är oförändrad i alla tre repon.
+
+Efter Roberts uttryckliga klartecken ska Claude aktivera exakt Borlänge,
+Falu tätort, Falu ytterorter, Habo, Mjölby och Jönköping lokalt, regenerera
+skarpa data till 53 produkter, synka dispositionen till **51/13/28**, göra
+Scenario 20 skarpt i standard-E2E och stanna för Codex granskning av
+aktiveringsdiffen. Full order finns i
+`conversations/reviews/2026/09/2026-09-15-slutgranskning-batch-5b-fixrunda-5.md`.
 
 ## 2026-09-15T19:33:53+02:00 — Codex omgranskning 2026-09-15-014
 
