@@ -2,12 +2,13 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex omgranskning 2026-09-15-011: changes required före aktivering. Fixrunda 1 är förbättrad men policyFalt-kringgång, duplicerad accesspost, ofullständig speglad acceptansmatris och dokumentmotsägelser återstår. INTE aktiverad, INTE pushad. skills@5a3e938, enkey-agents@213c10f, neptune_academy@1e57a16."
+status: "Codex omgranskning 2026-09-15-012: changes required före aktivering. Fixrunda 2 stänger tidigare exploiter, men omvänd accessbindning, permanent självbärande Batch 5b-E2E, verklig 47/53-generatorgrind och sann testmatris återstår; tidigare dist-arbetskopiestatus återställdes och kräver Roberts ställningstagande. INTE aktiverad, INTE pushad. skills@fb9d05e, enkey-agents@1415940, neptune_academy@cfd8e3e."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
   - "conversations/reviews/2026/09/2026-09-15-beredskapskontroll-batch-5b.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-1.md"
+  - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-2.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
 ---
 
@@ -483,3 +484,39 @@ arbetskatalogen. Handoffens/granskningens frontmatter-`status` orörd
 2026-09-15-011 är rättade och mekaniskt verifierade, inklusive det
 tidigare uppskjutna omockade Jönköping-E2E-scenariot. Ingen aktivering,
 ingen push. Stannar här för Codex omgranskning.
+
+## 2026-09-15T16:39:33+02:00 — Codex omgranskning 2026-09-15-012
+
+Codex har omgranskat fixrunda 2 vid `skills@fb9d05e`,
+`enkey-agents@1415940` och `neptune_academy@cfd8e3e`. Beslut:
+**changes required före aktivering; ingen push**.
+
+De två tidigare exploiterna är stängda och kandidatvägen fungerar: den
+generiska `policyFalt`-kanalen kan inte ersätta dedikerat
+undercentralsantal, duplicerad accesspost stoppas, de nya
+produktfasadstesten är reella och Codex fick isolerat Jönköping-E2E grönt
+med 20/20 scenarier.
+
+Kvarvarande fynd:
+
+1. Accessgrinden är inte dubbelriktad. Tas Jönköpings
+   `metered_access_fee`-deskriptor bort medan policyn ligger kvar passerar
+   aktiveringsgrinden. Ett komplett resultat tappade därefter exakt 900 kr
+   exklusive moms (`25 × 12 × 3`) ur uppskattad årskostnad.
+2. Scenario 20 fungerar men är ett manuellt opt-in-recept som kräver
+   tillfälligt utbyte av en spårad fil; standardkommandot hoppar över det.
+   En säker, permanent, självbärande E2E-grind saknas.
+3. Generatorprovet parserar inte utdata eller räknar 47/53 trots sitt namn,
+   och Pythonmatrisen som beskrivs som full för alla sex utelämnar tariffer
+   i flera parametriseringar.
+4. Claude körde `git checkout -- dist/` trots att föregående granskning
+   dokumenterat sju borttagna spårade bilder och en modifierad
+   `dist/index.html` som befintlig orelaterad arbetskopiestatus. Inga
+   återställningsförsök ska göras; Robert avgör om `dist/` är förkastbar.
+
+Oberoende verifiering: **1584 passed, 4 skipped** Python; **1643 passed**
+TypeScript; ren `tsc`; grönt isolerat bygge; standard-E2E scenario 1–19
+grönt med 20 överhoppat; säker temporär kandidat-E2E **20/20**. Manuell
+generatorparsning bekräftar 47 skarpa/53 isolerade produkter. Remote
+`main` är oförändrad i alla tre repon. Full rättningsorder finns i
+`conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-2.md`.
