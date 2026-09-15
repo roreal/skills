@@ -751,3 +751,87 @@ reproducerar racet. `enkey-agents` och `neptune_academy` är rena, inklusive
 `dist/`; remote `main` är oförändrad i alla tre repon. Full rättningsorder
 finns i
 `conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-4.md`.
+
+## 2026-09-15T19:50:00+02:00 — Fixrunda 5 (svar på granskning 2026-09-15-014)
+
+Rättar de två P2-fynden från omgranskningen. Ingen tariff-, motor- eller
+produktlogik ändras.
+
+1. **P2 — portkonfliktsspärrens readiness/exit-race.**
+   `vantaPaServer()` i `neptune-marketing/e2e/batch5b-isolated-e2e.mjs`
+   återgår till ren polling; ansvaret för processunik ägandebevisning
+   flyttas till en ny funktion `vantaPaViteRedo(server, port)` som lyssnar
+   på DEN STARTADE PREVIEWPROCESSENS EGNA stdout efter Vites
+   `Local:   http://.../<port>/`-redosignal, eller kastar direkt om
+   processen avslutas (t.ex. `EADDRINUSE` med `--strictPort`) — INNAN
+   någon HTTP-polling påbörjas. `main()` väntar nu på denna signal före
+   `baseUrl` konstrueras.
+
+   Vid första verifieringskörningen visade det sig att den ursprungliga
+   regexen (`Local:\s+https?://[^\s]*:${port}/`) inte matchade Vites
+   RIKTIGA, färgade stdout — ANSI-escapesekvenser (`\x1b[22m` m.fl.) delar
+   upp texten mellan "Local" och ":" samt runt själva portnumret. Löst
+   genom att städa bort ANSI-koderna ur den ackumulerade stdout-bufferten
+   innan matchning, i stället för att försöka uttrycka dem i regexet.
+
+   Lagt ett permanent regressionsprov,
+   `e2e/batch5b-isolated-e2e.port-conflict.test.mjs`
+   (`npm run test:e2e:batch5b-isolated:port-conflict`), som avsiktligt
+   upptar målporten med en RIKTIG `vite preview --strictPort`-process
+   (en enkel `http.createServer` visade sig kunna binda ett annat
+   nätverksgränssnitt än Vite och därmed INTE krocka på riktigt — bytt
+   till en riktig vite-process för att exakt spegla Codex ursprungliga
+   reproduktion) och kräver att harnesset (a) avslutas med en icke-nollkod
+   OCH (b) ALDRIG hinner skriva "OK: Scenario 1" i utdata — dvs bevisar
+   att spärren sitter FÖRE smoke-sviten, inte bara någon gång innan
+   processen dör. Verifierat manuellt: gamla mönstret (innan denna runda)
+   skulle ha kört scenario 1–19 mot fel server och fallit i scenario 20;
+   det nya mönstret stoppar omedelbart vid serverstarten med ett tydligt
+   `EADDRINUSE`-relaterat fel.
+
+2. **P2 — smoke-filens manuella filbytesrecept.** Ersatt både
+   huvudkommentarens recept (rader ~88–110) och det körtida
+   hoppa-över-meddelandet för Scenario 20 i
+   `e2e/kalkylator.smoke.mjs` med en hänvisning till
+   `npm run test:e2e:batch5b-isolated`. Ingen instruktion rekommenderar
+   längre temporär skrivning till en spårad fil i den riktiga
+   arbetskopian.
+
+**Fullständig verifieringssekvens (denna runda):**
+- Python-tariffsvit: **1608 passed, 4 skipped** (oförändrat mot
+  fixrunda 4 — inga tariff-/motorändringar).
+- TypeScript (`vitest`): **1643 passed** i 51 testfiler (oförändrat).
+- `npx tsc --noEmit`: rent.
+- Reproducerad Codex exakta race: skarp `dist-eval` startad avsiktligt på
+  port 4174, sedan `npm run test:e2e:batch5b-isolated` — harnesset stoppar
+  nu OMEDELBART vid serverstarten med ett `EADDRINUSE`-fel, INNAN någon
+  smoke-scenario körs (tidigare körde det scenario 1–19 mot fel server och
+  föll först i scenario 20).
+- Nytt permanent portkonfliktsprov
+  (`npm run test:e2e:batch5b-isolated:port-conflict`): **grönt** — bevisar
+  fail-closed-ordningen mekaniskt.
+- Normalfallet, fri port, `npm run test:e2e:batch5b-isolated`: **20/20**
+  gröna, samma slutmeddelande som tidigare.
+- Standard `npm run test:e2e` (mot separat `dist-eval`): scenario **1–19**
+  gröna, scenario 20 korrekt överhoppat med det uppdaterade meddelandet
+  som hänvisar till den isolerade kommandot.
+- `git diff --check`: rent på samtliga fyra ändrade/nya filer.
+- `neptune-marketing/dist/`: `git status` visar inga ändringar — orört
+  hela rundan, ingen kommando kördes mot den.
+- Generatorräkning/dispositionen ej berörd av denna runda (ingen
+  tariff-/motorändring): oförändrat 47/53 skarpa/isolerade produkter,
+  45/19/28 av 92, alla sex kandidater bakom `investigation.status="utreds"`.
+
+**Committat lokalt, fokuserat (ingen `git add -A`, inget under `dist/`):**
+- `neptune_academy@c8554bd` — `neptune-marketing/e2e/batch5b-isolated-e2e.mjs`
+  (processunik readiness, ANSI-tolerant matchning),
+  `neptune-marketing/e2e/batch5b-isolated-e2e.port-conflict.test.mjs` (nytt
+  permanent regressionsprov), `neptune-marketing/e2e/kalkylator.smoke.mjs`
+  (borttaget manuellt filbytesrecept) och `neptune-marketing/package.json`
+  (nytt npm-script för portkonfliktsprovet).
+- `enkey-agents` och `skills`: inga ändringar denna runda (fynden var
+  isolerade till `neptune_academy`).
+
+Inget pushat, i något repo. Alla sex kandidater ligger kvar bakom
+`utreds`. Dispositionen är oförändrad: 45/19/28 av 92; skarp/isolerad
+produktmängd 47/53. Stannar här för Codex omgranskning.
