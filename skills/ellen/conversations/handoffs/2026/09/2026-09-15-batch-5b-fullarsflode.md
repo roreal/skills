@@ -3,23 +3,23 @@ handoff_id: "2026-09-15-001"
 created_at: "2026-09-15T10:57:00+02:00"
 from: Codex
 to: Claude
-status: ready-for-local-implementation
+status: activated-locally-reviewed-awaiting-push-authorization
 implementation_allowed: true
 approved_implementation_scope: "batch-5b-six-full-year-volume-tariffs-and-jonkoping-access-coverage"
-tariff_activation_allowed: false
+tariff_activation_allowed: true
 push_allowed: false
-review_required_before_activation: true
-review_required_before_push: true
+review_required_before_activation: false
+review_required_before_push: false
 baseline_remote_heads:
   skills: "cd0bdb2e4fa33b753305d8983fda952aab43afdc"
   enkey_agents: "4d5f8a66e68ff4439ed379377d456230938962df"
   neptune_academy: "6331f27420c10e7104b002d97ad7ba67bb647040"
 tariff_disposition_before: "45 implemented / 19 ready / 28 blocked av 92"
 tariff_disposition_during_implementation: "45 implemented / 19 ready / 28 blocked av 92"
-tariff_disposition_after_future_approved_activation: "52 implemented / 12 ready / 28 blocked av 92"
+tariff_disposition_after_activation: "51 implemented / 13 ready / 28 blocked av 92"
 sharp_products_before: "47"
 sharp_products_during_implementation: "47"
-sharp_products_after_future_approved_activation: "53"
+sharp_products_after_activation: "53"
 relates_to:
   - "conversations/reviews/2026/09/2026-09-15-beredskapskontroll-batch-5b.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
@@ -239,9 +239,9 @@ efter aktivering är i stället **51 implemented / 13 ready / 28 blocked av
 produkter: **53** (51 katalog + 2 leverantörsfiler), mekaniskt parsat ur
 den genererade `TARIFFER`-ordboken.
 
-Frontmatterns fält (skrivna av Codex, ej ändrade här) lämnas oförändrade
-per instruktion — läs `51/13/28` som det korrekta, mekaniskt bekräftade
-talet framåt, inte handoffens ursprungliga `52/12/28`.
+Codex aktiveringsgranskning `2026-09-15-017` rättade frontmattern till det
+utförda och oberoende verifierade läget: aktiverad lokalt, **51/13/28**,
+53 skarpa produkter och ännu inte pushad.
 
 Aktivering utförd: `investigation` satt till `null` för exakt de sex
 namngivna tarifferna (`skills@c2fcdd9`), `tariffer.generated.ts`
@@ -249,4 +249,5 @@ regenererad från den riktiga generatorn (`enkey-agents@5eaca3c`,
 `neptune_academy@28ae629`) — mekaniskt diffat: exakt sex nya produkter,
 noll ändrade äldre. Ingen push.
 
-Stanna därefter för Codex kodgranskning. Ingen aktivering och ingen push.
+Aktiveringen är Codex-granskad och godkänd. Ingen push utan Roberts
+uttryckliga klartecken.

@@ -2,7 +2,7 @@
 session_id: "2026-09-15-010"
 date: "2026-09-15"
 participants: [Robert, Codex, Claude]
-status: "Codex slutgranskning 2026-09-15-015: samtliga fynd stängda; Batch 5b är godkänd för separat lokal aktivering av exakt sex efter Roberts uttryckliga klartecken. INTE aktiverad, INTE pushad. skills@cab9dff, enkey-agents@18022c1, neptune_academy@c8554bd."
+status: "Codex aktiveringsgranskning 2026-09-15-017: Batch 5b är lokalt aktiverad och godkänd för push efter Roberts separata klartecken. 51/13/28 av 92, 53 skarpa produkter. INTE pushad. Granskade huvuden: skills@f2ae6f5, enkey-agents@5eaca3c, neptune_academy@28ae629."
 topic: "Batch 5b: sex leverantörsvärdestariffer med fullårsflöde (Borlänge, Falu tätort, Falu ytterorter, Habo, Mjölby) plus Jönköpings räknade accessavgift"
 relates_to:
   - "conversations/handoffs/2026/09/2026-09-15-batch-5b-fullarsflode.md"
@@ -12,6 +12,7 @@ relates_to:
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-3.md"
   - "conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-4.md"
   - "conversations/reviews/2026/09/2026-09-15-slutgranskning-batch-5b-fixrunda-5.md"
+  - "conversations/reviews/2026/09/2026-09-15-granskning-batch-5b-aktivering.md"
   - "Fjarrvarmetariffer/batchplan-v22.md — Batch 5b"
 ---
 
@@ -963,3 +964,35 @@ Committat i samma `neptune_academy@28ae629` som generatorregenereringen.
 **Inget pushat, i något repo.** Push-behörighet ligger kvar hos Robert i
 chatten — dagens klartecken omfattade uttryckligen bara aktivering, inte
 push. Stannar här för Codex granskning av aktiveringsdiffen.
+
+## 2026-09-15T20:43:47+02:00 — Codex aktiveringsgranskning
+`2026-09-15-017`
+
+Codex har oberoende granskat den lokala Batch 5b-aktiveringen vid
+`skills@f2ae6f5`, `enkey-agents@5eaca3c` och
+`neptune_academy@28ae629`. Beslut: **godkänd för push efter Roberts
+separata uttryckliga klartecken; inga kod-, tariff- eller testfynd
+återstår. Ingen push har utförts.**
+
+Maskinell katalogdiff mot `skills@a8c729f` visar oförändrat antal 86
+tariffposter och exakt sex förändrade tariffobjekt: endast
+`investigation` gick till `null`; övriga fält är identiska. Skarpa
+`TARIFFER` gick från 47 till 53 nycklar med exakt de sex Batch 5b-
+produkterna tillagda, noll borttagna och noll ändrade äldre produkter.
+Dispositionen **51/13/28 av 92** och 53 skarpa produkter är därmed
+mekaniskt bekräftade.
+
+Oberoende verifiering: **1606 passed, 4 skipped** Python; **1643 passed**
+TypeScript; ren `tsc`; grönt isolerat `dist-eval`-bygge; standard-E2E
+scenario **1–20** gröna; isolerad E2E **20/20**; permanent
+portkonfliktsprov grönt och stopp före smoke. Leveransdiffarna passerar
+`git diff --check`. `neptune-marketing/dist/` återställdes till HEAD efter
+granskningen eftersom det är dokumenterat regenererbar, ocommittad
+byggoutput; `neptune_academy` är åter rent.
+
+Codex rättade samtidigt den egna handoff-/sessionsfrontmattern från det
+historiska före-aktiveringsläget till det faktiska läget. Detta är endast
+kommunikationsbokföring; ingen kalkylator-, tariff- eller testkod ändrades.
+Remote `main` är oberoende verifierad med `git ls-remote` och ligger kvar
+vid baslinjerna `skills@cd0bdb2`, `enkey-agents@4d5f8a6` och
+`neptune_academy@6331f27`; ingen Batch 5b-commit är pushad.
