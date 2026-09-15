@@ -650,3 +650,72 @@ grönt med 20 överhoppat; isolerad E2E 20/20 med explicit Python 3.14 men
 det exakta npm-kommandot faller på Python 3.9.6. Remote `main` är
 oförändrad i alla tre repon. Full rättningsorder finns i
 `conversations/reviews/2026/09/2026-09-15-omgranskning-batch-5b-fixrunda-3.md`.
+
+## 2026-09-15T19:27:14+02:00 — Fixrunda 4 (svar på granskning 2026-09-15-013)
+
+Rättar de tre kvarstående verifieringsfynden från granskning
+2026-09-15-013, lokalt bakom samtliga spärrar. Ingen aktivering, ingen
+push.
+
+1. **P1 — Pythonval i `e2e/batch5b-isolated-e2e.mjs`.** Lade till en
+   `valjPython()`-funktion: `ELLEN_PYTHON`-override →
+   `enkey-agents/.venv/bin/python` (om den finns) → generisk `python3`
+   som sista utväg, med en versionskontroll (≥ 3.10, PEP 604) mot varje
+   kandidat och ett fail-closed-fel som listar samtliga prövade
+   kandidater om ingen kvalificerar. Verifierat genom att köra det exakt
+   dokumenterade kommandot `npm run test:e2e:batch5b-isolated` från
+   `neptune-marketing` utan någon manuell `PATH`-ändring: väljer
+   automatiskt `enkey-agents/.venv/bin/python` (3.14) och ger **20/20**
+   gröna scenarier.
+2. **P2 — delta×flödesprismatrisen.** Lade till Falu ytterorter i
+   `test_leverantorsvarde_batch5b_kontrakt.py`s parametrisering med
+   källgrundad `rate=3,5 kr/m³` (katalogens `volume`-post). Rättade
+   samtidigt klassdocstringen så den inte längre påstår att ett
+   "över-max flöde" provas — `flode_m3`s `maxvarde=1_000_000` är en
+   generisk säkerhetsgräns, inte en källgrundad affärsgräns, och provas
+   inte separat.
+3. **P2 — isolerad E2E delvis arbetskopiebunden och inte fail-closed.**
+   Smoke-drivern körs nu från den arkiverade `git archive`-tempkopian
+   (`tempMarketing/e2e/kalkylator.smoke.mjs`) med `cwd` satt till
+   tempkopian, inte den riktiga arbetskopian. `vantaPaServer()` tar nu
+   emot en delad `avbruten`-signal som previewserverns exit-hanterare
+   sätter vid tidig/oväntad avslutning; pollingen kontrollerar signalen
+   varje iteration och kastar omedelbart i stället för att riskera att
+   godta en redan lyssnande, gammal server på samma port.
+4. **`dist/`-dokumentation.** Per Codex uttryckliga beslut i granskning
+   2026-09-15-013 är `neptune-marketing/dist/` regenererbar byggoutput,
+   inte källans sanningskälla. Den standardmässiga byggdriften (samma
+   sju borttagna spårade bilder + ändrad `index.html`, återuppstådd på
+   nytt efter denna rundas E2E-körningar) rensades tillbaka till HEAD med
+   `git checkout -- neptune-marketing/dist` och committades INTE. Ingen
+   ytterligare rekonstruktion gjordes.
+
+**Fullständig verifieringssekvens (denna runda):**
+- Python-tariffsvit: **1608 passed, 4 skipped** (+1 mot föregående rundas
+  1607, exakt det nya Falu-ytterorter-fallet, inga regressioner).
+- TypeScript (`vitest`): **1643 passed** i 51 testfiler (oförändrat).
+- `npx tsc --noEmit`: rent.
+- Standard `npm run test:e2e` (mot separat `dist-eval`): scenario **1–19**
+  gröna, scenario 20 korrekt överhoppat.
+- Exakt `npm run test:e2e:batch5b-isolated` från `neptune-marketing`, utan
+  manuell `PATH`-ändring: **20/20** gröna, avslutas med
+  `OK: Batch 5b isolerad E2E-grind — Scenario 20 kördes och passerade i en
+  tillfällig, isolerad kopia.`
+- `git diff --check`: rent i samtliga tre repon (`skills`, `enkey-agents`,
+  `neptune_academy`).
+- Generatorgrind (`TestGeneratorLaserSkarpOchIsoleradProduktrakning`):
+  **47 skarpa / 53 isolerade**, mekaniskt bekräftat via riktad testkörning
+  (oförändrat).
+- Alla sex Batch 5b-kandidater mekaniskt kontrollerade direkt mot
+  `optimate-fjarrvarme-2026.json`: samtliga har fortfarande
+  `investigation.status == "utreds"`. Ingen aktivering skedde.
+
+**Committat lokalt, fokuserat (ingen `git add -A`, inget under `dist/`):**
+- `enkey-agents@18022c1` — `tools/tariffer/tests/test_leverantorsvarde_batch5b_kontrakt.py`
+  (Falu ytterorter i delta×rate-matrisen, rättad docstring).
+- `neptune_academy@b54329b` — `neptune-marketing/e2e/batch5b-isolated-e2e.mjs`
+  (Pythonval, arkiverad smoke-driver, fail-closed serverstart).
+
+Inget pushat, i något repo. Alla sex kandidater ligger kvar bakom
+`utreds`. Dispositionen är oförändrad: 45/19/28 av 92; skarp/isolerad
+produktmängd 47/53. Stannar här för Codex omgranskning.
