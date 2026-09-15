@@ -599,6 +599,28 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Disposition:** `ready_to_implement`
 
 
+> **Statusuppdatering, handoff `2026-09-15-001` / granskning `2026-09-15-008`
+> (gäller de sex Batch 5b-raderna nedan: `borlange-energi-borlange-2026`,
+> `falu-energi-vatten-falun-2026`,
+> `falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026`,
+> `habo-energi-habo-2026`, `mjolby-svartadalen-energi-mjolby-2026`,
+> `jonkoping-energi-jonkoping-och-granna-2026`):** samtliga sex är nu
+> **implementerade lokalt** (`Disposition: implemented_source_verified_annual`,
+> `Kontraktsstatus: registrerad i POLICYREGISTER`, INTE aktiverad —
+> `investigation.status` kvarstår `"utreds"`). Per-tariffstyckena nedan är
+> ORÖRDA planeringssnapshots (skrivna innan implementationen) och listar
+> fortfarande "ej i POLICYREGISTER ännu"/"Disposition: ready_to_implement" —
+> läs dem som historisk kontext, inte aktuell status. Tre rättelser överstyr
+> texten nedan (se granskning `2026-09-15-008` för fullständig motivering):
+> (1) samtliga sex, inte bara Borlänge, kräver ett BEKRÄFTAT effektband-ID;
+> (2) varje policy har nu TRE bundna fält (effekt, band, `flode_m3`) —
+> `flode_m3` stänger `volume`-motorns äldre MWh/delta-T-reservberäkning via
+> en ny preflight, `kontrollera_volymbindning`; (3) Habos effektvärde är
+> TAKAT TILL SNAPSHOT (fast tvåårsmodell), INTE rullande. Jönköping har
+> dessutom en räknad accessavgift inbyggd i bastariffen (`metered_access_fee`,
+> enum 0/10/25/50, källtyp `customer_value`) — se `justeringar.py`/
+> `faktura.py`/`policyregister.py` (`_JONKOPING_POLICY`).
+
 #### `borlange-energi-borlange-2026`
 - **Leverantör / nät / kundkategori:** Borlänge Energi — Borlänge — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
@@ -2067,13 +2089,13 @@ fullständiga specifikationen:
 | Tariff-ID | Steg 1–2 idag | Planerad åtgärd (utöver ny policyregisterpost, steg 3) | Berörda filer |
 |---|---|---|---|
 | `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026` | kapacitetsform | Ny kapacitetsform `heterogeneous_bands` + ny justeringstyp `optional_environmental_addon` (kundvalt UI-tillval) | `katalog.py` (grind), `justeringar.py` + inline i `fjarrvarme.ts`, `KalkylatorPage.tsx` |
-| `borlange-energi-borlange-2026` | okänd issue (501 kW) | Normalisera issue; TA BORT R04 (§7); `supplier_confirmed_band_id`-bindning (§6a.2) | katalog-JSON, `resultatkontrakt.py`/`.ts`, `remaining_information_requests` |
+| `borlange-energi-borlange-2026` | okänd issue (501 kW) | Normalisera issue; R04 FLYTTAD till `resolved_information_requests` (§7, inte längre produktblockerande — inte externt besvarad i alla detaljer); `supplier_confirmed_band_id`-bindning (§6a.2, rättelse 2026-09-15-008: gäller ALLA SEX Batch 5b-rader, inte bara Borlänge) | katalog-JSON, `resultatkontrakt.py`/`.ts`, `remaining_information_requests` |
 | `c4-energi-kristianstad-2026` | okänd issue (500 kW) | Normalisera issue; TA BORT R05 (§7); `supplier_confirmed_band_id`-bindning (§6a.2) | katalog-JSON, `resultatkontrakt.py`/`.ts`, `remaining_information_requests` |
 | `e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026` | null i band | fixed:0, rate_period:month; TA BORT normaliserad issue; ny `supply_temperature_adjusted_flow`-motor; TA BORT R10 (§7) | katalog-JSON, `justeringar.py`/`fjarrvarme.ts`, `policyregister.py`, `remaining_information_requests` |
 | `e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026` | null i band | Samma som Järfälla bostäder | samma |
 | `e-on-malmo-malmo-och-burlov-bostader-2026` | null i band | Samma + Malmö/Burlöv −15→−8 °C rättelse (redan i v4) | samma |
 | `e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026` | null i band | Samma | samma |
-| `falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026` | okänd issue (>500 kW) | Normalisera issue; `KravPost.maxvarde=500` (§6a.1); TA BORT R15 (§7) | katalog-JSON, `resultatkontrakt.py`/`.ts`, `remaining_information_requests` |
+| `falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026` | okänd issue (>500 kW) | Normalisera issue; `KravPost.maxvarde=500` (§6a.1); R15 FLYTTAD till `resolved_information_requests` (§7, inte längre produktblockerande) | katalog-JSON, `resultatkontrakt.py`/`.ts`, `remaining_information_requests` |
 | `falu-energi-vatten-falun-2026` | passerar redan idag (steg 1–2) | Ny policyregisterpost (steg 3), inget motorarbete | `policyregister.py` |
 | `finspangs-tekniska-verk-finspang-2026` | kapacitetsform | Ny kapacitetsform `piecewise_polynomial` + ny justeringstyp `conditional_flow` | `katalog.py`, `justeringar.py`/`fjarrvarme.ts` |
 | `habo-energi-habo-2026` | passerar redan idag (steg 1–2) | Ny policyregisterpost (steg 3), inget motorarbete | `policyregister.py` |
@@ -4709,7 +4731,7 @@ Katalogen har 14 `remaining_information_requests` totalt. De 10 nedan berör min
 | ID | Medlem(mar) | Fråga | Disposition (EN livscykel per request) | Motivering |
 |---|---|---|---|---|
 | R03 | `malarenergi` | Vilka nät hör sidans två olika tabeller till? Bekräfta fast avgift 2217/2117 för 25–79 kW samt sommarperiod/flödesvillkor. | **`tariff_ids` sätts** till de två `blocked_external_info`-tarifferna (`storre-fastigheter`, `gruppanslutna-smahus`) | `24-lagenheter` har ingen kapacitetsdel och ingen effekt-/avgiftstvetydighet — request-posten begränsas till de tariff-ID:n frågan faktiskt gäller, `member_ids` tas bort från posten samtidigt. |
-| R04 | `borlange-energi` | Bekräfta september–oktober 559 kr/MWh och vilken effektgrupp exakt 501 kW tillhör. | **TAS BORT** | Höstpriset är verifierat; 501 kW-gränsen löses av `supplier_confirmed_band_id` (§6a.2), inte av request-processen. |
+| R04 | `borlange-energi` | Bekräfta september–oktober 559 kr/MWh och vilken effektgrupp exakt 501 kW tillhör. | **FLYTTAD till `resolved_information_requests`** (granskning `2026-09-15-008`, inte helt borttagen) | Höstpriset är verifierat; 501 kW-gränsen löses av `supplier_confirmed_band_id` (§6a.2), inte av request-processen — men frågan om exakt bandtillhörighet är inte externt besvarad i alla detaljer, bara inte längre produktblockerande. |
 | R05 | `c4-energi` | Vilken prisgrupp gäller exakt 500 kW? | **TAS BORT** | Löses av `supplier_confirmed_band_id` (§6a.2). |
 | R06 | `kraftringen` | Hur används temperaturens korrigeringsfaktor på flödespriset? Behöver explicit slutformel samt effektprisets tidsenhet och periodisering. | **TAS BORT** | Formeln är källverifierad (verifieringslistan, golv vid 0,2) och effektprisperioden rättas i katalogen (`rate_period: year`) — frågan är besvarad. |
 | R10 | `e-on-jarfalla, e-on-malmo, navirum-energi-norrkoping-och-soderkoping, navirum-energi-orebro-kumla-och-hallsberg` | Aktuell prisbilaga och särskilda prisvillkor: effektprisets periodisering och temperaturkorrigerat flödespris. | **TAS BORT** | Samtliga fyra medlemmars enda tariffer är `ready_to_implement`; periodiseringen rättas i katalogen (`rate_period: month`) och flödesformeln är källverifierad (§6, batch 3). Ingen `tariff_ids`-begränsning behövs — alla berörda produkter blir redo samtidigt. |
@@ -4717,7 +4739,7 @@ Katalogen har 14 `remaining_information_requests` totalt. De 10 nedan berör min
 | R12 | `temab-fjarrvarme` | Kategorital och historik bakom debiteringseffekten, om Optimate ska beräkna den själv; annars räcker leverantörens debiterbara effekt. | **TAS BORT** | Löses av den normaliserade issue-texten (leverantörens fakturavärde används, ingen egen beräkning). |
 | R13 | `soderhamn-nara` | Byggnadstypens omräkningsindex, om Optimate ska beräkna effekten själv; annars leverantörens debiterbara effekt. | **TAS BORT** | Tariffen passerar redan grinden idag — leverantörens debiterbara effekt används, ingen egen beräkning. |
 | R14 | `sundsvall-energi` | Leveransvillkor för abonnemang från 2000 kW i Sundsvall/Matfors. Krävs endast för kunder i dessa grupper. | **`tariff_ids` sätts** till de två `blocked_external_info`-tarifferna (`sundsvall-normal`, `matfors-och-kvissleby`) | `indal-liden-och-lucksta` (ren energitariff, ingen effektdel alls) är inte berörd av frågan — request-posten begränsas, `member_ids` tas bort samtidigt. |
-| R15 | `falu-energi-vatten` | Prisgrupp över 500 kW i Bjursås, Grycksbo, Sundborn eller Svärdsjö, endast om sådana kunder ingår. | **TAS BORT** | Löses mekaniskt av `KravPost.maxvarde=500` på ytterorternas rad (§6a.1). Falun berörs inte och har ingen egen öppen fråga. |
+| R15 | `falu-energi-vatten` | Prisgrupp över 500 kW i Bjursås, Grycksbo, Sundborn eller Svärdsjö, endast om sådana kunder ingår. | **FLYTTAD till `resolved_information_requests`** (granskning `2026-09-15-008`, inte helt borttagen) | Löses mekaniskt av `KravPost.maxvarde=500` på ytterorternas rad (§6a.1), inte av att frågan externt besvarats. Falun berörs inte, hade en felaktig medlemsvid koppling till samma fråga och den kopplingen är borttagen från Faluns katalograd. |
 
 **Sammanfattning:** 8 förfrågningar (`R04, R05, R06, R11, R12, R13, R15`, plus R10 utan
 begränsning) TAS BORT helt — deras frågor är redan besvarade av verifieringslistan eller

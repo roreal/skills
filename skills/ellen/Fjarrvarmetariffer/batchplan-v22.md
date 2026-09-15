@@ -1037,28 +1037,38 @@ standardvärde, okänt val blockerar, ingen dubblettprodukt.
   blockerad), `falu-energi-vatten-falun-2026`,
   `falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026`, `habo-energi-habo-2026`,
   `mjolby-svartadalen-energi-mjolby-2026`,
-  `jonkoping-energi-jonkoping-och-granna-2026` (PLUS varianttäckningen
-  `jonkoping-energi-jonkoping-och-granna-2026--accessavgift`, byggd i SAMMA commit —
-  se ovan).
-- **Obligatorisk indata:** debiterbar effekt/band + prissatt flöde i m³ (hela året,
-  fakturan/avtalet) för samtliga sex. Borlänge behöver DESSUTOM det NYA
-  `supplier_confirmed_band_id`-fältet (§6a.2, samma mekanism som C4 i batch 5a): källan
-  skriver `>501` och 501 kW är den uttryckligen osäkra gränsen mellan band 4 (`251–500`) och
-  band 5 (`>501`). Falu ytterorter behöver DESSUTOM `KravPost.maxvarde=500` (§6a.1): dess
-  publicerade prisgrupper går bara till 500 kW — ett mekaniskt maxkrav ersätter att bara
-  förlita sig på att `_niva()` råkar kasta `ValueError` för värden utan täckande band.
-  KATALOGRÄTTELSE: båda har var sin `issues`-text som inte matchar grindens
-  godkännandelista — normaliseras (se inventeringens §6). Informationsförfrågningarna R04
-  (borlange-energi) TAS BORT; R15 (falu-energi-vatten) TAS BORT (löst mekaniskt av
-  `maxvarde`, inte av request-processen) — se inventeringens §7.
-- **Filer:** 6× katalograd, `policyregister.py` (6 nya policyer med två bundna fält),
-  Jönköpings accessavgift: ny justeringstyp/UI-kundval (0/10/25/50 kr/mån, obligatoriskt val)
-  i `justeringar.py`/`fjarrvarme.ts` + `KalkylatorPage.tsx`.
+  `jonkoping-energi-jonkoping-och-granna-2026` (räknad accessavgift byggd IN i
+  bastariffen, se ovan — ingen sjunde katalograd/produkt).
+- **Obligatorisk indata (rättat i beredskapskontroll `2026-09-15-008`):** MINST TRE
+  kostnadsbärande krav per rad — leverantörens effekt, ett BEKRÄFTAT effektband-ID
+  (`supplier_confirmed_band_id_required`, samma mekanism som Familj 4-resten, gäller
+  ALLA SEX, inte bara Borlänge — v3-textens "Borlänge behöver DESSUTOM" var missvisande)
+  och fakturans prissatta helårsflöde i m³ (`flode_m3`, stänger `volume`-motorns äldre
+  MWh/delta-T-reservberäkning via en ny aktiveringspreflight,
+  `kontrollera_volymbindning`). Falu ytterorter har DESSUTOM `KravPost.maxvarde=500`
+  (§6a.1): dess publicerade prisgrupper går bara till 500 kW. Habos leverantörsvärde är
+  en FAST tvåårig normalårsmodell (`takad_till_snapshot`, INTE rullande — v3-textens
+  "medel av tre högsta dygnsmedeleffekter" var källfel, se granskning `2026-09-15-008`
+  punkt 3). Jönköping dessutom: ett obligatoriskt accessvalfält (sluten enum 0/10/25/50,
+  källtyp `customer_value`) och ett policybundet `antal_undercentraler`-fält som
+  produktadaptern fyller från kalkylatorns globala `substations`-fält (INGET andra
+  synligt antal-fält). KATALOGRÄTTELSE: Borlänge/Falu ytterorter hade var sin
+  `issues`-text som inte matchade grindens godkännandelista — normaliserad (se
+  inventeringens §6). Informationsförfrågningarna R04 (borlange-energi) och R15
+  (falu-energi-vatten) FLYTTADE till `resolved_information_requests` (inte externt
+  besvarade i alla detaljer, men inte längre produktblockerande eftersom kontraktet
+  kräver leverantörens bekräftade band-ID/värde) — se inventeringens §7.
+- **Filer:** 6× katalograd, `policyregister.py` (6 nya policyer med TRE-FEM bundna
+  fält, två nya aktiveringspreflighter `kontrollera_volymbindning`/
+  `kontrollera_accessavgiftsbindning`), Jönköpings accessavgift: ny justeringstyp
+  `metered_access_fee` i `justeringar.py`/`faktura.py` (och TS-motsvarigheten) +
+  `KalkylatorPage.tsx` (enum-val, substations-injektion).
 - **Teststrategi:** som 5a, plus golden-värde som inkluderar flödesavgiften för varje rad,
   plus Jönköpings fyra accessavgiftsvärden testade var för sig och ett negativt test att ett
   okänt/tomt val blockerar.
 - **Visas för användaren:** mwh-läge, effekt/band + flöde (Jönköping dessutom det
-  obligatoriska accessavgiftsvalet); kr/schablon blockerade.
+  obligatoriska accessavgiftsvalet, INGET separat antal-undercentraler-fält); kr/schablon
+  blockerade.
 
 ## Batch 5c — Leverantörsvärde, säsongsflöde (8 tariffer, kräver `months`-motorsemantik)
 
