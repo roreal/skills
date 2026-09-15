@@ -274,3 +274,84 @@ implementation ändrades av Codex, ingen aktivering eller push godkändes.
 
 Fullständiga fynd och bindande rättningsordning finns i
 [`2026-09-15-001`](../../../reviews/2026/09/2026-09-15-omgranskning-batch-5a-fixrunda-1.md).
+
+## Rättningsrunda 2 — svar på omgranskning 2026-09-15-001
+
+Nya commit-hashar: `skills@ed2a63c`, `enkey-agents@c99ff79`, `neptune_academy@4f62fe8`.
+
+1. **P1 (falsk `rullande`):** infört ett nytt, additivt policytak
+   `takad_till_snapshot: bool` (Python `KravPost`) / `takadTillSnapshot?: boolean`
+   (TypeScript `KravPost`), ömsesidigt uteslutande med `rullande` och validerat i
+   konstruktorn i båda språken. Ger samma `ar_ej_helt_verifierbar`/
+   `arEjHeltVerifierbar`-effekt (tvingar `snapshot`) UTAN att kräva ett nytt
+   obligatoriskt UI-periodfält. Satt på sex av åtta leverantörer (Kil, Skövde,
+   Katrineholm, Öresund Totalvärme, Söderhamn, TEMAB) vars källor genuint
+   beskriver en fast, periodiskt reviderad grund — INTE bara de fyra granskningen
+   nämnde (Kil, Skövde, Katrineholm, Söderhamn); Öresund Totalvärme och TEMAB
+   visade sig vid källgranskning ha samma egenskap. C4 och Trollhättan behåller
+   `rullande=True` (källorna beskriver genuint rullande värden — granskningens
+   egna exempel). Källtexten för Katrineholm och Öresund Totalvärme rättad i
+   samma commit (tog bort felaktiga "uppdateras/omräknas löpande"-påståenden).
+2. **P1 (UI-provet):** `KalkylatorPageBatch5a.test.tsx` bygger nu de injicerade
+   testposterna direkt ur `PRISAR`/`POLICY_JSON` (den generatorbundna fixturen i
+   `batch5aRawData.ts`) i stället för handbyggda literaler. Lagt till kr-/
+   schablonblockeringstäckning. Granskningens förslag att byta det icke-ändliga
+   testfallet mot `'1e400'` verifierades EMPIRISKT INTE fungera: jsdom saniterar
+   varje sträng som överlöper till ett icke-ändligt tal till en TOM sträng vid
+   DOM-värdetilldelning för `<input type="number">`, identiskt med ogiltiga
+   strängar som `'abc'` (verifierat direkt mot jsdom; exakt brytpunkt `1e308`
+   kvar/`1e309` blir tomt). Detta är en genuin DOM/jsdom-spec-begränsning, inte en
+   produktbugg — testet behåller `'abc'`, omdöpt och kommenterat för att ärligt
+   beskriva begränsningen, och pekar till det oberoende, DOM-förbigående
+   icke-ändlighetsbeviset i `resultatkontrakt.batch5a.test.ts`.
+3. **P1 (fel åtta rader):** `tariffinventering-v22.md` hade fått FEL åtta rader
+   markerade (Borås, Borlänge, C4, Falu regionalnät, Falun, Finspång, Habo,
+   Jönköping — sju av dessa hör inte till Batch 5a), medan sju av de åtta RIKTIGA
+   Batch 5a-raderna (samtliga utom C4) hade lämnats med sin gamla
+   föraktiveringstext. Rättat: de sju felaktiga raderna återställda till sin
+   ursprungliga text, de sju missade riktiga raderna fick Batch 5a-statustexten.
+   En permanent mekanisk kontroll (`TestLevandeInventeringssync`, tre testmetoder)
+   lades till som parsar HELA dokumentet och verifierar att EXAKT de åtta riktiga
+   Batch 5a-ID:na — och inga andra — bär statustexten.
+4. **P2 (bandmatris):** ersatt de tidigare inkompletta, blandade
+   parametriseringarna med en komplett matris per leverantör (Python) som täcker
+   varje bands min- och maxgräns för samtliga sex icke-C4/icke-Skövde-leverantörer
+   (44 parametriserade prov). Hittade och rättade i samma svep ett äkta testfel:
+   Kils lägsta testpunkt använde `kw=0` (katalogbandets golv) men Kils policy har
+   `minvarde=8`, vilket gav `ValueError` — rättat till `kw=8` med omräknat facit
+   `9262.32`.
+5. **P2 (sessions-/verifieringsdokumentation):** Kil-VAT/Skövde-meningen och
+   R13-påståendet ovan i denna fil rättade (se `Rättelse`-noterna i
+   Källverifiering- och Katalogrättelser-avsnitten). `verifieringslista-fjarrvarmebolag.md`
+   fick de fem saknade "återverifierad 2026-09-14, Batch 5a"-annotationerna
+   (C4, Söderhamn, TEMAB, Trollhättan, Öresundskraft). Katalogens Kil-VAT-källpost
+   fick en dokumenterande `note` som bekräftar att handoffens `bolag.kil.se`-URL
+   och katalogens `kilsenergi.kil.se`-URL är byteidentiska aliaser (matchande
+   SHA-256) — ingen tariffdata ändrad, bara metadata; katalogens
+   `_FORVANTAD_KATALOG_SHA256` uppdaterad i samma commit.
+
+**Sidoeffekt upptäckt och rättad under verifiering:** det nya Python-fältet
+`takad_till_snapshot` serialiseras av `dataclasses.asdict()` i ALLA policyer, inte
+bara Batch 5a:s — vilket fick TVÅ redan incheckade generator-bundna
+`neptune_academy`-fixturer att driva isär från sin källa (upptäckt mekaniskt av
+deras egna driftprov). `batch3bGenerated.json` regenererad från den isolerade
+katalogkopian (verifierad semantiskt identisk i övrigt). `batch1RawData.ts`
+(handunderhållen) fick fältet tillagt i `Batch1KravRaw`-gränssnittet och
+`KRAV_DEFAULT`. En mindre `tsc`-typfix krävdes också i `byggPost`s parametertyp
+(`id: string` → `id: keyof typeof PRISAR`) efter UI-provets omskrivning.
+
+**Verifiering (denna rättningsrunda, körd på riktigt):**
+- Python: `pytest tools/tariffer/tests/` → **1439 passed, 4 skipped**.
+- TypeScript: `vitest run` → **1381 passed** (45 filer).
+- `tsc --noEmit`: rent.
+- Isolerad `npm run eval:build` (dist-eval, aldrig den skarpa `dist/`): bygger rent.
+- Katalog: 86 fysiska poster, `godkanda(katalog)` == 37.
+- Samtliga åtta Batch 5a-rader: `investigation.status="utreds"`,
+  `contract_required=True`, `production_ready=False`.
+- Skarpa `tariffer.generated.ts`: 39 produkter, noll Batch 5a-ID:n.
+- Disposition mekaniskt verifierad **37 implemented / 27 ready / 28 blocked av 92**
+  (mekanisk tally av dokumentets 78 `**Disposition:**`-fält: 29/25/24, plus
+  variant-tabellens 8/2/4 = 14 → 37/27/28 av 92 — oförändrad).
+- `git diff --check`: rent i alla tre repon.
+
+Ingen aktivering, ingen push. Väntar på Codex' nästa omgranskning.
