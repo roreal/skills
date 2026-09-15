@@ -5796,7 +5796,8 @@
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026",
@@ -6159,11 +6160,10 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R03"
-        ],
+        "request_ids": [],
         "conditions_sv": []
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "mjolby-svartadalen-energi-mjolby-2026",
@@ -6557,7 +6557,8 @@
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "norrenergi-norrenergi-2026",
@@ -6851,7 +6852,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026",
@@ -7065,7 +7067,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "ovik-energi-ornskoldsvik-2026",
@@ -7454,7 +7457,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "piteenergi-norrfjarden-och-sjulnas-2026",
@@ -7559,7 +7563,8 @@
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "sandviken-energi-sandviken-normal-2026",
@@ -8909,7 +8914,8 @@
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "telge-nat-telge-foretag-och-bostadsrattsforeningar-2026",
@@ -11475,8 +11481,9 @@
     },
     {
       "id": "R03",
-      "member_ids": [
-        "malarenergi"
+      "tariff_ids": [
+        "malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026",
+        "malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026"
       ],
       "category": "source_conflict",
       "question_sv": "Vilka nät hör sidans två olika tabeller märkta Västerås/Hallstahammar till? Bekräfta också fast avgift 2217 eller 2117 för 25–79 kW samt sommarperiod och fullständiga flödes-/överuttagsvillkor.",
