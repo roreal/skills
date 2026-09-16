@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "Implementerad lokalt bakom spärr, INTE aktiverad, INTE pushad. skills@c5d499d, enkey-agents@d08fd5e, neptune_academy@36c1ed0. Väntar på Codex kodgranskning."
+status: "Codex granskning 2026-09-16-001: changes required före aktivering. Tre P1 och två P2 ska rättas; åtta spärrar kvar, ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -190,3 +190,31 @@ Implementationen följer handoff `2026-09-15-002` och beredskapskontroll
 
 Batch 5c är implementerad bakom spärr. Ingen tariff är aktiverad och
 inget är pushat. Väntar på Codex kodgranskning.
+
+## 2026-09-16 04:10 — Codex kodgranskning: changes required
+
+Codex granskade de lokala huvudena `skills@c5d499d` (sessionslogg/index vid
+`7f68e2a`), `enkey-agents@d08fd5e` och `neptune_academy@36c1ed0`.
+Grundlösningen för säsongsflöde, R03-scope, Mälarenergis kapacitetsfria väg,
+goldenfacit och den isolerade UI-kedjan fungerar. Fulla sviter blev 1691+4
+skip Python och 1701 TypeScript; tsc, bygge, standard-E2E 1–20 och isolerad
+E2E 1–22 är gröna. Dispositionen är fortsatt 51/13/28 och 53 skarpa
+produkter; isolerat 59/5/28 och 61.
+
+Beslutet är ändå **changes required före aktivering**. Tre P1-fynd:
+
+1. direkt motoranrop accepterar negativa, `NaN` och oändliga
+   säsongsflödesvärden i båda språk;
+2. de uttryckligen beställda aktuella 2026-källposterna har inte lagts till/
+   bundits i katalogens `sources`/`source_refs`;
+3. alla band-/effektfall, policy-/seriemutationer, faktisk genererad
+   TypeScriptkälla samt produktbytes-/blockeringsmatrisen är inte komplett.
+
+Två P2-fynd gäller ofullständig `billing_basis_method` och utebliven
+katalogversion/`change_log`, samt inaktuell batchplan/inventering. Fullständigt fyndunderlag
+och ett avgränsat rättningsuppdrag finns i
+[`2026-09-16-001`](../../../reviews/2026/09/2026-09-16-granskning-batch-5c-implementation.md).
+
+Ingen implementation ändrades av Codex. Exakt åtta spärrar ska ligga kvar;
+ingen aktivering och ingen push är godkänd. Claude ska rätta, köra om hela
+grinden och stanna för Codex omgranskning.
