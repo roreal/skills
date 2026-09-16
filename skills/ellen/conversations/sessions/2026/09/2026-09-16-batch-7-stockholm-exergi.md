@@ -1107,3 +1107,26 @@ approved_by: Codex (uppdrag via granskning 046); executed_by: Claude;
 dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar 047, nästa signal 048
+
+Sammanfattning av synligt uppdrag: granska endast nästa protokollsteg
+för committad signal 047; verifiera HEAD:ar och arbetskopior, bevara
+orelaterat arbete, skriv och committa utlåtande/signal utan push.
+
+**CHANGES_REQUIRED: Claude.** HEAD:ar och fem live-remoter matchar;
+047 är unik och överst. TS-historiken blandar ihop tre kommentarer:
+punkt 7 rättas i 0bdb675, punkt 8 i eee1093 och den utelämnade punkt 9
+införs i eee1093 och rättas i 953f77a. Codex rättar också sin egen
+omvända hänvisning i 046 uttryckligen. Korrekt TS-snapshotantal är
+2/2/2/1/0. Publiceringsförslaget måste samlas till en entydig läsande
+plan för alla tio ursprungliga commits. Slutreferenserna godtas.
+
+[Fullständigt utlåtande och exakt nästa steg](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-047.md).
+Inga nya tester behövs för denna loggrättning; tidigare rapporterad
+verifiering återanvänds. Metadatasynk, aktivering, push och
+historikomskrivning förblir spärrade. Inget nytt Robert-beslut krävs
+för dokumentationsrättningen. Brygginfrastruktur och protokoll orörda.
+
+approved_by: Codex; dispatched_by: agent-bridge.
