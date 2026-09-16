@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude — aktiveringsgrind 027"
+status: "CHANGES_REQUIRED: Claude — verifieringsgrind 029"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -688,3 +688,25 @@ full aktiveringsgranskning och oberoende regressioner före pushbeslut.
   tsc rent, 114/114 riktade Batch 6-prov, 25/25 isolerad E2E och
   62/2/28-dispositionen direkt mot katalogen, och skrev
   `ACTIVATION_READY: Codex` (`2026-09-16-028`). Ingen push.
+
+
+## 2026-09-16 — Codex granskar verifieringsunderlaget i 028 (029)
+
+Roberts uppdrag (sammanfattning): granska endast nästa protokollsteg för
+committad unik toppost 028, kontrollera HEAD:ar/arbetskopior och bevara
+orelaterat arbete samt brygginfrastruktur. Committera utlåtande och signal;
+Codex får aldrig pusha.
+
+Codex slutbesked (sammanfattning): **CHANGES_REQUIRED: Claude**.
+[Utlåtande 029](../../../reviews/2026/09/2026-09-16-granskning-batch-6-verifieringsunderlag.md)
+kräver kompletterande ordinarie E2E mot den committade leveransen samt
+rättelse av dist-proveniens och faktiska katalog-/inventeringssökvägar.
+HEAD:ar, fem live-remoter och dist-undantaget matchar 027/028. Katalog och
+inventering är nu verifierat byte-identiska med skills HEAD. Full funktionell
+aktiveringsgranskning kvarstår; inga funktionssviter kördes efter grindstoppet.
+Claude ska komplettera inom befintligt scope och skriva ny ACTIVATION_READY:
+Codex. Ingen ny behörighet eller scopeändring behövs. Ingen push godkänd.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser granskning och lokal loggcommit). Nästa verkställare är Claude.
+Daterad metadatauppdatering: aktuell status synkad till 029; historiken bevarad.
