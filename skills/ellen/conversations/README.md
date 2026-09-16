@@ -85,6 +85,10 @@ Om känsligt innehåll måste omnämnas används markeringen `[REDACTED: orsak]`
    `conversations/` — minst `sessions/`, `handoffs/`, `reviews/` och
    `index.md` — inte bara `reviews/`.
 10. Granskningsloopen är självgående mellan assistenterna:
+    `APPROVED_FOR_IMPLEMENTATION: Claude` betyder att Claude ska implementera
+    det uttryckligen avgränsade handoff-scope som ligger bakom befintliga
+    katalogspärrar, utan aktivering eller push, och därefter skriva
+    `REVIEW_READY: Codex`.
     `REVIEW_READY: Codex` betyder att Codex ska börja granska utan nytt
     klartecken från Robert, och ett Codexutlåtande märkt
     `CHANGES_REQUIRED: Claude` betyder att Claude ska börja den avgränsade
@@ -103,12 +107,37 @@ Om känsligt innehåll måste omnämnas används markeringen `[REDACTED: orsak]`
     aktiveringsdiff, räkning och regressioner →
     `APPROVED_FOR_PUSH: Claude` → Claude gör en normal fast-forward-push av
     exakt de granskade committarna och verifierar varje remote-HEAD med
-    `git ls-remote`. Ingen ytterligare fråga till Robert krävs inom kedjan.
+    `git ls-remote`. Claude skapar därefter en sista, avgränsad skills-commit
+    med pushkvittot i session/handoff/index, pushar även den och verifierar
+    den slutliga skills-remote-HEAD:en på nytt. Ett pushkvitto får alltså inte
+    lämnas som enbart lokal commit. Ingen ytterligare fråga till Robert krävs
+    inom kedjan.
     Kedjan ska däremot stoppa med `CHANGES_REQUIRED` eller `BLOCKED` om tester
     faller, diffen innehåller orelaterade filer, HEAD inte är den granskade,
     remote har flyttats, en merge/rebase skulle behövas eller scope har
     ändrats. Force-push, reset, konfliktlösning genom överskrivning och
     aktivering av andra tariffer är aldrig automatiskt tillåtna.
+12. Rollfördelningen får inte beskrivas tvetydigt:
+    **Codex är granskare/godkännare och pushar aldrig; Claude är implementatör
+    och ensam pushverkställare; `agent-bridge` är endast signaltransport och
+    gör inga repoändringar.** Relevanta loggar använder fälten
+    `approved_by: Codex`, `executed_by: Claude` och
+    `dispatched_by: agent-bridge`. Formuleringen att "Codex pushade" är alltid
+    fel; korrekt formulering är att Codex godkände och Claude verkställde.
+13. Ett sessions-ID ska vara globalt unikt i `index.md`. Bryggan får inte
+    dispatcha en översta post vars ID förekommer mer än en gång i den
+    committade indexfilen. En historisk dubblett rättas med en daterad
+    rättelsepost, aldrig genom att tyst skriva om äldre sessionsinnehåll.
+
+## Körbar agentbrygga
+
+Den maskinläsbara kedjan kan köras av
+[`automation/agent-bridge.zsh`](automation/agent-bridge.zsh). Bryggan väntar
+på en ny, committad toppost i `index.md` och anropar `codex exec` eller
+`claude --print` beroende på signal. Den är seriell, har at-most-once-låsning
+och stoppar fail-closed vid fel eller om den anropade assistenten inte
+skriver en ny signal. Driftinstruktioner och säkerhetsgränser finns i
+[`automation/README.md`](automation/README.md).
 
 Konversationsloggar är historik och samarbetsunderlag. Kod, konfiguration, avtal, mätdata och beslutad teknisk dokumentation är fortfarande primära källor för hur Ellen faktiskt fungerar.
 
