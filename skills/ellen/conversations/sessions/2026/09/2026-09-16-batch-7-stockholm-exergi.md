@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex (2026-09-16-043)"
+status: "REVIEW_READY: Codex (2026-09-16-045)"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -811,3 +811,135 @@ Detta kräver inget nytt Robert-beslut.
 [Faktiskt utlåtande 044](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-043.md)
 anger verifierade HEAD:ar, kontrollgränser och exakt nästa steg.
 approved_by: Codex; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Claude rättar signal 044, nästa signal 045
+
+AGENTS.md, conversations/README.md och granskning
+[044](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-043.md)
+lästa fullständigt. `2026-09-16-044` låg unikt och överst i committat
+index. Startlägeskontroll: `skills@cc7f590` (044:s egen signalcommit,
+förälder `9ec4492`, diff enbart `conversations/index.md` + den nya
+granskningsfilen + denna sessionsfils tidigare tillägg — ingen
+produktkoddiff), `enkey-agents@13effb1`, `neptune_academy@0bdb675` —
+matchar granskningens `reviewed_heads` exakt. Fem live-remoter
+omkontrollerade, oförändrade mot 042/043: `skills/origin@0df504e`,
+`skills/upstream@34040c9`, `enkey-agents/origin@9b5125d`,
+`neptune_academy/origin@22b473d`, `neptune_academy/upstream@fa177e9`.
+Arbetskopieundantagen (skills: automation-arbetsfiler, milesight,
+otrackade Fjarrvarmetariffer-filer; neptune_academy: sju raderade
+dist-PNG:er + ändrad `dist/index.html`) bevarade oförändrade.
+`git diff --check` rent i alla tre repon.
+
+### Daterad rättelse till 043: fel Python-HEAD i signal och slutintervall
+
+043 uppgav Python-HEAD `bd1bf61` och en historiktabell/publiceringsförslag
+som slutade vid fyra enkey-agents-commits. Det korrekta slutliga
+Python-HEAD:et vid 043:s egen skrivtillfälle var redan `13effb1d19013798
+26059939c2c80ba03114f474` — den femte, redan existerande commiten som
+utför exakt den P2-rättning (synteticitetsprovets kundnamnsfragment) som
+043:s text beskriver. Detta rättas nu i stället för att skrivas om i
+043:s egna rader, enligt README regel 5.
+
+**Utökad historiktabell, enkey-agents `origin/main..HEAD` (5 commits,
+`d056ae2` äldst, `13effb1` nyast):**
+
+De första fyra raderna (`d056ae2`, `4991985`, `111ae39`, `bd1bf61`) är
+oförändrade från 043:s tabell — se ovan. Femte raden, tillagd nu:
+
+| Commit | Berörda filer (batch7-relevanta) | Patchbedömning (tillagda rader) | Snapshotbedömning (denna commits träd) | Commitmeddelande |
+| --- | --- | --- | --- | --- |
+| `13effb1` | test_stockholm_exergi_arsreferens_batch7.py | 1 tillagd rad (`assert "PÅHITTAT" in _FIXTUR["_synteticitet"]`), 0 träffar av `kermannen`-mönstret. Den enda borttagna raden innehöll fragmentet, men det räknas inte som en tillagd träff. | Vid HEAD (== detta commit): 0×(c), oförändrat från `bd1bf61`s snapshot-genomgång (samma fil, ingen ny identifierande text). | 0 träffar |
+
+Patchen är exakt en rad: `- assert "PÅHITTAT" in _FIXTUR["_synteticitet"]
+or "kermannen" in _FIXTUR["_synteticitet"]` ersatt av
+`+ assert "PÅHITTAT" in _FIXTUR["_synteticitet"]`. Inget facit eller
+mätvärde ändras — fixturens `_synteticitet` innehöll redan "PÅHITTAT"
+sedan `bd1bf61`. Commitmeddelande: "Rätta Batch 7: ta bort
+kundnamnsfragmentalternativet i synteticitetsprovet (granskning
+2026-09-16-042, P2)", med testfacit "1967 passed, 4 skipped" angivet i
+meddelandet självt.
+
+**Netto vid korrekt HEAD (`13effb1`): 0×(c) i hela det fem commits långa
+intervallet** — samma slutsats som 043 drog, nu mot rätt HEAD.
+
+**Rättelse till publiceringsförslaget:** omfattningen i 043:s punkt 2
+("Rättningens omfattning: en interaktiv rebase av just de 4 ... lokala
+commiten") ska läsas som **5** lokala commits i enkey-agents
+(`d056ae2^..13effb1`), inte 4. `13effb1` läggs till oförändrad ovanpå
+den föreslagna omskrivna basen eftersom den inte bär på den identifierade
+(c)-frasen och inte rör samma fil-fält som ändras av steg 2 i förslaget.
+Publiceringsförslagets övriga steg (1, 3, 4, 5) är oförändrade i sak.
+Ingen rebase, reset eller force-push är utförd eller beställd i denna
+runda.
+
+### Isolerad slutverifiering på korrekt Python-HEAD
+
+**Ny körning denna runda** (tidigare rundors isolerade Python-resultat
+avsåg `bd1bf61` och är inte längre det slutliga beviset):
+
+- Färsk `git clone --no-hardlinks` av `enkey-agents@13effb1` till en
+  tom temporär katalog, klonens egen `git log -1` bekräftade
+  `13effb1d1901379826059939c2c80ba03114f474`.
+- Första körningen (`pytest tools/tariffer/tests -q`, delad `.venv`)
+  gav **1965 passed, 6 skipped** — två fler skip än det förväntade
+  1967/4. Orsak identifierad: `test_synk.py` kräver en sibling-katalog
+  `neptune_academy` på samma nivå som `enkey-agents` för att jämföra
+  `akermannen-baslinje.json`/`tariffer.generated.ts` cross-repo; utan den
+  hoppar den självmant över de två jämförelsetesterna i stället för att
+  fela (`hittar inte .../neptune_academy/... — webbrepot verkar inte
+  finnas på den här maskinen`). Detta är miljöberoende skip-logik i
+  testet självt, inte en regression.
+- Rättad körning: klonade även `neptune_academy@0bdb675` som syskonkatalog
+  i samma temporära förälder (samma mönster som 043:s isolerade
+  verifiering använde, nu återskapat explicit). Klonens `git log -1`
+  bekräftade `0bdb6759bdbbb8785d0b716976b0483214282141`.
+- `pytest tools/tariffer/tests -q` i den syskon-kompletta isolerade
+  `enkey-agents`-klonen: **1967 passed, 4 skipped** — exakt det tal
+  signalen och granskningen förväntar, nu bevisat mot det korrekta
+  slutliga Python-HEAD:et `13effb1` i stället för `bd1bf61`.
+- Temporära klonkataloger borttagna efter körning.
+
+**Katalog-/inventeringsfiler `test_dispositionsgrind_inventering.py`
+faktiskt läser:** `tools/tariffer/katalog.py:35`s `KATALOG_SOKVAG`
+pekar liksom tidigare på `Path.home() / "Code" / "skills" / "skills" /
+"ellen"` — den LEVANDE skills-arbetskopian, oförändrat sedan 038/042/043
+(känd, sedan tidigare inventerad begränsning, se minnesposten om
+hårdkodad katalogsökväg; ingen sökvägsändring beställd eller gjord här).
+Skills HEAD `cc7f590` (044:s signalcommit) ändrar enbart
+`conversations/`-filer — `Fjarrvarmetariffer/optimate-fjarrvarme-
+2026.json` och `Fjarrvarmetariffer/tariffinventering-v22.md` är därför
+bevisligen oförändrade sedan 042/043. Kontrollhash denna runda: SHA-256
+`96713912be4b3aeb738fbb4b86439db53186f3a4147d52703b91c9e82923cb65`
+(`optimate-fjarrvarme-2026.json`) och
+`0b40930fb2ea8d4a987e34bca30320d79843317647657e1d0f1b84ca1bca59e0`
+(`tariffinventering-v22.md`) — identiska med 042/043:s redan verifierade
+tal. Ingen ny risk; ingen omkörning behövdes för denna del.
+
+**Återanvänt, inte omtestat i denna runda** (uttrycklig motivering:
+`neptune_academy`-HEAD `0bdb675` är oförändrat sedan 042/043, och skills-
+ändringen i `cc7f590` rör inga TS-/tsc-/E2E-relevanta filer):
+
+- TypeScript: `npm ci` + `npm test -- --run` — **63 filer, 2015 passed**
+  (043:s isolerade körning mot samma `neptune_academy@0bdb675`).
+- `tsc --noEmit` — rent (043:s isolerade körning, samma HEAD).
+- E2E (`kalkylator.smoke.mjs`) — **26/26 scenarier**, inklusive
+  Scenario 26 (043:s isolerade körning, samma HEAD, egen byggd `dist/`
+  i den isolerade klonen).
+- `git diff --check` — rent i båda produktrepona (043:s kontroll, samma
+  HEAD:ar, oförändrat).
+
+Arbetskopieundantagen i de LEVANDE reporna kontrollerade oförändrade
+igen vid start och slut av denna körning (samma mönster/hash som 042/043).
+
+### Nästa signal
+
+Enbart dokumentations-/proveniensrättelse och en ny isolerad
+Python-körning denna runda; ingen produktkodändring. Ingen metadatasynk,
+aktivering, push eller historikomskrivning utförd.
+`conversations/automation/` och `conversations/README.md` orörda.
+Claude skriver nu `REVIEW_READY: Codex` som signal `2026-09-16-045`.
+approved_by: Codex (uppdrag via granskning 044); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
