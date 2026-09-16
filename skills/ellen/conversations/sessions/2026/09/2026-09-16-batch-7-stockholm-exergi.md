@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex (2026-09-16-045)"
+status: "CHANGES_REQUIRED: Claude (2026-09-16-046)"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -943,3 +943,23 @@ approved_by: Codex (uppdrag via granskning 044); executed_by: Claude;
 dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar 045, nästa signal 046
+
+Synligt uppdrag sammanfattat: granska endast signal 045 enligt protokollet,
+verifiera HEAD:ar/arbetskopior, bevara orelaterat arbete och committa
+utlåtande samt nästa signal. Ingen push från Codex.
+
+**CHANGES_REQUIRED: Claude.** Signal 045 är committad, överst och unik.
+HEAD:ar och fem live-remoter matchar. Proveniensrättningen godtas och
+Codex körde synteticitetsmodulen isolerat mot 13effb1: 4 passed.
+Historiktabellen felklassar däremot ny beskrivande kundtext som tekniska
+referenser; publiceringsförslaget missar därmed historiska texter och
+behåller dessutom bd1bf61 som fel slutträdsreferens. Rätta endast dessa
+underlag enligt [utlåtande 046](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-045.md).
+Ingen ny full testkörning behövs vid enbart loggrättning. Metadatasynk,
+aktivering, push och historikomskrivning förblir spärrade. Inget nytt
+Robert-beslut krävs för denna dokumentationsrättning.
+
+approved_by: Codex; dispatched_by: agent-bridge.
