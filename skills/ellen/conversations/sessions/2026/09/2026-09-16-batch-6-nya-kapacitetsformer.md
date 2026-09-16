@@ -461,3 +461,31 @@ Ingen aktivering eller push. Inget nytt beslut från Robert behövs.
 approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
 (avser endast denna granskning och lokala loggcommit). Nästa verkställare
 är Claude; bryggan förmedlar endast signalen.
+
+## 2026-09-16 — Claude verkställer rättningssteget för granskning 023 (024)
+
+**REVIEW_READY: Codex.** Utfört de fyra punkterna i [Utlåtande 023](../../../reviews/2026/09/2026-09-16-granskning-batch-6-arbetskopiegrind.md) inom befintligt scope. Inget nytt Robert-beslut krävdes.
+
+**1. Status- och HEAD-kontroll.** AGENTS.md, conversations/README.md och Ellens SKILL.md lästes fullständigt. Committad toppost var 023 och dess sessions-ID förekom exakt en gång i index.md. Lokala HEAD:ar: `skills@9ada075` (226d3a4 + 023:s egen loggcommit), `enkey-agents@5f079d7`, `neptune_academy@150a555` — matchar `reviewed_heads`/den efterföljande loggcommitten i granskning 023. Neptunes dist-avvikelse kvarstod oförändrad: samma sju raderade PNG (identiska blob-SHA:er `70e8bff4…`, `e762946…`, `e304015a…`, `80f92916…`, `1909168a…`, `c5e137ce…`, `99b75381…`) och samma index.html-ändring (`index-BQPLHK95.js`→`index-CNLZUEVG.js`, `index-TfUc0qB4.css`→`index-DLEzHTAQ.css`, worktree-hash `736f1b2`). Inga andra spårade filer rörda; milesight-undermodulen och skills otrackade användarfiler orörda. Ingen reset, clean eller överskrivande återställning utförd.
+
+**2. Isolerad leveransverifiering.** `git worktree`-kopior av exakt de committade HEAD:arna `enkey-agents@5f079d7` och `neptune_academy@150a555` skapades i `/tmp/batch6-verify/` (utanför arbetskopiorna, ingen mutation av dem). Körda kommandon och resultat:
+- `python -m pytest tools/tariffer/tests -q` (venv från `enkey-agents/.venv`) → **1904 passed, 4 skipped**.
+- `npx tsc --noEmit` → rent.
+- `npm run test` (vitest, efter `npm ci`) → **58 filer, 1958 test, 0 failed**.
+- `npm run test:e2e` → 23 aktiva scenarier godkända, Scenario 24/25 avsiktligt överhoppade i den ordinarie sviten (som avsett; Batch 6 är fortsatt `investigation.status="utreds"`).
+- `npm run test:e2e:batch6-isolated` → samtliga 25 scenarier godkända, inklusive Scenario 24 (Borås) och 25 (Finspång) mot en isolerad kandidatbyggnad.
+
+Samtliga siffror matchar 022:s rapporterade resultat exakt; ingen regression funnen. Worktree-kopiorna togs bort efter verifieringen (`git worktree remove --force`); arbetskopiornas dist-avvikelse och övriga otrackade filer kontrollerades oförändrade efter borttagningen (identiska blob-SHA:er och worktree-hash som före steg 1).
+
+**3. Rättelse av 022:s sammanblandade räkning.** 022:s formulering "Skarp disposition 59/5/28 och 61 katalograder/63 produkter" blandar ihop skarpt och isolerat läge. Enligt tidigare kontrollpunkter ([granskning 021](../../../reviews/2026/09/2026-09-16-omgranskning-batch-6-kontrollmangd-e2e.md), rad 111–112, och [granskning 019](../../../reviews/2026/09/2026-09-16-omgranskning-batch-6-rakning-ui.md), rad 65–77) gäller i stället:
+
+- **Skarpt** (skarp katalog): disposition 59/5/28, 59 godkända katalograder, 61 produkter.
+- **Isolerat** (isolerad kandidat): disposition 62/2/28, 61 katalograder, 63 produkter.
+
+Denna rättelse ändrar inte den äldre repliken i 022; den läggs här som daterat tillägg. Ingen kod eller testlogik ändras av denna punkt — endast en redovisningsrättelse.
+
+**4. Signal.** Ingen aktivering, ingen push i denna runda. P1/P2-sakgranskning och oberoende regressioner kvarstår för Codex. Nästa signal: `REVIEW_READY: Codex`, sessions-ID `2026-09-16-024`.
+
+## Ändringslogg (2026-09-16-024)
+
+- `2026-09-16T17:09:00+02:00` – Claude verkställde rättningssteget för granskning 023: bevarade dist-avvikelsen (blob-/hash-identisk före och efter), verifierade den committade leveransen isolerat (Python 1904 passed/4 skipped, TS 1958 passed, tsc rent, `test:e2e` 23/23, `test:e2e:batch6-isolated` 25/25 inkl. Scenario 24/25), rättade 022:s sammanblandade skarpt/isolerat-räkning och skrev `REVIEW_READY: Codex` (`2026-09-16-024`). Ingen aktivering, ingen push.
