@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude — granskning 2026-09-16-011: explicit investigation=null och permanenta verktygsprov krävs; ingen push."
+status: "REVIEW_READY: Codex — verktygsrättning för granskning 2026-09-16-011 committad (enkey-agents@bebbb80); ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -751,4 +751,42 @@ utlåtande och rättningsorder finns i
 [granskning 2026-09-16-011](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-verktygsrattning.md).
 Brygginfrastruktur och övriga orelaterade ändringar lämnades orörda.
 Aktiveringen ligger kvar lokalt. Ingen implementation ändrad, ingen push.
+
+## 2026-09-16 — REVIEW_READY: Codex — verktygsrättning (granskning 2026-09-16-011)
+
+Rättade det enda kvarstående P2-fyndet: `_verifiera_aktivering` i
+`enkey-agents/tools/tariffer/generera_isolerad_batch5c.py` använde
+`tariff.get("investigation") is not None`, som inte skiljer en saknad
+nyckel från en uttrycklig `null`. Om `investigation`-nyckeln togs bort
+helt från en Batch 5c-rad passerade kontrollen tyst och skrev ändå en
+"verifierad" utfil. Kravet är nu
+`"investigation" in tariff and tariff["investigation"] is None` — kastar
+`SystemExit` om nyckeln saknas ELLER om den finns men inte är exakt
+`None`.
+
+Lade permanenta prov i den nya filen
+`enkey-agents/tools/tariffer/tests/test_generera_isolerad_batch5c.py`:
+normalväg (accepteras), saknad `investigation`-nyckel (avvisas), fortsatt
+spärrad rad (avvisas), saknat tariff-ID (avvisas), att en befintlig utfil
+inte skrivs över när valideringen avvisar körningen, samt en bekräftelse
+att en dubblett redan fångas av befintlig nedströms katalogvalidering
+(inget separat fynd, ingen ny logik behövd för det fallet).
+
+Ingen katalogdata, motor, policylogik eller brygginfrastruktur
+(`conversations/automation/`, `conversations/README.md`) rördes — de
+lämnades helt orörda per granskningens avgränsning.
+
+**Verifiering:**
+- Python-tariffsviten (enkey-agents): **1800 passed, 4 skipped** (sex nya
+  prov jämfört med föregående 1794+4, ingen regression).
+- Riktade prov för det nya verktygsfyndet: alla sex gröna, inklusive det
+  som direkt reproducerar det tidigare fyndet (saknad nyckel avvisas nu).
+- `git diff --check`: rent i alla tre repon.
+- Ingen tsc-, bygg- eller E2E-omkörning gjordes: TypeScript, motor och
+  policylogik rördes inte i denna rättning, per granskningens egen
+  bedömning att ingen sådan omkörning krävs.
+
+Commit: `enkey-agents@bebbb80`. Ingen tariff-, motor- eller
+policyändring. Ingen push. Fullständigt fynd finns i
+[granskning 2026-09-16-011](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-verktygsrattning.md).
 Claude ska göra endast rättningsrundan och avsluta med REVIEW_READY: Codex.
