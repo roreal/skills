@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "REVIEW_READY: Codex (2026-09-16-043)"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -592,3 +592,200 @@ Inget nytt Robert-beslut behövs för denna avgränsade komplettering.
 [Faktiskt utlåtande 042](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-041.md)
 anger fynd, verifieringsgränser och exakt nästa steg.
 approved_by: Codex; dispatched_by: agent-bridge.
+
+## 2026-09-16 — Claude slutför granskning 042: `REVIEW_READY: Codex` (043)
+
+Startlägeskontroll: `skills@c3ae920` (042:s egen signalcommit, förälder
+`4d8dc13`), `enkey-agents@bd1bf61`, `neptune_academy@0bdb675` — matchar
+042:s `reviewed_heads` exakt. Fem live-remoter omkontrollerade och
+oförändrade mot 042: `skills/origin@0df504e`, `skills/upstream@34040c9`,
+`enkey-agents/origin@9b5125d`, `neptune_academy/origin@22b473d`,
+`neptune_academy/upstream@fa177e9`. Arbetskopieundantagen (skills:
+`conversations/automation/`-arbetsfiler, milesight, otrackade
+Fjarrvarmetariffer-filer; neptune_academy: sju raderade dist-PNG:er +
+ändrad `dist/index.html`) bevarade orörda. `git diff --check` rent i
+alla tre repon.
+
+### P2 — synteticitetsprovet rättat
+
+`tools/tariffer/tests/test_stockholm_exergi_arsreferens_batch7.py:98`
+kräver nu enbart `"PÅHITTAT" in _FIXTUR["_synteticitet"]`; det gamla
+kundnamnsfragmentalternativet är borttaget. Fixturens `_synteticitet`
+innehåller redan "PÅHITTAT" sedan bd1bf61, så inget facit/mätvärde
+ändrat. `4 passed` för hela testfilen.
+
+### P1 — komplett historiktabell, HELA slutintervallet från respektive origin/main
+
+Sökfragmentet är detsamma som 042 använde: skiftlägesokänsligt
+`kermannen` (fångar "Åkermannen" oavsett diakritiskt första tecken).
+Träff kopieras inte in här — bara antal, fil och klassificering.
+Klasser: **(a)** fryst baslinje/pre-existerande text utanför denna
+batchs diff, **(b)** mekanisk/teknisk referens (filnamn, symbolnamn,
+återanvänd redan etablerad terminologi), **(c)** genuint ny
+identifierande fritext introducerad av denna batch.
+
+**Viktigt fristående faktum, inte en slutsats:** föreningens fullständiga
+namn (`Brf` + husnummer) förekommer redan, sedan tidigare, på det
+LEVANDE `enkey-agents/origin/main` — i `tools/tariffer/faktura.py`
+(modul-docstring, rad 8–9, verifierat oförändrat och redan pushat,
+utanför denna batchs diff). Samma mönster ("Åkermannen"/possessivformer)
+finns sedan tidigare även i redan pushade delar av
+`neptune_academy/origin/main` (`besparingsvarde.test.ts`,
+`energiPotential.test.ts`, `fjarrvarme.ts`, `fjarrvarme.test.ts`,
+`stockholmExergiKontrakt.test.ts`) — verifierat genom att dessa exakta
+rader inte förekommer som tillagda rader i någon Batch 7-commit, bara
+som oförändrad diff-kontext. Detta är enbart en observation av
+nuvarande publikt tillstånd, inte ett beslut om vad som är godtagbart;
+Codex avgör vilken vikt faktumet ska ges.
+
+**enkey-agents, `origin/main..HEAD` (4 commits, d056ae2 äldst):**
+
+| Commit | Berörda filer (batch7-relevanta) | Patchbedömning (tillagda rader) | Snapshotbedömning (denna commits träd) | Commitmeddelande |
+| --- | --- | --- | --- | --- |
+| `d056ae2` | faktura.py, generera.py, policyregister.py, resultatkontrakt.py, akermannen-arkiv-batch7.json (ny), stockholm-exergi-2026-arsreferens-syntetisk.json (ny), test_generera_katalog.py, test_lidkoping_signed_monthly_flow.py, test_policyregister.py, test_stockholm_exergi_arkiv_batch7.py (ny), test_stockholm_exergi_arsreferens_batch7.py (ny), test_stockholm_exergi_batch7_arsserie.py (ny), test_stockholm_exergi_kontrakt.py | 21 träffar. 1×(c): fixturens `_beskrivning` innehöll vid denna commit föreningens fulla namn i fritext (rättat framåt av `4991985`, se nedan — kommiten som satte det kvarstår därmed i lokal historik tills en eventuell publicering). Övriga 20×(b): filnamn/symbolreferenser och återanvändning av redan etablerad "Åkermannen"-terminologi i nya docstrings/kommentarer/testnamn. | Vid detta commits eget träd (inte HEAD) finns (c)-frasen kvar olöst — den är inte rättad förrän `4991985`. | 0 träffar |
+| `4991985` | generera.py, akermannen-arkiv-batch7.json, test_batch_2/3/3b, test_dispositionsgrind_inventering.py, test_leverantorsvarde_batch5b_kontrakt.py, test_stockholm_exergi_arkiv_batch7.py, test_stockholm_exergi_batch7_arsserie.py | 1 träff, (b): den omskrivna `_beskrivning`n ("samma anläggnings ... som akermannen-baslinje.json") är en teknisk filnamnsreferens, inte en namngivning av föreningen; ersätter det (c)-fall som fanns i `d056ae2`. | Vid detta commits träd är `d056ae2`s (c)-fras borta ur den aktuella fixturfilen. | 1 träff, (b): filnamnsreferens i den beskrivande listpunkten "akermannen-arkiv-batch7.json/test_stockholm_exergi_arkiv_batch7.py: tog bort föreningsnamnet..." |
+| `111ae39` | test_stockholm_exergi_batch7_arsserie.py | 0 träffar | 0 träffar | 0 träffar |
+| `bd1bf61` | policyregister.py, stockholm-exergi-2026-arsreferens-syntetisk.json, test_stockholm_exergi_arkiv_batch7.py, test_stockholm_exergi_arsreferens_batch7.py, test_stockholm_exergi_batch7_arsserie.py | 2 träffar, båda (b): `_synteticitet`s filnamnsreferens och testassertionens (nu rättade P2-)villkor. | Vid HEAD (== detta commit): 0×(c). Kvarvarande träffar i berörda filer vid HEAD är uteslutande (a)/(b) (se filgenomgång nedan). | 0 träffar |
+
+Fullständig snapshot-genomgång vid HEAD (`bd1bf61`) av alla filer som
+någonsin träffades i intervallet: `faktura.py` (5 träffar, samtliga
+(a) — rad 8–9/64/1371/1551, verifierat oförändrade av `d056ae2`s diff,
+alltså redan pushade sedan tidigare), `policyregister.py` (1 träff,
+(a) — rad 65, oförändrad kontextrad, ej tillagd av batch7),
+`resultatkontrakt.py` (1 träff, (a) — rad 1586, oförändrad kontextrad),
+`akermannen-arkiv-batch7.json` (2 träffar, (b) — filnamnsreferenser i
+`_beskrivning`/`_kapacitet_kw_2026_kalla`), `stockholm-exergi-2026-
+arsreferens-syntetisk.json` (1 träff, (b) — filnamnsreferens i
+`_synteticitet`), `test_stockholm_exergi_arkiv_batch7.py` (5 träffar,
+(b) — modul-docstring/importrader, alla filnamn/funktionsnamn),
+`test_stockholm_exergi_arsreferens_batch7.py` (5 träffar, (b) —
+docstring/funktionsnamn/filnamn), `test_stockholm_exergi_batch7_
+arsserie.py` (1 träff, (b) — kommentarrad med funktionsnamnet
+`test_effektgransen_lever_kvar_som_akermannen_fixturedata`),
+`test_stockholm_exergi_kontrakt.py` (5 träffar, (a) — pre-existerande
+fil/rader, ingen av dem tillagd av `d056ae2`s diff mot filen). **Netto
+vid HEAD: 0×(c) i hela intervallet.**
+
+**neptune_academy, `origin/main..HEAD` (5 commits, 89924b6 äldst):**
+
+| Commit | Berörda filer (batch7-relevanta) | Patchbedömning (tillagda rader) | Snapshotbedömning (denna commits träd) | Commitmeddelande |
+| --- | --- | --- | --- | --- |
+| `89924b6` | tariffer.generated.ts, KalkylatorPageStockholmBatch7.test.tsx (ny), besparingsvarde.test.ts, besparingsvardeStockholmBatch7.test.ts (ny), energiPotential.test.ts, fjarrvarme.test.ts, fjarrvarme.ts, resultatkontrakt.ts, stockholmExergiKontrakt.test.ts | 8 träffar, samtliga (b): 6 i `besparingsvarde.test.ts` är en nästan ordagrann ombalansering av en rad/testnamn som redan fanns i motsvarande BORTTAGNA rader i samma diff (mekanisk migrering, inte ny exponering — jämförbar tidigare text fanns redan i filen före denna commit); 2 (rad 394, 459) är filnamns-/kommentarreferenser som upprepar samma redan etablerade term. | Ingen ny (c)-fras vid detta commits träd. | 0 träffar |
+| `3aa382e` | e2e/kalkylator.smoke.mjs | 0 träffar | 0 träffar | 0 träffar |
+| `eee1093` | akermannen-arkiv-batch7.json (ny), besparingsvardeStockholmBatch7.test.ts, resultatkontrakt.stockholmBatch7Arsserie.test.ts (ny), resultatkontrakt.ts, stockholmExergiArkivBatch7.test.ts (ny) | 8 träffar. 2×(b) i den nya fixturens `_beskrivning`/`_kapacitet_kw_2026_kalla` (filnamnsreferenser, TS-spegling av Pythons redan rättade fixturtext). 1×(c) vid detta commits träd: `resultatkontrakt.stockholmBatch7Arsserie.test.ts` rad 8 innehöll possessivformen "Åkermannens tolvmånaders-fixtur" (rättat framåt av `953f77a`, se nedan). Övriga 5×(b): filnamns-/importreferenser i `stockholmExergiArkivBatch7.test.ts`. | Vid detta commits eget träd finns (c)-frasen kvar olöst — rättas inte förrän `953f77a`. | 1 träff, (b): filnamnsreferens i listpunkten "__fixtures__/akermannen-arkiv-batch7.json/stockholmExergiArkivBatch7.test.ts (nya): ..." |
+| `953f77a` | resultatkontrakt.stockholmBatch7Arsserie.test.ts | 0 träffar (raden byts till "den befintliga tolvmånaders-", ingen ny träff) | Vid detta commits träd är `eee1093`s (c)-fras borta. | 0 träffar |
+| `0bdb675` | besparingsvardeStockholmBatch7.test.ts | 0 träffar | 0 träffar | 0 träffar |
+
+Fullständig snapshot-genomgång vid HEAD (`0bdb675`) av alla filer som
+någonsin träffades: `tariffer.generated.ts` (1 träff, (a) — genererad
+datarad, verifierat oförändrad av `89924b6`s diff, alltså redan
+publicerad sedan tidigare i den genererade artefakten),
+`__fixtures__/akermannen-arkiv-batch7.json` (2 träffar, (b) —
+filnamnsreferenser, speglar den rättade Python-fixturen),
+`besparingsvarde.test.ts` (27 träffar, (a) — samtliga verifierat
+oförändrade av `89924b6`s diff mot filen, pre-existerande sedan
+tidigare på `origin/main`), `energiPotential.test.ts` (17 träffar,
+(a) — 0 tillagda rader i `89924b6`s diff mot filen),
+`fjarrvarme.test.ts` (3 träffar, (a) — kontextrader, ej tillagda),
+`fjarrvarme.ts` (2 träffar, (a) — kontextrader, ej tillagda),
+`stockholmExergiArkivBatch7.test.ts` (5 träffar, (b) — modul-
+docstring/importrader), `stockholmExergiKontrakt.test.ts` (4 träffar,
+(a) — kontextrader, ej tillagda av `89924b6`s diff),
+`resultatkontrakt.stockholmBatch7Arsserie.test.ts` (0 träffar vid
+HEAD). **Netto vid HEAD: 0×(c) i hela intervallet.**
+
+**Sammanfattning:** i båda repona fanns vid ETT mellanliggande commit
+(`d056ae2` respektive `eee1093`) en (c)-klassad fras som rättades i
+nästa commit i samma rättningsrunda. Vid respektive HEAD är nettot
+0×(c). De två (c)-fraserna finns kvar i den lokala, opushade historiken
+(inte i det publicerade slutträdet) om just de commit-objekten skulle
+publiceras oförändrade.
+
+### P1 — konkret läsande publiceringsförslag (ENDAST förslag, ingen åtgärd utförd)
+
+Omfattning: exakt de lokala, opushade commit-intervallen ovan — `enkey-
+agents` `d056ae2^..bd1bf61` (4 commits) och `neptune_academy`
+`89924b6^..0bdb675` (5 commits). Ingen av dessa 9 commits finns på
+någon av de fem live-remoterna (kontrollerat med `git ls-remote` ovan).
+
+1. **Bevarande innan något rörs:** skapa en lokal backup-tagg vid
+   nuvarande spets i respektive repo (`git tag backup/batch7-pre-
+   publicering-cleanup <HEAD>`) och/eller ett `git bundle create`-
+   snapshot, innan någon historikoperation ens förbereds. Arbetskopian
+   rörs inte förrän det omskrivna trädet är bevisat identiskt.
+2. **Rättningens omfattning:** en interaktiv rebase av just de 4 (enkey-
+   agents) respektive 5 (neptune_academy) lokala commiten, där enbart
+   `d056ae2`s (enkey-agents) och `eee1093`s (neptune_academy) blob
+   ändras för att ta bort den ena identifierade (c)-frasen i respektive
+   commit, med den ordalydelse som redan är godkänd i `4991985`/
+   `953f77a`. Ingen annan rad, commit eller prisdata rörs. Eftersom
+   `4991985` redan ändrar samma fält i enkey-agents (och `953f77a` i
+   neptune_academy) är detta INTE en trivial mekanisk rebase — den
+   efterföljande commiten måste räknas om mot den nya basen, vilket
+   kräver en faktisk testkörning av det omskrivna resultatet, inte
+   bara en antagen konfliktfri replay.
+3. **Bevis om identiskt sluträd:** efter rebase ska `git diff bd1bf61
+   <nytt-HEAD>` (enkey-agents) och `git diff 0bdb675 <nytt-HEAD>`
+   (neptune_academy) vara tomma — det bevisar att omskrivningen bara
+   ändrar historiken, inte det redan granskade och testade slutresultatet.
+   Hela testsviterna (Python/TS/tsc/isolerad E2E) ska köras om mot det
+   nya HEAD:et och ge samma tal som denna rundas isolerade verifiering
+   nedan.
+4. **Granskning av HELA den publicerbara historiken:** eftersom en
+   rebase byter commit-hashar för alla nio commits måste hela den nya
+   sekvensen genomgå samma per-commit-tabell som ovan på nytt (nya
+   hashar, samma klassificeringsmetod) innan Codex kan godkänna
+   publicering — en gammal tabell mot gamla hashar duger inte.
+5. **Inget härutöver är beställt eller utfört:** ingen rebase, reset,
+   force-push eller branchersättning har körts i denna runda. Ett
+   framtida, separat mandat avgör om steg 1–4 ska genomföras; det är
+   inte en förutsättning för denna rättningsrundas leverans.
+
+### P2 — isolerad verifieringsgrind, avslutad
+
+Färska `git clone --no-hardlinks` av `enkey-agents@bd1bf61` och
+`neptune_academy@0bdb675` i tillfälliga kataloger, borttagna efter
+körning:
+
+- Python (delad `.venv`, samma tolk som repots egen `.venv/bin/python`):
+  `pytest tools/tariffer/tests` → **1967 passed, 4 skipped** — matchar
+  041:s rapporterade tal, nu bevisat mot en isolerad kopia av exakt
+  detta HEAD.
+- TypeScript: ren `npm ci` (247 paket) → `npx tsc --noEmit` rent →
+  `npm test -- --run` → **63 filer, 2015 passed**.
+- E2E: `npm run build` (ren build i den isolerade kopian) → `npm run
+  test:e2e` → **26/26 scenarier**, inklusive Scenario 26 (Stockholm
+  Exergi, granskning 2026-09-16-033).
+
+Faktiska sökvägar, verifierade under körningen: `tools/tariffer/
+katalog.py:35` (`KATALOG_SOKVAG`) och `tools/tariffer/tests/
+test_dispositionsgrind_inventering.py:52` läser båda katalogen/
+inventeringen från `Path.home() / "Code" / "skills" / "skills" /
+"ellen"` — dvs. den LEVANDE skills-arbetskopian, inte en isolerad kopia.
+Ingen ändring av sökvägsarkitekturen är beställd eller gjord. Under
+denna körning verifierades att de två lästa filerna på den levande
+sökvägen är byte-identiska med skills HEAD (`c3ae920`, ärvt oförändrat
+från 041/`4d8dc13`):
+`optimate-fjarrvarme-2026.json` → SHA-256
+`96713912be4b3aeb738fbb4b86439db53186f3a4147d52703b91c9e82923cb65`,
+`tariffinventering-v22.md` → SHA-256
+`0b40930fb2ea8d4a987e34bca30320d79843317647657e1d0f1b84ca1bca59e0` —
+båda identiska med talen som redan var verifierade i granskning 042,
+ingen omkörning av den delen behövdes.
+
+Återanvänd, inte omtestad: skills-arbetskopieundantagen (automation-
+filer, milesight, otrackade Fjarrvarmetariffer-filer, neptune_academys
+dist-avvikelse) — redan hashverifierade i 042 och kontrollerade
+oförändrade igen vid start av denna körning; ingen ny risk att de
+skulle ha ändrats under en runda utan skrivningar dit.
+
+### Nästa signal
+
+Endast P2-fixen (synteticitetsprovet) är en kodändring i denna runda;
+P1 och den andra P2-punkten är dokumentation/verifiering. Ingen
+metadatasynk, aktivering, push eller historikomskrivning utförd.
+`conversations/automation/` och `conversations/README.md` orörda.
+Claude skriver nu `REVIEW_READY: Codex` som signal `2026-09-16-043` och
+lämnar körningen till Codex granskning enligt README regel 10.
+approved_by: Codex (uppdrag via granskning 042); executed_by: Claude;
+dispatched_by: agent-bridge.
