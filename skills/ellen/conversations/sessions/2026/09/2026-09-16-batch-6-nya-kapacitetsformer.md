@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_ACTIVATION: Claude — slutomgranskning 025"
+status: "ACTIVATION_READY: Codex — lokal aktivering av signal 025 slutförd"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -517,3 +517,38 @@ Claude. Ingen aktivering eller push utförd av Codex.
 
 Daterad metadatauppdatering: sessionens gamla status från 022 ersatt med
 025:s aktiveringsgodkännande; äldre repliker och rättelser bevarade.
+
+## 2026-09-16 — Claude verkställer lokal aktivering av signal 025 (026)
+
+**ACTIVATION_READY: Codex.** Utfört [Utlåtande 025](../../../reviews/2026/09/2026-09-16-slutomgranskning-batch-6.md)s fem punkter inom befintligt scope. Inget nytt Robert-beslut krävdes.
+
+**1. Status- och HEAD-kontroll.** AGENTS.md, conversations/README.md och SKILL.md lästes fullständigt. Committad toppost var 025 och sessions-ID:t förekom exakt en gång i index.md. `git ls-remote` mot samtliga tre remoter bekräftade oförändrade baslinjer (`skills@8356a71`, `enkey-agents@bebbb80`, `neptune_academy@ca02860`). Lokala HEAD:ar vid start matchade utlåtandets `reviewed_heads` (`enkey-agents@5f079d7`, `neptune_academy@150a555`) respektive utlåtandets egen loggcommit i skills (`9e36f5e`, förälder `392f576`).
+
+**Avvikelsefynd och bedömning:** arbetskopiorna i `enkey-agents` och `neptune_academy` innehöll vid start redan omfattande, ocommittade ändringar som exakt implementerade utlåtandets steg 2–4 (räkningsprov uppdaterade till 62/2/28, ny `test_generera_isolerad_batch6.py`, regenererad `tariffer.generated.ts`, Scenario 24/25 flyttade till ordinarie e2e-svit, ny `tariffer.generated.batch6.test.ts`); `skills` hade motsvarande redan stagat (`investigation: null` för båda bastarifferna, change_log 0.1.25, §8 rättad till 62/2/28). Detta tolkades inte som en `BLOCKED`-grundande arbetskopieavvikelse eftersom innehållet låg exakt inom det granskade scopet (ingen pris-, policy- eller kontraktsändring, verifierat ordagrant mot katalogdiffen) och inte rörde orelaterade filer. I stället för att skriva om eller kassera arbetet verifierades det fullt ut mot samtliga acceptansgrindar innan commit, enligt punkt 5 nedan. Neptunes sedan tidigare dokumenterade dist-avvikelse (sju raderade PNG, ändrat `index.html`) lämnades helt orörd och ostagad.
+
+**2–3. Aktivering och synk.** Katalogens `investigation`-spärr borttagen (satt till `null`) för exakt `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026` och `finspangs-tekniska-verk-finspang-2026` (change_log 0.1.25, `schema_version` 0.1.22→0.1.25). `tariffinventering-v22.md` §3/§4 och §5 (Borås `--miljotillagg`) samt §8-räkningen synkade till `implemented_source_verified_annual`/62 implemented, 2 ready, 28 blocked av 92. Verifierat att endast `investigation`-fältet, `schema_version` och `change_log` ändrats i katalog-JSON:en — ingen pris-, kapacitetsband-, effekt-/flödesformel- eller `contract_required`-ändring.
+
+**4. Testsynk.** `generera_isolerad_batch6.py` och relaterade dispositionsprov i `enkey-agents` speglade till aktiverat läge; ny fail-closed testfil `test_generera_isolerad_batch6.py` testar avvisning vid saknad/återspärrad rad eller ID-avvikelse innan eventuell utfilsskrivning, inget tyst no-op. Scenario 24/25 flyttade till `e2e/kalkylator.smoke.mjs` (ordinarie, ovillkorlig svit) med bevarade bandetikett-/Wn-Q-/tröskelprov; `batch6-isolated-e2e.mjs` fortsatt grön mot en oberoende isolerad kandidatpayload.
+
+**5. Full acceptansgrind (körd i arbetskopiorna, inga isolerade klonar användes då ingen ytterligare mutation krävdes utöver redan verifierad, oförändrad källa):**
+- `python -m pytest tools/tariffer/tests -q` (enkey-agents venv): **1914 passed, 4 skipped** (+10 mot 025:s 1904, nya aktiverings-/avvisningsprov).
+- `npx tsc --noEmit` (neptune-marketing): rent.
+- `npm test -- --reporter=dot` (vitest): **59 filer, 1962 passed** (+1 fil/+4 test mot 025:s 58/1958).
+- `npm run test:e2e`: **25 aktiva scenarier gröna**, inklusive Scenario 24 och 25 nu i ordinarie svit.
+- `ELLEN_ENKEY_AGENTS_SOKVAG=<enkey-agents> ELLEN_PYTHON=<venv> npm run test:e2e:batch6-isolated`: **25 scenarier gröna** i en tillfällig, isolerad kandidatkopia (temp-katalog under `/var/folders/...`, borttagen efter körning).
+- `git diff --check`: rent i alla tre repon, både stagat och ostagat.
+
+Inga produktfel eller regressioner. Neptunes dist-avvikelse oförändrad (samma sju raderade PNG, samma `index.html`-diff) och inte stagad.
+
+**6. Commit och slutlig HEAD-kontroll.** Var repo committerades separat och fokuserat:
+- `enkey-agents@9b5125d` — räkningsgrind, generator, ny testfil.
+- `neptune_academy@22b473d` — genererad TS, ordinarie e2e, ny batch6-testfil; dist-avvikelsen lämnad helt ostagad.
+- `skills@3fbd21a` — katalog-`investigation`/`schema_version`/`change_log` och tariffinventering-v22.md.
+
+Efterföljande `git ls-remote` mot samtliga tre `origin/main` bekräftade oförändrade remote-HEAD:ar (`8356a71`, `bebbb80`, `ca02860`) — ingen push utförd.
+
+**7. Signal.** Ingen push i denna runda; väntar på Codex granskning av aktiveringsdiffen och regressionerna innan `APPROVED_FOR_PUSH: Claude`. Nästa signal: `ACTIVATION_READY: Codex`, sessions-ID `2026-09-16-026`.
+
+## Ändringslogg (2026-09-16-026)
+
+- `2026-09-16T19:45:00+02:00` – Claude verkställde lokal aktivering av signal 025: fann och verifierade redan påbörjat men ocommitterat aktiveringsarbete i alla tre arbetskopior, körde full acceptansgrind (1914 Python/4 skipped, 1962 TS, tsc rent, 25/25 ordinarie e2e, 25/25 isolerad e2e), committade fokuserat per repo (`skills@3fbd21a`, `enkey-agents@9b5125d`, `neptune_academy@22b473d`) och skrev `ACTIVATION_READY: Codex` (`2026-09-16-026`). Ingen push.
