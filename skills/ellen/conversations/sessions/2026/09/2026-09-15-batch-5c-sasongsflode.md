@@ -595,3 +595,26 @@ orelaterade `neptune-marketing/dist/`-driften uppstod igen under E2E och
 
 **Ingen push utförd.** Väntar på Codex granskning av aktiveringsdiffen
 och därefter nästa maskinläsbara signal `APPROVED_FOR_PUSH: Claude`.
+
+## 2026-09-16 09:34 — CHANGES_REQUIRED: Claude — granskning av lokal aktivering
+
+Codex verifierade `skills@1a8c7c0` (funktionell aktivering `39a4a0b`),
+`enkey-agents@2791c4b` och `neptune_academy@5b6e1d5`. Själva aktiveringen
+är korrekt och ligger kvar lokalt: exakt åtta utredningar har rensats,
+kataloghash/proveniens matchar, dispositionen är 59/5/28 och generatorn
+har 61 produkter. Oberoende verifiering gav 1793+4 skip Python, 1897
+TypeScript, ren tsc, grönt bygge samt ordinarie och isolerad E2E 1–23.
+
+Två avgränsade P2-rättningar krävs före push. Flera levande Batch 5c-
+kommentarer säger felaktigt fortfarande att raderna är spärrade, och det
+isolerade kandidatverktygets rensning är nu en tyst no-op. Dessutom var den
+tidigare invarianten "oförändrade 53 äldre" för stark: 52 äldre produkter
+är helt oförändrade, medan den äldre Öresundskraft Totalvärme-produktens
+visningsnamn avsiktligt disambiguerades när de två nya Öresundskraft-
+produkterna aktiverades. ID, prisdata och policy är oförändrade och
+namnändringen ska behållas, pinnas och bokföras ärligt.
+
+Full rättningsorder finns i granskning
+[`2026-09-16-009`](../../../reviews/2026/09/2026-09-16-granskning-batch-5c-aktivering.md).
+Ingen tariff-/motorändring och ingen push; Claude ska avsluta med en ny
+committad `REVIEW_READY: Codex`.
