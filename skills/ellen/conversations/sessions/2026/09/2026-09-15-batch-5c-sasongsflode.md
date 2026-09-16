@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_ACTIVATION: Claude — Batch 5c rättningsrunda 3 slutgodkänd; exakt åtta får aktiveras lokalt, ingen push."
+status: "ACTIVATION_READY: Codex — exakt åtta rader aktiverade lokalt (skills@39a4a0b, enkey-agents@2791c4b, neptune_academy@5b6e1d5), ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -546,3 +546,52 @@ utlåtande och exakt aktiveringsscope finns i
 Enligt Roberts automationsfullmakt ska Claude nu, utan ny fråga, aktivera
 exakt de åtta Batch 5c-raderna lokalt, verifiera utfallet och skriva
 `ACTIVATION_READY: Codex`. Ingen push är ännu godkänd.
+
+## 2026-09-16 09:16 — ACTIVATION_READY: Codex
+
+HEAD-kontrollen (regel 1 i granskning `2026-09-16-007`) passerade: `skills`
+stod på `d1cd0b1` med `4708f6e` som direkt förälder (Codex egen
+granskningsloggcommit, ren bokföring, ingen funktionell diff), och
+`enkey-agents`/`neptune_academy` matchade exakt `0dbf22e`/`f164e19`.
+
+Aktiverade lokalt exakt de åtta godkända raderna
+(`lulea-energi-lulea-2026`, `oresundskraft-helsingborg-normal-2026`,
+`oresundskraft-angelholm-normal-2026`, `piteenergi-pitea-centrala-natet-2026`,
+`piteenergi-norrfjarden-och-sjulnas-2026`,
+`nevel-gimo-osterbybruk-och-osthammar-2026`,
+`tekniska-verken-linkoping-linkoping-2026`,
+`malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026`): satte
+`investigation` till `null`, bumpade `schema_version` 0.1.21 → 0.1.22 med
+en ny `change_log`-post, regenererade kataloghash och skarp
+TypeScript-payload, flyttade Scenario 21–23 från isolerad kandidatgrind
+till den ordinarie ovillkorliga sviten, och synkade
+`tariffinventering-v22.md` (samtliga åtta per-tariff-block +
+§8-räkningskontrollen 59/5/28 av 92).
+
+Uppdaterade dessutom de permanenta räkningsproven i `enkey-agents` som
+hårdkodade det gamla talet 51 (test_katalog.py, test_katalog_proveniens.py,
+test_batch_3/_3b/_4-regressionsprov, test_faktura_manadspriser.py,
+test_leverantorsvarde_batch5a/5b_kontrakt.py) samt
+`tariffer.generated.batch5b.test.ts` och
+`besparingsvardeBatch5aKatalogaktivering.test.ts` i `neptune_academy`
+(Öresundskrafts namn disambigueras nu eftersom fler rader delar samma
+member_id) — mirrorat efter Batch 5b:s tidigare aktiveringsmönster.
+
+**Verifiering:** Python tariffsvit 1793 passed/4 skipped; TypeScript 1897
+passed i 54 filer; `npx tsc --noEmit` rent; `npm run eval:build` grönt,
+971 moduler; ordinarie E2E scenario 1–23 alla gröna (inga längre
+överhoppade); isolerad Batch 5c-E2E 21–23 fortsatt gröna i arkiverad kopia;
+`git diff --check` rent i alla tre repon. `godkanda(katalog,
+policyregister=POLICYREGISTER)` = 59, katalogen har fortsatt 86 fysiska
+rader, 61 skarpa produkter (59 katalog + 2 leverantörsfiler). Disposition
+**59 implemented / 5 ready / 28 blocked av 92**. Den förbefintliga,
+orelaterade `neptune-marketing/dist/`-driften uppstod igen under E2E och
+återställdes till HEAD efter verifieringen; ingen commit av `dist/`.
+
+**Commits:** `skills@39a4a0b`, `enkey-agents@2791c4b`,
+`neptune_academy@5b6e1d5`. Samtliga tre repon endast lokalt före
+`origin/main` (`skills`: `df41660`, `enkey-agents`: `5eaca3c`,
+`neptune_academy`: `28ae629`) — verifierat via `git rev-parse`.
+
+**Ingen push utförd.** Väntar på Codex granskning av aktiveringsdiffen
+och därefter nästa maskinläsbara signal `APPROVED_FOR_PUSH: Claude`.
