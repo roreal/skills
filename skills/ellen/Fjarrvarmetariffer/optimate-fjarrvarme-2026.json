@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.21",
+  "schema_version": "0.1.22",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-15",
@@ -5850,15 +5850,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Fullständig regel för debiterbar effekt behöver mappas.",
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6224,11 +6216,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": []
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6624,14 +6612,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -6926,13 +6907,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -7147,13 +7122,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -7541,13 +7510,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -7651,13 +7614,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -9005,14 +8962,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11823,6 +11773,15 @@
         "capacity.billing_basis_method rattad kallsant for Lulea, Oresundskraft Helsingborg/Angelholm, Pitea centrala/Norrfjarden-Sjulnas, Nevel och Linkoping utifran de aktuella kallorna ovan - ingen lokal effektberakning uppfunnen, oppet markerat nar exakt sammanvagning inte ar styrkt. Malarenergis kapacitetsfria rad har fortsatt ingen sadan metod.",
         "Rattningsrunda 2 (omgranskning 2026-09-16-003): Nevels och Linkopings capacity.billing_basis_method var inte kallsanna trots foregaende revisions pastaende - Nevels text uteslot medelvardessteget over de tva senaste arens medeleffektuttag, perioden januari-februari, minsta E-varde 3 och den arliga revisionen; Linkopings text pastod tvartom att kallan inte styrker tvaarig medelvardesregel trots att leverantorens sida uttryckligen anger det. Bada texterna rattade ordagrant mot de redan bundna och SHA-256-verifierade kallorna (nevel-pricelist-2026, tekniska-verken-web-2026) - ingen ny kalla hamtad, ingen lokal effektberakning uppfunnen.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel- eller aktiveringsandring gjord. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 51 tills en separat, godkand aktiveringsrunda for Batch 5c."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.22",
+      "changes": [
+        "Batch 5c lokal aktivering: investigation-sparren borttagen (satt till null) for exakt atta rader - lulea-energi-lulea-2026, oresundskraft-helsingborg-normal-2026, oresundskraft-angelholm-normal-2026, piteenergi-pitea-centrala-natet-2026, piteenergi-norrfjarden-och-sjulnas-2026, nevel-gimo-osterbybruk-och-osthammar-2026, tekniska-verken-linkoping-linkoping-2026 och malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026 - enligt Codex slutomgranskning 2026-09-16-007 (APPROVED_FOR_ACTIVATION: Claude) och Roberts uttryckliga automationsfullmakt for aktiverings-/pushkedjan.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla-, issues-, production_ready- eller contract_required-andring gjord. Godkannandet galler en uppskattad annual_forward-arskostnad fran tolv manaders leverantorsflode (och for sju av de atta leverantorens bekraftade effekt/effektsignatur och bekraftat band); resultatet ar inte en fakturaexakt manadskostnad. Malarenergis rad har fortsatt ingen kapacitetsdel. Kronor-/schabloninmatning och besparingsprodukten forblir blockerade for samtliga atta.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 59 (51 tidigare aktiva + dessa atta); dispositionen blir 59 implemented / 5 ready / 28 blocked av 92."
       ]
     }
   ],

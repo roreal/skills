@@ -951,18 +951,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `21_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Lulea-Energi.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (lulea-web-2026) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 9 debiteringsmånader (jan–maj, sep–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–maj samt september–december (9 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–maj samt september–december (9 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; okänd/opak effektmetod (`billing_basis_method`) blockerar fortsatt fakturagaranti/besparingsprodukten. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026`
@@ -970,18 +970,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `22_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Malarenergi.pdf); `web-review-malar-price` (https://www.malarenergi.se/foretag/varme-kyla-foretag/fjarrvarme-foretag/priser-fjarrvarme/); `web-review-malar-flow` (https://www.malarenergi.se/foretag/varme-kyla-foretag/fjarrvarme-foretag/flodespremie/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (malarenergi-flow-2026) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 7 debiteringsmånader (jan–apr, okt–dec) ur en 12-elements kalendermånadsserie; inget kapacitetsvillkor (kapacitetsfri rad)
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), `kapacitet_bindning=None`/`kapacitet_band_bindning=None` + tolv-elements flödesserie, ingen effekt-/bandindata krävs
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`, Scenario 22/23)
+- **UI-status:** valbar i den skarpa kalkylatorn utan effekt-/bandfält — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Ingen kapacitetsdel. Fast årsavgift (katalog), energi (MWh, kund anger), säsongens verkliga flöde i m³, januari–april samt oktober–december (7 månader, katalogens egen `months`-lista) — fakturans flödesvärde, INTE härlett ur MWh×antagen ΔT.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Mälarenergi, ren energitariff (2–4 lgh)
-- **Kvarstående arbete (utökat i v5, granskning 2026-09-08-004, P1):** `volume`-justeringen finns i motorn men appliceras i dag på ett enda årsflöde, inte postens egen `months`-lista (jan–apr + okt–dec, INTE okt–apr). Kräver månadssemantik i faktura.py/fjarrvarme.ts innan aktivering. INFORMATIONSFÖRFRÅGAN R03 (medlem `malarenergi`) SKA DELAS, INTE TAS BORT: dess text ("Vilka nät hör sidans två olika tabeller till? Bekräfta fast avgift 2217/2117 för 25–79 kW samt sommarperiod/flödesvillkor") gäller uttryckligen `malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026` och `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026` (båda `blocked_external_info`) — inte 2–4 lägenheter, som saknar kapacitetsdel helt och därmed ingen effekt-/fast avgifts-tvetydighet att lösa. Omskopa R03 till just de två övriga Mälarenergi-tarifferna. Grindtest: `grind()` på 2–4 lägenheter ska passera med tom `utredda`-mängd, medan de två övriga fortsatt ger `utreds (medlem)`.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade. R03 omscopad till de två övriga Mälarenergi-tarifferna (`storre-fastigheter`, `gruppanslutna-smahus`) — denna rad refererar inte längre R03 och är inte blockerad av den. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `mjolby-svartadalen-energi-mjolby-2026`
@@ -1084,18 +1084,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `27_0` (https://www.prisdialogen.se/wp-content/uploads/2024/10/Prisandringsmodell-2025-Nevel.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (nevel-web-2026, nevel-pricelist-2026 med verklig SHA-256) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 7 debiteringsmånader (jan–apr, okt–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`, inklusive Nevels publicerade referensfall med oavrundade andelstal; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–april samt oktober–december (7 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–april samt oktober–december (7 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; källsann `billing_basis_method` (medelvärde av senaste två årens medeleffektuttag jan–feb, min E-värde 3, årlig revision) begränsar men blockerar inte den aktiverade produkten. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `oresundskraft-angelholm-normal-2026`
@@ -1103,18 +1103,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `29_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/FV-Prisandringsmodell-2025-Oresundskraft.pdf); `oresund-web` (https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (oresundskraft-2026-2028 med verklig SHA-256) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 5 debiteringsmånader (jan–mar, nov–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`, Scenario 23 produktbyte)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–mars samt november–december (5 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–mars samt november–december (5 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; endast Öresundskrafts företags-/Normalprisvillkor används, inte konsumentproduktens avkylningsregel. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `oresundskraft-helsingborg-normal-2026`
@@ -1122,18 +1122,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `29_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/FV-Prisandringsmodell-2025-Oresundskraft.pdf); `oresund-web` (https://www.oresundskraft.se/foretag/fjarrvarme/priser-fjarrvarme/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (oresundskraft-2026-2028 med verklig SHA-256) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 5 debiteringsmånader (jan–mar, nov–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–mars samt november–december (5 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–mars samt november–december (5 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; endast Öresundskrafts företags-/Normalprisvillkor används, inte konsumentproduktens avkylningsregel. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026`
@@ -1198,18 +1198,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `pite-small` (https://www.piteenergi.se/fjarrvarme/priser-2-foretag/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); källa omverifierad 2026-09-15 (pite-small-2026) vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 6 debiteringsmånader (jan–mar, okt–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–mars samt oktober–december (6 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–mars samt oktober–december (6 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `piteenergi-pitea-centrala-natet-2026`
@@ -1217,18 +1217,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `pite-central` (https://www.piteenergi.se/fjarrvarme/priser-foretag/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); källa omverifierad 2026-09-15 (pite-central-2026) vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 6 debiteringsmånader (jan–mar, okt–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`, Scenario 21)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–mars samt oktober–december (6 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–mars samt oktober–december (6 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `skovde-energi-skovde-2026`
@@ -1350,18 +1350,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `41_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-for-Tekniska-verken-i-Linkoping-AB-Linkoping-2026.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** Befintlig (`selected_band_affine`/säsongsenergi)
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (tekniska-verken-web-2026) bunden vid Batch 5c-rättning (granskning 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-007, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — delad `volume.months`-motor (Python `faktura.py`/TypeScript `fjarrvarme.ts`), summerar postens egna 7 debiteringsmånader (jan–apr, okt–dec) ur en 12-elements kalendermånadsserie
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 5c, handoff 2026-09-15-002), bekräftat band-ID + debiterbar effekt + tolv-elements flödesserie
+- **Teststatus:** tariffspecifika automattester finns (Python: `test_leverantorsvarde_batch5c_kontrakt.py`; TypeScript: `resultatkontrakt.batch5c.test.ts`, `batch5cRawData.driftprov.test.ts`, isolerad E2E `batch5c-isolated-e2e.mjs`)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
 - **Obligatorisk indata:** Leverantörens effekt/band (fakturan). DESSUTOM prissatt säsongsflöde i m³, januari–april samt oktober–december (7 månader) (fakturan/avtalet, `volume`-justering) — inte bara kapacitetsdelen (granskning 2026-09-08-002, P1).
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Leverantörsvärde-mönstret
-- **Kvarstående arbete:** `volume` gäller ENDAST januari–april samt oktober–december (7 månader) för DENNA tariff (katalogens egen `months`-lista, inte ett generellt okt–apr-antagande) — dagens motor applicerar ett enda årsflöde utan `months`-hänsyn. Kräver verifierad säsongsindata och motorsemantik (motorn och testerna måste använda postens egen `months`-lista) innan aktivering.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade; endast normaltemperatursystemet omfattas, lågtemperaturvarianten (`--lagtemperatur`) förblir en separat, blockerad rad. Motorn, katalogen, kontraktet och testsviten är genomförda, lokalt aktiverade och committade — väntar på Codex granskning av aktiveringsdiffen före push.
+- **Disposition:** `implemented_source_verified_annual`
 
 
 #### `telge-nat-telge-foretag-och-bostadsrattsforeningar-2026`
@@ -4773,11 +4773,23 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 43 | 8 | 51 |
-| `ready_to_implement` | 11 | 2 | 13 |
+| `implemented_source_verified_annual` | 51 | 8 | 59 |
+| `ready_to_implement` | 3 | 2 | 5 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
+`2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
+samtliga åtta Batch 5c-bastariffers (§3–4) `Disposition`-kolumn flyttades från
+`ready_to_implement` till `implemented_source_verified_annual` i SAMMA commit
+som katalogens `investigation`-spärr togs bort, enligt skyldigheten som
+antecknades nedan efter Batch 5b-aktiveringen. Batch 5c har inga varianter, så
+varianttabellens 8/2/4 = 14 är oförändrad. Tabellen ovan är en mekanisk
+räkning; den matchar den katalog-mekaniskt verifierade dispositionen
+**59 implemented / 5 ready / 28 blocked av 92**
+(`godkanda(katalog, policyregister=POLICYREGISTER)` == 59; se
+`skills/ellen/conversations/sessions/2026/09/2026-09-15-batch-5c-sasongsflode.md`).
 
 **Rättat 2026-09-15 (Batch 5b-aktivering, granskning `2026-09-15-015`, Roberts
 uttryckliga klartecken "Ja starta"):** samtliga sex Batch 5b-bastariffers (§3–4)
