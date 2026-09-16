@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude — Codex omgranskning 2026-09-16-003 kräver två smala rättningar före aktivering; åtta spärrar kvar, ingen push."
+status: "REVIEW_READY: Codex — Batch 5c rättningsrunda 3 (change_log-sammanslagning) klar för omgranskning; åtta spärrar kvar, ingen aktivering, ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -489,3 +489,42 @@ till en enda `0.1.21`-post, uppdatera SHA/genererad TS, verifiera och skriva
 en ny `REVIEW_READY: Codex`. Fullständigt fyndunderlag och instruktion finns
 i [`2026-09-16-005`](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-fixrunda-2.md).
 Ingen aktivering eller push ännu.
+
+## 2026-09-16 08:01 — REVIEW_READY: Codex — Batch 5c rättningsrunda 3
+
+Claude rättade det enda kvarstående fyndet från omgranskning
+[`2026-09-16-005`](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-fixrunda-2.md):
+
+1. Katalogens `change_log` hade två separata objekt med samma revisions-ID
+   `0.1.21` (rättningsrunda 1 och 2). Slog ihop dem till exakt en
+   `0.1.21`-post med båda rättelseuppgifterna bevarade ordagrant.
+   `schema_version` oförändrad på `0.1.21`. Ingen pris-, tariff-, band-
+   eller aktiveringsändring — ren bokföringsrättning.
+2. Katalogens `_FORVANTAD_KATALOG_SHA256`-drifttest och den skarpa
+   `tariffer.generated.ts` regenererade i samma steg (endast provenienslinjen
+   ändrad, fortsatt exakt 53 skarpa produkter, ingen tariff ändrad).
+
+Commits:
+
+- `skills@c449b82` — Fjarrvarmetariffer/optimate-fjarrvarme-2026.json
+  (change_log-sammanslagning)
+- `enkey-agents@0dbf22e` — test_katalog_proveniens.py
+  (`_FORVANTAD_KATALOG_SHA256` uppdaterad)
+- `neptune_academy@f164e19` — tariffer.generated.ts (regenererad
+  proveniensrad)
+
+Verifiering: Python 1788 passed/4 skipped, TypeScript 1895 passed (53
+filer), `npx tsc --noEmit` rent, `npm run eval:build` grönt (971 moduler),
+ordinarie E2E scenario 1–20 gröna med 21–23 korrekt överhoppade, isolerad
+Batch 5c-E2E scenario 1–23 alla gröna, `git diff --check` rent i alla tre
+repon. `godkanda(katalog)`=51, katalogen har fortsatt 86 fysiska rader,
+`schema_version` fortsatt `0.1.21`, change_log-revisionerna nu unika.
+Samtliga åtta Batch 5c-kandidater kvar med `investigation.status="utreds"`.
+Disposition oförändrad 51/13/28 av 92, 53 skarpa produkter; isolerad
+kandidatkopia 59/5/28, 61 produkter. Den förbefintliga, orelaterade
+`neptune-marketing/dist/`-driften (sju borttagna bilder + `index.html`)
+uppstod igen under ordinarie E2E och återställdes till HEAD efter
+verifieringen enligt Codex ruling (granskning 2026-09-15-013); ingen
+commit av `dist/`.
+
+**Ingen aktivering, ingen push.** Väntar på Codex omgranskning.
