@@ -618,3 +618,62 @@ Full rättningsorder finns i granskning
 [`2026-09-16-009`](../../../reviews/2026/09/2026-09-16-granskning-batch-5c-aktivering.md).
 Ingen tariff-/motorändring och ingen push; Claude ska avsluta med en ny
 committad `REVIEW_READY: Codex`.
+
+## 2026-09-16 09:50 — Claude rättar dokumentation, verktyg och räknefelet (granskning 2026-09-16-009)
+
+**Daterad rättelse av räkningsgrinden:** den tidigare invarianten
+"oförändrade 53 äldre produkter" (denna sessionslogg, rad ~302; levande
+handoff, rad ~255) var bokstavligen fel och är nu rättad direkt i den
+levande handoffen
+([`2026-09-15-batch-5c-sasongsflode.md`](../../../handoffs/2026/09/2026-09-15-batch-5c-sasongsflode.md)).
+Korrekt räkning: exakt åtta nya produkt-ID:n, inga borttagna, och av de
+53 äldre produkterna är 52 helt oförändrade medan en
+(`oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024`)
+har fått ett avsiktligt disambiguerat visningsnamn ("Öresundskraft —
+Helsingborg Totalvärme, central installerad före 2024"); ID, prisdata
+och policy för den raden är oförändrade. Historiska Codex-
+granskningsdokument (t.ex. `2026-09-16-008`) skrivs INTE om.
+
+**Dokumentations-/verktygsrättningar (P2.1):** uppdaterade samtliga fem
+levande filer som fortfarande beskrev "utreds"/ej aktiverad/ej i skarp
+data till att beskriva det aktiva läget och tydligt skilja det
+arkiverade isolerade regressionsflödet från den ordinarie E2E-sviten:
+`enkey-agents/tools/tariffer/tests/test_leverantorsvarde_batch5c_kontrakt.py`
+(moduldokumentation), `enkey-agents/tools/tariffer/policyregister.py`
+(Batch 5c-kommentaren), `neptune-marketing/src/utils/batch5cRawData.ts`,
+`neptune-marketing/src/utils/resultatkontrakt.batch5c.test.ts` och
+`neptune-marketing/e2e/batch5c-isolated-e2e.mjs`.
+
+**Fail-closed isolerat verktyg:**
+`enkey-agents/tools/tariffer/generera_isolerad_batch5c.py` påstod att
+det skapar en spärrad kandidat genom att rensa `investigation` — mot
+den nu aktiva katalogen var rensningen en tyst no-op. Skriptet
+verifierar nu att exakt de åtta förväntade ID:na finns och redan har
+`investigation is None`, och kastar `SystemExit` vid varje avvikelse.
+Fil-/npm-namnet är oförändrat (undviker churn i
+`batch5c-isolated-e2e.mjs`); kandidatbegreppet i docstring/kommentarer
+är bytt mot "regressionskontroll"/"aktiverad".
+
+**Pinning (P2.2):** `tariffer.generated.batch5c.test.ts` fick en ny
+explicit assertion som pinnar Öresundskraft-namnändringen — det gamla
+produkt-ID:t finns kvar och exakt det nya visningsnamnet är pinnat.
+
+**Verifiering efter ändringarna:**
+- Python-tariffsviten (enkey-agents): **1794 passed, 4 skipped** (en ny
+  test jämfört med föregående 1793+4, ingen regression).
+- TypeScript/Vitest (neptune_academy): **1898 passed** i 54 filer (en
+  ny assertion jämfört med föregående 1897, ingen regression).
+- `npx tsc --noEmit`: rent.
+- `npm run eval:build`: grönt, 971 moduler.
+- Ordinarie E2E (`kalkylator.smoke.mjs`): Scenario 1–23 gröna.
+- Isolerad Batch 5c-E2E (`batch5c-isolated-e2e.mjs`): Scenario 21–23
+  gröna i den tillfälliga, arkiverade kopian.
+- `git diff --check`: rent i alla tre repon efter körningen.
+- `dist/` innehöll en oavsiktlig ändring från körningen (byggoutput,
+  oavsett `--outDir dist-eval`) och återställdes med
+  `git checkout -- dist/` innan commit.
+
+Inga pris-, tariff-, motor- eller policyändringar gjordes. Commits:
+`enkey-agents@4b5bee0`, `neptune_academy@ca02860`. Skills-commit för
+handoff-/sessionsrättelsen och den avslutande `REVIEW_READY: Codex`-
+posten i `index.md` följer separat. Ingen push.

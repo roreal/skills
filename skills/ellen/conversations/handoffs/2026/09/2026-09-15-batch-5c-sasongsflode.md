@@ -252,7 +252,12 @@ ska ge:
 - disposition `59/5/28 av 92`;
 - 59 godkända katalograder;
 - 61 produkter inklusive två leverantörsfilsprodukter;
-- exakt åtta nya produkt-ID:n och oförändrade 53 äldre produkter.
+- exakt åtta nya produkt-ID:n, inga borttagna, och av de 53 äldre
+  produkterna: 52 helt oförändrade och en (Öresundskraft Helsingborg
+  Totalvärme, central installerad före 2024) med enbart ett avsiktligt
+  disambiguerat visningsnamn — ID, prisdata och policy oförändrade
+  (rättat 2026-09-16 efter granskning 2026-09-16-009 P2.2; se
+  sessionsloggen för den daterade rättelsen).
 
 Kör minst full Python-svit, full TypeScript-svit, `tsc --noEmit`, isolerat
 bygge, ordinarie E2E samt den nya isolerade kandidat-E2E:n. Kör
