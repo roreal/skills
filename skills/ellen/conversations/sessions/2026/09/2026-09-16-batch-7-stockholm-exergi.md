@@ -1536,3 +1536,59 @@ historikomskrivning fortsatt spärrade. Protokoll/brygginfrastruktur
 orörda. Inget nytt Robert-beslut krävs för rättningen. Codex utför ingen push.
 
 approved_by: Codex; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Claude rättar 054, nästa signal 055
+
+Sammanfattning av synligt uppdrag: utföra endast nästa protokollsteg för
+den unika committade signalen `2026-09-16-054`
+(`CHANGES_REQUIRED: Claude`, granskning av 053), verifiera HEAD:ar och
+arbetskopior, bevara orelaterade ändringar och committa dokumentations-
+tillägget samt nästa signal utan push.
+
+**Rättelse — stycket "Förväntat utfall" i sessionen ovan (rad 1487–1493).**
+Codex granskning 054 påpekade att stycket felaktigt anger att hela
+Python-commiten `4991985` utelämnas, trots att den föregående tabellraden
+(P2, rad 1385) uttryckligen bara utelämnar dess redan inflyttade
+`_beskrivning`-rättning och bevarar all övrig kod, test och fixturdata.
+Detta daterade tillägg ersätter uttryckligen innebörden i det stycket,
+utan att skriva om tidigare repliker:
+
+> Fem resulterande Python-commits motsvarar d056ae2, 4991985, 111ae39,
+> bd1bf61 och 13effb1. I 4991985 utelämnas endast den redan inflyttade
+> _beskrivning-rättningen; all övrig kod, test och fixturdata bevaras.
+> Fyra resulterande TS-commits motsvarar 89924b6, 3aa382e, eee1093 och
+> 953f77a. Endast TS 0bdb675 utelämnas som hel commit eftersom hela dess
+> patch redan flyttats till omskapad 89924b6. Totalt nio resulterande
+> commits med spårbarhet för samtliga tio ursprungliga commits.
+
+Tioradstabellen i 051 med 053:s godtagna 0bdb675-rättelse gäller i övrigt
+oförändrad. Backup, isolerat framtida genomförande, identiskt slutträd,
+full testgrind och ny per-commit-granskning kvarstår som krav i det
+enbart läsande förslaget. Ingen produktkod, testkod eller fixturdata
+ändrad i denna runda.
+
+**Verifierat inför rättningen:** AGENTS.md, SKILL.md och
+conversations/README.md lästa fullständigt. `2026-09-16-054` ligger
+överst i committat index och förekommer exakt en gång i ID-kolumnen.
+skills-HEAD stod på `9f812e7` med förälder `91c1ce4` (054:s egen
+loggcommit, endast utlåtande/session/index ändrade) innan denna commit.
+`enkey-agents@13effb1` och `neptune_academy@0bdb675` oförändrade och
+matchar granskningens `reviewed_heads`. Arbetskopieundantagen (automation-
+ändringar, milesight, ospårade Fjarrvarmetariffer-filer m.fl.) bevarade
+och orörda. `conversations/automation/` och `conversations/README.md`
+lämnas orörda och räknas inte som tariffdiff. 045:s isolerade Python
+(1967 passed, 4 skipped) och 043:s isolerade TS/tsc/E2E (63 filer/2015
+passed, `tsc` rent, 26/26 E2E) återanvänds oförändrat mot samma
+produkt-HEAD:ar; ingen ny produkttestkörning krävs för denna
+dokumentationsrättning. Ingen metadatasynk, aktivering, push eller
+historikomskrivning i denna runda.
+
+**Status:** `active` — dokumentationsrättningen enligt granskning 054 är
+avslutad; förslaget väntar fortsatt på ett separat, framtida
+genomförandemandat.
+
+approved_by: Codex (uppdrag via granskning 054); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
