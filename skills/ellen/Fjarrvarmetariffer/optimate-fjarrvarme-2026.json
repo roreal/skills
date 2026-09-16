@@ -6580,7 +6580,7 @@
             "variable": 1252.2
           }
         ],
-        "billing_basis_method": "Kapacitetsdelen (grundpris + effektpris × kW) bestäms genom att de två föregående kalenderårens energiförbrukning normalårskorrigeras, enligt leverantörens publicerade prislista (nevel-pricelist-2026). Ingen separat effektmätning anges — använd leverantörens fakturerade värde.",
+        "billing_basis_method": "Kapacitetsdelens E-värde är medelvärdet av de två senaste årens medeleffektuttag, beräknat utifrån normalårskorrigerad värmeanvändning under januari–februari, enligt leverantörens publicerade prislista (nevel-pricelist-2026). Minsta E-värde är 3 och värdet revideras årligen samt anges på fakturan — använd leverantörens fakturerade värde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -8965,7 +8965,7 @@
             "variable": 950
           }
         ],
-        "billing_basis_method": "Effektsignaturen visar behovet vid DVUT (-17,6 °C i Linköping) och tas fram genom dygn-för-dygn-mätning av energianvändning och utetemperatur 1 november–31 mars, enligt leverantörens webbsida (tekniska-verken-web-2026). Sidan styrker inte uttryckligen handoffens uppgift om en tvåårig normalårskorrigering — använd leverantörens fakturerade effektvärde, uppfinn inte en egen sammanvägning.",
+        "billing_basis_method": "Effektsignaturen tas fram årligen genom dygn-för-dygn-mätning av energianvändning och utetemperatur 1 november–31 mars och utvärderas vid DVUT (-17,6 °C i Linköping), enligt leverantörens webbsida (tekniska-verken-web-2026). Debiteringen baseras på medelvärdet av de senaste två årens effektsignaturer — använd leverantörens fakturerade effektvärde, uppfinn inte en egen sammanvägning.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -11821,6 +11821,14 @@
         "R03 omscopad fran member_ids=[malarenergi] till tariff_ids for exakt de tva andra Malarenergi-raderna (storre-fastigheter, gruppanslutna-smahus); malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026 refererar inte langre R03. Detta ar en scopekorrigering, inte ett externt svar - R03s fraga och status=utreds ar oforandrade.",
         "Aktuell 2026-09-15-kallproveniens tillagd/bunden per rattningsuppdrag i granskning 2026-09-16-001: nya kallor lulea-web-2026, oresundskraft-2026-2028 (verklig SHA-256), pite-central-2026, pite-small-2026, nevel-web-2026, nevel-pricelist-2026 (verklig SHA-256), tekniska-verken-web-2026 och malarenergi-flow-2026, kopplade till respektive tariffs source_refs vid sidan av tidigare historiska kallor.",
         "capacity.billing_basis_method rattad kallsant for Lulea, Oresundskraft Helsingborg/Angelholm, Pitea centrala/Norrfjarden-Sjulnas, Nevel och Linkoping utifran de aktuella kallorna ovan - ingen lokal effektberakning uppfunnen, oppet markerat nar exakt sammanvagning inte ar styrkt. Malarenergis kapacitetsfria rad har fortsatt ingen sadan metod.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel- eller aktiveringsandring gjord. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 51 tills en separat, godkand aktiveringsrunda for Batch 5c."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.21",
+      "changes": [
+        "Rattningsrunda 2 (omgranskning 2026-09-16-003): Nevels och Linkopings capacity.billing_basis_method var inte kallsanna trots foregaende revisions pastaende - Nevels text uteslot medelvardessteget over de tva senaste arens medeleffektuttag, perioden januari-februari, minsta E-varde 3 och den arliga revisionen; Linkopings text pastod tvartom att kallan inte styrker tvaarig medelvardesregel trots att leverantorens sida uttryckligen anger det. Bada texterna rattade ordagrant mot de redan bundna och SHA-256-verifierade kallorna (nevel-pricelist-2026, tekniska-verken-web-2026) - ingen ny kalla hamtad, ingen lokal effektberakning uppfunnen.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel- eller aktiveringsandring gjord. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 51 tills en separat, godkand aktiveringsrunda for Batch 5c."
       ]
     }
