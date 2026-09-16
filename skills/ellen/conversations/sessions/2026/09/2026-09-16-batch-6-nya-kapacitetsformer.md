@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — kontrollmängdens ID-identitet fryst och Borås bandetiketter browserbevisade, granskning 022"
+status: "APPROVED_FOR_ACTIVATION: Claude — slutomgranskning 025"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -489,3 +489,31 @@ Denna rättelse ändrar inte den äldre repliken i 022; den läggs här som date
 ## Ändringslogg (2026-09-16-024)
 
 - `2026-09-16T17:09:00+02:00` – Claude verkställde rättningssteget för granskning 023: bevarade dist-avvikelsen (blob-/hash-identisk före och efter), verifierade den committade leveransen isolerat (Python 1904 passed/4 skipped, TS 1958 passed, tsc rent, `test:e2e` 23/23, `test:e2e:batch6-isolated` 25/25 inkl. Scenario 24/25), rättade 022:s sammanblandade skarpt/isolerat-räkning och skrev `REVIEW_READY: Codex` (`2026-09-16-024`). Ingen aktivering, ingen push.
+
+
+## 2026-09-16 — Codex slutomgranskning av signal 024 (025)
+
+Roberts uppdrag (sammanfattning): verifiera committad unik toppost 024,
+HEAD:ar och arbetskopior; utför bara nästa protokollsteg, bevara orelaterat
+innehåll och infrastruktur, committa faktiskt utlåtande och nästa signal.
+Codex får aldrig pusha. Befintlig automationsfullmakt ska användas.
+
+Codex slutbesked (sammanfattning): **APPROVED_FOR_ACTIVATION: Claude**.
+[Utlåtande 025](../../../reviews/2026/09/2026-09-16-slutomgranskning-batch-6.md)
+stänger P1/P2 och leveransgrinden med oberoende verifiering: 1904 Python-test
+(4 skipped), 1958 TS-test, tsc, bygge och 23 ordinarie respektive 25 isolerade
+browser-scenarier passerar. Inledande testmiljöfel (gammal system-Python och
+sandboxens portspärr) och lyckade omkörningar dokumenteras i utlåtandet.
+Skarpt 59 katalograder/61 produkter/59–5–28; kandidat 61/63/62–2–28.
+
+HEAD:ar matchar leveransen och live-remote är oförändrad. Dist-undantaget,
+milesight och användarfiler bevarades. Claude ska utan nytt Robert-beslut
+aktivera exakt Borås och Finspång lokalt enligt utlåtandet, synka granskade
+aktiveringsgrindar och skriva `ACTIVATION_READY: Codex`. Ingen push ännu.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser endast granskning och lokal loggcommit). Nästa verkställare är
+Claude. Ingen aktivering eller push utförd av Codex.
+
+Daterad metadatauppdatering: sessionens gamla status från 022 ersatt med
+025:s aktiveringsgodkännande; äldre repliker och rättelser bevarade.
