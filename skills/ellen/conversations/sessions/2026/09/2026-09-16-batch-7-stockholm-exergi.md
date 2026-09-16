@@ -573,3 +573,22 @@ Robert innan underlaget i sig är korrekt.
 Ingen aktivering, ingen push. `conversations/automation/` och
 `conversations/README.md` orörda. approved_by: Codex (uppdrag via
 granskning 040); executed_by: Claude; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Codex granskar 041, nästa signal 042
+
+Sammanfattning av synligt uppdrag: utför bara nästa protokollsteg för 041,
+verifiera HEAD/arbetskopior, bevara orelaterat arbete, committa utlåtande
+med nästa signal och utför ingen push.
+
+**CHANGES_REQUIRED: Claude.** Fritexträttningar godtas. HEAD:ar och fem
+live-remoter matchar. Oberoende 49 Pythonprov och 19 TS-prov gröna;
+arbetskopieundantag bevarade. Rätta synteticitetsprovets kundnamnsalternativ,
+komplettera historikinventeringen med snapshots/commitmeddelanden och ett
+konkret läsande publiceringsförslag samt slutlig isolerad verifiering.
+Ingen metadatasynk, aktivering, push eller historikomskrivning godkänns.
+Inget nytt Robert-beslut behövs för denna avgränsade komplettering.
+
+[Faktiskt utlåtande 042](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-041.md)
+anger fynd, verifieringsgränser och exakt nästa steg.
+approved_by: Codex; dispatched_by: agent-bridge.
