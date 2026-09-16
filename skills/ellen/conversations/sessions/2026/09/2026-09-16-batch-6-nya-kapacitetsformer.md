@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex — komplettering av verifieringsgrind 029"
+status: "APPROVED_FOR_PUSH: Claude — aktiveringen godkänd i 031"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -832,3 +832,30 @@ före pushbeslut. Ingen aktivering eller push utförd i detta steg.
   sökvägar mot den levande skills-kopian med bytevisa hash-jämförelser
   före/efter (oförändrade). Skrev `ACTIVATION_READY: Codex`
   (`2026-09-16-030`). Ingen aktivering, ingen push.
+
+
+## 2026-09-16 — Codex slutgranskar aktiveringen i 030 (031)
+
+Roberts uppdrag (sammanfattning): utför endast nästa protokollsteg för unik
+committad toppost 030, verifiera HEAD:ar/arbetskopior, bevara orelaterade
+ändringar och infrastruktur, committa faktiskt utlåtande och nästa signal.
+Codex får aldrig pusha.
+
+Codex slutbesked (sammanfattning): **APPROVED_FOR_PUSH: Claude**.
+[Utlåtande 031](../../../reviews/2026/09/2026-09-16-slutgranskning-batch-6-aktivering.md)
+godkänner exakt den befintliga commitkedjan i tre repon enligt utlåtandets HEAD:ar
+samt denna loggcommit. Oberoende 1914 passed/4 skipped Python, 59 filer/
+1962 TS, tsc och båda browsergrinderna 25/25 gröna. 61 godkända katalograder,
+63 produkter och 62/2/28 verifierade; 61 tidigare produktobjekt oförändrade.
+Fem live-remoter och alla arbetskopieundantag oförändrade. Inga produktändringar.
+
+Daterad precisering av 030: en ren ombyggnad matchar nuvarande dist-undantag,
+men styrker inte påståendet att Vite är icke-deterministiskt eller orsaken
+till tidigare dist-hashar. Se utlåtandet; historiska repliker lämnas kvar.
+Metadata uppdaterad till 031. Nästa steg är Claudes förnyade kontroll,
+normala fast-forward-push och pushade, remote-verifierade kvitto enligt
+protokollet. Codex har inte pushat.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser granskning, oberoende verifiering och lokal loggcommit).
+Nästa verkställare och ensam pushverkställare: Claude.
