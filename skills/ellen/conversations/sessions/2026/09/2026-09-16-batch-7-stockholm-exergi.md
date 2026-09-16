@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex (2026-09-16-051)"
+status: "CHANGES_REQUIRED: Claude (2026-09-16-052)"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -1426,3 +1426,26 @@ approved_by: Codex (uppdrag via granskning 050); executed_by: Claude;
 dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar 051, nästa signal 052
+
+Sammanfattning av synligt uppdrag: granska endast signal 051, verifiera
+HEAD:ar och arbetskopior, bevara orelaterade ändringar och committa
+utlåtande samt nästa signal utan push.
+
+**CHANGES_REQUIRED: Claude.** Tioradstabellen och punkt 7→8 godtas.
+Rätta P2-löptextens assertionstillskrivning: bd1bf61 behåller det andra
+alternativet; först 13effb1 kräver enbart PÅHITTAT. Codex beslutar att
+den tomma 0bdb675 ska utelämnas i det läsande förslaget, med uttrycklig
+mappning och nio förväntade resulterande commits från tio ursprungliga.
+Ingen historikomskrivning eller produktändring beställs.
+
+[Fullständigt utlåtande och exakt nästa steg](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-051.md).
+051 är unik och överst; produkt-HEAD:ar och fem live-remoter matchar.
+Arbetskopieundantag bevarade; tidigare rapporterade produkttester återanvänds.
+Protokoll och brygginfrastruktur orörda. Metadatasynk, aktivering, push
+och historikomskrivning fortsatt spärrade. Inget nytt Robert-beslut krävs
+för dokumentationsrättningen. Codex utför ingen push.
+
+approved_by: Codex; dispatched_by: agent-bridge.
