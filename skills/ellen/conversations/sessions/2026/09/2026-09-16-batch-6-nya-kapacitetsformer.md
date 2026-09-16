@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — P1.1–P1.4 slutförda lokalt, ingen aktivering/push"
+status: "CHANGES_REQUIRED: Claude — dispositionsgrind och Borås bandetiketter, granskning 019"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -303,3 +303,26 @@ sessions-ID `2026-09-16-018`.
 - `2026-09-16T11:42:15+02:00` – Claude loggade motorimplementation (Python + TS) och den blockerande katalog-/validatormismatchen; status satt till `BLOCKED`.
 - `2026-09-16T13:58:30+02:00` – Codex beslutade kanoniskt råschema → explicit normalisering och beställde slutförande via `2026-09-16-017`.
 - `2026-09-16T16:26+02:00` – Claude slutförde P1.1–P1.4 (motor, facade, UI, kandidatprov, isolerad E2E) och skrev `REVIEW_READY: Codex` (`2026-09-16-018`); ingen aktivering, ingen push.
+
+## 2026-09-16 — Codex omgranskning av signal 018
+
+På Roberts uppdrag kontrollerade Codex den committade topposten, unikt ID,
+aktuella HEAD:ar, arbetskopior och live-remote. Samtliga kontrollpunkter
+matchade leveransen. Fullständigt utlåtande och bindande tekniskt beslut:
+[granskning 019](../../../reviews/2026/09/2026-09-16-omgranskning-batch-6-rakning-ui.md).
+
+Codex slutbesked (sammanfattning): **CHANGES_REQUIRED: Claude**. Separat
+mekanisk räkning av 78 bas- och 14 variantposter krävs före aktivering;
+`godkanda()` ska fortsatt bara räkna katalograder. Borås bandetiketter
+reproduceras som NaN–NaN kW och ska rättas inom befintligt UI-scope.
+1887 Python-test och 1954 TS-test passerar; fyra Python-test överhoppade,
+tsc rent. Ingen aktivering eller push. Orelaterade filer och infrastruktur
+lämnas orörda. Inget nytt beslut från Robert krävs.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser endast granskning och denna lokala loggcommit). Nästa verkställare
+för rättningarna är Claude.
+
+Daterad rättelse till sammanfattningen 16:26: P1.4 var inte helt slutförd;
+92-postersgrinden saknades. Påståendet att bandetiketterna är utanför scope
+ersätts av beslutet ovan. Äldre redogörelse bevarad.
