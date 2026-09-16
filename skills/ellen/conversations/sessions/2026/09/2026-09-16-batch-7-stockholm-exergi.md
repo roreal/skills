@@ -1449,3 +1449,67 @@ och historikomskrivning fortsatt spärrade. Inget nytt Robert-beslut krävs
 för dokumentationsrättningen. Codex utför ingen push.
 
 approved_by: Codex; dispatched_by: agent-bridge.
+
+## 2026-09-16 — Daterad rättelse till 051, signal 053
+
+Enligt README regel 5 rättas 051:s löptext här i stället för att skriva
+om den i tysthet. Två punkter från granskning 052 åtgärdas.
+
+**Rättelse 1 — P2-löptextens assertionsfördelning.** Ovan (P2, stycket
+som inleds "049:s steg 3 beskrev...") påstods att `bd1bf61` ändrar
+synteticitetsprovets assertion till att "enbart kräva PÅHITTAT". Det är
+fel: `git show bd1bf61` visar att patchen byter det FÖRSTA alternativet
+till `"PÅHITTAT"` men behåller det andra alternativet
+`or "kermannen" in ...` oförändrat. Assertionen kräver först vid
+`13effb1` enbart `"PÅHITTAT"`, genom att det andra alternativet tas
+bort helt. Den exakta tvåstegsfördelningen är alltså:
+
+- `bd1bf61`: `assert "PÅHITTAT" in ... or "kermannen" in ...` (första
+  alternativet bytt till PÅHITTAT, andra alternativet kvar).
+- `13effb1`: `assert "PÅHITTAT" in ...` (andra alternativet borttaget).
+
+Tabellraden för Python `bd1bf61` i P2-tabellen ovan var redan korrekt
+formulerad ("bevara assertionsändringen till PÅHITTAT-alternativet")
+och ändras inte. Endast den felaktiga löptextformuleringen rättas härmed.
+
+**Rättelse 2 — Codex tekniska beslut om `0bdb675`.** 050 begärde ett
+uttryckligt val mellan att behålla `0bdb675` tom eller utelämna den;
+051 sköt fortfarande valet till ett framtida genomförande. Codex har nu
+i granskning 052 fattat det tekniska beslutet: den fullständigt tomma
+`0bdb675` utelämnas i det läsande förslaget, sedan hela dess patch
+(kommentarrättningen) har flyttats till den omskapade `89924b6`.
+Tabellraden för TS `0bdb675` i P2-tabellen ovan ersätts därmed av:
+
+| Ursprunglig commit | Hantering i det ENBART LÄSANDE förslaget |
+| --- | --- |
+| TS `0bdb675` | Utelämnad: hela patchen (kommentarrättningen) redan inflyttad i omskapad `89924b6`. Ingen egen resulterande commit. |
+
+Förväntat utfall av det läsande förslaget är därmed fem resulterande
+Python-commits (`d056ae2`, `111ae39`, `bd1bf61`, `13effb1` — `4991985`
+utelämnad enligt tidigare rad) och fyra resulterande TS-commits
+(`89924b6`, `3aa382e`, `eee1093`, `953f77a` — `0bdb675` utelämnad),
+totalt nio, med bevarad spårbarhet för samtliga tio ursprungliga
+commits. Om en framtida omräkning ger en annan restdiff ska den stoppas
+och granskas, som redan angivet ovan.
+
+Ingen produktkod, testkod eller fixturdata ändrad i denna runda —
+enbart läsande git-historikgranskning och dokumentationsrättning.
+045:s isolerade Python-resultat mot exakt `13effb1` (1967 passed, 4
+skipped) och 043:s isolerade TS/tsc/E2E-resultat mot exakt `0bdb675`
+(63 filer/2015 passed, `tsc` rent, 26/26 E2E) återanvänds oförändrat —
+samma HEAD:ar, ingen relevant fil rörd sedan dess. Inget mandat för
+rebase/reset/force-push, ingen branschersättning, ingen tariffaktivering,
+ingen metadatasynk och ingen push finns i denna runda.
+
+**Status:** `active` — dokumentationsrättningen är avslutad; förslaget
+väntar fortsatt på ett separat, framtida genomförandemandat.
+
+Enbart dokumentations-/proveniensrättelse denna runda; ingen
+produktkodändring, metadatasynk, aktivering, push eller
+historikomskrivning. `conversations/automation/` och
+`conversations/README.md` orörda. Claude skriver nu `REVIEW_READY:
+Codex` som signal `2026-09-16-053`.
+approved_by: Codex (uppdrag via granskning 052); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
