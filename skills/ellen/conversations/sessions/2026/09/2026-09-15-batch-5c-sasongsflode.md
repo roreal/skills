@@ -218,3 +218,108 @@ och ett avgränsat rättningsuppdrag finns i
 Ingen implementation ändrades av Codex. Exakt åtta spärrar ska ligga kvar;
 ingen aktivering och ingen push är godkänd. Claude ska rätta, köra om hela
 grinden och stanna för Codex omgranskning.
+
+## 2026-09-16 04:50 — Rättningsrunda 1 (granskning 2026-09-16-001)
+
+Alla tre P1-fynd och båda P2-fynd åtgärdade.
+
+**P1 #1 — direkt motorbypass:** `_flodesavgift`/`flodesavgift` kräver nu
+exakt kalendermånaderna 1–12 som nycklar i `flode_m3`-serien och
+validerar varje värde (verkligt, ändligt, numeriskt, ≥ 0) INNAN
+summeringen — ett andra, oberoende skydd bakom kontraktsfasaden. Codex
+egna reproduktioner (`-1000`, `NaN`, `Infinity`) kastar nu. Nya direkta
+motorprov i båda språken för negativt/NaN/Infinity/sträng/extra
+månad/ofullständig serie.
+
+**P1 #2 — källproveniens:** åtta nya källposter tillagda (`lulea-web-
+2026`, `oresundskraft-2026-2028`, `pite-central-2026`, `pite-small-
+2026`, `nevel-web-2026`, `nevel-pricelist-2026`, `tekniska-verken-web-
+2026`, `malarenergi-flow-2026`) och bundna i samtliga åtta tariffers
+`source_refs`, `retrieved_on=2026-09-15`, historiska källor bevarade.
+De två PDF-källorna (Öresundskraft, Nevel) har verklig SHA-256 räknad ur
+den faktiskt nedladdade filen. `capacity.billing_basis_method` källsann
+för Luleå (dygnsmedeleffekt, oktober-PDF:s formulering), Öresundskraft
+Helsingborg/Ängelholm (rullande högsta dygnsmedeleffekt, 12-
+månadersregel + vinterundantag — verifierat direkt mot den nedladdade
+PDF:en), Piteå centrala/Norrfjärden-Sjulnäs (omverifierad, oförändrad
+metod), Nevel (två föregående års normalårskorrigerade energi, direkt
+citerat ur den nedladdade prislistan) och Linköping (effektsignatur vid
+DVUT −17,6 °C, 1 nov–31 mar, verifierat mot leverantörens webbsida — den
+tvååriga normalårskorrigeringen handoffen nämnde är INTE styrkt på denna
+sida och texten säger det explicit). Ingen lokal effektberäkning
+uppfunnen. Mälarenergis kapacitetsfria rad har fortsatt ingen sådan
+metod.
+
+**P1 #3 — acceptansmatrisen:** Pythonsidan fick en ny
+`TestAllaBandIdPerKapacitetstariff`-klass: samtliga band-ID för var och
+en av de sju kapacitetstarifferna (mekaniskt härledd ur katalogens egna
+`capacity.bands`, aldrig hårdkodad separat), saknat/tomt/okänt band,
+saknad/ogiltig effekt (negativ/NaN/Infinity) — plus policy-
+mutationsprov mot `kontrollera_volymbindning`s egna vardetyp-/
+kardinalitets-/rullande-/takad_till_snapshot-/kravs_for-/tillatna_
+kallor-/minvarde-kontroller, samt tomt element och över-max i
+seriefelmatrisen. TypeScript-sidan bytte helt bort den handskrivna
+"syntetiska, katalogtrogna" prisar/policy-dubbletten mot
+`batch5cRawData.ts` — en VERBATIM export av den verkliga
+`till_prisar()`/`_policy_till_json()`-utdatan, mekaniskt
+driftkontrollerad mot enkey-agents i `batch5cRawData.driftprov.test.ts`
+(samma mönster som Batch 5b). Ny komplett bandmatris härledd ur samma
+fixtur. Nytt Scenario 23 i `kalkylator.smoke.mjs`: produktbyte Luleå
+(9 mån) → Öresundskraft Ängelholm (5 mån) → Mälarenergi (ingen
+kapacitet) → Luleå, som bevisar att effekt/band/flödesserie rensas vid
+varje byte och aldrig återanvänds tyst; `onskadTyp`-frånvaro bekräftar
+att kronor/schablon/besparing förblir blockerade genom hela bytet.
+`batch5c-isolated-e2e.mjs` uppdaterad att kräva "OK: Scenario 23".
+
+**P2 — katalogmetadata:** `schema_version` 0.1.20 → 0.1.21, ny
+`change_log`-post som dokumenterar Batch 5c/R03-ändringarna.
+
+**P2 — levande dokument:** `batchplan-v22.md` och
+`tariffinventering-v22.md` synkade — Batch 5c-status/motorarbete/
+källproveniens beskrivs nu som genomfört bakom spärr, inte som ett
+framtida uppdrag. Verifieringslistans huvudrutor är INTE kryssade och
+dispositionen är INTE ändrad, per rättningsuppdragets instruktion.
+
+### Full verifiering efter rättningen
+
+- Python: **1788 passed, 4 skipped** (94 → 175 → 182 nya/ändrade prov i
+  Batch 5c-filen, inklusive den nya bandmatrisen och
+  policymutationsklassen).
+- TypeScript/Vitest: **1879 passed** i 53 filer (`resultatkontrakt.
+  batch5c.test.ts`: 220 prov; ny `batch5cRawData.driftprov.test.ts`:
+  16 prov).
+- `npx tsc --noEmit`: rent.
+- `npm run eval:build`: grönt, 971 moduler, endast `dist-eval/`.
+- Ordinarie `npm run test:e2e` mot separat `dist-eval`: Scenario **1–20
+  gröna**, 21–23 korrekt överhoppade (loggat, exit 0).
+- `npm run test:e2e:batch5c-isolated`: Scenario **1–23 gröna** i den
+  arkiverade, isolerade kopian (inklusive det nya produktbytesscenariot).
+- `git diff --check`: rent i alla tre repon.
+- Mekanisk räkning oförändrad: skarpt `godkanda(katalog)`=51,
+  `blockerade_tariff_ider`=21 fysiska rader av 86 (disposition **51/13/28
+  av 92**), 53 skarpa produkter. Isolerat (exakt de åtta spärrarna
+  rensade): `godkanda(isolerad)`=59 (disposition **59/5/28 av 92**), 61
+  produkter — exakt de åtta nya ID:na, oförändrade 53 äldre.
+- Arbetskopiorna i alla tre repon rena förutom sedan tidigare
+  dokumenterad, orelaterad drift (`skills/milesight`-submodul,
+  otaggade filer i `skills/ellen/`) — allt lämnat orört.
+
+### Commit-hashar (rättningsrunda 1)
+
+- `skills@0d789fe4714c8f7237d3217ae637c4b0efab33cd` — källproveniens,
+  `billing_basis_method`, `schema_version`/`change_log`,
+  batchplan/inventering-synk.
+- `enkey-agents@a13c663` — motorskyddet i `faktura.py`, komplett
+  bandmatris/policymutationsprov, `_FORVANTAD_KATALOG_SHA256`-
+  uppdatering.
+- `neptune_academy@32dc895` — motorskyddet i `fjarrvarme.ts`,
+  `batch5cRawData.ts`/driftprov, ny bandmatris, `tariffer.generated.ts`
+  regenererad mot `skills@0d789fe` (fortsatt 53 skarpa produkter).
+- `neptune_academy@15dc48d` — liten E2E-namnmatchningsrättning (Scenario
+  23:s Öresundskraft Ängelholm-etikett).
+
+### Slutsats
+
+Batch 5c rättningsrunda 1 är genomförd bakom spärr. Ingen tariff är
+aktiverad och inget är pushat. Exakt åtta spärrar (`investigation.
+status="utreds"`) består oförändrat. Väntar på Codex omgranskning.
