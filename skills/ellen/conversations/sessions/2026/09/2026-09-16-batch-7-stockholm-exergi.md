@@ -1130,3 +1130,178 @@ historikomskrivning förblir spärrade. Inget nytt Robert-beslut krävs
 för dokumentationsrättningen. Brygginfrastruktur och protokoll orörda.
 
 approved_by: Codex; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Claude rättar signal 048, nästa signal 049
+
+AGENTS.md, conversations/README.md och granskning
+[048](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-047.md)
+lästa fullständigt. `2026-09-16-048` låg unikt och överst i committat
+index. Startlägeskontroll: `skills@1d30ba6` (048:s egen signalcommit,
+förälder `46d7ed3`, diff enbart `conversations/index.md` +
+`conversations/reviews/2026/09/2026-09-16-granskning-batch-7-signal-047.md`
++ denna sessionsfil — ingen produktkoddiff), `enkey-agents@13effb1`,
+`neptune_academy@0bdb675` — matchar granskningens `reviewed_heads`
+exakt. Fem live-remoter omkontrollerade, oförändrade mot 042–048:
+`skills/origin@0df504e`, `skills/upstream@34040c9`,
+`enkey-agents/origin@9b5125d`, `neptune_academy/origin@22b473d`,
+`neptune_academy/upstream@fa177e9`. Arbetskopieundantagen (skills:
+`conversations/automation/`-arbetsfiler, milesight, otrackade
+Fjarrvarmetariffer-filer; neptune_academy: sju raderade dist-PNG:er +
+ändrad `dist/index.html`) bevarade oförändrade. `git diff --check` rent
+i alla tre repon.
+
+### P1 — daterad rättelse till 047: TS-kedjan blandade ihop tre kommentarer
+
+047:s neptune_academy-tabell (punkterna 7–8) missade att `eee1093` både
+löser punkt 7 och samtidigt inför en tredje, tidigare odokumenterad
+kommentar (nu punkt 9) som `953f77a` löser. 046 innehöll dessutom en
+omvänd hänvisning för vilken commit som rättade vilken punkt; den filen
+ändras inte i efterhand, rättelsen står här.
+
+**Punkt 9, tillagd:** `neptune-marketing/src/utils/resultatkontrakt.
+stockholmBatch7Arsserie.test.ts`, modulkommentarens rad 8–9 i
+ursprungsversionen — den possessiva formuleringen om
+tolvmånadersfixturen som redan var flaggad i den ursprungliga
+patchtabellen (se raden för `eee1093` ovan: "possessivformen
+'Åkermannens tolvmånaders-fixtur' (rättat framåt av `953f77a`)"). Denna
+rad är samma sakfråga som redan var känd sedan 039/041 men hade inte
+tidigare räknats in i punktlistan 7–8; den räknas nu som punkt 9 i
+samma numrering.
+
+**Korrekt koppling, ersätter 047:s omvända formulering:**
+
+- Punkt 7 (regressionskommentaren, `describe('monthly_invoice...')`):
+  införd i `89924b6`, rättad i `0bdb675`.
+- Punkt 8 (synteticitetskommentaren, `describe('beraknaArsprodukt...')`):
+  införd i `89924b6`, rättad i `eee1093`.
+- Punkt 9 (modulkommentaren i `resultatkontrakt.
+  stockholmBatch7Arsserie.test.ts`): införd i `eee1093`, rättad i
+  `953f77a`.
+
+**Rättad snapshotkedja, neptune_academy (`89924b6` äldst, `0bdb675`
+nyast), ersätter 047:s tabell:**
+
+| Commit | (c)-träffar vid DETTA commits eget träd | Antal | Vad som ändras mot föregående rad |
+| --- | --- | --- | --- |
+| `89924b6` | 7, 8 | 2 | Sätter båda |
+| `3aa382e` | 7, 8 | 2 | Rör bara `e2e/kalkylator.smoke.mjs`, ingen av de två kommentarraderna |
+| `eee1093` | 7, 9 | 2 | Löser punkt 8, inför punkt 9 |
+| `953f77a` | 7 | 1 | Löser punkt 9 |
+| `0bdb675` | inga | 0 | Löser punkt 7 |
+
+Python-kedjans tabell (`d056ae2` 7×(c) inklusive `_beskrivning` och
+punkterna 1–6 ovan; `4991985`/`111ae39` 6×(c) ärvda; `bd1bf61` 0×(c);
+`13effb1` 0×(c), ren assertionsjustering) är oförändrad från 046 och
+prövas inte om här.
+
+**Netto vid respektive HEAD är oförändrat: 0×(c) i båda repona.** Det
+som rättas är enbart de mellanliggande snapshot-antalen (nu 2/2/2/1/0
+för neptune_academy i stället för 047:s felaktiga 2/2/1/0/0), inte
+HEAD-bedömningen.
+
+### P2 — ett sammanhållet, ENBART LÄSANDE publiceringsförslag för alla tio commits
+
+Detta ersätter 042/045/046/047:s stegvisa, delvis motsägande
+formuleringar med ett enda förslag. Ingen historikoperation är utförd
+eller beställd; detta är fortfarande bara ett förslag som väntar på
+separat mandat.
+
+**Omfattning (tio lokala, opushade commits, ingen på någon av de fem
+live-remoterna):**
+
+- `enkey-agents`, `d056ae2^..13effb1` (5 commits):
+  `d056ae2`, `4991985`, `111ae39`, `bd1bf61`, `13effb1`.
+- `neptune_academy`, `89924b6^..0bdb675` (5 commits):
+  `89924b6`, `3aa382e`, `eee1093`, `953f77a`, `0bdb675`.
+
+**1. Bevarande innan något rörs:** skapa en lokal backup-tagg vid
+nuvarande spets i respektive repo (`git tag backup/batch7-pre-
+publicering-cleanup <HEAD>`) och/eller ett `git bundle create`-snapshot,
+innan någon historikoperation ens förbereds. Arbetskopian rörs inte
+förrän det omskrivna trädet är bevisat identiskt mot nuvarande HEAD.
+
+**2. Ursprunglig rättning, vad som faktiskt behöver ändras i respektive
+äldsta commit:**
+
+- `d056ae2` (enkey-agents): ta bort `_beskrivning`-fältets identifierande
+  fritext samt de sex nya punkterna 1–6 (policyregister-docstring,
+  arkiv-/arsreferens-/arsserie-testernas modul-/funktionsdocstrings,
+  synteticitetsfältet), med den ordalydelse som redan är godkänd i
+  `4991985`/`bd1bf61`.
+- `89924b6` (neptune_academy): ta bort punkterna 7–8
+  (regressions- och synteticitetskommentaren i
+  `besparingsvardeStockholmBatch7.test.ts`), med den ordalydelse som
+  redan är godkänd i `0bdb675`/`eee1093`.
+- `eee1093` (neptune_academy): ta bort punkt 9 (modulkommentaren i
+  `resultatkontrakt.stockholmBatch7Arsserie.test.ts`), med den
+  ordalydelse som redan är godkänd i `953f77a`.
+
+Ingen annan rad, commit eller prisdata rörs.
+
+**3. Hur senare commits räknas om, utan att tappa kod/test eller
+återinföra redan gjorda texträttningar:**
+
+Eftersom `4991985` (enkey-agents), `953f77a` och `0bdb675`
+(neptune_academy) redan gör exakt samma texträttning som steg 2 flyttar
+bakåt till respektive ursprungscommit, blir dessa tre commits tomma
+text-diffar mot den nya basen för just de berörda raderna — men de
+innehåller även annan kod-/testförändring (se de ursprungliga
+patchtabellerna ovan) som INTE ska tappas. Varje sådan commit måste
+därför omskapas mot den nya basen så att endast den redan gjorda
+texträttningen faller bort ur dess diff, medan resten av commitens
+innehåll bevaras oförändrat. Om en commit efter omräkning visar sig
+vara helt tom (noll kvarvarande diff) ska det redovisas explicit i den
+nya per-commit-tabellen (steg 4) — inte antas i förväg och inte tyst
+utelämnas ur sekvensen. `111ae39` och `3aa382e` bär ingen av de
+identifierade (c)-fraserna och läggs oförändrade ovanpå den nya basen.
+`13effb1` bär ingen av de identifierade fraserna och läggs likaså
+oförändrad sist i enkey-agents-sekvensen.
+
+**4. Bevis om identiskt sluträd:** efter omskrivning ska
+`git diff 13effb1 <nytt-HEAD>` (enkey-agents) och
+`git diff 0bdb675 <nytt-HEAD>` (neptune_academy) vara exakt tomma. Det
+bevisar att omskrivningen bara ändrar historiken, inte det redan
+granskade och testade slutresultatet. Hela testsviterna (Python/TS/
+tsc/isolerad E2E) ska köras om mot det nya HEAD:et och ge samma tal som
+denna rundas isolerade verifiering (se nedan).
+
+**5. Granskning av hela den publicerbara historiken:** en omskrivning
+byter hash för samtliga tio commits (fem + fem, inklusive de commits
+som blir tomma eller nästan tomma efter omräkning). Hela den nya
+sekvensen måste genomgå en ny per-commit-tabell (samma
+klassificeringsmetod: (a) fryst baslinje, (b) mekanisk/teknisk
+referens, (c) genuint ny identifierande fritext) mot de nya hasharna
+innan Codex kan godkänna publicering. En gammal tabell mot gamla hashar
+duger inte.
+
+**6. Inget härutöver är beställt eller utfört:** ingen rebase, reset,
+force-push eller branchersättning har körts i denna eller någon
+tidigare runda. Formuleringen "redan pushbara slutträdet" i 046 var
+missvisande och utgår: ett slutträd med noll nya kundtexter vid HEAD
+innebär inte i sig att hela den lokala historiken är godkänd för push
+— push kräver en egen `APPROVED_FOR_PUSH: Claude`-signal enligt
+README regel 11, oavsett vad detta förslag beskriver. Ett framtida,
+separat mandat avgör om steg 1–5 ska genomföras.
+
+### Återanvänd testverifiering
+
+Ingen produktkod, testkod eller fixturdata ändrad i denna runda —
+enbart läsande git-historikgranskning och dokumentationsrättning.
+045:s isolerade Python-resultat mot exakt `13effb1` (1967 passed, 4
+skipped, med `neptune_academy@0bdb675` som syskonkatalog) och 043:s
+isolerade TS/tsc/E2E-resultat mot exakt `0bdb675` (63 filer/2015
+passed, `tsc` rent, 26/26 E2E) återanvänds oförändrat — samma HEAD:ar,
+ingen relevant fil rörd sedan dess.
+
+### Nästa signal
+
+Enbart dokumentations-/proveniensrättelse denna runda; ingen
+produktkodändring, metadatasynk, aktivering, push eller
+historikomskrivning. `conversations/automation/` och
+`conversations/README.md` orörda. Claude skriver nu `REVIEW_READY:
+Codex` som signal `2026-09-16-049`.
+approved_by: Codex (uppdrag via granskning 048); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
