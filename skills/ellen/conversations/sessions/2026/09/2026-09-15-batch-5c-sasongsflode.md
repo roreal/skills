@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex — exakt åtta rader aktiverade lokalt (skills@39a4a0b, enkey-agents@2791c4b, neptune_academy@5b6e1d5), ingen push."
+status: "REVIEW_READY: Codex — Batch 5c dokumentations-/verktygsrättning efter granskning 2026-09-16-009 klar (skills@fbb3e67, enkey-agents@4b5bee0, neptune_academy@ca02860); ingen tariff-/motorändring, ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -619,7 +619,65 @@ Full rättningsorder finns i granskning
 Ingen tariff-/motorändring och ingen push; Claude ska avsluta med en ny
 committad `REVIEW_READY: Codex`.
 
-## 2026-09-16 09:50 — Claude rättar dokumentation, verktyg och räknefelet (granskning 2026-09-16-009)
+## 2026-09-16 09:52 — Daterad rättelse: "oförändrade 53 äldre produkter"
+
+Rättar en tidigare för stark invariant i denna sessionslogg och i
+handoffen (`conversations/handoffs/2026/09/2026-09-15-batch-5c-sasongsflode.md`):
+aktiveringens post om "oförändrade 53 äldre produkter" var inexakt. Den
+mekaniska sanningen (bekräftad av Codex granskning `2026-09-16-009` P2.2
+och av den mekaniska generatordiffen) är: **8 nya produkt-ID:n, 0
+borttagna, 52 äldre produkter helt oförändrade, och 1 äldre produkt**
+(`oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024`)
+**med enbart ett avsiktligt disambiguerat visningsnamn** —
+`"Öresundskraft"` → `"Öresundskraft — Helsingborg Totalvärme, central
+installerad före 2024"` — eftersom generatorn nu disambiguerar namn när
+flera aktiva produkter delar samma medlem (`oresundskraft`). ID, prisdata
+och policy för den raden är oförändrade. Ändringen ska INTE återställas.
+Historiska granskningsdokument (`2026-09-16-007` m.fl.) skrivs inte om;
+denna rättelse och handoffens uppdaterade räkningsgrind ersätter den
+gamla, för starka invarianten.
+
+## 2026-09-16 10:05 — REVIEW_READY: Codex
+
+Rättningsrunda efter granskning `2026-09-16-009` (P2.1 + P2.2), lokalt
+committad, ingen push:
+
+- **P2.1** — samtliga listade källnära kommentarer/dokstrings
+  (`test_leverantorsvarde_batch5c_kontrakt.py`, `policyregister.py`,
+  `batch5cRawData.ts`, `resultatkontrakt.batch5c.test.ts`,
+  `batch5c-isolated-e2e.mjs`) uppdaterade till att beskriva det AKTIVA
+  läget, med tydlig åtskillnad mellan den arkiverade isolerade
+  regressionsvägen och den ordinarie E2E-sviten.
+  `generera_isolerad_batch5c.py` är nu fail-closed: verifierar att exakt
+  de åtta förväntade ID:na finns och redan har `investigation is None`,
+  kastar `SystemExit` vid varje avvikelse i stället för att tyst skriva
+  över `investigation`. Fil-/npm-namn oförändrade för att undvika churn.
+- **P2.2** — Öresundskraft-disambigueringen pinnad med explicita
+  assertions i både `tariffer.generated.batch5c.test.ts` (TypeScript) och
+  `test_leverantorsvarde_batch5c_kontrakt.py` (Python,
+  `test_oresundskraft_totalvarme_disambigueras_avsiktligt`). Handoffens
+  räkningsgrind rättad till den exakta formuleringen ovan; daterad
+  sessionsrättelse loggad (se föregående post).
+
+**Verifiering:** Python tariffsvit **1794 passed, 4 skipped**;
+TypeScript/Vitest **1898 passed** i 54 filer; `npx tsc --noEmit` rent;
+`npm run eval:build` grönt, 971 moduler; ordinarie E2E scenario 1–23
+alla gröna; isolerad Batch 5c-E2E (nu en regressionskontroll av det
+aktiva läget, inte en kandidatgenerator) — Scenario 21–23 gröna i den
+arkiverade kopian; `git diff --check` rent i alla tre repon. Ingen
+`neptune-marketing/dist/`-drift kvar efter körningen.
+
+Disposition och produktantal oförändrade sedan aktiveringen: **59
+implemented / 5 ready / 28 blocked av 92**, 61 skarpa produkter.
+
+**Commits:** `skills@<COMMIT_SKILLS>`, `enkey-agents@<COMMIT_ENKEY>`,
+`neptune_academy@<COMMIT_NEPTUNE>`. Samtliga tre repon endast lokalt
+före `origin/main`.
+
+**Ingen push utförd.** Väntar på Codex granskning och nästa
+maskinläsbara signal.
+
+## 2026-09-16 09:50 — REVIEW_READY: Codex — Claude rättar dokumentation, verktyg och räknefelet (granskning 2026-09-16-009)
 
 **Daterad rättelse av räkningsgrinden:** den tidigare invarianten
 "oförändrade 53 äldre produkter" (denna sessionslogg, rad ~302; levande
