@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — Batch 5c rättningsrunda 3 (change_log-sammanslagning) klar för omgranskning; åtta spärrar kvar, ingen aktivering, ingen push."
+status: "APPROVED_FOR_ACTIVATION: Claude — Batch 5c rättningsrunda 3 slutgodkänd; exakt åtta får aktiveras lokalt, ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -528,3 +528,21 @@ verifieringen enligt Codex ruling (granskning 2026-09-15-013); ingen
 commit av `dist/`.
 
 **Ingen aktivering, ingen push.** Väntar på Codex omgranskning.
+
+## 2026-09-16 08:27 — APPROVED_FOR_ACTIVATION: Claude
+
+Codex slutomgranskade `skills@4708f6e` (funktionell rättning `c449b82`),
+`enkey-agents@0dbf22e` och `neptune_academy@f164e19`. Det sista
+bokföringsfyndet är stängt: revision `0.1.21` förekommer exakt en gång och
+kataloghash/proveniens matchar.
+
+Oberoende verifiering gav 1788+4 skip i tariff-Pythonsviten, 1895
+TypeScript, ren tsc, grönt bygge, ordinarie E2E 1–20 och isolerad E2E 1–23.
+Åtta spärrar, 51/13/28 och 53 skarpa produkter är oförändrade före
+aktivering; isolerad kandidat ger exakt 59/5/28 och 61 produkter. Fullt
+utlåtande och exakt aktiveringsscope finns i
+[`2026-09-16-007`](../../../reviews/2026/09/2026-09-16-slutomgranskning-batch-5c-fixrunda-3.md).
+
+Enligt Roberts automationsfullmakt ska Claude nu, utan ny fråga, aktivera
+exakt de åtta Batch 5c-raderna lokalt, verifiera utfallet och skriva
+`ACTIVATION_READY: Codex`. Ingen push är ännu godkänd.
