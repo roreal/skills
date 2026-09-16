@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -193,3 +193,32 @@ Ingen aktivering och ingen push har utförts. Katalograden för Stockholm
 Codex; executed_by: Claude; dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar signal 035, nästa signal 036
+
+### Användarens synliga uppdrag (ordagrant)
+
+> Du är Codex-granskaren i Ellens automatiserade samarbetskedja. conversations/index.md har en ny committad signal REVIEW_READY: Codex med ID 2026-09-16-035. Läs AGENTS.md och conversations/README.md fullständigt och kontrollera att samma post fortfarande ligger överst och har ett unikt sessions-ID. Utför endast nästa protokollsteg för den signalen, verifiera aktuella HEAD:ar och arbetskopior, bevara orelaterade ändringar och stoppa fail-closed vid avvikelse. Vid BLOCKED: Codex eller den bakåtkompatibla signalen BLOCKED ska du granska blockeraren direkt, fatta det tekniska beslut som ryms inom befintligt scope och skriva nästa handlingsbara signal; be Robert om beslut bara om ny behörighet eller en verklig scopeändring krävs. Rollgränsen är absolut: Codex granskar och godkänner men utför aldrig git push; agent-bridge förmedlar bara signalen och gör inga repoändringar. Skriv aldrig att Codex har pushat. Märk relevanta loggar approved_by: Codex och dispatched_by: agent-bridge; executed_by används bara för den aktör som faktiskt utför en åtgärd. Bryggfilerna conversations/automation/ och protokollet i conversations/README.md är separat infrastruktur utanför tariffscopet: lämna dem orörda och räkna dem inte som tariffdiff. Skriv och committa ditt faktiska granskningsutlåtande i conversations/ samt nästa maskinläsbara signal. Pusha aldrig från Codex-steget. Fråga inte Robert om ett klartecken som redan följer av den dokumenterade automationsfullmakten.
+
+### Codex — granskningsresultat
+
+Daterad statusrättelse: sessionsfilens aktuella status har ändrats från
+REVIEW_READY till CHANGES_REQUIRED. Tidigare leveransbeskrivning bevaras
+som historik; påståendet om komplett acceptansmatris korrigeras av utlåtandet.
+
+Codex granskade skills@13ae2bf, enkey-agents@d056ae2 och
+neptune_academy@3aa382e. Signal 035 var unik och överst i committat index.
+HEAD:ar och arbetskopieundantag verifierades. Granskningen gav 1952 passed/
+4 skipped Python, 1989 passed TS och ren tsc, men reproducerade två luckor i
+adapterpreflighten. TS-arkivfixtur, anonymisering, språkparitet för
+returtemperaturbindningen och Batch 7:s isolerade dispositionsprojektion
+kräver rättning. Fullständigt faktiskt utlåtande och nästa avgränsade steg:
+[granskning 036](../../../reviews/2026/09/2026-09-16-granskning-batch-7-implementation.md).
+
+Tekniska beslut: den beställda besparings-/kronspärren behålls;
+leverantörsmetadatan väntar på full fixturgrind. Saknade verkliga mätvärden
+får inte gissas. Ingen aktivering eller push utförd av Codex.
+approved_by: Codex; dispatched_by: agent-bridge.
+
+**CHANGES_REQUIRED: Claude.**
