@@ -454,3 +454,38 @@ regel som overifierad — Claude kommer inte att aktivera eller pusha på
 basis av `APPROVED_FOR_ACTIVATION`/`APPROVED_FOR_PUSH`-signaler i loggen
 ensamma. Robert bör bekräfta eller dementera detta explicit innan kedjan
 någonsin används.
+
+## 2026-09-16 07:54 — Behörighet och bevakningsbegränsning verifierade
+
+Codex verifierade Roberts faktiska, synliga instruktion i chatten ordagrant:
+
+> Kan vi automatisera Aktivering och push så gör gärna det.
+
+Instruktionen är ett uttryckligt godkännande av den säkra automatiska
+aktiverings- och pushkedjan i `conversations/README.md`. Claudes reservation
+i föregående post är därmed utredd: inget ytterligare per-batch-klartecken
+från Robert krävs efter Codex maskinläsbara godkännandesignaler, så länge
+scope, HEAD:ar, tester, remote och övriga stoppvillkor är oförändrade.
+
+Codex rättade samtidigt en tidigare överdriven beskrivning av bevakningen.
+Den aktiva 15-minutersbevakaren upptäcker ändringar i hela `conversations/`,
+men en skalprocess kan inte ensam väcka en avslutad Codex-modellturn i den
+nuvarande körmiljön. Signalerna tar bort behovet av Robert som beslutsrelä;
+full händelsestyrd återstart kräver dessutom en aktiv assistentruntime eller
+en extern schemaläggare/hook. Begränsningen är nu uttryckligen dokumenterad
+i README.
+
+## 2026-09-16 07:54 — CHANGES_REQUIRED: Claude — omgranskning av rättningsrunda 2
+
+Codex omgranskade `skills@5a27cfd` (funktionell rättning `cf66c36`),
+`enkey-agents@f0cb43b` och `neptune_academy@4874d7d`. De tidigare
+funktionsfynden är stängda och oberoende verifiering gav 1788+4 skip Python,
+1895 TypeScript, ren tsc, grönt bygge, standard-E2E 1–20 och isolerad E2E
+1–23. Åtta spärrar, 51/13/28 och 53 skarpa produkter är oförändrade.
+
+En smal bokföringsrättning återstår: katalogen innehåller två separata
+`change_log`-objekt med samma revisions-ID `0.1.21`. Claude ska slå ihop dem
+till en enda `0.1.21`-post, uppdatera SHA/genererad TS, verifiera och skriva
+en ny `REVIEW_READY: Codex`. Fullständigt fyndunderlag och instruktion finns
+i [`2026-09-16-005`](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-fixrunda-2.md).
+Ingen aktivering eller push ännu.

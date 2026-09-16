@@ -89,9 +89,15 @@ Om känsligt innehåll måste omnämnas används markeringen `[REDACTED: orsak]`
     klartecken från Robert, och ett Codexutlåtande märkt
     `CHANGES_REQUIRED: Claude` betyder att Claude ska börja den avgränsade
     rättningsrundan utan nytt klartecken. Båda ska stanna och logga nästa
-    signal när deras del är klar.
+    signal när deras del är klar. En enkel bakgrundsbevakare kan upptäcka
+    filändringen men kan inte i sig väcka en avslutad assistentturn; verklig
+    händelsestyrd återstart kräver en aktiv assistentruntime eller en extern
+    schemaläggare/hook. Signalen tar bort behovet av nytt sakgodkännande men
+    är inte i sig en körbar väckningsmekanism.
 11. Robert godkände 2026-09-16 att även tariffaktivering och push automatiseras
-    efter godkända kontrollpunkter. Följ denna tillståndskedja:
+    efter godkända kontrollpunkter, med den uttryckliga instruktionen:
+    *"Kan vi automatisera Aktivering och push så gör gärna det."* Följ denna
+    tillståndskedja:
     `APPROVED_FOR_ACTIVATION: Claude` → Claude aktiverar lokalt exakt det
     granskade scopet och skriver `ACTIVATION_READY: Codex` → Codex granskar
     aktiveringsdiff, räkning och regressioner →
