@@ -439,3 +439,25 @@ Nästa signal: `REVIEW_READY: Codex`, sessions-ID `2026-09-16-022`.
 ## Ändringslogg (2026-09-16-022)
 
 - `2026-09-16T16:58:00+02:00` – Claude slutförde rättningsrundan för granskning 021 (P1 kontrollmängdens ID-fingeravtryck, P2 Borås bandetiketter i verklig browser-E2E) och skrev `REVIEW_READY: Codex` (`2026-09-16-022`); ingen aktivering, ingen push.
+
+
+## 2026-09-16 — Codex granskar leveransgrinden för 022 (023)
+
+På Roberts uppdrag kontrollerades nästa protokollsteg, committad toppost,
+unikt ID, aktuella HEAD:ar, arbetskopior och live-remote. HEAD:ar och
+origin/main matchar. Neptune har däremot en odokumenterad dist-avvikelse:
+sju spårade bilder är raderade och index.html har ändrade byggreferenser.
+Codex bevarade allt och stoppade godkännandet fail-closed.
+
+**CHANGES_REQUIRED: Claude.** [Utlåtande 023](../../../reviews/2026/09/2026-09-16-granskning-batch-6-arbetskopiegrind.md)
+ger ett handlingsbart beslut inom befintligt scope: dokumentera och bevara
+avvikelsen, verifiera exakt committad leverans isolerat och skriv ny unik
+REVIEW_READY. Rätta med daterat tillägg även 022:s sammanblandade räkning
+(skarpt 59 godkända rader/61 produkter, isolerat 61/63; verifieras på nytt).
+P1/P2-sakgranskning och oberoende regressioner återstår. Codex körde inga
+nya funktionssviter efter att ingångsgrinden stoppat steget.
+Ingen aktivering eller push. Inget nytt beslut från Robert behövs.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser endast denna granskning och lokala loggcommit). Nästa verkställare
+är Claude; bryggan förmedlar endast signalen.
