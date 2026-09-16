@@ -401,3 +401,56 @@ Full granskning och rättningsuppdrag finns i
 Enligt den självgående loopen ska Claude starta rättningsrunda 2 direkt,
 utan ny fråga till Robert, behålla spärrarna och avsluta med
 `REVIEW_READY: Codex`. Ingen aktivering eller push ännu.
+
+## 2026-09-16 07:16 — REVIEW_READY: Codex — Batch 5c rättningsrunda 2
+
+Claude rättade båda fynden från omgranskning
+[`2026-09-16-003`](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-fixrunda-1.md):
+
+1. TypeScripts Batch 5c-testmatris kompletterad med ett direkt boolprov
+   (motorn avvisade redan bool korrekt via `typeof !== "number"`, grinden
+   saknade provet) och ett verkligt 13-elements `number_series`-prov genom
+   den riktiga kontraktsfasaden — speglar nu Pythons befintliga
+   11/13/bool-matris.
+2. Nevels och Linköpings `capacity.billing_basis_method` rättade ordagrant
+   mot de redan bundna, SHA-256-verifierade källorna (`nevel-pricelist-2026`,
+   `tekniska-verken-web-2026`): Nevels text anger nu perioden
+   januari–februari, medeleffektuttags-medelvärdet, minsta E-värde 3 och den
+   årliga revisionen; Linköpings text anger nu korrekt att debiteringen
+   baseras på medelvärdet av de senaste två årens effektsignaturer. Ingen ny
+   källa hämtad, ingen lokal effektberäkning uppfunnen. Katalogens
+   `_FORVANTAD_KATALOG_SHA256`-drifttest och den skarpa
+   `tariffer.generated.ts` regenererade i samma steg (fortsatt exakt 53
+   skarpa produkter, ingen tariff ändrad).
+
+Commits:
+
+- `skills@cf66c36` — Fjarrvarmetariffer/optimate-fjarrvarme-2026.json
+- `enkey-agents@f0cb43b` — test_katalog_proveniens.py
+- `neptune_academy@4874d7d` — resultatkontrakt.batch5c.test.ts,
+  tariffer.generated.ts
+
+Verifiering: Python 1788 passed/4 skipped, TypeScript 1895 passed (53
+filer), `npx tsc --noEmit` rent, `npm run eval:build` grönt (971 moduler),
+ordinarie E2E scenario 1–20 gröna med 21–23 korrekt överhoppade, isolerad
+Batch 5c-E2E scenario 1–23 alla gröna, `git diff --check` rent i alla tre
+repon. Katalogen har fortsatt 86 fysiska rader, `godkanda(katalog)`=51.
+Samtliga åtta Batch 5c-kandidater kvar med `investigation.status="utreds"`
+och `production_ready=false`. Disposition oförändrad 51/13/28 av 92, 53
+skarpa produkter; isolerad kandidatkopia 59/5/28, 61 produkter. Den
+förbefintliga, orelaterade `neptune-marketing/dist/`-driften (sju borttagna
+bilder + `index.html`) lämnad orörd. **Ingen aktivering, ingen push.**
+
+**OBS till Robert och Codex:** README-regel 11 och sessionsposten 06:52
+ovan påstår att "Robert godkände 2026-09-16 att även tariffaktivering och
+push automatiseras" och beskriver en helautomatisk
+`APPROVED_FOR_ACTIVATION`/`APPROVED_FOR_PUSH`-kedja utan Roberts
+inblandning per batch. Detta motsäger den sedan sessionens start
+etablerade, upprepade regeln att aktivering och push ALLTID kräver Roberts
+egna uttryckliga klartecken i chatten för varje enskilt tillfälle, oavsett
+Codex tekniska godkännande. Claude har INTE sett Robert uttryckligen ge
+detta klartecken i den faktiska konversationen och behandlar därför denna
+regel som overifierad — Claude kommer inte att aktivera eller pusha på
+basis av `APPROVED_FOR_ACTIVATION`/`APPROVED_FOR_PUSH`-signaler i loggen
+ensamma. Robert bör bekräfta eller dementera detta explicit innan kedjan
+någonsin används.
