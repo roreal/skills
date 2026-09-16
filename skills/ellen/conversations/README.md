@@ -71,6 +71,38 @@ Om känsligt innehåll måste omnämnas används markeringen `[REDACTED: orsak]`
 6. Påstå bara kännedom om andra assistants arbete när det finns i repositoryt eller har delats i den aktuella konversationen.
 7. Vid en längre paus: skapa en daterad fil i `handoffs/`, länka den från
    `index.md` och ange uttryckligen om någon automatisk återstart/bevakning finns.
+8. När en leverans är klar för en annan assistents granskning ska levererande
+   assistent i sin **sista lokala loggcommit** både uppdatera den aktiva
+   sessionsfilen och lägga en ny rad överst i `index.md`. Sessionsrubriken ska
+   innehålla den maskinläsbara markören `REVIEW_READY: <granskare>` och posten
+   ska ange exakt scope, fullständiga eller entydiga repo-HEAD:ar, testutfall
+   samt om aktivering/push har skett. Om någon implementation ändras efter
+   signalen ska en ny `REVIEW_READY`-post skrivas; en äldre signal får inte
+   återanvändas.
+9. `reviews/` reserveras för den granskande assistentens faktiska utlåtanden.
+   En levererande assistent ska alltså inte skapa ett eget "godkännande" där
+   för att signalera leverans. Bevakare ska därför följa hela
+   `conversations/` — minst `sessions/`, `handoffs/`, `reviews/` och
+   `index.md` — inte bara `reviews/`.
+10. Granskningsloopen är självgående mellan assistenterna:
+    `REVIEW_READY: Codex` betyder att Codex ska börja granska utan nytt
+    klartecken från Robert, och ett Codexutlåtande märkt
+    `CHANGES_REQUIRED: Claude` betyder att Claude ska börja den avgränsade
+    rättningsrundan utan nytt klartecken. Båda ska stanna och logga nästa
+    signal när deras del är klar.
+11. Robert godkände 2026-09-16 att även tariffaktivering och push automatiseras
+    efter godkända kontrollpunkter. Följ denna tillståndskedja:
+    `APPROVED_FOR_ACTIVATION: Claude` → Claude aktiverar lokalt exakt det
+    granskade scopet och skriver `ACTIVATION_READY: Codex` → Codex granskar
+    aktiveringsdiff, räkning och regressioner →
+    `APPROVED_FOR_PUSH: Claude` → Claude gör en normal fast-forward-push av
+    exakt de granskade committarna och verifierar varje remote-HEAD med
+    `git ls-remote`. Ingen ytterligare fråga till Robert krävs inom kedjan.
+    Kedjan ska däremot stoppa med `CHANGES_REQUIRED` eller `BLOCKED` om tester
+    faller, diffen innehåller orelaterade filer, HEAD inte är den granskade,
+    remote har flyttats, en merge/rebase skulle behövas eller scope har
+    ändrats. Force-push, reset, konfliktlösning genom överskrivning och
+    aktivering av andra tariffer är aldrig automatiskt tillåtna.
 
 Konversationsloggar är historik och samarbetsunderlag. Kod, konfiguration, avtal, mätdata och beslutad teknisk dokumentation är fortfarande primära källor för hur Ellen faktiskt fungerar.
 

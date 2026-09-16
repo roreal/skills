@@ -323,3 +323,56 @@ dispositionen är INTE ändrad, per rättningsuppdragets instruktion.
 Batch 5c rättningsrunda 1 är genomförd bakom spärr. Ingen tariff är
 aktiverad och inget är pushat. Exakt åtta spärrar (`investigation.
 status="utreds"`) består oförändrat. Väntar på Codex omgranskning.
+
+## 2026-09-16 06:50 — Kommunikationsregel och bevakning rättad
+
+Robert bad Codex bredda bevakningen och instruera Claude så att en färdig
+leverans inte kan döljas av att endast sessionsloggen ändras. Codex stoppade
+den tidigare bevakningen av bara `conversations/reviews/` och ersätter den
+med bevakning av hela `conversations/`.
+
+### Bindande instruktion till Claude
+
+När en implementation eller rättningsrunda är klar för Codex granskning ska
+Claude i den **sista lokala loggcommitten** göra båda följande:
+
+1. lägg en daterad rubrik med `REVIEW_READY: Codex` i den aktiva
+   sessionsfilen och ange exakt scope, repo-HEAD:ar, testutfall samt
+   aktiverings-/pushstatus;
+2. lägg samtidigt en ny rad överst i `conversations/index.md` som länkar till
+   sessionen och börjar med samma `REVIEW_READY: Codex`-markör.
+
+Om produktkod, katalog eller test ändras efter signalen ska Claude skriva en
+ny signal med de nya HEAD:arna. `conversations/reviews/` är fortsatt
+reserverad för Codex faktiska granskningsutlåtanden; Claude ska inte skapa ett
+eget godkännande där. Den permanenta arbetsregeln finns även i
+`conversations/README.md`.
+
+Flödet ska därefter gå utan Robert som relä:
+
+- `REVIEW_READY: Codex` startar Codex granskning automatiskt;
+- `CHANGES_REQUIRED: Claude` startar Claudes avgränsade rättningsrunda
+  automatiskt;
+- respektive assistent stannar efter sin del och skriver nästa signal.
+
+Den redan levererade Batch 5c-rättningsrundan behandlas nu som
+`REVIEW_READY: Codex`, så Codex startar omgranskningen direkt.
+
+## 2026-09-16 06:52 — Robert godkänner automatiserad aktivering och push
+
+Robert gav uttryckligt tillstånd att även automatisera aktivering och push.
+Från denna punkt gäller följande säkra kedja för tariffbatcherna:
+
+1. `APPROVED_FOR_ACTIVATION: Claude` gör att Claude aktiverar lokalt exakt
+   det av Codex granskade scopet utan ytterligare fråga.
+2. Claude kör aktiveringsgrinden och skriver `ACTIVATION_READY: Codex` med
+   exakta HEAD:ar; Codex granskar diff, räkning och regressioner automatiskt.
+3. `APPROVED_FOR_PUSH: Claude` gör att Claude pushar exakt de godkända
+   committarna med normal fast-forward och verifierar samtliga remote-HEAD:ar
+   med `git ls-remote`.
+
+Automatiken stoppar vid avvikande HEAD/remote, orelaterad diff, fallande test,
+ändrat scope eller behov av merge/rebase. Force-push, reset, överskrivande
+konfliktlösning och aktivering utanför det uttryckligt granskade batchscopet
+är fortsatt förbjudet. Den permanenta regeln är införd i
+`conversations/README.md`.
