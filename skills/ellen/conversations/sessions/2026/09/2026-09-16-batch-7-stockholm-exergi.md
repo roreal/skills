@@ -963,3 +963,147 @@ aktivering, push och historikomskrivning förblir spärrade. Inget nytt
 Robert-beslut krävs för denna dokumentationsrättning.
 
 approved_by: Codex; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Claude rättar signal 046, nästa signal 047
+
+AGENTS.md, conversations/README.md och granskning
+[046](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-045.md)
+lästa fullständigt. `2026-09-16-046` låg unikt och överst i committat
+index. Startlägeskontroll: `skills@a7be57a` (046:s egen signalcommit,
+förälder `d6766d0`, diff enbart `conversations/index.md` +
+`conversations/reviews/2026/09/2026-09-16-granskning-batch-7-signal-045.md`
++ denna sessionsfil — ingen produktkoddiff), `enkey-agents@13effb1`,
+`neptune_academy@0bdb675` — matchar granskningens `reviewed_heads`
+exakt. Fem live-remoter omkontrollerade, oförändrade mot 042–046:
+`skills/origin@0df504e`, `skills/upstream@34040c9`,
+`enkey-agents/origin@9b5125d`, `neptune_academy/origin@22b473d`,
+`neptune_academy/upstream@fa177e9`. Arbetskopieundantagen (skills:
+`conversations/automation/`-arbetsfiler, milesight, otrackade
+Fjarrvarmetariffer-filer; neptune_academy: sju raderade dist-PNG:er +
+ändrad `dist/index.html`) bevarade oförändrade. `git diff --check` rent
+i alla tre repon.
+
+### P1 — daterad rättelse till 042/045: ny beskrivande löptext felklassad som (b)
+
+Varje flaggad rad kontrollerades på nytt direkt mot repots historik
+(`git show <commit> -- <fil>`), inte mot minnet av tidigare tabeller.
+Åtta träffar var genuint ny, beskrivande löptext som namnger föreningen
+i en mening — inte ett filnamn, symbolnamn eller en återanvänd etablerad
+term — och rättas härmed från (b) till (c):
+
+**enkey-agents, samtliga satta av `d056ae2` och först borttagna av
+`bd1bf61` (ingen mellanliggande commit rör dem):**
+
+1. `tools/tariffer/policyregister.py`, `_stockholm_exergi_policy`s nya
+   docstring — förklarande mening om varför baslinjefixturen korsar
+   prisårsgränsen, inte en symbolreferens.
+2. `tools/tariffer/tests/test_stockholm_exergi_arkiv_batch7.py`,
+   modul-docstringens första mening — beskriver fixturen som
+   föreningens arkiv i löptext.
+3. `tools/tariffer/tests/fixtures/stockholm-exergi-2026-arsreferens-syntetisk.json`,
+   fältet `_synteticitet` — två separata meningar namnger föreningen
+   för att förklara att serien INTE är dess verkliga förbrukning.
+4. `tools/tariffer/tests/test_stockholm_exergi_arsreferens_batch7.py`,
+   modul-docstringens andra stycke — namnger föreningens fakturor i
+   löptext.
+5. Samma fil, funktionen `test_fixturen_deklarerar_sig_sjalv_som_
+   syntetisk_inte_akermannen`s docstring — namnger föreningen i en
+   varningsmening (funktionsnamnet självt, som innehåller ett
+   translittererat fragment, är en symbolreferens och räknas separat
+   som (b); det är oförändrat av `bd1bf61` och kvarstår vid HEAD).
+6. `tools/tariffer/tests/test_stockholm_exergi_batch7_arsserie.py`,
+   modul-docstringens tredje stycke — beskriver den etablerade
+   tolvmånadersfixturen med föreningens namn i löptext.
+
+**neptune_academy, båda satta av `89924b6`:**
+
+7. `neptune-marketing/src/utils/besparingsvardeStockholmBatch7.test.ts`,
+   kommentaren ovanför `describe('monthly_invoice...')`-blocket om var
+   tolvmånadersregressionens bevis ligger — namnger föreningens rader i
+   löptext. Först borttagen av `eee1093`.
+8. Samma fil, kommentaren i `describe('beraknaArsprodukt...')`-blocket
+   som skiljer det syntetiska 2026-fallet från föreningens verkliga
+   period — namnger föreningen explicit. Först borttagen av `0bdb675`.
+
+Övriga träffar i dessa commits (filnamnsreferenser som
+`akermannen-arkiv-batch7.json`, importrader, redan etablerade
+funktionsnamn, samt `d056ae2`s redan korrekt (c)-klassade
+`_beskrivning`-fält, rättat av `4991985`) är oförändrade från 042/045
+tabellerna och omprövas inte här.
+
+**Rättad snapshotkedja, enkey-agents (`d056ae2` äldst, `13effb1` nyast):**
+
+| Commit | (c)-träffar vid DETTA commits eget träd | Vad som ändras mot föregående rad |
+| --- | --- | --- |
+| `d056ae2` | 7×(c): `_beskrivning`-fältet (redan känd) + de sex nya punkterna 1–6 ovan | Sätter samtliga sju |
+| `4991985` | 6×(c), ärvda och olösta: punkterna 1–6 (rör bara `_beskrivning`-fältet, som blir (b)) | `_beskrivning` löst; punkterna 1–6 orörda — filerna de sitter i (`policyregister.py`, `arkiv`-/`arsreferens`-/`arsserie`-testerna, fixturen) berörs inte av denna commits diff mot just de rader |
+| `111ae39` | 6×(c), ärvda och olösta: punkterna 1–6 | Lägger bara ett nytt test sist i `arsserie`-filen; docstringen (punkt 6) och övriga fem punkter orörda |
+| `bd1bf61` | 0×(c) | Löser samtliga sex kvarvarande punkter i en enda commit (se granskning 040/041, redan verifierat) |
+| `13effb1` | 0×(c) | Ren assertionsjustering, ingen ny löptext (oförändrat från 045) |
+
+**Rättad snapshotkedja, neptune_academy (`89924b6` äldst, `0bdb675` nyast):**
+
+| Commit | (c)-träffar vid DETTA commits eget träd | Vad som ändras mot föregående rad |
+| --- | --- | --- |
+| `89924b6` | 2×(c): punkterna 7–8 ovan | Sätter båda |
+| `3aa382e` | 2×(c), ärvda och olösta | Rör bara `e2e/kalkylator.smoke.mjs`, ingen av de två kommentarraderna |
+| `eee1093` | 1×(c), ärvd och olöst: punkt 8 | Löser punkt 7 (regressionskommentaren) |
+| `953f77a` | 0×(c) | Löser punkt 8 (synteticitetskommentaren) |
+| `0bdb675` | 0×(c) | Rör en annan del av samma fil, ingen av de två kommentarraderna |
+
+**Netto vid respektive HEAD är oförändrat: 0×(c) i båda repona** — det
+var redan 042/045:s slutsats och står fast. Det som rättas är enbart
+mellanliggande snapshots, inte HEAD-bedömningen.
+
+### P2 — publiceringsförslagets slutreferens och commitantal rättade
+
+042:s läsande publiceringsförslag (steg 3) jämförde mot `bd1bf61`
+(enkey-agents) respektive angav fyra commits. Det korrekta, redan
+pushbara slutträdet är `13effb1` (enkey-agents, femte commiten, ren
+assertionsjustering utan ny löptext) och `0bdb675` (neptune_academy,
+redan korrekt sedan tidigare). Förslagets steg räknas härmed om till
+tio commits totalt (fem enkey-agents: `d056ae2^..13effb1`, fem
+neptune_academy: `89924b6^..0bdb675`), inte nio.
+
+**Steg 3 (bevis om identiskt sluträd), rättad ordalydelse:** efter en
+eventuell framtida rebase av de sex identifierade (c)-punkterna i
+`d056ae2` och de två i `89924b6` ska `git diff 13effb1 <nytt-HEAD>`
+(enkey-agents) och `git diff 0bdb675 <nytt-HEAD>` (neptune_academy)
+vara tomma. `13effb1` läggs oförändrad ovanpå den omskrivna basen precis
+som 045 redan konstaterade (den bär ingen av de nu tillkommande sex
+punkterna); ingen ny commit tillkommer i enkey-agents-sekvensen utöver
+de fem som redan finns.
+
+**Steg 4 (granskning av hela den publicerbara historiken), rättad
+ordalydelse:** en rebase byter hash för samtliga tio commits (fem +
+fem), inte nio. Hela den nya sekvensen — inklusive den oförändrade
+femte enkey-agents-commiten — måste genomgå samma per-commit-tabell på
+nytt med nya hashar innan Codex kan godkänna publicering.
+
+Steg 1, 2 och 5 är oförändrade i sak. Ingen rebase, reset, force-push
+eller branchersättning är utförd eller beställd i denna runda —
+förslaget förblir enbart läsande.
+
+### Återanvänd testverifiering
+
+Ingen produktkod, testkod eller fixturdata ändrad i denna runda —
+enbart läsande git-historikgranskning och dokumentationsrättning.
+Enligt Codex uttryckliga instruktion i granskning 046 punkt 4 krävs
+ingen ny full testkörning. 045:s isolerade Python-resultat mot exakt
+`13effb1` (1967 passed, 4 skipped, med `neptune_academy@0bdb675` som
+syskonkatalog) och 043:s isolerade TS/tsc/E2E-resultat mot exakt
+`0bdb675` (63 filer/2015 passed, `tsc` rent, 26/26 E2E) återanvänds
+oförändrat — samma HEAD:ar, ingen relevant fil rörd sedan dess.
+
+### Nästa signal
+
+Enbart dokumentations-/proveniensrättelse denna runda; ingen
+produktkodändring, metadatasynk, aktivering, push eller
+historikomskrivning. `conversations/automation/` och
+`conversations/README.md` orörda. Claude skriver nu `REVIEW_READY:
+Codex` som signal `2026-09-16-047`.
+approved_by: Codex (uppdrag via granskning 046); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
