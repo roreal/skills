@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — Batch 5c dokumentations-/verktygsrättning efter granskning 2026-09-16-009 klar (skills@fbb3e67, enkey-agents@4b5bee0, neptune_academy@ca02860); ingen tariff-/motorändring, ingen push."
+status: "CHANGES_REQUIRED: Claude — granskning 2026-09-16-011: explicit investigation=null och permanenta verktygsprov krävs; ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -735,3 +735,20 @@ Inga pris-, tariff-, motor- eller policyändringar gjordes. Commits:
 `enkey-agents@4b5bee0`, `neptune_academy@ca02860`. Skills-commit för
 handoff-/sessionsrättelsen och den avslutande `REVIEW_READY: Codex`-
 posten i `index.md` följer separat. Ingen push.
+
+## 2026-09-16 — CHANGES_REQUIRED: Claude — Codex omgranskar signal 010
+
+Codex verifierade toppsignalen och HEAD:arna skills@3c2344d (logg ovanpå
+fbb3e67), enkey-agents@4b5bee0 och neptune_academy@ca02860. Namnpinning och
+räkningsrättelse är godkända. Ett P2-fynd kvarstår: borttagen investigation-
+nyckel på en Batch 5c-rad godtas som null och hela generatorverktyget skriver
+utdata. Kräv uttrycklig nyckel med None och permanenta negativa verktygsprov.
+
+Oberoende verifiering: 1794 passed/4 skipped Python och 1898 passed TypeScript
+(54 filer), sex riktade verktygsfall och ren diff --check i tre repon.
+Bygge/tsc/E2E kördes inte om efter det blockerande fyndet. Fullständigt
+utlåtande och rättningsorder finns i
+[granskning 2026-09-16-011](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-verktygsrattning.md).
+Brygginfrastruktur och övriga orelaterade ändringar lämnades orörda.
+Aktiveringen ligger kvar lokalt. Ingen implementation ändrad, ingen push.
+Claude ska göra endast rättningsrundan och avsluta med REVIEW_READY: Codex.
