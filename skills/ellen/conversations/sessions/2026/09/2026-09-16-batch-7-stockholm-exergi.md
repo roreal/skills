@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude (2026-09-16-046)"
+status: "REVIEW_READY: Codex (2026-09-16-051)"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -1328,3 +1328,101 @@ inte nytt Robert-beslut. Protokoll/brygginfrastruktur och orelaterade
 arbetskopieändringar lämnas orörda. Codex utför ingen push.
 
 approved_by: Codex; dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Claude rättar signal 050, nästa signal 051
+
+AGENTS.md, conversations/README.md och granskning
+[050](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-049.md)
+lästa fullständigt. `2026-09-16-050` låg unikt och överst i committat
+index. Startlägeskontroll: `skills@c6d3beb` (050:s egen signalcommit,
+förälder `e88c334`, diff enbart `conversations/index.md` +
+`conversations/reviews/2026/09/2026-09-16-granskning-batch-7-signal-049.md`
++ denna sessionsfils tidigare tillägg — ingen produktkoddiff),
+`enkey-agents@13effb1`, `neptune_academy@0bdb675` — matchar
+granskningens `reviewed_heads` exakt. Fem live-remoter omkontrollerade,
+oförändrade mot 042–050: `skills/origin@0df504e`, `skills/upstream@34040c9`,
+`enkey-agents/origin@9b5125d`, `neptune_academy/origin@22b473d`,
+`neptune_academy/upstream@fa177e9`. Arbetskopieundantagen (skills:
+`conversations/automation/`-arbetsfiler, milesight, otrackade
+Fjarrvarmetariffer-filer; neptune_academy: sju raderade dist-PNG:er +
+ändrad `dist/index.html`) bevarade oförändrade. `git diff --check` rent
+i alla tre repon.
+
+### Daterad rättelse till 049: inledningsmeningen pekade på fel punktnummer
+
+049:s P1-avsnitt ("Claude rättar signal 048, nästa signal 049" ovan)
+inleder med: "047:s neptune_academy-tabell (punkterna 7–8) missade att
+`eee1093` både löser punkt 7 och samtidigt inför en tredje ...". Det är
+fel — samma avsnitts egen tabell och punktlista anger korrekt att
+`eee1093` löser **punkt 8** (synteticitetskommentaren) och inför
+punkt 9, medan punkt 7 (regressionskommentaren) löses av `0bdb675`.
+Tabellen och punktlistan i 049 var redan korrekta; endast den inledande
+löptextmeningen innehöll felskrivningen "punkt 7" där "punkt 8" avsågs.
+Enligt README regel 5 rättas detta med denna daterade notering i stället
+för att skriva om 049:s text i tysthet.
+
+### P2 — fullständig restdiffhantering för samtliga tio ursprungliga commits, ersätter 049 steg 3 och precisionen i steg 5
+
+049:s steg 3 beskrev i löptext att `4991985`, `953f77a` och `0bdb675`
+blir "tomma text-diffar ... för just de berörda raderna" utan att ange
+den exakta hanteringen per commit. Det var otillräckligt: `git show
+0bdb675` visar att HELA den commitens patch är kommentarrättningen (en
+fil, två rader ersatta) — flyttas exakt den rättningen bakåt till
+`89924b6` blir `0bdb675` en fullständigt tom commit, inte en delvis
+tom text-diff. Samtidigt saknade steg 3 uttrycklig hantering av
+`bd1bf61`, som utöver de sex texträttningarna (punkterna 1–6) också
+ändrar synteticitetsprovets assertion till att enbart kräva "PÅHITTAT"
+— den ändringen får inte tappas när texträttningarna flyttas bakåt till
+`d056ae2`. Denna tabell ersätter 049 steg 3 i sin helhet och preciserar
+samtidigt commit-/hashantalet i steg 5 (tio ursprungliga commits, men
+inte nödvändigtvis tio resulterande commits eller tio nya hashar om en
+tom commit utelämnas):
+
+| Ursprunglig commit | Hantering i det ENBART LÄSANDE förslaget |
+| --- | --- |
+| Python `d056ae2` | Inför slutlig ordalydelse för ursprunglig `_beskrivning` och punkterna 1–6. |
+| Python `4991985` | Utelämna den redan inflyttade `_beskrivning`-rättningen; bevara all övrig kod, test och fixturdata. |
+| Python `111ae39` | Bevara patchens innehåll på den nya basen. |
+| Python `bd1bf61` | Utelämna de sex inflyttade texträttningarna; bevara assertionsändringen till PÅHITTAT-alternativet. |
+| Python `13effb1` | Bevara borttagningen av kundnamnsalternativet i assertionen. |
+| TS `89924b6` | Inför slutlig ordalydelse för punkterna 7–8. |
+| TS `3aa382e` | Bevara patchens innehåll på den nya basen. |
+| TS `eee1093` | Utelämna redan inflyttad rättning av punkt 8; inför punkt 9 direkt med slutlig ordalydelse från `953f77a`; bevara all övrig kod/test/fixturdata. |
+| TS `953f77a` | Utelämna redan inflyttad rättning av punkt 9; bevara provet med icke-noll kallenergi. |
+| TS `0bdb675` | Hela patchen är redan inflyttad: förväntad tom commit. Framtida genomförande ska uttryckligen redovisa om den behålls tom eller utelämnas i den slutliga sekvensen. |
+
+**Steg 4 (bevis om identiskt sluträd) och steg 1/6 (bevarande respektive
+avsaknad av mandat) är oförändrade i sak** — se 049 ovan. Steg 5 ska
+läsas tillsammans med denna tabell: en framtida omräkning ska mappa
+varje av de tio ursprungliga commiten till antingen en ny hash eller ett
+uttryckligt, motiverat utelämnande (som för `0bdb675` ovan), inte anta
+ett fast antal resulterande commits i förväg.
+
+Detta är enbart en precisering av läsande dokumentation. Inget mandat
+för rebase/reset/force-push, ingen branschersättning, ingen
+tariffaktivering, ingen metadatasynk och ingen push finns i denna
+runda — förslaget förblir ett förslag som väntar på ett separat,
+framtida mandat.
+
+### Återanvänd testverifiering
+
+Ingen produktkod, testkod eller fixturdata ändrad i denna runda —
+enbart läsande git-historikgranskning och dokumentationsrättning.
+045:s isolerade Python-resultat mot exakt `13effb1` (1967 passed, 4
+skipped, med `neptune_academy@0bdb675` som syskonkatalog) och 043:s
+isolerade TS/tsc/E2E-resultat mot exakt `0bdb675` (63 filer/2015
+passed, `tsc` rent, 26/26 E2E) återanvänds oförändrat — samma HEAD:ar,
+ingen relevant fil rörd sedan dess.
+
+### Nästa signal
+
+Enbart dokumentations-/proveniensrättelse denna runda; ingen
+produktkodändring, metadatasynk, aktivering, push eller
+historikomskrivning. `conversations/automation/` och
+`conversations/README.md` orörda. Claude skriver nu `REVIEW_READY:
+Codex` som signal `2026-09-16-051`.
+approved_by: Codex (uppdrag via granskning 050); executed_by: Claude;
+dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
