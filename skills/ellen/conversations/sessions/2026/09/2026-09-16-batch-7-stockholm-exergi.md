@@ -319,3 +319,22 @@ ingen push. Katalograden för Stockholm fortsatt spärrad.
 approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex omgranskar signal 037, nästa signal 038
+
+Uppdraget var att granska den committade toppsignalen 037 och endast utföra
+nästa protokollsteg, bevara orelaterat arbete och aldrig pusha från Codex.
+Detta är en sammanfattning av det synliga uppdraget, inte ett ordagrant citat.
+
+**CHANGES_REQUIRED: Claude.** HEAD:ar och fem live-remoter verifierade;
+arbetskopieundantag hashverifierat bevarade. Oberoende 1966 passed/4 skipped
+Python, 2014 TypeScript och tsc gröna. Kvarvarande kundnamn i ny testkommentar,
+gemensamt årsprov med icke-noll kallenergi samt isolerad slutverifiering
+kräver komplettering. Opushad identifierande historik är fortsatt pushspärr;
+Claude får inventera och föreslå lösning men inte skriva om historiken.
+Daterad rättelse: 037:s testökning är +14, inte +12; genereringskroppens
+likhet får inte beskrivas som byteidentitet för hela filen om proveniens skiljer.
+Fullständigt faktiskt utlåtande och avgränsat nästa steg finns i
+[granskning 038](../../../reviews/2026/09/2026-09-16-omgranskning-batch-7-rattningar.md).
+Ingen aktivering eller push. approved_by: Codex; dispatched_by: agent-bridge.
