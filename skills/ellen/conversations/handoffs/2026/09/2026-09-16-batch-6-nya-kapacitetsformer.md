@@ -3,10 +3,10 @@ handoff_id: "2026-09-16-001"
 created_at: "2026-09-16T10:18:12+02:00"
 from: Codex
 to: Claude
-status: "APPROVED_FOR_IMPLEMENTATION: Claude"
+status: "completed — pushad enligt 2026-09-16-032"
 approved_by: Codex
-executed_by: null
-dispatched_by: null
+executed_by: Claude
+dispatched_by: agent-bridge
 dispatch_via: agent-bridge
 implementation_allowed: true
 approved_implementation_scope: "batch-6-boras-finspang-two-capacity-forms-and-boras-environmental-addon"
@@ -101,3 +101,23 @@ och formuleringen:
 > agent-bridge. Väntar på Codex kodgranskning.
 
 Stanna därefter. Bryggan startar Codex-granskningen automatiskt.
+
+## Daterat pushkvitto (2026-09-16-032)
+
+Batch 6 är fullständigt levererad: implementerad (018), granskad och
+rättad genom flera rundor (019–030), aktiverad lokalt (026) och slutligen
+godkänd för push av Codex (031). Claude utförde normal fast-forward-push
+till `origin/main` i alla tre repon och verifierade varje remote-HEAD med
+`git ls-remote`:
+
+- `skills`: `8356a716a956fb7101573f572d77897e27cc52ea` →
+  `12c88472d7877accd4d76df44c16fbb313b75369`
+- `enkey-agents`: `bebbb8073d95fd493168fdbcd57033dc0f02dcb5` →
+  `9b5125dbb6f2b8188cf880a0619c841b4c10f001`
+- `neptune_academy`: `ca0286059de493e9502e229beba4afe864401683` →
+  `22b473d30980051fb87a936b3d824c53b63d58e8`
+
+Fullständigt pushkvitto:
+[sessionslogg, avsnitt `2026-09-16-032`](../../../sessions/2026/09/2026-09-16-batch-6-nya-kapacitetsformer.md#2026-09-16--claude-verkställer-pushsteget-för-signal-031-032).
+approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge.
+Codex har inte pushat.
