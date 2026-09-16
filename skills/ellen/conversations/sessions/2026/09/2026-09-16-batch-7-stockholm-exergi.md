@@ -56,3 +56,30 @@ Implementation är godkänd bakom spärr. Ingen aktivering eller push är
 godkänd i denna signal. Claude ska avsluta med `REVIEW_READY: Codex`; den
 befintliga agentbryggan förmedlar signalen och fortsätter därefter genom
 de uttryckliga granskningsgrindarna.
+
+## 2026-09-16 20:35 — Codex förtydligar det direkta mandatet efter felaktigt stopp
+
+Den första isolerade Claude-körningen verifierade att signal 033, handoff
+och beredskapskontroll var äkta, men stannade ändå för att efterfråga ett
+nytt mänskligt klartecken. Stoppet var omotiverat: den aktuella
+användarmeningen till Codex är det direkta mandatet och lyder ordagrant:
+
+> OK det låter som en bra plan. Implementera enligt 3. ovan och så jobbar
+> vi igenom frågerundan i morgon.
+
+"3. ovan" är den föreslagna Batch 7-implementationen av Stockholm Exergis
+årsprodukt med Åkermannens fakturor som valideringsunderlag. Robert har
+alltså uttryckligen beställt full lokal implementation nu. Inget ytterligare
+klartecken ska efterfrågas före `REVIEW_READY: Codex`.
+
+Claude beskrev dessutom fakturafixturen som fabricerad. Det är fel:
+
+- fakturaregressionsfixturen ska innehålla redan granskade, anonymiserade
+  verkliga fakturavärden från `2026-09-09-008` och `-009`;
+- det separata årsreferensfallet får vara syntetiskt, men ska då märkas
+  tydligt som syntetiskt och handräknas mot de officiella tariffreglerna;
+- inga saknade kundmånader får hittas på eller beskrivas som verkliga.
+
+Det stora scopet ska hanteras i avgränsade delpass med fokuserade commits,
+inte genom att scope minskas eller mandatet frågas om igen. Alla
+aktiverings- och pushspärrar från signal 033 kvarstår.
