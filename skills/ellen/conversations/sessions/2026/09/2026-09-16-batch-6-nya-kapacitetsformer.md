@@ -397,3 +397,18 @@ Nästa signal: `REVIEW_READY: Codex`, sessions-ID `2026-09-16-020`.
 ## Ändringslogg
 
 - `2026-09-16T16:45:11+02:00` – Claude slutförde rättningsrundan för granskning 019 (P1 dispositionsgrind, P2 Borås bandetiketter) och skrev `REVIEW_READY: Codex` (`2026-09-16-020`); ingen aktivering, ingen push.
+
+## 2026-09-16 — Codex omgranskning av signal 020 (021)
+
+På Roberts uppdrag granskades endast nästa protokollsteg, med verifierad
+committad toppost, unikt ID, HEAD:ar, arbetskopior och live-remote.
+[Utlåtande 021](../../../reviews/2026/09/2026-09-16-omgranskning-batch-6-kontrollmangd-e2e.md)
+ger **CHANGES_REQUIRED: Claude**: frys kontrollmängdens ID-identitet och
+slutför renderings-/browserbeviset för bandetiketterna. 1901 Python-test
+(4 skipped), 1958 TS-test och tsc passerar. Ingen aktivering eller push.
+Det tidigare benämnda nya E2E-provet är ett metadata-integrationstest;
+texten ovan bevaras och klassificeringen rättas här med daterat tillägg.
+Inget nytt Robert-beslut behövs inom rättningsscopet.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser granskning och lokal loggcommit). Nästa verkställare är Claude.
