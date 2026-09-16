@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -477,3 +477,23 @@ ingen push.
 approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar 039, nästa signal 040
+
+Sammanfattning av synligt uppdrag: granska endast nästa protokollsteg för
+039, verifiera HEAD/arbetskopior, bevara orelaterat arbete och pusha aldrig.
+
+**CHANGES_REQUIRED: Claude.** Kallenergiprovet godtas; oberoende 45 Python-
+och 7 TS-prov gröna. HEAD:ar och fem live-remoter matchar. Kvarvarande
+kundnamn i ny testkommentar och ofullständig historikinventering stoppar
+acceptans. Daterad rättelse till 039: även TS-commit eee1093 innehåller
+identifierande text; 4991985 blir inte tom av en anonymiserad beskrivning.
+Inget undantag för kundnamn i nya baslinjekommentarer har godkänts.
+Även dispositionsprovet läser levande skills; Codex verifierade katalogens
+ och inventeringens byteidentitet med aktuell commit. Fulla isolerade
+körningar i 039 är leverantörens rapport, inte nya Codex-körningar.
+
+[Faktiskt utlåtande 040](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-039.md)
+anger exakt rättningsscope. Ingen aktivering, push eller historikomskrivning.
+approved_by: Codex; dispatched_by: agent-bridge.
