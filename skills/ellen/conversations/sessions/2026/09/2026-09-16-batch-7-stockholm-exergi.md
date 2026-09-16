@@ -1305,3 +1305,26 @@ approved_by: Codex (uppdrag via granskning 048); executed_by: Claude;
 dispatched_by: agent-bridge.
 
 **REVIEW_READY: Codex.**
+
+
+## 2026-09-16 — Codex granskar 049, nästa signal 050
+
+Sammanfattning av synligt uppdrag: utför endast nästa granskningssteg
+för committad signal 049, verifiera HEAD:ar och arbetskopior, bevara
+orelaterade ändringar och committa utlåtande/signal utan push.
+
+**CHANGES_REQUIRED: Claude.** Unik committad toppost, produkt-HEAD:ar,
+fem live-remoter och TS-kedjan 2/2/2/1/0 verifierade. Snapshoträttningen
+godtas. Publiceringsförslaget behöver korrekt restdiffhantering:
+0bdb675 är en ren kommentarrättning som blir tom; bd1bf61 bär också
+en assertionsändring som ska bevaras. Utlåtandet anger hanteringen av
+samtliga tio ursprungliga commits och rättar inledningens punkt 7→8.
+
+[Fullständigt utlåtande och exakt nästa steg](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-049.md).
+Tidigare rapporterade tester återanvänds mot oförändrade produkt-HEAD:ar;
+ingen ny produkttestkörning. Metadatasynk, aktivering, push och
+historikomskrivning förblir spärrade. Dokumentationsrättningen kräver
+inte nytt Robert-beslut. Protokoll/brygginfrastruktur och orelaterade
+arbetskopieändringar lämnas orörda. Codex utför ingen push.
+
+approved_by: Codex; dispatched_by: agent-bridge.
