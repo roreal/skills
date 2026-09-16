@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.22",
+  "schema_version": "0.1.25",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-15",
@@ -1863,14 +1863,7 @@
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
       "component_completeness": "not_certified",
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Två skilda kapacitetsbaser; välj prisgrupp från avtal.",
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -3822,13 +3815,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11818,6 +11805,15 @@
         "Skalet: en komplett, registrerad Tariffpolicy for bada raderna (enkey-agents/tools/tariffer/policyregister.py) implementerar P1.3 i denna rattningsrunda - Boras typade Wn/Q-bandbindningskontrakt (kapacitet_band_falt_bindning) och Bra Miljoval som ett synligt tvavagsval (miljotillagg_vald), samt Finspangs kapacitetsklassificering via kapacitet.typ i stallet for bool(nivaer). contract_required=true kravs strukturellt (kontrollera_aktiveringsgrind) for att den isolerade Batch 6-kandidaten ska ge 63 produkter/2 nya produkt-ID:n i stallet for bara 61 godkanda fysiska rader.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla- eller issues-andring gjord i denna post. Bada radernas investigation forblir oforandrad.",
         "Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 59 (skarp katalog paverkas inte av contract_required ensamt - investigation-sparren galler fortsatt) tills en separat, godkand aktiveringsrunda for Batch 6."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.25",
+      "changes": [
+        "Batch 6 lokal aktivering: investigation-sparren borttagen (satt till null) for exakt de tva raderna boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026 och finspangs-tekniska-verk-finspang-2026 enligt Codex slutomgranskning 2026-09-16-025 (APPROVED_FOR_ACTIVATION: Claude) och Roberts uttryckliga automationsfullmakt for aktiverings-/pushkedjan.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla-, issues- eller contract_required-andring gjord. Boras Bra Miljoval forblir kundens eget, aktiva val (miljotillagg_vald) inom bastariffen, ingen egen katalograd. Finspangs spetsvarmetillagg och Boras topplast beror inte av denna post och ar oforandrade.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 61 (59 tidigare aktiva + dessa tva); dispositionen blir 62 implemented / 2 ready / 28 blocked av 92 (kontraktstackningen for Boras miljotillagg raknas som en av de tre dispositionstackningarna i 63 skarpa produkter, se tariffinventering-v22.md paragraf 8)."
       ]
     }
   ],

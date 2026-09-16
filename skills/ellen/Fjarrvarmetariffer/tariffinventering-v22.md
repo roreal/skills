@@ -585,18 +585,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `00_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-2025-Boras.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE — ny kapacitetsform `heterogeneous_bands` + optional_environmental_addon
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (borasem-2026) bunden vid Batch 6-rättning (handoff 2026-09-16-001)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-025, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — ny kapacitetsform `heterogeneous_bands` (katalog.py/faktura.py, TypeScript-motsvarighet) + `optional_environmental_addon`-justering (justeringar.py)
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 6, policyregister.py `_BORAS_POLICY`), typat Wn/Q-bandbindningskontrakt (`kapacitet_band_falt_bindning`) och Bra Miljöval som synligt tvåvägsval (`miljotillagg_vald`)
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_6_boras_finspang.py, test_dispositionsgrind_inventering.py)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Leverantörens prisgrupp (1–6) OCH `Wn` eller `Q` beroende på grupp (fakturan). Miljötillägget "Bra Miljöval" (31 SEK/MWh) är ett SYNLIGT KUNDVAL, inte automatiskt — måste bli ett explicit UI-alternativ (checkbox/produktval), annars måste det uttryckligen avgränsas bort tills UI-arbetet görs.
+- **Obligatorisk indata:** Leverantörens prisgrupp (1–6) OCH `Wn` eller `Q` beroende på grupp (fakturan). Miljötillägget "Bra Miljöval" (31 SEK/MWh) är ett SYNLIGT KUNDVAL, inte automatiskt — ett explicit UI-alternativ (checkbox/produktval) inom bastariffen, ingen egen katalograd.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Borås — ny kapacitetsform + valfritt tillägg
-- **Kvarstående arbete:** `heterogeneous_bands` (ny kapacitetsform) OCH `optional_environmental_addon` (ny justeringstyp, dessutom kräver kundvalsUI, inte bara ett fält) — v1 nämnde bara kapacitetsformen.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade. Topplast (egen katalogpost) är oförändrad, utanför scope.
+- **Disposition:** `implemented_source_verified_annual`
 
 > **Källrättelse 2026-09-16 (beredskapskontroll `2026-09-16-015`, handoff
 > `2026-09-16-001`, Batch 6 lokal implementation bakom spärr):** Leverantörens
@@ -610,6 +610,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 > Detta är fortfarande en IMPLEMENTATIONSFAS-rättelse: `investigation.status`
 > är fortsatt `utreds`, `production_ready` fortsatt `false`, `Disposition`
 > fortsatt `ready_to_implement` — ingen aktivering har skett.
+
+> **Aktivering 2026-09-16 (Codex slutomgranskning `2026-09-16-025`, Roberts
+> automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt
+> till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json`
+> (change_log 0.1.25). `Disposition` uppdaterad till
+> `implemented_source_verified_annual`. `contract_required: true` och
+> `POLICYREGISTER`-registreringen (rättningsrunda 2, granskning
+> 2026-09-16-017) var redan på plats sedan tidigare — endast
+> aktiveringsspärren togs bort i detta steg. Aktiverad lokalt, ej pushad
+> ännu.
 
 > **Statusuppdatering, handoff `2026-09-15-001` / granskning `2026-09-15-008`
 > (gäller de sex Batch 5b-raderna nedan: `borlange-energi-borlange-2026`,
@@ -792,18 +802,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json` (se proveniens)
 - **Primärkälla:** `07_1` (https://www.prisdialogen.se/wp-content/uploads/2025/10/Normalprislista-Finspang-2025.pdf); `web-review-finspang-final` (https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** källgranskad (verifieringslistan 2026-09-04)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` — väntar på denna implementationsomgång, inte på nytt leverantörsbesked
-- **Motorstatus:** NYTT MOTORARBETE — ny kapacitetsform `piecewise_polynomial` + conditional_flow
-- **Kontraktsstatus:** ej i `POLICYREGISTER` ännu
-- **Teststatus:** inga tariffspecifika automattester ännu
-- **UI-status:** inte valbar i kalkylatorn ännu
+- **Källstatus:** källgranskad (verifieringslistan 2026-09-04); aktuell 2026-källa (web-review-finspang-final, verifierad SHA-256) bunden vid Batch 6-rättning (beredskapskontroll 2026-09-16-015)
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-16 (Codex slutomgranskning 2026-09-16-025, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — ny kapacitetsform `piecewise_polynomial` (katalog.py/faktura.py, TypeScript-motsvarighet) + `conditional_flow`-justering (justeringar.py)
+- **Kontraktsstatus:** i `POLICYREGISTER` (Batch 6, policyregister.py `_FINSPANG_POLICY`), `kapacitet_bindning` + `conditional_flow`-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_6_boras_finspang.py, test_dispositionsgrind_inventering.py)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
 - **Årsreproducerbar med nuvarande underlag:** Ja
-- **Obligatorisk indata:** Leverantörens P-värde (kapacitetsformelns bas), returtemperatur varje månad (°C, fakturan — avgör om `conditional_flow`s villkor >55 °C utlöses) OCH, när villkoret utlöses, MÅNADENS flöde i m³ (fakturan — multipliceras med 20 kr/m³). Spetsvärmetillägget (20 %) är en EGEN VARIANT, se särfallstabellen.
+- **Obligatorisk indata:** Leverantörens P-värde (kapacitetsformelns bas), returtemperatur varje månad (°C, fakturan — avgör om `conditional_flow`s villkor >55 °C utlöses) OCH, när villkoret utlöses, MÅNADENS flöde i m³ (fakturan — multipliceras med 20 kr/m³). Spetsvärmetillägget (20 %) är en EGEN VARIANT, se särfallstabellen — utanför scope för denna aktivering.
 - **Inmatningslägen:** mwh (obligatorisk indata krävs); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
 - **Tariffamilj/adapter:** Finspång — ny kapacitetsform + ny motortyp
-- **Kvarstående arbete:** `piecewise_polynomial` (ny kapacitetsform) OCH `conditional_flow` (ny justeringstyp, villkorad på månatlig returtemperatur) — TVÅ separata nya motordelar, större arbete än enbart kapacitetsformen som v1 angav.
-- **Disposition:** `ready_to_implement`
+- **Kvarstående arbete:** Inget för denna aktiveringsomgång (`annual_forward`, MWh-läge). Kronor och schablon förblir blockerade. Spetsvärmetillägget (egen variantrad, `blocked_external_info`) är oförändrat, utanför scope.
+- **Disposition:** `implemented_source_verified_annual`
 
 > **Källrättelse 2026-09-16 (beredskapskontroll `2026-09-16-015`, handoff
 > `2026-09-16-001`, Batch 6 lokal implementation bakom spärr):** källposten
@@ -817,9 +827,16 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 > `07_1` (2025) kvarstår oförändrad som historik. Spetsvärmetillägget (20 %)
 > ingår fortsatt INTE i denna batch — källan preciserar inte entydigt vilka
 > prisdelar påslaget träffar, se särfallstabellen (`blocked_external_info`).
-> Fortsatt implementationsfas: `investigation.status: utreds`,
-> `production_ready: false`, `Disposition: ready_to_implement` oförändrade —
-> ingen aktivering har skett.
+
+> **Aktivering 2026-09-16 (Codex slutomgranskning `2026-09-16-025`, Roberts
+> automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt
+> till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json`
+> (change_log 0.1.25). `Disposition` uppdaterad till
+> `implemented_source_verified_annual`. `contract_required: true` och
+> `POLICYREGISTER`-registreringen (rättningsrunda 2, granskning
+> 2026-09-16-017) var redan på plats sedan tidigare — endast
+> aktiveringsspärren togs bort i detta steg. Spetsvärmetillägget förblir
+> `blocked_external_info`, oförändrat. Aktiverad lokalt, ej pushad ännu.
 
 #### `habo-energi-habo-2026`
 - **Leverantör / nät / kundkategori:** Habo Energi — Habo — näring/brf
@@ -1992,7 +2009,7 @@ aldrig `exact` — samma klassificering som huvudfallet.
 | `tekniska-verken-linkoping-linkoping-2026--lagtemperatur` | `tekniska-verken-linkoping-linkoping-2026` | `41_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-for-Tekniska-verken-i-Linkoping-AB-Linkoping-2026.pdf) | Lågtemperaturleveransens egen tariffstruktur, inte kartlagd i detalj | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken är lågtemperaturleveransens fullständiga prisstruktur (kapacitet, energi, ev. justeringar)?" |
 | `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` | `finspangs-tekniska-verk-finspang-2026` | `web-review-finspang-final` (https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 (v4 citerade av misstag 2025-dokumentet) | Spetsvärmetillägget (20 %) — det procentuella villkoret är källkänt, men VILKA kunder/perioder som utlöser tillägget och om 20 % gäller samtliga prisdelar (effekt, energi OCH flöde, eller bara en delmängd) är INTE mappat mot en entydig kund-/avtalsregel. Detta strider mot `ready`-definitionen (samtliga regler verifierade, inget nytt besked krävs) — flyttad till blockerad i v4 (granskning 2026-09-08-003, P1) | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilka kunder/perioder utlöser spetsvärmetillägget på 20 %, och gäller procentsatsen samtliga tre prisdelar (effekt, energi, flöde) eller bara en delmängd?" |
 | `jonkoping-energi-jonkoping-och-granna-2026--accessavgift` | `jonkoping-energi-jonkoping-och-granna-2026` | `16_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Jonkoping-Energi-2025-till-2026-Prisandringsmodell.pdf) | Avtalsberoende accessavgift — verifierade värden 0/10/25/50 kr/mån, ett synligt, obligatoriskt kundval | Kundval i UI (radioknappar/dropdown, 0/10/25/50 kr/mån), inget standardvärde — okänt/tomt val BLOCKERAR beräkningen | mwh; kr/schablon blockerade (som bastariffen) | Samma batch som Jönköpings bastariff (§8 batchplan) | `ready_to_implement` — **beslut fattat av Codex/Robert i granskning `2026-09-08-006`:** en fakturerbar, källkänd och kundkänd avtalsuppgift ska kunna ingå som ett synligt obligatoriskt val. Ingen dubblettprodukt exponeras. |
-| `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026--miljotillagg` | `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026` | `borasem-2026` (https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 | Miljötillägget "Bra Miljöval" (31 SEK/MWh) — ett kundvalt UI-tillval, inte en automatisk prisdel | Kryssruta/kundval i UI, inget nytt fält utöver bastariffens | mwh; kr/schablon blockerade | 6 (samma batch som grundformeln — se §8:s räkningsnot om hur denna variant räknas separat trots att den byggs i samma commit) | `ready_to_implement` |
+| `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026--miljotillagg` | `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026` | `borasem-2026` (https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 | Miljötillägget "Bra Miljöval" (31 SEK/MWh) — ett kundvalt UI-tillval, inte en automatisk prisdel | Kryssruta/kundval i UI, inget nytt fält utöver bastariffens | mwh; kr/schablon blockerade | 6 (samma batch som grundformeln — se §8:s räkningsnot om hur denna variant räknas separat trots att den byggs i samma commit) | `implemented_source_verified_annual` — aktiverad 2026-09-16 (Codex slutomgranskning 2026-09-16-025, Roberts automationsfullmakt) tillsammans med bastariffen; kundvalet `miljotillagg_vald` inom bastariffen, ingen egen katalograd |
 
 **14 variant-ID:n totalt, rättat i v7 (Codex/Roberts beslut i granskning `2026-09-08-006`):**
 10 `ready_to_implement` (åtta E.ON/Navirum-varianter, Borås tillägg, Jönköpings accessavgift
@@ -4800,11 +4817,28 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 51 | 8 | 59 |
-| `ready_to_implement` | 3 | 2 | 5 |
+| `implemented_source_verified_annual` | 53 | 9 | 62 |
+| `ready_to_implement` | 1 | 1 | 2 |
 | `blocked_external_info` | 24 | 4 | 28 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-16 (Batch 6-aktivering, Codex slutomgranskning
+`2026-09-16-025`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
+Borås Energi och Miljös samt Finspångs Tekniska Verks bastariffer (§3–4) och
+Borås `--miljotillagg`-variantrad (§5) flyttades från `ready_to_implement`
+till `implemented_source_verified_annual` i SAMMA commit som katalogens
+`investigation`-spärr togs bort för båda bastarifferna (change_log 0.1.25),
+enligt skyldigheten som antecknades nedan efter Batch 5c-aktiveringen.
+`godkanda(katalog, policyregister=POLICYREGISTER)` == 61 fysiska katalograder
+(59 tidigare + Borås + Finspång) — det mekaniska måttet på fysiska rader i
+`optimate-fjarrvarme-2026.json`, skilt från denna tabells 92
+dispositionsposter (78 bas + 14 variant). Tabellen ovan är en mekanisk
+räkning av dokumentets egna `**Disposition:**`-rader; den matchar det
+förväntade resultatet **62 implemented / 2 ready / 28 blocked av 92
+dispositionsposter** (53/1/24 bas + 9/1/4 variant). Finspångs
+spetsvärmetillägg och Borås topplast förblir `blocked_external_info`,
+oförändrade, utanför scope.
 
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
