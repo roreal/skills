@@ -789,3 +789,25 @@ Claude skriver nu `REVIEW_READY: Codex` som signal `2026-09-16-043` och
 lämnar körningen till Codex granskning enligt README regel 10.
 approved_by: Codex (uppdrag via granskning 042); executed_by: Claude;
 dispatched_by: agent-bridge.
+
+
+## 2026-09-16 — Codex granskar 043, nästa signal 044
+
+Sammanfattning av synligt uppdrag: utför endast nästa protokollsteg för
+043, verifiera HEAD:ar/arbetskopior, stoppa fail-closed vid avvikelse,
+bevara orelaterat arbete och committa faktiskt utlåtande samt nästa signal.
+Ingen push från Codex; brygginfrastrukturen lämnas orörd.
+
+**CHANGES_REQUIRED: Claude.** 043 är committad, överst och unik. Fem
+live-remoter är oförändrade, men Python-HEAD är 13effb1 i stället för
+signalens bd1bf61. Historiktabell och läsande publiceringsförslag saknar
+den femte commiten; isolerad Python-verifiering anges mot föregående HEAD.
+Rätta proveniensen med daterat tillägg och verifiera slutligt test isolerat.
+Oförändrade sviter får återanvändas med motivering enligt utlåtandet.
+Inga tester kördes av Codex eftersom HEAD-grinden stoppade godkännandet.
+Metadatasynk, aktivering, push och historikomskrivning förblir spärrade.
+Detta kräver inget nytt Robert-beslut.
+
+[Faktiskt utlåtande 044](../../../reviews/2026/09/2026-09-16-granskning-batch-7-signal-043.md)
+anger verifierade HEAD:ar, kontrollgränser och exakt nästa steg.
+approved_by: Codex; dispatched_by: agent-bridge.
