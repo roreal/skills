@@ -20,6 +20,9 @@ har avslutats och skrivit en ny indexpost. Den kräver att signalen är ren
 och finns i `HEAD`, använder ett singletonlås och markerar signalen som
 övertagen före anrop. Vid CLI-fel, oförändrat sessions-ID eller annan
 avvikelse stoppar den i stället för att försöka mutera samma steg igen.
+`HUP`, `INT` och `TERM` avslutar bevakaren och låter `EXIT`-städningen ta
+bort singletonlåset; signalhanteraren får aldrig fortsätta poll-loopen utan
+lås.
 Sessions-ID:t i den översta signalen måste också förekomma exakt en gång i den
 committade indexfilen; en dubblett stoppar kedjan fail-closed.
 
@@ -69,6 +72,10 @@ tas för den nya signalen. Anropet använder dessutom
 `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0` gör att huvudkörningen väntar tills
 delegerade bakgrundsagenter verkligen är klara i stället för att avbryta dem
 efter klientens tiominutersgräns.
+Claude-prompten kräver dessutom att huvudkörningen själv väntar in, granskar
+och sammanför delegerat arbete och därefter committar nästa indexsignal. Den
+får inte avsluta med enbart beskedet att en bakgrundsagent senare ska återuppta
+arbetet.
 Runtime-loggen visar därför startens tilldelade sessions-ID,
 `CLAUDE_TOOL start` när Claude börjar använda ett verktyg, eventuella
 `CLAUDE_UPDATE`-texter och ett avslutande `CLAUDE_RESULT`, utan att dumpa
