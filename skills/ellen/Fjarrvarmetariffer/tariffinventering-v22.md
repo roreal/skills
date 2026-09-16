@@ -598,6 +598,18 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Kvarstående arbete:** `heterogeneous_bands` (ny kapacitetsform) OCH `optional_environmental_addon` (ny justeringstyp, dessutom kräver kundvalsUI, inte bara ett fält) — v1 nämnde bara kapacitetsformen.
 - **Disposition:** `ready_to_implement`
 
+> **Källrättelse 2026-09-16 (beredskapskontroll `2026-09-16-015`, handoff
+> `2026-09-16-001`, Batch 6 lokal implementation bakom spärr):** Leverantörens
+> aktuella 2026-prissida (ny källa `borasem-2026`,
+> https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html)
+> är nu bunden i katalogens `source_refs` tillsammans med `00_0`, och bär nu
+> grundpriserna — `00_0` bevaras men bär ensam bara längre miljötillägget
+> (Bra Miljöval, 31 kr/MWh, redan verifierad SHA-256). `valid_from` satt till
+> `2026-01-01`. `network_or_product` utökad med Gånghester, som
+> leverantörssidan uttryckligen omfattar — stabilt tariff-ID oförändrat.
+> Detta är fortfarande en IMPLEMENTATIONSFAS-rättelse: `investigation.status`
+> är fortsatt `utreds`, `production_ready` fortsatt `false`, `Disposition`
+> fortsatt `ready_to_implement` — ingen aktivering har skett.
 
 > **Statusuppdatering, handoff `2026-09-15-001` / granskning `2026-09-15-008`
 > (gäller de sex Batch 5b-raderna nedan: `borlange-energi-borlange-2026`,
@@ -793,6 +805,21 @@ fyndplats, inmatningsläge, tariffamilj/adapter, kvarstående arbete, dispositio
 - **Kvarstående arbete:** `piecewise_polynomial` (ny kapacitetsform) OCH `conditional_flow` (ny justeringstyp, villkorad på månatlig returtemperatur) — TVÅ separata nya motordelar, större arbete än enbart kapacitetsformen som v1 angav.
 - **Disposition:** `ready_to_implement`
 
+> **Källrättelse 2026-09-16 (beredskapskontroll `2026-09-16-015`, handoff
+> `2026-09-16-001`, Batch 6 lokal implementation bakom spärr):** källposten
+> `web-review-finspang-final` fick korrekt titel, `retrieved_on=2026-09-16`
+> och verifierad SHA-256
+> `909cbafc1f87be7c00b11f82818f703361f948cf7c2de3d6e04f792410b2ba26` för den
+> aktuella 2026-PDF:en. Denna källa är nu normativ för 2026-priserna
+> (energipriser 708,6/355/212,2 kr/MWh, kapacitetsformlerna
+> `(-0,204×P + 1093)×P` för P≤2600 och `98,45×P + 1 206 554` för P>2600,
+> samt flödesavgiften 20 kr/m³ vid returtemperatur >55 °C); äldre källan
+> `07_1` (2025) kvarstår oförändrad som historik. Spetsvärmetillägget (20 %)
+> ingår fortsatt INTE i denna batch — källan preciserar inte entydigt vilka
+> prisdelar påslaget träffar, se särfallstabellen (`blocked_external_info`).
+> Fortsatt implementationsfas: `investigation.status: utreds`,
+> `production_ready: false`, `Disposition: ready_to_implement` oförändrade —
+> ingen aktivering har skett.
 
 #### `habo-energi-habo-2026`
 - **Leverantör / nät / kundkategori:** Habo Energi — Habo — näring/brf

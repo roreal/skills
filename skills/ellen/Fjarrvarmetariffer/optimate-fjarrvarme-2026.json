@@ -720,10 +720,11 @@
     },
     {
       "id": "web-review-finspang-final",
-      "title": "finspang-final",
+      "title": "Taxor och avtalsvillkor 2026 - Normalprislista flerfamiljshus och lokaler (Finspångs Tekniska Verk)",
       "url": "https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf",
-      "retrieved_on": "2026-09-02",
-      "kind": "supplier_website_or_linked_document"
+      "retrieved_on": "2026-09-16",
+      "kind": "supplier_website_or_linked_document",
+      "sha256": "909cbafc1f87be7c00b11f82818f703361f948cf7c2de3d6e04f792410b2ba26"
     },
     {
       "id": "web-review-hemab-final",
@@ -1008,6 +1009,13 @@
       "title": "Pris för fjärrvärme (webb)",
       "url": "https://www.malarenergi.se/fjarrvarme/pris-for-fjarrvarme/",
       "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "borasem-2026",
+      "title": "Priser och villkor 2026 - fjärrvärme (Borås Energi och Miljö)",
+      "url": "https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html",
+      "retrieved_on": "2026-09-16",
       "kind": "supplier_website"
     }
   ],
@@ -1745,13 +1753,13 @@
     {
       "id": "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026",
       "member_id": "boras-energi-och-miljo",
-      "network_or_product": "Borås, Sjömarken, Sandared, Dalsjöfors, Fristad",
+      "network_or_product": "Borås, Sjömarken, Sandared, Dalsjöfors, Fristad, Gånghester",
       "customer_scope": [
         "business",
         "housing_association"
       ],
       "price_year": 2026,
-      "valid_from": null,
+      "valid_from": "2026-01-01",
       "valid_to": null,
       "price_status": "published_2026",
       "vat_basis": "excluded",
@@ -1836,8 +1844,13 @@
       ],
       "source_refs": [
         {
+          "source_id": "borasem-2026",
+          "pages": []
+        },
+        {
           "source_id": "00_0",
           "pages": [
+            5,
             6
           ]
         }
@@ -1857,7 +1870,8 @@
           "Två skilda kapacitetsbaser; välj prisgrupp från avtal.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "borlange-energi-borlange-2026",
@@ -3814,7 +3828,8 @@
         "conditions_sv": [
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "gavle-energi-gavle-2026",
@@ -11782,6 +11797,27 @@
         "Batch 5c lokal aktivering: investigation-sparren borttagen (satt till null) for exakt atta rader - lulea-energi-lulea-2026, oresundskraft-helsingborg-normal-2026, oresundskraft-angelholm-normal-2026, piteenergi-pitea-centrala-natet-2026, piteenergi-norrfjarden-och-sjulnas-2026, nevel-gimo-osterbybruk-och-osthammar-2026, tekniska-verken-linkoping-linkoping-2026 och malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026 - enligt Codex slutomgranskning 2026-09-16-007 (APPROVED_FOR_ACTIVATION: Claude) och Roberts uttryckliga automationsfullmakt for aktiverings-/pushkedjan.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla-, issues-, production_ready- eller contract_required-andring gjord. Godkannandet galler en uppskattad annual_forward-arskostnad fran tolv manaders leverantorsflode (och for sju av de atta leverantorens bekraftade effekt/effektsignatur och bekraftat band); resultatet ar inte en fakturaexakt manadskostnad. Malarenergis rad har fortsatt ingen kapacitetsdel. Kronor-/schabloninmatning och besparingsprodukten forblir blockerade for samtliga atta.",
         "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 59 (51 tidigare aktiva + dessa atta); dispositionen blir 59 implemented / 5 ready / 28 blocked av 92."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.23",
+      "changes": [
+        "Batch 6 lokal implementation bakom sparr (handoff 2026-09-16-001, beredskapskontroll 2026-09-16-015): boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026 och finspangs-tekniska-verk-finspang-2026 behaller investigation.status=utreds och production_ready=false - ingen aktivering i denna etapp.",
+        "Boras: ny kalla borasem-2026 (leverantorens aktuella 2026-prissida) tillagd och bunden till grundpriserna i source_refs tillsammans med befintlig kalla 00_0 (bar redan verifierad SHA-256, anvands nu ocksa for miljotillagget Bra Miljoval 31 kr/MWh, sida 5). valid_from satt till 2026-01-01. network_or_product utokad med Ganghester (som leverantorssidan uttryckligen omfattar) - stabilt tariff-id ofrandrat, inga andra produktnamn andrade.",
+        "Finspang: kallposten web-review-finspang-final fick korrekt titel, retrieved_on=2026-09-16 och verifierad SHA-256 909cbafc1f87be7c00b11f82818f703361f948cf7c2de3d6e04f792410b2ba26 for den aktuella 2026-PDF:en. Aldre kalla 07_1 (2025) kvarstar som historik, inte normativ for 2026-priserna. Inga pris-, formel- eller kapacitetsbandandringar gjorda i denna post.",
+        "Ingen kapacitetsband-, energipris-, effekt-/flodesformel-, issues- eller contract_required-andring for nagon av de tva raderna. Motorstod for heterogeneous_bands (Boras) och piecewise_polynomial/conditional_flow (Finspang) implementeras separat i enkey-agents/tools/tariffer och neptune_academy bakom samma sparr - se sessionsfilen for Batch 6.",
+        "Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 59 tills en separat, godkand aktiveringsrunda for Batch 6."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.24",
+      "changes": [
+        "Batch 6 lokal implementation bakom sparr, rattningsrunda 2 (granskning 2026-09-16-017, P1.3/P1.4): contract_required=true satt for boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026 och finspangs-tekniska-verk-finspang-2026. investigation.status kvarstar 'utreds' och production_ready=false for bada - ingen aktivering.",
+        "Skalet: en komplett, registrerad Tariffpolicy for bada raderna (enkey-agents/tools/tariffer/policyregister.py) implementerar P1.3 i denna rattningsrunda - Boras typade Wn/Q-bandbindningskontrakt (kapacitet_band_falt_bindning) och Bra Miljoval som ett synligt tvavagsval (miljotillagg_vald), samt Finspangs kapacitetsklassificering via kapacitet.typ i stallet for bool(nivaer). contract_required=true kravs strukturellt (kontrollera_aktiveringsgrind) for att den isolerade Batch 6-kandidaten ska ge 63 produkter/2 nya produkt-ID:n i stallet for bara 61 godkanda fysiska rader.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla- eller issues-andring gjord i denna post. Bada radernas investigation forblir oforandrad.",
+        "Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 59 (skarp katalog paverkas inte av contract_required ensamt - investigation-sparren galler fortsatt) tills en separat, godkand aktiveringsrunda for Batch 6."
       ]
     }
   ],
