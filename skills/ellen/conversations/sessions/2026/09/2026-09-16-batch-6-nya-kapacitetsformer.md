@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude — dispositionsgrind och Borås bandetiketter, granskning 019"
+status: "REVIEW_READY: Codex — dispositionsgrind och Borås bandetiketter rättade, granskning 020"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -19,6 +19,10 @@ local_heads_after_fixrunda_2026_09_16_017:
   skills: "a96f9ef824310dc29b6ae535a34f5281a867234f"
   enkey_agents: "fd09535169f77ce747fe7291ae08ab5670a3032d"
   neptune_academy: "ff0c2532a1f1c6354aad0427c3e356e7f8e25bbd"
+local_heads_after_fixrunda_2026_09_16_019:
+  skills: "f6890926ee52d8c01ecfc8ab7ae5f8bcee7b0576"
+  enkey_agents: "8be154278b339847ffdea301741018ee95b45693"
+  neptune_academy: "60f9e77b6fc841c988d398d3f74d694fd398c8d6"
 relates_to:
   - "conversations/reviews/2026/09/2026-09-16-beredskapskontroll-batch-6.md"
   - "conversations/handoffs/2026/09/2026-09-16-batch-6-nya-kapacitetsformer.md"
@@ -326,3 +330,70 @@ för rättningarna är Claude.
 Daterad rättelse till sammanfattningen 16:26: P1.4 var inte helt slutförd;
 92-postersgrinden saknades. Påståendet att bandetiketterna är utanför scope
 ersätts av beslutet ovan. Äldre redogörelse bevarad.
+
+## 2026-09-16 — Claude verkställer rättningsrundan (granskning 019 → 020)
+
+Läste `AGENTS.md` och `conversations/README.md` fullständigt. Committad
+toppost i `index.md` var `2026-09-16-019` (`CHANGES_REQUIRED: Claude`), ID
+förekom exakt en gång, och arbetskopians index var identiskt. HEAD:ar
+verifierade före arbetet: `skills@f689092` (= granskningens loggcommit,
+ovanpå den granskade `cb85b94`), `enkey-agents@fd09535`,
+`neptune_academy@ff0c253` — samtliga matchade granskning 019:s
+`reviewed_heads` exakt. Arbetskopiorna i enkey-agents och neptune_academy var
+rena; skills hade sedan tidigare det orelaterade syskonet `milesight` samt
+Roberts egna otrackade tariffunderlagsfiler — inget av detta rörs eller
+räknas som del av leveransen.
+
+**P1 (dispositionsgrind, enkey-agents):** ny testmodul
+`tools/tariffer/tests/test_dispositionsgrind_inventering.py` parsar
+`tariffinventering-v22.md`s §3+§4 (78 bastariffer) och §5 (14 variantkrav)
+DIREKT ur dokumenttexten — fail-closed vid fel antal, saknat/dubblerat ID
+eller okänd dispositionssträng, ingen handskriven ID-lista. Verifierar den
+skarpa dispositionen 59/5/28 (bas 51/3/24, variant 8/2/4) mot §8, projicerar
+i minnet EXAKT Borås bastariff, Finspångs bastariff och Borås
+`--miljotillagg` från `ready_to_implement` till
+`implemented_source_verified_annual`, och verifierar den projicerade
+dispositionen 62/2/28 (bas 53/1/24, variant 9/1/4). Projektionen kopplas till
+den verkliga mekaniska grinden (`godkanda(isolerad) − godkanda(sharp) ==
+{Borås, Finspång}`) och till två genuina negativa prov som visar att en
+borttagen `optional_environmental_addon`-justering respektive en borttagen
+policybindning för `miljotillagg_vald` båda kollapsar de två lägenas kostnad
+till samma värde — inte bara ett fältexistens-påstående. `godkanda()`s
+semantik i `katalog.py` och `tariffinventering-v22.md` lämnades helt
+orörda (bara lästa). Fyra parserinriktade negativa prov (förlorad/dubblerad
+post, bas och variant) bekräftar att parsern kastar `ValueError` vid
+dokumentdrift. Full svit: `.venv/bin/python -m pytest tools/tariffer/tests -q`
+→ **1901 passed, 4 skipped** (tidigare baslinje 1887/4; +14 är exakt de nya
+proven, verifierat av Claude oberoende av implementationsagenten).
+
+**P2 (Borås bandetiketter, neptune_academy):** `policyFaltMetadata`
+(`src/utils/resultatkontrakt.ts`) läste `n.min`/`n.max` och
+`kapacitet.enhet` för samtliga kapacitetstyper, vilket för
+`heterogeneous_bands` (Borås) gav `1 (NaN–NaN kW)` … `6 (NaN–NaN kW)` — de
+normaliserade banden bär i stället `min_mwh`/`max_mwh`, och toppnivåns
+`enhet` är den orelaterade strängen `"kW"`. Ny funktion
+`bandAlternativFranPrisar` dispatchar på `kapacitet.typ`: för
+`heterogeneous_bands` byggs etiketterna av `min_mwh`/`max_mwh` med enheten
+`MWh` (öppet toppband hanterat); alla andra kapacitetstyper (inkl.
+`piecewise_polynomial`, som saknar `nivaer` helt) fortsätter oförändrat via
+`.min`/`.max`/`kapacitet.enhet`. Bandvalets affärsregel, de råa
+katalogfälten och Wn/Q-fältbindningsmekaniken (`kapacitetBandFaltBindning`)
+rördes inte — verifierat med ett nytt, riktigt isolerat E2E-prov genom den
+verkliga `batch6RawData` → `policyFranGenererad` → `policyFaltMetadata`-
+kedjan, utöver enhetsprov för alla sex etiketter och en regressionskontroll
+att äldre kapacitetstypers etiketter är oförändrade. Full svit körd av
+Claude oberoende: `npm test -- --reporter=dot` → **58 filer, 1958 test**
+(tidigare baslinje 58/1954; +4 är de nya proven), `npx tsc --noEmit` → rent,
+exit 0.
+
+Commits: `enkey-agents@8be1542` ("Lägg dispositionsgrind för Batch 6:s 92
+inventeringsposter"), `neptune_academy@60f9e77` ("Rätta Borås bandetiketter
+till MWh-intervall"). `skills`-repots egna filer (denna sessionslogg samt
+`index.md`) committas separat som sista steg i denna leverans. Ingen
+aktivering, ingen push — väntar på Codex granskning av denna rättningsrunda.
+
+Nästa signal: `REVIEW_READY: Codex`, sessions-ID `2026-09-16-020`.
+
+## Ändringslogg
+
+- `2026-09-16T16:45:11+02:00` – Claude slutförde rättningsrundan för granskning 019 (P1 dispositionsgrind, P2 Borås bandetiketter) och skrev `REVIEW_READY: Codex` (`2026-09-16-020`); ingen aktivering, ingen push.
