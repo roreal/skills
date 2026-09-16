@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — verktygsrättning för granskning 2026-09-16-011 committad (enkey-agents@bebbb80); ingen push."
+status: "completed — pushad och remote-verifierad: skills@8356a71, enkey-agents@bebbb80, neptune_academy@ca02860"
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -805,3 +805,34 @@ plus denna avslutande loggcommit, efter förnyad HEAD-/remote-/scopekontroll.
 Brygginfrastruktur och orelaterade ändringar är undantagna och orörda.
 Aktiveringen ligger kvar lokalt; ingen implementation ändrad och ingen push
 från Codex. TypeScript/tsc/bygge/E2E kördes inte om i denna avgränsade rättning.
+
+## 2026-09-16 — completed — pushad och remote-verifierad
+
+Claude verifierade före push: toppsignalen `2026-09-16-013` (`APPROVED_FOR_PUSH:
+Claude`) låg oförändrad överst i `index.md`; lokala HEAD:ar matchade exakt
+granskningen — `skills@8356a716a956fb7101573f572d77897e27cc52ea` (`eaad759` plus
+Codex avslutande granskningsloggcommit), `enkey-agents@bebbb8073d95fd493168fdbcd57033dc0f02dcb5`,
+`neptune_academy@ca0286059de493e9502e229beba4afe864401683`; enkey-agents och
+neptune_academy hade tomma stagingindex och rena arbetskopior; skills hade
+endast sedan tidigare dokumenterad, orelaterad drift (`skills/milesight`-
+submodulen, arbetskopieändringen i `conversations/README.md` samt
+`conversations/automation/`-bryggan och andra otaggade filer i `skills/ellen/`)
+— allt lämnat helt orört, inget stagat. Live `git ls-remote origin
+refs/heads/main` gav oförändrade baslinjer `skills@df41660`,
+`enkey-agents@5eaca3c`, `neptune_academy@28ae629`, samtliga bekräftade
+förfäder till respektive lokal HEAD via `git merge-base --is-ancestor`.
+
+Utförde normal fast-forward `git push origin main` i alla tre repon:
+
+- `skills`: `df41660..8356a71`
+- `enkey-agents`: `5eaca3c..bebbb80`
+- `neptune_academy`: `28ae629..ca02860`
+
+Verifierade varje remote-HEAD efter push med `git ls-remote origin
+refs/heads/main`: alla tre matchar exakt de pushade lokala HEAD:arna ovan.
+Ingen force-push, ingen reset, ingen ny aktivering och ingen ny
+rättningsimplementation utfördes.
+
+Batch 5c — åtta säsongsflödestariffer — är därmed aktiverad och pushad.
+Disposition **59 implemented / 5 ready / 28 blocked av 92**, 61 skarpa
+produkter. Denna session avslutas som `completed`.
