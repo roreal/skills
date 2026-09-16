@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 approved_by: Robert
 implementation_directed_by: Codex
 executed_by: Claude
@@ -338,3 +338,142 @@ likhet får inte beskrivas som byteidentitet för hela filen om proveniens skilj
 Fullständigt faktiskt utlåtande och avgränsat nästa steg finns i
 [granskning 038](../../../reviews/2026/09/2026-09-16-omgranskning-batch-7-rattningar.md).
 Ingen aktivering eller push. approved_by: Codex; dispatched_by: agent-bridge.
+
+## 2026-09-16 — Claude slutför rättningsrundan 038, nästa signal 039
+
+AGENTS.md, conversations/README.md och granskning
+[038](../../../reviews/2026/09/2026-09-16-omgranskning-batch-7-rattningar.md)
+lästa fullständigt. Signal 038 låg överst och förekom exakt en gång i
+committat index. Startheadar matchade granskningens `reviewed_heads`
+(`enkey_agents@4991985`, `neptune_academy@eee1093`); skills-HEAD var
+`1322525` (038:s egen signalcommit ovanpå 037, ingen produktkoddiff).
+Arbetskopieundantagen (skills-infrastruktur/otrackade Fjarrvarmetariffer-
+filer, Neptunes sju borttagna dist-PNG + ändrad `dist/index.html`)
+bevarades oförändrade genom hela körningen.
+
+**P1 — anonymisering.** Den flaggade kommentaren i
+`resultatkontrakt.stockholmBatch7Arsserie.test.ts` ("Åkermannens
+tolvmånaders-fixtur") ersatt med "den befintliga tolvmånadersfixturen".
+Kontrollerade ALL nytillagd text i båda rättningsommgångarnas egna
+commits (`enkey-agents@d056ae2..4991985`, `neptune_academy@3aa382e..
+eee1093`) mot föreningsnamn/adress — inga ytterligare träffar i själva
+rättningscommitsen. (Äldre, redan granskade Batch 7-filer innehåller
+fortsatt det bara ordet "Åkermannen" som intern pekare till den frysta
+baslinjefixturen — samma mönster som redan godkänts i tidigare
+granskningar, t.ex. `besparingsvardeStockholmBatch7.test.ts:13`; detta
+rördes inte, eftersom uppdraget gällde exakt den flaggade raden och den
+frysta baslinjen inte får ändras.)
+
+**P2 — icke-noll kallenergi.** Nytt handräknat årsfall i båda språk
+(samma tal): `kall_energi_mwh_arsserie` jan=3.0/feb=1.5/nov=1.0/dec=2.0
+MWh (7.5 MWh totalt, övriga månader noll), ovanpå samma varierade
+returtemperaturserie. `energi = (mwh−kall)×säsongspris + kall×1243`
+(energi.tillagg, 2026-prislistan) räknat per månad; facit = 70 697,5 kr.
+`fast` (146 685 kr) och `retur` (260 kr) bevisat oförändrade — kapacitet
+beror bara på kW, och retur räknas på hela månadens mwh, inte mwh minus
+kall energi (`faktura.py`: `retur = forbrukning.mwh × …`). Python:
+`test_arsserierna_med_ickenoll_kallenergi_ger_handraknat_facit`. TS:
+motsvarande `it(...)` i samma testfil, samma tal. Behöll alla befintliga
+prov oförändrade. Rättelse mottagen och tillämpad: Pythons tidigare
+"rikare" facit hade noll kallenergi (inte icke-noll) — den nya funktionen
+är den första som kombinerar icke-noll kallenergi med varierad
+returtemperatur i samma fall.
+
+**P2 — isolerad slutverifiering.** Körd i separata lokala klonar
+(`git clone --no-hardlinks` från de lokala repona, inga nätverksremoter
+inblandade) av de slutliga committarna nedan, INTE i de levande
+arbetskopiorna:
+- `pytest tools/tariffer/tests -q`: **1967 passed, 4 skipped** (+1 mot
+  038:s 1966 — den nya kallenergitestet; 038 rättade själv den tidigare
+  felaktiga "+12"-uppgiften till korrekt +14 för 037-rundan).
+- `npm ci` (ren installation, ingen `node_modules` återanvänd) + `npm
+  test -- --reporter=dot`: **63 filer, 2015 passed** (+1 mot 038:s 2014).
+- `tsc --noEmit`: exit 0.
+- `npm run test:e2e` (`kalkylator.smoke.mjs`, egen byggd `dist/` i den
+  isolerade klonen, ren `npm ci`): **26/26 scenarier gröna**, inklusive
+  Scenario 26 (Stockholm Exergi). Detta är den isolerade körning som
+  036/037/038 efterlyst; tidigare rundor byggde mot den levande
+  arbetskopian.
+- Dispositionsprojektion (`test_dispositionsgrind_inventering.py`, körd
+  i samma isolerade Python-miljö): `test_skarp_disposition_ar_nu_62_2_28
+  _efter_batch6_aktivering` (skarp, 62/2/28) och
+  `test_projicerad_batch7_disposition_ar_63_1_28_stockholm_isolerad`
+  (Batch 7-isolerad, 63/1/28) båda gröna — katalogspärren och 61 godkända
+  katalograder oförändrade.
+- Produktionsgenerator: kördes i den isolerade enkey-agents-klonen
+  (`python -m tools.tariffer.generera … <skills-HEAD>`) och jämfördes mot
+  den incheckade `tariffer.generated.ts` i den isolerade neptune_academy-
+  klonen. Resultat: **exakt en rad skiljer** — proveniensradens
+  `commit=`-fält (checkad in: `okänd`; nyss körd: den levande skills-
+  HEAD:en `1322525…`). `sha256`-katalogfältet är identiskt (samma
+  källkatalog). Kroppen (`GENERERAD`-raden och hela `TARIFFER`-objektet,
+  dvs. allt FRÅN rad 6) är **sha256-identisk** mellan de två filerna.
+  Korrekt formulering enligt 038:s rättelse: kroppen är byteidentisk,
+  filen som helhet är det inte när proveniensraden skiljer.
+  **Viktig begränsning, redovisad öppet:** `katalog.py`s
+  `KATALOG_SOKVAG` är ett `Path.home()`-baserat absolut sökväg till den
+  LEVANDE `~/Code/skills/skills/ellen`-katalogen (inte relativt till
+  enkey-agents-repot). Det betyder att generatorkörningen ovan — även
+  från en isolerad enkey-agents-klon — fortfarande läste den levande
+  skills-arbetskopian, inte en isolerad kopia av katalogfilen. Detta är
+  en känd, sedan tidigare inventerad brist (se minnesposten om
+  hårdkodad katalogsökväg) och INTE något denna runda ändrar eller kan
+  beskriva som fullt isolerat; endast produkt-/motorkoden (Python och
+  TypeScript) och dess testsviter kördes i genuint isolerade klonar.
+- `git diff --check`: rent i båda repona (isolerade klonar).
+- Arbetskopieundantagen i de LEVANDE reporna verifierade oförändrade
+  före/efter hela körningen: `git diff --stat` för
+  `neptune-marketing/dist/` identiskt (7 borttagna PNG + `index.html`
+  `+2/-2`), `dist/index.html` sha256 =
+  `2b0e0e7492405a46723235ade75b8f5fd33ff6e3d3e1bd79502d2471e9e1a067`.
+  Skills- och enkey-agents-arbetskopiorna oförändrade (`git status`
+  identisk uppsättning otrackade/modifierade filer som vid körningens
+  start).
+
+**Opushad identifierande historik — inventering och förslag (endast
+läsande, ingen historikomskrivning genomförd).** Fullständig genomgång
+av `origin/main..HEAD` i båda repona (inte bara de senaste
+rättningscommitsen):
+- `enkey-agents`: en (1) träff. Commit `d056ae2` (nu `HEAD~1` relativt
+  `4991985`) innehåller i sin diff/ögonblicksbild "Brf Åkermannen 33:s
+  Stockholm Exergi-arkiv" i `akermannen-arkiv-batch7.json`s
+  `_beskrivning`. Ordet ersattes i barnkommiten `4991985`, men
+  originaltexten finns kvar i `d056ae2`s committade objekt. Ingen annan
+  unpushad enkey-agents-commit innehåller identifieraren
+  (`git diff origin/main..HEAD` genomsökt fullt ut).
+- `neptune_academy`: en (1) träff, i commit `89924b6`
+  (`besparingsvardeStockholmBatch7.test.ts`, ursprunglig kommentartext
+  "INTE Brf Åkermannens faktiska 2026 …"), senare mjukad till det bara
+  ordet "Åkermannen" i en efterföljande commit inom samma unpushade
+  intervall. Kontrollerade även `besparingsvarde.test.ts`s
+  "Brf Åkermannen 33"-rad (samma commit `89924b6`) — denna rad finns
+  REDAN på `origin/main` (verifierad med `git show origin/main:…`), är
+  alltså inte ny exponering och tillhör den frysta, redan publicerade
+  baslinjen.
+- Ingen av de två träffade commitsen finns på någon av de fem
+  granskade live-remoterna (verifierat med `git ls-remote` mot alla
+  fem — samtliga oförändrade mot 038:s tabell).
+
+**Föreslagen publiceringsväg (förslag, INTE genomfört denna runda):**
+Eftersom `d056ae2` och `89924b6` aldrig varit publika är en `git rebase
+-i` av enbart de två unpushade repointervallen (redigera/`fixup` just de
+två commitsen, låta alla andra commitmeddelanden och innehåll vara
+oförändrade) en normal, ofarlig redigering av lokal historik — inte en
+omskrivning av publik historik. Konkret: `edit d056ae2` → ta bort
+strängen ur `_beskrivning` → `git rebase --continue` (låter `4991985`
+appliceras ovanpå, vars egen diff blir tom eftersom ändringen redan
+ligger i den redigerade `d056ae2`); analogt `edit 89924b6` i
+neptune_academy. Verifiera efteråt att `git diff <ny-HEAD> <nuvarande-
+HEAD>` är tomt (identiskt sluttillstånd) och att `git log -p
+origin/main..HEAD | grep "Brf Åkermannen"` inte ger träff i någotdera
+repo. Force-push krävs INTE eftersom ingenting är pushat än — en vanlig
+`git push` räcker efteråt. Detta kräver ett separat, uttryckligt mandat
+innan det körs (jf. 038: "Ett eventuellt utökat mandat avgörs
+separat").
+
+Nya HEAD:ar: `enkey-agents@111ae39`, `neptune_academy@953f77a`
+(`skills` uppdateras av denna sessions-/indexcommit). Ingen aktivering,
+ingen push.
+approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge.
+
+**REVIEW_READY: Codex.**
