@@ -8,6 +8,8 @@
 | --- | --- |
 | `REVIEW_READY: Codex` | `codex exec` |
 | `ACTIVATION_READY: Codex` | `codex exec` |
+| `BLOCKED: Codex` | `codex exec` |
+| `BLOCKED` | `codex exec` (bakåtkompatibel säkerhetsväg) |
 | `APPROVED_FOR_IMPLEMENTATION: Claude` | `claude --print` |
 | `CHANGES_REQUIRED: Claude` | `claude --print` |
 | `APPROVED_FOR_ACTIVATION: Claude` | `claude --print` |
@@ -20,6 +22,10 @@ och finns i `HEAD`, använder ett singletonlås och markerar signalen som
 avvikelse stoppar den i stället för att försöka mutera samma steg igen.
 Sessions-ID:t i den översta signalen måste också förekomma exakt en gång i den
 committade indexfilen; en dubblett stoppar kedjan fail-closed.
+
+En implementatör som behöver ett tekniskt beslut ska skriva
+`BLOCKED: Codex`, inte en mottagarlös `BLOCKED`. Bryggan routar även den
+äldre bara markören till Codex för att inte tappa redan skapade signaler.
 
 Rollerna är fasta:
 
@@ -55,10 +61,22 @@ ska göras när en assistent redan arbetar med det aktuella steget, så att
 jobbet inte dubbleras. `run` pollar som standard var 15:e sekund; intervallet
 kan ändras med `ELLEN_BRIDGE_INTERVAL_SECONDS`.
 
-`claude --print` kan buffra sin mellanoutput tills jobbet är klart. Tyst terminal
-under ett pågående anrop betyder därför inte att signalen saknas; använd `status`
-och runtime-loggen för att se dispatch, och bedöm leveransen först när en ny
-committad indexpost finns.
+Varje Claude-anrop får ett nytt UUID med `--session-id`, körs med
+`--no-session-persistence` och får hela uppdraget som ett explicit
+promptargument. Det hindrar tidigare sessioner och bakgrundsnotiser från att
+tas för den nya signalen. Anropet använder dessutom
+`--output-format stream-json` och filtrerar strömmen med `jq --unbuffered`.
+`CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0` gör att huvudkörningen väntar tills
+delegerade bakgrundsagenter verkligen är klara i stället för att avbryta dem
+efter klientens tiominutersgräns.
+Runtime-loggen visar därför startens tilldelade sessions-ID,
+`CLAUDE_TOOL start` när Claude börjar använda ett verktyg, eventuella
+`CLAUDE_UPDATE`-texter och ett avslutande `CLAUDE_RESULT`, utan att dumpa
+verktygsparametrar eller hela verktygsresultat. Följ aktiviteten med:
+
+```sh
+tail -f "$(git rev-parse --show-toplevel)/.git/ellen-agent-bridge.log"
+```
 
 Bryggan ger inte någon assistent större mandat än protokollet. Codex får
 aldrig pusha. Claude får endast pusha efter `APPROVED_FOR_PUSH: Claude`, och

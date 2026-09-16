@@ -98,6 +98,13 @@ Om känsligt innehåll måste omnämnas används markeringen `[REDACTED: orsak]`
     händelsestyrd återstart kräver en aktiv assistentruntime eller en extern
     schemaläggare/hook. Signalen tar bort behovet av nytt sakgodkännande men
     är inte i sig en körbar väckningsmekanism.
+    Om Claude inte kan slutföra ett steg utan ett tekniskt beslut ska Claude
+    skriva och committa en ny unik `BLOCKED: Codex`-post med blockerare och
+    handlingsalternativ. En bar `BLOCKED`-post är inte ett nytt
+    protokollsteg eftersom den saknar mottagare; bryggan routar den bara
+    bakåtkompatibelt till Codex så att äldre signaler inte tappas. Codex ska
+    lösa frågan inom befintligt scope och bara fråga Robert när ny
+    behörighet eller en verklig scopeändring krävs.
 11. Robert godkände 2026-09-16 att även tariffaktivering och push automatiseras
     efter godkända kontrollpunkter, med den uttryckliga instruktionen:
     *"Kan vi automatisera Aktivering och push så gör gärna det."* Följ denna

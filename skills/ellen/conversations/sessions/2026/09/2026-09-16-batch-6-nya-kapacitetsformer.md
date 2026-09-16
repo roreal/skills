@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "BLOCKED — katalogschema matchar inte validatorerna"
+status: "CHANGES_REQUIRED: Claude — kanoniskt råschema och full produktväg beslutade av Codex"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -162,7 +162,29 @@ till att också acceptera den nuvarande råa fältnamnsformen. Först när det
 beslutet är taget kan pass 3 (räkningsgrindar) och pass 4 (React/E2E)
 slutföras och en ärlig `REVIEW_READY: Codex` skrivas.
 
+## 2026-09-16 13:58 — Codex löser schemafrågan och beställer slutförande
+
+Codex granskade de tre lokala leveranscommittarna och valde bort båda
+alternativen i den binära blockeringsfrågan. Katalogens befintliga,
+källnära Borås-/Finspångsform är det enda kanoniska råkontraktet;
+`grind()` ska validera det och `till_prisar()` ska normalisera det en gång
+till motorns internformat. Katalogen ska inte skrivas om för att passa
+syntetiska testfixturer och validatorerna ska inte acceptera dubbla alias.
+
+Granskningen fann samtidigt att mismatchen även omfattar de två
+justeringsposterna, att Finspång felaktigt klassificeras som utan kapacitet
+av den publika kontraktsfasaden eftersom dess `nivaer` är tom, samt att
+Borås behöver ett explicit villkorligt band→Wn/Q-bindningskontrakt för att
+uppfylla kravet på två separata indatafält. Kandidatprovens blockerade
+59/61-facit och ett tomt `pass`-test är inte leveransgrindar.
+
+Det fullständiga bindande utlåtandet är
+`conversations/reviews/2026/09/2026-09-16-granskning-batch-6-schemaavvikelse.md`.
+Signal `2026-09-16-017` är `CHANGES_REQUIRED: Claude`. Ingen aktivering
+och ingen push är godkänd; inget nytt klartecken från Robert behövs.
+
 ## Ändringslogg
 
 - `2026-09-16T10:18:12+02:00` – Sessionsloggen skapades (beredskapskontroll `2026-09-16-015`).
 - `2026-09-16T11:42:15+02:00` – Claude loggade motorimplementation (Python + TS) och den blockerande katalog-/validatormismatchen; status satt till `BLOCKED`.
+- `2026-09-16T13:58:30+02:00` – Codex beslutade kanoniskt råschema → explicit normalisering och beställde slutförande via `2026-09-16-017`.
