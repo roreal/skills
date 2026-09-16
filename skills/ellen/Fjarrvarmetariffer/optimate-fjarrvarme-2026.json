@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.20",
+  "schema_version": "0.1.21",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-15",
@@ -949,6 +949,64 @@
       "id": "jonkopingenergi-web-effekt",
       "title": "Vad består fjärrvärmekostnaden av",
       "url": "https://jonkopingenergi.se/foretag/kundcenter/guider/vad-bestar-fjarrvarmekostnaden-av",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "lulea-web-2026",
+      "title": "Fjärrvärme, företag 2026 (webb)",
+      "url": "https://www.luleaenergi.se/produktion-och-infrastruktur/fjarrvarme/priser-och-avtalsvillkor/lulea-foretag-2026/",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "oresundskraft-2026-2028",
+      "title": "Prisändringsmodell 2026-2028 (pdf)",
+      "url": "https://www.oresundskraft.se/globalassets/pdf/prisdialog/prisandringsmodell/prisandringsmodell-2026-2028.pdf",
+      "retrieved_on": "2026-09-15",
+      "sha256": "d72d71a6999efef7a6debce3fccb2c0c20b71225c1e52e00b67f2ab1ddbe18e0",
+      "kind": "supplier_document"
+    },
+    {
+      "id": "pite-central-2026",
+      "title": "Priser Centrala nätet, företag (omverifierad 2026)",
+      "url": "https://www.piteenergi.se/fjarrvarme/priser-foretag/",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "pite-small-2026",
+      "title": "Priser Norrfjärden och Sjulnäs, företag (omverifierad 2026)",
+      "url": "https://www.piteenergi.se/fjarrvarme/priser-2-foretag/",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "nevel-web-2026",
+      "title": "Fjärrvärme Gimo/Österbybruk/Östhammar (webb)",
+      "url": "https://nevel.com/sv/fjarrvarme/gimo/",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "nevel-pricelist-2026",
+      "title": "Prislista företag Östhammar/Gimo/Österbybruk 2026 (pdf)",
+      "url": "https://nevel.com/wp-content/uploads/2025/10/Nevel_prislista_foretag_Osthammar_Gimo_Osterbybruk_2026.pdf",
+      "retrieved_on": "2026-09-15",
+      "sha256": "62485371413dfd3e1b3c1147175de844ac4eb1e2373fd64ee176eef147f44da2",
+      "kind": "supplier_document"
+    },
+    {
+      "id": "tekniska-verken-web-2026",
+      "title": "Fjärrvärmepriser företag (webb)",
+      "url": "https://tekniskaverken.se/foretag/fjarrvarme/priser",
+      "retrieved_on": "2026-09-15",
+      "kind": "supplier_website"
+    },
+    {
+      "id": "malarenergi-flow-2026",
+      "title": "Pris för fjärrvärme (webb)",
+      "url": "https://www.malarenergi.se/fjarrvarme/pris-for-fjarrvarme/",
       "retrieved_on": "2026-09-15",
       "kind": "supplier_website"
     }
@@ -5748,7 +5806,7 @@
             "variable": 225
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Effekten (E) är fastighetens aktuella dygnsmedeleffekt: dygnets värmeförbrukning delat med 24 timmar, enligt leverantörens prissida (lulea-web-2026). Sidan anger inte offentligt vilken historikperiod som avgör det aktuella värdet — använd leverantörens fakturerade effektvärde, uppfinn inte en egen sammanvägning.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -5777,6 +5835,10 @@
             8,
             9
           ]
+        },
+        {
+          "source_id": "lulea-web-2026",
+          "pages": null
         }
       ],
       "issues": [
@@ -6142,6 +6204,10 @@
         },
         {
           "source_id": "web-review-malar-flow",
+          "pages": null
+        },
+        {
+          "source_id": "malarenergi-flow-2026",
           "pages": null
         }
       ],
@@ -6514,7 +6580,7 @@
             "variable": 1252.2
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Kapacitetsdelen (grundpris + effektpris × kW) bestäms genom att de två föregående kalenderårens energiförbrukning normalårskorrigeras, enligt leverantörens publicerade prislista (nevel-pricelist-2026). Ingen separat effektmätning anges — använd leverantörens fakturerade värde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -6540,6 +6606,14 @@
           "pages": [
             5
           ]
+        },
+        {
+          "source_id": "nevel-web-2026",
+          "pages": null
+        },
+        {
+          "source_id": "nevel-pricelist-2026",
+          "pages": null
         }
       ],
       "issues": [
@@ -6809,7 +6883,7 @@
             "variable": 781.12
           }
         ],
-        "billing_basis_method": "Högsta dygnsförbrukning / 24; kontrollera historikperiod i prisvillkor.",
+        "billing_basis_method": "Effekten är kundens rullande högsta dygnsmedeleffekt: värdet gäller som debiteringsunderlag till en högre dygnsmedeleffekt uppmäts, eller i högst 12 månader (med ett vinterundantag vid milda år), enligt den aktuella prisändringsmodellen 2026-2028 (oresundskraft-2026-2028). Använd leverantörens fakturerade effektvärde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -6837,6 +6911,12 @@
         {
           "source_id": "oresund-web",
           "pages": null
+        },
+        {
+          "source_id": "oresundskraft-2026-2028",
+          "pages": [
+            19
+          ]
         }
       ],
       "issues": [
@@ -7024,7 +7104,7 @@
             "variable": 767.67
           }
         ],
-        "billing_basis_method": "Högsta dygnsförbrukning / 24; kontrollera historikperiod i prisvillkor.",
+        "billing_basis_method": "Effekten är kundens rullande högsta dygnsmedeleffekt: värdet gäller som debiteringsunderlag till en högre dygnsmedeleffekt uppmäts, eller i högst 12 månader (med ett vinterundantag vid milda år), enligt den aktuella prisändringsmodellen 2026-2028 (oresundskraft-2026-2028). Använd leverantörens fakturerade effektvärde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -7052,6 +7132,12 @@
         {
           "source_id": "oresund-web",
           "pages": null
+        },
+        {
+          "source_id": "oresundskraft-2026-2028",
+          "pages": [
+            21
+          ]
         }
       ],
       "issues": [
@@ -7419,7 +7505,7 @@
             "variable": 812.76
           }
         ],
-        "billing_basis_method": "Dygnsmedeleffekter oktober–mars styr nästa kalenderår; exakt sammanvägning behöver prisvillkor.",
+        "billing_basis_method": "Dygnsmedeleffekterna under vinterhalvåret (oktober–mars) ligger till grund för effektavgiften under nästkommande kalenderår, enligt leverantörens omverifierade prissida (pite-central-2026). Använd leverantörens fakturerade effektvärde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -7441,6 +7527,10 @@
       "source_refs": [
         {
           "source_id": "pite-central",
+          "pages": null
+        },
+        {
+          "source_id": "pite-central-2026",
           "pages": null
         }
       ],
@@ -7525,7 +7615,7 @@
             "variable": 958.24
           }
         ],
-        "billing_basis_method": "Dygnsmedeleffekter oktober–mars styr nästa kalenderår; exakt sammanvägning behöver prisvillkor.",
+        "billing_basis_method": "Dygnsmedeleffekterna under vinterhalvåret (oktober–mars) ligger till grund för effektavgiften under nästkommande kalenderår, enligt leverantörens omverifierade prissida (pite-small-2026). Använd leverantörens fakturerade effektvärde.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -7547,6 +7637,10 @@
       "source_refs": [
         {
           "source_id": "pite-small",
+          "pages": null
+        },
+        {
+          "source_id": "pite-small-2026",
           "pages": null
         }
       ],
@@ -8871,7 +8965,7 @@
             "variable": 950
           }
         ],
-        "billing_basis_method": null,
+        "billing_basis_method": "Effektsignaturen visar behovet vid DVUT (-17,6 °C i Linköping) och tas fram genom dygn-för-dygn-mätning av energianvändning och utetemperatur 1 november–31 mars, enligt leverantörens webbsida (tekniska-verken-web-2026). Sidan styrker inte uttryckligen handoffens uppgift om en tvåårig normalårskorrigering — använd leverantörens fakturerade effektvärde, uppfinn inte en egen sammanvägning.",
         "monthly_proration": null,
         "formula": "fixed + variable * billing_basis"
       },
@@ -8897,6 +8991,10 @@
           "pages": [
             3
           ]
+        },
+        {
+          "source_id": "tekniska-verken-web-2026",
+          "pages": null
         }
       ],
       "issues": [
@@ -11713,6 +11811,17 @@
         "Batch 5b lokal aktivering: investigation-sparren borttagen (satt till null) for exakt sex rader - borlange-energi-borlange-2026, falu-energi-vatten-falun-2026, falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026, habo-energi-habo-2026, mjolby-svartadalen-energi-mjolby-2026 och jonkoping-energi-jonkoping-och-granna-2026 - enligt Codex slutgranskning 2026-09-15-015.",
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, issues-, production_ready- eller contract_required-andring gjord. Samtliga sex behaller sina kvarvarande manadsperiodiseringsissues; godkannandet galler uppskattad annual_forward-arskostnad fran leverantorens effekt/effektsignatur, bekraftat band och fakturans fullarsflode - Jonkoping dessutom med den inbyggda metered_access_fee-kostnadsdelen (0/10/25/50 kr per central/manad). Godkannandet galler inte fakturaexakt manadsberakning, kronor-/schabloninmatning eller besparingsprodukten.",
         "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 51 (45 tidigare aktiva + dessa sex)."
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "revision": "0.1.21",
+      "changes": [
+        "Batch 5c lokal implementation bakom sparr (handoff 2026-09-15-002), rattningsrunda 1 (granskning 2026-09-16-001): contract_required=true satt for de atta kandidaterna (lulea-energi-lulea-2026, oresundskraft-helsingborg-normal-2026, oresundskraft-angelholm-normal-2026, piteenergi-pitea-centrala-natet-2026, piteenergi-norrfjarden-och-sjulnas-2026, nevel-gimo-osterbybruk-och-osthammar-2026, tekniska-verken-linkoping-linkoping-2026, malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026). Samtliga atta behaller investigation.status=utreds och production_ready=false - ingen aktivering i denna etapp.",
+        "R03 omscopad fran member_ids=[malarenergi] till tariff_ids for exakt de tva andra Malarenergi-raderna (storre-fastigheter, gruppanslutna-smahus); malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026 refererar inte langre R03. Detta ar en scopekorrigering, inte ett externt svar - R03s fraga och status=utreds ar oforandrade.",
+        "Aktuell 2026-09-15-kallproveniens tillagd/bunden per rattningsuppdrag i granskning 2026-09-16-001: nya kallor lulea-web-2026, oresundskraft-2026-2028 (verklig SHA-256), pite-central-2026, pite-small-2026, nevel-web-2026, nevel-pricelist-2026 (verklig SHA-256), tekniska-verken-web-2026 och malarenergi-flow-2026, kopplade till respektive tariffs source_refs vid sidan av tidigare historiska kallor.",
+        "capacity.billing_basis_method rattad kallsant for Lulea, Oresundskraft Helsingborg/Angelholm, Pitea centrala/Norrfjarden-Sjulnas, Nevel och Linkoping utifran de aktuella kallorna ovan - ingen lokal effektberakning uppfunnen, oppet markerat nar exakt sammanvagning inte ar styrkt. Malarenergis kapacitetsfria rad har fortsatt ingen sadan metod.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel- eller aktiveringsandring gjord. Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) forblir 51 tills en separat, godkand aktiveringsrunda for Batch 5c."
       ]
     }
   ],

@@ -1084,6 +1084,20 @@ standardvärde, okänt val blockerar, ingen dubblettprodukt.
 
 ## Batch 5c — Leverantörsvärde, säsongsflöde (8 tariffer, kräver `months`-motorsemantik)
 
+**Status 2026-09-16 (uppdaterad efter granskning 2026-09-16-001, rättningsrunda 1):**
+Implementationen nedan bakom spärr är GENOMFÖRD, inte längre planerad. Det delade
+`months`-motorarbetet i `faktura.py`/`fjarrvarme.ts` är skrivet och regressionstestat mot
+Batch 5b/VänerEnergis skalära helårsflöde och Mölndals icke-kontraktsstyrda legacyreserv
+(oförändrade). Aktuell 2026-09-15-källproveniens är bunden i katalogens `source_refs`
+(lulea-web-2026, oresundskraft-2026-2028, pite-central-2026, pite-small-2026,
+nevel-web-2026, nevel-pricelist-2026, tekniska-verken-web-2026, malarenergi-flow-2026),
+och källsann `capacity.billing_basis_method` är ifylld för Luleå, Öresundskraft
+Helsingborg/Ängelholm, Piteå centrala/Norrfjärden-Sjulnäs, Nevel och Linköping. Samtliga
+åtta rader ligger fortsatt bakom `investigation.status="utreds"` i väntan på Codex
+godkännande av rättningsrundan — INGEN aktivering, INGEN disposition-/verifieringslista
+kryssad ännu. Se granskning 2026-09-16-001 och handoff 2026-09-15-002 för det bindande
+uppdraget.
+
 **Rättat i v3:** v2:s batch 5b påstod att samtliga tolv rader hade oktober–april (7
 månader) — fel för nio av dem. De faktiska `months`-listorna varierar 5–9 månader per
 tariff (verifierat direkt mot katalog-JSON):
