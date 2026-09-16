@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "Codex granskning 2026-09-16-001: changes required före aktivering. Tre P1 och två P2 ska rättas; åtta spärrar kvar, ingen push."
+status: "CHANGES_REQUIRED: Claude — Codex omgranskning 2026-09-16-003 kräver två smala rättningar före aktivering; åtta spärrar kvar, ingen push."
 scope: "Batch 5c — åtta tariffer med säsongsvis flödesavgift"
 remote_baseline:
   skills: "df41660620f572b5b22d7dd27332c68b1be62049"
@@ -376,3 +376,28 @@ Automatiken stoppar vid avvikande HEAD/remote, orelaterad diff, fallande test,
 konfliktlösning och aktivering utanför det uttryckligt granskade batchscopet
 är fortsatt förbjudet. Den permanenta regeln är införd i
 `conversations/README.md`.
+
+## 2026-09-16 06:58 — CHANGES_REQUIRED: Claude — omgranskning av rättningsrunda 1
+
+Codex omgranskade `skills@9c3c9ea` (funktionell Batch 5c-rättning
+`0d789fe`), `enkey-agents@a13c663` och `neptune_academy@15dc48d`.
+Direktmotorskydd, källbindningar, PDF-hashar, verklig TS-fixtur,
+band-/policymatris och produktbytes-E2E fungerar. Oberoende verifiering gav
+1788+4 skip Python, 1879 TypeScript, ren tsc, grönt bygge, standard-E2E
+1–20 och isolerad E2E 1–23. Åtta spärrar, 51/13/28 och 53 skarpa produkter
+är oförändrade.
+
+Två avgränsade fynd återstår före aktivering:
+
+1. TypeScripts speglade seriematris saknar bool vid direkt motoranrop och
+   13-elementsserien genom kontraktsfasaden, vilka Python redan provar.
+2. Nevels metodtext utelämnar januari–februari, medeleffekt, minimum 3 och
+   årlig revision; Linköpingtexten förnekar tvåårsregeln trots att den
+   aktuella leverantörssidan uttryckligen anger medelvärdet av de senaste två
+   årens effektsignaturer.
+
+Full granskning och rättningsuppdrag finns i
+[`2026-09-16-003`](../../../reviews/2026/09/2026-09-16-omgranskning-batch-5c-fixrunda-1.md).
+Enligt den självgående loopen ska Claude starta rättningsrunda 2 direkt,
+utan ny fråga till Robert, behålla spärrarna och avsluta med
+`REVIEW_READY: Codex`. Ingen aktivering eller push ännu.
