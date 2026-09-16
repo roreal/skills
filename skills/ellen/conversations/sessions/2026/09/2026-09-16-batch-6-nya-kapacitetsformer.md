@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex — dispositionsgrind och Borås bandetiketter rättade, granskning 020"
+status: "REVIEW_READY: Codex — kontrollmängdens ID-identitet fryst och Borås bandetiketter browserbevisade, granskning 022"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -412,3 +412,30 @@ Inget nytt Robert-beslut behövs inom rättningsscopet.
 
 approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
 (avser granskning och lokal loggcommit). Nästa verkställare är Claude.
+
+## 2026-09-16 — Claude genomför rättningsrundan för granskning 021 (022)
+
+**REVIEW_READY: Codex.** Utfört exakt de två punkterna [Utlåtande 021](../../../reviews/2026/09/2026-09-16-omgranskning-batch-6-kontrollmangd-e2e.md) begärde, inom befintliga katalogspärrar. Inget nytt Robert-beslut krävdes.
+
+**Kontroll av signal och arbetskopior:** AGENTS.md, conversations/README.md och Ellens SKILL.md lästes fullständigt innan arbetet. Committad toppost var 021 och dess sessions-ID förekom exakt en gång i index.md. Arbetskopiornas HEAD:ar matchade `reviewed_heads` i granskning 021 (`skills@9c62a40`, `enkey_agents@8be1542`, `neptune_academy@60f9e77`) innan denna rättningsrundas commits. Live `git ls-remote` mot `origin`/`upstream` för alla tre repon: oförändrat mot `remote_heads_verified` i granskning 021. Endast de avsedda filerna ändrades i respektive repo (`git status`/`git diff --stat` verifierat); milesight-undermodulen och otrackade användarfiler i skills lämnades orörda.
+
+**P1 — kontrollmängdens ID-identitet fryst.** `tools/tariffer/tests/test_dispositionsgrind_inventering.py` binder nu de parsade 78 bas- och 14 variant-ID-mängderna till oberoende SHA-256-fingeravtryck (`_BAS_ID_FINGERAVTRYCK`/`_VARIANT_ID_FINGERAVTRYCK`, pinnade mot `skills@a96f9ef`, senaste committen som rörde `tariffinventering-v22.md`), inte bara antal/dispositionsräkning. Två nya negativa prov reproducerar exakt Codex fynd (`review-unknown-id` ersätter första bas-/variant-ID:t med oförändrat antal och oförändrad räkning) och bevisar att fingeravtrycket — men inte de äldre proven — upptäcker bytet. Befintliga bortfalls-/dubblettprov kvarstår oförändrade; `godkanda()`-semantiken rördes inte.
+
+**P2 — Borås bandetiketter browserbevisade.** `e2e/kalkylator.smoke.mjs` Scenario 24 läser nu de sex FAKTISKT renderade `<option>`-texterna i `#policyfalt-boras_vald_niva_id` på den riktiga byggda sidan (inte ett direkt anrop av `policyFranGenererad`/`policyFaltMetadata`) och verifierar exakt ordning, band-ID:n, MWh-intervalltext (`"1 (0–40 MWh)"` … `"6 (7000+ MWh)"`), öppet toppband och frånvaro av NaN/undefined. Ingen parallell testapp; återanvänder befintlig isolerad kandidatgenerator (`npm run test:e2e:batch6-isolated`) och browserkedja.
+
+**Oberoende verifiering, körd av Claude efter commit (mot faktiska HEAD:ar, inte bara arbetskopian):**
+- `.venv/bin/python -m pytest tools/tariffer/tests -q` → **1904 passed, 4 skipped** (tidigare 1901+4; +3 är de nya proven).
+- `npx tsc --noEmit` → rent, exit 0.
+- `npm test -- --reporter=dot` → **58 filer, 1958 test** (oförändrat — P2 är ett E2E-tillägg, inget nytt enhetstest).
+- `npm run test:e2e` (ordinarie svit, mot skarp katalog) → samtliga 23 aktiva scenarier godkända, Scenario 24/25 avsiktligt överhoppade (Batch 6 fortfarande `investigation.status="utreds"`).
+- `npm run test:e2e:batch6-isolated` (isolerad kandidat via `git archive HEAD`) → samtliga 25 scenarier godkända, inklusive det nya bandetikett-browserbeviset i Scenario 24 (loggtexten bekräftar att det är den nya, committade koden som kördes, inte den gamla).
+
+Skarp disposition 59/5/28 och 61 katalograder/63 produkter oförändrade (rörs inte av dessa två testrättningar). Isolerad kandidat 62/2/28, 61 katalograder, 63 produkter oförändrat.
+
+Commits: `enkey-agents@5f079d7` ("Frys dispositionsgrindens ID-mängd med fingeravtryck, granskning 2026-09-16-021, P1"), `neptune_academy@150a555` ("Verifiera Borås bandetiketter i verklig browser-E2E, granskning 2026-09-16-021, P2"). `skills`-repots egna filer (denna sessionslogg samt `index.md`) committas separat som sista steg i denna leverans. Ingen aktivering, ingen push — väntar på Codex granskning av denna rättningsrunda.
+
+Nästa signal: `REVIEW_READY: Codex`, sessions-ID `2026-09-16-022`.
+
+## Ändringslogg (2026-09-16-022)
+
+- `2026-09-16T16:58:00+02:00` – Claude slutförde rättningsrundan för granskning 021 (P1 kontrollmängdens ID-fingeravtryck, P2 Borås bandetiketter i verklig browser-E2E) och skrev `REVIEW_READY: Codex` (`2026-09-16-022`); ingen aktivering, ingen push.
