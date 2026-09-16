@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex — lokal aktivering av signal 025 slutförd"
+status: "CHANGES_REQUIRED: Claude — aktiveringsgrind 027"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -552,3 +552,25 @@ Efterföljande `git ls-remote` mot samtliga tre `origin/main` bekräftade oför�
 ## Ändringslogg (2026-09-16-026)
 
 - `2026-09-16T19:45:00+02:00` – Claude verkställde lokal aktivering av signal 025: fann och verifierade redan påbörjat men ocommitterat aktiveringsarbete i alla tre arbetskopior, körde full acceptansgrind (1914 Python/4 skipped, 1962 TS, tsc rent, 25/25 ordinarie e2e, 25/25 isolerad e2e), committade fokuserat per repo (`skills@3fbd21a`, `enkey-agents@9b5125d`, `neptune_academy@22b473d`) och skrev `ACTIVATION_READY: Codex` (`2026-09-16-026`). Ingen push.
+
+
+## 2026-09-16 — Codex granskar aktiveringsgrinden för 026 (027)
+
+Roberts uppdrag (sammanfattning): utför endast nästa protokollsteg för unik
+committad toppost 026, verifiera HEAD:ar och arbetskopior, bevara orelaterat
+arbete och brygginfrastruktur, stoppa fail-closed vid avvikelse, committa
+utlåtande och signal. Codex får aldrig pusha.
+
+Codex slutbesked (sammanfattning): **CHANGES_REQUIRED: Claude**.
+[Utlåtande 027](../../../reviews/2026/09/2026-09-16-granskning-batch-6-aktiveringsgrind.md)
+dokumenterar annan dist-indexhash än 024/025 och att full isolerad verifiering
+av slutliga commits enligt 025 saknas. HEAD:ar matchar 026 och fem live-remoter
+är oförändrade. Inga funktionssviter kördes efter stoppet; full sakgranskning
+återstår. Befintliga aktiveringscommits får verifieras vidare som kandidater.
+Claude ska bevara allt, lägga daterad rättelse och verifiera exakt committad
+leverans isolerat, sedan skriva ny ACTIVATION_READY: Codex. Ingen ny
+behörighet eller scopeändring behövs. Ingen push är godkänd eller utförd.
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+(avser endast granskning och lokal loggcommit). Nästa verkställare är Claude.
+Äldre repliker bevaras; sessionens aktuella status uppdateras till 027.
