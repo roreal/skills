@@ -5,7 +5,7 @@ participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude — verifieringsgrind 029"
+status: "ACTIVATION_READY: Codex — komplettering av verifieringsgrind 029"
 approved_by: Codex
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -710,3 +710,125 @@ Codex. Ingen ny behörighet eller scopeändring behövs. Ingen push godkänd.
 approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
 (avser granskning och lokal loggcommit). Nästa verkställare är Claude.
 Daterad metadatauppdatering: aktuell status synkad till 029; historiken bevarad.
+
+## 2026-09-16 — Claude kompletterar verifieringsunderlaget i 029 (030)
+
+**Utgångskontroll.** Läste AGENTS.md, SKILL.md och conversations/README.md
+fullständigt. Bekräftade att `2026-09-16-029` var unik och överst i
+committad `index.md`. HEAD:ar vid start: `skills@2d163a2`
+(029:s egen loggcommit ovanpå `2648746`), `enkey-agents@9b5125d`,
+`neptune_academy@22b473d` — samtliga matchar 029:s `reviewed_heads` exakt.
+Alla fem live-remoter kontrollerade på nytt med `git ls-remote` och
+oförändrade mot 029:s `remote_heads_verified`
+(`skills` origin `8356a716a9…`/upstream `34040c9c56…`,
+`enkey-agents` origin `bebbb8073d…`,
+`neptune_academy` origin `ca0286059d…`/upstream `fa177e935b…`).
+`enkey-agents` rent. `neptune_academy` hade endast den redan dokumenterade
+dist-avvikelsen (sju raderade PNG, ändrad `dist/index.html`,
+blobhash `fe1716a3d8156a9f1cd3f5ba5d2714061c427fe2`). Skills orelaterade
+användarfiler, `milesight`-syskonet och de två modifierade bryggfilerna
+(`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`)
+lämnade orörda, ingår inte i tariffdiffen.
+
+**P1 — ordinarie isolerad leverans-E2E, kompletterad.** Skapade en detached
+`git worktree` av `neptune_academy` vid exakt `22b473d30980051fb87a936b3d824c53b63d58e8`
+på `/tmp/ellen-verify-029/neptune_academy-22b473d` (borttagen efter körning).
+Den incheckade `src/data/tariffer.generated.ts` verifierades byte-identisk
+med skills-/neptune-HEAD innan körning (`git hash-object` = `500f6fe934…`
+i både arbetskopian och `git rev-parse 22b473d:...`) — ingen
+kandidatregenerering föregick testet. Den delvis i git spårade
+`node_modules`-katalogen i det repot (2393 spårade filer, men saknar
+`playwright`) dög inte för isolering; körde i stället en ren
+`npm ci` i tempkopian mot det incheckade `package-lock.json` i stället
+för att symlänka in den levande kopians `node_modules` (skulle ha
+blandat in ospårade/nyare paket). `npx playwright`s redan nedladdade
+Chromium-cache (`~/Library/Caches/ms-playwright`) återanvändes oförändrad.
+
+Kommando: `npm run test:e2e` (kör `npm run build` — `tsc && vite build &&
+node scripts/inject-og-tags.mjs` — och sedan `node e2e/kalkylator.smoke.mjs`)
+i `/tmp/ellen-verify-029/neptune_academy-22b473d/neptune-marketing`.
+Exitkod 0. Samtliga 25 scenarier godkända (`OK: Scenario 1`…`OK: Scenario 25`,
+avslutande rad `e2e/kalkylator.smoke.mjs: samtliga scenarier godkända.`),
+inklusive Scenario 24 (Borås Wn/Q-växling + Bra Miljöval) och Scenario 25
+(Finspångs styckvisa polynom + villkorat flöde). All byggoutput
+(`dist/`, `node_modules/` från `npm ci`) stannade i tempkopian; `git
+diff --stat` i tempkopian efter körning visade inga ändringar utanför
+`dist/` (källkoden, inklusive `tariffer.generated.ts`, orörd — bekräftat
+med samma hash `500f6fe934…` efter körning).
+
+**P2 — dist-proveniens rättad.** 028:s och tidigare rundors påstående om
+vilket asset-namn som hör till vilket tillstånd innehöll en sammanblandning.
+Fastställt nu direkt genom oberoende ombyggnad:
+
+- Committad `dist/index.html` vid `22b473d` (dvs. `git show 22b473d:…`):
+  blobhash `46b896a415186555eb9f5d6db9e67ffd4bfef160`, asset
+  `index-BQPLHK95.js`.
+- En fristående ombyggnad av exakt samma källa (steget ovan, ren
+  `npm ci` + `npm run build` i en isolerad worktree) gav i stället
+  blobhash `fe1716a3d8156a9f1cd3f5ba5d2714061c427fe2`, asset
+  `index-C8Ezc7kq.js` — byte-identiskt med den levande arbetskopians
+  odokumenterade, ostagade `dist/index.html` (samma hash,
+  samma sju borttagna PNG-filer reproducerades oberoende i tempkopian).
+- Detta visar att `vite build` för detta projekt inte är
+  bit-för-bit-reproducerbart mellan körningar (troligen
+  inbäddad tidsstämpel/ordning i OG-tagg-injektionssteget eller
+  chunk-hashning), inte att någon manuellt redigerat filen. Den
+  incheckade `dist/index.html` (`46b896a4…`/`BQPLHK95`) skiljer sig
+  alltså regelmässigt från en färsk ombyggnad av samma commit
+  (`fe1716a3…`/`C8Ezc7kq`) — vilket är den odokumenterade dist-avvikelsen
+  som synts i arbetskopian sedan flera rundor tillbaka.
+- 024/025:s tidigare rapporterade asset-namn `index-CNLZUEVG.js` kunde
+  INTE återskapas eller verifieras i denna körning — den exakta
+  temporära körvägen/kommandot för 024/025 sparades aldrig och
+  rekonstrueras inte här som fakt. Det enda som nu är oberoende
+  verifierat är paret ovan (committerat `BQPLHK95`/`46b896a4` vs.
+  ombyggt/levande `C8Ezc7kq`/`fe1716a3`).
+
+**Katalog-/inventeringssökvägar, redovisade exakt.** `enkey-agents` läser
+tariffkatalogen och inventeringen INTE ur någon isolerad kopia av skills,
+utan hårdkodat ur den levande skills-arbetskopian, oavsett vilken
+enkey-agents-worktree som körs:
+
+- `tools/tariffer/katalog.py:35–36`:
+  `KATALOG_SOKVAG = Path.home()/"Code/skills/skills/ellen/Fjarrvarmetariffer/optimate-fjarrvarme-2026.json"`
+- `tools/tariffer/tests/test_dispositionsgrind_inventering.py:52–53`:
+  samma mönster mot `.../Fjarrvarmetariffer/tariffinventering-v22.md`
+
+Detta är en känd, sedan tidigare i minnesloggen dokumenterad begränsning
+(hårdkodad sökväg, inte del av detta scope att åtgärda). Verifierade
+båda filernas blobhash i tre punkter — före denna körning, mot committad
+`skills@2648746` (029:s granskade HEAD) och mot committad `skills@2d163a2`
+(nuvarande HEAD, 029:s egen loggcommit) — samtliga identiska:
+`optimate-fjarrvarme-2026.json` = `e9b793005e98e572028f893e988e638e4d661a03`,
+`tariffinventering-v22.md` = `984fe623e1b1395a25d4d83d100280b3829c3464`.
+Detta styrker att de tidigare rapporterade Python-resultaten (1914 passed/
+4 skipped) och TS-resultaten (59 filer/1962 test) fortfarande gäller utan
+omkörning, eftersom källorna bevisligen är identiska — enligt utlåtandets
+egen undantagsregel. Ingen ytterligare fullkörning av Python-/TS-sviterna
+gjordes i detta steg.
+
+**Bevarande.** `neptune_academy`s dist-avvikelse lämnad exakt som
+dokumenterat (nu med korrekt hash/asset-par för både committat och
+ombyggt/levande tillstånd). `enkey-agents` rört inte alls. Skills
+orelaterade filer och bryggfilerna rörda inte. Ingen omaktivering,
+produktändring, reset eller push. Temporär worktree och alla temporära
+filer under `/tmp/ellen-verify-029/` borttagna efter körning; `git
+worktree list` i `neptune_academy` bekräftade tomt efteråt.
+
+**Signal.** `ACTIVATION_READY: Codex`, sessions-ID `2026-09-16-030`.
+Codex återupptar full aktiveringsgranskning och oberoende regressioner
+före pushbeslut. Ingen aktivering eller push utförd i detta steg.
+
+## Ändringslogg (2026-09-16-030)
+
+- `2026-09-16T20:10:00+00:00` – Claude kompletterade 029:s verifieringsgrind:
+  körde ordinarie `npm run test:e2e` (inkl. bygge) mot exakt committad
+  `neptune_academy@22b473d` i en isolerad `git worktree` med ren `npm ci`
+  (25/25 scenarier gröna, exitkod 0, ingen kandidatregenerering av
+  `tariffer.generated.ts`); rättade dist-proveniensen med korrekta
+  hash-/asset-par för committat (`46b896a4…`/`BQPLHK95`) kontra
+  ombyggt/levande (`fe1716a3…`/`C8Ezc7kq`) tillstånd, och redovisade
+  `katalog.py`/`test_dispositionsgrind_inventering.py`s faktiska hårdkodade
+  sökvägar mot den levande skills-kopian med bytevisa hash-jämförelser
+  före/efter (oförändrade). Skrev `ACTIVATION_READY: Codex`
+  (`2026-09-16-030`). Ingen aktivering, ingen push.
