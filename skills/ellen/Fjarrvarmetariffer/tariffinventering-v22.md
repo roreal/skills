@@ -2036,6 +2036,16 @@ Tekniska Verken Linköping lågtemperatur, Finspångs spetsvärmetillägg).
 > Finspångs spetsvärmetillägg kvarstår `external_answer_required` (§8a rad 28, ny fråga R17 = A5
 > i `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`). Ingen av de fyra är
 > tillagd som katalograd i `optimate-fjarrvarme-2026.json` av detta.
+>
+> **Rättelse 2026-09-17 (Codex granskning
+> [källnormalisering 002](../conversations/reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md),
+> session `2026-09-17-003`):** frågan om Finspångs spetsvärmetillägg (tidigare `R17`)
+> togs bort ur `optimate-fjarrvarme-2026.json`s fysiska `remaining_information_requests`,
+> eftersom dess `tariff_ids` pekade på den redan aktiva basraden och felaktigt spärrade
+> den för kataloggrinden. Frågan är oförändrat olöst och spåras nu i
+> [`variantfragor-ej-materialiserade-2026.md`](variantfragor-ej-materialiserade-2026.md)
+> i stället, se §8a:s rättelse. Den aktiva basraden (energi/effekt/`conditional_flow`) är
+> och förblir opåverkad.
 
 **Batch 3b — lokal implementation bakom spärr genomförd 2026-09-13 (handoff
 2026-09-13-001, beredskapskontroll 2026-09-13-035, katalogcommit
@@ -4912,9 +4922,34 @@ Två underklasser ersätter den tidigare enhetliga texten:
 | 25 | `harnosand-energi-miljo-harnosand-2026` (HEMAB) | external_answer_required | R02 (A2) |
 | 26 | `gavle-energi-gavle-2026` | external_answer_required | R16 (ny, A3) |
 | 27 | `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026` | external_answer_required | R03 (omscopad, A4) |
-| 28 | `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` (ej materialiserad variantrad) | external_answer_required | R17 (ny, A5) |
+| 28 | `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` (ej materialiserad variantrad) | external_answer_required | variantfråga (A5), spårad separat — se rättelse 2026-09-17 nedan |
 
 **Summa:** 22 `source_resolved_implementation_pending` + 6 `external_answer_required` = 28.
+
+> **Rättelse 2026-09-17 (Codex granskning
+> [källnormalisering 002](../conversations/reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md),
+> session `2026-09-17-003`, `CHANGES_REQUIRED: Claude`; rättad i session `2026-09-17-004`):**
+> två fel i tabellen ovan rättade i `optimate-fjarrvarme-2026.json` (revision `0.1.27`), ingen
+> ändring av de 28 raderna eller 22/6-summan:
+>
+> - **Rad 26 (Gävle, R16):** posten hade av misstag både `member_ids` och `tariff_ids`
+>   satta samtidigt, vilket bryter `enkey-agents/tools/tariffer/katalog.py`s krav på exakt
+>   en scopeform och gjorde att kataloggrinden kastade ett fel. Rättad till enbart
+>   `tariff_ids=[gavle-energi-gavle-2026]`.
+> - **Rad 28 (Finspång, tidigare R17):** posten pekade med `tariff_ids` på den redan aktiva
+>   `finspangs-tekniska-verk-finspang-2026`-basraden, vilket felaktigt fick kataloggrindens
+>   godkända-räkning att sjunka med en rad (61 → 60) trots att bara ett obyggt tillägg är
+>   blockerat. R17 är därför borttagen ur `optimate-fjarrvarme-2026.json`s fysiska
+>   `remaining_information_requests` och spåras i stället som en egen variantfråga i
+>   [`variantfragor-ej-materialiserade-2026.md`](variantfragor-ej-materialiserade-2026.md),
+>   som återanvänder samma dispositionsmatris och samma frågedokument (A5 i
+>   `leverantorsfragor-blockerade-tariffer-2026.md`) utan att dubblera frågetexten. Frågan
+>   är fortsatt olöst och tariffraden fortsatt `external_answer_required`; endast
+>   spårningsplatsen ändras. `remaining_information_requests` innehåller därför nu exakt
+>   R02, R03, R08, R16 (fyra fysiska frågor); tillsammans med variantfrågan i det nya
+>   dokumentet är det fortsatt fem öppna frågor för de sex `external_answer_required`-
+>   dispositionerna (rad 23–28). Oberoende in-memory-prov: kataloggrinden godkänner 61
+>   fysiska rader efter denna rättning.
 Rader 20–22 och 28 saknar egen post i `optimate-fjarrvarme-2026.json:tariffs[]` (samma fyra
 variantrader som §5/batchplan-v22.md alltid räknat separat: SFAB kundvald effekt, Kraftringen
 Brunnshög, Tekniska Verken lågtemperatur, Finspångs spetsvärmetillägg) — de är medvetet INTE

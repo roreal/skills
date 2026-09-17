@@ -53,7 +53,7 @@
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
-      "utreds": 5,
+      "utreds": 4,
       "lost": 1
     },
     "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
@@ -6063,9 +6063,10 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Webbsidan har två tabeller med rubriken Västerås/Hallstahammar men olika priser; nätkoppling måste bekräftas.",
-          "Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): 2026-priser, 2217 kr fast avgift i det första stora bandet 25-79 kW, samt maxeffektens bränsleår (1 juli-30 juni) och flödesformeln är publicerade och gäller större fastigheter. R03 är omscopad (2026-09-17) till att bara gälla den öppna A4-frågan om gruppanslutna småhus (malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026); den här tariffraden refererar inte längre R03. Kräv månadsvis kundflöde och publicerad/angiven nätreferens; en äldre säsong får bara användas som synligt snapshot. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): nätkoppling, 2026-priser (2217 kr fast avgift i det första stora bandet 25-79 kW) och maxeffektens bränsleår (1 juli-30 juni) är källbekräftade och gäller större fastigheter. R03 är omscopad (2026-09-17) till att bara gälla den öppna A4-frågan om gruppanslutna småhus (malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026); den här tariffraden refererar inte längre R03. Kvarvarande internt arbete: bygg sommarperiodens avgränsning, överuttagsperiodisering och flödesavgiftens debetsats i motorn; kräv månadsvis kundflöde och publicerad/angiven nätreferens som indata (en äldre säsong får bara användas som synligt snapshot). Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+        ],
+        "conditions_history_sv": [
+          "Villkor före källrevisionen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuell blockerare): 'Webbsidan har två tabeller med rubriken Västerås/Hallstahammar men olika priser; nätkoppling måste bekräftas.' samt 'Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor.'"
         ]
       }
     },
@@ -7927,9 +7928,10 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv, R07 löst till resolved_information_requests). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten; null i fast avgift betyder fortsatt ej extraherad/separat angiven, inte verifierad noll. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+        ],
+        "conditions_history_sv": [
+          "Villkor före källrevisionen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuell blockerare): 'Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.'"
         ]
       }
     },
@@ -8081,9 +8083,10 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv, R07 löst till resolved_information_requests). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten; null i fast avgift betyder fortsatt ej extraherad/separat angiven, inte verifierad noll. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
+        ],
+        "conditions_history_sv": [
+          "Villkor före källrevisionen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuell blockerare): 'Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.'"
         ]
       }
     },
@@ -11727,9 +11730,6 @@
     },
     {
       "id": "R16",
-      "member_ids": [
-        "gavle-energi"
-      ],
       "tariff_ids": [
         "gavle-energi-gavle-2026"
       ],
@@ -11740,22 +11740,6 @@
       "created_on": "2026-09-17",
       "created_by_proposal": "conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md",
       "corresponds_to_email": "A3 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md"
-    },
-    {
-      "id": "R17",
-      "member_ids": [
-        "finspangs-tekniska-verk"
-      ],
-      "tariff_ids": [
-        "finspangs-tekniska-verk-finspang-2026"
-      ],
-      "category": "formula_missing",
-      "question_sv": "Omfattar spetsvärmekunders 20-procentiga prispåslag hela summan av energi-, effekt- och flödesavgift eller bara vissa prisdelar? Hur klassas en kund som spetsvärmekund, och gäller klassningen hela avtals-/kalenderåret eller kan den börja/sluta en viss månad? Detta är en ej byggd tilläggsfunktion på den redan aktiva Finspång-tariffen — den aktiva basraden (energi/effekt/conditional_flow) påverkas inte.",
-      "source_id": "07_1",
-      "status": "utreds",
-      "created_on": "2026-09-17",
-      "created_by_proposal": "conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md",
-      "corresponds_to_email": "A5 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md"
     }
   ],
   "change_log": [
@@ -12000,6 +11984,16 @@
         "vb-energi-normal-2026: network_or_product rättat från 'Ludvika, Björnmossen, Grängesberg, Fagersta och Norberg' till 'Ludvika, Grängesberg, Fagersta och Norberg' — Björnmossen är inte uttryckligen omfattat av 2026-villkoren och exkluderas tills B3 är besvarad. Priser, band och formler oförändrade.",
         "Sju nya källposter tillagda (retrieved_on 2026-09-17): web-review-vattenfall-calculator-2026-09-17 och web-review-vattenfall-faq-2026-09-17 (med kalkylatorsidans och komponentmodulens SHA-256), web-review-sundsvall-2026-09-17, web-review-malarenergi-priser-2026-09-17, web-review-malarenergi-flodespremie-2026-09-17, web-review-vbenergi-2026-09-17 och web-review-gavleenergi-2026-09-17. Bundna till respektive tariffraders source_refs. Skellefteå Kraft och EEM fick ingen ny källpost (inget nytt URL bekräftat i denna revision) — deras klassning grundas på redan bundna web-review-källor plus proposalen.",
         "SFAB kundvald effekt, Kraftringen Brunnshög och Tekniska Verken Linköping lågtemperatur (3 av de 22 source-resolved dispositionerna) samt Finspångs spetsvärmetillägg (1 av de 6 external-answer-required) saknar fortfarande egna katalograder — de är ej materialiserade varianter/tilläggsfunktioner på redan existerande (delvis aktiva) basrader. De är INTE tillagda som nya tariffs[]-poster i denna normaliseringsrevision (skulle ändra coverage_summary.tariffs och likna implementation); klassning och källor för dessa fyra är dokumenterade i tariffinventering-v22.md:s dispositionsmatris i stället."
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "revision": "0.1.27",
+      "changes": [
+        "Rättningsrunda enligt Codex granskning 2026-09-17 (session 2026-09-17-003, CHANGES_REQUIRED: Claude), avgränsad till skills-only-source-and-blocker-normalization-for-28-dispositions. Ingen aktivering, ingen prisändring, ingen produktkod rörd.",
+        "R16 rättad till exakt en scopeform: member_ids-fältet togs bort, endast tariff_ids=[gavle-energi-gavle-2026] kvarstår. Orsak: katalogens kontrollrutin (enkey-agents/tools/tariffer/katalog.py) kräver exakt en scopeform och kastade ValueError för R16 med båda fälten satta.",
+        "R17 (Finspång spetsvärmetillägg) borttagen ur remaining_information_requests. Frågan är fortsatt olöst men gällde en ännu ej materialiserad tilläggsfunktion — att låta den stå som fysisk request med tariff_ids mot den redan aktiva finspangs-tekniska-verk-finspang-2026-raden fick kataloggrindens godkända-räkning att sjunka från 61 till 60 för en rad som redan är aktiv. Frågan dokumenteras nu separat i Fjarrvarmetariffer/variantfragor-ej-materialiserade-2026.md och länkas från tariffinventering-v22.md §8a; den fysiska frågan A5 i leverantorsfragor-blockerade-tariffer-2026.md är oförändrad. remaining_information_requests är efter denna rättning exakt R02, R03, R08, R16 (fyra fysiska frågor); tillsammans med variantfrågan R17 är det fortsatt fem öppna frågor för sex dispositioner. coverage_summary.information_request_status_counts.utreds mekaniskt rättat 5→4.",
+        "Stale aktiva investigation.conditions_sv ersatta med precisa kvarvarande implementationskrav på tre rader vars sista villkor redan klassade dem source_resolved_implementation_pending men vars äldre villkor motsade det: malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026, skelleftea-kraft-skelleftea-skelleftehamn-ursviken-lycksele-mala-2026 och skelleftea-kraft-boliden-burea-burtrask-byske-jorn-kage-lovanger-norsjo-robertsfors-stensele-storuman-vindeln-anaset-2026. Ursprunglig frågetext bevarad ordagrant i ny investigation.conditions_history_sv per rad. Ingen energy/capacity/production_ready/contract_required/price_status ändrad på någon rad."
       ]
     }
   ],

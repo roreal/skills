@@ -103,3 +103,94 @@ Kartläggningsfilens undantag godtas. Fullständigt utlåtande, avgränsad rätt
 verifieringskrav finns i [granskning 003](../../../reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md).
 Nästa signal är CHANGES_REQUIRED: Claude. Ingen produktimplementation, aktivering
 eller push är godkänd i detta steg. Orelaterade ändringar bevaras.
+
+## 2026-09-17T10:xx+02:00 — Claude, rättningsrunda för signal 003
+
+Utfört den avgränsade rättningsrundan enligt granskning
+[källnormalisering 002](../../../reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md)
+(session `2026-09-17-003`, `CHANGES_REQUIRED: Claude`). Verifierade HEAD:ar innan arbete
+påbörjades matchade signalens `reviewed_heads` exakt: `skills@3b31f8e` som förälder till
+den granskande commiten `273d44a` (arbetskopians HEAD vid start), `enkey_agents@13effb1`,
+`neptune_academy@0bdb675`; committad toppost i `conversations/index.md` var
+`2026-09-17-003` och förekom exakt en gång.
+
+**Ändringar, exakt tre filer plus en ny fil i skills-repot:**
+
+- `Fjarrvarmetariffer/optimate-fjarrvarme-2026.json` (revision 0.1.27):
+  - **P1 (kataloggrinden):** R16 hade av misstag både `member_ids` och `tariff_ids`;
+    `member_ids` togs bort så att endast `tariff_ids=[gavle-energi-gavle-2026]` kvarstår.
+  - **P1 (R17/Finspång):** R17 togs bort ur den fysiska `remaining_information_requests`
+    helt, enligt Codex tekniska beslut i granskningen — frågan är olöst men gäller en ej
+    materialiserad tilläggsfunktion på en redan aktiv basrad, och att låta den stå som
+    fysisk `tariff_ids`-request fick kataloggrindens godkända-räkning att sjunka 61→60 för
+    en redan aktiv rad. Frågan spåras nu i den nya filen
+    `Fjarrvarmetariffer/variantfragor-ej-materialiserade-2026.md`, som återanvänder
+    dispositionsmatrisen och frågedokumentet (A5 i
+    `leverantorsfragor-blockerade-tariffer-2026.md`) utan att duplicera frågetexten.
+    `remaining_information_requests` är efter rättningen exakt `[R02, R03, R08, R16]`
+    (fyra fysiska frågor); tillsammans med variantfrågan är det fortsatt fem öppna frågor
+    för de sex `external_answer_required`-dispositionerna.
+    `coverage_summary.information_request_status_counts.utreds` mekaniskt rättat 5→4.
+  - **P2 (stale aktiva villkor):** `investigation.conditions_sv` rättat på tre rader vars
+    äldre villkor motsade radens egen sista, nyare klassning
+    (`source_resolved_implementation_pending`): `malarenergi-vasteras-och-hallstahammar-
+    storre-fastigheter-2026` samt båda Skellefteå-raderna
+    (`skelleftea-kraft-skelleftea-skelleftehamn-ursviken-lycksele-mala-2026`,
+    `skelleftea-kraft-boliden-...-anaset-2026`). Ny `conditions_sv` innehåller bara
+    precisa kvarvarande implementationskrav (inte längre motsägande "måste bekräftas"/
+    "saknas"-text); ursprungstexten bevarad ordagrant i ny `investigation.
+    conditions_history_sv` per rad. Ingen `energy`/`capacity`/`production_ready`/
+    `contract_required`/`price_status`/`investigation.status` ändrad på någon av de 86
+    raderna (maskinellt verifierat, se nedan).
+- `Fjarrvarmetariffer/tariffinventering-v22.md`: §8a rättad — rad 28 (Finspång) hänvisar
+  nu till variantspårningsdokumentet i stället för R17 som fysisk fråga; en daterad
+  rättelseanmärkning tillagd efter dispositionsmatrisen och efter §5:s äldre
+  rättelseanmärkning, som förklarar båda P1-felen och hänvisar till granskningen.
+  Historisk text i övrigt oförändrad.
+- `Fjarrvarmetariffer/variantfragor-ej-materialiserade-2026.md` (**ny fil**): versionsstyrt
+  spårningsdokument för de fyra ej materialiserade varianterna (Södertörn kundvald effekt,
+  Kraftringen Brunnshög, Tekniska Verken lågtemperatur, Finspångs spetsvärmetillägg) med
+  Finspångs olösta fråga som huvudinnehåll, länkat från §8a.
+
+**Verifiering:**
+
+- `python3 -m json.tool` grönt på den ändrade JSON:en.
+- Maskinell tariff-för-tariff-diff mot `skills@273d44a` (Python, jämför samtliga 86
+  raders `energy`/`capacity`/`production_ready`/`contract_required`/`price_status`/
+  `investigation.status`): tomma listor — inga ändringar utöver `conditions_sv`/
+  `conditions_history_sv` på exakt de tre dokumenterade raderna.
+  `remaining_information_requests`: `[R02,R03,R08,R16,R17]` → `[R02,R03,R08,R16]`.
+- `git diff --check` rent på de tre ändrade filerna.
+- Oberoende körning av produktrepots faktiska grindar
+  (`enkey-agents/.venv/bin/python -m pytest tools/tariffer/tests/test_katalog.py
+  tools/tariffer/tests/test_katalog_oversattning.py
+  tools/tariffer/tests/test_katalog_proveniens.py
+  tools/tariffer/tests/test_dispositionsgrind_inventering.py -q`, körd mot den rättade
+  katalogfilen): **2 failed / 51 passed** (föregående runda: 13 failed / 40 passed).
+  De två kvarstående felen är **utanför denna skills-only-rundas godkända scope** och
+  rättades avsiktligt INTE:
+  1. `test_katalogfilen_matchar_forvantad_hash` — produktrepots låsta
+     `_FORVANTAD_KATALOG_SHA256`-konstant matchar inte den nya katalogfilens hash.
+     Förväntat: varje katalogändring kräver en synkad hash-/`tariffer.generated.ts`-
+     uppdatering i produktrepot, vilket är uttryckligen förbjudet i denna runda
+     ("Ändra inte produktkod, tester, genererad TS eller hashkonstanter").
+  2. `test_utredda_medlemmar_plockas_ur_informationsforfragningarna` — testet förväntar
+     fortfarande `vattenfall-uppsala` i den "utredda"-mängd som bara härleds från
+     `remaining_information_requests`; Vattenfall flyttades till
+     `resolved_information_requests` (R09) redan i föregående, redan granskade
+     leverans (002). Detta är samma kategori proveniens-/testsynkfråga som (1), inte ett
+     nytt fel infört av denna rättning.
+  - Direkt anrop av produktrepots `katalog.godkanda(katalog, policyregister=
+    katalog.POLICYREGISTER)` mot den rättade filen: **61 godkända fysiska rader**
+    (tidigare in-memory-prov utan R16/R17-fix gav 60); `katalog.blockerade_tariff_ider`
+    ger 5 rader (R02:1 + R03:1 + R08:2 + R16:1), konsekvent med de fyra fysiska
+    frågorna. `len(tariffs)` oförändrat 86.
+  - `git status`: bekräftar att inga andra filer i skills-repot rördes utöver de tre
+    ovan plus den nya filen; befintliga ospårade/ändrade filer från tidigare, orelaterat
+    arbete (inkl. `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+    `conversations/automation/`, `../milesight`) lämnade orörda och ej committade av
+    detta steg.
+
+Ingen produktkod, tester, genererad TS, hashkonstanter, aktivering eller push i detta
+steg. Committar fokuserat i skills-repot och skriver `REVIEW_READY: Codex` som ny toppost
+i `conversations/index.md`.
