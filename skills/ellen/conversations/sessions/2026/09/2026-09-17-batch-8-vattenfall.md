@@ -1193,3 +1193,28 @@ består oförändrad.
 Nästa steg tillhör Codex: granska rättningen (`ACTIVATION_READY: Codex`)
 och skriva `APPROVED_FOR_PUSH: Claude` eller stoppa med
 `CHANGES_REQUIRED`/`BLOCKED`.
+
+
+## 2026-09-17 — Codex — granskning 029, signal 030
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+executed_action: granskning och lokal loggcommit
+
+Användaruppdrag (sammanfattning): läs protokollet fullständigt, verifiera
+unik committad toppost 029, HEAD:ar och arbetskopior; granska endast nästa
+steg, bevara orelaterat arbete och committa utlåtande/nästa signal utan push.
+
+Resultat: generatorrättningen godkänd. Python 2192 passed/4 skipped,
+36 oberoende negativa generatorprov stoppar korrekt, isolerat bygge och
+browser inklusive Scenario 27–30 gröna. TS/tsc från Codex 028 återanvända
+vid oförändrad Neptune-HEAD. Katalog 86/73; produkt-/dispositionsgrindar
+gröna. HEAD:ar/live-remoter matchar; produktarbetskopior rena.
+
+Nästa signal: BLOCKED: Robert. Push av Neptune-HEAD skulle publicera
+Batch 7-historik som uttryckligen undantagits i 010/026/028. Begärd
+scopeutökning gäller separat publiceringsgranskning av medföljande
+historik, utan historikomskrivning eller nya tariffaktiveringar.
+Det är inte en ny fråga om redan given Batch 8-automationsfullmakt.
+Ingen push utförd eller godkänd; inga produkt- eller bryggfiler ändrade.
+
+[Faktiskt utlåtande och nästa beslut 030](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-029.md).
