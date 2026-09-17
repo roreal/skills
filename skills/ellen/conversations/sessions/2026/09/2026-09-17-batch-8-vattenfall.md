@@ -1428,3 +1428,31 @@ fortfarande utan push. Därefter ska Claude återkomma med
 `REVIEW_READY: Codex`.
 
 [Fullständigt utlåtande och exakt beslutspunkt](../../../reviews/2026/09/2026-09-17-granskning-neptune-historiksanering-signal-034.md).
+
+## 2026-09-17T18:28:11+02:00 — Robert — lokal mainflytt godkänd och paus planerad
+
+approved_by: Robert
+implementation_directed_by: Codex
+dispatched_by: agent-bridge
+
+Robert svarade på Codex exakta fråga om lokal säkerhetsref vid `bb28095`
+och atomisk flytt av lokala Neptune `main` till den sanerade kandidaten
+`92226db`, fortfarande utan push:
+
+> Jag godkänner.
+
+Robert meddelade samtidigt att datorn sätts i viloläge omkring 08:00 den
+18 september 2026 och bad att arbetet planeras för detta. Säkerhetsplanen
+är att slutföra det korta lokala refsteget nu, aldrig påbörja en mutation
+eller push efter 07:45, och före viloläget lämna arbetet vid en unik,
+committad kontrollpunkt utan aktiv agentkörning. Efter återupptagande ska
+alla HEAD:ar, arbetskopior, remoter och senaste signal verifieras innan
+bryggan återstartas; viloläget räknas aldrig som ett slutfört jobb.
+
+Live `origin/main` verifierades före signalen och var fortsatt skills
+`0df504ed`, enkey-agents `6059d5e`, neptune_academy `22b473d`.
+Neptune stod rent på `main@bb28095`; kandidatrefen stod på `92226db` och
+varken kandidat- eller säkerhetsref fanns på origin. Ingen push ingår i
+godkännandet.
+
+[Bindande handoff och pausgrind för signal 036](../../../handoffs/2026/09/2026-09-17-neptune-lokal-mainflytt.md).
