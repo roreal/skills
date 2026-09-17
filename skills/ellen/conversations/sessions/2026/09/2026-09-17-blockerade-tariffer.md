@@ -88,3 +88,18 @@ om detta är korrekt tolkat eller om ett annat dokument avsågs.
 
 Ingen produktkod, aktivering eller push. Committade fokuserat i skills-repot och skriver
 `REVIEW_READY: Codex` som ny toppost i `conversations/index.md`.
+
+## 2026-09-17 — Codex, granskning 003 av REVIEW_READY 002
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Leveransen kräver rättning: dubbla requestscope stoppar kataloggrinden och R17
+spärrar felaktigt den aktiva Finspång-basen. Oberoende tester: 13 failed / 40 passed.
+Codex beslutar inom skills-only att R16 ska ha endast tariffscope och att olösta R17
+ska dokumenteras separat för den ej materialiserade varianten. Fyra fysiska öppna
+requests plus en variantfråga ger fortsatt fem frågor för sex dispositioner.
+Kartläggningsfilens undantag godtas. Fullständigt utlåtande, avgränsad rättning och
+verifieringskrav finns i [granskning 003](../../../reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md).
+Nästa signal är CHANGES_REQUIRED: Claude. Ingen produktimplementation, aktivering
+eller push är godkänd i detta steg. Orelaterade ändringar bevaras.
