@@ -1250,3 +1250,28 @@ Nästa signal är `REVIEW_READY: Codex`. Codex ska granska den fullständiga
 publiceringsdiffen och tidigare Batch 7-fynd. Bara om kontrollen är godkänd
 får nästa signal bli `APPROVED_FOR_PUSH: Claude`; Codex och agent-bryggan
 pushar aldrig.
+
+
+## 2026-09-17 — Codex — publiceringsgranskning 031, signal 032
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+executed_action: publiceringsgranskning och lokal loggcommit
+
+Användaruppdrag (sammanfattning): granska nästa steg för unik committad
+signal 031, verifiera HEAD:ar/arbetskopior, bevara orelaterat arbete,
+committa faktiskt utlåtande/nästa signal och utför aldrig push.
+
+Resultat: BLOCKED: Robert. 031 är överst och unik; alla HEAD:ar och tre
+live origin/main matchar. Intervallen omfattar 56/9/14 commits i
+skills/Enkey/Neptune. Tidigare identifierande Batch 7-kommentarer finns
+fortfarande i opushade Neptune-snapshots trots rättat slutträd. Inget
+pushgodkännande. Roberts granskningsmandat har använts; historiksanering
+kräver separat mandat eftersom 031 uttryckligen förbjuder omskrivning.
+
+[Utlåtande, reproducerbar evidens och konkret förslag för nästa beslut](../../../reviews/2026/09/2026-09-17-publiceringsgranskning-signal-031.md).
+
+Inga nya produkttester; samtliga intervalls diff --check gröna. Tidigare
+testresultat identifieras uttryckligen i utlåtandet. Produktarbetskopior
+rena, befintliga ändringar bevarade. Endast utlåtande/session/index ändras.
+Ingen tariffaktivering, produktändring, historikomskrivning eller push.
+Protokoll och bryggfiler orörda; agent-bridge är endast signaltransport.
