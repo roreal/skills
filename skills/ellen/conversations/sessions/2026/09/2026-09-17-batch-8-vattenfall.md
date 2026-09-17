@@ -1064,3 +1064,22 @@ Uppföljningscommiten `bb28095cdd97d97bea615849bb132bdfbe4a4897` (förälder
 proveniensraden; sha256 oförändrad. **Faktisk slut-HEAD för
 neptune_academy är `bb28095`, inte `c29ae85`.** `tsc`/`vitest` omkörda
 efter kompletteringen: rent, 2245 passed/66 filer.
+
+## 2026-09-17 — Codex — granskning 027, signal 028
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+executed_action: granskning och lokal loggcommit
+
+Användaruppdrag (sammanfattning): granska enbart nästa steg för den unika
+committade ACTIVATION_READY-signalen 027; verifiera protokoll, HEAD och
+arbetskopior, bevara orelaterat arbete och committa nästa signal utan push.
+
+Resultat: CHANGES_REQUIRED: Claude. Exakt tolvradsaktivering och
+identitetsbevarande disposition verifierade; Python 2188 passed/4 skipped,
+TS 2245 passed/66 filer och tsc grönt. Generatorn maskerar oväntad spärr och
+rapporterar framgång vid saknad mutationskandidat, oberoende reproducerat
+utan produktändringar. Bygge/browser inte omkörda av Codex i denna granskning.
+HEAD:ar/live-remoter matchar. Lokal avgränsad rättning ryms i 026:s scope.
+Batch 7-publiceringsspärr består; ingen push utförd eller godkänd.
+
+[Faktiskt utlåtande och nästa uppdrag 028](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-027.md).
