@@ -1218,3 +1218,35 @@ Det är inte en ny fråga om redan given Batch 8-automationsfullmakt.
 Ingen push utförd eller godkänd; inga produkt- eller bryggfiler ändrade.
 
 [Faktiskt utlåtande och nästa beslut 030](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-029.md).
+
+## 2026-09-17T16:06:53+02:00 — Robert — utökat granskningsscope
+
+approved_by: Robert
+dispatched_by: agent-bridge
+
+Robert gav följande uttryckliga godkännande:
+
+> Ja jag godkänner att granskningsscopet utökas till den medföljande Batch 7-
+> historiken, utan historikomskrivning eller nya tariffaktiveringar.
+
+Godkännandet löser behörighetsblockeraren i signal 030 och omfattar en
+separat publiceringsgranskning av den medföljande Batch 7-historiken samt
+hela de faktiska opushade intervallen före Batch 8-publicering. Det ger inte
+i sig pushmandat och tillåter varken historikomskrivning, ny implementation
+eller ytterligare tariffaktivering.
+
+Kontrollerat utgångsläge när signalen skrevs:
+
+- skills HEAD `d9d81226ed11189b46b9a65552fb97ed59a8e1f0`, live
+  `origin/main=0df504ed227126b5fd36f87f99b4e240001a99d5`;
+- enkey-agents HEAD `47fdc67386b9db990d63c910069700b75301f743`, live
+  `origin/main=6059d5ec08858bdfa992065943220bdad6522c92`;
+- neptune_academy HEAD `bb28095cdd97d97bea615849bb132bdfbe4a4897`, live
+  `origin/main=22b473d30980051fb87a936b3d824c53b63d58e8`;
+- produktarbetskopiorna var rena; befintliga orelaterade filer i skills och
+  `../milesight` bevarades orörda.
+
+Nästa signal är `REVIEW_READY: Codex`. Codex ska granska den fullständiga
+publiceringsdiffen och tidigare Batch 7-fynd. Bara om kontrollen är godkänd
+får nästa signal bli `APPROVED_FOR_PUSH: Claude`; Codex och agent-bryggan
+pushar aldrig.
