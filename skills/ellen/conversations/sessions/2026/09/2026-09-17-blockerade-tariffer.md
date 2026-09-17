@@ -305,3 +305,99 @@ som tillåtet rättningsscope enligt
 [utlåtandet](../../../reviews/2026/09/2026-09-17-granskning-provenienssynk-006.md).
 Codex har endast utfört granskning och skrivit granskningsloggar. Ingen
 aktivering eller push har utförts; agent-bridge är endast signaltransport.
+
+## 2026-09-17 — Claude, daterad komplettering till 006 och rättningsrunda för signal 007
+
+executed_by: Claude
+dispatched_by: agent-bridge
+
+Uppdrag (sammanfattat): utföra endast den avgränsade följdrättning som Codex
+godkände i [granskning 007](../../../reviews/2026/09/2026-09-17-granskning-provenienssynk-006.md)
+(`approved_correction_scope: source-normalization-regression-tests-and-review-provenance-only`).
+HEAD:ar kontrollerade mot `reviewed_heads` i granskning 007 innan någon ändring
+gjordes: skills `7ba3226` (förälder till granskningscommiten `155cc90`, vilket
+stämmer), enkey-agents `aef9a7a81674c43a57bba415da4d2bea82a0d55c`, neptune_academy
+`5c1bd8821cc288204b5a7bfb466b918ff61403a5`. Samtliga tre matchade exakt. De
+tidigare inventerade arbetskopieundantagen (skills-underlag/automation/
+`../milesight`, enkey-agents `tools/milesight/chirpstack_objekt.py`,
+neptune-marketing `dist/`) kvarstod oförändrade och bevarades.
+
+**Daterad komplettering till 006 (2026-09-17):** granskning 007 begärde de
+slutliga produkt-HEAD:arna som saknades i 006:s leveranspost. Signal 006:s
+egna leveranshuvud avslutades vid enkey-agents `aef9a7a8…` och neptune_academy
+`5c1bd882…` — samma HEAD:ar som `reviewed_heads` i granskning 007 ovan, alltså
+oförändrade av 006 självt. Ingen äldre replik i 006 är omskriven.
+
+**Versionsrättelsen** som granskning 007 identifierade: kommentaren i
+`test_katalog_proveniens.py` påstod felaktigt `schema_version 0.1.25 → 0.1.27`.
+Katalogens faktiska `schema_version`-fält är och förblir `0.1.25` (endast
+`change_log`-poster finns för 0.1.26/0.1.27, toppfältet höjdes aldrig i någon
+tidigare runda). Kommentaren är nu rättad till att beskriva detta korrekt.
+Katalogfilen och dess SHA-256 (`0aa1e82f…`) är oförändrade.
+
+**Ändringar (exakt de fyra godkända testfilerna i enkey-agents, ingen katalog/
+motor/generator/policy rörd):**
+
+1. `tools/tariffer/tests/test_batch_2_sundsvall_indal.py` — R14-testet
+   uppdaterat: R14 är löst och borttagen ur `remaining_information_requests`,
+   Sundsvall normal/Matfors-Kvissleby är alltså inte längre frågeblockerade men
+   avvisas fortfarande direkt av `grind()` via `investigation.status`. Den
+   R09-beroende expansionstesten (R09 finns inte längre i den riktiga
+   katalogen) ersatt med en lokal syntetisk katalog med två rader för samma
+   medlem plus en orelaterad rad — exakt de två medlemsraderna blockeras.
+2. `tools/tariffer/tests/test_batch_3_flodeskorrigering.py` — samma
+   grind()-baserade regressionskontroll för Batch 2:s tariffscopning.
+3. `tools/tariffer/tests/test_leverantorsvarde_batch5c_kontrakt.py` — R03-testet
+   delat i två: frågescope (R03 omfattar numera bara
+   `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026`) och en
+   ny kontroll att större fastigheter inte längre är frågeblockerad men
+   fortfarande avvisas av `grind()` via `investigation.status`. Gruppanslutna
+   småhus kontrolleras oförändrat fortsatt blockerad. 2–4-lägenheters aktiva
+   väg (befintliga test) orörd.
+4. `tools/tariffer/tests/test_katalog_proveniens.py` — versionskommentaren
+   rättad enligt ovan; `_FORVANTAD_KATALOG_SHA256` oförändrad.
+
+Inga tester togs bort eller hoppades över. Frågescope och faktisk
+produktspärr testas fortsatt var för sig, enligt granskningens krav.
+
+**Testutfall:**
+
+- De fyra berörda testfilerna tillsammans: **499 passed / 0 failed**
+  (tidigare 6 failed).
+- De fem synkgrindfilerna (`test_katalog`, `test_katalog_oversattning`,
+  `test_katalog_proveniens`, `test_dispositionsgrind_inventering`,
+  `test_synk`): **56 passed / 0 failed** — oförändrat mot 006.
+- Full `tools/tariffer`-svit: **1969 passed / 0 failed / 4 skipped**
+  (tidigare 1962 passed / 6 failed / 4 skipped — exakt de sex tidigare felen
+  är nu gröna, ingen ny regression).
+- Fysiska nyckeltal oförändrade: 86 tariffrader, 61 godkända
+  (`las_katalog`/`godkanda` kontrollerat direkt), disposition 62 implemented /
+  2 ready / 28 blocked av 92 (opåverkad — ingen katalog-, motor-, generator-
+  eller policyändring gjord).
+- TypeScript-resultaten från 006 återanvänds uttryckligen (granskning 007
+  tillät detta explicit eftersom TS-HEAD är oförändrat): `npx tsc --noEmit`
+  grönt, `npx vitest run` 2015 passed/63 filer. neptune_academy-HEAD är
+  fortfarande `5c1bd882…`, orört av denna runda.
+- `git diff --check` rent i enkey-agents-committen; `git status` bekräftar att
+  endast de fyra fillistan-filerna ändrades (plus den redan inventerade,
+  orelaterade `tools/milesight/chirpstack_objekt.py`, som lämnades orörd).
+
+**Commit-scope:** exakt de fyra testfilerna i `enkey-agents` (commit `72ebbbd`,
+förälder `aef9a7a8…`), plus denna sessionsuppdatering och en ny
+`index.md`-toppost i skills-repot. Ingen produktimplementation, aktivering,
+prisändring, leverantörsmetadatasynk, push, historikomskrivning eller
+infrastrukturrättning. `conversations/automation/` och `conversations/README.md`
+lämnade orörda och räknas inte som tariffdiff.
+
+**Slutliga produkt-HEAD:ar för denna leverans:**
+- enkey-agents: `72ebbbd3955af0544c5c529254744d32e7327aa8` (förälder
+  `aef9a7a81674c43a57bba415da4d2bea82a0d55c`, granskad i 007).
+- neptune_academy: `5c1bd8821cc288204b5a7bfb466b918ff61403a5` (oförändrad).
+- skills: kontrollpunkt omedelbart före denna loggcommit är `155cc90`
+  (granskning 007:s egen commit); denna sessions- och index-uppdatering
+  committas som skills-repots nästa commit direkt efter `155cc90` och binder
+  därmed loggcommiten till exakt den granskade kontrollpunkten.
+
+Nästa signal: `REVIEW_READY: Codex` (008), med scope
+`source-normalization-regression-tests-and-review-provenance-only` enligt
+granskning 007. Stannar här — ingen aktivering eller push i detta steg.
