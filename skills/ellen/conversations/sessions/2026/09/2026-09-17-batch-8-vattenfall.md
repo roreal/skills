@@ -274,3 +274,108 @@ isoleringsmönster; Robert behöver inte ge nytt mandat.
 [Faktiskt utlåtande och handlingsbart uppdrag 014](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-013.md).
 Ingen aktivering, push eller historikomskrivning. Arbetskopieundantag och
 separat brygginfrastruktur bevaras. Nästa steg utförs av Claude.
+
+## 2026-09-17 — Claude — REVIEW_READY: Codex (rättning av signal 014)
+
+approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge
+
+HEAD:ar vid start matchade 014:s `reviewed_heads` exakt (`skills@451e0cf`
+med `644407c` som förälder, `enkey-agents@ec0ba368`,
+`neptune_academy@eb48defe`). Slutfört rättningsscopet
+`batch-8-vattenfall-contract-product-integration-and-acceptance-corrections`
+enligt utlåtande 014.
+
+### P1 — eligibility-transport rättad
+
+`katalog.py:till_prisar` kopierar nu `tariff["eligibility"]` in i den
+returnerade prisar-strukturen (endast när fältet finns, samma konvention
+som övriga valfria nycklar). `bygg_ts_fran_katalog` behövde ingen egen
+ändring — den json-dumpar `prisar_post` oklippt, så fältet flödar nu
+automatiskt till genererad TS. Isolerad kontroll: en kandidat-TS med de
+tolv Vattenfall-spärrarna rensade i minnet innehåller nu **12** träffar på
+`"eligibility"` (tidigare 0). `berakna_vattenfall_arsprodukt` i Python
+läste redan direkt mot rå katalogdata och var aldrig själv sårbar — felet
+var isolerat till webbtransporten (`fjarrvarme.ts:137`s
+`if (!eligibility) return null` fail-open när fältet saknades).
+
+### P1 — bandproveniens rättad
+
+`vattenfall_arsprodukt.py:155`s hårdkodade `varde="1"` ersatt med en
+härledning ur `prisar["kapacitet"]["nivaer"]`; kastar `ValueError`
+fail-closed om det inte finns exakt ett band eller om det saknar ID.
+Ny regressionstest bevisar både härledningen (icke-`"1"`-ID fungerar) och
+fail-closed-beteendet (0 eller 2 band kastar).
+
+### Ny isolerad kandidatgenerator och E2E-grind
+
+`tools/tariffer/generera_isolerad_batch8.py` (mirror av
+`generera_isolerad_batch5b.py`) genererar en isolerad kandidat-TS med de
+tolv Vattenfall-raderna rensade i minnet — den skarpa katalogen och den
+skarpa `tariffer.generated.ts` rörs aldrig. Isolerad räkning: **73
+godkända rader** (matchar granskningens tidigare siffra).
+
+Ny `neptune-marketing/e2e/batch8-isolated-e2e.mjs` (mirror av
+`batch6-isolated-e2e.mjs`, port 4177, `E2E_ISOLERAD_BATCH8=1`) med tre
+nya gated scenarier (27–29) i `kalkylator.smoke.mjs`: alla tre
+energiprofiler, Standard-behörighetsgränsen 1,2 provad vid kvot
+0,5/1,2/6,0 (`>=` är inklusive — kvot 1,2 är behörig), och blockerat läge
+vid saknat obligatoriskt fält. Krävde minimal, avgränsad produktkodstillägg
+för att göra befintligt beräknade `documented_exclusion`-poster och
+`estimated`-noggrannhetsstatus synliga i UI:t (nya fält/badge i
+`fjarrvarme.ts`/`besparingsvarde.ts`/`KalkylatorPage.tsx`) —
+behörighetsavslaget återanvände redan befintlig `KontraktBlockerat`-väg
+från granskning 012, ingen ny felväg uppfanns.
+
+Grinden kördes verkligt mot exakt den committade koden (`git archive`-
+baserad, inte bara simulerad): **29/29 scenarier gröna**, inklusive
+Scenario 27–29. Ordinarie `npm run test:e2e`: 26/26. Arbetskopian
+(inkl. `dist/`) verifierad ren efter körning.
+
+### Regenererad skarp `tariffer.generated.ts`
+
+Regenererad med verklig skills-commit som proveniens (`a17d537…`, tidigare
+`commit=okänd`). Diff mot tidigare committad fil: **endast
+provenienshuvudets commit-rad** ändrades — de tolv Vattenfall-raderna är
+fortsatt `investigation`-spärrade och alltså frånvarande ur den skarpa
+katalogens `godkanda()`-utfall, så ingen aktiverad rads serverade data
+ändrades.
+
+### Slut-HEAD:ar
+
+- enkey-agents: `ded969a3122b088820f5ec2ef8cd5a6200cfb7cd`
+- neptune_academy: `f24333e413e997b5e34c1b1d62b15a5736ee8768`
+- skills: denna commit (sessions-/indexposten)
+
+### Ändrade filer
+
+**enkey-agents** (commit `ded969a`):
+- `tools/tariffer/katalog.py`
+- `tools/tariffer/vattenfall_arsprodukt.py`
+- `tools/tariffer/tests/test_batch_8_vattenfall.py`
+- `tools/tariffer/generera_isolerad_batch8.py` (ny)
+
+**neptune_academy** (commit `f24333e`):
+- `neptune-marketing/e2e/kalkylator.smoke.mjs`
+- `neptune-marketing/e2e/batch8-isolated-e2e.mjs` (ny)
+- `neptune-marketing/package.json`
+- `neptune-marketing/src/data/tariffer.generated.ts`
+- `neptune-marketing/src/pages/KalkylatorPage.tsx`
+- `neptune-marketing/src/utils/besparingsvarde.ts`
+- `neptune-marketing/src/utils/fjarrvarme.ts`
+
+### Testutfall (körda av implementerande Claude-session)
+
+- Python, `tools/tariffer`: **2058 passed, 4 skipped** (baseline 2053 + 5
+  nya transport-/bandregressionstester, 0 regressioner).
+- TypeScript, `npx vitest run`: **2068 passed** (65 filer, oförändrat
+  antal — `ArsprodukResultat`-tillägget bröt ingen befintlig snapshot).
+- `npx tsc --noEmit`: grönt.
+- Isolerad kandidat: 73/73 godkända rader, 12/12 `eligibility`-träffar.
+- Isolerad Batch 8-E2E (`npm run test:e2e:batch8-isolated`, verklig
+  `git archive`-grind mot committad kod): **29/29 gröna**, inkl.
+  Scenario 27–29.
+- Ordinarie `npm run test:e2e`: 26/26.
+- Arbetskopior verifierat rena (`git status --porcelain` tomt) i båda
+  produktrepona efter samtliga körningar.
+
+Ingen aktivering, ingen push, ingen historikomskrivning.
