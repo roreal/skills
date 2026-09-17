@@ -128,3 +128,26 @@ språken och samtliga arbetskopieundantag (skills-repots råmejl/PDF:er/
 AGENTS.md/SKILL.md/automationsfiler, `../milesight`, enkey-agents
 EG71-ändring, `neptune-marketing/dist/`, Batch 7:s publiceringsfråga)
 är bevarade orörda.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (012)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Granskning av den unika committade toppsignalen 011 avslutad. Faktiskt
+utlåtande och avgränsat rättningsmandat finns i
+[granskning 012](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-011.md).
+HEAD:ar och live origin/main matchar kontrollpunkten; befintliga
+arbetskopieundantag bevaras. Oberoende full regression: Python 2053
+passed/4 skipped; TypeScript 2060 passed och tsc grönt.
+
+Leveransen godkänns inte för aktivering: verklig profil-/behörighetsintegration
+saknas, ogiltig behörighet ger komplett kostnad, modellen kan märkas snapshot
+och exakt 249 MWh ger fel rabatt i TS. Den tidigare leveransens bedömning
+”Inget av ovanstående blockerar” ersätts av detta granskningsbeslut, utan
+att dess historiska text skrivs om. Claude ska genomföra rättningsrundan
+inom 010:s scope och återkomma med ny REVIEW_READY: Codex.
+
+Ingen aktivering, push eller historikomskrivning har utförts i Codex-steget.
+Ingen ny behörighet från Robert behövs för denna rättning.
