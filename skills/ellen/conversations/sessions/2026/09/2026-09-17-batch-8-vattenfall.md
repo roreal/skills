@@ -1083,3 +1083,113 @@ HEAD:ar/live-remoter matchar. Lokal avgränsad rättning ryms i 026:s scope.
 Batch 7-publiceringsspärr består; ingen push utförd eller godkänd.
 
 [Faktiskt utlåtande och nästa uppdrag 028](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-027.md).
+
+## 2026-09-17 — Claude — rättning av signal 028, ny signal 029
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Claude
+executed_action: rättning enligt granskning 028, lokal aktiveringscommit
+
+Användaruppdrag (sammanfattning): verifiera unik committad toppost 028,
+utföra exakt nästa protokollsteg (rättningen i 028:s "Nästa steg för
+Claude"), bevara orelaterat arbete och stanna med ny ACTIVATION_READY.
+Ingen push i detta steg.
+
+### Verifiering före rättning
+
+- Läst AGENTS.md, SKILL.md, `conversations/README.md` samt granskning 027
+  (`2026-09-17-granskning-batch-8-signal-027.md`) i sin helhet.
+- `conversations/index.md`: `2026-09-17-028` (CHANGES_REQUIRED: Claude)
+  låg överst och förekom exakt en gång i ID-kolumnen; 029 var ledigt.
+- Skills-HEAD `345a2d0` med `7161303` som direkt förälder — matchar
+  granskningens `reviewed_heads.skills`. enkey-agents-HEAD `88b00ec` och
+  neptune_academy-HEAD `bb28095` matchade `reviewed_heads` exakt.
+  Live `origin/main` i alla tre repon verifierad med `git ls-remote` och
+  matchade granskningens `live_origin_main_heads`.
+- Samtliga tre arbetskopior rena vid start (skills-repots sedan tidigare
+  kända, orelaterade ändringar/ospårade filer oförändrade och lämnade
+  orörda, se nedan).
+
+### Rättning (028 punkt 2–4)
+
+`enkey-agents/tools/tariffer/generera_isolerad_batch8.py`: tog bort den
+ovillkorliga `tariff["investigation"] = None`-satsen för alla tolv
+kandidater. Generatorn räknar nu förekomster av vart och ett av de tolv
+`BATCH8_KANDIDATER`-ID:na i den lästa katalogen och kräver **exakt en**
+förekomst vardera samt `investigation is None` (redan aktiverat i den
+skarpa katalogen) för samtliga innan något skrivs. Saknad, dubblerad
+eller oväntat spärrad kandidat avbryter körningen (icke-nollstatus,
+tydligt felmeddelande, ingen TS-fil skriven). Eligibility-mutationen
+(tredje CLI-argumentet) muterar sedan endast den uttryckligen begärda
+kandidatens rad i den redan verifierade kopian. Docstringen uppdaterad
+till att beskriva det faktiska, nu fail-closed beteendet.
+
+`enkey-agents/tools/tariffer/tests/test_batch_8_vattenfall.py`: den
+befintliga mutationstesten skriven om till att anropa den riktiga
+`main()` (via `unittest.mock.patch` av `las_katalog`, samma metod Codex
+använde vid reproduktionen) i stället för att duplicera generatorns logik
+inline. Fyra nya regressionstester tillagda:
+
+- positivt grundfall — alla tolv redan aktiverade, ingen mutation:
+  `main()` returnerar 0 och samtliga tolv `"eligibility"`-förekomster
+  finns i utdatan;
+- oväntat spärrad kandidat (`investigation={"status": "utreds"}` satt på
+  Motala/Askersund Standard i en katalogkopia): `main()` returnerar
+  icke-noll och ingen utdatafil skrivs;
+- saknad kandidat (samma rad borttagen ur kopian): samma fail-closed-utfall;
+  duplicerad kandidat (samma rad kopierad in en andra gång): samma
+  fail-closed-utfall.
+
+Ingen ny parallell implementation, tariffaktivering eller bryggändring.
+Scenario 30:s assertion, alla tolv kandidaters profil-/etikett-/
+bindningsprov och katalogvärdena i övrigt är oförändrade.
+
+### Verifiering efter rättning
+
+- `python -m pytest tools/tariffer -q` (enkey-agents, `.venv/bin/python`):
+  **2192 passed, 4 skipped** (2188 + 4 nya regressionstester mot Codex
+  028:s baslinje).
+- `python -m pytest tools/tariffer/tests/test_dispositionsgrind_inventering.py -q`:
+  **25 passed** — disposition fortsatt **74 implemented / 2 ready /
+  16 blocked av 92**.
+- Direkt katalogräkning (`las_katalog()`/`godkanda()`): **86 fysiska
+  rader / 73 godkända**, oförändrat (ingen katalogdata rörd).
+- `npx tsc --noEmit` (neptune-marketing): rent.
+- `npx vitest run`: **2245 passed, 66 filer** — identiskt med 027/028:s
+  baslinje.
+- `npm run test:e2e:batch8-isolated`: byggde och körde `eval:build` +
+  isolerad `vite preview`. Samtliga scenarier godkända, inklusive
+  Scenario 27–29 (ovillkorlig dubbelkontroll) och Scenario 30 (negativt,
+  muterad Motala/Askersund-eligibility) genom den riktiga isolerade
+  generatorn efter rättningen.
+- `npm run test:e2e` (ordinarie, mot skarp `dist/`): **30/30**, inklusive
+  Scenario 27–29 mot verklig aktiverad Vattenfall-data.
+- `npm run test:e2e` skrev oavsiktligt till den incheckade
+  `neptune-marketing/dist/` (index.html + sju PNG-borttagningar) —
+  återställt med `git checkout -- neptune-marketing/dist` omedelbart
+  efter körningen; `git status` i neptune_academy rent därefter.
+- `git diff --check` rent i enkey-agents för rättningscommiten.
+
+### Slut-HEAD:ar
+
+- enkey-agents: `47fdc67386b9db990d63c910069700b75301f743` (förälder
+  `88b00eccdbeab820c3dc13d309f7bc6c0d28264a`) — den fokuserade
+  rättningscommiten (generator + tester).
+- neptune_academy: `bb28095cdd97d97bea615849bb132bdfbe4a4897` — oförändrad,
+  ingen kodändring krävdes i detta repo (endast e2e-körning, `dist/`
+  återställd).
+- skills: denna commit (sessions-/indexposten).
+
+### Bekräftelser
+
+Inga andra tariffer (Stockholm/Batch 7 eller annan) rörda. Inget pushat.
+`conversations/automation/` och `conversations/README.md` orörda. De sedan
+tidigare pågående, orelaterade ändringarna/ospårade filerna i skills-repot
+(`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`,
+`../milesight` samt de ospårade filerna listade i tidigare `git status`)
+lämnade orörda och ingår inte i denna commit. Batch 7-publiceringsspärren
+består oförändrad.
+
+Nästa steg tillhör Codex: granska rättningen (`ACTIVATION_READY: Codex`)
+och skriva `APPROVED_FOR_PUSH: Claude` eller stoppa med
+`CHANGES_REQUIRED`/`BLOCKED`.
