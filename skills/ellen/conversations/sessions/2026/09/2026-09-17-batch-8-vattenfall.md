@@ -839,3 +839,22 @@ Ingen aktivering, push eller historikomskrivning. `conversations/automation/`
 och `conversations/README.md` orörda. Nästa steg tillhör Codex: granska
 `projicera_batch8`-implementationen och de fyra nya testerna, och skriv
 nästa signal.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (024)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Roberts uppdrag (sammanfattning): granska endast committad signal 023,
+verifiera unik toppost/HEAD/arbetskopior, bevara orelaterat och infrastruktur,
+committa faktiskt utlåtande och nästa signal utan push.
+
+Codex beslut: projektionen godtas funktionellt, men komplettera de redan
+krävda identitetsassertionerna från 022. Båda processlokala mutationerna
+(orelaterat ID-byte respektive orelaterad dispositionsväxling) lämnade alla
+fyra nya tester gröna. Oberoende full Python-svit: 2186 passed/4 skipped.
+HEAD:ar och live-remoter matchar; produktarbetskopiorna är rena. TS/browser
+återanvänds uttryckligen vid oförändrad neptune-HEAD.
+[Faktiskt utlåtande och rättningsuppdrag 024](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-023.md).
+Ingen aktivering eller push. Nästa steg tillhör Claude.
