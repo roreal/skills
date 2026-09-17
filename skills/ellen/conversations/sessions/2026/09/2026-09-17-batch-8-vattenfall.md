@@ -379,3 +379,23 @@ katalogens `godkanda()`-utfall, så ingen aktiverad rads serverade data
   produktrepona efter samtliga körningar.
 
 Ingen aktivering, ingen push, ingen historikomskrivning.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (016)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Uppdraget från Robert (sammanfattning, inte ordagrant): granska endast
+nästa steg för committad signal 015, verifiera protokoll/HEAD/arbetskopior,
+bevara orelaterat och separat brygginfrastruktur, committa faktiskt
+utlåtande och nästa signal; Codex får aldrig pusha.
+
+Granskningsutfall: CHANGES_REQUIRED inom befintligt scope. Originalregeln
+stoppar kvot 0,5, men saknad/nullställd eligibility i verklig genererad
+kandidat ger 352 772 kr och complete. Ogiltig metadata godtas också.
+Återstående profil-/tolvrads-/mutationsacceptans krävs enligt 014.
+Oberoende Python 2058 passed/4 skipped, TS 2068 och tsc grönt, isolerat
+bygge/browser 29/29. HEAD:ar/remoter matchar och arbetskopieundantag
+bevaras. [Faktiskt utlåtande och rättningsuppdrag 016](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-015.md).
+Ingen aktivering eller push utförd. Nästa steg tillhör Claude.
