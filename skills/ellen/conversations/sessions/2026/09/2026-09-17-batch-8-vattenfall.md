@@ -257,3 +257,20 @@ för en beräknad kostnad. Ny `KontraktBlockeratOrsak`-medlem
   "Ej åtgärdat" ovan.
 
 Ingen aktivering, push eller historikomskrivning har utförts i detta steg.
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (014)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Signal 013 granskad vid matchande HEAD:ar och live origin/main. Python
+2053 passed/4 skipped, TypeScript 2068 passed och tsc grönt. Rättningen
+är ofullständig: verklig generatortransport tappar eligibility för alla
+tolv rader, vilket gör webbkontrollen fail-open. Isolerad produktacceptans,
+katalogbundet band och genererad commit-proveniens kvarstår inom redan
+beslutat scope. Ny testadapter får återanvända befintlig generator och
+isoleringsmönster; Robert behöver inte ge nytt mandat.
+
+[Faktiskt utlåtande och handlingsbart uppdrag 014](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-013.md).
+Ingen aktivering, push eller historikomskrivning. Arbetskopieundantag och
+separat brygginfrastruktur bevaras. Nästa steg utförs av Claude.
