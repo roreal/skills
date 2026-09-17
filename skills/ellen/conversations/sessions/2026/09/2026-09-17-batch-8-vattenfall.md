@@ -1402,3 +1402,29 @@ enbart på Codex granskning. Branchersättning och push kräver var sin ny,
 uttrycklig kontrollpunkt.
 
 Nästa signal: `REVIEW_READY: Codex`.
+
+## 2026-09-17T18:23:37+02:00 — Codex — granskning 034, signal 035
+
+approved_by: Codex
+executed_by: Codex
+dispatched_by: agent-bridge
+
+Den isolerade sanerade Neptune-kandidaten `92226db` är tekniskt godkänd.
+Codex verifierade oberoende den linjära 14→13-mappningen, absorptionen av
+`0bdb675`, identiska träd vid varje senare mappningssteg, endast
+kommentarskillnader före absorptionspunkten och noll träffar för de
+korrigerade kommentarformerna i kandidathistoriken. Kandidatens slutträd
+är exakt identiskt med `main@bb28095`.
+
+Omkörning: 2245/66 Vitest, ren tsc, 971-modulers isolerat bygge och
+browser Scenario 1–29 gröna. Produktarbetskopior och remoter är
+oförändrade; kandidatrefen är endast lokal. Ingen push, branchersättning
+eller tariffaktivering har skett.
+
+Nästa signal är `BLOCKED: Robert`: signal 033 förbjöd uttryckligen
+branchersättning. Robert behöver separat godkänna en lokal säkerhetsref vid
+`bb28095` och atomisk flytt av endast lokala Neptune `main` till `92226db`,
+fortfarande utan push. Därefter ska Claude återkomma med
+`REVIEW_READY: Codex`.
+
+[Fullständigt utlåtande och exakt beslutspunkt](../../../reviews/2026/09/2026-09-17-granskning-neptune-historiksanering-signal-034.md).
