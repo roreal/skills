@@ -212,3 +212,76 @@ aktivering, push eller historikomskrivning. Inga repoändringar utförs av brygg
 
 Daterad precisering av 004:s filantal: tariffdiffen bestod av två ändrade filer
 och en ny fil (tre totalt), plus två loggfiler. Tidigare replik bevaras.
+
+## 2026-09-17 — Claude, rättningsrunda för signal 005 (`CHANGES_REQUIRED: Claude`)
+
+executed_by: Claude
+dispatched_by: agent-bridge
+
+Utfört exakt det avgränsade synkuppdraget `catalog-provenance-and-stale-expectation-sync-only`
+från [granskning 005](../../../reviews/2026/09/2026-09-17-granskning-kallnormalisering-004.md).
+
+**Verifiering före ändring:** skills HEAD `2e39ecc` (förälder `2a0e0ed`, matchar
+`reviewed_heads.skills`), enkey-agents HEAD `13effb1` och neptune_academy HEAD
+`0bdb675` matchade `reviewed_heads` exakt. `2026-09-17-005` bekräftat unik
+(en förekomst) och överst i `index.md`. neptune_academys enda arbetskopieändringar
+var de redan inventerade `neptune-marketing/dist/`-undantagen.
+
+**Ändringar (exakt de två godkända filerna, ingen motor/generator rörd):**
+
+1. `enkey-agents/tools/tariffer/tests/test_katalog_proveniens.py`: `_FORVANTAD_KATALOG_SHA256`
+   uppdaterad från `96713912…` till `0aa1e82f…` (den redan granskade hashen för
+   katalog rev 0.1.27), med daterad förklaring av 0.1.26/0.1.27-normaliseringen.
+2. `enkey-agents/tools/tariffer/tests/test_katalog.py`: den stale assertionen
+   `"vattenfall-uppsala" in utredda` ersatt med `not in` (R09 flyttades till
+   `resolved_information_requests` i katalog rev 0.1.26 — Vattenfall syns därför
+   inte längre i den informationsförfrågningsbaserade listan). Nytt test
+   `test_vattenfall_fortsatt_blockerad_trots_lost_r09` lades till och verifierar
+   att samtliga tolv Vattenfall-rader ändå har `investigation.status == "utreds"`
+   och avvisas av `grind()` — dvs. fortsatt blockerade trots den lösta frågan,
+   exakt vad granskningen krävde verifierat.
+3. `neptune_academy/neptune-marketing/src/data/tariffer.generated.ts`: regenererad
+   med befintlig `python -m tools.tariffer.generera` mot den redan granskade
+   proveniensen (`skills@2a0e0ed037db6a66b5e62104a3d28b391165dacf`,
+   sha256 `0aa1e82fcb92befe506162f242941e07e9d0d06752ab4d88edf5376e1b54d03a`).
+   Genererad kropp jämförd byte-för-byte mot den tidigare incheckade filen med
+   `GENERERAD`- och `Källkatalog`-raderna undantagna: **identisk**. Ingen
+   handredigering.
+
+**Testutfall:**
+
+- De fem godkända testfilerna
+  (`test_katalog`, `test_katalog_oversattning`, `test_katalog_proveniens`,
+  `test_dispositionsgrind_inventering`, `test_synk`): **56 passed / 0 failed**
+  (föregående: 52 passed / 3 failed). Båda dokumenterade rotorsakerna lösta.
+- Fysiska nyckeltal bekräftade: 86 tariffrader, 61 godkända, 63 skarpa produkter
+  (2 leverantörsfiler + 61 ur katalogen, enligt `generera.py`s egen utskrift),
+  disposition 62 implemented / 2 ready / 28 blocked av 92 (oförändrad —
+  `test_dispositionsgrind_inventering.py`: 19 passed).
+- **`tools/tariffer` fullständig svit: 6 failed / 1962 passed / 4 skipped.**
+  De sex felen (`test_batch_2_sundsvall_indal.py::TestRequestscopadR14` ×2,
+  `test_batch_3_flodeskorrigering.py::TestGrindOchDisposition::
+  test_ovriga_sundsvallstariffer_fortsatt_blockerade` ×2,
+  `test_leverantorsvarde_batch5c_kontrakt.py::TestR03ScopesakringOchAndraMalarenergirader`
+  ×2) ligger **utanför denna rundas godkända scope**
+  (`catalog-provenance-and-stale-expectation-sync-only`) och rördes avsiktligt
+  INTE. Verifierat med `git stash` att de redan fanns identiskt, oförändrat,
+  FÖRE denna rundas två testfilsändringar — de är alltså en följd av den
+  tidigare, redan committade R03/R07/R14-källnormaliseringen (rev 0.1.26,
+  signal 002/003), inte av detta steg. Ingen test utanför fillistan ändrades
+  för att dölja dem; de flaggas här åt Codex för scopebeslut i en separat,
+  framtida runda.
+- `npx tsc --noEmit` i `neptune-marketing`: grönt (exit 0).
+- `npx vitest run` i `neptune-marketing`: **2015 passed / 63 test files**, inga
+  fel.
+
+**Commit-scope:** exakt de tre filerna ovan i respektive produktrepo, plus
+denna sessionsuppdatering och en ny `index.md`-toppost i skills-repot. Inga
+andra filer rörda; skills-repots befintliga ospårade/ändrade filer från
+orelaterat arbete (Fjärrvärmetariffer-underlag, `conversations/automation/`,
+`../milesight`) lämnas orörda. Ingen aktivering, ingen prisändring, ingen
+push, ingen historikomskrivning.
+
+Nästa signal: `REVIEW_READY: Codex`, med en uttrycklig flagg om de sex
+scope-externa testfelen ovan för Codex att besluta om (separat rättningsrunda
+eller medvetet accepterad kvarstående brist).
