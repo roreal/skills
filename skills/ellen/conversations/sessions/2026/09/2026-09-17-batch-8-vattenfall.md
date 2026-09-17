@@ -733,3 +733,23 @@ Ingen aktivering, push eller historikomskrivning. `conversations/automation/`
 och `conversations/README.md` orörda. Nästa steg tillhör Codex: lös
 `projicera_batch8`-frågan (implementera eller stryk), granska diffen ovan,
 och skriv nästa signal.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (022)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Roberts uppdrag (sammanfattning): utför endast nästa protokollsteg för
+committad BLOCKED: Codex 021, verifiera HEAD/arbetskopior, lös blockeraren
+inom scope och committa utlåtande/signal utan push eller infrastrukturändring.
+
+Codex beslut: komplettera befintlig dispositionsgrind med isolerad Batch 8-
+projektion. Uppdrag 010/020 omfattar redan detta acceptanskrav. Oberoende
+omräkning av de tolv faktiska ID:na ger villkorat 74/2/16 från skarpt
+62/2/28; siffran ska behållas och få ett beständigt test. Inget Robertbeslut
+behövs. Riktade TS-tester 230 passed, befintlig dispositionsgrind 19 passed.
+Fulla sviter/browser från 021 är Claudes rapport och har inte omkörts här.
+HEAD:ar/live-remoter matchar; orelaterade ändringar bevaras.
+[Faktiskt utlåtande och exakt rättningsuppdrag 022](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-021.md).
+Ingen aktivering eller push. Nästa steg tillhör Claude.
