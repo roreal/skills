@@ -53,7 +53,7 @@
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
-      "utreds": 6,
+      "utreds": 5,
       "lost": 1
     },
     "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
@@ -1017,6 +1017,64 @@
       "url": "https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html",
       "retrieved_on": "2026-09-16",
       "kind": "supplier_website"
+    },
+    {
+      "id": "web-review-vattenfall-calculator-2026-09-17",
+      "title": "Beräkna ditt pris — officiell 2026-kalkylator (företag)",
+      "url": "https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/berakna-ditt-pris/",
+      "retrieved_on": "2026-09-17",
+      "sha256": "8e1707e28d6f6972b8dc75cf3f8e0ee87ad9cdf0392ec02f6f797bd840caa314",
+      "component_module_sha256": "4288641b675b0220c1fe68d464e7abf5a9b9e039dea7a8e97b955860fb0d0c7e",
+      "kind": "supplier_website_calculator_snapshot",
+      "notes_sv": "Kalkylatorsidans HTML och dess inbäddade prismodul hashades separat vid granskningen 2026-09-17 (källrevision, se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md). Sidan är dynamisk och saknar en stabil maskinläsbar URL för enskilda värden; fullständig extraherad konfiguration (nätgruppernas Standard-effektpriser, energiprisprofiler jan-dec, Spetsig-priset 1724 kr/kW, energi/effekt-gränsen 1,2, flödesvalens ±7,5/±3,75 kr och volymrabattens band/avdrag) är dokumenterad ordagrant i källrevisionens proposal-fil i stället för att upprepas maskinellt här. Lokala granskningskopior i /tmp är revisionsunderlag, inte godkända repoartefakter."
+    },
+    {
+      "id": "web-review-vattenfall-faq-2026-09-17",
+      "title": "Frågor och svar om fjärrvärmepriset — Standard/Spetsig",
+      "url": "https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/fragor-och-svar-om-fjarrvarmepriset/",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Källa för Spetsig-priset 1724 kr/kW och energi/effekt-gränsen 1,2 som skiljer Standard från Spetsig."
+    },
+    {
+      "id": "web-review-sundsvall-2026-09-17",
+      "title": "Fjärrvärmepriser för verksamheten 2026",
+      "url": "https://sundsvallenergi.se/foretag-och-brf/fjarrvarme/fjarrvarme-for-verksamheten/fjarrvarmepriser",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Bekräftar att 2026-tabellen är komplett t.o.m. 1999 kW och att 2000+ kW är individuellt avtal (Matfors/Kvissleby-Njurunda)."
+    },
+    {
+      "id": "web-review-malarenergi-priser-2026-09-17",
+      "title": "Priser fjärrvärme företag 2026",
+      "url": "https://www.malarenergi.se/foretag/varme-kyla-foretag/fjarrvarme-foretag/priser-fjarrvarme/",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Bekräftar 2026-priser inkl. 2217 kr fast avgift i bandet 25-79 kW för större fastigheter."
+    },
+    {
+      "id": "web-review-malarenergi-flodespremie-2026-09-17",
+      "title": "Flödespremie fjärrvärme företag",
+      "url": "https://www2.malarenergi.se/foretag/varme-kyla-foretag/fjarrvarme-foretag/flodespremie/",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Källan till den olösta A4-frågan: sidan nämner stora fastigheter men är tvetydig om gruppanslutna småhus omfattas av samma flödespremie/-avgift. Används både som stöd för större fastigheters redan publicerade villkor och som den öppna källan för R03/A4."
+    },
+    {
+      "id": "web-review-vbenergi-2026-09-17",
+      "title": "Prisvillkor fjärrvärme 2026",
+      "url": "https://www.vbenergi.se/fjarrvarme/priser/prisvillkor-20222222/",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Anger samma 2026-villkor för Ludvika, Grängesberg, Fagersta och Norberg. Björnmossen är inte uttryckligen omfattat (se B3)."
+    },
+    {
+      "id": "web-review-gavleenergi-2026-09-17",
+      "title": "Fjärrvärmeavgifter företag 2026",
+      "url": "https://www.gavleenergi.se/foretag/fjarrvarme/fjarrvarmeavgifter/",
+      "retrieved_on": "2026-09-17",
+      "kind": "supplier_website",
+      "notes_sv": "Källa för den olösta A3-frågan om vilken månad ett ackumulerat volymband bryts."
     }
   ],
   "members": [
@@ -3457,7 +3515,8 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12."
+          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Formel och faktor för flödestaxan ((Q kund/W kund − Q alla/W alla) × 4 × W kund) är publicerade. Kräv kundens månadsflöde/energi och en explicit månadsreferens Q alla/W alla (eller leverantörens fakturerade justering) som obligatorisk indata; leverantörens exempelvärde 28 får bara användas som ett synligt valt snapshot (accuracy=snapshot), aldrig som dold 2026-sanning. Var kunden hämtar det löpande Q alla/W alla-värdet är en frivillig precisionsfråga (B1 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md), inte produktblockerande. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -3899,6 +3958,10 @@
             4,
             5
           ]
+        },
+        {
+          "source_id": "web-review-gavleenergi-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -3911,10 +3974,13 @@
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
-        "request_ids": [],
+        "request_ids": [
+          "R16"
+        ],
         "conditions_sv": [
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A3 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Villkoren säger ackumulerat kalenderår med avdrag varje månad, men inte om tröskelmånaden får avdrag på hela, marginaldelen eller först nästa månad. Ny fråga R16 skapad och kopplad till denna tariff."
         ]
       }
     },
@@ -4497,7 +4563,8 @@
           "R02"
         ],
         "conditions_sv": [
-          "Volymrabattens räkneexempel motsäger intervalltabellen. Kontroll krävs."
+          "Volymrabattens räkneexempel motsäger intervalltabellen. Kontroll krävs.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A2 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Tabellen (65 kr/MWh i bandet 1501-2000 MWh) och räkneexemplet för 1750 MWh (42,90 kr/MWh på hela delen över 1000) motsäger varandra. R02 oförändrad."
         ]
       }
     },
@@ -4624,7 +4691,8 @@
           "R08"
         ],
         "conditions_sv": [
-          "Bekräfta om effektrabatten gäller hela effekten eller intervallvis."
+          "Bekräfta om effektrabatten gäller hela effekten eller intervallvis.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A1 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Prisbanden är publicerade men tillämpningssemantiken (hela effekten eller marginalintervall) framgår inte av källorna. R08 oförändrad."
         ]
       }
     },
@@ -4751,7 +4819,8 @@
           "R08"
         ],
         "conditions_sv": [
-          "Bekräfta om effektrabatten gäller hela effekten eller intervallvis."
+          "Bekräfta om effektrabatten gäller hela effekten eller intervallvis.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A1 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Prisbanden är publicerade men tillämpningssemantiken (hela effekten eller marginalintervall) framgår inte av källorna. R08 oförändrad."
         ]
       }
     },
@@ -5969,6 +6038,10 @@
         {
           "source_id": "web-review-malar-flow",
           "pages": null
+        },
+        {
+          "source_id": "web-review-malarenergi-priser-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -5988,12 +6061,11 @@
       ],
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R03"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Webbsidan har två tabeller med rubriken Västerås/Hallstahammar men olika priser; nätkoppling måste bekräftas.",
-          "Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor."
+          "Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): 2026-priser, 2217 kr fast avgift i det första stora bandet 25-79 kW, samt maxeffektens bränsleår (1 juli-30 juni) och flödesformeln är publicerade och gäller större fastigheter. R03 är omscopad (2026-09-17) till att bara gälla den öppna A4-frågan om gruppanslutna småhus (malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026); den här tariffraden refererar inte längre R03. Kräv månadsvis kundflöde och publicerad/angiven nätreferens; en äldre säsong får bara användas som synligt snapshot. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -6111,6 +6183,10 @@
         {
           "source_id": "web-review-malar-flow",
           "pages": null
+        },
+        {
+          "source_id": "web-review-malarenergi-flodespremie-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -6132,7 +6208,8 @@
         ],
         "conditions_sv": [
           "Webbsidan har två tabeller med rubriken Västerås/Hallstahammar men olika priser; nätkoppling måste bekräftas.",
-          "Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor."
+          "Sommarperiod, överuttagsperiodisering och flödesavgiftens debetsats behöver fullständiga villkor.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A4 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Prissidan för 2026 redovisar gemensamt rörligt pris för stora fastigheter och gruppanslutna småhus, men flödespremiesidan nämner bara stora fastigheter och ett äldre informationsblad säger att systemet inte gäller småhus. Väntar på Mälarenergis svar om flödespremien/-avgiften (±2,50 kr/m3 okt-apr) gäller gruppanslutna småhus innan formeln får byggas."
         ]
       }
     },
@@ -7815,7 +7892,8 @@
           ],
           "formula": "A * normal_year_MWh + B",
           "result_unit": null,
-          "application": "discount_per_consumed_kWh; currency_scale_not_confirmed"
+          "application": "discount_per_consumed_kWh; currency_scale_not_confirmed",
+          "result_unit_determined_sv": "öre/kWh, härlett av rabattfunktionens kontinuitet och prisskala vid källrevisionen 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md); ingen fakturaverifiering genomförd, resultatet ska märkas uppskattat."
         }
       ],
       "source_refs": [
@@ -7847,12 +7925,11 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R07"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -7969,7 +8046,8 @@
           ],
           "formula": "A * normal_year_MWh + B",
           "result_unit": null,
-          "application": "discount_per_consumed_kWh; currency_scale_not_confirmed"
+          "application": "discount_per_consumed_kWh; currency_scale_not_confirmed",
+          "result_unit_determined_sv": "öre/kWh, härlett av rabattfunktionens kontinuitet och prisskala vid källrevisionen 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md); ingen fakturaverifiering genomförd, resultatet ska märkas uppskattat."
         }
       ],
       "source_refs": [
@@ -8001,12 +8079,11 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R07"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Rabattformelns valutaenhet saknas. Ortstabell hittad; Ursviken och Stensele saknar explicit temperatur i denna tabell.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Prislistorna ger energi, effekt, avkylningsregel och rabattfunktion. Rabattfunktionens resultatenhet är öre/kWh (dimensionsslutsats av kontinuitet/prisskala, dokumenterad i adjustments[].result_unit_determined_sv). Leverantörens fakturerade effektvärde används som kundindata, så saknade ortstemperaturer (Ursviken, Stensele) i design_temperatures_degC behöver inte härledas för att bygga produkten. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -8531,6 +8608,10 @@
         {
           "source_id": "web-review-sundsvall-flow",
           "pages": null
+        },
+        {
+          "source_id": "web-review-sundsvall-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -8550,15 +8631,14 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R14"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Flödes-/avkylningsvillkor behöver kompletteras.",
           "Pris för 2000+ kW saknas.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): 2026-tabellen är komplett t.o.m. 1999 kW (band 5, source_interval 1000-1999). 2000+ kW är en hård produktgräns: pris saknas medvetet (null) och ska stoppas fail-closed som individuellt avtal, inte härledas eller extrapoleras. Flödesdelen kräver explicita månadsvisa kund- och nätvärden eller leverantörens fakturerade justering; inget dolt nätmedel får antas. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -8676,6 +8756,10 @@
         {
           "source_id": "web-review-sundsvall-flow",
           "pages": null
+        },
+        {
+          "source_id": "web-review-sundsvall-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -8695,11 +8779,10 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R14"
-        ],
+        "request_ids": [],
         "conditions_sv": [
-          "2000+ kW prissätts enligt individuella leveransvillkor."
+          "2000+ kW prissätts enligt individuella leveransvillkor.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): 2026-tabellen är komplett t.o.m. 1999 kW (band 5, source_interval 1000-1999). 2000+ kW är en hård produktgräns: pris saknas medvetet (null) och ska stoppas fail-closed som individuellt avtal, inte härledas eller extrapoleras. Flödesdelen kräver explicita månadsvisa kund- och nätvärden eller leverantörens fakturerade justering; inget dolt nätmedel får antas. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -9666,6 +9749,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -9689,14 +9780,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -9811,6 +9901,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -9834,14 +9932,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -9956,6 +10053,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -9979,14 +10084,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10101,6 +10205,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10124,14 +10236,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10246,6 +10357,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10269,14 +10388,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10391,6 +10509,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10414,14 +10540,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10536,6 +10661,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10559,14 +10692,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10681,6 +10813,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10704,14 +10844,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10826,6 +10965,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10849,14 +10996,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -10971,6 +11117,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -10994,14 +11148,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -11116,6 +11269,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -11139,14 +11300,13 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
@@ -11261,6 +11421,14 @@
         {
           "source_id": "web-review-vattenfall-model-current",
           "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-calculator-2026-09-17",
+          "pages": null
+        },
+        {
+          "source_id": "web-review-vattenfall-faq-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
@@ -11284,21 +11452,20 @@
       },
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R09"
-        ],
+        "request_ids": [],
         "conditions_sv": [
           "Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.",
           "Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     },
     {
       "id": "vb-energi-normal-2026",
       "member_id": "vb-energi",
-      "network_or_product": "Ludvika, Björnmossen, Grängesberg, Fagersta och Norberg",
+      "network_or_product": "Ludvika, Grängesberg, Fagersta och Norberg",
       "customer_scope": [
         "business",
         "housing_association"
@@ -11442,12 +11609,17 @@
           "pages": [
             5
           ]
+        },
+        {
+          "source_id": "web-review-vbenergi-2026-09-17",
+          "pages": null
         }
       ],
       "issues": [
         "Prisgrupp styrs av årsenergi; kontrollera leverantörens volymgrund.",
         "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+        "Björnmossen är exkluderat ur produktomfånget (2026-09-17): aktuell 2026-sida anger samma villkor bara för Ludvika, Grängesberg, Fagersta och Norberg. Björnmossen beskrivs på annat håll som ett separat nät som senare ska kopplas till Ludvika och inkluderas inte förrän B3-frågan i leverantorsfragor-blockerade-tariffer-2026.md är besvarad."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -11459,7 +11631,8 @@
         "conditions_sv": [
           "Prisgrupp styrs av årsenergi; kontrollera leverantörens volymgrund.",
           "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Aktuell 2026-sida anger samma villkor i Ludvika, Grängesberg, Fagersta och Norberg (leverantörens effekt/fem dygnstoppar). Produkten begränsas till dessa fyra nät (network_or_product rättat, Björnmossen borttaget); Björnmossen inkluderas inte utan svar på B3. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna."
         ]
       }
     }
@@ -11527,28 +11700,19 @@
       "category": "source_conflict",
       "question_sv": "Vilka rabattintervall gäller? Tabellen anger 1501–2000 MWh till 65 kr/MWh, men exemplet för 1750 MWh använder 42,90 även över 1500.",
       "source_id": "web-review-hemab-final",
-      "status": "utreds"
+      "status": "utreds",
+      "confirmed_still_open_on": "2026-09-17"
     },
     {
       "id": "R03",
       "tariff_ids": [
-        "malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026",
         "malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026"
       ],
       "category": "source_conflict",
-      "question_sv": "Vilka nät hör sidans två olika tabeller märkta Västerås/Hallstahammar till? Bekräfta också fast avgift 2217 eller 2117 för 25–79 kW samt sommarperiod och fullständiga flödes-/överuttagsvillkor.",
-      "source_id": "web-review-malar-price",
-      "status": "utreds"
-    },
-    {
-      "id": "R07",
-      "member_ids": [
-        "skelleftea-kraft"
-      ],
-      "category": "unit_missing",
-      "question_sv": "Ger volymrabattformeln resultat i öre/kWh eller annan enhet? Behöver även dimensioneringstemperatur för Ursviken/Stensele om de orterna ska användas.",
-      "source_id": "web-review-skelleftea-final",
-      "status": "utreds"
+      "question_sv": "Gäller 2026 års flödespremie/-avgift (±2,50 kr/m3 okt-apr, jämfört mot månadens nätmedel) gruppanslutna småhus i Västerås och Hallstahammar? Prissidan grupperar energipriset med stora fastigheter, flödespremiesidan nämner bara stora fastigheter, och ett äldre informationsblad säger att systemet inte gäller småhus.",
+      "source_id": "web-review-malarenergi-flodespremie-2026-09-17",
+      "status": "utreds",
+      "scope_note_sv": "Omscopad 2026-09-17 (källrevision, se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md) från att även täcka malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026 (nu source_resolved_implementation_pending, se den tariffens investigation.conditions_sv) till att bara gälla gruppanslutna småhus (fråga A4 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md)."
     },
     {
       "id": "R08",
@@ -11558,32 +11722,40 @@
       "category": "formula_missing",
       "question_sv": "Gäller effektrabatten hela debiteringseffekten eller bara effekten inom varje intervall?",
       "source_id": "web-review-hassleholm-model",
-      "status": "utreds"
+      "status": "utreds",
+      "confirmed_still_open_on": "2026-09-17"
     },
     {
-      "id": "R09",
+      "id": "R16",
       "member_ids": [
-        "vattenfall-haninge-tyreso-alta-och-gustavsberg",
-        "vattenfall-motala-och-askersund",
-        "vattenfall-nykoping",
-        "vattenfall-uppsala",
-        "vattenfall-vanersborg"
+        "gavle-energi"
+      ],
+      "tariff_ids": [
+        "gavle-energi-gavle-2026"
       ],
       "category": "formula_missing",
-      "question_sv": "Hur tillämpas volymrabatten: hela förbrukningen eller marginalintervall, och vilken historik bestämmer den? Behöver fullständiga villkor för rekommenderad effekt och månadsperiodisering.",
-      "source_id": "web-review-vattenfall-model-current",
-      "status": "utreds"
+      "question_sv": "Hur beräknas volymavdraget den månad ett ackumulerat kalenderårsband passeras: på hela månadens volym, bara den marginella delen över tröskeln, eller först påföljande månad? Ändras tidigare månaders debitering retroaktivt?",
+      "source_id": "web-review-gavleenergi-2026-09-17",
+      "status": "utreds",
+      "created_on": "2026-09-17",
+      "created_by_proposal": "conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md",
+      "corresponds_to_email": "A3 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md"
     },
     {
-      "id": "R14",
-      "category": "individual_contract",
-      "question_sv": "Leveransvillkor för abonnemang från 2000 kW i Sundsvall/Matfors. Krävs endast för kunder i dessa grupper.",
-      "source_id": "web-review-matfors-final",
-      "status": "utreds",
+      "id": "R17",
+      "member_ids": [
+        "finspangs-tekniska-verk"
+      ],
       "tariff_ids": [
-        "sundsvall-energi-sundsvall-normal-2026",
-        "sundsvall-energi-matfors-och-kvissleby-normal-2026"
-      ]
+        "finspangs-tekniska-verk-finspang-2026"
+      ],
+      "category": "formula_missing",
+      "question_sv": "Omfattar spetsvärmekunders 20-procentiga prispåslag hela summan av energi-, effekt- och flödesavgift eller bara vissa prisdelar? Hur klassas en kund som spetsvärmekund, och gäller klassningen hela avtals-/kalenderåret eller kan den börja/sluta en viss månad? Detta är en ej byggd tilläggsfunktion på den redan aktiva Finspång-tariffen — den aktiva basraden (energi/effekt/conditional_flow) påverkas inte.",
+      "source_id": "07_1",
+      "status": "utreds",
+      "created_on": "2026-09-17",
+      "created_by_proposal": "conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md",
+      "corresponds_to_email": "A5 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md"
     }
   ],
   "change_log": [
@@ -11815,6 +11987,20 @@
         "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla-, issues- eller contract_required-andring gjord. Boras Bra Miljoval forblir kundens eget, aktiva val (miljotillagg_vald) inom bastariffen, ingen egen katalograd. Finspangs spetsvarmetillagg och Boras topplast beror inte av denna post och ar oforandrade.",
         "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 61 (59 tidigare aktiva + dessa tva); dispositionen blir 62 implemented / 2 ready / 28 blocked av 92 (kontraktstackningen for Boras miljotillagg raknas som en av de tre dispositionstackningarna i 63 skarpa produkter, se tariffinventering-v22.md paragraf 8)."
       ]
+    },
+    {
+      "date": "2026-09-17",
+      "revision": "0.1.26",
+      "changes": [
+        "Källrevisionsnormalisering (ingen aktivering, ingen prisändring): de 28 blockerade dispositionerna omklassade från en enhetlig 'väntar på leverantörssvar' till 22 source_resolved_implementation_pending och 6 external_answer_required, enligt conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md. Skarp disposition oförändrad: 62 implemented / 2 ready / 28 blocked av 92. Ingen tariffs investigation.status, production_ready eller contract_required ändrad; endast information_request-bokföring och källhänvisningar.",
+        "R07 (Skellefteå), R09 (Vattenfall x5 nätgruppsmedlemmar/12 tariffrader) och R14 (Sundsvall Matfors/Kvissleby) flyttade till resolved_information_requests: frågorna är inte externt besvarade men är inte längre produktblockerande (se resolution_sv per post). Berörda tariffraders investigation.request_ids rensade för dessa tre ID:n; investigation.status kvarstår 'utreds' (implementation ej byggd) på samtliga 19 berörda rader.",
+        "R03 omscopad till att bara gälla malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026 (fråga A4). malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026 refererar inte längre R03 och är dokumenterad som source_resolved_implementation_pending.",
+        "R02 och R08 kvarstår oförändrade i sak (Härnösand Energi & Miljö/HEMAB respektive Hässleholm Miljö) — bekräftade som genuint external_answer_required vid källrevisionen (confirmed_still_open_on=2026-09-17).",
+        "Nya frågor R16 (Gävle Energi, brytmånad för ackumulerat volymavdrag, fråga A3) och R17 (Finspångs Tekniska Verk, omfattning av 20-procentigt spetsvärmetillägg, fråga A5) tillagda i remaining_information_requests och kopplade till gavle-energi-gavle-2026 respektive finspangs-tekniska-verk-finspang-2026. R17 gäller en ännu obyggd tilläggsfunktion på en redan aktiv basrad — den aktiva raden är oförändrad.",
+        "vb-energi-normal-2026: network_or_product rättat från 'Ludvika, Björnmossen, Grängesberg, Fagersta och Norberg' till 'Ludvika, Grängesberg, Fagersta och Norberg' — Björnmossen är inte uttryckligen omfattat av 2026-villkoren och exkluderas tills B3 är besvarad. Priser, band och formler oförändrade.",
+        "Sju nya källposter tillagda (retrieved_on 2026-09-17): web-review-vattenfall-calculator-2026-09-17 och web-review-vattenfall-faq-2026-09-17 (med kalkylatorsidans och komponentmodulens SHA-256), web-review-sundsvall-2026-09-17, web-review-malarenergi-priser-2026-09-17, web-review-malarenergi-flodespremie-2026-09-17, web-review-vbenergi-2026-09-17 och web-review-gavleenergi-2026-09-17. Bundna till respektive tariffraders source_refs. Skellefteå Kraft och EEM fick ingen ny källpost (inget nytt URL bekräftat i denna revision) — deras klassning grundas på redan bundna web-review-källor plus proposalen.",
+        "SFAB kundvald effekt, Kraftringen Brunnshög och Tekniska Verken Linköping lågtemperatur (3 av de 22 source-resolved dispositionerna) samt Finspångs spetsvärmetillägg (1 av de 6 external-answer-required) saknar fortfarande egna katalograder — de är ej materialiserade varianter/tilläggsfunktioner på redan existerande (delvis aktiva) basrader. De är INTE tillagda som nya tariffs[]-poster i denna normaliseringsrevision (skulle ändra coverage_summary.tariffs och likna implementation); klassning och källor för dessa fyra är dokumenterade i tariffinventering-v22.md:s dispositionsmatris i stället."
+      ]
     }
   ],
   "resolved_information_requests": [
@@ -11883,6 +12069,47 @@
       "source_id": "web-review-falu-final",
       "status": "not_externally_answered_but_no_longer_product_blocking",
       "resolution_sv": "Frågan är inte externt besvarad, men är inte längre produktblockerande för Bjursås/Grycksbo/Sundborn/Svärdsjö: produktkontraktet stoppar mekaniskt varje leverantörsvärde över 500 kW som ett specialavtal (maxvarde=500 i policyn), i stället för att extrapolera prisgruppen automatiskt (Batch 5b, handoff 2026-09-15-001). Falu tätorts katalograd har ingen sådan gräns och har rättats till att inte längre peka på denna medlemsvida fråga."
+    },
+    {
+      "id": "R07",
+      "member_ids": [
+        "skelleftea-kraft"
+      ],
+      "tariff_ids": null,
+      "category": "unit_missing",
+      "question_sv": "Ger volymrabattformeln resultat i öre/kWh eller annan enhet? Behöver även dimensioneringstemperatur för Ursviken/Stensele om de orterna ska användas.",
+      "source_id": "web-review-skelleftea-final",
+      "status": "not_externally_answered_but_no_longer_product_blocking",
+      "resolution_sv": "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): frågan är inte externt besvarad, men är inte längre produktblockerande. Rabattfunktionens resultatenhet är öre/kWh, härlett av formelns kontinuitet och prisskala (dokumenterat på tariffraderna, adjustments[].result_unit_determined_sv) — INTE verifierat mot faktura. Ursviken/Stensele saknar fortfarande explicit dimensionerande temperatur i design_temperatures_degC, men det blockerar inte produkten eftersom leverantörens fakturerade effektvärde används i stället för en härledd signaturberäkning."
+    },
+    {
+      "id": "R09",
+      "member_ids": [
+        "vattenfall-haninge-tyreso-alta-och-gustavsberg",
+        "vattenfall-motala-och-askersund",
+        "vattenfall-nykoping",
+        "vattenfall-uppsala",
+        "vattenfall-vanersborg"
+      ],
+      "tariff_ids": null,
+      "category": "formula_missing",
+      "question_sv": "Hur tillämpas volymrabatten: hela förbrukningen eller marginalintervall, och vilken historik bestämmer den? Behöver fullständiga villkor för rekommenderad effekt och månadsperiodisering.",
+      "source_id": "web-review-vattenfall-model-current",
+      "status": "not_externally_answered_but_no_longer_product_blocking",
+      "resolution_sv": "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): frågan är inte externt besvarad, men är inte längre produktblockerande. Vattenfalls officiella 2026-kalkylator (berakna-ditt-pris) publicerar en fullständig estimatmodell: volymrabatten tillämpas marginellt över sju vintermånader (band 0/249/1249/2499/4999/7500 MWh, avdrag 0/5/10/20/25/30 kr/MWh), rekommenderad effekt och flödesval framgår av kalkylatorn och FAQ-sidan om Standard/Spetsig. Kalkylatorsidan (SHA-256 8e1707e28d6f6972b8dc75cf3f8e0ee87ad9cdf0392ec02f6f797bd840caa314) och dess komponentmodul (SHA-256 4288641b675b0220c1fe68d464e7abf5a9b9e039dea7a8e97b955860fb0d0c7e) granskades 2026-09-17; kopiorna i /tmp är revisionsunderlag, inte godkända repoartefakter. Kräv leverantörens/kundens effekt och synligt flödesval; resultatet ska heta uppskattad årskostnad enligt Vattenfalls 2026-kalkylator, inte fakturareproduktion."
+    },
+    {
+      "id": "R14",
+      "member_ids": null,
+      "tariff_ids": [
+        "sundsvall-energi-sundsvall-normal-2026",
+        "sundsvall-energi-matfors-och-kvissleby-normal-2026"
+      ],
+      "category": "individual_contract",
+      "question_sv": "Leveransvillkor för abonnemang från 2000 kW i Sundsvall/Matfors. Krävs endast för kunder i dessa grupper.",
+      "source_id": "web-review-matfors-final",
+      "status": "not_externally_answered_but_no_longer_product_blocking",
+      "resolution_sv": "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): frågan är inte externt besvarad, men är inte längre produktblockerande. 2026-tabellen för Sundsvall/Matfors-Kvissleby är komplett t.o.m. 1999 kW; 2000+ kW är en avsiktlig hård produktgräns (pris null, pricing=individual_delivery_terms) som ska stoppas fail-closed, inte härledas. Flödesdelen kräver explicita månadsvisa kund-/nätvärden eller leverantörens fakturerade justering."
     }
   ]
 }

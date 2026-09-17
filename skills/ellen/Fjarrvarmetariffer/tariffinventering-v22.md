@@ -1509,6 +1509,16 @@ prisdel helt saknar publicerat värde. Frågan i sista fältet är den som ska s
 leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknisk-kartläggningen
 — inte omformulerad här).
 
+> **Rättelse 2026-09-17 (källrevision, se
+> `conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md` och §8a
+> nedan):** Posterna i detta avsnitt beskrevs tidigare som att samtliga "väntar på
+> leverantörssvar" eller har en "fråga" som "ska skickas till leverantören". Det stämmer
+> fortfarande för 6 av de 24 raderna nedan (Hässleholm x2, HEMAB/Härnösand Energi & Miljö,
+> Gävle Energi, Mälarenergi gruppanslutna småhus — se §8a). För de övriga 18 raderna nedan är
+> frågan/källbristen som beskrivs numera källbar ur redan publicerade officiella 2026-sidor
+> utan bolagssvar; klassad `source_resolved_implementation_pending` i §8a. Texten per rad
+> nedan ändras INTE här (historik bevaras) — läs §8a:s dispositionsmatris för den aktuella
+> klassningen per rad.
 
 #### `eskilstuna-energi-och-miljo-eskilstuna-2026`
 - **Leverantör / nät / kundkategori:** Eskilstuna Energi och Miljö — Eskilstuna — näring/brf
@@ -2015,6 +2025,17 @@ aldrig `exact` — samma klassificering som huvudfallet.
 10 `ready_to_implement` (åtta E.ON/Navirum-varianter, Borås tillägg, Jönköpings accessavgift
 — flyttad från blockerad), 4 `blocked_external_info` (Södertörn, Kraftringen Brunnshög,
 Tekniska Verken Linköping lågtemperatur, Finspångs spetsvärmetillägg).
+
+> **Rättelse 2026-09-17 (källrevision, se §8a):** de fyra `blocked_external_info`-varianterna
+> ovan (Södertörns kundvalda effekt, Kraftringen Brunnshög, Tekniska Verken Linköping
+> lågtemperatur, Finspångs spetsvärmetillägg) hade tidigare en gemensam "fråga: ..."-formulering
+> som antydde att ett bolagssvar krävdes för alla fyra. Källrevisionen visar att tre av dem
+> (Södertörn/SFAB, Kraftringen Brunnshög, Tekniska Verken lågtemperatur) redan har publicerade
+> 2026-priser/formler och bara väntar på intern modellering (`source_resolved_implementation_pending`,
+> §8a rad 20–22) — deras "fråga"-text ovan är historik, inte en aktuell blockerare. Endast
+> Finspångs spetsvärmetillägg kvarstår `external_answer_required` (§8a rad 28, ny fråga R17 = A5
+> i `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`). Ingen av de fyra är
+> tillagd som katalograd i `optimate-fjarrvarme-2026.json` av detta.
 
 **Batch 3b — lokal implementation bakom spärr genomförd 2026-09-13 (handoff
 2026-09-13-001, beredskapskontroll 2026-09-13-035, katalogcommit
@@ -4839,6 +4860,75 @@ förväntade resultatet **62 implemented / 2 ready / 28 blocked av 92
 dispositionsposter** (53/1/24 bas + 9/1/4 variant). Finspångs
 spetsvärmetillägg och Borås topplast förblir `blocked_external_info`,
 oförändrade, utanför scope.
+
+### 8a. Källrevision 2026-09-17 — korrigerad blockeringsorsak för de 28
+
+**Rättelse, ingen aktivering:** proposalen
+`conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md` (godkänd
+inriktning, källnormalisering beställd) visar att beskrivningen av samtliga 28
+`blocked_external_info`-poster som "väntar på leverantörssvar" inte längre stämmer. Tabellen
+i §8 ovan (24 bas + 4 variant = 28) och dess `Disposition`-etikett `blocked_external_info` är
+**oförändrade** — det som korrigeras är bara *varför* posterna är blockerade. Ingen post
+flyttar till `ready_to_implement` eller `implemented_source_verified_annual` av detta; den
+skarpa dispositionen **62 implemented / 2 ready / 28 blocked av 92** kvarstår exakt.
+
+Två underklasser ersätter den tidigare enhetliga texten:
+
+- **`source_resolved_implementation_pending` (22 poster):** redan publicerade officiella
+  2026-sidor/PDF:er/kalkylatorer räcker som källa. Kräver bara intern modellering, tester och
+  en separat, granskad aktiveringsrunda — inget bolagssvar.
+- **`external_answer_required` (6 poster):** ett av de fem mejlen i
+  `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md` måste besvaras innan
+  formeln kan byggas utan antagande.
+
+**Mekanisk dispositionsmatris (28 rader, summerar 22 + 6 = 28):**
+
+| # | Disposition/tariff-id eller beskrivning | Klassning | Blockerande fråge-ID |
+|---:|---|---|---|
+| 1 | `vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard-2026` | source_resolved_implementation_pending | R09 (löst → resolved_information_requests) |
+| 2 | `vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 3 | `vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 4 | `vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 5 | `vattenfall-motala-och-askersund-motala-och-askersund-standard-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 6 | `vattenfall-motala-och-askersund-motala-och-askersund-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 7 | `vattenfall-nykoping-nykoping-standard-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 8 | `vattenfall-nykoping-nykoping-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 9 | `vattenfall-uppsala-uppsala-standard-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 10 | `vattenfall-uppsala-uppsala-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 11 | `vattenfall-vanersborg-vanersborg-standard-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 12 | `vattenfall-vanersborg-vanersborg-spetsig-2026` | source_resolved_implementation_pending | R09 (löst) |
+| 13 | `skelleftea-kraft-skelleftea-skelleftehamn-ursviken-lycksele-mala-2026` | source_resolved_implementation_pending | R07 (löst) |
+| 14 | `skelleftea-kraft-boliden-burea-burtrask-byske-jorn-kage-lovanger-norsjo-robertsfors-stensele-storuman-vindeln-anaset-2026` | source_resolved_implementation_pending | R07 (löst) |
+| 15 | `sundsvall-energi-sundsvall-normal-2026` | source_resolved_implementation_pending | R14 (löst) |
+| 16 | `sundsvall-energi-matfors-och-kvissleby-normal-2026` | source_resolved_implementation_pending | R14 (löst) |
+| 17 | `eskilstuna-energi-och-miljo-eskilstuna-2026` | source_resolved_implementation_pending | Ingen (formel/faktor redan källverifierad; B1 frivillig) |
+| 18 | `malarenergi-vasteras-och-hallstahammar-storre-fastigheter-2026` | source_resolved_implementation_pending | Ingen (R03 omscopad bort från denna rad) |
+| 19 | `vb-energi-normal-2026` (Ludvika, Grängesberg, Fagersta, Norberg — Björnmossen exkluderat) | source_resolved_implementation_pending | Ingen (B3 frivillig för Björnmossen) |
+| 20 | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026--kundvald-effekt` (ej materialiserad variantrad) | source_resolved_implementation_pending | Ingen — SFAB 2026-villkoren (överuttag 1032 kr/kW) är publicerade |
+| 21 | `kraftringen-kraftringen-2026--brunnshog` (ej materialiserad variantrad) | source_resolved_implementation_pending | Ingen — 647 kr/MWh + styckvis returtemperaturdel publicerad |
+| 22 | `tekniska-verken-linkoping-linkoping-2026--lagtemperatur` (ej materialiserad variantrad) | source_resolved_implementation_pending | Ingen — flödespris okt–apr 2,67 kr/m³ publicerat |
+| 23 | `hassleholm-miljo-hassleholm-2026` | external_answer_required | R08 (A1) |
+| 24 | `hassleholm-miljo-tyringe-2026` | external_answer_required | R08 (A1) |
+| 25 | `harnosand-energi-miljo-harnosand-2026` (HEMAB) | external_answer_required | R02 (A2) |
+| 26 | `gavle-energi-gavle-2026` | external_answer_required | R16 (ny, A3) |
+| 27 | `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026` | external_answer_required | R03 (omscopad, A4) |
+| 28 | `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` (ej materialiserad variantrad) | external_answer_required | R17 (ny, A5) |
+
+**Summa:** 22 `source_resolved_implementation_pending` + 6 `external_answer_required` = 28.
+Rader 20–22 och 28 saknar egen post i `optimate-fjarrvarme-2026.json:tariffs[]` (samma fyra
+variantrader som §5/batchplan-v22.md alltid räknat separat: SFAB kundvald effekt, Kraftringen
+Brunnshög, Tekniska Verken lågtemperatur, Finspångs spetsvärmetillägg) — de är medvetet INTE
+tillagda som nya katalogposter i denna normaliseringsrevision, eftersom det skulle likna
+implementation/utöka `coverage_summary.tariffs` utan en godkänd aktiveringsrunda. Deras
+källor är dokumenterade i `optimate-fjarrvarme-2026.json`-change_log 0.1.26 och i
+proposalen ovan.
+
+**JSON-ändringar i samma revision (change_log 0.1.26, ingen prisändring, ingen
+aktivering):** R07/R09/R14 flyttade till `resolved_information_requests` (frågorna är inte
+externt besvarade men blockerar inte längre produkten); R03 omscopad till bara
+`malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026`; R02/R08 bekräftade
+oförändrade; nya frågor R16 (Gävle) och R17 (Finspång) tillagda. `remaining_information_requests`
+innehåller efter revisionen exakt R02, R03, R08, R16, R17.
 
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**

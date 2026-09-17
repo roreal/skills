@@ -1374,6 +1374,24 @@ Lidköping Energis två bastariffer (`lidkoping-energi-lidkoping-041-kw-2026`,
 löste den externa sakfrågan, flyttade till `ready_to_implement`, batch 5d ovan. Bastariffer
 i denna lista minskar därmed från 26 till 24.
 
+> **Rättelse 2026-09-17 (källrevision, se
+> `conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md`):**
+> Ovanstående beskrivning av samtliga 28 dispositioner som "väntar på leverantörssvar" är
+> inte längre korrekt. Den ursprungliga texten ovan står kvar oförändrad som historik. Den
+> korrigerade klassningen är: **22 av de 28** (Vattenfall x12, Skellefteå Kraft x2, Sundsvall
+> Energi Matfors/Kvissleby x2, EEM x1, Mälarenergi större fastigheter x1, VB Energi x1,
+> Södertörn/SFAB kundvald effekt x1, Kraftringen Brunnshög x1, Tekniska Verken Linköping
+> lågtemperatur x1) kan källas ur redan publicerade officiella 2026-sidor/PDF:er/kalkylatorer
+> och kräver bara intern modellering — klassade `source_resolved_implementation_pending`, inte
+> `external_answer_required`. **Endast 6** (Hässleholm Miljö x2, HEMAB x1, Gävle Energi x1,
+> Mälarenergi gruppanslutna småhus x1, Finspångs spetsvärmetillägg x1) kräver fortfarande ett
+> leverantörssvar — färdiga mejl finns i
+> `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`. Ingen av de 28 flyttas
+> till `ready_to_implement` eller `implemented_source_verified_annual` av detta — dispositionen
+> `62 implemented / 2 ready / 28 blocked av 92` är oförändrad; bara *varför* posterna är
+> blockerade är korrigerat. Fullständig dispositionsmatris (28 rader) finns i
+> `tariffinventering-v22.md` §8a.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |
