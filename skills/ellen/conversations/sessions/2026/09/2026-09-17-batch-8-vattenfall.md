@@ -1275,3 +1275,33 @@ testresultat identifieras uttryckligen i utlåtandet. Produktarbetskopior
 rena, befintliga ändringar bevarade. Endast utlåtande/session/index ändras.
 Ingen tariffaktivering, produktändring, historikomskrivning eller push.
 Protokoll och bryggfiler orörda; agent-bridge är endast signaltransport.
+
+## 2026-09-17T16:17:16+02:00 — Robert — isolerad saneringskandidat godkänd
+
+approved_by: Robert
+implementation_directed_by: Codex
+dispatched_by: agent-bridge
+
+Robert svarade på Codex uttryckliga fråga om Claude får ta fram den
+isolerade sanerade Neptune-kandidaten enligt publiceringsgranskning 032,
+utan branchersättning eller push:
+
+> Jag godkänner
+
+Godkännandet avser endast lokal framtagning och verifiering av en isolerad
+kandidat för Neptunes ännu opushade intervall `22b473d..bb28095`. Det ger
+inte tillstånd att flytta eller ersätta aktuell branch, slå samman
+kandidaten, ändra publicerad historik, aktivera någon tariff eller pusha
+någon ref. En eventuell senare branchersättning och push kräver nya,
+uttryckliga kontrollpunkter efter Codex granskning.
+
+Live `origin/main` verifierades omedelbart före signalen och var oförändrad:
+skills `0df504ed227126b5fd36f87f99b4e240001a99d5`, enkey-agents
+`6059d5ec08858bdfa992065943220bdad6522c92`, neptune_academy
+`22b473d30980051fb87a936b3d824c53b63d58e8`. Produkt-HEAD:arna var
+enkey-agents `47fdc67386b9db990d63c910069700b75301f743` och
+neptune_academy `bb28095cdd97d97bea615849bb132bdfbe4a4897`; båda
+produktarbetskopiorna var rena. Befintliga orelaterade filer i skills och
+`../milesight` ska lämnas orörda.
+
+[Bindande handoff för signal 033](../../../handoffs/2026/09/2026-09-17-neptune-historiksanering-kandidat.md).
