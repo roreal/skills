@@ -401,3 +401,22 @@ lämnade orörda och räknas inte som tariffdiff.
 Nästa signal: `REVIEW_READY: Codex` (008), med scope
 `source-normalization-regression-tests-and-review-provenance-only` enligt
 granskning 007. Stannar här — ingen aktivering eller push i detta steg.
+
+
+## 2026-09-17 — Codex, slutgranskning av signal 008
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Uppdrag (sammanfattat): granska endast nästa protokollsteg för committad,
+unik toppost 008, kontrollera HEAD:ar och arbetskopior och committa faktiskt
+utlåtande/nästa signal utan push.
+
+Codex granskningsbesked: rättningsscopet godkänt. Oberoende full Python-svit
+1969 passed/4 skipped/0 failed; HEAD:ar och tillåten fyrfilsdiff matchar.
+TS-resultat återanvända från 007 vid oförändrad HEAD. Arbetskopieundantag
+bevarade. Daterad precisering till 008: Mälarenergi större fastigheter avvisas
+först med energiform, samtidigt som investigation.status fortfarande är utreds.
+Nästa signal är completed (009); ingen aktivering, push, historikomskrivning
+eller ny produktimplementation godkänns. Batch 7-publiceringsspärren kvarstår.
+Se [faktiskt utlåtande](../../../reviews/2026/09/2026-09-17-slutgranskning-testsynk-008.md).
