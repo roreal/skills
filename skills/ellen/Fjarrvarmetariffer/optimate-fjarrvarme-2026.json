@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.28",
+  "schema_version": "0.1.29",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-17",
@@ -9795,16 +9795,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -9961,16 +9952,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10127,16 +10109,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10293,16 +10266,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10459,16 +10423,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10625,16 +10580,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10791,16 +10737,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -10957,16 +10894,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11123,16 +11051,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11289,16 +11208,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11455,16 +11365,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -11621,16 +11522,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [],
-        "conditions_sv": [
-          "Batch 8 (beredskapskontroll 2026-09-17-010): lokal implementation av kalkylatorestimatet (annual_forward) klar bakom investigation-spärren i enkey-agents/tools/tariffer och neptune_academy — två nya beräkningsbara justeringstyper (seasonal_banded_volume_discount_estimate, categorical_flow_rate_estimate), en generisk, katalogstyrd Standard/Spetsig-behörighetskontroll (eligibility), tre bundna publicerade energiprofiler (flerbostadshus/industri/lokal) och dokumenterade exkluderingar för överuttagsavgift och 150 kr/MWh-industriavdrag. Resultatet är alltid märkt en uppskattning (estimated), inte en fakturaexakt reproduktion — kalkylatorns egen 4 kr/m³-modell används symmetriskt trots att 2026-prislistan tar 6 kr/m³ vid sämre avkylning (se kategorivalets hjälptext). Väntar på Codex kodgranskning och en separat godkänd aktiveringsrunda innan investigation.status/production_ready ändras."
-        ],
-        "conditions_history_sv": [
-          "Villkor/issues före Batch 8-implementationen 2026-09-17, ersatta av den aktuella conditions_sv ovan (bevarade som historik, inte aktuella blockerare): issue: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | issue: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | issue: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | issue: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Volymrabattens tillämpning och rekommenderad effekt behöver kompletteras. Överuttagsregler och flödesperiod hittade på aktuell modellwebbsida.' | condition: 'Metod för debiterbar effekt/kapacitet är inte fullständigt mappad; använd leverantörens fakturavärde tills villkoren implementerats.' | condition: 'Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.' | condition: 'null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.' | condition: 'Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): Officiella 2026-kalkylatorn (Standard/Spetsig) publicerar nätets energipris, Standard-effektpris, månadsprofil, flödeskategorier och sjumånaders volymrabatt; Spetsig är 1724 kr/kW och energi/effekt-gränsen 1,2 skiljer taxorna. Bygg en uttryckligt uppskattad årsprodukt (annual_forward) enligt kalkylatorns estimatmodell, inte fakturareproduktion; kräv leverantörens/kundens effekt och synligt flödesval. Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de 28 blockerade dispositionerna.'"
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -12173,6 +12065,16 @@
         "Motstridiga gamla issues/investigation.conditions_sv flyttade till investigation.conditions_history_sv (daterad historik) på samtliga tolv rader; conditions_sv innehåller nu bara det aktuella implementationskravet (väntar på Codex-granskning/aktiveringsrunda).",
         "investigation.status='utreds' och production_ready=false OFÖRÄNDRADE på samtliga tolv rader — ingen aktivering i denna revision. Motorstöd (två nya justeringstyper, generisk Standard/Spetsig-eligibility, tre bundna energiprofiler) implementeras separat i enkey-agents/tools/tariffer och neptune_academy bakom samma spärr.",
         "Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) och dispositionen (62 implemented / 2 ready / 28 blocked av 92) oförändrade — investigation-spärren gäller fortfarande samtliga tolv rader."
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "revision": "0.1.29",
+      "changes": [
+        "Batch 8 lokal aktivering (Codex granskning 2026-09-17-025/026, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt for aktiverings-/pushkedjan): investigation-sparren borttagen (satt till null) for exakt de tolv Vattenfall-raderna vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard-2026, vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-spetsig-2026, vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard-2026, vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig-2026, vattenfall-motala-och-askersund-motala-och-askersund-standard-2026, vattenfall-motala-och-askersund-motala-och-askersund-spetsig-2026, vattenfall-nykoping-nykoping-standard-2026, vattenfall-nykoping-nykoping-spetsig-2026, vattenfall-uppsala-uppsala-standard-2026, vattenfall-uppsala-uppsala-spetsig-2026, vattenfall-vanersborg-vanersborg-standard-2026, vattenfall-vanersborg-vanersborg-spetsig-2026.",
+        "Ingen pris-, kapacitetsband-, effekt-/flodesformel-, kalla-, issues-, eligibility- eller contract_required-andring gjord pa nagon av de tolv raderna. production_ready forblir false (opaverkat av denna revision) och contract_required forblir true. Estimated-provenienser, dokumenterade exkluderingar (overuttagsavgift, 150 kr/MWh-industriavdrag) och stodjer_besparing=False oforandrade.",
+        "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 73 (61 tidigare godkanda + dessa tolv); dispositionen (tariffinventering-v22.md) blir 74 implemented / 2 ready / 16 blocked av 92.",
+        "Inga andra tariffer, inklusive Stockholm Exergi/Batch 7, aktiverade i denna revision."
       ]
     }
   ],

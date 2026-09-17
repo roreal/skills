@@ -1773,192 +1773,204 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 - **Primärkälla:** `47_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Haninge-Tyreso-Alta-och-Gustavsberg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Gustavsberg – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `47_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Haninge-Tyreso-Alta-och-Gustavsberg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-spetsig-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Haninge, Tyresö och Älta – Spetsig — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `47_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Haninge-Tyreso-Alta-och-Gustavsberg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Haninge, Tyresö och Älta – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `47_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Haninge-Tyreso-Alta-och-Gustavsberg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-motala-och-askersund-motala-och-askersund-spetsig-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Motala och Askersund — Motala och Askersund – Spetsig — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `48_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Motala-och-Askersund-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-motala-och-askersund-motala-och-askersund-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Motala och Askersund — Motala och Askersund – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `48_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Motala-och-Askersund-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-nykoping-nykoping-spetsig-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Nyköping — Nyköping – Spetsig — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `49_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Nykoping-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-nykoping-nykoping-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Nyköping — Nyköping – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `49_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Nykoping-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-uppsala-uppsala-spetsig-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Uppsala — Uppsala – Spetsig — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `50_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Uppsala-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-uppsala-uppsala-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Uppsala — Uppsala – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `50_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Uppsala-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-vanersborg-vanersborg-spetsig-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Vänersborg — Vänersborg – Spetsig — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `51_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Vanersborg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vattenfall-vanersborg-vanersborg-standard-2026`
 - **Leverantör / nät / kundkategori:** Vattenfall - Vänersborg — Vänersborg – Standard — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
 - **Primärkälla:** `51_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-Vanersborg-2025.pdf); `vattenfall-model` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/); `web-review-vattenfall-model-current` (https://www.vattenfall.se/foretag/varme-kyla/fjarrvarme/priser/prismodell/)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
 - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-17 (Codex granskning 2026-09-17-025/026, Roberts automationsfullmakt); ej pushad ännu
+- **Motorstatus:** klar — `seasonal_banded_volume_discount_estimate` + `categorical_flow_rate_estimate` (justeringar.py), generisk Standard/Spetsig-eligibility (katalog.py), TypeScript-motsvarighet (neptune_academy)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_vattenfall_policy`, tools/tariffer/policyregister.py), profil-/eligibility-fältbindning
+- **Teststatus:** tariffspecifika automattester finns (Python: test_batch_8_vattenfall.py, test_dispositionsgrind_inventering.py; TS: besparingsvardeVattenfallKandidatMatris.test.ts)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
 - **Exakt saknad uppgift/fråga:** `asymmetric_flow_difference` (delproblem 3.3): nätreferensen (`reference: "network_average"`) är inte verifierad som ett statiskt katalogvärde — källan beskriver den som beräknad för aktuell månad. Hela tariffgruppens resultat förblir `blocked` tills 3.3 är löst, per teknisk-kartläggning v4 — oavsett att delproblemen 3.1 (produktval), 3.2 (säsongsvolymrabatt) och 3.4 (`capacity_overrun`-spärr) är byggbara internt.
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Inmatningslägen:** mwh (obligatorisk indata krävs, profil + Standard/Spetsig-eligibility); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
+> **Aktivering 2026-09-17 (Codex granskning `2026-09-17-025`/`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för aktiverings-/pushkedjan):** `investigation` satt till `null` (`utreds` borttaget) i `optimate-fjarrvarme-2026.json` (change_log 0.1.29). `Disposition` uppdaterad till `implemented_source_verified_annual`. Motorstöd (två beräkningsbara kalkylestimattyper `seasonal_banded_volume_discount_estimate`/`categorical_flow_rate_estimate`, generisk Standard/Spetsig-eligibility, tre bundna publicerade energiprofiler) och `POLICYREGISTER`-bindningen (`_vattenfall_policy`, tools/tariffer/policyregister.py) var redan på plats sedan handoff 2026-09-17-010/011 — endast aktiveringsspärren togs bort i detta steg. Resultatet är fortsatt en uppskattning (`annual_forward`, `estimated`-proveniens), aldrig en fakturaexakt reproduktion; `contract_required: true` oförändrat. Aktiverad lokalt, ej pushad ännu.**
 #### `vb-energi-normal-2026`
 - **Leverantör / nät / kundkategori:** VB Energi — Ludvika, Björnmossen, Grängesberg, Fagersta och Norberg — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
@@ -4848,9 +4860,9 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 53 | 9 | 62 |
+| `implemented_source_verified_annual` | 65 | 9 | 74 |
 | `ready_to_implement` | 1 | 1 | 2 |
-| `blocked_external_info` | 24 | 4 | 28 |
+| `blocked_external_info` | 12 | 4 | 16 |
 | `not_applicable` | 0 | 0 | 0 |
 | **Summa** | **78** | **14** | **92** |
 
@@ -4870,6 +4882,28 @@ förväntade resultatet **62 implemented / 2 ready / 28 blocked av 92
 dispositionsposter** (53/1/24 bas + 9/1/4 variant). Finspångs
 spetsvärmetillägg och Borås topplast förblir `blocked_external_info`,
 oförändrade, utanför scope.
+
+**Rättat 2026-09-17 (Batch 8-aktivering, Codex granskning `2026-09-17-025`/
+`026`, APPROVED_FOR_ACTIVATION: Claude, Roberts automationsfullmakt för
+aktiverings-/pushkedjan):** de tolv Vattenfall-kandidaternas bastariffer
+(§3–4) — `vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-
+alta-standard-2026`, `...-spetsig-2026`, `vattenfall-haninge-tyreso-alta-och-
+gustavsberg-gustavsberg-standard-2026`, `...-spetsig-2026`,
+`vattenfall-motala-och-askersund-motala-och-askersund-standard-2026`,
+`...-spetsig-2026`, `vattenfall-nykoping-nykoping-standard-2026`,
+`...-spetsig-2026`, `vattenfall-uppsala-uppsala-standard-2026`,
+`...-spetsig-2026`, `vattenfall-vanersborg-vanersborg-standard-2026` och
+`...-spetsig-2026` — flyttades från `blocked_external_info` till
+`implemented_source_verified_annual` i SAMMA commit som katalogens
+`investigation`-spärr togs bort för samtliga tolv (change_log 0.1.29).
+`godkanda(katalog, policyregister=POLICYREGISTER)` == 73 fysiska katalograder
+(61 tidigare + de tolv Vattenfall-raderna) — det mekaniska måttet på fysiska
+rader i `optimate-fjarrvarme-2026.json`, skilt från denna tabells 92
+dispositionsposter (78 bas + 14 variant). Tabellen ovan är en mekanisk
+räkning av dokumentets egna `**Disposition:**`-rader; den matchar det
+förväntade resultatet **74 implemented / 2 ready / 16 blocked av 92
+dispositionsposter** (65/1/12 bas + 9/1/4 variant). Inga andra tariffer,
+inklusive Stockholm Exergi/Batch 7, aktiverade i denna revision.
 
 ### 8a. Källrevision 2026-09-17 — korrigerad blockeringsorsak för de 28
 

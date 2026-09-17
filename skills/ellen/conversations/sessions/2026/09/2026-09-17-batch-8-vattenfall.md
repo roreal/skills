@@ -961,3 +961,94 @@ Nästa signal: APPROVED_FOR_ACTIVATION: Claude för exakt tolv Vattenfall-
 kalkylprodukter, följt av ACTIVATION_READY: Codex. Push och Batch 7:s
 publiceringsfråga är fortsatt spärrade. Ingen aktivering eller push utförd
 av Codex. [Faktiskt utlåtande och handlingsbart uppdrag 026](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-025.md).
+
+## 2026-09-17 — Claude — lokal aktivering, signal 027
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Claude
+executed_action: lokal aktivering av exakt tolv Vattenfall-kalkylprodukter
+
+Uppdrag (sammanfattning): utförde nästa protokollsteg för den committade
+toppsignalen `2026-09-17-026` (`APPROVED_FOR_ACTIVATION: Claude`) enligt
+[granskning 025](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-025.md),
+punkt 2–5. Föregångskontroll: skills-HEAD `6139f32` (förälder `218a612`),
+enkey-agents `6ac09d0`, neptune_academy `190a081` — alla matchade
+`reviewed_heads` exakt; alla tre `live_origin_main_heads` matchade via
+`git ls-remote`; produktarbetskopiorna rena. Arbetet delegerades delvis
+till en subagent för research/genomförande, men verifierades oberoende
+av mig innan commit: strukturell diff av katalog-JSON:en (Python), full
+ombkörning av samtliga testsviter och e2e-grindar, samt återställning av
+en oavsiktlig `dist/`-diff som en verifieringsbygge orsakade.
+
+### Vad som ändrades
+
+**skills** (denna commit): `optimate-fjarrvarme-2026.json` — `investigation`
+satt till `null` för exakt de tolv Vattenfall-ID:na (schema_version
+0.1.28→0.1.29, en ny daterad change_log-post; `change_log`-historiken i
+övrigt oförändrad, verifierat append-only). Strukturell Python-diff
+bekräftar: exakt 12 tariffrader ändrade, ingen annan rad, endast fältet
+`investigation` rört — production_ready, contract_required, priser,
+policyer, eligibility, estimated-proveniens och `stodjer_besparing=False`
+oförändrade. `tariffinventering-v22.md` — de tolv kandidaternas §4-status
+synkad till aktiverat läge, §8:s räkningstabell 62/2/28→74/2/16 med
+daterad korrigeringsnot.
+
+**enkey-agents** (commit `88b00ec`, förälder `6ac09d0`): tretton testfiler
+med hårdkodade totalräkningar bumpade (61→73 godkända, 63→75 produkter,
+41→46 medlemmar m.fl.), plus ett nytt historiskt återställningsprov i
+`test_dispositionsgrind_inventering.py`. Ingen produktionslogik ändrad.
+
+**neptune_academy** (commit `c29ae85`, förälder `190a081`):
+`tariffer.generated.ts` regenererad från den riktiga katalogen via den
+skarpa produktionsvägen (`python -m tools.tariffer.generera`, inte den
+isolerade Batch 8-generatorn). `kalkylator.smoke.mjs` Scenario 27–29 körs
+nu ovillkorligt mot ordinarie `dist/`; Scenario 30 (muterad eligibility)
+kvarstår i den isolerade grinden. Tre TS-räkningstest bumpade 63→75.
+
+### Oberoende verifiering (körd av mig, inte bara subagentens rapport)
+
+- Strukturell Python-diff av katalog-JSON:en mot HEAD `6139f32`: exakt
+  tolv ändrade rader == de tolv Vattenfall-ID:na, enda ändrat fält
+  `investigation`, top-level `change_log` append-only.
+- `python -m pytest tools/tariffer -q` (enkey-agents): **2188 passed / 4
+  skipped**, 0 fel.
+- `godkanda(las_katalog())` kört direkt: **86 fysiska rader, 73 godkända**
+  — matchar målet.
+- `npx tsc --noEmit` (neptune-marketing): rent.
+- `npx vitest run`: **2245 passed, 66 filer**.
+- `npm run build`: grönt. Bygget skrev oavsiktligt till den incheckade
+  `dist/`-katalogen (8 filer, orelaterat till aktiveringen) —
+  återställd med `git checkout -- dist/` innan commit.
+- `npm run test:e2e` (ordinarie, mot skarp `dist/`): **30/30**, inklusive
+  Scenario 27–29 mot verklig aktiverad Vattenfall-data.
+- `npm run test:e2e:batch8-isolated`: samtliga scenarier inklusive
+  30 (negativt, muterad eligibility) godkända.
+- `git diff --check`: rent i alla tre repon.
+
+### Katalog-/dispositionsmål
+
+86 fysiska rader / **73 godkända** / **75 produkter** (73 katalog + 2
+leverantörsfiler) / disposition **74 implemented / 2 ready / 16 blocked
+av 92** — uppnått exakt, verifierat oberoende via produktionskoden.
+
+### Slut-HEAD:ar
+
+- enkey-agents: `88b00eccdbeab820c3dc13d309f7bc6c0d28264a` (förälder
+  `6ac09d0db8fdee8446ded1611e8c99afa594163f`)
+- neptune_academy: `c29ae851850244e865b7ba10047f00dc2193c7c8` (förälder
+  `190a0810d8b9d211df227039e406030238c59920`) — proveniensraden i
+  `tariffer.generated.ts` uppdateras med skills-repots faktiska commit-hash
+  i en uppföljande, avgränsad commit omedelbart efter denna, eftersom
+  hashen bara kan vara känd efter att skills-commiten finns.
+- skills: denna commit (sessions-/indexposten och katalogändringen)
+
+### Bekräftelser
+
+Inga andra tariffer (Stockholm/Batch 7 eller annan) rörda. Inget pushat.
+`conversations/automation/` och `conversations/README.md` orörda. Den
+sedan tidigare pågående, orelaterade ändringen i
+`leverantorsfragor-blockerade-tariffer-2026.md` lämnad orörd och ingår
+inte i denna commit.
+
+Nästa steg tillhör Codex: granska aktiveringsdiffen (`ACTIVATION_READY:
+Codex`) och skriva `APPROVED_FOR_PUSH: Claude` eller stoppa med
+`CHANGES_REQUIRED`/`BLOCKED`.
