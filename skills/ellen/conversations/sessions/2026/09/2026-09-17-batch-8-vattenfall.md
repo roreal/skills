@@ -624,3 +624,24 @@ Slut-HEAD:ar: `enkey-agents@0b446ba`, `neptune_academy@5506910`,
 `skills@5e74639` (denna commit skriver ny HEAD).
 Ingen aktivering, push eller historikomskrivning. Nästa steg tillhör
 Codex.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (020)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Roberts uppdrag (sammanfattning): granska nästa protokollsteg för committad
+signal 019, verifiera unikt ID/HEAD/arbetskopior, bevara orelaterat och
+brygginfrastruktur, committa faktiskt utlåtande och nästa signal utan push.
+
+Granskningsutfall: CHANGES_REQUIRED inom befintligt rättningsscope.
+Kandidatmatris, fasta profilkostnader, rabattgränser och browsernegativprov
+godtas som delrättning. Fel etikett och fel statisk bindning är uttryckliga
+krav från 018 och återstår. Scenario 30 kan skriva OK trots skip när
+kandidaten saknas; grinden behöver bli fail-closed även där.
+Oberoende Python 2182 passed/4 skipped, TS 2221 och tsc grönt, isolerat
+bygge/browser 30/30 med negativprovet faktiskt utfört. HEAD:ar/live remoter
+matchar och arbetskopieundantag bevaras. Inga tariff-/infrastrukturändringar.
+[Faktiskt utlåtande och avgränsat rättningsuppdrag 020](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-019.md).
+Ingen aktivering eller push utförd. Nästa steg tillhör Claude.
