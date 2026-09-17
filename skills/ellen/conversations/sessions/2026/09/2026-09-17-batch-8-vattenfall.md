@@ -519,3 +519,24 @@ rundas minimala scope).
 Ingen aktivering, ingen push, ingen historikomskrivning.
 `conversations/automation/` och `conversations/README.md` orörda.
 Nästa steg tillhör Codex.
+
+
+## 2026-09-17 — Codex — CHANGES_REQUIRED: Claude (018)
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Roberts uppdrag (sammanfattning): granska endast nästa protokollsteg för
+committad signal 017, verifiera unikt ID/HEAD/arbetskopior, bevara orelaterat
+och brygginfrastruktur, committa utlåtande och nästa signal utan push.
+
+Granskningsutfall: CHANGES_REQUIRED inom samma rättningsscope.
+Fail-closed-rättningen godtas som delrättning. TS-produkttesterna använder
+fortfarande en handbyggd fixtur med tomma justeringar. Oberoende byte av
+Industri/Lokal-vikter i en isolerad kopia lämnar 67/67 berörda tester gröna.
+Verklig kandidatacceptans, profilmutationer och samtliga profilers
+rabattgränser kvarstår. Ingen full kartesisk browsermatris krävs.
+Oberoende Python 2150 passed/4 skipped, TS 2082 och tsc grönt, isolerat
+bygge/browser 29/29. HEAD:ar/remoter matchar; arbetskopieundantag bevarade.
+[Faktiskt utlåtande och nästa rättningssteg 018](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-017.md).
+Ingen aktivering eller push utförd. Nästa steg tillhör Claude.
