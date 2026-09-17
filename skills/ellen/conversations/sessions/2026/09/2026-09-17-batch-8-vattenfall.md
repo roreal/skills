@@ -540,3 +540,87 @@ Oberoende Python 2150 passed/4 skipped, TS 2082 och tsc grönt, isolerat
 bygge/browser 29/29. HEAD:ar/remoter matchar; arbetskopieundantag bevarade.
 [Faktiskt utlåtande och nästa rättningssteg 018](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-017.md).
 Ingen aktivering eller push utförd. Nästa steg tillhör Claude.
+
+## 2026-09-17 — Claude — REVIEW_READY: Codex (019)
+
+executed_by: Claude
+dispatched_by: agent-bridge
+
+`reviewed_heads` från [granskning 018](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-017.md)
+verifierade före ändring och matchade exakt: `enkey-agents@c468ebc3`,
+`neptune_academy@41dde169`. Skills-HEAD var granskningscommitten själv
+(`5e74639`, förälder till 018). Arbetskopiorna i alla tre repon var rena
+utöver redan bevarade, oförändrade undantag (skills:
+`conversations/automation/`, `Fjarrvarmetariffer/...`, milesight-submodul
+m.fl.; inget av detta rört).
+
+Slutfört exakt scope `batch-8-vattenfall-contract-product-integration-and-acceptance-corrections`
+enligt 018:s "Nästa avgränsade steg":
+
+1. **Verklig TS-kandidatacceptans**: ny
+   `neptune_academy/neptune-marketing/src/utils/besparingsvardeVattenfallKandidatMatris.test.ts`
+   (109 tester) kör den riktiga `generera_isolerad_batch8.py` →
+   `bygg_ts_fran_katalog` → dynamisk import → riktig `beraknaArsprodukt`
+   mot samtliga tolv genererade Vattenfall-prisår, tre profiler,
+   Standard/Spetsig under/på/över tröskeln 1,2, samt eligibility-mutationer
+   (saknad/ogiltig metric/strängtröskel) blockerade av rätt anledning
+   (`KontraktBlockerat.orsak === 'eligibility_not_met'`).
+2. **Profilmutationer och rabattgränser**: profiltestet i
+   `besparingsvardeVattenfallProdukt.test.ts` jämför nu mot oberoende
+   handräknade kronbelopp per profil (1 347 350 / 1 321 150 / 1 291 650 kr)
+   i stället för bara `kostnad > 0`. Rabattgränstester i både Python
+   (`test_volymrabattens_gransvarden_alla_profiler`, 30 fall) och TS
+   (`vattenfallArsprodukt.test.ts`, 30 fall) täcker nu alla tre profilers
+   oktober-april-andelar (89/85/81 %), jämför rätt säsongsbelopp. Bytet av
+   Industri/Lokal-vikterna som 018 visade lämnade 67/67 tester gröna
+   demonstrerades levande i en tillfällig kopia (Python 18 failed/193
+   passed, TS naket 18 failed/79 passed, TS riktig produktväg felade
+   förväntad kostnad) och återställdes sedan utan permanent diff —
+   `git diff` på de rörda motorfilerna är tomt.
+3. **Browsernegativprov**: nytt Scenario 30 i
+   `batch8-isolated-e2e.mjs`/`kalkylator.smoke.mjs` — en muterad isolerad
+   kandidat (Motala/Askersund Standard, `eligibility=null`, skild rad från
+   Scenario 27–29:s Uppsala) blockerar kr-resultatet genom den riktiga
+   React-/browservägen trots en i övrigt kvalificerande kvot (6,0). Ingen
+   full tolv×tre×tröskel-matris i browser (uttryckligen ej krävd av 018).
+4. **Full regression** (omkörd av granskande Claude-session, inte bara
+   rapporterad): Python **2182 passed/4 skipped** (0 regressioner mot
+   018:s 2150); TS **2221 passed/66 filer** (0 regressioner mot 018:s
+   2082); `tsc --noEmit` grönt. Isolerad Batch 8-E2E via officiellt
+   `npm run test:e2e:batch8-isolated` (kräver committad kod pga
+   `git archive HEAD`) omkörd **efter commit: 30/30 gröna**, inklusive
+   det nya Scenario 30. Ordinarie E2E `npm run test:e2e` **26/26 gröna**;
+   byggsteget rörde tillfälligt `dist/` (7 borttagna bildfiler + ändrad
+   `index.html`), återställt med `git checkout -- dist` direkt efteråt
+   och bekräftat rent. Skarp disposition oförändrad: dispositions-/
+   kataloggrinden `pytest -k "dispositionsgrind_inventering or
+   test_katalog"` **74 passed**, 86 fysiska/61 godkända/63 skarpa rader
+   och 62/2/28 bekräftat oförändrade.
+5. Inget rört i `conversations/automation/`, `conversations/README.md`,
+   skarp `dist/` eller `tariffer.generated.ts` (bekräftat rent efter
+   punkt 4:s tillfälliga byggartefakt).
+
+### Ändrade filer
+
+- `enkey-agents/tools/tariffer/generera_isolerad_batch8.py`
+- `enkey-agents/tools/tariffer/tests/test_batch_8_vattenfall.py`
+- `neptune_academy/neptune-marketing/src/utils/besparingsvardeVattenfallKandidatMatris.test.ts` (ny)
+- `neptune_academy/neptune-marketing/src/utils/besparingsvardeVattenfallProdukt.test.ts`
+- `neptune_academy/neptune-marketing/src/utils/vattenfallArsprodukt.test.ts`
+- `neptune_academy/neptune-marketing/e2e/batch8-isolated-e2e.mjs`
+- `neptune_academy/neptune-marketing/e2e/kalkylator.smoke.mjs`
+
+### Öppet flaggat
+
+018 nämnde tre mutationsformer som exempel (vikter/etikett/statisk
+bindning) för samma underliggande brist. Vikt-vektor-bytet demonstrerades
+levande i alla tre lagren (Python-motor, TS-naken motor, TS riktig
+produktväg) enligt punkt 2 ovan, men separata "fel etikett"- respektive
+"fel statisk bindning"-mutationsprov utöver detta byggdes inte som egna
+testfall. Om Codex vill ha dessa som distinkta, fristående mutationsprov
+är det ytterligare scope.
+
+Slut-HEAD:ar: `enkey-agents@0b446ba`, `neptune_academy@5506910`,
+`skills@5e74639` (denna commit skriver ny HEAD).
+Ingen aktivering, push eller historikomskrivning. Nästa steg tillhör
+Codex.
