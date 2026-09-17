@@ -151,3 +151,109 @@ inom 010:s scope och återkomma med ny REVIEW_READY: Codex.
 
 Ingen aktivering, push eller historikomskrivning har utförts i Codex-steget.
 Ingen ny behörighet från Robert behövs för denna rättning.
+
+## 2026-09-17T11:16:00+02:00 — Claude — REVIEW_READY: Codex (013)
+
+approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge
+
+Utfört rättningsrundan från [granskning 012](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-011.md)
+inom det redan godkända scopet `batch-8-vattenfall-contract-product-integration-and-acceptance-corrections`.
+`reviewed_heads` verifierade mot arbetskopiornas HEAD innan ändring:
+enkey-agents `9f9930f8f8224784f9245714026787a2df3c9485` och neptune_academy
+`0352117d36ca87149045c1517ac0cb1aca147723` matchade exakt; skills-repots
+granskningscommit `644407c` med `e088470` som förälder verifierades också.
+enkey-agents och neptune_academy hade rena arbetskopior före rättningen
+(bortsett från de nya ändringarna). Skills-repots befintliga, orelaterade
+arbetskopieundantag (frågedokument, råunderlag, AGENTS.md/SKILL.md,
+automation, `../milesight`) är bevarade orörda — endast denna sessionsfil
+och `index.md` ändras här.
+
+### De tre P1-fynden och P2-fyndet — åtgärd
+
+1. **Profil/behörighet nådde inte produkten.** `beraknaArsprodukt`
+   (`besparingsvarde.ts`) körde tidigare alltid den generiska
+   `fordelaEnergi`-profilen. Detekterar nu strukturellt att policyns
+   `kravdaFalt` bär `VATTENFALL_PROFIL_FALT` och kör i så fall
+   `fordelaEfterProfil(totalMwh, profilId)` med kundens faktiska profilval
+   samt `vattenfallBehorighetUppfylld(...)`, vars resultat styr
+   `saknarVerifieradFormel` in i den delade, redan testade
+   `beraknaArskostnadMedKontraktProdukt`. Samtidigt upptäckt och rättad:
+   `byggKontraktIndata` hårdkodade `kallaTyp: 'supplier_value'` för
+   kapacitetsbindningen — korrekt för alla tariffer före Batch 8 (deras
+   krav har uteslutande `supplier_value`), men Vattenfalls
+   kapacitetskrav är `customer_value` och kastade därför ett
+   auktoritativt fel. Ersatt med `kallaTypForKrav(kapacitetKravFor(policy))`,
+   samma generiska mönster som redan används för övriga policyfält —
+   beteendemässigt identiskt för alla äldre tariffer.
+2. **Ogiltig behörighet gav ändå komplett kostnad (Python).**
+   `berakna_vattenfall_arsprodukt` satte nu `saknar_verifierad_formel=
+   behorighetsfel is not None` på anropet till
+   `berakna_arskostnad_med_kontrakt` — samma typade blockeringskanal
+   (`harled_resultatstatus` regel 1) som resten av kontraktet redan
+   använder. Oberoende reproducerat exakt granskningens scenario
+   (Uppsala Standard, 1000 MWh, 300 kW, behörighetsindata 100 MWh/250 kW,
+   kvot 0,4): ger nu `fullstandighet='blocked'`, `kostnad=None` (tidigare
+   `complete` + 1 073 430 kr).
+3. **Estimat kunde omklassificeras till snapshot.**
+   `_VATTENFALL_PROFIL_KRAV.tillatna_kallor` inskränkt från
+   `("customer_value", "estimated")` till exakt `("estimated",)`.
+   Oberoende verifierat: ett försök att sätta `kalla_typ='customer_value'`
+   för detta fält ger nu ett hårt `ValueError` i stället för en tyst
+   omklassificering till `noggrannhet='snapshot'`.
+4. **Språkberoende avrundning vid exakt 249 MWh (P2).** Ny
+   Kahan/Neumaier-kompenserad `summaStabil` i `fjarrvarme.ts`, använd
+   ENDAST av `sasongsbundenVolymrabattEstimat` (Batch 8:s nya säsongstyp) —
+   `mwhTotaltFor`, som äldre tariffers `volymrabatt`/`miljotillagg`
+   fortfarande delar, är orörd. Testfilens tidigare undantag (248,999 i
+   stället för exakt 249, vilket granskningen underkände) rättat till
+   exakta heltalsgränser plus nya fraktionella gränstester.
+
+Ny testfil `besparingsvardeVattenfallProdukt.test.ts` bevisar via den
+verkliga `beraknaArsprodukt` (mockad produktfixtur, ingen av de tolv
+riktiga katalograderna berörs) att tre profilval ger tre olika kostnader,
+att resultatet blir `estimated` aldrig `snapshot`, och att ett
+behörighetsfel kastar `KontraktBlockerat('eligibility_not_met')` i stället
+för en beräknad kostnad. Ny `KontraktBlockeratOrsak`-medlem
+`'eligibility_not_met'` plus svensk klartext i `KalkylatorPage.tsx`.
+
+### Ej åtgärdat i denna runda — flaggat, inte gissat
+
+- **Kapacitetsbandets proveniens ("commit=okänd")** och **fullständig
+  isolerad tolvradsgenerator + React/browser-E2E mot den kandidaten**
+  rördes inte. Ingen `generera_isolerad_batch8`-motsvarighet eller
+  Vattenfall-rader i `tariffer.generated.ts` finns ännu; att bygga en
+  sådan generatorinfrastruktur inom denna avgränsade rättningsrunda hade
+  varit ny, oprövad infrastruktur snarare än en minimal sammanhängande
+  rättning. Kvarstår som öppen beslutspunkt för Codex — troligen en egen
+  namngiven leverans.
+
+### Slut-HEAD:ar
+
+- enkey-agents: `ec0ba3682c50a630c908679182f39cbbccd2c41f` (förälder
+  `9f9930f8f8224784f9245714026787a2df3c9485`) — `tools/tariffer/policyregister.py`,
+  `tools/tariffer/vattenfall_arsprodukt.py`.
+- neptune_academy: `eb48defec176d5f398e1ad76e0f632961ccc0cfd` (förälder
+  `0352117d36ca87149045c1517ac0cb1aca147723`) —
+  `neptune-marketing/src/pages/KalkylatorPage.tsx`,
+  `neptune-marketing/src/utils/besparingsvarde.ts`,
+  `neptune-marketing/src/utils/fjarrvarme.ts`,
+  `neptune-marketing/src/utils/vattenfallArsprodukt.test.ts`,
+  `neptune-marketing/src/utils/besparingsvardeVattenfallProdukt.test.ts` (ny).
+- skills: denna commit (sessions-/indexposten).
+
+### Testutfall (oberoende körda av granskande/implementerande Claude-session)
+
+- Python, `tools/tariffer`: **2053 passed, 4 skipped**, identiskt med
+  granskningens baseline — ingen regression.
+- TypeScript, `npx vitest run`: **2068 passed** (65 filer; baseline 2060
+  + 8 nya/rättade gränstester).
+- `npx tsc --noEmit`: grönt.
+- Oberoende reproduktion av behörighetsfelet (se punkt 2 ovan): bekräftad.
+- `test_katalog.py` och `test_dispositionsgrind_inventering.py`: **42
+  passed** — 86 fysiska/61 godkända rader, disposition 62/2/28 och
+  Batch 7-projektionen 63/1/28 bekräftat oförändrade; ingen katalogdata
+  eller `grind()`-logik rörd.
+- React/browser-E2E mot en isolerad tolvradskandidat: **inte körd** — se
+  "Ej åtgärdat" ovan.
+
+Ingen aktivering, push eller historikomskrivning har utförts i detta steg.
