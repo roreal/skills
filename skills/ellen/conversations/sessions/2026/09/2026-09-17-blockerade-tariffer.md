@@ -420,3 +420,24 @@ först med energiform, samtidigt som investigation.status fortfarande är utreds
 Nästa signal är completed (009); ingen aktivering, push, historikomskrivning
 eller ny produktimplementation godkänns. Batch 7-publiceringsspärren kvarstår.
 Se [faktiskt utlåtande](../../../reviews/2026/09/2026-09-17-slutgranskning-testsynk-008.md).
+
+## 2026-09-17T10:03:40+02:00 — Codex, första leverantörssvaret
+
+Robert har lagt Sundsvall Energis svar på precisionsfråga B2 i den lokala
+mappen `Fjarrvarmetariffer/Svar på frågor/`.
+
+Codex har granskat hela mejltråden och transporthuvudena. Svaret kommer
+från bolagets domän och SPF, DKIM och DMARC passerar. Bolaget bekräftar
+för både Matfors och Kvissleby/Njurunda att kundens månadsvisa Q/W och
+nätets månadsmedel Q/W i m³/MWh finns på fakturan och Mina sidor.
+
+Detta löser den frivilliga precisionsfrågan, men ändrar inte
+22/6-klassningen eller dispositionen: de två Sundsvallstarifferna var
+redan `source_resolved_implementation_pending`. Framtida implementation
+ska kräva kund- och nätvärde för var och en av de sju
+debiteringsmånaderna och aldrig använda mejlets exempelvärden som dold
+standard.
+
+En sanitiserad bedömning utan personuppgifter finns i
+`Fjarrvarmetariffer/Svar på frågor/2026-09-17-bedomning-sundsvall-flodespremie.md`.
+Råmejlet innehåller kontaktuppgifter och ska inte committas.
