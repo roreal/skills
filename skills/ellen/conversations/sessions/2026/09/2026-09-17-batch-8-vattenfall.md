@@ -1305,3 +1305,100 @@ produktarbetskopiorna var rena. Befintliga orelaterade filer i skills och
 `../milesight` ska lämnas orörda.
 
 [Bindande handoff för signal 033](../../../handoffs/2026/09/2026-09-17-neptune-historiksanering-kandidat.md).
+
+## 2026-09-17 — Claude — isolerad sanerad Neptune-kandidat framtagen (signal 033)
+
+approved_by: Robert (uttryckligt klartecken i chatten för signal 033)
+executed_by: Claude
+scope: "isolated-neptune-unpushed-history-sanitization-candidate"
+
+Verifierade före start att `skills@eb1c366` (via förälder till aktuell
+`skills@1f87b9d`, som endast lade signalens loggcommit ovanpå — inget
+annat ändrat), `enkey-agents@47fdc67` och `neptune_academy@bb28095`
+matchade handoff `2026-09-17-033` exakt, samt att live `origin/main`
+(skills `0df504e`, enkey-agents `6059d5e`, neptune_academy `22b473d`) var
+oförändrade.
+
+Byggde kandidaten i en separat worktree/lokal branchref
+(`neptune-batch7-history-sanitized-candidate`) i `neptune_academy`, utan
+att röra `main`-branchens HEAD, originalcommits eller remoter:
+
+**Original → kandidat-mappning (14 → 13 commits):**
+
+| # | Original | Kandidat | Anmärkning |
+| --- | --- | --- | --- |
+| 1 | `89924b6` | `bab02df` | Introducerar filen redan utan de två identifierande kommentarerna (ursprungligen rad 13/78) |
+| 2 | `3aa382e` | `1c7f470` | Oförändrad patch |
+| 3 | `eee1093` | `8b96400` | Introducerar den nya årsserietestfilen redan utan den identifierande kommentaren (ursprungligen rad 8); ingen ändring kvar för fil 1 (redan fixad i kandidat-commit 1) |
+| 4 | `953f77a` | `a2919a6` | Endast P2-tillägget (icke-noll kallenergi-facit) kvar; P1-kommentarrättningen är redan bakad in i kandidat-commit 3 |
+| 5 | `0bdb675` | **utelämnad** | Mekaniskt bevisat fullständigt absorberad: kandidatträdet efter commit 4 är byte-identiskt med originalets träd vid `0bdb675` (`git rev-parse HEAD^{tree}` == `0bdb675^{tree}`) |
+| 6 | `5c1bd88` | `4a53fa8` | Oförändrad patch |
+| 7 | `0352117` | `93d834f` | Oförändrad patch |
+| 8 | `eb48def` | `cfd6ad2` | Oförändrad patch |
+| 9 | `f24333e` | `b5f22fe` | Oförändrad patch |
+| 10 | `41dde16` | `dfbb106` | Oförändrad patch |
+| 11 | `5506910` | `1c890a7` | Oförändrad patch |
+| 12 | `190a081` | `1c1051c` | Oförändrad patch |
+| 13 | `c29ae85` | `568eb94` | Oförändrad patch |
+| 14 | `bb28095` | `92226db` | Oförändrad patch |
+
+Kandidat-HEAD: `92226dbf16d705365cf9d9d3b52e763dadfad1b5` på branch
+`neptune-batch7-history-sanitized-candidate` (lokal ref i
+`neptune_academy`-repot; ingen extern worktree-katalog kvar — worktreet
+skapades vid `/Users/robertrennel/Code/neptune_academy_candidate_batch7hist`
+för isolerad testkörning och tas bort efter granskning, branchreferensen
+finns kvar i huvudrepot).
+
+**Trädidentitet bevisad:** `git rev-parse HEAD^{tree}` på kandidaten ==
+`bb28095cdd97d97bea615849bb132bdfbe4a4897^{tree}` exakt. Slutresultatet är
+alltså på pixel-/byte-nivå identiskt med den redan granskade, godkända
+slutkatalogen — endast historien mellan de två ändpunkterna skiljer sig.
+
+**Identifierande fragment kontrollerat i hela kandidatens historik**
+(utan att återge texten här): varje kandidatcommits fullständiga
+commit-meddelande genomsöktes, och varje kandidatsnapshots innehåll för de
+två berörda filerna kontrollerades manuellt vid varje steg. Fragmentet
+förekommer inte i identifierande form i någon kandidatcommit. En bredare
+sökning över hela kandidatträdet hittar samma etablerade, redan publicerade
+baslinjeförekomster (fixturer/kommentarer i filer som fanns redan i
+`22b473d`, t.ex. `besparingsvarde.ts`/`fjarrvarme.ts`/`varmeprofil.ts` och
+den tekniska fixturfilnamnsreferensen `akermannen-arkiv-batch7.json`) som
+granskning 032 uttryckligen undantog som etablerade symboler/tekniska
+filreferenser, inte nya fynd.
+
+**Test-/byggverifiering** (körd i den isolerade worktree-kopian, placerad
+som syskonkatalog till `enkey-agents` för att de kors-repo-beroende proven
+ska hitta rätt sökväg, samma mönster som tidigare batchers isolerade
+kopior):
+
+- TypeScript/Vitest: **2245 passed** i 66 filer (0 failed);
+- `npx tsc --noEmit`: rent;
+- `npm run eval:build` (`vite build --outDir dist-eval`): grönt, 971
+  moduler — identiskt med tidigare batchers figur;
+- `node e2e/kalkylator.smoke.mjs`: samtliga scenarier (1–29, inkl.
+  Scenario 26 = Stockholm Exergi/Batch 7) godkända;
+- `git diff --check` för hela kandidatintervallet (`22b473d..HEAD`): rent.
+
+En arbetskopiemisstag korrigerades under körningen: `node_modules` visade
+sig vara spårat i detta repo (inte gitignorat) och ersattes tillfälligt av
+en symlänk för att återanvända huvudarbetskopians paket — detta upptäcktes
+via `git status` och återställdes omedelbart med `git checkout --
+node_modules` innan något committades. `dist/`-byggartefakten från
+E2E-körningen återställdes likaså till HEAD, aldrig committad.
+
+**Bevarat:** originalbranchen `main` i `neptune_academy` står fortfarande
+exakt vid `bb28095cdd97d97bea615849bb132bdfbe4a4897`; alla 14
+originalcommits och alla fjärrar (`origin`, `upstream`) är orörda; `origin/
+main` är oförändrat `22b473d30980051fb87a936b3d824c53b63d58e8`. Ingen push
+utfördes eller görs av detta steg. `skills` och `enkey-agents` rördes
+inte. Ingen tariff aktiverades, ingen katalogdata ändrades — disposition
+och produkträkning i Neptune är opåverkade av denna kandidat (den ändrar
+bara historien mellan två redan identiska trädändpunkter). Bryggfiler
+(`conversations/automation/`) och den orelaterade README-arbetskopian
+lämnades helt orörda.
+
+**Detta är INTE en push och INTE en branchersättning.** Kandidaten väntar
+enbart på Codex granskning. Branchersättning och push kräver var sin ny,
+uttrycklig kontrollpunkt.
+
+Nästa signal: `REVIEW_READY: Codex`.
