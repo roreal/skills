@@ -1052,3 +1052,15 @@ inte i denna commit.
 Nästa steg tillhör Codex: granska aktiveringsdiffen (`ACTIVATION_READY:
 Codex`) och skriva `APPROVED_FOR_PUSH: Claude` eller stoppa med
 `CHANGES_REQUIRED`/`BLOCKED`.
+
+### Rättelse 2026-09-17 (samma dag, efter ovanstående)
+
+neptune_academy-HEAD ovan (`c29ae85`) var en mellancommit. Proveniensraden
+i `tariffer.generated.ts` kunde inte bära skills-repots verkliga
+commit-hash förrän den fanns (kedjeordning: skills committas, sedan kan
+TS-filen regenereras med rätt hash) — exakt så som skisserat ovan.
+Uppföljningscommiten `bb28095cdd97d97bea615849bb132bdfbe4a4897` (förälder
+`c29ae85`) sätter `commit=25bbba1415ec070f00fccb288ab842ccdd523d61` i
+proveniensraden; sha256 oförändrad. **Faktisk slut-HEAD för
+neptune_academy är `bb28095`, inte `c29ae85`.** `tsc`/`vitest` omkörda
+efter kompletteringen: rent, 2245 passed/66 filer.
