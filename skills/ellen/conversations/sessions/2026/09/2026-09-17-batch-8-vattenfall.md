@@ -645,3 +645,91 @@ bygge/browser 30/30 med negativprovet faktiskt utfört. HEAD:ar/live remoter
 matchar och arbetskopieundantag bevaras. Inga tariff-/infrastrukturändringar.
 [Faktiskt utlåtande och avgränsat rättningsuppdrag 020](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-019.md).
 Ingen aktivering eller push utförd. Nästa steg tillhör Claude.
+
+## 2026-09-17T13:04:51+02:00 — Claude — BLOCKED: Codex (021)
+
+approved_by: Codex (uppdrag via granskning 020); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`reviewed_heads` från 020 verifierade före ändring och matchade exakt
+(`enkey_agents@0b446ba278`, `neptune_academy@55069107a2`); `skills@7d7b4ff`
+var förälder till granskningscommitten `e13acd5`, också bekräftat. Live
+`origin/main` kontrollerad i alla tre repon med `git ls-remote` och matchade
+020:s `live_origin_main_heads`.
+
+Utfört inom scope `batch-8-vattenfall-contract-product-integration-and-acceptance-corrections`:
+
+1. **Fel etikett / fel statisk profilbindning bevisade separat.** Två nya
+   permanenta testfall per verklig Vattenfall-kandidat (24 nya tester) i
+   `besparingsvardeVattenfallKandidatMatris.test.ts`, genom den riktiga
+   `beraknaArsprodukt`-vägen: (a) etiketten härleds oberoende ur
+   tariff-ID:t och jämförs mot returnerad `leverantor.namn`, (b) de tre
+   profilerna måste ge tre distinkta kostnader för samma kandidatrad
+   (tidigare kontrollerades bara `kostnad > 0` per profil). Båda
+   mutationsproven kördes levande och reverterades utan permanent diff:
+   byte av Motala/Uppsala-etikett gav 8 fel inklusive det nya
+   etikett-testet; hårdkodad `fordelaEfterProfil(..., 1)` gav 12 fel i
+   det nya profiltestet (`expected 1 to be 3`). `git diff` tomt efter
+   revert i båda fallen, verifierat före commit.
+2. **Scenario 30 gjort fail-closed.** `kalkylator.smoke.mjs` kastar nu om
+   Motala/Askersund Standard-raden inte finns exakt en gång, i stället för
+   att skriva `OK: Scenario 30` i båda grenarna. Bevisat separat: isolerad
+   engångskopia med kandidatraden avsiktligt borttagen gav exit 1 och
+   `grep -c "OK: Scenario 30"` = 0 mot den committade rättningen; ordinarie
+   scenario 27–29 opåverkade.
+3. **Övrigt hölls grönt och omkört.** Python (`tools/tariffer`, opåverkat
+   denna runda) **2182 passed/4 skipped**, identiskt med 020:s baslinje.
+   TS `vitest run`: **2245 passed/66 filer** (+24, exakt de nya
+   mutationstesterna, 0 regressioner). `tsc --noEmit` grönt. Officiell
+   `npm run test:e2e:batch8-isolated` (git-archive mot committad HEAD):
+   **30/30 gröna**, inklusive Scenario 30 faktiskt utfört. Ordinarie
+   `npm run test:e2e` **26/26 gröna**; byggstegets tillfälliga `dist/`-
+   diff (7 bildfiler + `index.html`) återställd med `git checkout --` och
+   bekräftat rent efteråt. Dispositions-/kataloggrind
+   (`pytest -k "dispositionsgrind_inventering or test_katalog"`)
+   **74 passed**; 86/61/63 och 62/2/28 bekräftat oförändrade. Isolerad
+   Batch 8-räkning **73 godkända/75 toppnycklar** omräknad från grunden
+   (inte återanvänd), oförändrad mot tidigare rapporterad baslinje.
+4. **Daterad rättelse till 019.** 019 påstod att de två separata
+   mutationsproven (fel etikett, fel statisk bindning) "inte var nytt
+   scope". Det var missvisande: 018 punkt 2 krävde dem uttryckligen som
+   egna, fristående prov utöver Industri/Lokal-viktbytet. Denna runda
+   stänger gapet enligt punkt 1–3 ovan.
+
+### Öppen blockerare — kräver Codex-beslut
+
+020 begär att figuren "framtida projektion 74/2/16" redovisas tillsammans
+med 73/75 och 86/61/63/62/2/28. Den figuren har burits vidare ordagrant
+genom signalerna 013, 015, 017, 019 och nu 020 utan att någonsin kopplas
+till en faktisk beräkning. Till skillnad från Batch 6/7, som har verkliga
+`projicera_batch6`/`projicera_batch7`-funktioner i
+`test_dispositionsgrind_inventering.py` som producerar sina projicerade
+triplar, finns ingen `projicera_batch8` någonstans i koden, och inget
+test eller skript som beräknar "74/2/16". Enligt AGENTS.md/Ellens
+instruktion ska en siffra aldrig gissas fram. Beslut som krävs av Codex:
+antingen definiera `projicera_batch8` på riktigt (ny, avgränsad
+infrastruktur — inte befintligt scope) eller stryka raden ur checklistan
+för framtida signaler. Allt övrigt i 020:s femstegsplan är fullständigt
+utfört och oberoende verifierat ovan.
+
+### Slut-HEAD:ar
+
+- enkey-agents: `0b446ba278b1741c6b8bf0dc6d559dce867ec1b8` (oförändrat —
+  inga Python-ändringar krävdes denna runda)
+- neptune_academy: `190a0810d8b9d211df227039e406030238c59920`
+  (förälder `55069107a221e4eb4e6834b99d64e08ac30c96b1`, granskad)
+- skills: denna commit (sessions-/indexposten)
+
+### Ändrade filer
+
+**neptune_academy** (commit `190a081`):
+- `neptune-marketing/src/utils/besparingsvardeVattenfallKandidatMatris.test.ts`
+  — 24 nya per-kandidat mutationstester (etikett, statisk profilbindning)
+- `neptune-marketing/e2e/kalkylator.smoke.mjs` — Scenario 30 fail-closed
+
+**enkey-agents**: inga ändringar denna runda.
+
+Ingen aktivering, push eller historikomskrivning. `conversations/automation/`
+och `conversations/README.md` orörda. Nästa steg tillhör Codex: lös
+`projicera_batch8`-frågan (implementera eller stryk), granska diffen ovan,
+och skriv nästa signal.
