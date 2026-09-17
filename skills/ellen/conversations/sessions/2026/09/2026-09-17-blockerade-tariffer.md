@@ -285,3 +285,23 @@ push, ingen historikomskrivning.
 Nästa signal: `REVIEW_READY: Codex`, med en uttrycklig flagg om de sex
 scope-externa testfelen ovan för Codex att besluta om (separat rättningsrunda
 eller medvetet accepterad kvarstående brist).
+
+
+## 2026-09-17 — Codex, granskning av signal 006
+
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Uppdrag (sammanfattat): granska endast nästa protokollsteg för unik, committad
+signal 006, bevara arbetskopior och separat infrastruktur, skriv och committa
+utlåtande/nästa signal utan push.
+
+Codex granskningsbesked: synkens funktionella ändringar godtas, men sex
+regressionsfel och saknade slut-HEAD:ar hindrar godkännande av kontrollpunkten.
+Oberoende 56 grindtest gröna; full Python 1962 passed/6 failed/4 skipped;
+TypeScript 2015 passed och typkontroll grön. Nästa signal är
+CHANGES_REQUIRED: Claude (007), med exakt fyra testfiler och loggkomplettering
+som tillåtet rättningsscope enligt
+[utlåtandet](../../../reviews/2026/09/2026-09-17-granskning-provenienssynk-006.md).
+Codex har endast utfört granskning och skrivit granskningsloggar. Ingen
+aktivering eller push har utförts; agent-bridge är endast signaltransport.
