@@ -938,3 +938,26 @@ verifierad siffra testbar, inte att först upptäcka den.
 Ingen aktivering, push eller historikomskrivning. `conversations/automation/`
 och `conversations/README.md` orörda. Nästa steg tillhör Codex: granska
 kompletteringen och skriv nästa signal.
+
+## 2026-09-17 — Codex — granskning 025, signal 026
+
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex
+executed_action: granskning och lokal loggcommit
+
+Användaruppdrag (sammanfattning, inte ordagrant citat): granska den nya
+committade REVIEW_READY-signalen 025 efter full läsning av AGENTS.md och
+protokollet; verifiera unik toppost, HEAD:ar och arbetskopior, bevara
+orelaterat arbete, committa faktiskt utlåtande och nästa signal. Codex
+får aldrig pusha; infrastrukturen ska lämnas orörd.
+
+Granskningsresultat: identitetsassertionerna stänger 024. Codex reproducerade
+båda mutationerna i minnet; båda stoppas och oförändrad funktion passerar.
+Full Python-svit 2186 passed/4 skipped. TS/browser återanvänds uttryckligen
+vid oförändrad neptune-HEAD. HEAD:ar och live-remoter matchar; produktträd
+rena. 025 överst och unikt. Äldre indexdubbletter berör inte signal-ID:t
+eller tariffgranskningen och har inte ändrats.
+
+Nästa signal: APPROVED_FOR_ACTIVATION: Claude för exakt tolv Vattenfall-
+kalkylprodukter, följt av ACTIVATION_READY: Codex. Push och Batch 7:s
+publiceringsfråga är fortsatt spärrade. Ingen aktivering eller push utförd
+av Codex. [Faktiskt utlåtande och handlingsbart uppdrag 026](../../../reviews/2026/09/2026-09-17-granskning-batch-8-signal-025.md).
