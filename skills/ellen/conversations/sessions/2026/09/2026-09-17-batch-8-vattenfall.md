@@ -1513,3 +1513,36 @@ pushkvitto, push av den exakta kvittocommitten och ny remote-verifiering.
 Agentbryggan är stoppad. Codex pushar aldrig.
 
 [Exakt rättad tillståndstext och verifierade remote-HEAD:ar](../../../handoffs/2026/09/2026-09-18-skills-push-direkt-tillstand.md).
+
+## 2026-09-18T11:20:00+02:00 — Claude — direkt godkänd skills-push, signal 041
+
+approved_by: Robert (direkt i chatten)
+executed_by: Claude
+dispatched_by: direkt Claude-session (agentbryggan stoppad)
+
+Robert godkände uttryckligen i chatten: "Jag godkänner att du följer
+signal 2026-09-18-040: pusha först exakt
+`aed85f9f149eeb7b35a6171f73ad05d889a5f24e:refs/heads/main` till
+skills-origin från `0df504ed227126b5fd36f87f99b4e240001a99d5`. Skriv
+därefter pushkvittot ovanpå nuvarande lokala main, pusha den exakta
+kvittocommitten och verifiera remoten igen. Ingen force-push eller andra
+refs."
+
+Före ändring verifierades: `0df504e` är förfader till `aed85f9`; `aed85f9`
+är förfader till lokal `main` (som stod vid `2068400`, Codex egen
+loggcommit för handoff 040); `git diff --check` rent för hela intervallet.
+
+Steg 1: `git push origin aed85f9f149eeb7b35a6171f73ad05d889a5f24e:refs/heads/main`
+— normal fast-forward, `0df504e..aed85f9`. `git ls-remote origin
+refs/heads/main` bekräftade `aed85f9f149eeb7b35a6171f73ad05d889a5f24e`.
+
+Steg 2: detta pushkvitto skrevs ovanpå lokal `main` (`2068400`), som
+enda ändring i `conversations/index.md` och denna sessionspost.
+
+Steg 3: `git push origin main` (normal fast-forward av den exakta
+kvittocommitten) följt av `git ls-remote origin refs/heads/main` för
+förnyad verifiering.
+
+Ingen force-push, inga andra refs och inga arbetskopiefiler utanför
+loggning berördes. Enkey och Neptune var redan pushade och verifierade
+via signal 038; oförändrade i detta steg.
