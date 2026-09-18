@@ -1456,3 +1456,35 @@ varken kandidat- eller säkerhetsref fanns på origin. Ingen push ingår i
 godkännandet.
 
 [Bindande handoff och pausgrind för signal 036](../../../handoffs/2026/09/2026-09-17-neptune-lokal-mainflytt.md).
+
+## 2026-09-18T11:02:37+02:00 — Codex — återstart, lokal refslutföring och signal 038
+
+approved_by: Codex
+executed_by: Codex (endast redan godkänd lokal CAS-refoperation)
+dispatched_by: agent-bridge
+
+Efter vilopausen verifierades signal 037, stoppad agentbrygga, lokala
+HEAD:ar/referenser, rena produktarbetskopior och alla live-remoter.
+Neptune stod exakt i det dokumenterade mellanläget. Codex slutförde den av
+Robert redan uttryckligen godkända mekaniska CAS-flytten som Claudes
+icke-interaktiva verktyg hade nekat: lokala Neptune `main` flyttades från
+exakt `bb28095` till exakt `92226db`. Backup `bb28095`, kandidat `92226db`,
+identiskt slutträd och ren arbetskopia verifierades; remoten är fortsatt
+`22b473d`. Ingen push utfördes av Codex.
+
+Återstarten fann även lokal Enkey `main@2e30bb2`, en ny ren commit ovanpå
+tariffspetsen `47fdc67` som endast ändrar `tools/milesight/*`. Den bevaras
+men undantas uttryckligen: Enkey-pushen får endast använda explicit
+`47fdc67:refs/heads/main`, aldrig lokala `main`.
+
+Full slutkontroll ger fast-forward och ren intervalldiff för skills
+62 commits/46 filer före denna signal, Enkey tariffmål 9/20 och sanerad
+Neptune 13/23. Tidigare oberoende testgrindar står på oförändrade träd:
+2192 passed/4 skipped Python samt 2245/66 TS, tsc, 971-modulers bygge och
+browser 1–29 gröna. Disposition 74/2/16 oförändrad.
+
+Nästa signal är `APPROVED_FOR_PUSH: Claude` med exakta refspec och krav på
+separat, pushat och remote-verifierat skills-kvitto. Ingen force-push,
+tariffaktivering eller publicering av Neptune backup/kandidatref.
+
+[Fullständigt pushutlåtande 038](../../../reviews/2026/09/2026-09-18-slutgranskning-publicering-efter-neptune-mainflytt.md).
