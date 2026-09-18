@@ -2029,7 +2029,7 @@ aldrig `exact` — samma klassificering som huvudfallet.
 | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026--kundvald-effekt` | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026` | `sfab-prislista-2026` (https://sfab.se/media/33mnnexa/prislista-normal-2026.pdf) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 | Kundvald effekt (i stället för SFAB:s rekommenderade) med egen överuttagsavgift; formeln är inte kartlagd i detalj och skiljer sig från katalogschemats `capacity_overrun`-typ | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken exakt formel/sats gäller för överuttagsavgiften vid kundvald effekt, och skiljer den sig från standardschemats `capacity_overrun`?" |
 | `kraftringen-kraftringen-2026--brunnshog` | `kraftringen-kraftringen-2026` | `19_0` (https://www.kraftringen.se/brf/varme-och-kylalosningar/fjarrvarme/fjarrvarmepriser/) | Brunnshögs egen nätdel/prisstruktur, inte kartlagd — bara ordinarie nät är verifierat i §4.1 | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken är Brunnshögs egen prislista/formel, och skiljer den sig från Kraftringens ordinarie nät?" |
 | `tekniska-verken-linkoping-linkoping-2026--lagtemperatur` | `tekniska-verken-linkoping-linkoping-2026` | `41_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-for-Tekniska-verken-i-Linkoping-AB-Linkoping-2026.pdf) | Lågtemperaturleveransens egen tariffstruktur, inte kartlagd i detalj | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilken är lågtemperaturleveransens fullständiga prisstruktur (kapacitet, energi, ev. justeringar)?" |
-| `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` | `finspangs-tekniska-verk-finspang-2026` | `web-review-finspang-final` (https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 (v4 citerade av misstag 2025-dokumentet) | Spetsvärmetillägget (20 %) — det procentuella villkoret är källkänt, men VILKA kunder/perioder som utlöser tillägget och om 20 % gäller samtliga prisdelar (effekt, energi OCH flöde, eller bara en delmängd) är INTE mappat mot en entydig kund-/avtalsregel. Detta strider mot `ready`-definitionen (samtliga regler verifierade, inget nytt besked krävs) — flyttad till blockerad i v4 (granskning 2026-09-08-003, P1) | Okänt tills källfrågan är löst | samtliga blockerade | Ej batchad | `blocked_external_info` — fråga: "Vilka kunder/perioder utlöser spetsvärmetillägget på 20 %, och gäller procentsatsen samtliga tre prisdelar (effekt, energi, flöde) eller bara en delmängd?" |
+| `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` | `finspangs-tekniska-verk-finspang-2026` | `web-review-finspang-final` (https://d2sabnli7hsonp.cloudfront.net/finspangs-tekniska/image/upload/fl_attachment/v1762179931/zvwzbdzlxxtsl15nsxrd.pdf) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 (v4 citerade av misstag 2025-dokumentet) | Spetsvärmetillägget är enligt leverantörens svar 2026-09-17 inte debiterat kunder 2026 och saknar en tillämpad debiteringsmodell — se rättelse 2026-09-18 nedan | Ingen — ej tillämpligt för 2026 | ej tillämpligt | Ej batchad | `not_applicable` — leverantörssvar 2026-09-17 (A5), sanitiserad bedömning [`2026-09-18-bedomning-finspang-spetsvarmetillagg.md`](Svar%20på%20frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md), fullständig status i [`variantfragor-ej-materialiserade-2026.md`](variantfragor-ej-materialiserade-2026.md) |
 | `jonkoping-energi-jonkoping-och-granna-2026--accessavgift` | `jonkoping-energi-jonkoping-och-granna-2026` | `16_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Jonkoping-Energi-2025-till-2026-Prisandringsmodell.pdf) | Avtalsberoende accessavgift — verifierade värden 0/10/25/50 kr/mån, ett synligt, obligatoriskt kundval | Kundval i UI (radioknappar/dropdown, 0/10/25/50 kr/mån), inget standardvärde — okänt/tomt val BLOCKERAR beräkningen | mwh; kr/schablon blockerade (som bastariffen) | Samma batch som Jönköpings bastariff (§8 batchplan) | `ready_to_implement` — **beslut fattat av Codex/Robert i granskning `2026-09-08-006`:** en fakturerbar, källkänd och kundkänd avtalsuppgift ska kunna ingå som ett synligt obligatoriskt val. Ingen dubblettprodukt exponeras. |
 | `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026--miljotillagg` | `boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026` | `borasem-2026` (https://borasem.se/webb/foretag/fjarrvarme/priserochvillkor2026.4.3b2618bc1976272a99c471fd.html) — rättad till aktuell officiell 2026-källa, granskning 2026-09-08-004, P2 | Miljötillägget "Bra Miljöval" (31 SEK/MWh) — ett kundvalt UI-tillval, inte en automatisk prisdel | Kryssruta/kundval i UI, inget nytt fält utöver bastariffens | mwh; kr/schablon blockerade | 6 (samma batch som grundformeln — se §8:s räkningsnot om hur denna variant räknas separat trots att den byggs i samma commit) | `implemented_source_verified_annual` — aktiverad 2026-09-16 (Codex slutomgranskning 2026-09-16-025, Roberts automationsfullmakt) tillsammans med bastariffen; kundvalet `miljotillagg_vald` inom bastariffen, ingen egen katalograd |
 
@@ -4862,9 +4862,26 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 |---|---:|---:|---:|
 | `implemented_source_verified_annual` | 65 | 9 | 74 |
 | `ready_to_implement` | 1 | 1 | 2 |
-| `blocked_external_info` | 12 | 4 | 16 |
-| `not_applicable` | 0 | 0 | 0 |
+| `blocked_external_info` | 12 | 3 | 15 |
+| `not_applicable` | 0 | 1 | 1 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-18 (källnormalisering, session `2026-09-18-042`, handoff
+[`2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md`](../conversations/handoffs/2026/09/2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md),
+`APPROVED_FOR_IMPLEMENTATION: Claude`):** Finspångs Tekniska Verk har bekräftat att
+spetsvärmetillägget inte debiteras kunder 2026 och att bolaget saknar en tillämpad
+modell (sanitiserad bedömning
+[`2026-09-18-bedomning-finspang-spetsvarmetillagg.md`](Svar%20på%20frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md)).
+Den ej materialiserade variantposten
+`finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` (§5) flyttar därför från
+`blocked_external_info` till `not_applicable` — den enda ändringen i denna revision.
+Tabellen ovan går från **74 implemented / 2 ready / 16 blocked / 0 not_applicable** till
+**74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92**. Ingen katalograd,
+ingen produktkod, ingen aktivering och ingen prisändring följer av detta. Finspångs
+redan implementerade bastariff `finspangs-tekniska-verk-finspang-2026` (§3–4) är
+oförändrad. Fysiska katalogmått (86 rader, 73 godkända, 75 produkter) är oförändrade.
+Fullständig status spåras i
+[`variantfragor-ej-materialiserade-2026.md`](variantfragor-ej-materialiserade-2026.md).
 
 **Rättat 2026-09-16 (Batch 6-aktivering, Codex slutomgranskning
 `2026-09-16-025`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
@@ -4998,6 +5015,20 @@ externt besvarade men blockerar inte längre produkten); R03 omscopad till bara
 `malarenergi-vasteras-och-hallstahammar-gruppanslutna-smahus-2026`; R02/R08 bekräftade
 oförändrade; nya frågor R16 (Gävle) och R17 (Finspång) tillagda. `remaining_information_requests`
 innehåller efter revisionen exakt R02, R03, R08, R16, R17.
+
+> **Rättelse 2026-09-18 (källnormalisering, session `2026-09-18-042`,
+> `APPROVED_FOR_IMPLEMENTATION: Claude`):** rad 28 ovan (Finspångs spetsvärmetillägg,
+> tidigare `external_answer_required`, fråga A5) är besvarad av leverantören 2026-09-17
+> och normaliserad till `not_applicable` — se §8:s uppdaterade rättelse ovan och den
+> sanitiserade bedömningen
+> [`2026-09-18-bedomning-finspang-spetsvarmetillagg.md`](Svar%20på%20frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md).
+> Den mekaniska 28-radersmatrisen ovan fryser ett tidigare skede (innan Batch 8:s
+> aktivering av de tolv Vattenfall-kandidaterna sänkte `blocked`-totalen till 16, och
+> före denna normalisering till 15) och skrivs INTE om i efterhand — den är historik,
+> inte en levande räkning. Den skarpa, aktuella `external_answer_required`-mängden är nu
+> fem poster (rad 23–27: Hässleholm x2, HEMAB, Gävle, Mälarenergi gruppanslutna småhus),
+> inte sex; Finspångs rad räknas i stället i den skarpa `not_applicable`-kolumnen i §5/§8.
+> Ingen annan rad i denna matris ändras av detta.
 
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**

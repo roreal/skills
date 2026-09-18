@@ -28,12 +28,12 @@ variantfrågor tills de eventuellt materialiseras som egna katalograder.
 | 1 | Södertörns kundvalda effekt (`sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026--kundvald-effekt`) | `sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026` | `source_resolved_implementation_pending` | Ingen — SFAB 2026-villkoren (överuttag 1032 kr/kW) är publicerade; kräver bara intern modellering. |
 | 2 | Kraftringen Brunnshög (`kraftringen-kraftringen-2026--brunnshog`) | `kraftringen-kraftringen-2026` | `source_resolved_implementation_pending` | Ingen — 647 kr/MWh + styckvis returtemperaturdel publicerad; kräver bara intern modellering. |
 | 3 | Tekniska Verken lågtemperatur (`tekniska-verken-linkoping-linkoping-2026--lagtemperatur`) | `tekniska-verken-linkoping-linkoping-2026` | `source_resolved_implementation_pending` | Ingen — flödespris okt–apr 2,67 kr/m³ publicerat; kräver bara intern modellering. |
-| 4 | Finspångs spetsvärmetillägg (`finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg`) | `finspangs-tekniska-verk-finspang-2026` | `external_answer_required` | **Öppen.** Se fråga nedan. |
+| 4 | Finspångs spetsvärmetillägg (`finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg`) | `finspangs-tekniska-verk-finspang-2026` | `not_applicable` | **Stängd 2026-09-18 (A5 besvarad).** Se rättelse nedan. |
 
 Rad 1–3 kräver inget bolagssvar för att gå vidare till en separat, granskad
-aktiveringsrunda. Rad 4 kräver leverantörssvar innan tillägget kan byggas.
+aktiveringsrunda. Rad 4 är stängd — inget nytt leverantörssvar behövs för 2026.
 
-## Öppen fråga: Finspångs spetsvärmetillägg
+## Stängd fråga (2026-09-18): Finspångs spetsvärmetillägg
 
 Historiskt spårad som `R17` i `optimate-fjarrvarme-2026.json` fram till
 2026-09-17-rättningen (revision `0.1.27`), då `R17` togs bort ur den fysiska
@@ -53,12 +53,24 @@ börja/sluta en viss månad?
 [A5 i `leverantorsfragor-blockerade-tariffer-2026.md`](leverantorsfragor-blockerade-tariffer-2026.md#a5-finspångs-tekniska--omfattningen-av-20-procents-spetsvärmetillägg)
 innehåller det fullständiga, skickbara mejlet till Finspångs Tekniska Verk.
 
-**Status:** `utreds`, öppen sedan 2026-09-17 (`created_on` i den tidigare `R17`-posten).
-Ingen ny information sedan dess.
+**Status (t.o.m. 2026-09-17):** `utreds`, öppen sedan 2026-09-17 (`created_on` i den
+tidigare `R17`-posten).
 
-**Nästa steg när svar inkommer:** dokumentera svaret här med `resolution_sv`-liknande
-text, uppdatera klassningen i tabellen ovan, och — endast om variantfunktionen ska
-byggas — lägg till en ny katalograd i `optimate-fjarrvarme-2026.json:tariffs[]` med
-`variant_of` mot `finspangs-tekniska-verk-finspang-2026` i en separat, granskad
-implementationsrunda. Detta dokument i sig ger inget implementations- eller
-aktiveringsmandat.
+**Svar mottaget 2026-09-17, bedömt 2026-09-18:** Finspångs Tekniska Verk bekräftar att
+prislistans text om spetsvärmetillägg finns kvar, men att inget sådant tillägg har
+debiterats kunder 2026 och att bolaget saknar en tillämpad debiteringsmodell. Den
+sanitiserade bedömningen finns i
+[`2026-09-18-bedomning-finspang-spetsvarmetillagg.md`](Svar%20på%20frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md)
+(originalmejlet innehåller personuppgifter och committas inte).
+
+**Beslut:** variantposten klassas `not_applicable` för 2026 — det finns ingen faktisk
+debiteringsregel att modellera, och kalkylatorn ska inte konstruera ett 20-procentigt
+påslag från prislistans oklara formulering. Detta är en käll- och
+dispositionsnormalisering, inte en implementation eller aktivering. Finspångs redan
+implementerade bastariff `finspangs-tekniska-verk-finspang-2026` är oförändrad. Ingen
+ny katalograd, produktkod eller prisändring följer av detta.
+
+**Nästa steg om läget ändras:** om en senare prislista eller ett kundavtal inför ett
+faktiskt spetsvärmetillägg måste den nya debiteringsmodellen källgranskas från början
+innan en variant får byggas eller aktiveras — samma krav som tidigare, oförändrat av
+denna stängning.

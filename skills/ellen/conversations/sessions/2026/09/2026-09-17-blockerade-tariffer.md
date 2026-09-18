@@ -468,3 +468,77 @@ blocked / 1 not_applicable av 92. Enkey-arbetet måste göras i en isolerad
 kandidat från `origin/main@47fdc67`; lokala `main@2e30bb2` med den orelaterade
 Milesight-commiten ska bevaras orörd. Ingen katalogändring, produktkod,
 aktivering eller push tillåts.
+
+## 2026-09-18T13:xx+02:00 — Claude, implementation av signal 042 (`APPROVED_FOR_IMPLEMENTATION: Claude`)
+
+executed_by: Claude
+dispatched_by: agent-bridge
+
+Utfört uppdraget enligt handoff
+[`2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md`](../../../handoffs/2026/09/2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md)
+(`approved_implementation_scope:
+finspang-2026-spetsvarmetillagg-source-normalization-and-disposition-tests-only`).
+
+**Verifiering före ändring:** skills HEAD `38d1f22` (förälder `ab14328` =
+`required_skills_parent`, ancestor bekräftad via `git merge-base
+--is-ancestor`); `enkey-agents/main@2e30bb2` matchade `protected_enkey_local_main`
+exakt och `origin/main@47fdc67` matchade `required_enkey_origin_main` exakt;
+`neptune_academy@92226db` matchade `required_neptune_main` exakt. Toppost
+`2026-09-18-042` bekräftat unik och överst i `index.md` innan arbete
+påbörjades.
+
+**Ändringar i skills-repot (exakt de tre dokumenten handoffen tillåter):**
+
+1. `Fjarrvarmetariffer/variantfragor-ej-materialiserade-2026.md`: rad 4 (A5)
+   stängd och omklassad `external_answer_required` → `not_applicable`;
+   svaret dokumenterat med länk till den sanitiserade bedömningen
+   `Svar på frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md`.
+2. `Fjarrvarmetariffer/tariffinventering-v22.md`: §5:s maskinparsade
+   Finspång-variantrad fick disposition `not_applicable` (var
+   `blocked_external_info`); §8:s räkningstabell uppdaterad till 74/2/15/1
+   av 92 med daterad rättelse; §8a fick en daterad synkanmärkning som
+   klargör att den historiska 28-radersmatrisen fryser ett tidigare skede
+   och inte skrivs om, medan den skarpa `external_answer_required`-mängden
+   nu är fem poster.
+3. `Fjarrvarmetariffer/batchplan-v22.md`: daterad rättelse efter den
+   frusna "väntar på leverantörssvar"-sektionen, med hänvisning till den
+   uppdaterade §5/§8.
+
+Ingen ändring av råmejlet, `optimate-fjarrvarme-2026.json`, katalog-SHA,
+generatorer, motorn, policyregistret, React/TypeScript, Neptune eller
+Finspångs bastariff. Ingen ny katalograd eller produkt skapad.
+`git diff --check` rent på de tre filerna.
+
+**Enkey-isolering:** teständringen gjordes INTE på lokala `main@2e30bb2`.
+En separat kandidatbranch/worktree skapades med exakt bas
+`47fdc67386b9db990d63c910069700b75301f743`
+(`git worktree add -b finspang-2026-not-applicable-tests
+/tmp/enkey-agents-finspang-2026 47fdc67…`). Där uppdaterades ENDAST
+`tools/tariffer/tests/test_dispositionsgrind_inventering.py`: variantens
+`blocked_external_info`/`not_applicable`-räkning ändrad 4→3/0→1, samtliga
+berörda projicerade summeringar (Batch 6-, Batch 7- och Batch 8-proven)
+uppdaterade från 74/2/16 (respektive 75/1/16) till 74/2/15/1 (75/1/15/1),
+och `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` pinnad
+explicit till `not_applicable` i ett nytt, eget test. ID-fingeravtrycken
+(`_BAS_ID_FINGERAVTRYCK`/`_VARIANT_ID_FINGERAVTRYCK`) är oförändrade —
+ID-mängden ändras inte, bara en disposition.
+
+**Testutfall (kandidatbranchen, körd med `enkey-agents/.venv`):**
+`test_dispositionsgrind_inventering.py`: 26 passed. Full `tools/tariffer`-svit:
+2191 passed / 6 skipped / 0 failed.
+
+**Commit:** `3479331` på branchen `finspang-2026-not-applicable-tests`
+(förälder `47fdc67386b9db990d63c910069700b75301f743`, i en separat worktree
+under `/tmp/enkey-agents-finspang-2026`, inte i `enkey-agents`-checkouten).
+`enkey-agents/main@2e30bb2` verifierat oförändrad efter commit. Ingen ref
+pushad.
+
+Ospårade/orelaterade arbetskopieändringar (skills-underlag under
+`Fjarrvarmetariffer/`, `conversations/automation/`, `../milesight`,
+inklusive den redan befintliga, ospårade ändringen i
+`leverantorsfragor-blockerade-tariffer-2026.md` som fanns i arbetskopian
+före denna sessions start) lämnade orörda och ej committade av detta steg.
+
+Ingen aktivering eller push i detta steg. Committar fokuserat i skills-repot
+och skriver `REVIEW_READY: Codex` som ny toppost i `conversations/index.md`,
+med kandidatbranch/commit-referensen ovan för Codex granskning.

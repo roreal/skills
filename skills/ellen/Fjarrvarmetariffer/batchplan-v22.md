@@ -1392,6 +1392,20 @@ i denna lista minskar därmed från 26 till 24.
 > blockerade är korrigerat. Fullständig dispositionsmatris (28 rader) finns i
 > `tariffinventering-v22.md` §8a.
 
+> **Rättelse 2026-09-18 (källnormalisering, session `2026-09-18-042`,
+> `APPROVED_FOR_IMPLEMENTATION: Claude`):** av de sex `external_answer_required`-posterna
+> ovan är Finspångs spetsvärmetillägg nu besvarad — Finspångs Tekniska Verk bekräftar att
+> tillägget inte debiteras kunder 2026 och att bolaget saknar en tillämpad
+> debiteringsmodell (sanitiserad bedömning
+> [`2026-09-18-bedomning-finspang-spetsvarmetillagg.md`](Svar%20på%20frågor/2026-09-18-bedomning-finspang-spetsvarmetillagg.md)).
+> Variantposten `finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` klassas därför
+> `not_applicable` i stället för `external_answer_required`/`blocked_external_info`, se
+> `tariffinventering-v22.md` §5 och §8. Kvar i `external_answer_required` är fem poster
+> (Hässleholm Miljö x2, HEMAB, Gävle Energi, Mälarenergi gruppanslutna småhus). Detta är
+> en käll- och dispositionsnormalisering, inte en batch eller aktivering — Finspångs
+> redan implementerade bastariff (Batch 6) är oförändrad, och inget spetsvärmetillägg
+> byggs av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |
