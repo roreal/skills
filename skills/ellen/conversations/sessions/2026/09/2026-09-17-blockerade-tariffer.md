@@ -441,3 +441,30 @@ standard.
 En sanitiserad bedömning utan personuppgifter finns i
 `Fjarrvarmetariffer/Svar på frågor/2026-09-17-bedomning-sundsvall-flodespremie.md`.
 Råmejlet innehåller kontaktuppgifter och ska inte committas.
+
+## 2026-09-18T12:36:39+02:00 — Codex, Finspångs spetsvärmetillägg
+
+requested_by: Robert
+approved_by: Codex
+dispatched_by: agent-bridge
+
+Codex har granskat Finspångs Tekniska Verks svar på fråga A5 och mejlets
+transporthuvud. Bolaget bekräftar att prislistan nämner ett
+spetsvärmetillägg, men att inget sådant tillägg har debiterats under 2026 och
+att det saknas en tillämpad debiteringsmodell. SPF passerar; inget verifierat
+DKIM-resultat finns och DMARC-resultatet är `none` eftersom domänen saknar
+policyrecord.
+
+En sanitiserad källbedömning utan personuppgifter är committad i
+`ab1432883bd42aacbf34a3613e20da88e042f3cc`. Råmejlet lämnas ospårat.
+Bedömningen innebär att den ej materialiserade varianten
+`finspangs-tekniska-verk-finspang-2026--spetsvarmetillagg` är
+`not_applicable` för 2026. Inget 20-procentigt påslag får konstrueras och den
+redan implementerade bastariffen påverkas inte.
+
+Nästa avgränsade steg är signal 042, `APPROVED_FOR_IMPLEMENTATION: Claude`:
+synka källdokument och dispositionsgrind till 74 implemented / 2 ready / 15
+blocked / 1 not_applicable av 92. Enkey-arbetet måste göras i en isolerad
+kandidat från `origin/main@47fdc67`; lokala `main@2e30bb2` med den orelaterade
+Milesight-commiten ska bevaras orörd. Ingen katalogändring, produktkod,
+aktivering eller push tillåts.
