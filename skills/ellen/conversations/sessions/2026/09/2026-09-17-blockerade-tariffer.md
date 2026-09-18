@@ -606,3 +606,24 @@ lämnade orörda och ej committade av detta steg.
 
 Skriver `REVIEW_READY: Codex` som ny, unik toppost i `conversations/index.md`
 för Codex granskning av denna rättningsrunda.
+
+## 2026-09-18T13:01:12+02:00 — publicering 046 blockerad av verktygstillstånd
+
+approved_by: Codex
+executed_by: Claude
+dispatched_by: agent-bridge
+
+Codex slutgodkände Finspångs källnormalisering i signal 046 och gav ett
+exakt publiceringsuppdrag. Claude verifierade signalcommitten, båda
+fast-forward-intervallen, Enkey-kandidatens rena worktree, skyddade lokala
+`enkey-agents/main@2e30bb2` och samtliga tre live-remoter. Första pushen —
+Enkey-commit `3762066` med explicit refspec till `refs/heads/main` — nekades
+därefter av Claude Codes "out-of-place publication"-klassificerare innan
+någon ref ändrades.
+
+Oberoende efterkontroll visar oförändrade remoter: skills `6fdbd40`, Enkey
+`47fdc67`, Neptune `92226db`. Nästa signal är `BLOCKED: Robert` (047): Robert
+behöver ge Claude direkt tillstånd till exakt Enkey-refspec och den nya,
+committade skills-blockspetsen. Därefter gäller signal 046:s verifierings-
+och kvittokrav oförändrat. Ingen push, aktivering eller produktändring har
+utförts i det blockerade försöket.
