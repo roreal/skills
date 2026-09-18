@@ -1,25 +1,32 @@
 # Variantfrågor för ej materialiserade tilläggsfunktioner (2026)
 
-Version 1 — 2026-09-17. Skapad av Codex beslut i granskning
+Version 2 — 2026-09-18. Skapad av Codex beslut i granskning
 [2026-09-17, källnormalisering 002](../conversations/reviews/2026/09/2026-09-17-granskning-kallnormalisering-002.md)
 (session `2026-09-17-003`, `CHANGES_REQUIRED: Claude`), rättad av Claude i session
-`2026-09-17-004`. Länkad från `tariffinventering-v22.md` §8a.
+`2026-09-17-004`. Uppdaterad av Claude i session `2026-09-18-045` efter Codex
+rättningskrav i granskning
+[2026-09-18, källnormalisering 044](../conversations/reviews/2026/09/2026-09-18-granskning-finspang-kallnormalisering-043.md)
+för att spegla att Finspångs post stängdes 2026-09-18. Länkad från
+`tariffinventering-v22.md` §8a.
 
 ## Syfte
 
 De fyra raderna i §8a:s dispositionsmatris (rad 20–22, 28) och i §5:s varianttabell som
 är märkta "ej materialiserad variantrad" saknar egen post i
 `optimate-fjarrvarme-2026.json:tariffs[]`. De är tilläggsfunktioner eller alternativa
-kundval på redan existerande basrader, inte fristående tariffer. Tre av dem har redan
-publicerade 2026-källor och väntar bara på intern modellering
-(`source_resolved_implementation_pending`). En av dem — Finspångs spetsvärmetillägg —
-har en olöst extern sakfråga och får inte representeras som en fysisk
-`remaining_information_requests`-post, eftersom dess `tariff_ids` skulle peka på den
-redan aktiva `finspangs-tekniska-verk-finspang-2026`-basraden och därmed felaktigt spärra
-den för `enkey-agents/tools/tariffer/katalog.py`s kataloggrind.
+kundval på redan existerande basrader, inte fristående tariffer. Tre av dem —
+Södertörns kundvalda effekt, Kraftringen Brunnshög och Tekniska Verken
+lågtemperatur — har publicerade 2026-källor och väntar bara på intern modellering
+(`source_resolved_implementation_pending`). Den fjärde — Finspångs
+spetsvärmetillägg — är stängd och klassad `not_applicable` för 2026: leverantören
+bekräftar att prislistans text finns kvar men att inget sådant tillägg debiteras
+2026. Den representeras inte som en fysisk `remaining_information_requests`-post,
+eftersom dess `tariff_ids` skulle peka på den redan aktiva
+`finspangs-tekniska-verk-finspang-2026`-basraden och därmed felaktigt spärra den
+för `enkey-agents/tools/tariffer/katalog.py`s kataloggrind.
 
 Detta dokument är den auktoritativa, versionsstyrda platsen för status på dessa fyra
-variantfrågor tills de eventuellt materialiseras som egna katalograder.
+variantfrågor tills de tre öppna eventuellt materialiseras som egna katalograder.
 
 ## Dispositionsmatris (4 rader, motsvarar §8a rad 20–22 och 28)
 

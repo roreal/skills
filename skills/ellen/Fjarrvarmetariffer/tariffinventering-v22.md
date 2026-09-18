@@ -1992,7 +1992,9 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 Enligt granskning `2026-09-08-002` (P1): dessa sju kända variantfamiljer får INTE stå
 utanför totalen längre. Var och en är nu en egen, räknad, stabil variant-ID i kontrollmängden
 — ingen väntar på en "framtida inventeringsversion". `not_applicable` används aldrig för en
-verklig, källkänd variant.
+faktiskt tillämpad debiteringsvariant med en verklig, källkänd modell. Finspångs
+spetsvärmetillägg är klassad `not_applicable` av motsatt skäl: leverantören bekräftar
+att ingen sådan debiteringsmodell tillämpas 2026, inte att modellen är okänd.
 
 E.ON/Navirums 36-månadersmetod gäller samtliga åtta bastariffer separat — den räknas
 därför som ÅTTA variant-ID:n (en per bastariff), inte en enda ospecificerad post, enligt

@@ -469,7 +469,11 @@ kandidat från `origin/main@47fdc67`; lokala `main@2e30bb2` med den orelaterade
 Milesight-commiten ska bevaras orörd. Ingen katalogändring, produktkod,
 aktivering eller push tillåts.
 
-## 2026-09-18T13:xx+02:00 — Claude, implementation av signal 042 (`APPROVED_FOR_IMPLEMENTATION: Claude`)
+## 2026-09-18T12:46:17+02:00 — Claude, implementation av signal 042 (`APPROVED_FOR_IMPLEMENTATION: Claude`)
+
+**Rättelse 2026-09-18:** rubrikens tid var ursprungligen platshållaren `13:xx`;
+ersatt med den faktiska leveranstiden från skills-commit `d3ccf63` enligt
+Codex rättningskrav i granskning 044.
 
 executed_by: Claude
 dispatched_by: agent-bridge
@@ -542,3 +546,63 @@ före denna sessions start) lämnade orörda och ej committade av detta steg.
 Ingen aktivering eller push i detta steg. Committar fokuserat i skills-repot
 och skriver `REVIEW_READY: Codex` som ny toppost i `conversations/index.md`,
 med kandidatbranch/commit-referensen ovan för Codex granskning.
+
+## 2026-09-18T12:54:21+02:00 — Claude, rättningsrunda för signal 044 (`CHANGES_REQUIRED: Claude`)
+
+executed_by: Claude
+dispatched_by: agent-bridge
+
+Utfört den avgränsade rättningsrundan enligt Codex granskning
+[2026-09-18, källnormalisering 044](../../../reviews/2026/09/2026-09-18-granskning-finspang-kallnormalisering-043.md)
+(`approved_correction_scope:
+finspang-source-normalization-stale-text-and-timestamp-only`). Verifierade
+först att skills-HEAD (`d3ccf63`), Enkey-kandidaten (`3479331`, förälder
+`47fdc67`), skyddad `enkey-agents/main@2e30bb2` och samtliga tre live
+`origin/main`-HEAD:ar (skills `6fdbd40`, enkey `47fdc67`, neptune
+`92226db`) exakt matchade granskningens frontmatter innan något ändrades.
+
+**P1:** `variantfragor-ej-materialiserade-2026.md` versionshuvudet uppdaterat
+till "Version 2 — 2026-09-18" med hänvisning till granskning 044, och
+Syfte-stycket skrivet om i nutid: tre varianter är fortsatt
+`source_resolved_implementation_pending`, Finspångs post är uttryckligen
+stängd och `not_applicable` för 2026 (leverantören bekräftar att inget
+tillägg debiteras), ingen fysisk `remaining_information_requests`-post
+eller ny katalograd skapas.
+
+**P2 (1):** `tariffinventering-v22.md` §5-ingressen förtydligad — meningen
+sa kategoriskt att `not_applicable` "aldrig används för en verklig,
+källkänd variant"; nu preciserat till att klassen inte används för en
+faktiskt tillämpad debiteringsvariant, medan Finspångs post är
+`not_applicable` av motsatt skäl (leverantören bekräftar att ingen sådan
+modell tillämpas 2026).
+
+**P2 (2):** Enkey-kandidatens docstring i
+`test_dispositionsgrind_inventering.py` rad ~571 rättad på den befintliga
+isolerade branchen `finspang-2026-not-applicable-tests` ovanpå `3479331`
+(ny commit `3762066`, samma worktree `/tmp/enkey-agents-finspang-2026`).
+Det stale talet `62/2/28` för Batch 6-tillståndet efter
+Finspång-normaliseringen ersatt med det korrekta `62/2/27/1`; `62/2/28`
+kvarstår bara som den uttryckligt historiska siffran före
+normaliseringen. Endast beskrivningen ändrad — testlogik och förväntat
+resultat oförändrade. `enkey-agents/main@2e30bb2` verifierat orörd efter
+commit.
+
+**P2 (3):** platshållartiden `2026-09-18T13:xx+02:00` i denna sessionslogg
+ersatt med den faktiska leveranstiden `2026-09-18T12:46:17+02:00` från
+skills-commit `d3ccf63`, med en daterad rättelsenot kvarlämnad i rubriken.
+
+**Testutfall:** riktad `test_dispositionsgrind_inventering.py` i
+kandidatbranchen: 26 passed (oförändrat resultat, endast docstring
+ändrad). `git diff --check` rent i båda repona för samtliga ändrade
+filer.
+
+Ingen ändring av testlogik, räkningsresultat, katalog, motor, policy,
+produktkod, prisdata, Neptune eller agentbrygga. Ingen katalogändring,
+aktivering eller push i detta steg. Ospårade/orelaterade
+arbetskopieändringar (skills-underlag under `Fjarrvarmetariffer/`,
+`conversations/automation/`, `../milesight`, samt de redan befintliga,
+ospårade filerna som fanns i arbetskopian före denna sessions start)
+lämnade orörda och ej committade av detta steg.
+
+Skriver `REVIEW_READY: Codex` som ny, unik toppost i `conversations/index.md`
+för Codex granskning av denna rättningsrunda.
