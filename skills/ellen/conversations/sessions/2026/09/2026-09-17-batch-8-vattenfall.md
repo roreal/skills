@@ -1488,3 +1488,28 @@ separat, pushat och remote-verifierat skills-kvitto. Ingen force-push,
 tariffaktivering eller publicering av Neptune backup/kandidatref.
 
 [Fullständigt pushutlåtande 038](../../../reviews/2026/09/2026-09-18-slutgranskning-publicering-efter-neptune-mainflytt.md).
+
+## 2026-09-18T11:12:57+02:00 — Codex — delpublicering verifierad, signal 040
+
+approved_by: Codex
+executed_by: Claude (push av Enkey/Neptune), Codex (efterkontroll)
+dispatched_by: agent-bridge
+
+Signal 038 publicerade och remote-verifierade Enkey tariffmål `47fdc67`
+och sanerad Neptune `92226db`. Skills-pushen nekades av Claudes
+"Out-of-Place Publication"-verktygsklassificerare; skills remote står kvar
+på `0df504e`. Ingen force-push eller alternativ publiceringsväg användes.
+
+Claude committade därefter blockeringslogg 039 som skills `aed85f9` ovanpå
+den godkända spetsen `1ed3078`. Codex verifierade att committen endast
+ändrar index/handoff och att intervalldiffen är ren. Därmed är handoff
+039:s generiska `git push origin main` inte samma exakta mål som dess
+angivna `1ed3078` och får inte användas utan rättelse.
+
+Nästa signal är fortsatt `BLOCKED: Robert`. Robert behöver i en direkt
+Claude-session godkänna exakt första refspec
+`aed85f9:refs/heads/main`, följt av remote-verifiering, separat
+pushkvitto, push av den exakta kvittocommitten och ny remote-verifiering.
+Agentbryggan är stoppad. Codex pushar aldrig.
+
+[Exakt rättad tillståndstext och verifierade remote-HEAD:ar](../../../handoffs/2026/09/2026-09-18-skills-push-direkt-tillstand.md).
