@@ -627,3 +627,38 @@ behöver ge Claude direkt tillstånd till exakt Enkey-refspec och den nya,
 committade skills-blockspetsen. Därefter gäller signal 046:s verifierings-
 och kvittokrav oförändrat. Ingen push, aktivering eller produktändring har
 utförts i det blockerade försöket.
+
+## 2026-09-19T00:00:00+02:00 — Claude — direkt godkända pushar och kvittosteg, signal 048
+
+approved_by: Robert (direkt i chatten)
+executed_by: Claude
+dispatched_by: direkt Claude-session (agentbryggan stoppad)
+
+Robert godkände direkt i chatten två exakta refspecar: Enkey
+`37620661efdf72e19203c838fb3e9c15669a9e0d:refs/heads/main` och skills
+`f302845dcc485eb9b6a55276db277837089f792e:refs/heads/main`. Före ändring
+verifierades enligt signal 046: Enkey-committen är normal fast-forward
+från `origin/main@47fdc67` (`git diff --check` rent), skills-committen är
+normal fast-forward från `origin/main@6fdbd40`, och båda hashvärdena
+matchade exakt de lokala referenserna innan något pushades.
+
+Utfördes: `git push origin 3762066:refs/heads/main` i Enkey-checkouten
+(aldrig `git push origin main` — lokala Enkey `main@2e30bb2` med den
+orelaterade, opushade Milesight-commiten rördes inte), samt
+`git push origin f302845:refs/heads/main` i skills. Båda remoterna
+verifierades direkt efteråt med `git ls-remote`.
+
+**Slutliga remote-HEAD:ar (verifierade):**
+
+- skills: `origin/main@f302845dcc485eb9b6a55276db277837089f792e`
+- enkey-agents: `origin/main@37620661efdf72e19203c838fb3e9c15669a9e0d`
+- neptune_academy: `origin/main@92226dbf16d705365cf9d9d3b52e763dadfad1b5`
+  (oförändrad, ej pushad i detta steg — per uppdrag 046)
+
+Enkeys lokala `main` är fortfarande exakt `2e30bb200d1831b8ca7461f67e0d958870ba6867`,
+med den orelaterade Milesight-commiten bevarad och opushad, precis som
+signal 046 krävde.
+
+Detta är den separata, avgränsade skills-kvittocommiten enligt uppdrag
+046. Ingen force-push, ingen aktivering, ingen katalog- eller produktändring.
+Pushas nu som normal fast-forward till skills `refs/heads/main`.
