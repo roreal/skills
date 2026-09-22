@@ -1,0 +1,3366 @@
+{
+  "source_file": "neptune-marketing/src/data/tariffer.generated.ts",
+  "source_sha256": "cc5a5a591236ecd15370d3e54a0616520c21c26397c6d05b326b49e50d2df2d1",
+  "generated_on": "2026-09-19",
+  "catalog_sha256": "e05ae523acfe70bef67f4f520e7950680f794a94d29dbc9e2af0802d0dd76235",
+  "catalog_commit": "25bbba1415ec070f00fccb288ab842ccdd523d61",
+  "counts": {
+    "products": 75,
+    "real_products": 74,
+    "synthetic_products": 1,
+    "existing_savings": 8,
+    "current_cost_only": 67,
+    "review_waves": {
+      "1": 2,
+      "2": 13,
+      "3": 48,
+      "4": 12
+    }
+  },
+  "rows": [
+    {
+      "product_id": "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad",
+      "product_name": "Borås Energi och Miljö",
+      "tariff_id": "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "heterogeneous_bands",
+      "capacity_bands": 6,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "optional_environmental_addon"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "boras_flode_m3h",
+        "boras_normalarsenergi_mwh",
+        "boras_vald_niva_id",
+        "miljotillagg_vald"
+      ],
+      "measurement_resolutions": {
+        "boras_vald_niva_id": "arsvis",
+        "boras_normalarsenergi_mwh": "arsvis",
+        "boras_flode_m3h": "arsvis",
+        "miljotillagg_vald": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "specialeffekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "borlange-energi-borlange",
+      "product_name": "Borlänge Energi",
+      "tariff_id": "borlange-energi-borlange-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "borlange_debiterbar_effekt_kw",
+        "borlange_vald_niva_id",
+        "flode_m3"
+      ],
+      "measurement_resolutions": {
+        "borlange_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "borlange_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "borlange_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "c4-energi-kristianstad",
+      "product_name": "C4 Energi",
+      "tariff_id": "c4-energi-kristianstad-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 6,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "c4_debiterbar_effekt_kw",
+        "c4_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "c4_debiterbar_effekt_kw": "arsvis",
+        "c4_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "c4_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader",
+      "product_name": "E.ON - Järfälla — Järfälla och Upplands-Bro – Bostäder – Fullvärme",
+      "tariff_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_jarfalla_bostader_debiterbar_effekt_kw",
+        "eon_jarfalla_bostader_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_jarfalla_bostader_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_jarfalla_bostader_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_jarfalla_bostader_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader--bas-delvarme",
+      "product_name": "E.ON - Järfälla — Järfälla och Upplands-Bro – Bostäder – Bas-/delvärme",
+      "tariff_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_jarfalla_bostader_bas_delvarme_debiterbar_effekt_kw",
+        "eon_jarfalla_bostader_bas_delvarme_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_jarfalla_bostader_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_jarfalla_bostader_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_jarfalla_bostader_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter",
+      "product_name": "E.ON - Järfälla — Järfälla och Upplands-Bro – Övriga fastigheter – Fullvärme",
+      "tariff_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_jarfalla_ovriga_debiterbar_effekt_kw",
+        "eon_jarfalla_ovriga_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_jarfalla_ovriga_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_jarfalla_ovriga_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_jarfalla_ovriga_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter--bas-delvarme",
+      "product_name": "E.ON - Järfälla — Järfälla och Upplands-Bro – Övriga fastigheter – Bas-/delvärme",
+      "tariff_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_jarfalla_ovriga_bas_delvarme_debiterbar_effekt_kw",
+        "eon_jarfalla_ovriga_bas_delvarme_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_jarfalla_ovriga_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_jarfalla_ovriga_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_jarfalla_ovriga_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-malmo-malmo-och-burlov-bostader",
+      "product_name": "E.ON - Malmö — Malmö och Burlöv – Bostäder – Fullvärme",
+      "tariff_id": "e-on-malmo-malmo-och-burlov-bostader-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_malmo_bostader_debiterbar_effekt_kw",
+        "eon_malmo_bostader_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_malmo_bostader_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_malmo_bostader_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_malmo_bostader_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-malmo-malmo-och-burlov-bostader--bas-delvarme",
+      "product_name": "E.ON - Malmö — Malmö och Burlöv – Bostäder – Bas-/delvärme",
+      "tariff_id": "e-on-malmo-malmo-och-burlov-bostader-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_malmo_bostader_bas_delvarme_debiterbar_effekt_kw",
+        "eon_malmo_bostader_bas_delvarme_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_malmo_bostader_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_malmo_bostader_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_malmo_bostader_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter",
+      "product_name": "E.ON - Malmö — Malmö och Burlöv – Övriga fastigheter – Fullvärme",
+      "tariff_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_malmo_ovriga_debiterbar_effekt_kw",
+        "eon_malmo_ovriga_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_malmo_ovriga_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_malmo_ovriga_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_malmo_ovriga_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter--bas-delvarme",
+      "product_name": "E.ON - Malmö — Malmö och Burlöv – Övriga fastigheter – Bas-/delvärme",
+      "tariff_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "eon_malmo_ovriga_bas_delvarme_debiterbar_effekt_kw",
+        "eon_malmo_ovriga_bas_delvarme_vald_niva_id",
+        "flode_m3",
+        "framledningstemperatur_c"
+      ],
+      "measurement_resolutions": {
+        "eon_malmo_ovriga_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "eon_malmo_ovriga_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "eon_malmo_ovriga_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo",
+      "product_name": "Falu Energi & Vatten — Bjursås, Grycksbo, Sundborn, Svärdsjö",
+      "tariff_id": "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "falun_ytterorter_debiterbar_effekt_kw",
+        "falun_ytterorter_vald_niva_id",
+        "flode_m3"
+      ],
+      "measurement_resolutions": {
+        "falun_ytterorter_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "falun_ytterorter_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "falun_ytterorter_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "falu-energi-vatten-falun",
+      "product_name": "Falu Energi & Vatten — Falun",
+      "tariff_id": "falu-energi-vatten-falun-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 7,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "falun_tatort_debiterbar_effekt_kw",
+        "falun_tatort_vald_niva_id",
+        "flode_m3"
+      ],
+      "measurement_resolutions": {
+        "falun_tatort_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "falun_tatort_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "falun_tatort_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "finspangs-tekniska-verk-finspang",
+      "product_name": "Finspångs Tekniska Verk",
+      "tariff_id": "finspangs-tekniska-verk-finspang-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "piecewise_polynomial",
+      "capacity_bands": 0,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "conditional_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "conditional_flow_flode_m3",
+        "conditional_flow_returtemp_c",
+        "finspang_debiterbar_effekt_kw"
+      ],
+      "measurement_resolutions": {
+        "finspang_debiterbar_effekt_kw": "arsvis",
+        "conditional_flow_returtemp_c": "manadsvis",
+        "conditional_flow_flode_m3": "manadsvis"
+      },
+      "series_fields": [
+        "conditional_flow_flode_m3",
+        "conditional_flow_returtemp_c"
+      ],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "specialeffekt",
+        "flode_eller_temperatur",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "goteborg-energi",
+      "product_name": "Göteborg Energi",
+      "tariff_id": "goteborg-energi-goteborg-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 6,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "temperature_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
+      "product_name": "Gotlands Energi — Gotland taxa 17, under 50 MWh/år",
+      "tariff_id": "gotlands-energi-gotland-taxa-17-under-50-mwh-ar-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 0,
+      "has_capacity_charge": false,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [],
+      "review_wave": 1,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "gotlands-energi-gotland-taxa-21-over-50-mwh-ar",
+      "product_name": "Gotlands Energi — Gotland taxa 21, över 50 MWh/år",
+      "tariff_id": "gotlands-energi-gotland-taxa-21-over-50-mwh-ar-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 0,
+      "has_capacity_charge": false,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "cooling_deadband",
+        "volume_discount"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "habo-energi-habo",
+      "product_name": "Habo Energi",
+      "tariff_id": "habo-energi-habo-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "habo_debiterbar_effekt_kw",
+        "habo_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "habo_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "habo_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "habo_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "halmstads-energi-och-miljo",
+      "product_name": "Halmstads Energi och Miljö",
+      "tariff_id": "halmstads-energi-och-miljo-halmstad-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge",
+      "product_name": "Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge",
+      "tariff_id": "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "flow_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_okt_apr_m3",
+        "jamtkraft_are_debiterbar_effekt_kw",
+        "jamtkraft_are_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "jamtkraft_are_debiterbar_effekt_kw": "arsvis",
+        "jamtkraft_are_vald_niva_id": "arsvis",
+        "flode_okt_apr_m3": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "jamtkraft_are_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "jamtkraft-brunflo-och-opevagen",
+      "product_name": "Jämtkraft — Brunflo och Opevägen",
+      "tariff_id": "jamtkraft-brunflo-och-opevagen-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "flow_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_okt_apr_m3",
+        "jamtkraft_brunflo_debiterbar_effekt_kw",
+        "jamtkraft_brunflo_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "jamtkraft_brunflo_debiterbar_effekt_kw": "arsvis",
+        "jamtkraft_brunflo_vald_niva_id": "arsvis",
+        "flode_okt_apr_m3": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "jamtkraft_brunflo_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "jamtkraft-ostersund-froson-as",
+      "product_name": "Jämtkraft — Östersund, Frösön, Ås",
+      "tariff_id": "jamtkraft-ostersund-froson-as-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "flow_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_okt_apr_m3",
+        "jamtkraft_ostersund_debiterbar_effekt_kw",
+        "jamtkraft_ostersund_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "jamtkraft_ostersund_debiterbar_effekt_kw": "arsvis",
+        "jamtkraft_ostersund_vald_niva_id": "arsvis",
+        "flode_okt_apr_m3": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "jamtkraft_ostersund_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "jonkoping-energi-jonkoping-och-granna",
+      "product_name": "Jönköping Energi",
+      "tariff_id": "jonkoping-energi-jonkoping-och-granna-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "metered_access_fee",
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "access_pris_kr_per_central_manad",
+        "antal_undercentraler",
+        "flode_m3",
+        "jonkoping_debiterbar_effekt_kw",
+        "jonkoping_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "jonkoping_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "jonkoping_vald_niva_id": "arsvis",
+        "access_pris_kr_per_central_manad": "arsvis",
+        "antal_undercentraler": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "jonkoping_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "karlstads-energi-karlstad",
+      "product_name": "Karlstads Energi",
+      "tariff_id": "karlstads-energi-karlstad-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "karlstad_debiterbar_effekt_kw",
+        "karlstad_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "karlstad_debiterbar_effekt_kw": "arsvis",
+        "karlstad_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "kils-energi-kil",
+      "product_name": "Kils Energi",
+      "tariff_id": "kils-energi-kil-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "inkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "kil_debiterbar_effekt_kw",
+        "kil_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "kil_debiterbar_effekt_kw": "arsvis",
+        "kil_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "kil_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "kraftringen-kraftringen",
+      "product_name": "Kraftringen",
+      "tariff_id": "kraftringen-kraftringen-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "kraftringen_debiterbar_effekt_kw",
+        "kraftringen_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "kraftringen_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "kraftringen_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "kraftringen_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "lidkoping-energi-lidkoping-041-kw",
+      "product_name": "Lidköping Energi — Lidköping 0–41 kW",
+      "tariff_id": "lidkoping-energi-lidkoping-041-kw-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 2,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "signed_monthly_flow_adjustment"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "lidkoping_debiterbar_effekt_kw",
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c",
+        "lidkoping_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "lidkoping_debiterbar_effekt_kw": "arsvis",
+        "lidkoping_vald_niva_id": "arsvis",
+        "lidkoping_kund_volym_m3": "manadsvis",
+        "lidkoping_kund_avkylning_c": "manadsvis",
+        "lidkoping_nat_avkylning_c": "manadsvis"
+      },
+      "series_fields": [
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c"
+      ],
+      "history_fields": [
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "lidkoping-energi-lidkoping-42-kw",
+      "product_name": "Lidköping Energi — Lidköping 42+ kW",
+      "tariff_id": "lidkoping-energi-lidkoping-42-kw-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 2,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "signed_monthly_flow_adjustment"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "lidkoping_debiterbar_effekt_kw",
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c",
+        "lidkoping_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "lidkoping_debiterbar_effekt_kw": "arsvis",
+        "lidkoping_vald_niva_id": "arsvis",
+        "lidkoping_kund_volym_m3": "manadsvis",
+        "lidkoping_kund_avkylning_c": "manadsvis",
+        "lidkoping_nat_avkylning_c": "manadsvis"
+      },
+      "series_fields": [
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c"
+      ],
+      "history_fields": [
+        "lidkoping_kund_avkylning_c",
+        "lidkoping_kund_volym_m3",
+        "lidkoping_nat_avkylning_c"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "lulea-energi-lulea",
+      "product_name": "Luleå Energi",
+      "tariff_id": "lulea-energi-lulea-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 7,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "lulea_debiterbar_effekt_kw",
+        "lulea_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "lulea_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "lulea_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "lulea_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "malarenergi-vasteras-och-hallstahammar-24-lagenheter",
+      "product_name": "Mälarenergi",
+      "tariff_id": "malarenergi-vasteras-och-hallstahammar-24-lagenheter-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 0,
+      "has_capacity_charge": false,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3"
+      ],
+      "measurement_resolutions": {
+        "flode_m3": "manadsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "mjolby-svartadalen-energi-mjolby",
+      "product_name": "Mjölby Svartådalen Energi",
+      "tariff_id": "mjolby-svartadalen-energi-mjolby-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "mjolby_debiterbar_effekt_kw",
+        "mjolby_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "mjolby_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "mjolby_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "mjolby_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "molndal-energi",
+      "product_name": "Mölndal Energi",
+      "tariff_id": "molndal-energi-molndal-kallered-och-lindome-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 14,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader",
+      "product_name": "Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Bostäder – Fullvärme",
+      "tariff_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_norrkoping_bostader_debiterbar_effekt_kw",
+        "navirum_norrkoping_bostader_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_norrkoping_bostader_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_norrkoping_bostader_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_norrkoping_bostader_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader--bas-delvarme",
+      "product_name": "Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Bostäder – Bas-/delvärme",
+      "tariff_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_norrkoping_bostader_bas_delvarme_debiterbar_effekt_kw",
+        "navirum_norrkoping_bostader_bas_delvarme_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_norrkoping_bostader_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_norrkoping_bostader_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_norrkoping_bostader_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter",
+      "product_name": "Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Övriga fastigheter – Fullvärme",
+      "tariff_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_norrkoping_ovriga_debiterbar_effekt_kw",
+        "navirum_norrkoping_ovriga_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_norrkoping_ovriga_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_norrkoping_ovriga_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_norrkoping_ovriga_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter--bas-delvarme",
+      "product_name": "Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Övriga fastigheter – Bas-/delvärme",
+      "tariff_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_norrkoping_ovriga_bas_delvarme_debiterbar_effekt_kw",
+        "navirum_norrkoping_ovriga_bas_delvarme_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_norrkoping_ovriga_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_norrkoping_ovriga_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_norrkoping_ovriga_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader",
+      "product_name": "Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Bostäder – Fullvärme",
+      "tariff_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_orebro_bostader_debiterbar_effekt_kw",
+        "navirum_orebro_bostader_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_orebro_bostader_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_orebro_bostader_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_orebro_bostader_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme",
+      "product_name": "Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Bostäder – Bas-/delvärme",
+      "tariff_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_orebro_bostader_bas_delvarme_debiterbar_effekt_kw",
+        "navirum_orebro_bostader_bas_delvarme_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_orebro_bostader_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_orebro_bostader_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_orebro_bostader_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter",
+      "product_name": "Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Övriga fastigheter – Fullvärme",
+      "tariff_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_orebro_ovriga_debiterbar_effekt_kw",
+        "navirum_orebro_ovriga_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_orebro_ovriga_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_orebro_ovriga_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_orebro_ovriga_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme",
+      "product_name": "Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Övriga fastigheter – Bas-/delvärme",
+      "tariff_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter-2026--bas-delvarme",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "supply_temperature_adjusted_flow"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "framledningstemperatur_c",
+        "navirum_orebro_ovriga_bas_delvarme_debiterbar_effekt_kw",
+        "navirum_orebro_ovriga_bas_delvarme_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "navirum_orebro_ovriga_bas_delvarme_debiterbar_effekt_kw": "manadsvis, leverantorsberaknat 36-manadersvarde per fakturamanad",
+        "flode_m3": "arsvis",
+        "framledningstemperatur_c": "arsvis",
+        "navirum_orebro_ovriga_bas_delvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "navirum_orebro_ovriga_bas_delvarme_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "nevel-gimo-osterbybruk-och-osthammar",
+      "product_name": "Nevel",
+      "tariff_id": "nevel-gimo-osterbybruk-och-osthammar-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 3,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "nevel_debiterbar_effekt_kw",
+        "nevel_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "nevel_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "nevel_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "nevel_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "norrenergi",
+      "product_name": "Norrenergi",
+      "tariff_id": "norrenergi-norrenergi-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 7,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "incremental_return_temperature",
+        "low_utilization"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "oresundskraft-angelholm-normal",
+      "product_name": "Öresundskraft — Ängelholm normal",
+      "tariff_id": "oresundskraft-angelholm-normal-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "oresundskraft_angelholm_debiterbar_effekt_kw",
+        "oresundskraft_angelholm_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "oresundskraft_angelholm_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "oresundskraft_angelholm_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "oresundskraft_angelholm_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "oresundskraft-helsingborg-normal",
+      "product_name": "Öresundskraft — Helsingborg normal",
+      "tariff_id": "oresundskraft-helsingborg-normal-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "oresundskraft_helsingborg_debiterbar_effekt_kw",
+        "oresundskraft_helsingborg_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "oresundskraft_helsingborg_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "oresundskraft_helsingborg_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "oresundskraft_helsingborg_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024",
+      "product_name": "Öresundskraft — Helsingborg Totalvärme, central installerad före 2024",
+      "tariff_id": "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "oresund_totalvarme_effekt_kw",
+        "oresund_totalvarme_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "oresund_totalvarme_effekt_kw": "arsvis",
+        "oresund_totalvarme_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "oresund_totalvarme_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "ovik-energi-ornskoldsvik",
+      "product_name": "Övik Energi",
+      "tariff_id": "ovik-energi-ornskoldsvik-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 16,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "ovik_kapacitetsbehov_kwh_dygn",
+        "ovik_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "ovik_kapacitetsbehov_kwh_dygn": "arsvis",
+        "ovik_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "partille-energi-partille",
+      "product_name": "Partille Energi",
+      "tariff_id": "partille-energi-partille-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 7,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "temperature_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "avvikelse_c",
+        "partille_debiterbar_effekt_kw",
+        "partille_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "partille_debiterbar_effekt_kw": "arsvis",
+        "avvikelse_c": "arsvis",
+        "partille_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "piteenergi-norrfjarden-och-sjulnas",
+      "product_name": "PiteEnergi — Norrfjärden och Sjulnäs",
+      "tariff_id": "piteenergi-norrfjarden-och-sjulnas-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "pitea_norrfjarden_debiterbar_effekt_kw",
+        "pitea_norrfjarden_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "pitea_norrfjarden_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "pitea_norrfjarden_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "pitea_norrfjarden_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "piteenergi-pitea-centrala-natet",
+      "product_name": "PiteEnergi — Piteå centrala nätet",
+      "tariff_id": "piteenergi-pitea-centrala-natet-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "pitea_centrala_debiterbar_effekt_kw",
+        "pitea_centrala_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "pitea_centrala_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "pitea_centrala_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "pitea_centrala_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "riksgenomsnitt",
+      "product_name": "Riksgenomsnitt (schablon)",
+      "tariff_id": null,
+      "price_year": 2026,
+      "price_source": "https://nilsholgersson.nu/rapporter/rapport-2025/fjarrvarme-2025/",
+      "synthetic": true,
+      "vat_basis": "exkl",
+      "cost_path": "legacy_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "sasonger",
+        "tillagg"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": true,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "sandviken-energi-sandviken-normal",
+      "product_name": "Sandviken Energi — Helleverans",
+      "tariff_id": "sandviken-energi-sandviken-normal-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_besparing",
+      "savings_today": true,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 3,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "debiterbar_effekt_kw"
+      ],
+      "measurement_resolutions": {
+        "debiterbar_effekt_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "skovde-energi-skovde",
+      "product_name": "Skövde Energi",
+      "tariff_id": "skovde-energi-skovde-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "skovde_debiterbar_effekt_kw",
+        "skovde_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "skovde_debiterbar_effekt_kw": "arsvis",
+        "skovde_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "skovde_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "soderhamn-nara-soderhamn-taxa-11-och-12",
+      "product_name": "Söderhamn Nära",
+      "tariff_id": "soderhamn-nara-soderhamn-taxa-11-och-12-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "soderhamn_anslutningseffekt_kw",
+        "soderhamn_vald_taxa_id"
+      ],
+      "measurement_resolutions": {
+        "soderhamn_anslutningseffekt_kw": "arsvis",
+        "soderhamn_vald_taxa_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "soderhamn_anslutningseffekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
+      "product_name": "Södertörns Fjärrvärme",
+      "tariff_id": "sodertorns-fjarrvarme-sodertorns-fjarrvarme-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "temperature_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "avvikelse_c",
+        "sodertorn_debiterbar_effekt_kw",
+        "sodertorn_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "sodertorn_debiterbar_effekt_kw": "arsvis",
+        "avvikelse_c": "arsvis",
+        "sodertorn_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "stockholm-exergi",
+      "product_name": "Stockholm Exergi",
+      "tariff_id": "stockholm-exergi-2026",
+      "price_year": 2026,
+      "price_source": "https://www.stockholmexergi.se/kundservice/priser/",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "sasonger",
+        "tillagg"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": true,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "debiterbar_effekt_kw",
+        "kall_energi_mwh",
+        "kall_energi_mwh_arsserie",
+        "returtemperatur_c",
+        "returtemperatur_c_vintermanader"
+      ],
+      "measurement_resolutions": {
+        "debiterbar_effekt_kw": "arsvis, en gang per kalenderar",
+        "kall_energi_mwh": "manadsvis",
+        "returtemperatur_c": "manadsvis, energiviktat medelvarde",
+        "kall_energi_mwh_arsserie": "manadsvis, tolv varden",
+        "returtemperatur_c_vintermanader": "manadsvis, energiviktat medelvarde"
+      },
+      "series_fields": [
+        "kall_energi_mwh_arsserie",
+        "returtemperatur_c_vintermanader"
+      ],
+      "history_fields": [
+        "kall_energi_mwh_arsserie"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "sundsvall-energi-indal-liden-och-lucksta",
+      "product_name": "Sundsvall Energi",
+      "tariff_id": "sundsvall-energi-indal-liden-och-lucksta-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 0,
+      "has_capacity_charge": false,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [],
+      "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [],
+      "review_wave": 1,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "tekniska-verken-katrineholm-katrineholm",
+      "product_name": "Tekniska Verken - Katrineholm",
+      "tariff_id": "tekniska-verken-katrineholm-katrineholm-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "katrineholm_effektsignatur_kw",
+        "katrineholm_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "katrineholm_effektsignatur_kw": "arsvis",
+        "katrineholm_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "katrineholm_effektsignatur_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "tekniska-verken-linkoping-linkoping",
+      "product_name": "Tekniska Verken - Linköping",
+      "tariff_id": "tekniska-verken-linkoping-linkoping-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "tekniska_verken_linkoping_debiterbar_effekt_kw",
+        "tekniska_verken_linkoping_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "tekniska_verken_linkoping_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "manadsvis",
+        "tekniska_verken_linkoping_vald_niva_id": "arsvis"
+      },
+      "series_fields": [
+        "flode_m3"
+      ],
+      "history_fields": [
+        "flode_m3",
+        "tekniska_verken_linkoping_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "manadsserie"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "telge-nat-telge-foretag-och-bostadsrattsforeningar",
+      "product_name": "Telge Nät",
+      "tariff_id": "telge-nat-telge-foretag-och-bostadsrattsforeningar-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 3,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "incremental_return_temperature",
+        "low_utilization"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "normalarskorrigerad_energi_mwh",
+        "returtemperatur_c",
+        "telge_debiterbar_effekt_kw",
+        "telge_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "telge_debiterbar_effekt_kw": "arsvis",
+        "normalarskorrigerad_energi_mwh": "arsvis",
+        "returtemperatur_c": "arsvis",
+        "telge_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus",
+      "product_name": "TEMAB Fjärrvärme",
+      "tariff_id": "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 3,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "temab_debiteringseffekt_kw",
+        "temab_vald_taxa_id"
+      ],
+      "measurement_resolutions": {
+        "temab_debiteringseffekt_kw": "arsvis",
+        "temab_vald_taxa_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "temab_debiteringseffekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "trollhattan-energi-trollhattan",
+      "product_name": "Trollhättan Energi",
+      "tariff_id": "trollhattan-energi-trollhattan-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 5,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "trollhattan_debiterbar_effekt_kw",
+        "trollhattan_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "trollhattan_debiterbar_effekt_kw": "arsvis",
+        "trollhattan_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "trollhattan_debiterbar_effekt_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "historik_eller_band"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "umea-energi-umea-enkel",
+      "product_name": "Umeå Energi",
+      "tariff_id": "umea-energi-umea-enkel-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 7,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "asymmetric_flow_difference"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_okt_apr_m3",
+        "umea_enkel_arseffekt_a_kw",
+        "umea_enkel_kapacitetsfaktor_b",
+        "umea_enkel_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "umea_enkel_arseffekt_a_kw": "arsvis",
+        "umea_enkel_vald_niva_id": "arsvis",
+        "flode_okt_apr_m3": "arsvis",
+        "umea_enkel_kapacitetsfaktor_b": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [
+        "umea_enkel_arseffekt_a_kw"
+      ],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vanerenergi-mariestad-och-toreboda",
+      "product_name": "VänerEnergi",
+      "tariff_id": "vanerenergi-mariestad-och-toreboda-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 4,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "volume"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "flode_m3",
+        "vanerenergi_debiterbar_effekt_kw",
+        "vanerenergi_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "vanerenergi_debiterbar_effekt_kw": "arsvis",
+        "flode_m3": "arsvis",
+        "vanerenergi_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur"
+      ],
+      "review_wave": 3,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig",
+      "product_name": "Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Gustavsberg – Spetsig",
+      "tariff_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_gustavsberg_spetsig_abonnerad_effekt_kw",
+        "vattenfall_gustavsberg_spetsig_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_gustavsberg_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_gustavsberg_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard",
+      "product_name": "Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Gustavsberg – Standard",
+      "tariff_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_gustavsberg_standard_abonnerad_effekt_kw",
+        "vattenfall_gustavsberg_standard_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_gustavsberg_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_gustavsberg_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-spetsig",
+      "product_name": "Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Haninge, Tyresö och Älta – Spetsig",
+      "tariff_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_haninge_tyreso_alta_spetsig_abonnerad_effekt_kw",
+        "vattenfall_haninge_tyreso_alta_spetsig_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_haninge_tyreso_alta_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_haninge_tyreso_alta_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard",
+      "product_name": "Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Haninge, Tyresö och Älta – Standard",
+      "tariff_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-haninge-tyreso-och-alta-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_haninge_tyreso_alta_standard_abonnerad_effekt_kw",
+        "vattenfall_haninge_tyreso_alta_standard_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_haninge_tyreso_alta_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_haninge_tyreso_alta_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-motala-och-askersund-motala-och-askersund-spetsig",
+      "product_name": "Vattenfall - Motala och Askersund — Motala och Askersund – Spetsig",
+      "tariff_id": "vattenfall-motala-och-askersund-motala-och-askersund-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_motala_askersund_spetsig_abonnerad_effekt_kw",
+        "vattenfall_motala_askersund_spetsig_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_motala_askersund_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_motala_askersund_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-motala-och-askersund-motala-och-askersund-standard",
+      "product_name": "Vattenfall - Motala och Askersund — Motala och Askersund – Standard",
+      "tariff_id": "vattenfall-motala-och-askersund-motala-och-askersund-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_motala_askersund_standard_abonnerad_effekt_kw",
+        "vattenfall_motala_askersund_standard_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_motala_askersund_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_motala_askersund_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-nykoping-nykoping-spetsig",
+      "product_name": "Vattenfall - Nyköping — Nyköping – Spetsig",
+      "tariff_id": "vattenfall-nykoping-nykoping-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_nykoping_spetsig_abonnerad_effekt_kw",
+        "vattenfall_nykoping_spetsig_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_nykoping_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_nykoping_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-nykoping-nykoping-standard",
+      "product_name": "Vattenfall - Nyköping — Nyköping – Standard",
+      "tariff_id": "vattenfall-nykoping-nykoping-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_nykoping_standard_abonnerad_effekt_kw",
+        "vattenfall_nykoping_standard_vald_niva_id",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_nykoping_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_nykoping_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-uppsala-uppsala-spetsig",
+      "product_name": "Vattenfall - Uppsala — Uppsala – Spetsig",
+      "tariff_id": "vattenfall-uppsala-uppsala-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw",
+        "vattenfall_uppsala_spetsig_abonnerad_effekt_kw",
+        "vattenfall_uppsala_spetsig_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_uppsala_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_uppsala_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-uppsala-uppsala-standard",
+      "product_name": "Vattenfall - Uppsala — Uppsala – Standard",
+      "tariff_id": "vattenfall-uppsala-uppsala-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw",
+        "vattenfall_uppsala_standard_abonnerad_effekt_kw",
+        "vattenfall_uppsala_standard_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_uppsala_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_uppsala_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-vanersborg-vanersborg-spetsig",
+      "product_name": "Vattenfall - Vänersborg — Vänersborg – Spetsig",
+      "tariff_id": "vattenfall-vanersborg-vanersborg-spetsig-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw",
+        "vattenfall_vanersborg_spetsig_abonnerad_effekt_kw",
+        "vattenfall_vanersborg_spetsig_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_vanersborg_spetsig_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_vanersborg_spetsig_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "vattenfall-vanersborg-vanersborg-standard",
+      "product_name": "Vattenfall - Vänersborg — Vänersborg – Standard",
+      "tariff_id": "vattenfall-vanersborg-vanersborg-standard-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "categorical_flow_rate_estimate",
+        "documented_exclusion",
+        "seasonal_banded_volume_discount_estimate"
+      ],
+      "documented_exclusions": [
+        "capacity_overrun",
+        "industrial_deduction"
+      ],
+      "required_policy_fields": [
+        "vattenfall_arsenergi_maj_april_mwh",
+        "vattenfall_energiprofil_id",
+        "vattenfall_flodeskategori_m3_per_mwh",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw",
+        "vattenfall_vanersborg_standard_abonnerad_effekt_kw",
+        "vattenfall_vanersborg_standard_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "vattenfall_vanersborg_standard_abonnerad_effekt_kw": "arsvis",
+        "vattenfall_vanersborg_standard_vald_niva_id": "arsvis",
+        "vattenfall_energiprofil_id": "arsvis",
+        "vattenfall_flodeskategori_m3_per_mwh": "arsvis",
+        "vattenfall_arsenergi_maj_april_mwh": "arsvis",
+        "vattenfall_tre_hogsta_timmedeleffekter_kw": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": true,
+      "risk_flags": [
+        "debiterbar_effekt",
+        "flode_eller_temperatur",
+        "historik_eller_band",
+        "behorighet"
+      ],
+      "review_wave": 4,
+      "scenario_review_status": "not_reviewed"
+    }
+  ]
+}

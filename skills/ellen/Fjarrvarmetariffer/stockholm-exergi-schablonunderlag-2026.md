@@ -5,7 +5,7 @@
 Underlaget gör det möjligt att fylla Stockholm Exergis kalkyl med preliminära värden när kunden saknar fullständiga fakturauppgifter. Schablonen uppskattar:
 
 - årsenergi, om användaren inte redan har angett känd MWh/år,
-- total köpt värme per kalendermånad, som tillsammans summerar till årsenergin och kan ersättas med fakturans månadsvärden,
+- månadsenergi med samma omfattning som vald årsenergi: total köpt värme eller enbart rumsvärme,
 - debiterbar effekt,
 - internt skattad överskjutande energivolym under kalla dygn, som bara är en del av månadsenergin,
 - energiviktad returtemperatur för november–mars.
@@ -38,13 +38,20 @@ fördelas 82 procent av årsenergin mellan månaderna efter summan av positiva
 dygnsgradskillnader `max(0, balanstemperatur − dygnsmedeltemperatur)` för
 1991–2020. Resterande 18 procent fördelas lika på årets tolv månader.
 Månadsandelarna avrundas för visning och sista månaden får differensen, så
-summan blir exakt det årsbelopp som används av tariffmotorn. När schablonen
-används prissätter motorn just denna synliga månadsserie, inte en annan
-generisk förbrukningsprofil.
+summan blir exakt vald årsenergi. Vid totalvärme prissätter tariffmotorn
+den synliga serien. Vid enbart rumsvärme prissätter den den synliga
+rumsvärmeserien **plus samma uppskattade baslast varje månad**, inte en
+annan generisk förbrukningsprofil.
 
-Kunden anger eller justerar i formuläret **total köpt fjärrvärme per månad**;
-den ska summera till årsenergin för tariffen. När årsenergin anges som enbart
-rumsvärme ingår modellens uppskattade tappvarmvatten i tariffens månadsbelopp.
+Kunden anger eller justerar i formuläret månadsenergi med **samma omfattning
+som vald årsenergi**. För total köpt värme summerar fälten till tariffens
+årsenergi. För valet enbart rumsvärme summerar de till angiven rumsvärme;
+schablonen visar då nära noll rumsvärme under sommaren. För tariffpriset
+läggs ett separat, jämnt fördelat och uttryckligen uppskattat tappvarmvatten
+till varje rumsvärmemånad. Den köpta månadsserien finns internt och summerar
+till `rumsvärme / (1 − 0,18)`. Uppskattningen inkluderar **inte separat
+ventilationsvärme**; sådan behöver verifieras från faktura eller annan mätning,
+och kunden bör då använda valet total köpt värme.
 Tariffmotorns separata, obligatoriska serie för överskjutande energi fylls
 automatiskt med källtypen `estimated`. För varje månad multipliceras kundens
 totala månadsenergi med normalårsmodellens skattade andel överskjutande
@@ -53,10 +60,14 @@ dygnsvärden eller avtalade effektgräns och får inte utges för
 fakturareproduktion. Formuläret frågar inte kunden efter den interna serien.
 
 Om användaren uttryckligen anger **enbart rumsvärme** behålls den uppgiften
-och dess omfattning. För att uppskatta total köpt värme inklusive varmvatten
-dividerar modellen då rumsvärmen med `1 − 0,18`; den antagna tillkommande
-varmvattendelen redovisas som en osäkerhet. Om användaren anger **total köpt
-värme inklusive varmvatten** används talet oförändrat.
+och dess omfattning. För att uppskatta total köpt värme inklusive tappvarmvatten
+dividerar modellen då rumsvärmen med `1 − 0,18`. Talet 18 procent kommer från
+projektets verifierade kundexempel, inte från SMHI och inte från en generell
+regel för alla byggnader. SMHI:s guide stödjer uppdelningen i väderberoende
+värme och väderoberoende baslast, men anger ingen generell baslastandel.
+Om användaren anger **total köpt värme inklusive varmvatten** används talet
+oförändrat. Ett byte av energins omfattning rensar tidigare månadsserie för att
+förhindra att samma tal tolkas som ett annat energislag.
 
 Byggnadens balanstemperatur väljs så här:
 
@@ -111,11 +122,55 @@ Profilen 17 °C ger cirka 122 kW vid 423 MWh/år. Det ligger nära det verifiera
 - 77-procentsgränsen är härledd ur ett kundexempel och kan avvika från den effektgräns Stockholm Exergi fastställer för en annan kund.
 - Industriprocesser och andra avvikande värmelaster kräver manuell bedömning.
 
+## Utforskande Optimate-potential (lokal prototyp 2026-09-21)
+
+Den befintliga `annual_forward`-produkten och dess spärr
+`stodjer_besparing=false` är oförändrade. En separat, uttryckligen
+**preliminär scenariovy** under Stockholms årskostnad prövar Roberts antagande
+om 15, 20 och 25 procent mindre styrbar rumsvärme. Dessa procenttal är inte
+fakturaverifierade eller garanterade utfall. För varje kalendermånad gäller:
+
+`köpt värme efter = köpt värme före − styrbar rumsvärme före × scenarioandel`.
+
+Om kunden anger enbart rumsvärme används den uttryckligen angivna
+månadsserien. Om kunden anger total köpt värme skattas styrbar rumsvärme
+som `max(0, köpt månadsenergi − 18 % av total årsenergi / 12)`; resultatet
+märks som uppskattat. Den opåverkade delen — huvudsakligen schablonens
+tappvarmvatten — minskas aldrig. Separat ventilationsvärme är inte
+identifierbar från dessa uppgifter.
+
+Samma 2026-tariffmotor och prisår körs före och efter. **Debiterbar effekt,
+returtemperatur och den skattade kölddygnsvolymen hålls oförändrade** i
+huvudscenarierna. Tariffens redan energiviktade returavgift kan därmed
+ändras när månadsenergin ändras, men ingen förbättrad temperatur antas.
+Om den fasta kölddygnsvolymen inte längre ryms inom någon eftermånad
+avvisas scenariot, i stället för att skapa en ogiltig efterkostnad.
+Resultatet är en skattad *kostnadsskillnad för energiscenariot*, inklusive
+moms — inte en fullständig prognos för Optimate och inte en godkänd
+besparingsprodukt.
+
+En separat, hopfälld känslighet visar tariffkostnadens skillnad om
+**leverantören senare skulle fastställa 20 % lägre debiterbar kW** i
+20-procentsscenariot. Hypotetiskt eftervärde avrundas till heltal och
+begränsas av Stockholms 10 kW-golv. Detta är inte samma sak som 20 % lägre
+fysisk toppeffekt. Stockholm Exergi härleder debiterbar effekt ur tidigare
+vardagars energisignatur och reviderar den den 1 januari; en verklig
+effektbesparing kan därför komma senare eller utebli. Den eventuellt ändrade
+`Effektgräns −3 °C` kan inte räknas fram ur tolv månadsbelopp och hålls
+oförändrad även i denna känslighet. Beloppet adderas **inte** till
+huvudscenarierna.
+
+Innan en verifierad besparingsprodukt kan öppnas behövs minst en separat
+granskning av styrbar last, dygnsvärden/effektsignatur, avtalad effektgräns,
+tariffens omräkningsdatum och komfortutfall. Jämför verklig drift med
+likvärdigt väder och bevarat inomhusklimat; schablonens procenttal är bara
+en start för diskussion.
+
 ## Produktkrav
 
 - Hjälpen ska vara frivillig och synligt märkt som preliminär uppskattning.
 - Användaren ska kunna ersätta alla schablonvärden med fakturavärden.
 - Känd, manuellt angiven årsenergi ska behålla sin proveniens; bara de framräknade fälten märks `estimated`.
-- Kunden ska se och kunna ändra tolv värden för total månadsenergi. De ska summera till den årsenergi som tariffmotorn använder. Överskjutande energi är ett internt uppskattat tariffunderlag, inte ett eget kundfält.
+- Kunden ska se och kunna ändra tolv värden för vald energiomfattning. Enbart rumsvärme summerar till angiven rumsvärme, totalvärme till tariffens årsenergi. Tariffmotorn får alltid en separat serie för uppskattat totalt fjärrvärmeköp. Överskjutande energi är ett internt uppskattat tariffunderlag, inte ett eget kundfält.
 - Om byggnadsindata ändras ska gamla modellvärden ogiltigförklaras och rensas.
-- Resultatet får endast vara en uppskattad aktuell årskostnad och ska visa att det inte är en besparingsberäkning.
+- Den ordinarie, kontraktsstyrda tariffprodukten får endast ge en uppskattad aktuell årskostnad och ska fortsatt ange att den inte är en godkänd besparingsberäkning. Den separata Optimate-vyn ovan är uttryckligen en utforskande scenariokalkyl, inte ett upplåst produktlöfte.
