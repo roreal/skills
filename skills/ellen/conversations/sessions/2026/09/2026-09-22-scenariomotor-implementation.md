@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-22-008"
 started_at: "2026-09-22T13:44:00+02:00"
-last_updated: "2026-09-22T13:44:00+02:00"
+last_updated: "2026-09-22T15:40:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -84,16 +84,67 @@ bara lita på subagentens rapport.
   omgång (ligger utanför Neptune-scopet); flaggas för Codex att avgöra om
   den behövs innan aktivering av fler tariffer.
 
+## Rättningsrunda (Claude, `CHANGES_REQUIRED: Claude` 2026-09-22-009)
+
+Codex granskning [2026-09-22-009](../../../reviews/2026/09/2026-09-22-granskning-optimate-scenariomotor-008.md)
+krävde tre avgränsade rättningar i `optimateScenario.ts`/`optimateScenario.test.ts`,
+ovanpå granskad Neptune-HEAD `0958f61` (bas `86be35a`). Ingen annan fil
+rörd; `stockholmOptimatePotential.ts` och `besparingsvarde.ts` oförändrade
+i denna runda.
+
+1. **P1 (rumsvärmeproveniens/scenariostatus).** Nytt obligatoriskt fält
+   `OptimateScenarioInput.rumsvarmeProvenance` (`confirmed_mwh` |
+   `estimated_mwh`), validerat med samma mönster som övriga serier (nya
+   orsaker `missing_rumsvarme_provenance`/`invalid_rumsvarme_provenance`).
+   Varje scenario bär nu en egen, alltid `'preliminar'` `status` samt en
+   `antaganden`-lista (andelsantagandet + ev. not om skattad rumsvärme).
+   `efter.status.noggrannhet` nedgraderas alltid från `'exact'` till
+   `'estimated'` i scenariot — oavsett `energyProvenance`/
+   `rumsvarmeProvenance` — eftersom 15/20/25-procentsandelen alltid är ett
+   antagande. `referens.status` (den befintliga årskostnaden) är orörd.
+2. **P2 (ackumulerad övrig last).** Ny årsnivåkontroll
+   `underlag.totalMwh - rumsvarmeForeMwh < -0.001` kastar
+   `rumsvarme_overstiger_kopt_varme` innan resultatet byggs — fångar t.ex.
+   tolv månader × 0,0005 MWh överskott som var för sig klarar
+   månadstoleransen men ackumulerat ger negativ "icke styrbar last".
+   `ovrigLastForeMwh` klämd till lägst 0 som sista skyddsnät. Nytt
+   gränstest tillagt.
+3. **P2 (publik/aktiverad förmåga).** Ny, separat exporterad
+   `stodjerOptimateScenarioPubliktAktiverad(leverantorId)` — fail-closed
+   tom allowlist (`SCENARIO_PUBLIKT_AKTIVERAD_TARIFFER`), skild från den
+   interna beräkningspilotgrinden `stodjerOptimateScenario`. Sundsvall är
+   `true` för den interna piloten men `false` för den publika förmågan; ett
+   framtida UI måste kontrollera den senare. Två nya test verifierar detta
+   uttryckligen, inklusive fail-closed för `undefined`.
+
+### Oberoende verifiering (Claude)
+
+- `npx tsc --noEmit` i `neptune-marketing/`: rent.
+- `npx vitest run`: **2292/2292 test gröna, 69/69 filer** (2286 + 6 nya
+  test för rättningen).
+- `npm run eval:build`: ren `tsc` + Vite-bygge, inga nya fel (samma
+  förbyggda chunk-storleksvarning som tidigare, orelaterad).
+- `grep` bekräftar att ingen annan fil i `src/` importerar
+  `beraknaOptimateScenario`/`OptimateScenarioInput`/`stodjerOptimateScenario`
+  — ingen UI-anropare att uppdatera, i linje med Codex granskning.
+- `git diff --stat` mot Neptune-HEAD innan denna runda: endast
+  `optimateScenario.ts` och `optimateScenario.test.ts` ändrade.
+
 ## Git
 
-Neptune, lokala commits ovanpå `main@86be35a` (ingen push):
+Neptune, lokala commits (ingen push):
 
 - `e1521c9` — Expose Kostnad-led ur beraknaArsprodukt utan att ändra dess
   returtyp
 - `0958f61` — Lägg tariffneutral Optimate-scenariomotor, piloterad för
-  Sundsvall
+  Sundsvall (granskad av Codex, `neptune_reviewed_head` i granskning 009)
+- `605bddd` — Rätta scenarioprovenienss, ackumulerad lastgräns och publik
+  pilotgrind (denna rättningsrunda, ovanpå `0958f61`)
 
 ## Ändringslogg
 
 - 2026-09-22 13:44 — Session skapad, implementation granskad och
   verifierad, `REVIEW_READY: Codex` skrivet i `conversations/index.md`.
+- 2026-09-22 15:40 — Rättningsrunda för `CHANGES_REQUIRED: Claude`
+  (2026-09-22-009) genomförd och oberoende verifierad, ny
+  `REVIEW_READY: Codex` skriven i `conversations/index.md`.
