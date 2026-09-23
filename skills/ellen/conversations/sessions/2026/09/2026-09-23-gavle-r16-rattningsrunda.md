@@ -1,14 +1,14 @@
 ---
 session_id: "2026-09-23-006"
 started_at: "2026-09-23T12:00:00+02:00"
-last_updated: "2026-09-23T13:22:20+02:00"
+last_updated: "2026-09-23T14:32:35+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: review-ready
-topics: ["gavle-energi-gavle-2026", "R16", "marginal_annual_volume_discount", "CHANGES_REQUIRED"]
+status: activation-ready
+topics: ["gavle-energi-gavle-2026", "R16", "marginal_annual_volume_discount", "APPROVED_FOR_ACTIVATION", "ACTIVATION_READY"]
 source: agent-session
 transcript_fidelity: summary
 ---
@@ -338,3 +338,87 @@ agentrapporterna:
   innehåll). Granskning:
   [2026-09-23-slutomgranskning-gavle-r16-signal-008.md](../../../reviews/2026/09/2026-09-23-slutomgranskning-gavle-r16-signal-008.md)
   (signal 009), fynd 3.
+
+## Lokal aktivering (signal 011, `APPROVED_FOR_ACTIVATION: Claude`)
+
+Slutgranskningen
+[2026-09-23-slutgranskning-gavle-r16-signal-010.md](../../../reviews/2026/09/2026-09-23-slutgranskning-gavle-r16-signal-010.md)
+(signal 011) godkände lokal aktivering av exakt `gavle-energi-gavle-2026`
+mot de granskade HEAD:arna skills@7940f36, enkey-agents-branch
+`gavle-r16-volume-discount`@2638040, neptune_academy-branch
+`gavle-r16-volume-discount`@ffce709 (samtliga verifierade identiska med
+den lokala arbetskopian innan något ändrades). Ingen push godkänd i
+detta steg.
+
+- `2026-09-23T14:16:30+02:00` – **Katalogaktivering (skills@9ad2bee,
+  7940f36→9ad2bee).** `investigation` för `gavle-energi-gavle-2026`
+  ändrad från `{"status": "utreds", ...}` till `null` — den verkliga
+  publiceringsspärren i `tools/tariffer/katalog.py`s `grind()`.
+  `production_ready` kvarstår medvetet `false` (äldre, icke styrande
+  metadata; `godkanda()`/`grind()` läser aldrig fältet). `issues[0]` och
+  `resolved_information_requests[R16].resolution_sv` rättade i samma
+  commit: båda beskrev tidigare aktiveringssteget felaktigt som
+  `production_ready: false → true` — rätt beskrivning är
+  `investigation.status: utreds → investigation: null`. Ny
+  `change_log`-post `0.1.34` (`schema_version` 0.1.33→0.1.34). Samma
+  korrigering (fel `production_ready`-beskrivning → rätt
+  `investigation`-beskrivning) tillagd som daterade rättelser i
+  `verifieringslista-fjarrvarmebolag.md`, `batchplan-v22.md` och
+  `tariffinventering-v22.md` (§8-tabellen synkad till **75 implemented /
+  2 ready / 14 blocked / 1 not_applicable av 92**; Gävles per-rad-post i
+  §3–4 uppdaterad från `blocked_external_info` till
+  `implemented_source_verified_annual`, samma mönster som tidigare
+  batchaktiveringar). Bevisat mekaniskt: `godkanda()`-ID-diffen mellan
+  7940f36 och 9ad2bee är exakt `{+gavle-energi-gavle-2026}`, inga andra
+  ID:n tillagda eller borttagna. `godkanda(katalog)` 73 → 74 (86 fysiska
+  katalograder oförändrat).
+- `2026-09-23T14:17:35+02:00` – **enkey-agents-testsvit synkad
+  (branch `gavle-r16-volume-discount`@a32e540, 2638040→a32e540).**
+  Samtliga pinnade checkpoint-asserts som läser den riktiga, incheckade
+  katalogfilen direkt bumpade i tolv testfiler (godkanda-antal 73→74,
+  skarp produkträkning 75→76, medlemsmängd 46→47, "utreds"-räkning 9→8,
+  `_FORVANTAD_KATALOG_SHA256` uppdaterad till
+  `eb8cf397b97aeaf55f667245df448cf051f3715a39479351bc304f299d0bafa1`,
+  fyra dispositionsprojektionstupler i `test_dispositionsgrind_inventering.py`
+  synkade mot den nya §8-tabellen). `gavle-energi-gavle-2026` tillagd i
+  `KONTRAKTSGATADE` i `test_faktura_manadspriser.py` (tariffen bär
+  `contract_required: true`, samma mönster som övriga kontraktsspärrade
+  rader). `test_generera_isolerad_gavle_r16.py`s
+  `test_ordinarie_katalogvag_forblir_opaverkad` uppdaterad: Gävle ingår
+  nu i det skarpa urvalet på riktigt (inte längre ett bevis på att den
+  SAKNAS). Full `tools/tariffer/`-svit: **2270 passed, 6 skipped.**
+- `2026-09-23T14:32:35+02:00` – **neptune_academy regenererad och
+  E2E-flyttad (branch `gavle-r16-volume-discount`@72cc8e9→32d0428,
+  ffce709→72cc8e9→32d0428).** `tariffer.generated.ts` regenererad via
+  `python -m tools.tariffer.generera` med källkatalogens sha256 och
+  commit-hash (`9ad2bee`) i proveniensraden — 76 skarpa produkter (74 ur
+  katalogen + 2 leverantörsfiler). Tre pinnade produkträknings-asserts
+  (`tariffer.generated.batch5b/5c/6.test.ts`) bumpade 75→76. Scenario
+  31/32 i `e2e/kalkylator.smoke.mjs` — tidigare bakom
+  `E2E_ISOLERAD_GAVLE_R16=1` — körs nu ovillkorligt, både i ordinarie
+  `npm run test:e2e` och i `gavle-r16-isolated-e2e.mjs`; den isolerade
+  generatorn/grinden lever kvar oförändrad som regressionskontroll av
+  generatorn själv.
+
+  **Oberoende Claude-verifiering** (körd själv, inte bara agentrapport):
+  `npx tsc --noEmit` rent. `npx vitest run`: **72 filer, 2356 passed.**
+  `npm run build`: ren, spårad `dist/` återställd till branch-HEAD efter
+  varje körning (`git checkout -- neptune-marketing/dist`), `git diff
+  --check` rent. Ordinarie `npm run test:e2e` (skarp data, utan
+  `E2E_ISOLERAD_GAVLE_R16`): 32 scenarier gröna inklusive Scenario 31
+  (**124 785,275 kr** inkl. moms, leverantörens exakta tolvmånadersserie)
+  och Scenario 32. `npm run test:e2e:gavle-r16-isolated`: samma
+  Scenario 31/32 gröna i den tillfälliga, isolerade kopian; isolerad
+  E2E-grinden själv oförändrad. Python `python3 -m pytest
+  tools/tariffer/ -q`: **2270 passed, 6 skipped** (omkört efter
+  neptune-regenereringen). Rå EML-filen med personuppgifter
+  (`GEAB volymavdrag fjärrvärme.eml`) förblev ospårad i samtliga tre
+  repon under hela körningen.
+
+  Ingen push, merge, rebase, reset eller historikomskrivning. Orelaterade
+  ändringar i skills-repot (tariffprislistor, `.eml`-underlag, andra
+  leverantörsfrågor, `AGENTS.md`/`SKILL.md`/`claude.md`,
+  `conversations/automation/`) och `../milesight`-submodulen lämnade
+  helt orörda. Session markerad `activation-ready`. Nästa signal:
+  `ACTIVATION_READY: Codex` — se ny toppost i `conversations/index.md`.
+  executed_by: Claude; dispatched_by: agent-bridge
