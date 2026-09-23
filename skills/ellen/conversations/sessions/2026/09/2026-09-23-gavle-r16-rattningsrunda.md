@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-23-006"
 started_at: "2026-09-23T12:00:00+02:00"
-last_updated: "2026-09-23T14:32:35+02:00"
+last_updated: "2026-09-23T14:43:33+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: activation-ready
+status: activation-ready-pending-codex
 topics: ["gavle-energi-gavle-2026", "R16", "marginal_annual_volume_discount", "APPROVED_FOR_ACTIVATION", "ACTIVATION_READY"]
 source: agent-session
 transcript_fidelity: summary
@@ -422,3 +422,63 @@ detta steg.
   helt orörda. Session markerad `activation-ready`. Nästa signal:
   `ACTIVATION_READY: Codex` — se ny toppost i `conversations/index.md`.
   executed_by: Claude; dispatched_by: agent-bridge
+
+## Rättningsrunda 2026-09-23 (signal 013, `CHANGES_REQUIRED: Claude`, Codex granskning av signal 012)
+
+Codex granskning [2026-09-23-granskning-gavle-r16-aktivering-signal-012.md](../../../reviews/2026/09/2026-09-23-granskning-gavle-r16-aktivering-signal-012.md)
+godtog själva aktiveringen (Gävle tillkommer, 73→74 godkända, Scenario
+31–32 gröna) men fann att fyra nytillagda statusrader från signal 011
+använde en felaktig villkorad total **75 implemented / 1 ready / 16
+blocked av 92**, trots att den mekaniska dispositionsgrinden
+(`test_dispositionsgrind_inventering.py`) och `tariffinventering-v22.md`
+§8-tabellen korrekt visar **75 implemented / 2 ready / 14
+blocked_external_info / 1 not_applicable av 92** — Gävle flyttar enbart
+från `blocked_external_info` till `implemented`; `ready_to_implement`
+ligger oförändrat kvar på 2.
+
+**Åtgärdat (append-only, ingen historisk signal skriven om):**
+
+- Fyra daterade rättelsestycken tillagda direkt efter de felaktiga
+  texterna i `batchplan-v22.md`, `tariffinventering-v22.md` (§5-matrisen;
+  §8-tabellen var redan korrekt), `verifieringslista-fjarrvarmebolag.md`
+  och en ny `change_log`-post `0.1.35` i `optimate-fjarrvarme-2026.json`
+  (`schema_version` 0.1.34 → 0.1.35). Signal 011:s ursprungliga text
+  lämnad orörd i alla fyra filer.
+- Ingen ny permanent disposition-grind behövdes: `test_dispositionsgrind_inventering.py::test_skarp_disposition_ar_nu_74_2_15_1_efter_finspang_normalisering`
+  parsar redan §3–§5 direkt ur dokumentet (oberoende av de fyra
+  felaktiga prosatexterna) och binder exakt `(75, 2, 14, 1)` — dubblerar
+  inte en redan identisk assertion.
+- Katalogens SHA-256 räknad på nytt efter JSON-ändringen:
+  `377cfecdf4a7e24664111e7bf6bf50c0efdfbd153a561d2f2c17dedb4191145f`.
+  `enkey-agents/tools/tariffer/tests/test_katalog_proveniens.py`s
+  `_FORVANTAD_KATALOG_SHA256` synkad i samma commit.
+  `neptune_academy/neptune-marketing/src/data/tariffer.generated.ts`
+  regenererad mot skills@`2cdcfd0827ee5d188ac2d50627db0dbaa6fe4038`; diff
+  visar **endast provenienshuvudets sha256/commit-rad ändrad** (en rad),
+  produktkroppen byte-identisk.
+
+**Slut-HEAD:ar:** skills `main@2cdcfd0827ee5d188ac2d50627db0dbaa6fe4038`
+(f105e30→2cdcfd0), `enkey-agents`-branch `gavle-r16-volume-discount@451c85a0e19833e6607e109f44a30c0d54ef2815`
+(a32e540→451c85a, lokal `main@2e30bb2` orörd), `neptune_academy`-branch
+`gavle-r16-volume-discount@3cc527e895f95684d1aed9e553566b9578f075ca`
+(32d0428→3cc527e, lokal `main@605bddd` orörd).
+
+**Oberoende Claude-verifiering:** riktade `python3 -m pytest
+tools/tariffer/tests/test_katalog_proveniens.py
+tools/tariffer/tests/test_dispositionsgrind_inventering.py -q` — **27
+passed**. Full `python3 -m pytest tools/tariffer/ -q` — **2270 passed, 6
+skipped** (katalogens gränsyta ändrad, så full svit kördes). `npx tsc
+--noEmit` rent i neptune-marketing. `npx vitest run` — **72 filer, 2356
+passed.** `git diff --check` rent i alla tre repon; produktarbetskopiorna
+rena (endast de avsedda filerna ändrade, se `git status` per repo).
+`test_synk.py::test_genererad_ts_matchar_kallan` skippad som väntat (den
+jämför mot lokal `neptune_academy main`, inte den isolerade branchen —
+oförändrat beteende sedan tidigare rundor).
+
+Ingen pris-, motor-, policy-, UI- eller annan tariffändring. Ingen
+aktivering utöver den redan granskade Gävle-raden. Ingen push, merge,
+rebase, reset eller historikomskrivning. Orelaterade ändringar i
+skills-repot och `../milesight`-submodulen lämnade helt orörda. Nästa
+signal: `ACTIVATION_READY: Codex` — se ny toppost i
+`conversations/index.md`. executed_by: Claude; approved_by: Codex
+(väntande denna signal); dispatched_by: agent-bridge
