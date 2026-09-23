@@ -482,3 +482,60 @@ skills-repot och `../milesight`-submodulen lämnade helt orörda. Nästa
 signal: `ACTIVATION_READY: Codex` — se ny toppost i
 `conversations/index.md`. executed_by: Claude; approved_by: Codex
 (väntande denna signal); dispatched_by: agent-bridge
+
+## 2026-09-23 — Pushförsök signal 015: delvis blockerat lokalt (BLOCKED: Codex)
+
+Signal `2026-09-23-015` (`APPROVED_FOR_PUSH: Claude`, godkänd Codex, se
+[slutgranskningen](../../../reviews/2026/09/2026-09-23-slutgranskning-gavle-r16-aktivering-signal-014.md))
+verifierades fullständigt innan push: unik toppost i `index.md`, signal-015-
+committen `4d43b0a53838785ee0ed5d8bf414943d80b0ce68` har exakt förälder
+`ce2e5f875e0c73a7bd8570bab2c3bc6412cb462d`, produkt-HEAD:arna är exakt
+`451c85a0e19833e6607e109f44a30c0d54ef2815` (enkey-agents,
+`gavle-r16-volume-discount`) och `3cc527e895f95684d1aed9e553566b9578f075ca`
+(neptune_academy, `gavle-r16-volume-discount`), och `git ls-remote origin
+main` bekräftade alla tre `verified_origin_main_heads` exakt
+(skills `a2a33acd250809bfb32a581e609365da65130fd0`, enkey-agents
+`716d2e8816388b10bac892d29b68682d12b1d9d0`, neptune_academy
+`a4eb519e06bed0eaaa62719b87ee9e330b071529`). Diffstat mot `origin/main` för
+båda produktbranchema innehöll uteslutande avsedda kod-/testfiler, ingen rå
+EML eller orelaterat innehåll.
+
+**Faktiskt pushutfall:**
+
+- **skills**: `git push origin main` lyckades. `origin/main`
+  `a2a33ac → 4d43b0a`. Signal-015-committen och slutgranskningen är nu på
+  remote.
+- **enkey-agents**: `git push origin 451c85a:main` **blockerades lokalt**
+  av Claude Codes egen verktygsbehörighets-klassificerare ("Stage 2
+  classifier error — blocking based on stage 1 assessment"), inte av
+  GitHub eller ett repogrind. Ingen commit pushad; `origin/main` kvarstår
+  på `716d2e88`.
+- **neptune_academy**: `git push origin 3cc527e:main` **blockerades
+  lokalt** av samma klassificerare, denna gång med den uttryckliga
+  motiveringen "[Data Exfiltration]". Ingen commit pushad; `origin/main`
+  kvarstår på `a4eb519e`.
+
+Enligt körande instruktion ska en sådan lokal verktygsspärr inte kringgås
+med alternativa metoder; körningen ska stanna och rapportera till Robert.
+Detta är alltså **inte** ett Codex-lösbart scope- eller kvalitetsproblem
+och **inte** en avvikelse i det granskade underlaget — samtliga tre
+verifieringssteg i den bindande pushordern passerade. Blockeraren är en
+lokal exekveringsspärr i den aktuella Claude Code-sessionen som kräver att
+Robert antingen själv kör de två resterande pushkommandona, eller
+uttryckligen justerar Bash-behörighetsreglerna så att `git push` mot
+`enkey-agents` och `neptune_academy` tillåts.
+
+**Resterande, ej utförda kommandon (oförändrade sedan granskningen):**
+
+```
+cd enkey-agents && git push origin 451c85a0e19833e6607e109f44a30c0d54ef2815:main
+cd neptune_academy && git push origin 3cc527e895f95684d1aed9e553566b9578f075ca:main
+```
+
+Inget skills-pushkvitto för hela kedjan skrivs eftersom endast 1 av 3 repon
+faktiskt pushades — ett kvitto som påstod tre lyckade pushar hade varit
+felaktigt. Nästa signal: `BLOCKED: Codex` (ny toppost i
+`conversations/index.md`), väntar på antingen Roberts manuella push av de
+två resterande repona eller en behörighetsjustering, därefter kan en
+korrekt, fullständig pushkvittosignal skrivas. executed_by: Claude;
+dispatched_by: agent-bridge
