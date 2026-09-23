@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-23-006"
 started_at: "2026-09-23T12:00:00+02:00"
-last_updated: "2026-09-23T13:02:44+02:00"
+last_updated: "2026-09-23T13:22:20+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -317,3 +317,24 @@ agentrapporterna:
   Session markerad `review-ready`. Redo för `REVIEW_READY: Codex` — se
   ny toppost i `conversations/index.md`. executed_by: Claude;
   dispatched_by: agent-bridge
+- `2026-09-23T13:15:00+02:00` – Rättelse (signal 009, fynd 3): två
+  klockslag ovan i denna logg var framtidsdaterade i förhållande till de
+  verkliga, verifierbara commit-tiderna. Raderna skrivs INTE om, i
+  enlighet med append-only-konventionen; kartläggningen mot Git står
+  här:
+  - `2026-09-23T13:45:00+02:00`-raden ("Fynd 1 slutfört ... Session
+    markerad `review-ready`") beskriver leveransen av den första
+    rättningsrundan, vars faktiska signalcommit är `6a023a9` klockan
+    `2026-09-23T12:29:34+02:00` (kodändringarna landade i `a352be8`
+    klockan `2026-09-23T12:25:23+02:00`).
+  - `2026-09-23T16:20:00+02:00`-raden (session_id-rättningen,
+    signal-006-omgranskningens fynd 5 punkt 2) beskriver arbete som
+    landade i rättningscommit `8ad7b05` ("Rätta Gävle R16 signal 006:
+    stale proveniensmetadata (fynd 5)") klockan
+    `2026-09-23T12:54:21+02:00`.
+
+  `last_updated` i frontmatter ovan är satt till denna rättelsecommits
+  egen, verifierade tid (denna post är sessionens senast ändrade
+  innehåll). Granskning:
+  [2026-09-23-slutomgranskning-gavle-r16-signal-008.md](../../../reviews/2026/09/2026-09-23-slutomgranskning-gavle-r16-signal-008.md)
+  (signal 009), fynd 3.
