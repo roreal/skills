@@ -53,8 +53,9 @@
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
-      "utreds": 4,
-      "lost": 1
+      "utreds": 3,
+      "lost": 1,
+      "answered": 1
     },
     "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
   },
@@ -3920,13 +3921,14 @@
           {
             "id": "1",
             "source_interval": "Alla",
-            "fixed": null,
+            "fixed": 0,
             "variable": 41.63
           }
         ],
         "billing_basis_method": "Daglig energi vid -10 °C från regression för vardagar november–mars föregående vinter.",
-        "monthly_proration": null,
-        "formula": "fixed + variable * billing_basis"
+        "monthly_proration": "days_in_month/days_in_year",
+        "formula": "fixed + variable * billing_basis",
+        "kw_faktor": 1.0
       },
       "adjustments": [
         {
@@ -3965,8 +3967,7 @@
         }
       ],
       "issues": [
-        "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-        "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll."
+        "Marginaltrappans motorimplementation (marginal_annual_volume_discount) saknas ännu i Python- och TypeScriptmotorn; katalogtypen är deklarerad men okänd för justeringsdispatchen fram till en separat granskad implementation."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -3974,13 +3975,10 @@
       "raw_data_validation": "single_pass_extraction_with_targeted_visual_checks",
       "investigation": {
         "status": "utreds",
-        "request_ids": [
-          "R16"
-        ],
+        "request_ids": [],
         "conditions_sv": [
-          "Månadsperiodisering saknas eller behöver verifieras; årsbelopp får inte automatiskt delas med 12.",
-          "null i fast avgift betyder ej extraherad/separat angiven, inte verifierad noll.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A3 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Villkoren säger ackumulerat kalenderår med avdrag varje månad, men inte om tröskelmånaden får avdrag på hela, marginaldelen eller först nästa månad. Ny fråga R16 skapad och kopplad till denna tariff."
+          "Marginaltrappans motorimplementation (marginal_annual_volume_discount) saknas ännu i Python- och TypeScriptmotorn; katalogtypen är deklarerad men okänd för justeringsdispatchen fram till en separat granskad implementation.",
+          "Källrevision 2026-09-23 (se Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md): Gävle Energi har besvarat A3/R16. Avdraget är marginalt per kalenderårsintervall, tröskelmånaden delas mellan intervall, ingen retroaktiv omräkning, avdrag betalas månadsvis. Fast avgift verifierad till 0 kr, kapacitetspriset periodiseras per kalenderdag och debiteringsgrunden är redan kWh/dygn (kw_faktor 1.0). Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de blockerade dispositionerna."
         ]
       }
     },
@@ -11787,19 +11785,6 @@
       "source_id": "web-review-hassleholm-model",
       "status": "utreds",
       "confirmed_still_open_on": "2026-09-17"
-    },
-    {
-      "id": "R16",
-      "tariff_ids": [
-        "gavle-energi-gavle-2026"
-      ],
-      "category": "formula_missing",
-      "question_sv": "Hur beräknas volymavdraget den månad ett ackumulerat kalenderårsband passeras: på hela månadens volym, bara den marginella delen över tröskeln, eller först påföljande månad? Ändras tidigare månaders debitering retroaktivt?",
-      "source_id": "web-review-gavleenergi-2026-09-17",
-      "status": "utreds",
-      "created_on": "2026-09-17",
-      "created_by_proposal": "conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md",
-      "corresponds_to_email": "A3 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md"
     }
   ],
   "change_log": [
@@ -12076,9 +12061,29 @@
         "Katalogen har fortsatt 86 fysiska poster. Efter denna aktivering ger godkanda(katalog) 73 (61 tidigare godkanda + dessa tolv); dispositionen (tariffinventering-v22.md) blir 74 implemented / 2 ready / 16 blocked av 92.",
         "Inga andra tariffer, inklusive Stockholm Exergi/Batch 7, aktiverade i denna revision."
       ]
+    },
+    {
+      "date": "2026-09-23",
+      "revision": "0.1.30",
+      "changes": [
+        "Källnormalisering (ingen aktivering, ingen prisändring) för gavle-energi-gavle-2026: R16 flyttad från remaining_information_requests till resolved_information_requests efter Gävle Energis bekräftelse att kalenderårsvolymavdraget är marginalt, tröskelmånaden delas mellan intervall och ingen retroaktiv omräkning görs (se Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md). remaining_information_requests är efter detta exakt R02, R03, R08.",
+        "Gävles stale kapacitetsmetadata rättad enligt samma källrevision: capacity.bands[0].fixed null → 0 (ingen separat fast avgift), monthly_proration null → days_in_month/days_in_year, samt explicit kw_faktor 1.0 (leverantörens debiteringsgrund är redan kWh/dygn). Ingen energy-, band-id- eller adjustments-ändring.",
+        "Gävles investigation.status kvarstår utreds och production_ready kvarstår false: motorimplementationen av katalogtypen marginal_annual_volume_discount (redan deklarerad i adjustments[]) och en separat granskad aktiveringsrunda krävs fortfarande. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92; inom blocked minskar externt obesvarade från 5 till 4 och källösta implementationsposter ökar från 10 till 11."
+      ]
     }
   ],
   "resolved_information_requests": [
+    {
+      "id": "R16",
+      "member_ids": [
+        "gavle-energi"
+      ],
+      "category": "formula_missing",
+      "question_sv": "Hur beräknas volymavdraget den månad ett ackumulerat kalenderårsband passeras: på hela månadens volym, bara den marginella delen över tröskeln, eller först påföljande månad? Ändras tidigare månaders debitering retroaktivt?",
+      "source_id": "web-review-gavleenergi-2026-09-17",
+      "status": "answered",
+      "resolution_sv": "Gävle Energi bekräftar att avdraget är marginalt: bara volymen över respektive kalenderårsgräns i tröskelmånaden får avdrag, tidigare månader räknas inte om retroaktivt, och avdraget betalas ut månadsvis. Leverantörens exempel (94,57 MWh ackumulerat efter april, 9,65 MWh i maj) ger 4,22 rabatt-MWh i maj och 93 rabatt-MWh för helåret 193 MWh (3 255 kr avdrag exkl. moms). Se den sanitiserade källbedömningen Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md (originalmejlet innehåller personuppgifter och är inte committat). Frågan är sakligt löst; en separat, granskad motor-/produktimplementation krävs fortfarande innan aktivering."
+    },
     {
       "id": "R01",
       "member_ids": [

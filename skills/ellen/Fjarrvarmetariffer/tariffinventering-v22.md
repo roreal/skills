@@ -5032,6 +5032,22 @@ innehåller efter revisionen exakt R02, R03, R08, R16, R17.
 > inte sex; Finspångs rad räknas i stället i den skarpa `not_applicable`-kolumnen i §5/§8.
 > Ingen annan rad i denna matris ändras av detta.
 
+> **Rättelse 2026-09-23 (källnormalisering, `APPROVED_FOR_IMPLEMENTATION: Claude`,
+> session `2026-09-23-003`):** rad 26 ovan (Gävle Energi, fråga R16/A3) är besvarad av
+> leverantören 2026-09-23 och normaliserad till `source_resolved_implementation_pending`
+> — se den sanitiserade bedömningen
+> [`2026-09-23-bedomning-gavle-volymavdrag.md`](Svar%20på%20frågor/2026-09-23-bedomning-gavle-volymavdrag.md)
+> och `optimate-fjarrvarme-2026.json` change_log `0.1.30`. Avdraget är marginalt per
+> kalenderårsintervall, tröskelmånaden delas mellan intervall och ingen retroaktiv
+> omräkning görs. Den mekaniska 28-radersmatrisen ovan fryser ett tidigare skede och
+> skrivs INTE om i efterhand — den är historik, inte en levande räkning. Den skarpa,
+> aktuella `external_answer_required`-mängden är nu fyra poster (rad 23, 24, 25, 27:
+> Hässleholm x2, HEMAB, Mälarenergi gruppanslutna småhus), inte fem; Gävles rad räknas
+> i stället bland `source_resolved_implementation_pending`. `production_ready` och
+> `investigation.status` för Gävle är oförändrade (`false`/`utreds`) — en separat,
+> granskad motor-/produktimplementation och aktiveringsrunda krävs fortfarande innan
+> aktivering. Ingen annan rad i denna matris ändras av detta.
+
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
 samtliga åtta Batch 5c-bastariffers (§3–4) `Disposition`-kolumn flyttades från
