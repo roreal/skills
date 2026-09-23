@@ -130,6 +130,15 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 > och den skarpa dispositionen till 75 implemented / 1 ready / 16 blocked av
 > 92. Raderna ovan är historik och skrivs inte om.
 
+> **Rättelse 2026-09-23 (signal 013, `CHANGES_REQUIRED: Claude`, Codex
+> granskning av signal 012):** rättelsen ovan (signal 011) angav felaktigt
+> **75 implemented / 1 ready / 16 blocked av 92**. Den korrekta, skarpa
+> dispositionen är **75 implemented / 2 ready / 14 blocked_external_info /
+> 1 not_applicable av 92** — se `tariffinventering-v22.md` §8. Gävle
+> flyttar enbart från `blocked_external_info` till `implemented`;
+> `ready_to_implement` är oförändrat 2. Raderna ovan (signal 011) skrivs
+> inte om.
+
 ### Habo Energi
 
 - [ ] **Habo** (`habo-energi-habo-2026`)

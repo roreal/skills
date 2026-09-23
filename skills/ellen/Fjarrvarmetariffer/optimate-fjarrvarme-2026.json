@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.34",
+  "schema_version": "0.1.35",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-23",
@@ -12113,6 +12113,14 @@
         "issues[0] och resolved_information_requests[R16].resolution_sv rattade i samma runda: bada beskrev tidigare aktiveringssteget felaktigt som production_ready false -> true. Beskriver nu korrekt den faktiska andringen investigation.status: utreds -> investigation: null. Ingen sakuppgift, kalla eller siffra i ovrigt andrad.",
         "Katalogen har fortsatt 86 fysiska poster. Fore denna aktivering gav godkanda(katalog) 73 (Batch 8-nivan). Efter denna aktivering ger godkanda(katalog) 74; dispositionen blir 75 implemented / 1 ready / 16 blocked av 92.",
         "Ingen annan tariff aktiverad eller andrad i denna revision."
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "revision": "0.1.35",
+      "changes": [
+        "Rattningsrunda (signal 013, CHANGES_REQUIRED: Claude, Codex granskning av signal 012 / ACTIVATION_READY: Codex): revision 0.1.34s changes-rad ovan angav felaktigt dispositionen 75 implemented / 1 ready / 16 blocked av 92 efter Gavles aktivering. Den mekaniska dispositionsgrinden (test_dispositionsgrind_inventering.py) och tariffinventering-v22.md #8-tabellen visar korrekt 75 implemented / 2 ready / 14 blocked_external_info / 1 not_applicable av 92 -- Gavle flyttar enbart fran blocked_external_info till implemented; ready_to_implement ligger oforandrat kvar pa 2. Revision 0.1.34s text skrivs inte om.",
+        "Endast denna changes-rad och schema_version/revision-provenienshuvudet andrat. Ingen pris-, kapacitetsband-, effekt-, adjustments-, kalla-, investigation- eller contract_required-andring. production_ready (false) och investigation (null for gavle-energi-gavle-2026) OFORANDRADE. Katalogen har fortsatt 86 fysiska poster och godkanda(katalog) ar fortsatt 74; ingen tariff aktiverad eller deaktiverad i denna revision."
       ]
     }
   ],

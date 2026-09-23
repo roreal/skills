@@ -5073,6 +5073,16 @@ innehåller efter revisionen exakt R02, R03, R08, R16, R17.
 > disposition blir 75 implemented / 1 ready / 16 blocked av 92. Ingen annan
 > rad i denna matris ändras av detta.
 
+> **Rättelse 2026-09-23 (signal 013, `CHANGES_REQUIRED: Claude`, Codex
+> granskning av signal 012):** rättelsen ovan (signal 011) angav felaktigt
+> **75 implemented / 1 ready / 16 blocked av 92**. Den korrekta, skarpa
+> dispositionen efter Gävles aktivering är **75 implemented / 2 ready / 14
+> blocked_external_info / 1 not_applicable av 92**, i linje med §8-tabellen
+> ovan — Gävle flyttar enbart från `blocked_external_info` till
+> `implemented`; `ready_to_implement` är oförändrat 2. Rättelsen ovan
+> (signal 011) skrivs inte om. Ingen annan rad i denna matris ändras av
+> detta.
+
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
 samtliga åtta Batch 5c-bastariffers (§3–4) `Disposition`-kolumn flyttades från

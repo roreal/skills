@@ -1432,6 +1432,16 @@ i denna lista minskar därmed från 26 till 24.
 > implemented / 1 ready / 16 blocked av 92. Ingen annan rad i denna
 > batchplan ändras av detta.
 
+> **Rättelse 2026-09-23 (signal 013, `CHANGES_REQUIRED: Claude`, Codex
+> granskning av signal 012):** rättelsen ovan (signal 011) angav felaktigt
+> **75 implemented / 1 ready / 16 blocked av 92**. Den mekaniska
+> dispositionsgrinden och `tariffinventering-v22.md` §8-tabellen visar
+> korrekt **75 implemented / 2 ready / 14 blocked_external_info / 1
+> not_applicable av 92** — Gävle flyttar enbart från `blocked_external_info`
+> till `implemented`; `ready_to_implement` ligger oförändrat kvar på 2.
+> Rättelsen ovan (signal 011) skrivs inte om. Ingen annan rad i denna
+> batchplan ändras av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |
