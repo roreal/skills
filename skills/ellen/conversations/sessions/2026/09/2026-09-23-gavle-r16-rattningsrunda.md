@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-23-006"
 started_at: "2026-09-23T12:00:00+02:00"
-last_updated: "2026-09-23T13:45:00+02:00"
+last_updated: "2026-09-23T13:02:44+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -261,3 +261,59 @@ agentrapporterna:
   till `session_id: "2026-09-23-006"` för att matcha indexet. Äldre
   indexrader (inklusive `2026-09-23-005`/`-006`) skrivs INTE om, i
   enlighet med append-only-konventionen.
+- `2026-09-23T13:02:44+02:00` – Samtliga fem fynd i omgranskningen
+  [2026-09-23-omgranskning-gavle-r16-signal-006.md](../../../reviews/2026/09/2026-09-23-omgranskning-gavle-r16-signal-006.md)
+  (signal 007, `CHANGES_REQUIRED: Claude`) åtgärdade på samma tre
+  isolerade arbetskopior. Slut-HEAD:ar: skills `main@8ad7b05`
+  (`cb973b3` → `8ad7b05`), enkey-agents
+  `gavle-r16-volume-discount@2638040` (`ba29fd5` → `2638040`, lokal
+  `main@2e30bb2` orörd), neptune_academy
+  `gavle-r16-volume-discount@1fe24bb` (`1214ece` → `1fe24bb`, lokal
+  `main@605bddd` orörd).
+
+  Fynd 1: ny generisk (icke-Stockholmsbunden) synlig tolvmånaders-
+  inmatning i `KalkylatorPage.tsx`, synlig när tariffens `justeringar`
+  innehåller `marginal_annual_volume_discount`; matar samma
+  `Tariffberakningsunderlag.manadsEnergiMwh`-kanal som Stockholms fält
+  redan använder, inget nytt justeringsfält. Scenario 31 fyller
+  leverantörens exakta tolv månader och renderar **124 785,275 kr inkl.
+  moms** genom hela produktionskedjan (tidigare ~125 320 kr via
+  schablonprofilen). Fynd 2: `marginalArsvolymrabatt` i `fjarrvarme.ts`
+  kräver nu exakt nyckelmängden `type/unit/lower_bounds_MWh/rates/
+  accumulation`, rätt `type`/`unit === "SEK/MWh"`/
+  `accumulation === "calendar_year"` innan aritmetik; fem nya
+  schematest. Fynd 3: katalogens faktiska SHA-256 (efter fynd 5:s
+  metadataändring) är `f3766d9e824e99bc962e5733a32e16bd655e16dc1a201391
+  7bdbe912f860b583`; `tariffer.generated.ts` regenererad, diff visar
+  ENDAST provenienshuvudets sha256/commit-rad ändrad (produktkroppen
+  byte-identisk, 73 skarpa rader, ingen Gävle);
+  `test_katalog_proveniens.py` synkad. Fynd 4: `gavleR16RawData.
+  driftprov.test.ts` följer nu samma `ELLEN_ENKEY_AGENTS_SOKVAG`/
+  `ELLEN_PYTHON`-kontrakt med fail-closed versionskontroll (≥3.10) som
+  den isolerade E2E-wrappern; verifierat grönt utan beroende av den
+  temporära symlänken. Fynd 5: `resolved_information_requests[R16].
+  resolution_sv` rättad till att enbart en aktiveringsrunda återstår
+  (`schema_version` 0.1.32→0.1.33); sessionsfilens `session_id` rättad
+  till 006 (se föregående post).
+
+  **Oberoende Claude-verifiering** (denna sessions ägare körde själv,
+  litade inte blint på delegerad agentrapport): `git log`/`git diff
+  --stat`/`git status` i alla tre repon mot respektive granskad HEAD —
+  matchar exakt, inga orelaterade filer rörda, skills-repots
+  förexisterande smutsiga status oförändrad. enkey-agents
+  `python3 -m pytest tools/tariffer/tests -q`: **2270 passed, 6
+  skipped**. Dispositions-/proveniensgrind: **27 passed**. neptune_academy
+  `npx vitest run`: **72 filer, 2356 passed**. `npx tsc --noEmit`: rent.
+  Riktat driftprov med explicita env-vars (ingen symlänksberoende): **2
+  passed**. `npx vitest run` på schemakontrolltestet: **56 passed**.
+  Isolerad E2E omkörd: Scenario 31 renderar exakt **124 785,275 kr**.
+  Ordinarie E2E (30 scenarier): alla gröna, Gävle fortsatt exkluderad
+  från skarpt UI. Katalogens SHA-256 beräknad färskt med `shasum -a
+  256`, matchar den regenererade filens provenienshuvud exakt.
+  `production_ready: false` och `investigation.status: "utreds"`
+  oförändrade i alla tre repon.
+
+  Ingen aktivering, ingen merge/rebase/historikomskrivning, ingen push.
+  Session markerad `review-ready`. Redo för `REVIEW_READY: Codex` — se
+  ny toppost i `conversations/index.md`. executed_by: Claude;
+  dispatched_by: agent-bridge
