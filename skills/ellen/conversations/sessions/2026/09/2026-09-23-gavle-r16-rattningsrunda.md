@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-23-005"
 started_at: "2026-09-23T12:00:00+02:00"
-last_updated: "2026-09-23T12:40:00+02:00"
+last_updated: "2026-09-23T13:45:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: partial-completion-blocker-flagged
+status: review-ready
 topics: ["gavle-energi-gavle-2026", "R16", "marginal_annual_volume_discount", "CHANGES_REQUIRED"]
 source: agent-session
 transcript_fidelity: summary
@@ -114,72 +114,142 @@ I `Fjarrvarmetariffer/optimate-fjarrvarme-2026.json` (revision `0.1.31`,
 - TypeScript-motsvarande mutations-/fördelade-gränsfallstest är **inte**
   hunna denna runda (se nedan) — kvarstår som öppen punkt.
 
-## Öppen blockerare — fynd 1 (policy-/produktintegration) INTE slutförd
+## Uppföljningspass — fynd 1 (policy-/produktintegration) SLUTFÖRT
 
-Efter research (se agentrapport i denna sessions verktygslogg) är bilden:
+Ett andra, avgränsat pass genomförde det pass som flaggades ovan.
+Utfallet: ingen olöslig designtvetydighet hittades. kWh/dygn-
+kontraktsbindningen visade sig följa Öviks mönster exakt, och
+marginalrabatt-justeringen krävde inget nytt policyfält — den läser samma
+generiska `mwh_per_manad`-serie som varje `annual_forward`-tariff redan
+beräknar.
 
-- `enkey-agents/tools/tariffer/policyregister.py` (3466 rader) saknar
-  helt en `Tariffpolicy`/`POLICYREGISTER`-post för
-  `gavle-energi-gavle-2026`. Det närmaste mönstret (Sandviken,
-  rad ~203–241) är enkelt i sig, men Gävles kapacitetsform
-  (`selected_band_affine`, `band_selection:
-  supplier_confirmed_band_id_required`, ETT band, kWh/dygn-grund) liknar
-  mer Lidköpings `kapacitet_band_bindning`-mönster, och `KravPost`/
-  `Tariffpolicy`-kontraktet (i `resultatkontrakt.py`) har många
-  samverkande fält (`heltal`, `minvarde`, `vardetyp`,
-  `stodjer_besparing`, `tackning` m.fl.) vars EXAKTA samspel jag inte
-  hunnit verifiera empiriskt (via `test_policyregister.py`/
-  `test_resultatkontrakt_vektorer.py`) inom den här rundan.
-- Att gissa denna bindning för en skarp finansiell beräkning — särskilt
-  kWh/dygn-debiteringsgrunden, som explicit INTE får bli en dold
-  kW×24-omräkning — bedöms som för riskabelt att göra utan en egen,
-  noggrann verifieringspass mot det befintliga kontraktstestet. Detta är
-  samma bedömning föregående runda gjorde (se
-  [2026-09-23-gavle-r16-implementation.md](2026-09-23-gavle-r16-implementation.md),
-  "Vad som INTE gjordes").
-- Konsekvens: `generera_isolerad_gavle_r16.py`, ett isolerat browsertest
-  (`e2e/gavle-r16-isolated-e2e.mjs`, mönster: `batch8-isolated-e2e.mjs`)
-  och det oberoende fullproduktfacit (98 920,22 / 4 163,00 / -3 255,00 /
-  99 828,22 / 124 785,275 kr) via den RIKTIGA produktkoden är INTE
-  byggda eller bevisade denna runda. Motorformeln är oberoende bevisad
-  (isolerat, se fynd 2/5 ovan) men det är inte samma sak som
-  kontraktsvägen.
-- **Detta flaggas explicit som en öppen punkt för Codex/Robert**, inte
-  tyst utelämnat: fullföljande av fynd 1 kräver ett eget, avgränsat pass
-  med samma rigör som Sandviken-/Lidköping-policyerna fick, inklusive
-  körning av `test_policyregister.py` och `test_resultatkontrakt_vektorer.py`
-  mot ett utkast innan det committas.
+- `enkey-agents/tools/tariffer/policyregister.py`: ny `_GAVLE_POLICY`
+  (kWh/dygn-kapacitet, obligatoriskt band-ID trots endast ett band, inget
+  extra fält krävdes för marginalrabatten), registrerad under
+  `gavle-energi-gavle-2026`.
+- `enkey-agents/tools/tariffer/katalog.py`: Gävles "motorn är klar,
+  väntar på aktivering"-formulering allowlistad i
+  `_KANDA_OCH_AVFARDADE_ISSUES` (samma precedent som Borås/Batch 6).
+  `investigation.status="utreds"` spärrar fortsatt den skarpa vägen
+  oberoende av detta.
+- Nya Python-test: `tests/test_familj4_resten_kontrakt.py::TestGavle`
+  bevisar det bindande fullproduktfacit via `berakna_arskostnad_med_kontrakt`
+  (den RIKTIGA kontraktsvägen, inte motorfunktionen isolerat): energi
+  98 920,22 kr, kapacitet 4 163,00 kr, justering −3 255,00 kr, summa
+  exkl. moms 99 828,22 kr, summa inkl. moms 124 785,275 kr — exakt
+  handoffens facit.
+- Ny isolerad generator `tools/tariffer/generera_isolerad_gavle_r16.py`
+  (mönster: `generera_isolerad_batch5b.py`): rensar `investigation` för
+  ENDAST `gavle-energi-gavle-2026` i en djup kopia, fail-closed om posten
+  saknas, sanity-kontrollerar att ingen annan kandidats `investigation`
+  ändras, har `--check`-läge. Ordinarie skarpa `godkanda()`-vägen förblir
+  73 rader utan Gävle.
+- `tools/tariffer/tests/test_generera_isolerad_gavle_r16.py` (9 test),
+  inklusive ett generatortransport-bevis: parsar den faktiskt genererade
+  TS-katalogen och kör den genom `berakna_arskostnad_med_kontrakt` igen —
+  återger exakt samma facit.
+- TypeScript-sidan: `neptune-marketing/src/utils/gavleR16RawData.ts`
+  (verbatim råexport, mönster: batch5c/batch1), `.contract.test.ts`
+  (samma facit via `beraknaArskostnadMedKontrakt`) och
+  `.driftprov.test.ts` (mekaniskt driftprov mot enkey-agents verkliga
+  Python-utdata, hoppar över om syskonrepot saknas).
+- Isolerat browsertest `e2e/gavle-r16-isolated-e2e.mjs` (mönster:
+  `batch5b-isolated-e2e.mjs`) + Scenario 31 i `kalkylator.smoke.mjs`,
+  bakom `E2E_ISOLERAD_GAVLE_R16`. **Ärlig begränsning**: kalkylatorns
+  interaktiva energiinput accepterar bara en total MWh/år, som sedan
+  sprids över månaderna via en fast säsongsprofil (`fordelaEnergi`,
+  kalibrerad på en annan byggnads data) — inte leverantörens exakta
+  icke-uniforma serie. Scenario 31 bevisar därför inkopplingen/UI-vägen
+  med ett oberoende framräknat och verifierat facit för samma 193 MWh
+  via den profilen (energi 99 348,18 kr i stället för 98 920,22 kr;
+  kapacitet och justering identiska eftersom de är vägoberoende av
+  månadsfördelningen), INTE leverantörsseriens exakta facit — det
+  facitet är bevisat på kontraktstestnivå i båda språken ovan, vilket är
+  den auktoritativa "obligatoriskt facit"-punkten i handoff 003 §4.4.
+  Detta är kommenterat i koden, inte dolt.
+- Ordinarie E2E (30 scenarier) bekräftar fortsatt att Gävle INTE erbjuds
+  i det skarpa UI:t.
+- Fynd 5 (kvarvarande P2-punkter): distribuerade (icke-januari)
+  gränsfallstest för alla sex bandkanter (100/250/500/1500/2500 MWh)
+  tillagda i båda språk, samt generatortransportbeviset ovan.
+- Miljönot: driftprov-testen (denna och alla befintliga batch1/5a/5b/5c/6)
+  löser `enkey-agents` via en fast relativ syskonsökväg. I `/private/tmp`-
+  arbetskopiorna krävde detta en lokal, ospårad symlänk
+  `/private/tmp/enkey-agents -> /private/tmp/enkey-agents-gavle-r16` för
+  att köra korrekt i stället för att tyst/felaktigt fela — påverkar inget
+  spårat, men behövs för att återskapa "2351 passed" i en färsk
+  verifieringssession utan den riktiga katalogstrukturen.
 
-## Repobranscher och HEAD:ar (denna runda)
+## Repobranscher och HEAD:ar (slutliga, efter båda ronderna)
 
-- **skills** (`/Users/robertrennel/Code/skills`, `main`): ny commit ovanpå
-  `5bd2b4b` (tidigare HEAD), ändrar exakt
-  `Fjarrvarmetariffer/optimate-fjarrvarme-2026.json`,
+- **skills** (`/Users/robertrennel/Code/skills`, `main`): `a352be8`
+  (`75faaa2` → `a352be8`, ursprunglig bas `5bd2b4b`). Ändrar
+  `Fjarrvarmetariffer/optimate-fjarrvarme-2026.json`
+  (`contract_required: true` tillagt, `schema_version` 0.1.31→0.1.32),
   `Fjarrvarmetariffer/verifieringslista-fjarrvarmebolag.md`,
-  `Fjarrvarmetariffer/batchplan-v22.md` samt denna sessionslogg.
+  `Fjarrvarmetariffer/batchplan-v22.md`, denna sessionslogg samt
+  granskningsfilen. Oberoende verifierat: `git diff --stat 5bd2b4b..HEAD`
+  visar exakt dessa filer; all tidigare smutsig/ospårad status i repot
+  (leverantörsfrågor, `AGENTS.md`, `SKILL.md`, `claude.md`,
+  prisdialogen, PDF/eml/xlsx, `../milesight`, `conversations/automation/`)
+  orörd.
 - **enkey-agents** (`/private/tmp/enkey-agents-gavle-r16`,
-  `gavle-r16-volume-discount`): ny commit ovanpå `2aa5084`, ändrar
-  `tools/tariffer/faktura.py`,
-  `tools/tariffer/tests/test_gavle_marginal_volume_discount.py`,
-  `tools/tariffer/tests/test_katalog_proveniens.py`.
+  `gavle-r16-volume-discount`): `ba29fd5` (`2aa5084` → `e76c08b` →
+  `ba29fd5`). Ändrar `tools/tariffer/faktura.py`, `katalog.py`,
+  `policyregister.py`, `generera_isolerad_gavle_r16.py` (ny),
+  `tests/test_familj4_resten_kontrakt.py`,
+  `tests/test_gavle_marginal_volume_discount.py`,
+  `tests/test_generera_isolerad_gavle_r16.py` (ny),
+  `tests/test_katalog_proveniens.py`. Lokal `main` oförändrad `2e30bb2`
+  (Milesight-commiten orörd).
 - **neptune_academy** (`/private/tmp/neptune-academy-gavle-r16`,
-  `gavle-r16-volume-discount`): ny commit ovanpå `d7d89c5`, ändrar
-  `neptune-marketing/src/utils/fjarrvarme.ts`,
-  `neptune-marketing/src/data/tariffer.generated.ts`.
+  `gavle-r16-volume-discount`): `1214ece` (`d7d89c5` → `edecc77` →
+  `6fbd04a` → `965cf33` → `1214ece`). Ändrar
+  `neptune-marketing/e2e/gavle-r16-isolated-e2e.mjs` (ny),
+  `e2e/kalkylator.smoke.mjs`, `package.json`,
+  `src/data/tariffer.generated.ts` (endast provenienshuvud, 4 rader),
+  `src/utils/fjarrvarme.ts`, `src/utils/gavleMarginalVolymrabatt.test.ts`,
+  `src/utils/gavleR16RawData.ts` (ny),
+  `src/utils/gavleR16RawData.contract.test.ts` (ny),
+  `src/utils/gavleR16RawData.driftprov.test.ts` (ny). Lokal `main`
+  oförändrad `605bddd`; `git diff --stat 605bddd..HEAD` bekräftar att
+  Optimate-scenariomotorfilerna inte är rörda.
 
-Exakta slutliga HEAD-hashar och testresultat: se rapporten till Codex/Robert
-(denna sessions handoff-mottagare) för den fullständiga körningen.
+## Oberoende Claude-verifiering (inte bara agentrapport)
+
+Claude (denna sessions ägare) körde själv, utan att lita blint på
+agentrapporterna:
+
+- `git log`/`git diff --stat`/`git status` i alla tre repon — matchar
+  agentrapporterna exakt.
+- `python3 -m pytest tools/tariffer/tests -q` i
+  `/private/tmp/enkey-agents-gavle-r16`: **2270 passed, 6 skipped**.
+- `python3 -m pytest tools/tariffer/tests/test_dispositionsgrind_inventering.py -q`:
+  **26 passed** — disposition 74/2/15/1 av 92 bekräftad oförändrad.
+- `npx vitest run` i `/private/tmp/neptune-academy-gavle-r16/neptune-marketing`:
+  **72 filer, 2351 test, alla gröna**.
+- `git diff --check 2aa5084..HEAD` i enkey-agents: rent (exit 0).
+- Katalogen läst direkt: `production_ready: false`,
+  `investigation.status: "utreds"`, `contract_required: true`,
+  `source_refs` pekar på `08_0` + `assessment-gavle-volymavdrag-2026-09-23`,
+  R16 har `status: "answered"` med samma `source_id`.
 
 ## Beslut
 
-- Fynd 2, 3 slutförda. Fynd 4, 5 delvis slutförda (dokumentationsrättelser
-  och katalogdriven hashsynk klara; TypeScript-mutationstest och det sista
-  P2-täckningsdjupet kvarstår).
-- Fynd 1 kvarstår öppet och flaggas för ett eget uppföljningspass — ingen
-  aktivering, ingen push, `production_ready` oförändrat `false` i alla tre
-  repon.
+- Fynd 1–5 slutförda enligt ovan (fynd 1 i uppföljningspasset; fynd 2–5 i
+  första passet denna session). Ingen olöst designtvetydighet återstod i
+  fynd 1 — se motivering ovan.
+- Ingen aktivering, ingen push, `production_ready` oförändrat `false` i
+  alla tre repon, lokala `main`-grenar i enkey-agents/neptune_academy
+  orörda, Optimate-scenariomotorn orörd.
+- Redo för `REVIEW_READY: Codex` — se ny toppost i `conversations/index.md`.
 
 ## Ändringslogg
 
 - `2026-09-23T12:40:00+02:00` – Sessionsloggen skapades vid leverans av
-  denna rättningsrunda.
+  första rättningsrundan (fynd 2, 3 klara; fynd 1 öppen blockerare).
+- `2026-09-23T13:45:00+02:00` – Fynd 1 slutfört i ett uppföljningspass;
+  fynd 4/5:s kvarvarande P2-punkter (TS-mutationstest, distribuerade
+  bandkantstest, generatortransportbevis) stängda. Claude verifierade
+  själv testresultat och repo-diffar oberoende av agentrapporterna innan
+  denna signal skrevs. Session markerad `review-ready`.
