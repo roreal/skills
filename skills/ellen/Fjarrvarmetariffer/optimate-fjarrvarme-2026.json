@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.31",
+  "schema_version": "0.1.32",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-23",
@@ -3991,7 +3991,8 @@
           "Motorimplementationen (marginal_annual_volume_discount) ar klar och fail-closed i bada motorerna sedan denna rattningsrunda (signal 005). Kvarstaende hinder ar enbart en separat, granskad aktiveringsrunda (production_ready false -> true) -- inte att motortypen ar okand.",
           "Kallrevision 2026-09-23 (se Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md, kalla-id assessment-gavle-volymavdrag-2026-09-23): Gavle Energi har besvarat A3/R16. Avdraget ar marginalt per kalenderarsintervall, troskelmanaden delas mellan intervall, ingen retroaktiv omrakning, avdrag betalas manadsvis. Fast avgift verifierad till 0 kr (kalla 08_0), kapacitetspriset periodiseras per kalenderdag (kalla 08_0) och debiteringsgrunden ar redan kWh/dygn (kw_faktor 1.0, kalla 08_0). Klassning: source_resolved_implementation_pending."
         ]
-      }
+      },
+      "contract_required": true
     },
     {
       "id": "goteborg-energi-goteborg-2026",
@@ -12092,6 +12093,15 @@
         "members[gavle-energi].tariff_ids/source_ids granskade: redan snävt scopade till exakt [gavle-energi-gavle-2026] respektive [08_0], ingen ändring behövdes.",
         "issues/investigation.conditions_sv uppdaterade: beskriver nu det verkliga återstående hindret (separat aktiveringsrunda) i stället för att motortypen är okänd, sedan marginal_annual_volume_discount implementerats fail-closed i både Python (_marginal_arsvolymrabatt) och TypeScript (marginalArsvolymrabatt) denna runda.",
         "production_ready (false) och investigation.status (utreds) OFÖRÄNDRADE. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92."
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "revision": "0.1.32",
+      "changes": [
+        "Slutförande av fynd 1 (signal 005, CHANGES_REQUIRED: Claude): gavle-energi-gavle-2026 fick contract_required=true, samma mönster som Övik/Telge/Lidköping/Sandviken m.fl. (se 0.1.21 för föregångsbeslutet). Ingen pris-, kapacitetsband-, effekt-/adjustments- eller issues-ändring.",
+        "Motsvarande Tariffpolicy (_GAVLE_POLICY) tillagd i enkey-agents/tools/tariffer/policyregister.py, samma struktur som Öviks kWh/dygn-policy (ett kapacitetsbegrepp, kw_faktor=1.0, obligatoriskt bekräftat band-ID trots att katalogen bara har ett band). marginal_annual_volume_discount kräver inget eget policybundet fält (läser den redan generiska köpta-energi-serien).",
+        "production_ready (false) och investigation.status (utreds) OFÖRÄNDRADE. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92 — contract_required ensamt aktiverar ingen rad (investigation-spärren gäller fortfarande, se 0.1.21-precedensen)."
       ]
     }
   ],
