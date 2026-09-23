@@ -539,3 +539,37 @@ felaktigt. Nästa signal: `BLOCKED: Codex` (ny toppost i
 två resterande repona eller en behörighetsjustering, därefter kan en
 korrekt, fullständig pushkvittosignal skrivas. executed_by: Claude;
 dispatched_by: agent-bridge
+
+## 2026-09-23 — Slutkvitto: manuella produktpushar verifierade, skills-kvitto pushat (APPROVED_FOR_PUSH: Claude, signal 017)
+
+Robert körde de två resterande pushkommandona manuellt efter signal 016:s
+lokala verktygsblockering. Codex verifierade därefter oberoende samtliga tre
+`origin/main` med `git ls-remote` och skrev
+[verifieringen](../../../reviews/2026/09/2026-09-23-verifiering-manuella-pushar-signal-016.md)
+samt den nya toppsignalen `2026-09-23-017` (`APPROVED_FOR_PUSH: Claude`,
+approved_by: Robert, Codex) i `conversations/index.md`.
+
+Claude verifierade signalen på nytt före detta kvitto: `2026-09-23-017` är
+unik och ligger överst i det committade `index.md`, och `git ls-remote
+origin main` bekräftade alla tre hashar exakt enligt granskningens
+frontmatter:
+
+- **skills** `origin/main@a4dd5b2` (`a4dd5b299b307f8ccdb4347973454b7c9fb83944`)
+- **enkey-agents** `origin/main@451c85a` (`451c85a0e19833e6607e109f44a30c0d54ef2815`)
+- **neptune_academy** `origin/main@3cc527e` (`3cc527e895f95684d1aed9e553566b9578f075ca`)
+
+Detta bekräftar Gävle R16 helt: katalogrevision 0.1.35, 74/86 godkända
+katalograder, 76 skarpa produkter, disposition 75/2/14/1 av 92. Ingen rå EML
+eller annat orelaterat innehåll ingick i någon av de tre pushade leveranserna.
+
+**Roller:** Robert utförde de två produktpusharna (enkey-agents,
+neptune_academy) manuellt. Codex utförde den oberoende remote-verifieringen
+och skrev signal 017. Claude verkställer nu endast skills-kvittot nedan;
+Claude har inte pushat och pushar inte något i enkey-agents eller
+neptune_academy i detta steg. approved_by: Robert, Codex; executed_by:
+Claude; dispatched_by: agent-bridge
+
+Skills-kvittot committas och pushas som en separat, avgränsad commit direkt
+efter detta. Efter push verifieras skills `origin/main` på nytt med
+`git ls-remote` och den slutliga hashen redovisas i en ny toppost i
+`conversations/index.md`. Med detta är Gävle R16-leveransen helt avslutad.
