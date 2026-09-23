@@ -118,6 +118,18 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
 > (`production_ready: false` → `true`), inte ett öppet källunderlag. Raden
 > ovan är historik från verifieringsomgången 2026-09-04 och skrivs inte om.
 
+> **Rättelse 2026-09-23 (signal 011, `APPROVED_FOR_ACTIVATION: Claude`,
+> Codex slutgranskning av signal 010):** ovanstående parentes
+> `(production_ready: false → true)` beskrev det återstående aktiveringssteget
+> fel. Den verkliga publiceringsspärren är `investigation`, inte
+> `production_ready` — se `tools/tariffer/katalog.py`s `grind()`, som aldrig
+> läser `production_ready`. Gävle är sedan denna runda lokalt aktiverad genom
+> att `investigation` för `gavle-energi-gavle-2026` ändrats från objektet med
+> `status: "utreds"` till `null`; `production_ready` kvarstår medvetet `false`
+> som äldre, icke styrande metadata. `godkanda(katalog)` går från 73 till 74
+> och den skarpa dispositionen till 75 implemented / 1 ready / 16 blocked av
+> 92. Raderna ovan är historik och skrivs inte om.
+
 ### Habo Energi
 
 - [ ] **Habo** (`habo-energi-habo-2026`)

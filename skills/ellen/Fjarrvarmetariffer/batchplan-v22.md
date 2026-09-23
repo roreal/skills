@@ -1421,6 +1421,17 @@ i denna lista minskar därmed från 26 till 24.
 > hinder är enbart en separat, granskad aktiveringsrunda. Ingen annan rad i denna
 > batchplan ändras av detta.
 
+> **Rättelse 2026-09-23 (signal 011, `APPROVED_FOR_ACTIVATION: Claude`,
+> Codex slutgranskning av signal 010):** den separata, granskade
+> aktiveringsrundan som saknades ovan är nu genomförd. Gävle är lokalt
+> aktiverad genom att `investigation` för `gavle-energi-gavle-2026` ändrats
+> från `status: "utreds"` till `null` — inte genom `production_ready: false
+> → true`, som felaktigt angavs ovan (`production_ready` läses aldrig av
+> `godkanda()`/`grind()` i `tools/tariffer/katalog.py` och kvarstår medvetet
+> `false`). `godkanda(katalog)` går från 73 till 74; dispositionen blir 75
+> implemented / 1 ready / 16 blocked av 92. Ingen annan rad i denna
+> batchplan ändras av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |

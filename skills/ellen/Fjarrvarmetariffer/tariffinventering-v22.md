@@ -1540,18 +1540,18 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 #### `gavle-energi-gavle-2026`
 - **Leverantör / nät / kundkategori:** Gävle Energi — Gävle — näring/brf
 - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
-- **Primärkälla:** `08_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-naringsidkare-2025-Gavle-Energi.pdf)
+- **Primärkälla:** `08_0` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prisandringsmodell-naringsidkare-2025-Gavle-Energi.pdf); `assessment-gavle-volymavdrag-2026-09-23` (Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md)
 - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
-- **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
-- **Motorstatus:** N/A tills källfrågan är löst
-- **Kontraktsstatus:** ej i `POLICYREGISTER`
-- **Teststatus:** inga
-- **UI-status:** inte valbar
-- **Årsreproducerbar med nuvarande underlag:** Nej
-- **Exakt saknad uppgift/fråga:** Beräknas volymavdraget marginalt eller på hela månadens volym efter uppnådd nivå?
-- **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
-- **Disposition:** `blocked_external_info`
+- **Källstatus:** löst 2026-09-23 (R16/A3 besvarad av Gävle Energi, se `assessment-gavle-volymavdrag-2026-09-23`) — den äldre `villkorat godkänd/motsägelsefull`-raden från 2026-09-04 gällde volymavdragets beräkningsmetod, nu bekräftad marginal
+- **Katalogstatus:** `production_ready: false`, `investigation: null` — aktiverad lokalt 2026-09-23 (signal 011, Codex slutgranskning av signal 010, Roberts automationsfullmakt för aktiverings-/pushkedjan); ej pushad ännu
+- **Motorstatus:** klar — `marginal_annual_volume_discount` (Python: `_marginal_arsvolymrabatt`, TypeScript: `marginalArsvolymrabatt`)
+- **Kontraktsstatus:** i `POLICYREGISTER` (`_GAVLE_POLICY`, tools/tariffer/policyregister.py); `contract_required: true`
+- **Teststatus:** tariffspecifika automattester finns (test_gavle_marginal_volume_discount.py, test_generera_isolerad_gavle_r16.py, test_katalog.py, test_katalog_proveniens.py, test_dispositionsgrind_inventering.py)
+- **UI-status:** valbar i den skarpa kalkylatorn — aktiverad lokalt, ej pushad ännu (väntar på Codex granskning av aktiveringsdiffen)
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion
+- **Exakt saknad uppgift/fråga:** Ingen — Gävle Energi bekräftar att kalenderårsvolymavdraget är marginalt, tröskelmånaden delas mellan intervall och ingen retroaktiv omräkning görs.
+- **Inmatningslägen:** mwh (kapacitetsbehov kWh/dygn + bekräftat band, kontraktsgated); kr och schablon BLOCKERAS (ingen verifierad invers/schablonmodell)
+- **Disposition:** `implemented_source_verified_annual`
 
 #### `harnosand-energi-miljo-harnosand-2026`
 - **Leverantör / nät / kundkategori:** Härnösand Energi & Miljö — Härnösand — näring/brf
@@ -4862,11 +4862,25 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 65 | 9 | 74 |
+| `implemented_source_verified_annual` | 66 | 9 | 75 |
 | `ready_to_implement` | 1 | 1 | 2 |
-| `blocked_external_info` | 12 | 3 | 15 |
+| `blocked_external_info` | 11 | 3 | 14 |
 | `not_applicable` | 0 | 1 | 1 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-23 (signal 011, Codex slutgranskning av signal 010,
+`APPROVED_FOR_ACTIVATION: Claude`, Roberts automationsfullmakt för
+aktiverings-/pushkedjan):** `gavle-energi-gavle-2026`s bastariffrad (§3–4)
+flyttades från `blocked_external_info` till `implemented_source_verified_annual`
+i SAMMA commit som katalogens `investigation`-spärr togs bort
+(`optimate-fjarrvarme-2026.json` change_log `0.1.34`). Tabellen ovan går
+från **74 implemented / 2 ready / 15 blocked / 1 not_applicable** till
+**75 implemented / 2 ready / 14 blocked / 1 not_applicable av 92**.
+`godkanda(katalog, policyregister=POLICYREGISTER)` == 74 fysiska
+katalograder (73 tidigare + Gävle) — det mekaniska måttet på fysiska rader
+i `optimate-fjarrvarme-2026.json`, skilt från denna tabells 92
+dispositionsposter (78 bas + 14 variant). Ingen annan rad i denna tabell
+ändras av detta.
 
 **Rättat 2026-09-18 (källnormalisering, session `2026-09-18-042`, handoff
 [`2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md`](../conversations/handoffs/2026/09/2026-09-18-finspang-spetsvarmetillagg-kallnormalisering.md),
@@ -5047,6 +5061,17 @@ innehåller efter revisionen exakt R02, R03, R08, R16, R17.
 > `investigation.status` för Gävle är oförändrade (`false`/`utreds`) — en separat,
 > granskad motor-/produktimplementation och aktiveringsrunda krävs fortfarande innan
 > aktivering. Ingen annan rad i denna matris ändras av detta.
+
+> **Rättelse 2026-09-23 (signal 011, `APPROVED_FOR_ACTIVATION: Claude`, Codex
+> slutgranskning av signal 010):** den separata, granskade aktiveringsrundan
+> som ovan angavs krävas är nu genomförd — se `optimate-fjarrvarme-2026.json`
+> change_log `0.1.34`. Gävles publiceringsspärr `investigation` är ändrad
+> från `status: "utreds"` till `null`; `production_ready` kvarstår medvetet
+> `false` (äldre metadata, inte den skarpa grinden i `godkanda()`/`grind()`).
+> Gävle räknas därför inte längre `source_resolved_implementation_pending`
+> utan `implemented`. `godkanda(katalog)` går från 73 till 74; skarp
+> disposition blir 75 implemented / 1 ready / 16 blocked av 92. Ingen annan
+> rad i denna matris ändras av detta.
 
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**
