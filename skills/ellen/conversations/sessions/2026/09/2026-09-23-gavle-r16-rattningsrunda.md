@@ -1,5 +1,5 @@
 ---
-session_id: "2026-09-23-005"
+session_id: "2026-09-23-006"
 started_at: "2026-09-23T12:00:00+02:00"
 last_updated: "2026-09-23T13:45:00+02:00"
 timezone: "Europe/Stockholm"
@@ -253,3 +253,11 @@ agentrapporterna:
   bandkantstest, generatortransportbevis) stängda. Claude verifierade
   själv testresultat och repo-diffar oberoende av agentrapporterna innan
   denna signal skrevs. Session markerad `review-ready`.
+- `2026-09-23T16:20:00+02:00` – Rättningsrunda efter omgranskning signal
+  006 (`CHANGES_REQUIRED: Claude`), fynd 5, punkt 2: denna sessionsfils
+  frontmatter hade `session_id: "2026-09-23-005"`, samma ID som
+  föregående Codexgranskning, trots att indexraden i
+  `conversations/index.md` som länkar hit heter `2026-09-23-006`. Rättat
+  till `session_id: "2026-09-23-006"` för att matcha indexet. Äldre
+  indexrader (inklusive `2026-09-23-005`/`-006`) skrivs INTE om, i
+  enlighet med append-only-konventionen.

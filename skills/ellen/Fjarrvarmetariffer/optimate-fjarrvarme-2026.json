@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.32",
+  "schema_version": "0.1.33",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-23",
@@ -12103,6 +12103,14 @@
         "Motsvarande Tariffpolicy (_GAVLE_POLICY) tillagd i enkey-agents/tools/tariffer/policyregister.py, samma struktur som Öviks kWh/dygn-policy (ett kapacitetsbegrepp, kw_faktor=1.0, obligatoriskt bekräftat band-ID trots att katalogen bara har ett band). marginal_annual_volume_discount kräver inget eget policybundet fält (läser den redan generiska köpta-energi-serien).",
         "production_ready (false) och investigation.status (utreds) OFÖRÄNDRADE. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92 — contract_required ensamt aktiverar ingen rad (investigation-spärren gäller fortfarande, se 0.1.21-precedensen)."
       ]
+    },
+    {
+      "date": "2026-09-23",
+      "revision": "0.1.33",
+      "changes": [
+        "Rättningsrunda efter omgranskning signal 006 (CHANGES_REQUIRED: Claude), fynd 5, punkt 1: resolved_information_requests[R16].resolution_sv slutade fortfarande med att en separat motor-/produktimplementation krävdes, trots att motorn (marginal_annual_volume_discount, Python och TypeScript) redan var klar och fail-closed sedan revision 0.1.31/0.1.32. Meningen rättad till att enbart en separat, granskad aktiveringsrunda återstår. Inget sakbeslut, ingen källa och ingen siffra ändrad.",
+        "Ingen pris-, kapacitetsband-, effekt-, adjustments- eller issues-ändring. production_ready (false) och investigation.status (utreds) OFÖRÄNDRADE. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92."
+      ]
     }
   ],
   "resolved_information_requests": [
@@ -12115,7 +12123,7 @@
       "question_sv": "Hur beräknas volymavdraget den månad ett ackumulerat kalenderårsband passeras: på hela månadens volym, bara den marginella delen över tröskeln, eller först påföljande månad? Ändras tidigare månaders debitering retroaktivt?",
       "source_id": "assessment-gavle-volymavdrag-2026-09-23",
       "status": "answered",
-      "resolution_sv": "Gävle Energi bekräftar att avdraget är marginalt: bara volymen över respektive kalenderårsgräns i tröskelmånaden får avdrag, tidigare månader räknas inte om retroaktivt, och avdraget betalas ut månadsvis. Leverantörens exempel (94,57 MWh ackumulerat efter april, 9,65 MWh i maj) ger 4,22 rabatt-MWh i maj och 93 rabatt-MWh för helåret 193 MWh (3 255 kr avdrag exkl. moms). Se den sanitiserade källbedömningen Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md (originalmejlet innehåller personuppgifter och är inte committat). Frågan är sakligt löst; en separat, granskad motor-/produktimplementation krävs fortfarande innan aktivering."
+      "resolution_sv": "Gävle Energi bekräftar att avdraget är marginalt: bara volymen över respektive kalenderårsgräns i tröskelmånaden får avdrag, tidigare månader räknas inte om retroaktivt, och avdraget betalas ut månadsvis. Leverantörens exempel (94,57 MWh ackumulerat efter april, 9,65 MWh i maj) ger 4,22 rabatt-MWh i maj och 93 rabatt-MWh för helåret 193 MWh (3 255 kr avdrag exkl. moms). Se den sanitiserade källbedömningen Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md (originalmejlet innehåller personuppgifter och är inte committat). Frågan är sakligt löst och motorimplementationen (marginal_annual_volume_discount) är klar och fail-closed i båda motorerna; enbart en separat, granskad aktiveringsrunda (production_ready false → true) återstår innan Gävle erbjuds i det skarpa UI:t."
     },
     {
       "id": "R01",
