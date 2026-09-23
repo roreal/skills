@@ -1406,6 +1406,21 @@ i denna lista minskar därmed från 26 till 24.
 > redan implementerade bastariff (Batch 6) är oförändrad, och inget spetsvärmetillägg
 > byggs av detta.
 
+> **Rättelse 2026-09-23 (källrevision, se
+> [2026-09-23-bedomning-gavle-volymavdrag.md](Svar%20på%20frågor/2026-09-23-bedomning-gavle-volymavdrag.md),
+> källa `assessment-gavle-volymavdrag-2026-09-23` i `optimate-fjarrvarme-2026.json`):**
+> av de fem `external_answer_required`-posterna i rättelsen ovan är Gävle Energi nu
+> besvarad — bolaget bekräftar att kalenderårsvolymavdraget är marginalt, tröskelmånaden
+> delas mellan intervall och ingen retroaktiv omräkning görs. Gävle klassas därför
+> `source_resolved_implementation_pending` i stället för `external_answer_required`; kvar
+> i `external_answer_required` är fyra poster (Hässleholm Miljö x2, HEMAB, Mälarenergi
+> gruppanslutna småhus). Detta är en käll- och dispositionsnormalisering, inte en
+> aktivering: `production_ready` för `gavle-energi-gavle-2026` är fortfarande `false`.
+> Motorimplementationen (`marginal_annual_volume_discount`) är sedan denna
+> rättningsrunda (signal 005) klar och fail-closed i både Python och TypeScript; kvarstående
+> hinder är enbart en separat, granskad aktiveringsrunda. Ingen annan rad i denna
+> batchplan ändras av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |

@@ -1,8 +1,8 @@
 {
-  "schema_version": "0.1.29",
+  "schema_version": "0.1.31",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
-  "as_of": "2026-09-17",
+  "as_of": "2026-09-23",
   "target_price_year": 2026,
   "time_zone": "Europe/Stockholm",
   "status": "reviewable_tariff_catalog_not_production_calculator",
@@ -1076,6 +1076,17 @@
       "retrieved_on": "2026-09-17",
       "kind": "supplier_website",
       "notes_sv": "Källa för den olösta A3-frågan om vilken månad ett ackumulerat volymband bryts."
+    },
+    {
+      "id": "assessment-gavle-volymavdrag-2026-09-23",
+      "title": "Sanitiserad bedömning: Gävle Energis svar om marginellt volymavdrag (R16/A3)",
+      "url": null,
+      "path": "Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md",
+      "retrieved_on": "2026-09-23",
+      "sha256": "322c7d5c9cddc0ff4797ad384f52c4665b607f4445e28b119390b484297a6357",
+      "sha256_note": "SHA-256 for denna sanitiserade bedomningsfil sjalv, berak nad farskt med `shasum -a 256` 2026-09-23 (finns inte sedan tidigare i katalogen eller sessionsloggarna). Bedomningsfilens EGEN metadata dokumenterar separat de bakomliggande, ocommittade kallornas hashar: originalmejlet 5f34055e4ad704e81cca464cace4e203eaabc9fe0e7c3716673539cefde9a7a4 och bilagan Volymrabatt.xlsx 77c07371d88ddf9ff079b64c8b1362cea405ed42593befd999407d1801f59236 (sha 256, se filens egna metadata). Originalmejlet/bilagan ar personuppgiftsbarande och committas aldrig.",
+      "kind": "internal_sanitized_source_assessment",
+      "notes_sv": "Stanger R16/A3 for gavle-energi-gavle-2026: bekraftar att kalenderarsvolymavdraget ar marginalt, troskelmanaden delas mellan intervall, ingen retroaktiv omrakning gors och avdraget betalas manadsvis. Ersatter web-review-gavleenergi-2026-09-17 som kalla for just denna fraga (den kallans egen notes_sv sager uttryckligen att A3 ar olost)."
     }
   ],
   "members": [
@@ -3962,12 +3973,12 @@
           ]
         },
         {
-          "source_id": "web-review-gavleenergi-2026-09-17",
+          "source_id": "assessment-gavle-volymavdrag-2026-09-23",
           "pages": null
         }
       ],
       "issues": [
-        "Marginaltrappans motorimplementation (marginal_annual_volume_discount) saknas ännu i Python- och TypeScriptmotorn; katalogtypen är deklarerad men okänd för justeringsdispatchen fram till en separat granskad implementation."
+        "Motorimplementationen av marginal_annual_volume_discount ar klar och fail-closed (Python: _marginal_arsvolymrabatt, TypeScript: marginalArsvolymrabatt), men tariffen ar medvetet INTE aktiverad: production_ready=false och en separat, granskad aktiveringsrunda kravs innan Gavle erbjuds i det ordinarie skarpa UI:t."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -3977,8 +3988,8 @@
         "status": "utreds",
         "request_ids": [],
         "conditions_sv": [
-          "Marginaltrappans motorimplementation (marginal_annual_volume_discount) saknas ännu i Python- och TypeScriptmotorn; katalogtypen är deklarerad men okänd för justeringsdispatchen fram till en separat granskad implementation.",
-          "Källrevision 2026-09-23 (se Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md): Gävle Energi har besvarat A3/R16. Avdraget är marginalt per kalenderårsintervall, tröskelmånaden delas mellan intervall, ingen retroaktiv omräkning, avdrag betalas månadsvis. Fast avgift verifierad till 0 kr, kapacitetspriset periodiseras per kalenderdag och debiteringsgrunden är redan kWh/dygn (kw_faktor 1.0). Klassning: source_resolved_implementation_pending — inte längre externt blockerad, men implementation/aktivering är inte byggd eller granskad i denna revision; tariffen kvarstår i de blockerade dispositionerna."
+          "Motorimplementationen (marginal_annual_volume_discount) ar klar och fail-closed i bada motorerna sedan denna rattningsrunda (signal 005). Kvarstaende hinder ar enbart en separat, granskad aktiveringsrunda (production_ready false -> true) -- inte att motortypen ar okand.",
+          "Kallrevision 2026-09-23 (se Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md, kalla-id assessment-gavle-volymavdrag-2026-09-23): Gavle Energi har besvarat A3/R16. Avdraget ar marginalt per kalenderarsintervall, troskelmanaden delas mellan intervall, ingen retroaktiv omrakning, avdrag betalas manadsvis. Fast avgift verifierad till 0 kr (kalla 08_0), kapacitetspriset periodiseras per kalenderdag (kalla 08_0) och debiteringsgrunden ar redan kWh/dygn (kw_faktor 1.0, kalla 08_0). Klassning: source_resolved_implementation_pending."
         ]
       }
     },
@@ -12070,6 +12081,18 @@
         "Gävles stale kapacitetsmetadata rättad enligt samma källrevision: capacity.bands[0].fixed null → 0 (ingen separat fast avgift), monthly_proration null → days_in_month/days_in_year, samt explicit kw_faktor 1.0 (leverantörens debiteringsgrund är redan kWh/dygn). Ingen energy-, band-id- eller adjustments-ändring.",
         "Gävles investigation.status kvarstår utreds och production_ready kvarstår false: motorimplementationen av katalogtypen marginal_annual_volume_discount (redan deklarerad i adjustments[]) och en separat granskad aktiveringsrunda krävs fortfarande. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92; inom blocked minskar externt obesvarade från 5 till 4 och källösta implementationsposter ökar från 10 till 11."
       ]
+    },
+    {
+      "date": "2026-09-23",
+      "revision": "0.1.31",
+      "changes": [
+        "Rättningsrunda (signal 005, CHANGES_REQUIRED: Claude) för gavle-energi-gavle-2026, ingen aktivering, ingen prisändring: ny sanitiserad källpost assessment-gavle-volymavdrag-2026-09-23 tillagd i sources (path till Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md, sha256 322c7d5c9cddc0ff4797ad384f52c4665b607f4445e28b119390b484297a6357 beräknad färskt med shasum -a 256, eftersom bedömningsfilen självt inte hade en tidigare dokumenterad egen hash).",
+        "resolved_information_requests[R16].source_id ändrad från web-review-gavleenergi-2026-09-17 (vars egen notes_sv uttryckligen säger att A3 är olöst) till assessment-gavle-volymavdrag-2026-09-23.",
+        "Gävletariffens source_refs[1] ändrad från web-review-gavleenergi-2026-09-17 till assessment-gavle-volymavdrag-2026-09-23. source_refs[0] (08_0, officiella prisvillkoren) oförändrad och används fortsatt uteslutande som källa för kapacitetens fast=0/kalenderdagsperiodisering/kw_faktor=1.0 — mejlsvaret behandlar bara volymavdraget, inte kapacitetsmetadata.",
+        "members[gavle-energi].tariff_ids/source_ids granskade: redan snävt scopade till exakt [gavle-energi-gavle-2026] respektive [08_0], ingen ändring behövdes.",
+        "issues/investigation.conditions_sv uppdaterade: beskriver nu det verkliga återstående hindret (separat aktiveringsrunda) i stället för att motortypen är okänd, sedan marginal_annual_volume_discount implementerats fail-closed i både Python (_marginal_arsvolymrabatt) och TypeScript (marginalArsvolymrabatt) denna runda.",
+        "production_ready (false) och investigation.status (utreds) OFÖRÄNDRADE. Skarp disposition oförändrad 74 implemented / 2 ready / 15 blocked / 1 not_applicable av 92."
+      ]
     }
   ],
   "resolved_information_requests": [
@@ -12080,7 +12103,7 @@
       ],
       "category": "formula_missing",
       "question_sv": "Hur beräknas volymavdraget den månad ett ackumulerat kalenderårsband passeras: på hela månadens volym, bara den marginella delen över tröskeln, eller först påföljande månad? Ändras tidigare månaders debitering retroaktivt?",
-      "source_id": "web-review-gavleenergi-2026-09-17",
+      "source_id": "assessment-gavle-volymavdrag-2026-09-23",
       "status": "answered",
       "resolution_sv": "Gävle Energi bekräftar att avdraget är marginalt: bara volymen över respektive kalenderårsgräns i tröskelmånaden får avdrag, tidigare månader räknas inte om retroaktivt, och avdraget betalas ut månadsvis. Leverantörens exempel (94,57 MWh ackumulerat efter april, 9,65 MWh i maj) ger 4,22 rabatt-MWh i maj och 93 rabatt-MWh för helåret 193 MWh (3 255 kr avdrag exkl. moms). Se den sanitiserade källbedömningen Fjarrvarmetariffer/Svar på frågor/2026-09-23-bedomning-gavle-volymavdrag.md (originalmejlet innehåller personuppgifter och är inte committat). Frågan är sakligt löst; en separat, granskad motor-/produktimplementation krävs fortfarande innan aktivering."
     },

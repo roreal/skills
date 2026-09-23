@@ -104,6 +104,20 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
   - [x] `null` i fast avgift kan ersättas med verifierad noll: den officiella formeln är enbart `kapacitetsbehov × kapacitetspris`.
   - [ ] Begär leverantörsbesked eller faktura som visar exakt hur volymavdragets nivåskiften beräknas.
 
+> **Rättelse 2026-09-23 (källrevision, se
+> [2026-09-23-bedomning-gavle-volymavdrag.md](Svar%20på%20frågor/2026-09-23-bedomning-gavle-volymavdrag.md),
+> källa `assessment-gavle-volymavdrag-2026-09-23` i `optimate-fjarrvarme-2026.json`):**
+> ovanstående `⛔ Ej godkänt 2026-09-04` och den öppna
+> leverantörsbesked-punkten gäller inte längre. Gävle Energi har svarat: avdraget
+> är marginalt per kalenderårsintervall (bara volymen över respektive gräns i
+> tröskelmånaden får avdrag), tidigare månader räknas inte om retroaktivt, och
+> avdraget betalas ut månadsvis. Motorimplementationen
+> (`marginal_annual_volume_discount`) är sedan denna rättningsrunda klar och
+> fail-closed i både Python och TypeScript. Kvarstående hinder innan Gävle
+> syns i kalkylatorn är enbart en separat, granskad aktiveringsrunda
+> (`production_ready: false` → `true`), inte ett öppet källunderlag. Raden
+> ovan är historik från verifieringsomgången 2026-09-04 och skrivs inte om.
+
 ### Habo Energi
 
 - [ ] **Habo** (`habo-energi-habo-2026`)
