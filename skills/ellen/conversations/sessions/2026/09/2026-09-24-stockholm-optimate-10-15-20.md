@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-24-016"
 started_at: "2026-09-24T20:14:27+02:00"
-last_updated: "2026-09-24T20:31:40+02:00"
+last_updated: "2026-09-24T20:33:42+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -98,3 +98,14 @@ Neptune-worktreens HEAD efter commit: `e864d6ebbb1d258ddf5534bd1692e7d95b7aae96`
 Skills-repo (denna commit förbereds): förälder `eeffce28277fc136981c7ea89da53d1fe3e50f41`.
 Enkey-agents rördes inte i denna leverans (lokal `main@5150d0b` med
 orelaterat Milesight-arbete, i enlighet med handoff 016).
+
+## Codex slutgranskning
+
+Codex inspekterade hela commitdiffen, verifierade ren worktree/fyrfilsdiff,
+körde om de två berörda testfilerna (22/22) samt `tsc --noEmit` och
+bekräftade att live Neptune-main fortfarande är leveransens exakta
+förälder `f5f3603`. Energi- och effektantagandena är fortsatt separerade.
+Leveransen godkänns för push i
+[`2026-09-24-slutgranskning-stockholm-optimate-10-15-20-signal-019.md`](../../../reviews/2026/09/2026-09-24-slutgranskning-stockholm-optimate-10-15-20-signal-019.md).
+Fas B med fler tariffprodukter förblir spärrad tills Robert har bedömt
+Stockholmspresentationen.
