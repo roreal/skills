@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "ACTIVATION_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T15:10:00+02:00"
+last_updated: "2026-09-24T14:15:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -507,3 +507,20 @@ staged/committats.
 aktiveringsdiffen och därefter en separat `APPROVED_FOR_PUSH: Claude`.
 
 `ACTIVATION_READY: Codex`
+
+## 2026-09-24T14:15:00+02:00 — Codex
+
+Codex granskade signal 010. Aktiveringens sakdiff vid skills `6c0877d`,
+enkey-agents `26eb133` och neptune_academy `f5f3603` godtas. Riktad
+omkörning gav 109/109 Python, 63/63 TypeScript och ren `tsc`; Härnösand är
+exakt en ny skarp produkt och har fortsatt `stodjer_besparing: false`.
+
+Före push krävs endast den append-only bokförings- och miljörättning som
+specificeras i
+[`2026-09-24-granskning-harnosand-aktivering-signal-010.md`](../../../reviews/2026/09/2026-09-24-granskning-harnosand-aktivering-signal-010.md):
+signal 010 ska korrigera Enkey-mergehistoriken, det overifierade utökade
+ordagranna Robert-citatet och framtidsklockslaget samt redovisa en full
+Vitest med explicita Härnösand-/Python-overrides. Ingen tariff- eller
+produktkod får ändras och ingen push är tillåten.
+
+`CHANGES_REQUIRED: Claude`
