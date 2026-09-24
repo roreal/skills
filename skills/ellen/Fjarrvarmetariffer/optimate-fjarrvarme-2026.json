@@ -210,7 +210,8 @@
       "url": "https://www.prisdialogen.se/wp-content/uploads/2020/11/Prislista-flerbostadshus-2025-Harnosand.pdf",
       "retrieved_on": "2026-09-02",
       "sha256": "abb93a2c30be3d33fd6d30e8de6af1963b2bf7e507595abda806338320775db8",
-      "kind": "supplier_document_hosted_by_prisdialogen"
+      "kind": "supplier_document_hosted_by_prisdialogen",
+      "note": "Källnormalisering, signal 2026-09-24-001: titeln/URL:en är kvar från Prisdialogens 2025-namngivning, men sha256 ovan är redan byteidentisk med HEMAB:s officiella 2026-prislista (bekräftat i den sanitiserade bedömningen 2026-09-24-bedomning-harnosand-volymrabatt.md, källa web-review-hemab-final). Titel/URL lämnas oförändrade som historisk provenienspost; ingen om-hämtning eller hashbyte krävs."
     },
     {
       "id": "14_0",
@@ -1087,6 +1088,17 @@
       "sha256_note": "SHA-256 for denna sanitiserade bedomningsfil sjalv, berak nad farskt med `shasum -a 256` 2026-09-23 (finns inte sedan tidigare i katalogen eller sessionsloggarna). Bedomningsfilens EGEN metadata dokumenterar separat de bakomliggande, ocommittade kallornas hashar: originalmejlet 5f34055e4ad704e81cca464cace4e203eaabc9fe0e7c3716673539cefde9a7a4 och bilagan Volymrabatt.xlsx 77c07371d88ddf9ff079b64c8b1362cea405ed42593befd999407d1801f59236 (sha 256, se filens egna metadata). Originalmejlet/bilagan ar personuppgiftsbarande och committas aldrig.",
       "kind": "internal_sanitized_source_assessment",
       "notes_sv": "Stanger R16/A3 for gavle-energi-gavle-2026: bekraftar att kalenderarsvolymavdraget ar marginalt, troskelmanaden delas mellan intervall, ingen retroaktiv omrakning gors och avdraget betalas manadsvis. Ersatter web-review-gavleenergi-2026-09-17 som kalla for just denna fraga (den kallans egen notes_sv sager uttryckligen att A3 ar olost)."
+    },
+    {
+      "id": "assessment-harnosand-volymrabatt-2026-09-24",
+      "title": "Sanitiserad bedömning: HEMAB:s svar om volymrabatt (R02/A2)",
+      "url": null,
+      "path": "Fjarrvarmetariffer/Svar på frågor/2026-09-24-bedomning-harnosand-volymrabatt.md",
+      "retrieved_on": "2026-09-24",
+      "sha256": "455f0684658c59101ff67aa0afb949fea66211fb4dcfe0729b3ac8097c5fe8d3",
+      "sha256_note": "SHA-256 för denna sanitiserade bedömningsfil själv, beräknad färskt med `shasum -a 256` 2026-09-24. Bedömningsfilens EGEN metadata dokumenterar separat de bakomliggande, ocommittade källornas hashar: originalmejlet a4434f7a07a58532a8e8ddd820e7557b9cf8a4b2a1e835317378214cda435de8 och den officiella HEMAB-prislistan abb93a2c30be3d33fd6d30e8de6af1963b2bf7e507595abda806338320775db8 (identisk med källan 13_1 ovan). Originalmejlet är personuppgiftsbärande och committas aldrig.",
+      "kind": "internal_sanitized_source_assessment",
+      "notes_sv": "Stänger R02/A2 för harnosand-energi-miljo-harnosand-2026: bekräftar att intervalltabellen är faktureringsgrundande, att prislistans 1 750 MWh-räkneexempel (45 050 kr) är felaktigt och att korrekt marginalt avdrag är 50 575 kr exklusive moms, avräknat på årets sista faktura. Dokumenterar även energipris, effektavgift och effektkorrigeringsformeln (max(0, faktiskt effektuttag − vald effekt) × 1266 × 1,3)."
     }
   ],
   "members": [
@@ -3961,7 +3973,8 @@
             95,
             125
           ],
-          "accumulation": "calendar_year"
+          "accumulation": "calendar_year",
+          "settlement": "monthly"
         }
       ],
       "source_refs": [
@@ -4459,7 +4472,7 @@
         "housing_association"
       ],
       "price_year": 2026,
-      "valid_from": null,
+      "valid_from": "2026-01-01",
       "valid_to": null,
       "price_status": "published_2026",
       "vat_basis": "excluded",
@@ -4503,14 +4516,15 @@
       },
       "adjustments": [
         {
-          "type": "marginal_volume_discount",
-          "source_intervals": [
-            "0–500",
-            "501–750",
-            "751–1000",
-            "1001–1500",
-            "1501–2000",
-            "2001+"
+          "type": "marginal_annual_volume_discount",
+          "unit": "SEK/MWh",
+          "lower_bounds_MWh": [
+            0,
+            500,
+            750,
+            1000,
+            1500,
+            2000
           ],
           "rates": [
             0,
@@ -4520,17 +4534,16 @@
             65,
             130
           ],
-          "unit": "SEK/MWh",
-          "status": "table_example_conflict",
+          "accumulation": "calendar_year",
           "settlement": "last_invoice_of_calendar_year"
         },
         {
           "type": "capacity_overrun",
+          "unit": "SEK/kW",
           "rate": 1266,
           "multiplier": 1.3,
-          "unit": "SEK/kW",
           "assessment_period": "12_months",
-          "formula": "max(0,actual_daily_mean_kW-chosen_kW)*1266*1.3; adjustment covers entire 12-month commitment"
+          "actual_kw_field": "debiteringsgrundande_effekt_kw"
         }
       ],
       "source_refs": [
@@ -4547,10 +4560,14 @@
             1,
             2
           ]
+        },
+        {
+          "source_id": "assessment-harnosand-volymrabatt-2026-09-24",
+          "pages": null
         }
       ],
       "issues": [
-        "Volymrabattens räkneexempel motsäger intervalltabellen. Kontroll krävs."
+        "Löst (signal 2026-09-24-001, R02/A2): HEMAB bekräftar att intervalltabellen är faktureringsgrundande och att prislistans 1750 MWh-räkneexempel (45 050 kr) är felaktigt; korrekt marginalt avdrag är 50 575 kr exklusive moms, avräknat på årets sista faktura. Se assessment-harnosand-volymrabatt-2026-09-24."
       ],
       "production_ready": false,
       "calculation_status": "requires_engine_mapping_and_invoice_validation",
@@ -4567,7 +4584,8 @@
         ],
         "conditions_sv": [
           "Volymrabattens räkneexempel motsäger intervalltabellen. Kontroll krävs.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A2 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Tabellen (65 kr/MWh i bandet 1501-2000 MWh) och räkneexemplet för 1750 MWh (42,90 kr/MWh på hela delen över 1000) motsäger varandra. R02 oförändrad."
+          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A2 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Tabellen (65 kr/MWh i bandet 1501-2000 MWh) och räkneexemplet för 1750 MWh (42,90 kr/MWh på hela delen över 1000) motsäger varandra. R02 oförändrad.",
+          "Signal 2026-09-24-001 (Codex → Claude, APPROVED_FOR_IMPLEMENTATION): HEMAB besvarade R02/A2 2026-09-24 och stänger den externa källfrågan — se assessment-harnosand-volymrabatt-2026-09-24. Disposition flyttad från external_answer_required till source_resolved_implementation_pending. investigation.status hålls kvar på 'utreds' medvetet: motor (marginal_annual_volume_discount + ny capacity_overrun), policy, UI och acceptanstest är ännu inte separat granskade och aktiverade. Tariffen får inte bli valbar i skarp kalkylator eller ingå i godkanda() förrän en separat APPROVED_FOR_ACTIVATION-signal."
         ]
       }
     },

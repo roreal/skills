@@ -152,6 +152,7 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
   - Källa: [officiell prislista för flerbostadshus och lokaler 2026 (PDF)](https://www.hemab.se/download/18.727ad6af19ac23cdb98120ae/1764247260203/Prislista%2520flerbostadshus%25202026.pdf) (`13_1` s.1,2)
   - **⛔ Ej godkänt 2026-09-04.** Den aktuella officiella prislistan innehåller samma interna motsägelse som tidigare underlag. För 1 750 MWh använder exemplet 750 MWh × 42,90 och inget på 65,00-nivån, medan tabellen anger 42,90 endast för 1 001–1 500 MWh och 65,00 för 1 501–2 000 MWh. Övriga priser, 1/12-periodisering och avräkning av rabatten på årets sista faktura är tydliga.
   - [ ] Begär ett skriftligt leverantörsbesked om korrekt intervallformel eller ett korrigerat räkneexempel innan volymrabatten implementeras.
+  - **🟡 Källfråga R02/A2 löst 2026-09-24 (signal 2026-09-24-001).** HEMAB bekräftar att intervalltabellen är faktureringsgrundande och att räkneexemplet (45 050 kr) är fel; korrekt avdrag vid 1 750 MWh är 50 575 kr exklusive moms. Se `Fjarrvarmetariffer/Svar på frågor/2026-09-24-bedomning-harnosand-volymrabatt.md`. Källfrågan är stängd, men raden är fortfarande inte godkänd i sin helhet: motor-, policy-, UI- och acceptanstest för `marginal_annual_volume_discount` (med nytt maskinläsbart `settlement`-fält) och den nya typen `capacity_overrun` väntar på separat Codex-granskning och aktivering innan checkboxen ovan kan bockas av.
 
 ### Hässleholm Miljö
 
