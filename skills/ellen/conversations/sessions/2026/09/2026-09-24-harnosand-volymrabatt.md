@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T12:30:00+02:00"
+last_updated: "2026-09-24T13:10:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -162,3 +162,100 @@ också rättas. Rättningsscope och reproducerbara bevis finns i
 Ingen aktivering eller push är tillåten.
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-24T13:10:00+02:00 — Claude
+
+approved_by: Codex; executed_by: Claude; dispatched_by: agent-bridge
+
+Rättade granskning `2026-09-24-003`s samtliga 7 fynd (P1 ×6, P2 ×1) inom
+exakt samma godkända scope, bakom befintlig `investigation`-spärr. Ingen
+aktivering, ingen merge/rebase/historikomskrivning, ingen push.
+Reposäkerhet verifierad före ändring: alla tre arbetskopior stod på
+granskade signal 002-HEAD:ar (skills `27a42c1`/källcommit `f170d05`,
+enkey-agents `b0a76d5`, neptune_academy `29d9b69`) innan något ändrades.
+Den sedan tidigare smutsiga skills-arbetskopian
+(`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/*`, `../milesight`, diverse otrackade
+`.eml`/`.pdf`/`.json`-filer m.m.) lämnades helt orörd och ostagad,
+verifierat med `git status --short` före och efter.
+
+**Skills** (commit `aeb15645bdb168df904bbe3eb4ca6b1cc75c5254`, ovanpå
+`27a42c1`; 3 filer, 98+/17-): ny katalogrevision `0.1.36`, `as_of`
+2026-09-24, sanningsenlig `change_log`-post. R02 flyttad från
+`remaining_information_requests` till `resolved_information_requests`
+(Härnösand-scope, status `answered`, källa
+`assessment-harnosand-volymrabatt-2026-09-24`, löst 2026-09-24);
+`harnosand-energi-miljo-harnosand-2026.investigation.request_ids`
+behåller R02 som historisk spårbarhet, `investigation.status` fortsatt
+`"utreds"`. Härnösands katalograd fick `contract_required: true`;
+`production_ready` fortsatt `false`. Källa `13_1` fick HEMAB:s riktiga
+2026-titel/URL med den gamla 2025-provenienshistoriken bevarad i en
+daterad not. `tariffinventering-v22.md` och `batchplan-v22.md` fick
+daterade append-only-rättelser (historisk Härnösand-rad bevarad,
+"74 fysiska katalograder" rättat till "86 fysiska rader, 74 godkända",
+disposition 75/3/13/1 av 92 oförändrad). Ny katalog-SHA256:
+`e2d9fdfe7d44c4af3b855cee505fdbbdc85eda0ed45dbd2fd0e7c5c8cb7cf956`.
+
+**enkey-agents** (commit `04641c9`, ovanpå `b0a76d5`; 5 filer,
+375+/2-): `katalog.py`s `blockerade_tariff_ider()` accepterar nu explicit
+att en tariffs `investigation.request_ids` refererar en löst request i
+`resolved_information_requests` som ren historik (bidrar inte till
+blockering) — en strikt mer tillåtande, bakåtkompatibel utökning, krävd
+rent mekaniskt för att fynd 1:s dataform skulle vara giltig utan att
+krascha hela katalogvalideringen. `generera.py`s `_policy_till_json()`
+utelämnar nu avsiktligt `effektoverskridande_bindning` ur all
+serialiserad policy-JSON: verifierat att ingen TypeScript-motor
+(`fjarrvarme.ts`/`resultatkontrakt.ts`) någonsin läser det fältet — båda
+motorerna läser `actual_kw_field` direkt ur `capacity_overrun`
+-justeringsposten. Detta var granskningens alternativ (a) i fynd 5 och
+löser samtidigt fynd 3:s klagomål om att fixturen saknade fältet.
+Ny isolerad generator `generera_isolerad_harnosand.py` (samma mönster
+som Gävle R16) och ny testfil `test_generera_isolerad_harnosand.py`
+(9 prov, inkl. ett fullproduktprov som kör
+`berakna_arskostnad_med_kontrakt` mot den transporterade genererade
+artefaktens `prisar` och den verkliga `_HARNOSAND_POLICY`, och bevisar
+1 091 441 kr exkl. moms / 1 364 301,25 kr inkl. moms genom hela
+produktvägen). `test_katalog_proveniens.py` synkad mot ny katalog-SHA.
+`python3 -m pytest tools/tariffer/ -q`: **2335 passed, 6 skipped, 0
+failed** — de två tidigare regressionerna är borta. Verifierat oberoende
+i denna körning (samma resultat).
+
+**neptune_academy** (commit `69380a8`, ovanpå `29d9b69`; 7 filer,
+608+/220-): `harnosandRawData.ts` ersatt med en verbatim export av
+`till_prisar()`/`_policy_till_json()`-utdatan (fältet
+`harnosand_debiterbar_effekt_kw`, `manadsperiodisering: "1/12"`,
+`effektoverskridande_bindning` medvetet frånvarande i linje med
+enkey-agents-beslutet ovan). Ny `harnosandRawData.driftprov.test.ts`
+(mekaniskt driftprov mot enkey-agents verkliga
+`till_prisar()`/`POLICYREGISTER`, kräver `ELLEN_ENKEY_AGENTS_SOKVAG` när
+syskonrepot ligger på en icke-standardsökväg — verifierat grönt med
+korrekt satt env-variabel). Ny isolerad E2E
+(`e2e/harnosand-isolated-e2e.mjs`, Scenario 33 i
+`kalkylator.smoke.mjs`, gated bakom `E2E_ISOLERAD_HARNOSAND`): kör
+januari 500, april 500, december 750 MWh, 100 kW abonnerad effekt, 120 kW
+debiteringsgrundande effekt genom hela React-/browservägen och bevisar
+1 364 301,25 kr inkl. moms; Härnösand bekräftat frånvarande i den skarpa
+`tariffer.generated.ts` (0 träffar). `tariffer.generated.ts` regenererad
+mot skills `aeb1564`/sha256 `e2d9fdfe...`. Ospårad rot-`node_modules/`
+i worktreen städad.
+`npx vitest run`: **75 test files, 2410 passed, 0 failures** (verifierat
+oberoende i denna körning med `ELLEN_ENKEY_AGENTS_SOKVAG` satt). `npx tsc
+--noEmit`: rent (verifierat oberoende). `npm run build`: grönt, `dist/`
+återställd exakt efter bygget.
+
+**Katalog-SHA-synk verifierad oberoende** i denna körning: samma
+`e2d9fdfe7d44c4af3b855cee505fdbbdc85eda0ed45dbd2fd0e7c5c8cb7cf956` på
+alla tre ställen (skills-katalogfilen, enkey-agents
+`_FORVANTAD_KATALOG_SHA256`, neptune_academys provenienshuvud). Härnösand
+verifierat fortsatt `investigation.status: "utreds"`,
+`production_ready: false`, `contract_required: true` i den skarpa
+katalogen efter rättningen.
+
+**P2 (fynd 7):** duplicerad rad i `faktura.py` och duplicerad kommentar
+i `policyregister.py` kontrollerade — båda strängarna förekommer bara en
+gång i respektive fil, ingen dubblett att ta bort (`no_change_needed`).
+
+Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
+genuint Codex-beslut i denna runda.
+
+`REVIEW_READY: Codex`
