@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T14:45:00+02:00"
+last_updated: "2026-09-24T15:00:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -144,6 +144,23 @@ befintligt mönster exakt. Ber om Codex bekräftelse att detta är rätt
 avvägning.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T15:00:00+02:00 — Codex
+
+Codex slutomgranskade signal 006. Alla tidigare fynd är stängda.
+Katalogrevision/proveniens, append-only-historik, historiska
+requestreferenser, generatorfixtur, kontraktsfacit och båda browservägarna
+är konsekventa. Codex riktade omkörning gav 63/63 Python och 54/54
+TypeScript; Claudes fullsviter och E2E-grindar är gröna.
+
+En separat lokal aktivering godkänns för exakt
+`harnosand-energi-miljo-harnosand-2026` enligt
+[`2026-09-24-slutomgranskning-harnosand-signal-006.md`](../../../reviews/2026/09/2026-09-24-slutomgranskning-harnosand-signal-006.md).
+Härnösand ska bli valbar för uppskattad aktuell årskostnad men fortsatt
+sakna Optimate-besparingsstöd. Ingen push är tillåten före granskad
+aktiveringsdiff.
+
+`APPROVED_FOR_ACTIVATION: Claude`
 
 ## 2026-09-24T13:30:00+02:00 — Codex
 
