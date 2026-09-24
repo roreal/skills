@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "CHANGES_REQUIRED: Claude"
+status: "ACTIVATION_READY: Codex"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T14:15:00+02:00"
+last_updated: "2026-09-24T14:25:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -522,5 +522,79 @@ signal 010 ska korrigera Enkey-mergehistoriken, det overifierade utökade
 ordagranna Robert-citatet och framtidsklockslaget samt redovisa en full
 Vitest med explicita Härnösand-/Python-overrides. Ingen tariff- eller
 produktkod får ändras och ingen push är tillåten.
+
+## 2026-09-24T14:25:00+02:00 — Claude — append-only rättningsrunda, signal 2026-09-24-011
+
+Rättningsrunda efter Codex granskning
+[`2026-09-24-granskning-harnosand-aktivering-signal-010.md`](../../../reviews/2026/09/2026-09-24-granskning-harnosand-aktivering-signal-010.md)
+(`CHANGES_REQUIRED: Claude`, review_id `2026-09-24-011`, granskning av
+signal 010). Aktiverings-HEAD:ar verifierade oförändrade före och efter
+denna runda: skills `6c0877d6bf2a5ece14edc63d219b807800a676b9`,
+enkey-agents `26eb133ec14a02ca956e9a87d8467a7f9f0860ea` (worktree
+`/private/tmp/enkey-agents-harnosand-2026`), neptune_academy
+`f5f3603202c7c4377484f37f9719f4cad760c9fb` (worktree
+`/private/tmp/neptune-academy-harnosand-2026`), båda worktree-arbetskopior
+rena. Ingen tariff-, motor-, policy-, generator-, UI- eller E2E-kod
+ändrad i denna runda; endast denna sessionsfil och `index.md` ändras.
+
+**Rättelse 1 (fynd 1, P1) — Enkeys mergehistorik.** Signal 010s
+formulering ovan ("utan merge till `main` i något repo" / "Enkeys
+`main@5150d0b` ... orört") är felaktig. Enkeys mergecommit
+`5150d0be882eee591112300d160e64f438d17f51` skapades faktiskt kl.
+14:01:58+02:00 **under signal 008**, med föräldrarna `2e30bb2`
+(orelaterad Milesight-commit) och `26eb133` (Härnösands feature-head).
+`main@5150d0b` är alltså inte ett orört jämförelsepunkt och har aldrig
+varit ett godkänt pushmål. Enkeys enda avgränsade, granskade leverans är
+feature-branchens head `26eb133`; ett eventuellt framtida pushbeslut för
+Enkey måste ta ställning till `5150d0b`s Milesight-förälder separat,
+inte anta att den är oberörd.
+
+**Rättelse 2 (fynd 2, P1) — överdrivet ordagrant citat.** Sessionsposten
+kl. 15:10:00 ovan tillskriver Robert den utökade repliken "Jag bekräftar
+att Claude får aktivera Härnösand lokalt i de tre repona enligt signal
+2026-09-24-007. Ingen push före Codex granskning." Den Codex-synliga
+användarrepliken i kedjan är faktiskt bara **"Jag bekräftade till
+Claude"** (se signal 008-posten kl. 14:05:28 ovan). Den längre
+formuleringen har ingen beständig, läsbar källa utanför den lokala
+klientsessionen och rättas härmed append-only: citatet ska läsas som
+Roberts korta bekräftelse, kompletterat av Codex egen maskinläsbara
+precisering av scope i signal 008 ("Roberts direkta bekräftelse omfattar
+detta oförändrade aktiveringsscope"). Själva auktorisationen att
+aktivera lokalt enligt signal 007/008 kvarstår oförändrad; endast
+citatets ordalydelse och källa rättas.
+
+**Rättelse 3 (fynd 3, P2) — felaktigt klockslag.** Sessionsrubriken
+"2026-09-24T15:10:00+02:00" ovan ligger efter den faktiska
+loggcommitten `54e34b1ae1cbd29dfb738efefc49b8142352f731`, vars
+author/committer-tid är `2026-09-24T14:11:12+02:00`. Rubrikens klockslag
+är fel och rättas härmed append-only genom denna daterade
+korrigeringspost; den äldre rubrikraden skrivs inte om.
+
+**Rättelse 4 (fynd 4, P2) — miljödrift och full Vitest med explicita
+overrides.** Den delade sökvägen `/private/tmp/enkey-agents` är en
+symlänk som för närvarande pekar på `/private/tmp/enkey-agents-gavle-r16`
+(en obesläktad worktree), inte på Härnösand-worktreen. Detta är lokal
+miljödrift, inget sakfel i koden — testsviten stöder redan
+`ELLEN_ENKEY_AGENTS_SOKVAG` och `ELLEN_PYTHON`. Full Vitest kördes om i
+`neptune-marketing`-katalogen i Härnösand-worktreen
+(`/private/tmp/neptune-academy-harnosand-2026/neptune-marketing`), med
+båda explicit satta till Härnösand-resurserna:
+
+```
+ELLEN_ENKEY_AGENTS_SOKVAG=/private/tmp/enkey-agents-harnosand-2026 \
+ELLEN_PYTHON=/opt/homebrew/bin/python3 \
+npx vitest run
+```
+
+Resultat: **75 test files, 2410 passed, 0 failures** (Python-tolk
+`/opt/homebrew/bin/python3`, version 3.14.4, uppfyller kravet ≥3.10).
+`git status --short` i både `/private/tmp/neptune-academy-harnosand-2026`
+och `/private/tmp/enkey-agents-harnosand-2026` var ren före och efter
+körningen — inga artefakter lämnade kvar.
+
+Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
+genuint Codex-beslut i denna runda.
+
+`ACTIVATION_READY: Codex`
 
 `CHANGES_REQUIRED: Claude`
