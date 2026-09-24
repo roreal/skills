@@ -434,3 +434,76 @@ Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
 genuint Codex-beslut i denna runda.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T15:10:00+02:00 — Claude — lokal aktivering, signal 2026-09-24-007
+
+Robert bekräftade direkt i chatten: "Jag bekräftar att Claude får aktivera
+Härnösand lokalt i de tre repona enligt signal 2026-09-24-007. Ingen push
+före Codex granskning." Slutomgranskning
+[`2026-09-24-slutomgranskning-harnosand-signal-006.md`](../../../reviews/2026/09/2026-09-24-slutomgranskning-harnosand-signal-006.md)
+(review_id `2026-09-24-007`, `APPROVED_FOR_ACTIVATION: Claude`,
+`approved_activation_scope: harnosand-energi-miljo-harnosand-2026-only`)
+lästes i sin helhet före ändring. Verifierade HEAD:ar/branchar matchade
+exakt: skills (`994bfcc` som förfader till lokal HEAD, med Codex egen
+granskningsloggcommit `ccd0d63` ovanpå — ren bokföring, ingen
+implementation), `enkey-agents@harnosand-2026-volymrabatt-effektkorrigering`
+exakt `6d6a79ab6df782be708156ff6c55596c691d5976`,
+`neptune_academy@harnosand-2026-volymrabatt-effektkorrigering` exakt
+`fac02cb569a983b2097a013415f094d7cda834ac`.
+
+**Aktivering (lokal, ingen push):**
+
+- **skills:** `harnosand-energi-miljo-harnosand-2026`s `investigation`
+  satt till `null`. `contract_required` (`true`), `production_ready`
+  (`false`), prisdata, källor och R02:s resolved-bokföring oförändrade.
+  Katalogrevision `0.1.38`, ny change_log-post, §8-tabellen och det
+  per-tariff levande dispositionsblocket (§3–4) uppdaterade append-only;
+  `batchplan-v22.md` och `verifieringslista-fjarrvarmebolag.md` fick
+  motsvarande daterade rättelser. Commit `6c0877d`.
+- **enkey-agents** (branch `harnosand-2026-volymrabatt-effektkorrigering`):
+  synkade katalog-SHA (`463d7492…`) och samtliga hårdkodade
+  dispositions-/räkningsprov (`godkanda(katalog)` 74→75, medlemsräkning
+  47→48, produktantal 76→77 i tre befintliga generatorprov) mot den nya
+  skarpa dispositionen. Ingen motor- eller policylogik ändrad. Commit
+  `26eb133`.
+- **neptune_academy** (samma branch): regenererade
+  `tariffer.generated.ts` från katalogcommit `6c0877d` (sha256
+  `463d7492d4ff9e69c91da0270fa586e0c3d0c094467859332649733b02876d38`) —
+  77 skarpa produkter (75 katalog + 2 leverantörsfiler), exakt en
+  Härnösand-produkt tillagd, tidigare 74 katalogprodukter oförändrade.
+  Scenario 33 gjord ovillkorlig i ordinarie E2E-sviten; Scenario 1:s
+  tidigare negativa Härnösand-kontroll bytt till en positiv (Härnösand
+  syns i den skarpa dropdownen). Isolerad regressionsväg
+  (`harnosand-isolated-e2e.mjs`) oförändrad och fortsatt grön. Commit
+  `f5f3603`.
+
+**Ny disposition:** `godkanda(katalog)` går från 74 till **75** fysiska
+katalograder. Skarp disposition går från 75 implemented / 3 ready / 13
+blocked_external_info / 1 not_applicable till **76 implemented / 2 ready
+/ 13 blocked_external_info / 1 not_applicable av 92**. Härnösand stödjer
+fortsatt endast `annual_forward`; `stodjer_besparing` är inte satt till
+`true`.
+
+**Verifiering (oberoende, denna aktiveringsrunda):** Python
+`tools/tariffer/tests` i enkey-agents-worktreen: **2339 passed, 6
+skipped, 0 failed**. `npx vitest run` i neptune_academy-worktreen (med
+`ELLEN_ENKEY_AGENTS_SOKVAG` satt till samma worktree): **75 filer, 2410
+passed, 0 failures**. `npx tsc --noEmit`: rent. `npm run eval:build`:
+grönt (973 moduler). Ordinarie `node e2e/kalkylator.smoke.mjs` mot byggd
+`dist-eval/`: samtliga scenarier godkända, inklusive Scenario 1 (positiv
+Härnösand-kontroll) och Scenario 33 (ovillkorlig). Isolerad
+`node e2e/harnosand-isolated-e2e.mjs`: godkänd, regressionsvägen
+opåverkad. `git diff --check`: rent i alla tre repon. Byggartefakter i
+`dist/` återställda till incheckat skick efter varje lokalt bygge, inte
+del av den committade diffen.
+
+**Orelaterad drift upptäckt, lämnad orörd:** en befintlig, ospårad
+arbetskopieändring i `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`
+(A1-ämnesraden för Hässleholm ersatt med ett tabulatortecken) upptäcktes
+under denna runda. Den är inte del av Härnösand-scopet och har inte
+staged/committats.
+
+**Ingen push har utförts.** Väntar på Codex granskning av
+aktiveringsdiffen och därefter en separat `APPROVED_FOR_PUSH: Claude`.
+
+`ACTIVATION_READY: Codex`
