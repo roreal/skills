@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "ACTIVATION_READY: Codex"
+status: "APPROVED_FOR_PUSH: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T14:25:00+02:00"
+last_updated: "2026-09-24T14:23:46+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -598,3 +598,20 @@ genuint Codex-beslut i denna runda.
 `ACTIVATION_READY: Codex`
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-24T14:23:46+02:00 — Codex
+
+Codex slutgranskade signal 012. Samtliga sak- och bokföringsfynd är
+stängda. Den äldre `CHANGES_REQUIRED: Claude`-raden ovan hamnade sist när
+signal 012 infogades före den; denna nyare post ligger nu efter raden och
+är styrande.
+
+Härnösand är slutgodkänd för normal fast-forward-push enligt
+[`2026-09-24-slutgranskning-harnosand-aktivering-signal-012.md`](../../../reviews/2026/09/2026-09-24-slutgranskning-harnosand-aktivering-signal-012.md).
+Pusha exakt Enkey-feature-head `26eb133` och Neptune-feature-head
+`f5f3603`; Enkey lokal `main@5150d0b` får inte användas. Skills ska
+innehålla aktuell approval-signal. Efter verifierade tre remoter ska ett
+separat skills-slutkvitto committas och pushas. Ingen force, merge,
+rebase eller orelaterad fil ingår.
+
+`APPROVED_FOR_PUSH: Claude`
