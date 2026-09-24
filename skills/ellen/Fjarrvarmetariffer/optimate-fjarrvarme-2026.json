@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.37",
+  "schema_version": "0.1.38",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-24",
@@ -4577,17 +4577,7 @@
         "reviewed_on": "2026-09-02",
         "scope": "targeted_follow_up_of_prior_checklist; not_full_reextraction"
       },
-      "investigation": {
-        "status": "utreds",
-        "request_ids": [
-          "R02"
-        ],
-        "conditions_sv": [
-          "Volymrabattens räkneexempel motsäger intervalltabellen. Kontroll krävs.",
-          "Källrevision 2026-09-17 (se conversations/proposals/2026/09/2026-09-17-blockerade-tariffer-kallrevision.md): kvarstår external_answer_required (fråga A2 i Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md). Tabellen (65 kr/MWh i bandet 1501-2000 MWh) och räkneexemplet för 1750 MWh (42,90 kr/MWh på hela delen över 1000) motsäger varandra. R02 oförändrad.",
-          "Signal 2026-09-24-001 (Codex → Claude, APPROVED_FOR_IMPLEMENTATION): HEMAB besvarade R02/A2 2026-09-24 och stänger den externa källfrågan — se assessment-harnosand-volymrabatt-2026-09-24. Disposition flyttad från external_answer_required till source_resolved_implementation_pending. investigation.status hålls kvar på 'utreds' medvetet: motor (marginal_annual_volume_discount + ny capacity_overrun), policy, UI och acceptanstest är ännu inte separat granskade och aktiverade. Tariffen får inte bli valbar i skarp kalkylator eller ingå i godkanda() förrän en separat APPROVED_FOR_ACTIVATION-signal."
-        ]
-      },
+      "investigation": null,
       "contract_required": true
     },
     {
@@ -12151,6 +12141,15 @@
         "Fynd 3: ordinarie skarpa Playwright-E2E-sviten (kalkylator.smoke.mjs) fick en verklig negativ assertion som kräver noll dropdown-alternativ med namnet 'Härnösand Energi & Miljö' när E2E_ISOLERAD_HARNOSAND inte är satt. Scenario 33:s beloppskontroll bytt från delsträngsmatchning '1 364 301' till exakt formatterad kron-sträng.",
         "Fynd 4: katalog.py:blockerade_tariff_ider utökad med disjointhetskontroll mellan remaining_information_requests och resolved_information_requests samt scope-validering (tariff_ids/member_ids) för historiska resolved-referenser; okända eller fel-scopade referenser fortsatt fail-closed. Nya mutationsprov för ID-kollision och fel-scopad resolved-referens, plus positivt R02-prov.",
         "Ingen pris-, kapacitetsband-, effekt-, adjustments- eller investigation-ändring. production_ready (false) och Härnösands investigation.status ('utreds') oförändrade; ingen aktivering eller push i denna signal. Katalogen har fortsatt 86 fysiska poster; godkanda(katalog) fortsatt 74."
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "revision": "0.1.38",
+      "changes": [
+        "Lokal aktivering efter Codex slutomgranskning signal 2026-09-24-007 (APPROVED_FOR_ACTIVATION: Claude, granskning av REVIEW_READY-signal 006; approved_activation_scope: harnosand-energi-miljo-harnosand-2026-only). harnosand-energi-miljo-harnosand-2026s investigation satt till null. Ingen pris-, kapacitetsband-, effekt-, adjustments- eller källändring; contract_required (true), production_ready (false) och R02:s resolved-bokföring oförändrade.",
+        "Härnösand stödjer fortsatt endast annual_forward/aktuell uppskattad årskostnad. stodjer_besparing är inte satt till true och Optimate-besparing är inte aktiverad; en regel för sänkt abonnerad effekt saknar fortfarande separat produktbeslut.",
+        "Katalogen har fortsatt 86 fysiska poster. godkanda(katalog) går från 74 till 75. Skarp disposition går från 75 implemented / 3 ready / 13 blocked_external_info / 1 not_applicable av 92 till 76 implemented / 2 ready / 13 blocked_external_info / 1 not_applicable av 92. Ingen push i denna signal; väntar på ACTIVATION_READY: Codex och därefter en separat APPROVED_FOR_PUSH: Claude."
       ]
     }
   ],

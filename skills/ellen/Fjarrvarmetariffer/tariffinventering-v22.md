@@ -1580,9 +1580,14 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 - **Teststatus:** implementation bakom spärr — oberoende handräknat 1750 MWh-facit (1 091 441 kr exkl. moms / 1 364 301,25 kr inkl. moms), bandgränstester och mutationstester, se `REVIEW_READY: Codex`
 - **UI-status:** inte valbar i skarp kalkylator (medvetet, `investigation.status: utreds`); browsertestbar via en isolerad rådatafixtur (samma mönster som Gävle R16 innan aktivering)
 - **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion, och inte aktiverad denna runda
-- **Exakt saknad uppgift/fråga:** Ingen extern källfråga kvarstår. Kvarstående steg är intern granskning och aktivering.
-- **Inmatningslägen:** samtliga blockerade tills en separat aktiveringssignal tar bort `investigation`-spärren
-- **Disposition:** `ready_to_implement`
+- **Exakt saknad uppgift/fråga:** Ingen. Motor-, policy-, UI- och acceptanstest är granskade och aktiverade lokalt (signal `2026-09-24-007`, Codex slutomgranskning av signal `006`, `APPROVED_FOR_ACTIVATION: Claude`, Roberts direkta klartecken i chatten). Ingen push i denna signal; väntar `ACTIVATION_READY: Codex` och därefter en separat `APPROVED_FOR_PUSH: Claude`.
+- **Inmatningslägen:** oförändrade
+- **Disposition:** `implemented_source_verified_annual`
+
+**Daterad rättelse, 2026-09-24 (signal `2026-09-24-007`, Codex slutomgranskning av signal `006`, `APPROVED_FOR_ACTIVATION: Claude`, Roberts direkta klartecken i chatten — lokal aktivering, ingen push ännu).** Katalogstatus och UI-status ovan (2026-09-24, fynd 2) gäller inte längre; nuläge:
+- **Katalogstatus:** `production_ready: false`, `investigation: null` (spärren borttagen; `optimate-fjarrvarme-2026.json` change_log `0.1.38`)
+- **UI-status:** valbar i skarp kalkylator efter regenerering av tariffartefakten
+- **Årsreproducerbar med nuvarande underlag:** Ja, som uppskattning (`annual_forward`) — inte en fakturaexakt reproduktion. Härnösand stödjer fortsatt endast `annual_forward`; `stodjer_besparing` är inte satt till `true`.
 
 #### `hassleholm-miljo-hassleholm-2026`
 - **Leverantör / nät / kundkategori:** Hässleholm Miljö — Hässleholm — näring/brf
@@ -4877,11 +4882,27 @@ produkt som ska förbli redo — samma representation, inget "delas eller läggs
 
 | Disposition | Bastariffer (§3–4) | Varianter (§5) | Summa |
 |---|---:|---:|---:|
-| `implemented_source_verified_annual` | 66 | 9 | 75 |
-| `ready_to_implement` | 2 | 1 | 3 |
+| `implemented_source_verified_annual` | 67 | 9 | 76 |
+| `ready_to_implement` | 1 | 1 | 2 |
 | `blocked_external_info` | 10 | 3 | 13 |
 | `not_applicable` | 0 | 1 | 1 |
 | **Summa** | **78** | **14** | **92** |
+
+**Rättat 2026-09-24 (signal `2026-09-24-007`, Codex slutomgranskning av
+signal `006`, `APPROVED_FOR_ACTIVATION: Claude`, Roberts direkta
+klartecken i chatten):** `harnosand-energi-miljo-harnosand-2026`s
+bastariffrad (§3–4) flyttades från `ready_to_implement` till
+`implemented_source_verified_annual` i SAMMA commit som katalogens
+`investigation`-spärr togs bort (`optimate-fjarrvarme-2026.json`
+change_log `0.1.38`). Tabellen ovan går från **75 implemented / 3 ready /
+13 blocked / 1 not_applicable** till **76 implemented / 2 ready / 13
+blocked / 1 not_applicable av 92** (bastariffraden 66→67 implemented,
+2→1 ready; varianterna oförändrade). `godkanda(katalog,
+policyregister=POLICYREGISTER)` går från 74 till **75** fysiska
+katalograder (74 tidigare + Härnösand). Härnösand stödjer fortsatt endast
+`annual_forward`; `stodjer_besparing` är inte satt till `true`. Ingen push
+i denna signal; väntar `ACTIVATION_READY: Codex` och därefter en separat
+`APPROVED_FOR_PUSH: Claude`.
 
 **Rättat 2026-09-24 (signal `2026-09-24-001`, Codex → Claude,
 `APPROVED_FOR_IMPLEMENTATION: Claude`, källnormalisering — ingen

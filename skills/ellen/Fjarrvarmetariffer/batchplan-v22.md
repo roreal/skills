@@ -1469,6 +1469,22 @@ i denna lista minskar därmed från 26 till 24.
 > **75 implemented / 3 ready / 13 blocked_external_info / 1 not_applicable
 > av 92** ändras. Ingen annan rad i denna batchplan ändras av detta.
 
+> **Rättelse 2026-09-24 (signal `2026-09-24-007`, Codex slutomgranskning
+> av signal `006`, `APPROVED_FOR_ACTIVATION: Claude`, Roberts direkta
+> klartecken i chatten):** den separata, granskade aktiveringsrundan som
+> rättelsen ovan förutsatte är nu genomförd — enbart lokalt, ingen push.
+> `harnosand-energi-miljo-harnosand-2026`s `investigation` sattes till
+> `null` i SAMMA commit som katalogens `investigation`-spärr togs bort
+> (`optimate-fjarrvarme-2026.json` change_log `0.1.38`). `godkanda(katalog,
+> policyregister=POLICYREGISTER)` går från 74 till **75** fysiska
+> katalograder; dispositionen går från **75 implemented / 3 ready / 13
+> blocked_external_info / 1 not_applicable** till **76 implemented / 2
+> ready / 13 blocked_external_info / 1 not_applicable av 92**. Härnösand
+> stödjer fortsatt endast `annual_forward`; `stodjer_besparing` är inte
+> satt till `true`. Väntar `ACTIVATION_READY: Codex` och därefter en
+> separat `APPROVED_FOR_PUSH: Claude`. Ingen annan rad i denna batchplan
+> ändras av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |

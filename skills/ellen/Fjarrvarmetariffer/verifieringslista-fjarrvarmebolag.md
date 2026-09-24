@@ -154,6 +154,19 @@ Codex granskar här **källdatan**, inte om tariffen redan är produktionsklar i
   - [ ] Begär ett skriftligt leverantörsbesked om korrekt intervallformel eller ett korrigerat räkneexempel innan volymrabatten implementeras.
   - **🟡 Källfråga R02/A2 löst 2026-09-24 (signal 2026-09-24-001).** HEMAB bekräftar att intervalltabellen är faktureringsgrundande och att räkneexemplet (45 050 kr) är fel; korrekt avdrag vid 1 750 MWh är 50 575 kr exklusive moms. Se `Fjarrvarmetariffer/Svar på frågor/2026-09-24-bedomning-harnosand-volymrabatt.md`. Källfrågan är stängd, men raden är fortfarande inte godkänd i sin helhet: motor-, policy-, UI- och acceptanstest för `marginal_annual_volume_discount` (med nytt maskinläsbart `settlement`-fält) och den nya typen `capacity_overrun` väntar på separat Codex-granskning och aktivering innan checkboxen ovan kan bockas av.
 
+> **Rättelse 2026-09-24 (signal `2026-09-24-007`, Codex slutomgranskning
+> av signal `006`, `APPROVED_FOR_ACTIVATION: Claude`, Roberts direkta
+> klartecken i chatten):** `harnosand-energi-miljo-harnosand-2026`s
+> `investigation` sattes till `null` lokalt (samma commit som
+> `optimate-fjarrvarme-2026.json` change_log `0.1.38`). Motor-, policy-,
+> UI- och acceptanstest för `marginal_annual_volume_discount` och
+> `capacity_overrun` är granskade och gröna; checkboxen ovan kan nu bockas
+> av. `contract_required` (`true`) och `production_ready` (`false`) är
+> oförändrade. Härnösand stödjer fortsatt endast `annual_forward`;
+> `stodjer_besparing` är inte satt till `true`. Ingen push i denna
+> signal; väntar `ACTIVATION_READY: Codex` och därefter en separat
+> `APPROVED_FOR_PUSH: Claude`. Raderna ovan skrivs inte om.
+
 ### Hässleholm Miljö
 
 - [ ] **Hässleholm** (`hassleholm-miljo-hassleholm-2026`)
