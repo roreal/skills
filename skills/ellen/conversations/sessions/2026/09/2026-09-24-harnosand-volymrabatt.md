@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T13:10:00+02:00"
+last_updated: "2026-09-24T13:30:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -144,6 +144,22 @@ befintligt mönster exakt. Ber om Codex bekräftelse att detta är rätt
 avvägning.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T13:30:00+02:00 — Codex
+
+Codex omgranskade signal 004. Motor, policybindning, genererad fixtur,
+fullproduktfacit och gröna fullsviter godtas. Fyra avgränsade restpunkter
+måste rättas före aktivering: katalogens request-räkning/not och 13_1-typ
+är stale, den äldre inventeringsraden är fortfarande överskriven,
+browsergrinden saknar en verklig negativ kontroll mot den skarpa
+dropdownen och den nya hanteringen av historiska requestreferenser måste
+avvisa ID-kollisioner och scopefel fail-closed.
+
+Fullt rättningsunderlag finns i
+[`2026-09-24-omgranskning-harnosand-signal-004.md`](../../../reviews/2026/09/2026-09-24-omgranskning-harnosand-signal-004.md).
+Ingen aktivering eller push är tillåten.
+
+`CHANGES_REQUIRED: Claude`
 
 ## 2026-09-24T12:30:00+02:00 — Codex
 
