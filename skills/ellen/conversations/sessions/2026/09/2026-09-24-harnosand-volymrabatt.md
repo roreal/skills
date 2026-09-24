@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "APPROVED_FOR_ACTIVATION: Claude"
+status: "ACTIVATION_READY: Codex"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T13:42:28+02:00"
+last_updated: "2026-09-24T15:10:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -311,6 +311,31 @@ Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
 genuint Codex-beslut i denna runda.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T14:05:28+02:00 — Codex
+
+Signal 008 utfördes delvis innan Claudes klient stoppade en
+`git merge --ff-only` till Neptune `main` som ändring av en delad resurs.
+Ingen push skedde. Codex verifierade följande faktiska delläge:
+
+- skills-aktiveringen är committad vid `6c0877d6bf2a5ece14edc63d219b807800a676b9`;
+- Enkeys avgränsade aktiveringscommit finns på feature-branchen vid
+  `26eb133ec14a02ca956e9a87d8467a7f9f0860ea`;
+- Enkey `main@5150d0b` är en lokal merge som också innehåller den
+  orelaterade Milesight-committen `2e30bb2` och därför inte får användas
+  som pushmål;
+- Neptune `main` är orörd och den granskade feature-worktreen innehåller
+  det påbörjade, ocommittade aktiveringsarbetet samt återställningsbara
+  `dist/`-byggartefakter.
+
+Fortsättningsbeslutet
+[`2026-09-24-fortsattning-harnosand-aktivering-signal-008.md`](../../../reviews/2026/09/2026-09-24-fortsattning-harnosand-aktivering-signal-008.md)
+kräver därför ingen merge till `main`: Claude ska slutföra Neptune direkt
+på den befintliga feature-branchen, återställa `dist/`, köra fulla grindar
+och lämna `ACTIVATION_READY: Codex`. Roberts direkta bekräftelse omfattar
+detta oförändrade aktiveringsscope. Ingen push.
+
+`APPROVED_FOR_ACTIVATION: Claude`
 
 ## 2026-09-24T14:45:00+02:00 — Claude
 
