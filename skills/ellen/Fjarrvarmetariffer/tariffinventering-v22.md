@@ -4884,6 +4884,27 @@ runda. Motor (`marginal_annual_volume_discount` med nytt `settlement`-fält
 plus ny typ `capacity_overrun`), policy och UI implementeras bakom
 spärren i isolerade branches, väntar `REVIEW_READY: Codex`.
 
+**Rättat 2026-09-24 (rättningsrunda, granskning
+[`2026-09-24-granskning-harnosand-signal-002.md`](../conversations/reviews/2026/09/2026-09-24-granskning-harnosand-signal-002.md),
+`CHANGES_REQUIRED: Claude`, fynd 6):** ovanstående rättelse (signal
+`2026-09-24-001`) använde felaktigt frasen "74 fysiska katalograder" för
+att beskriva `godkanda()`-resultatet. Korrekt formulering: katalogen har
+**86 fysiska rader, varav 74 är godkända**
+(`godkanda(katalog, policyregister=POLICYREGISTER)` == 74) — "fysiska
+katalograder" syftar på samtliga 86 raderna i
+`optimate-fjarrvarme-2026.json:tariffs[]`, inte enbart de godkända.
+Samtidigt (katalogrevision `0.1.36`, se change_log): R02 flyttades från
+`remaining_information_requests` till `resolved_information_requests` med
+Härnösand-scope, ny källa `assessment-harnosand-volymrabatt-2026-09-24`
+och status `answered`; `harnosand-energi-miljo-harnosand-2026`s
+`investigation.request_ids` behåller R02 som historisk spårbarhet.
+`contract_required: true` sattes på Härnösands katalograd (ren, oaktiverad
+plumbing — grinden nås aldrig så länge `investigation` inte är `null`).
+Disposition oförändrad **75 implemented / 3 ready / 13 blocked / 1
+not_applicable av 92**; `investigation.status` fortsatt `utreds`,
+`production_ready` fortsatt `false`. Härnösand fortsatt inte aktiverad.
+Rättelsen ovan (signal `2026-09-24-001`) skrivs inte om i övrigt.
+
 **Rättat 2026-09-23 (signal 011, Codex slutgranskning av signal 010,
 `APPROVED_FOR_ACTIVATION: Claude`, Roberts automationsfullmakt för
 aktiverings-/pushkedjan):** `gavle-energi-gavle-2026`s bastariffrad (§3–4)
@@ -5098,6 +5119,28 @@ innehåller efter revisionen exakt R02, R03, R08, R16, R17.
 > `implemented`; `ready_to_implement` är oförändrat 2. Rättelsen ovan
 > (signal 011) skrivs inte om. Ingen annan rad i denna matris ändras av
 > detta.
+
+> **Rättelse 2026-09-24 (källnormalisering, signal `2026-09-24-001`,
+> `APPROVED_FOR_IMPLEMENTATION: Claude`, rättad efter granskning
+> [`2026-09-24-granskning-harnosand-signal-002.md`](../conversations/reviews/2026/09/2026-09-24-granskning-harnosand-signal-002.md),
+> `CHANGES_REQUIRED: Claude`, fynd 6):** rad 25 ovan (HEMAB, fråga R02/A2)
+> är besvarad av leverantören 2026-09-24 och normaliserad till
+> `source_resolved_implementation_pending` — se den sanitiserade
+> bedömningen
+> [`2026-09-24-bedomning-harnosand-volymrabatt.md`](Svar%20på%20frågor/2026-09-24-bedomning-harnosand-volymrabatt.md)
+> och `optimate-fjarrvarme-2026.json` change_log `0.1.36`. Intervalltabellen
+> är faktureringsgrundande; prislistans räkneexempel (45 050 kr) är fel;
+> korrekt marginalt avdrag vid 1750 MWh är 50 575 kr exklusive moms,
+> avräknat på årets sista faktura. Den mekaniska 28-radersmatrisen ovan
+> fryser ett tidigare skede och skrivs INTE om i efterhand — den är
+> historik, inte en levande räkning. Den skarpa, aktuella
+> `external_answer_required`-mängden är nu tre poster (rad 23, 24, 27:
+> Hässleholm x2, Mälarenergi gruppanslutna småhus), inte fyra; HEMABs rad
+> räknas i stället bland `source_resolved_implementation_pending`.
+> `production_ready` och `investigation.status` för Härnösand är oförändrade
+> (`false`/`utreds`) — en separat, granskad motor-/produktimplementation
+> och aktiveringsrunda krävs fortfarande innan aktivering. Ingen annan rad
+> i denna matris ändras av detta.
 
 **Rättat 2026-09-16 (Batch 5c-aktivering, Codex slutomgranskning
 `2026-09-16-007`, Roberts automationsfullmakt för aktiverings-/pushkedjan):**

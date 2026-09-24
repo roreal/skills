@@ -1442,6 +1442,33 @@ i denna lista minskar därmed från 26 till 24.
 > Rättelsen ovan (signal 011) skrivs inte om. Ingen annan rad i denna
 > batchplan ändras av detta.
 
+> **Rättelse 2026-09-24 (källnormalisering, signal `2026-09-24-001`,
+> `APPROVED_FOR_IMPLEMENTATION: Claude`, rättad efter granskning
+> [`2026-09-24-granskning-harnosand-signal-002.md`](../conversations/reviews/2026/09/2026-09-24-granskning-harnosand-signal-002.md),
+> `CHANGES_REQUIRED: Claude`, fynd 6 — denna batchplan saknade tidigare helt
+> en post om Härnösand/R02):** av de fyra `external_answer_required`-posterna
+> i rättelsen 2026-09-23 ovan är HEMAB (Härnösand Energi & Miljö, fråga
+> R02/A2) nu besvarad — bolaget bekräftar 2026-09-24 att den publicerade
+> intervalltabellen är faktureringsgrundande och att prislistans eget
+> räkneexempel för 1750 MWh (45 050 kr) är felaktigt; korrekt marginalt
+> avdrag är 50 575 kr exklusive moms, avräknat på årets sista faktura. Se
+> den sanitiserade bedömningen
+> [2026-09-24-bedomning-harnosand-volymrabatt.md](Svar%20på%20frågor/2026-09-24-bedomning-harnosand-volymrabatt.md)
+> (källa `assessment-harnosand-volymrabatt-2026-09-24` i
+> `optimate-fjarrvarme-2026.json`, change_log `0.1.36`). HEMAB klassas
+> därför `source_resolved_implementation_pending` i stället för
+> `external_answer_required`; kvar i `external_answer_required` är tre
+> poster (Hässleholm Miljö × 2, Mälarenergi gruppanslutna småhus). Detta är
+> en käll- och dispositionsnormalisering, inte en aktivering:
+> `production_ready` och `investigation.status` för
+> `harnosand-energi-miljo-harnosand-2026` är oförändrade (`false`/`utreds`)
+> — motor (`marginal_annual_volume_discount` med nytt `settlement`-fält
+> plus ny typ `capacity_overrun`), policy, UI och acceptanstest kräver en
+> separat, granskad implementations- och aktiveringsrunda innan
+> `godkanda(katalog)` (74 av 86 fysiska rader) och dispositionen
+> **75 implemented / 3 ready / 13 blocked_external_info / 1 not_applicable
+> av 92** ändras. Ingen annan rad i denna batchplan ändras av detta.
+
 ## Sammanfattning
 
 | Batch | Tariffer/varianter | Ny motorkod? | Risk |
