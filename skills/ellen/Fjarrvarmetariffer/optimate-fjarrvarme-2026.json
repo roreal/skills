@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.1.36",
+  "schema_version": "0.1.37",
   "dataset_id": "optimate-prisdialogen-district-heating-2026",
   "language": "sv-SE",
   "as_of": "2026-09-24",
@@ -53,9 +53,9 @@
     },
     "production_ready_tariffs": 0,
     "information_request_status_counts": {
-      "utreds": 3,
+      "utreds": 2,
       "lost": 1,
-      "answered": 1
+      "answered": 2
     },
     "tariffs_note": "86 = 78 bastariffer + 8 materialiserade Batch 3b-varianter (<bas-id>--bas-delvarme). Ändrar inte projektets fasta kontrollmängd 92 (se 'Frusen kontrollmängd (proveniens)')."
   },
@@ -210,7 +210,7 @@
       "url": "https://www.hemab.se/download/18.727ad6af19ac23cdb98120ae/1764247260203/Prislista%20flerbostadshus%202026.pdf",
       "retrieved_on": "2026-09-02",
       "sha256": "abb93a2c30be3d33fd6d30e8de6af1963b2bf7e507595abda806338320775db8",
-      "kind": "supplier_document_hosted_by_prisdialogen",
+      "kind": "supplier_official_pricelist_pdf",
       "note": "Källnormalisering, rättningsrunda 2026-09-24 (granskning 2026-09-24-003, fynd 6): levande titel/URL rättade till HEMAB:s egna officiella 2026-dokument (samma URL som web-review-hemab-final redan pekade på). sha256 ovan är oförändrad — redan byteidentisk med denna fil, bekräftad i 2026-09-24-bedomning-harnosand-volymrabatt.md. Daterad provenienshistorik: före denna rättning bar posten Prisdialogens 2025-namngivning (titel ’Normalprislista 2025 Flerbostadshus och Lokaler (pdf)’, url ’https://www.prisdialogen.se/wp-content/uploads/2020/11/Prislista-flerbostadshus-2025-Harnosand.pdf’), tillagd av källnormaliseringssignal 2026-09-24-001 med en not om att titel/URL lämnades oförändrade trots byteidentisk hash — den noten var otillräcklig enligt granskningen och ersätts nu av denna rättelse."
     },
     {
@@ -11774,7 +11774,7 @@
       "Eskilstunas flödesformel",
       "Stockholm Exergis förtydligande prisvillkor"
     ],
-    "remaining_requests_note": "Kvarstående frågor är R02, R03, R07, R08, R09 och R14 (R01/R04–R06/R10/R12/R13/R15 är lösta eller borttagna, R11 är borttaget), samtliga med status utreds. Ytterligare villkor finns per tariff under investigation.conditions_sv."
+    "remaining_requests_note": "Kvarstående frågor är exakt R03 och R08, samtliga med status utreds. R02 besvarades 2026-09-24 (se resolved_information_requests) och flyttades därmed ur denna lista; R01/R04–R07/R09/R10/R12–R15 är redan lösta eller borttagna, R11 är borttaget. Ytterligare villkor finns per tariff under investigation.conditions_sv."
   },
   "remaining_information_requests": [
     {
@@ -12139,6 +12139,18 @@
         "Fynd 2: harnosand-energi-miljo-harnosand-2026 fick contract_required: true (ren, oaktiverad plumbing — kontrollera_aktiveringsgrind nås aldrig så länge investigation inte är null, se katalog.py:grind). Ingen pris-, kapacitetsband-, effekt- eller adjustments-ändring.",
         "Fynd 6: källa 13_1s titel och URL rättade från Prisdialogens 2025-namngivning till HEMAB:s egna officiella 2026-dokument (samma fil som web-review-hemab-final redan pekade på; sha256 oförändrad, redan byteidentisk). Den äldre 2025-titeln/URL:en bevarad som daterad provenienspost i stället för att skrivas bort.",
         "Ingen annan tariffs pris, kapacitetsband, effekt, adjustments, källa eller investigation ändrad. Katalogen har fortsatt 86 fysiska poster; godkanda(katalog) är fortsatt 74 (Härnösand ingår inte, investigation är inte null). Skarp disposition oförändrad 75 implemented / 3 ready / 13 blocked_external_info / 1 not_applicable av 92; se tariffinventering-v22.md för detaljerad räkning."
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "revision": "0.1.37",
+      "changes": [
+        "Rättningsrunda efter omgranskning signal 2026-09-24-005 (CHANGES_REQUIRED: Claude, granskning av REVIEW_READY-signal 004). Fynd 1: coverage_summary.information_request_status_counts synkad mot den fysiska remaining_information_requests-listan (endast R03 och R08 kvarstår): utreds 3→2, answered 1→2 (R02 räknas nu som besvarad), lost oförändrat 1. website_review_summary.remaining_requests_note rättad till att exakt ange R03 och R08, med daterad förklaring att R02 besvarades 2026-09-24 och övriga tidigare nämnda ID:n redan var lösta/borttagna.",
+        "Fynd 1 (fortsättning): källa 13_1s kind rättad från supplier_document_hosted_by_prisdialogen till supplier_official_pricelist_pdf, i linje med den redan etablerade officiella dokumenttypen (jämför web-review-kil-vat). Ingen ändring av 13_1s titel, URL eller sha256 (fortsatt HEMAB:s officiella 2026-dokument, oförändrad sedan revision 0.1.36).",
+        "Fynd 2: den historiska §3–4-raden i tariffinventering-v22.md återställd ordagrant till sitt förgranskningsskick (source c25a809) med en direkt efterföljande, daterad append-only-rättelse som redovisar nuvarande källa (13_1, supplier_official_pricelist_pdf), investigation-status och R02-lösning. §8-tabellens levande dispositionsrad oförändrad.",
+        "Fynd 3: ordinarie skarpa Playwright-E2E-sviten (kalkylator.smoke.mjs) fick en verklig negativ assertion som kräver noll dropdown-alternativ med namnet 'Härnösand Energi & Miljö' när E2E_ISOLERAD_HARNOSAND inte är satt. Scenario 33:s beloppskontroll bytt från delsträngsmatchning '1 364 301' till exakt formatterad kron-sträng.",
+        "Fynd 4: katalog.py:blockerade_tariff_ider utökad med disjointhetskontroll mellan remaining_information_requests och resolved_information_requests samt scope-validering (tariff_ids/member_ids) för historiska resolved-referenser; okända eller fel-scopade referenser fortsatt fail-closed. Nya mutationsprov för ID-kollision och fel-scopad resolved-referens, plus positivt R02-prov.",
+        "Ingen pris-, kapacitetsband-, effekt-, adjustments- eller investigation-ändring. production_ready (false) och Härnösands investigation.status ('utreds') oförändrade; ingen aktivering eller push i denna signal. Katalogen har fortsatt 86 fysiska poster; godkanda(katalog) fortsatt 74."
       ]
     }
   ],

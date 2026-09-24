@@ -1554,11 +1554,26 @@ leverantören (ordagrant eller nästan ordagrant från verifieringslistan/teknis
 - **Disposition:** `implemented_source_verified_annual`
 
 #### `harnosand-energi-miljo-harnosand-2026`
-- **Leverantör / nät / kundkategori:** Härnösand Energi & Miljö — Härnösand — näring/brf
-- **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
-- **Primärkälla:** `13_1` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prislista-flerbostadshus-2025-Harnosand.pdf); `web-review-hemab-final` (https://www.hemab.se/download/18.727ad6af19ac23cdb98120ae/1764247260203/Prislista%20flerbostadshus%202026.pdf); `assessment-harnosand-volymrabatt-2026-09-24` (Fjarrvarmetariffer/Svar på frågor/2026-09-24-bedomning-harnosand-volymrabatt.md)
+> **Historik, bevarad ordagrant från c25a809 (append-only; se daterad rättelse direkt nedan för det aktuella, mekaniskt räknade nuläget — denna citerade block räknas medvetet INTE av §8:s mekaniska dispositionsgrind).**
+> - **Leverantör / nät / kundkategori:** Härnösand Energi & Miljö — Härnösand — näring/brf
+> - **Prisår/giltighet:** 2026, `optimate-fjarrvarme-2026.json`
+> - **Primärkälla:** `13_1` (https://www.prisdialogen.se/wp-content/uploads/2020/11/Prislista-flerbostadshus-2025-Harnosand.pdf); `web-review-hemab-final` (https://www.hemab.se/download/18.727ad6af19ac23cdb98120ae/1764247260203/Prislista%20flerbostadshus%202026.pdf)
+> - **Giltighet:** valid_from=unknown (katalogens `valid_from` är null), valid_to=unknown (katalogens `valid_to` är null)
+> - **Källstatus:** villkorat godkänd/motsägelsefull (verifieringslistan 2026-09-04, teknisk-kartläggning v4 för Vattenfall/Sundsvall Matfors)
+> - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds`
+> - **Motorstatus:** N/A tills källfrågan är löst
+> - **Kontraktsstatus:** ej i `POLICYREGISTER`
+> - **Teststatus:** inga
+> - **UI-status:** inte valbar
+> - **Årsreproducerbar med nuvarande underlag:** Nej
+> - **Exakt saknad uppgift/fråga:** Prislistans räkneexempel (1750 MWh) motsäger den publicerade intervalltabellen — vilken är korrekt?
+> - **Inmatningslägen:** samtliga blockerade tills källfrågan är löst
+> - **Disposition:** `blocked_external_info`
+
+**Daterad rättelse, 2026-09-24 (granskning 2026-09-24-005, fynd 2).** Nuläge sedan dess (mekaniskt räknad, aktuell rad):
+- **Primärkälla:** `13_1` (nu HEMAB:s officiella 2026-dokument, https://www.hemab.se/download/18.727ad6af19ac23cdb98120ae/1764247260203/Prislista%20flerbostadshus%202026.pdf, `kind: supplier_official_pricelist_pdf`); `web-review-hemab-final` (samma URL); `assessment-harnosand-volymrabatt-2026-09-24` (Fjarrvarmetariffer/Svar på frågor/2026-09-24-bedomning-harnosand-volymrabatt.md)
 - **Giltighet:** valid_from=2026-01-01 (katalogen), valid_to=unknown (katalogens `valid_to` är null)
-- **Källstatus:** löst 2026-09-24 (R02/A2 besvarad av HEMAB, se `assessment-harnosand-volymrabatt-2026-09-24`) — den äldre `villkorat godkänd/motsägelsefull`-raden från 2026-09-04 gällde volymrabattens beräkningsmetod, nu bekräftad marginal (intervalltabellen är faktureringsgrundande, prislistans räkneexempel 45 050 kr är fel, korrekt avdrag vid 1750 MWh är 50 575 kr exkl. moms)
+- **Källstatus:** löst 2026-09-24 (R02/A2 besvarad av HEMAB, se `assessment-harnosand-volymrabatt-2026-09-24`) — den äldre `villkorat godkänd/motsägelsefull`-raden ovan (historik) gällde volymrabattens beräkningsmetod, nu bekräftad marginal (intervalltabellen är faktureringsgrundande, prislistans räkneexempel 45 050 kr är fel, korrekt avdrag vid 1750 MWh är 50 575 kr exkl. moms)
 - **Katalogstatus:** `production_ready: false`, `investigation.status: utreds` (medvetet kvar — se signal `2026-09-24-001`: källfrågan är löst men motor/policy/UI/acceptanstest väntar på separat Codex-granskning och en egen `APPROVED_FOR_ACTIVATION`-signal innan spärren tas bort)
 - **Motorstatus:** implementation bakom spärr (signal `2026-09-24-001`, `APPROVED_FOR_IMPLEMENTATION: Claude`) — återanvänder `marginal_annual_volume_discount` (Python: `_marginal_arsvolymrabatt`, TypeScript: `marginalArsvolymrabatt`) med ett nytt maskinläsbart `settlement`-fält (`last_invoice_of_calendar_year`, mot Gävles `monthly`), plus en ny typ `capacity_overrun` för effektkorrigeringen (`max(0, debiteringsgrundande_effekt_kw − abonnerad_effekt_kw) × 1266 × 1,3`, med `debiteringsgrundande_effekt_kw` som ett separat obligatoriskt fält — aldrig härlett eller tyst nollställt)
 - **Kontraktsstatus:** implementation bakom spärr, ännu inte i `POLICYREGISTER` på granskad `main` — se `REVIEW_READY: Codex` för exakta branch-/commit-hashar
