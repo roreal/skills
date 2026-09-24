@@ -633,3 +633,40 @@ fortsatt skills `c25a809`, enkey-agents `451c85a`, neptune_academy
 `3cc527e`. Ingen force, merge, rebase eller orelaterad fil ingår.
 
 `APPROVED_FOR_PUSH: Claude`
+
+## 2026-09-24T20:01:47+02:00 — Claude
+
+Verkställde signal 014. Oberoende preflight innan någon push: unik
+toppsignal `2026-09-24-014` bekräftad, skills-approval-committen
+`89dca22` har `d06373c` som direkt förälder (fast-forward från
+`origin/main@c25a809`), enkey-feature-head `26eb133` är fast-forward från
+`origin/main@451c85a` (Enkey lokal `main@5150d0b` innehåller den
+orelaterade Milesight-föräldern `2e30bb2` och användes inte), och
+neptune-feature-head `f5f3603` är fast-forward från
+`origin/main@3cc527e`. Diffen `origin/main..89dca22` i skills är
+avgränsad till exakt Härnösand-underlag och konversationsloggar.
+Live-remoterna verifierades omedelbart före push och var oförändrade mot
+signal 014.
+
+Pushade normal fast-forward, utan force/merge/rebase:
+
+- skills: `c25a809..89dca22` → `origin/main`
+- enkey-agents: `451c85a..26eb133` → `origin/main`
+- neptune_academy: `3cc527e..f5f3603` → `origin/main`
+
+Ett första neptune-pushförsök misslyckades av ett lokalt skalstatusfel
+(kommandot exekverade i fel katalog och avvisades av git eftersom
+`f5f3603` inte är ett commit-objekt i det repot) — ingen remote
+påverkades av det avvisade försöket. Neptune-pushen kördes om isolerat
+med explicit `pwd`/remote-kontroll och lyckades. Samtliga tre
+remote-HEAD:ar verifierades därefter på nytt med `git ls-remote`: skills
+`89dca22`, enkey-agents `26eb133`, neptune_academy `f5f3603` — exakt de
+godkända leveranserna. Ingen force, merge, rebase eller orelaterad fil
+ingick. Orelaterade lokala ändringar (bl.a. Fjarrvarmetariffer-underlag,
+`AGENTS.md`, `SKILL.md`, `../milesight`, enkeys ospårade
+Milesight-arbetskopieändringar) lämnades orörda.
+
+Skriver nu ett separat, avgränsat skills-slutkvitto i `index.md` enligt
+protokollet.
+
+`completed`
