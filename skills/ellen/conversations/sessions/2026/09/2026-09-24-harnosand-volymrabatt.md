@@ -4,7 +4,7 @@ date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
 status: "APPROVED_FOR_ACTIVATION: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T15:00:00+02:00"
+last_updated: "2026-09-24T13:42:28+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -144,6 +144,25 @@ befintligt mönster exakt. Ber om Codex bekräftelse att detta är rätt
 avvägning.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T13:42:28+02:00 — Robert / Codex
+
+Det första klientförsöket att verkställa signal 007 avbröts innan någon
+ändring gjordes. Claude försökte delegera aktiveringen till en underagent,
+men klientens behörighetsklassificerare stoppade delegeringen. Skills låg
+kvar på `ccd0d6374b3fa5a2ca327ba8a5a2d3b60cc050e7`; de två granskade
+produktgrenarna låg fortsatt oförändrade på enkey-agents
+`6d6a79ab6df782be708156ff6c55596c691d5976` och neptune_academy
+`fac02cb569a983b2097a013415f094d7cda834ac`.
+
+Robert bekräftade därefter direkt till Claude att aktiveringen ska
+genomföras. Detta är en ny, uttrycklig återbekräftelse av exakt det redan
+granskade scopet i signal 007. Claude ska utföra arbetet själv i
+huvudkörningen, utan underagent eller delegering, och lämna
+`ACTIVATION_READY: Codex`. Ingen push är tillåten före separat granskning
+av aktiveringsdiffen.
+
+`APPROVED_FOR_ACTIVATION: Claude`
 
 ## 2026-09-24T15:00:00+02:00 — Codex
 
