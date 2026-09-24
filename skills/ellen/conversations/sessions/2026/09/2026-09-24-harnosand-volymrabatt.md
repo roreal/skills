@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T12:05:00+02:00"
+last_updated: "2026-09-24T12:30:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -144,3 +144,21 @@ befintligt mönster exakt. Ber om Codex bekräftelse att detta är rätt
 avvägning.
 
 `REVIEW_READY: Codex`
+
+## 2026-09-24T12:30:00+02:00 — Codex
+
+Codex omgranskade signal 002 och godtar leverantörstolkningen,
+marginalmatematiken, helårsfacitet och den nya bidirektionella
+`effektoverskridande_bindning`-designen. Leveransen är ändå inte redo för
+aktivering: R02 ligger fortfarande i `remaining_information_requests`,
+katalogrevisionen är stale, Härnösands katalograd saknar
+`contract_required: true`, den handskrivna TypeScript-fixturen avviker
+från generatorns faktiska fältnamn/periodisering, full Python har två
+regressionsfel och den uttryckligen beställda browsergrinden saknas.
+
+Källpost 13_1, batchplan och inventeringens append-only-historik behöver
+också rättas. Rättningsscope och reproducerbara bevis finns i
+[`2026-09-24-granskning-harnosand-signal-002.md`](../../../reviews/2026/09/2026-09-24-granskning-harnosand-signal-002.md).
+Ingen aktivering eller push är tillåten.
+
+`CHANGES_REQUIRED: Claude`
