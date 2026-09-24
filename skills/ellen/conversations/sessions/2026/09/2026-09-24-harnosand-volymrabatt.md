@@ -2,9 +2,9 @@
 session_id: "2026-09-24-001"
 date: "2026-09-24"
 participants: ["Robert", "Codex", "Claude"]
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topic: "Härnösand 2026 — leverantörssvar om volymrabatt"
-last_updated: "2026-09-24T13:30:00+02:00"
+last_updated: "2026-09-24T14:45:00+02:00"
 ---
 
 # Härnösand 2026 — A2/R02
@@ -270,6 +270,104 @@ katalogen efter rättningen.
 **P2 (fynd 7):** duplicerad rad i `faktura.py` och duplicerad kommentar
 i `policyregister.py` kontrollerade — båda strängarna förekommer bara en
 gång i respektive fil, ingen dubblett att ta bort (`no_change_needed`).
+
+Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
+genuint Codex-beslut i denna runda.
+
+`REVIEW_READY: Codex`
+
+## 2026-09-24T14:45:00+02:00 — Claude
+
+Rättningsrunda efter omgranskning
+[`2026-09-24-omgranskning-harnosand-signal-004.md`](../../../reviews/2026/09/2026-09-24-omgranskning-harnosand-signal-004.md)
+(Codex, `CHANGES_REQUIRED: Claude`, granskning av `REVIEW_READY: Codex`
+signal 004; granskade HEAD:ar bekräftade oförändrade vid start: skills
+`7c72ffd3`, enkey-agents `04641c97b357121c6a77ab5fdcf2a2f2cb0976cc`,
+neptune_academy `69380a87f556af31852bb49397b217ec4f9bd671`). Fyra P1-fynd,
+alla inom befintligt granskat scope (`harnosand-final-metadata-history-
+and-browser-negative-gate`). Ingen aktivering, ingen push
+(`activation_allowed`/`push_allowed: false` i granskningen).
+
+**Skills** (commit `f0ffd46e0a5cdbd0572268c14262f0a381850ef4`, ovanpå
+`27fb05e`; 2 filer, 36+/9-): fynd 1 — `coverage_summary.
+information_request_status_counts` synkad mot den fysiska
+`remaining_information_requests`-listan (endast R03/R08 kvarstår):
+`utreds` 3→2, `answered` 1→2, `lost` oförändrat 1.
+`website_review_summary.remaining_requests_note` rättad till att exakt
+ange R03/R08 med en daterad förklaring om att R02 besvarades 2026-09-24.
+Källa `13_1`s `kind` rättad `supplier_document_hosted_by_prisdialogen` →
+`supplier_official_pricelist_pdf` (titel/URL/sha256 oförändrade sedan
+revision 0.1.36). Katalogrevision `0.1.36` → `0.1.37`, ny
+`change_log`-post. Ny katalog-SHA256:
+`de195144c28a0d6b6529fc7f8413f4e1c3f16b8013fdcd9467212da32c92c211`.
+Fynd 2 — `tariffinventering-v22.md`s §3–4-rad för
+`harnosand-energi-miljo-harnosand-2026` var fortfarande direkt
+överskriven trots granskning 003s krav. Den ursprungliga raden (från
+`c25a809`) är nu återställd ordagrant, formaterad som ett citerat block
+som §8:s mekaniska dispositionsgrind medvetet INTE räknar, direkt följt
+av en daterad rättelse i vanligt (icke-citerat) format med nuvarande
+fält och disposition (`ready_to_implement`) — den rad §8:s grind faktiskt
+räknar. §8-tabellens levande Härnösand-rad var redan korrekt och är
+oförändrad.
+
+**enkey-agents** (commit `6d6a79ab6df782be708156ff6c55596c691d5976`,
+ovanpå `04641c97`; 3 filer, 181+/46-): fynd 4 —
+`katalog.py:blockerade_tariff_ider()` kontrollerade varken att
+request-ID:n är disjunkta mellan `remaining_information_requests` och
+`resolved_information_requests`, eller att en tariffs historiska
+`investigation.request_ids`-referens till en löst request faktiskt
+ligger inom DEN requestens egen `tariff_ids`/`member_ids`-scope. Båda
+kontrollerna tillagda: ID-kollision mellan listorna kastar fail-closed;
+en historisk referens löses nu **lazy** (bara för de requests en tariff
+faktiskt refererar, via en refaktorerad `los_omfattning()`-hjälpfunktion)
+mot sin egen scope och kastar om tariffen inte ingår i den. Lazy i
+stället för eager var nödvändigt: en första eager-version bröt
+etablerade isolerade engångskatalogkopior (`test_lidkoping_signed_
+monthly_flow.py`, som medvetet bär en enda tariff och bara rensar
+`remaining_information_requests`, aldrig behövt röra
+`resolved_information_requests`). Ny testfil
+`test_blockerade_tariff_ider_losta_requests.py` (4 prov: positivt
+R02-prov mot den riktiga katalogen, ID-kollision remaining/resolved,
+fel-scopad historisk referens (R16/gävle-energi mot Härnösand), okänd
+historisk referens). `test_katalog_proveniens.py`s
+`_FORVANTAD_KATALOG_SHA256` synkad mot revision 0.1.37.
+`python3 -m pytest tools/tariffer -q`: **2339 passed, 6 skipped, 0
+failed** (upp från 2335/6 — de fyra nya mutationsproven).
+
+**neptune_academy** (commit `fac02cb569a983b2097a013415f094d7cda834ac`,
+ovanpå `69380a87`; 2 filer, 33+/5-): fynd 3 —
+`e2e/kalkylator.smoke.mjs`s ordinarie skarpa väg (Scenario 1) fick en
+verklig browserassertion som kräver noll dropdown-alternativ med namnet
+"Härnösand Energi & Miljö" när `E2E_ISOLERAD_HARNOSAND` inte är satt;
+hoppas medvetet över i den isolerade kandidatvägen. Scenario 33:s
+beloppskontroll bytt från delsträngen `'1 364 301'` till en exakt match
+mot den formatterade UI-strängen `"1 364 301 kr"` (`#arsprodukt-kostnad`
+via `formatKr()`/`Intl.NumberFormat`, hela kronor utan decimaler) —
+kommentaren formulerar nu sanningsenligt att browsern bevisar den
+avrundade presentationen, medan de exakta örena (1 364 301,25 kr) bevisas
+i Python-/TypeScriptkontraktstesten. `tariffer.generated.ts` regenererad
+mot skills-katalogens revision 0.1.37 (sha256 `de195144…`, commit
+`f0ffd46e0a5cdbd0572268c14262f0a381850ef4`). Byggartefakter i `dist/`
+(oavsiktligt spårade i detta repo) återställda exakt till incheckat
+skick efter varje lokalt bygge — inte del av den committade diffen.
+
+**Verifiering, denna runda (alla körda oberoende, inga cachade
+resultat):** `python3 -m pytest tools/tariffer -q` i enkey-agents-
+worktreen: 2339 passed/6 skipped/0 failed. `npx vitest run` i
+neptune_academy-worktreen (med `ELLEN_ENKEY_AGENTS_SOKVAG` satt till
+enkey-agents-worktreen — standardsökvägens symlink pekade på en
+obesläktad äldre worktree, `gavle-r16`, ett lokalt miljöproblem utanför
+detta scope): 75 test files, 2410 passed, 0 failures. `npx tsc --noEmit`:
+rent. `npm run build`: grönt. `npm run test:e2e` (ordinarie, mot byggd
+`dist/`, inkl. den nya negativa Härnösand-kontrollen): samtliga scenarier
+godkända. `npm run test:e2e:harnosand-isolated` (isolerad kandidatkopia,
+Scenario 33): godkänt, inkl. den nya exakta beloppsassertionen.
+Källsynk verifierad: samma sha256
+`de195144c28a0d6b6529fc7f8413f4e1c3f16b8013fdcd9467212da32c92c211` på
+alla tre ställen (skills-katalogfilen, enkey-agents
+`_FORVANTAD_KATALOG_SHA256`, neptune_academys provenienshuvud). Härnösand
+verifierat fortsatt `investigation.status: "utreds"`,
+`production_ready: false` i den skarpa katalogen efter rättningen.
 
 Inga kvarstående avvikelser mot granskningens scope. Inget krävde ett
 genuint Codex-beslut i denna runda.
