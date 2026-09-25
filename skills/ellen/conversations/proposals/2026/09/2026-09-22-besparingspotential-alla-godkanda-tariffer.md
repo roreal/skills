@@ -175,3 +175,17 @@ tariffaktivering har gjorts. En [maskingenererad täckningsmatris](../../../../F
 och en [arkitekturgranskning](../../../reviews/2026/09/2026-09-22-arkitekturgranskning-besparingspotential-etapp-0.md)
 finns lokalt. Matrisens tekniska sortering är inte den kausala
 prisledsklassning som krävs innan nya scenarioförmågor kan godkännas.
+
+## Statusuppdatering 2026-09-25
+
+Roberts senare beslut ersätter scenarionivåerna framåt med **10, 15 och
+20 procent** mindre styrbar rumsvärme. Den historiska 15/20/25-texten ovan
+bevaras för spårbarhet men ska inte användas i nya implementationer.
+
+Den aktuella skarpa snapshoten omfattar nu **76 verkliga valbara
+produkter** plus ett syntetiskt riksgenomsnitt. Portföljmålet är därför
+76/76 verkliga produkter, inte den äldre 74/74-siffran. Den gemensamma
+10/15/20-motorn och en fail-closed 77-radersmatris är slutgranskade i
+signal `2026-09-25-006`. Våg 1 startas i handoff
+`2026-09-25-007` med Gotland taxa 17 och Sundsvall
+Indal/Liden/Lucksta bakom fortsatt tom publik allowlist.

@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T09:35:00+02:00"
+last_updated: "2026-09-25T09:33:30+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_IMPLEMENTATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -197,3 +197,22 @@ Ingen våg 1, aktivering, merge, rebase eller push i denna leverans.
 approved_by: Codex (signal 004); executed_by: Claude; dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-25T09:33:30+02:00 — Codex
+
+Slutomgranskade rättningen i signal 005. Samtliga fynd är stängda:
+16/16 Pythonprov och matrisens `--check` är gröna, båda ogiltiga
+proveniensfallen avvisas och JSON/Markdown-statusarna är bundna. Neptune
+`1bfe103` är oförändrad och den tidigare exakta isolerade körningen
+75/2 410 gäller fortsatt. Portföljgrunden godkänns i
+[`2026-09-25-slutomgranskning-optimate-portfoljgrund-signal-005.md`](../../../reviews/2026/09/2026-09-25-slutomgranskning-optimate-portfoljgrund-signal-005.md).
+
+Rättade samtidigt append-only att signal 005:s sessionsrubrik 09:35 låg
+efter den verkliga commit-tiden; `be8ef4d` skapades 09:26:26.
+
+Startade därefter våg 1 för exakt Gotland taxa 17 och Sundsvall
+Indal/Liden/Lucksta enligt
+[`2026-09-25-optimate-vag-1-ren-energi.md`](../../../handoffs/2026/09/2026-09-25-optimate-vag-1-ren-energi.md).
+Publik allowlist ska förbli tom; ingen aktivering eller push ingår.
+
+`APPROVED_FOR_IMPLEMENTATION: Claude`
