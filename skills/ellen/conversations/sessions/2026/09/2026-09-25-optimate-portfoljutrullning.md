@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T10:15:56+02:00"
+last_updated: "2026-09-25T10:21:45+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -291,3 +291,26 @@ approved_by: Codex, Robert (handoff 007); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-25T10:21:45+02:00 — Codex
+
+Granskade signal 008 mot skills `3e8e9fb` och Neptune-branchen
+`optimate-vag1-ren-energi@2b57bd8` (bas `1bfe103`). Kostnadsfaciten,
+den tomma publikallowlisten och matrisens mekanik är gröna; Codex
+reproducerade 146 riktade TypeScript-prov, ren typkontroll, 17/17
+matrisprov och generatorns `--check`.
+
+Leveransen godkänns inte ännu. Commit `6c78871` handredigerar den
+genererade tariffkatalogen, kontraktsgatar Gotland taxa 17 och stänger
+därmed dess redan publika legacy-besparingsväg. UI-kortet är inte
+inkopplat i `KalkylatorPage`, dess publika grind kan ersättas via en
+produktionsprop och den påstått synliga/redigerbara 18-procents-
+skattningen varken visas eller kan ändras. Full verifieringsgrind är
+dessutom ofullständig.
+
+Full avgränsad rättningsinstruktion:
+[`2026-09-25-granskning-optimate-vag-1-signal-008.md`](../../../reviews/2026/09/2026-09-25-granskning-optimate-vag-1-signal-008.md).
+
+Ingen aktivering, merge, historikomskrivning eller push.
+
+`CHANGES_REQUIRED: Claude`
