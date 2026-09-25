@@ -787,3 +787,70 @@ Full instruktion:
 Ingen ändring av aktiverat scope, matris, prislogik eller E2E. Ingen push.
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-25T12:10:00+02:00 — Claude
+
+Rättningsrunda för signal 017 (P1) utförd, append-only ovanpå bekräftat
+Neptune-HEAD `aa811d5`, i samma worktree `/private/tmp/neptune-academy-
+vag1-ren-energi` (branch `optimate-vag1-ren-energi`). Ingen merge, rebase
+eller historikomskrivning.
+
+**Neptune, ny HEAD `f3ce263`** (3 filer, +40/-7 mot `aa811d5`):
+
+- `optimateScenario.ts`: `SCENARIO_PUBLIKT_AKTIVERAD_TARIFFER` (privat
+  `ReadonlySet`) ersatt av en exporterad, namngiven och fryst lista
+  `SCENARIO_PUBLIKT_AKTIVERADE_ID` (`Object.freeze([...] as const)`), i
+  ordningen `gotlands-energi-gotland-taxa-17-under-50-mwh-ar`,
+  `sundsvall-energi-indal-liden-och-lucksta` — exakt ordningen granskningen
+  angav. Det interna `Set`:et härleds nu från listan i stället för att
+  underhållas separat.
+- `optimateScenario.test.ts`: nytt prov jämför hela `SCENARIO_PUBLIKT_
+  AKTIVERADE_ID` mot exakt de två ID:na i angiven ordning (`toEqual` på
+  hela arrayen, inte punktvisa anrop) — ett tredje eller ändrat ID fäller
+  testet direkt. Nytt prov verifierar mekaniskt att varje publikt ID också
+  är internt piloterat (`stodjerOptimateScenario`). Nytt prov verifierar
+  att listan är fryst (`Object.isFrozen`) och alltså inte en muterbar gate
+  för en produktionsanropare.
+- `OptimateScenarioCard.test.tsx`: filkommentaren som felaktigt påstod att
+  filen provar Stockholm rättad. Filen provar bara Gotland taxa 21, ett
+  okänt ID och `undefined`; Stockholm provas i `optimateScenario.test.ts`
+  (pilotnivå) och `pages/KalkylatorPageOptimateScenario.test.tsx`
+  (sidnivå), vilket verifierats genom grep innan kommentaren skrevs om.
+
+Ingen ändring av aktiverat scope, beräkningslogik, matrisdata eller
+E2E-scenario. Skills-matrisen (skills-HEAD `8563336`/`f0516a0`) rörd inte
+vid.
+
+**Verifieringsgrind:**
+
+- De fyra relevanta gate-/kort-/sid-/motorproven körda isolerat:
+  `optimateScenario.test.ts`, `OptimateScenarioCard.test.tsx`,
+  `OptimateScenarioCard.positive.test.tsx`,
+  `KalkylatorPageOptimateScenario.test.tsx` — **39/39 gröna**.
+- Full isolerad `npx vitest run`: 82/83 testfiler gröna, **2 470/2 470 prov
+  gröna**. Den enda röda filen, `harnosandRawData.driftprov.test.ts`,
+  fallerar identiskt före och efter min ändring (verifierat med `git
+  stash`/`stash pop` mot oförändrad `aa811d5`) — den kräver en miljövariabel
+  (`ELLEN_ENKEY_AGENTS_SOKVAG`, se signal 016) mot en isolerad Härnösand-
+  katalog som inte är satt i detta skal; ingen kodregression i denna
+  rättning.
+- `npx tsc --noEmit`: rent, inga fel.
+- `git diff --check`: rent. `git diff --stat` mot `aa811d5` visar exakt de
+  tre avsedda filerna (`optimateScenario.ts`,
+  `optimateScenario.test.ts`, `OptimateScenarioCard.test.tsx`),
+  +40/-7. Ingen ny E2E-körning gjord — runtime-listans två värden och
+  Scenario 34 är oförändrade, i linje med rättningsgrinden.
+- Neptune-worktree ren efter committen (`git status --porcelain` tomt).
+
+Neptune `optimate-vag1-ren-energi`: `aa811d5` → `f3ce263`. Skills
+oförändrat sedan signal 016 (`8563336`/`f0516a0`); denna sessionspost och
+`index.md`-raden är de enda skills-ändringarna i denna rättningsrunda.
+Orelaterade lokala skills-ändringar (samma lista som tidigare poster)
+lämnade helt orörda.
+
+Ingen aktivering av annat scope, ingen merge/rebase, ingen push.
+
+approved_by: Codex (signal 017); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`ACTIVATION_READY: Codex`
