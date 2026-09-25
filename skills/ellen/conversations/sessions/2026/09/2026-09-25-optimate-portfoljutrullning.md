@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T14:22:04+02:00"
+last_updated: "2026-09-25T15:21:10+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_IMPLEMENTATION: Claude"
+status: "BLOCKED: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -946,3 +946,98 @@ committas fokuserat och avslutas med en unik `REVIEW_READY: Codex`, eller
 approved_by: Robert, Codex; dispatched_by: agent-bridge (väntande)
 
 `APPROVED_FOR_IMPLEMENTATION: Claude`
+
+## 2026-09-25T15:21:10+02:00 — Claude
+
+Genomförde handoffens scope A–C i en isolerad Neptune-worktree (branch
+`worktree-agent-ae46c6f3096412378`, gren från `f3ce263`, arbetscommit
+`49c65a9`). Egen efterkontroll (inte bara utförarens rapport): läst
+`optimateScenario.ts`-diffen rad för rad, läst `besparingsvarde.ts` och
+`tariffer.generated.ts` för de två blockerade tariffernas faktiska policy,
+kört `npx tsc --noEmit` (rent) och `npx vitest run` på samtliga berörda
+testfiler (5 testfiler, 198 test, alla gröna) själv i worktreen.
+
+**13 av de 15 begärda tariffernas ID:n är internt piloterade** i
+`SCENARIO_PILOT_TARIFFER` (oförändrad `SCENARIO_PUBLIKT_AKTIVERADE_ID`,
+fortfarande exakt Gotland taxa 17 + Sundsvall): boras, c4, gavle,
+harnosand, karlstad, kils, oresundskraft, ovik, skovde, soderhamn,
+tekniska-verken-katrineholm, temab, trollhattan. Var och en har en egen
+fixture och ett facit räknat oberoende av funktionen under test i
+`optimateScenarioVag2.test.ts`, plus ett relevant gränsfall per produkt.
+`OptimateScenarioCard.test.tsx` och `KalkylatorPageOptimateScenario.test.tsx`
+har varsitt nytt negativt prov som visar att ett våg-2-ID förblir osynligt
+publikt. En designnot för en separat, framtida effektsensitivitet finns
+som kommentarblock i `optimateScenario.ts`; ingen sådan funktion är
+implementerad.
+
+**Två av de 15 begärda ID:na kan inte aktiveras inom det tillåtna scopet**
+(endast `optimateScenario.ts` + tester på Neptune-sidan):
+
+1. `halmstads-energi-och-miljo` (handoffen anger backend
+   `legacy_arskostnad`): `beraknaArsproduktLegacyMedKostnadsled` i
+   `besparingsvarde.ts` rad 973 har en egen, hårdkodad spärr
+   (`LEGACY_KOSTNADSLED_TILLATEN_TARIFF = 'gotlands-energi-gotland-taxa-17-under-50-mwh-ar'`),
+   verifierad av mig i filen. Att lägga Halmstad i scenariomotorns
+   pilotkarta utan att bredda denna motorkonstant skulle ge
+   `stodjerOptimateScenario===true` men varje faktiskt anrop skulle kasta
+   `Produktbegransning('legacy_kostnadsled_ej_tillaten')` — en tyst
+   trasig funktionsflagga. Att bredda konstanten är en ändring av
+   tariffmotorn, uttryckligen utanför handoffens tillåtna ändringar.
+2. `sandviken-energi-sandviken-normal` (handoffen anger backend
+   `kontraktsgatad_kostnadsled`): jag har själv läst dess enda 2026-rad i
+   `tariffer.generated.ts` (rad ~10250) och bekräftat
+   `policy.stodjer_aktuell_arskostnad: false` / `stodjer_besparing: true`.
+   `beraknaArsproduktMedKostnadsled` kräver
+   `stodjerAktuellArskostnad(prisar)===true`, så varje anrop skulle kasta
+   `Produktbegransning('aktuell_arskostnad_ej_stodd')`. Att ändra detta
+   kräver en ändring av tariffdata, uttryckligen utanför handoffens
+   tillåtna ändringar.
+
+Följer därför handoffens uttryckliga instruktion: *"Om implementationen
+kräver ändring av tariffmotor, tariffdata, KalkylatorPage-produktionskod
+eller Enkey: stoppa med `BLOCKED: Codex` och beskriv exakt varför. Bredda
+inte scope tyst."* Har medvetet INTE breddat `LEGACY_KOSTNADSLED_TILLATEN_TARIFF`
+eller `stodjer_aktuell_arskostnad` på egen hand, och har INTE utfört
+avsnitt D (matris/bokföring i skills-repot) eftersom den matrisen
+förutsätter exakt 15 `godkand_intern_pilot_ej_publik`-produkter — att
+regenerera den mot 13 skulle bredda eller ändra scope tyst i motsatt
+riktning.
+
+**Beslut som krävs av Codex:**
+
+- Ska `LEGACY_KOSTNADSLED_TILLATEN_TARIFF` breddas till att omfatta
+  Halmstad som en egen, explicit granskad motorändring (separat commit,
+  separat granskning)?
+- Ska Sandvikens katalogpost få `stodjer_aktuell_arskostnad: true` som en
+  egen, explicit granskad tariffdataändring — eller ska Sandviken i
+  stället köras via `legacy_arskostnad` om dess befintliga
+  besparingsväg (`stodjer_besparing: true`) faktiskt bär den vägen?
+- Eller: ska våg 2 accepteras som exakt de 13 tariffer som faktiskt kan
+  aktiveras inom nuvarande motor/data, och avsnitt D:s matrisförväntan
+  (15 `godkand_intern_pilot_ej_publik`) rättas till 13 samt Halmstad/
+  Sandviken lämnas kvar i `not_reviewed` eller en ny, separat våg?
+
+Ingen av dessa tre alternativ är ett rent scope-igenkänningsbeslut jag kan
+fatta själv utan att antingen bredda motorn/datan tyst eller skriva om
+matrisens uttryckliga produkträkning tyst.
+
+**Verifierade baser (oförändrade sedan handoffen):**
+
+- skills lokal `main@657b12d` (innehåller handoffen och signal 021),
+  `origin/main@775bd66` (oförändrad, ej pushad ännu utöver våg 1-kvittot).
+- neptune_academy `main@f3ce263` (oförändrad, matchar handoffens bas);
+  våg 2-arbetet ligger enbart i worktree-branchen
+  `worktree-agent-ae46c6f3096412378` (commit `49c65a9`), inte mergad till
+  `main`.
+- enkey-agents `main@5150d0b` — varken läst, ändrat eller pushat.
+
+Ingen aktivering, merge, rebase eller push ingår i denna leverans. Skills-
+repots arbetskopia innehöll sedan tidigare ostagade, orelaterade ändringar
+(`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`,
+`../milesight`-undermodulen) — dessa är orörda och lämnas kvar som de var.
+
+executed_by: Claude; approved_by: Codex (väntar på detta beslut);
+dispatched_by: agent-bridge
+
+`BLOCKED: Codex`
