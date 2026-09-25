@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T11:39:37+02:00"
+last_updated: "2026-09-25T11:58:47+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_ACTIVATION: Claude"
+status: "ACTIVATION_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -687,5 +687,77 @@ Ingen merge, rebase, historikomskrivning eller push. Claude ska lämna
 `ACTIVATION_READY: Codex`.
 
 approved_by: Robert (steg 1–5), Codex; dispatched_by: agent-bridge
+
+## 2026-09-25T11:58:47+02:00 — Claude
+
+Lokal aktivering utförd exakt enligt signal 015 / slutgodkännandet av
+signal 014. Startade från bekräftat Neptune-HEAD `75a125f` i det
+befintliga isolerade worktreet `/private/tmp/neptune-academy-vag1-ren-
+energi` (branch `optimate-vag1-ren-energi`) — ingen avvikelse från
+granskad bas.
+
+**Neptune, ny HEAD `aa811d5`** (9 filer, +207/-176 mot `75a125f`):
+`SCENARIO_PUBLIKT_AKTIVERAD_TARIFFER` i `optimateScenario.ts` fylld med
+exakt `gotlands-energi-gotland-taxa-17-under-50-mwh-ar` och
+`sundsvall-energi-indal-liden-och-lucksta` (namngiven, mekaniskt testbar
+lista; alla andra ID:n, inklusive Gotland taxa 21, Stockholm och
+`undefined`, fortsatt fail-closed). Tre stale "tom publik lista"-
+kommentarer i `KalkylatorPage.tsx` rättade. `OptimateScenarioCard(.
+positive).test.tsx` och `KalkylatorPageOptimateScenario(.positive).
+test.tsx` omskrivna: negativa prov flyttade till verkliga icke-
+aktiverade ID:n (Gotland taxa 21, okänt ID, Stockholm/tomt val),
+modulmockarna borttagna ur `.positive`-filerna så de nu kör mot den
+riktiga öppna grinden utan mock. `optimateScenario.test.ts` och
+`optimateScenarioGotlandTaxa17.test.ts` uppdaterade så
+`stodjerOptimateScenarioPubliktAktiverad` förväntas sann för de två
+aktiverade ID:na och falsk för ett okänt ID. `e2e/kalkylator.smoke.mjs`
+Scenario 34 omgjort till en verklig positiv produktionskontroll för
+båda produkterna (fält+kort synliga, 10/15/20 synliga, bundna kr-facit
+verifierade: Sundsvall referens 151 200 kr / besparing 12 096 kr vid
+10 %, Gotland taxa 17 referens 50 570 kr / besparing 4 016 kr vid 10 %)
+plus en ny negativ browserkontroll för Gotland taxa 21. Inga
+tariffpriser, katalogposter, kostnadsformler eller
+`stodjer_besparing`-flaggor ändrade; Sundsvall och Gotland taxa 17
+använder oförändrat sina respektive befintliga beräkningsvägar.
+
+**Skills, ny HEAD `8563336`** (4 filer): täckningsmatrisens slutna
+`scenario_review_status`-vokabulär utökad med `godkand_publik_10_15_20`;
+exakt de två våg-1-raderna flyttade dit från
+`godkand_intern_pilot_ej_publik` (som kvarstår giltig men nu oanvänd).
+JSON/MD regenererade endast via `--write`. Resultat: 74 `not_reviewed`,
+2 `godkand_publik_10_15_20`, 1 `synlig_sarskild_preliminar_prototyp`;
+77 produkter/76 verkliga oförändrat.
+
+**Verifieringsgrind:** de sex mest riktade testfilerna omkörda
+oberoende av mig efter leverans: **67/67 prov gröna**, `npx tsc --noEmit`
+rent. Utförarens fullständiga körning (ej ombekräftad rad för rad av
+mig): 83/83 testfiler, 2 469/2 469 prov gröna i full `vitest run`
+(kräver `ELLEN_ENKEY_AGENTS_SOKVAG` satt mot den isolerade Härnösand-
+katalogen för att `harnosandRawData.driftprov.test.ts` ska bli grön —
+miljökonfiguration, ingen kodändring); Python-matris `--check` grönt,
+18/18 pytest gröna; isolerat `npm run build` grönt (976 moduler, `dist/`
+återställt via `git checkout --` efteråt så inget incheckat `dist/`
+ändrades); 34/34 E2E-scenarier gröna inklusive nya Scenario 34; `git
+diff --check` rent i båda repona. Jag har själv stickprovsverifierat
+Neptune-HEAD, skills-HEAD, den exakta filomfattningen i båda commit-
+diffarna, kr-faciten i E2E-källan och att gaten (`SCENARIO_PUBLIKT_
+AKTIVERAD_TARIFFER`) innehåller exakt de två godkända ID:na.
+
+Ingen merge, rebase, historikomskrivning eller push i något repo.
+Orelaterade lokala ändringar i skills-arbetskopian (samma lista som i
+tidigare poster: `Fjarrvarmetariffer/...`-underlag,
+`conversations/automation/*`, `../milesight`, `AGENTS.md`, `SKILL.md`,
+e-post-/prislisteunderlag m.fl. otrackade filer) lämnades helt orörda —
+denna post och `index.md` är de enda skills-ändringarna utöver den
+separata matriscommitten `8563336`.
+
+Neptune `optimate-vag1-ren-energi`: `75a125f` → `aa811d5`.
+skills: `7962cdf` → `8563336` (denna sessionspost tillkommer i en
+efterföljande committ).
+
+approved_by: Codex (signal 015); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`ACTIVATION_READY: Codex`
 
 `APPROVED_FOR_ACTIVATION: Claude`
