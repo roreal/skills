@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T09:33:30+02:00"
+last_updated: "2026-09-25T10:15:56+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_IMPLEMENTATION: Claude"
+status: "REVIEW_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -216,3 +216,78 @@ Indal/Liden/Lucksta enligt
 Publik allowlist ska förbli tom; ingen aktivering eller push ingår.
 
 `APPROVED_FOR_IMPLEMENTATION: Claude`
+
+## 2026-09-25T10:15:56+02:00 — Claude
+
+Genomförde handoff `2026-09-25-007` (Optimate våg 1, ren energi) i en ny
+isolerad Neptune-worktree (`/tmp/neptune-academy-vag1-ren-energi`, branch
+`optimate-vag1-ren-energi`, baserad på den godkända committen `1bfe103`)
+samt motsvarande skills-del direkt i denna checkout.
+
+**A. Scenariomotor (Neptune, lokala committar `6c78871`, `e32379a`,
+`2b57bd8` på branchen ovan).** `SCENARIO_PILOT_TARIFFER` innehåller nu
+exakt Sundsvall och `gotlands-energi-gotland-taxa-17-under-50-mwh-ar`;
+`SCENARIO_PUBLIKT_AKTIVERAD_TARIFFER` är fortsatt tom. 10/15/20 fanns
+redan i basen. Båda faciten i handoffens punkt A.5 reproducerades exakt
+av motorn (inget facit tvingat fram): Sundsvall referens 151 200 kr,
+besparing 12 096/18 144/24 192 kr, efterkostnad 139 104/133 056/127 008
+kr; Gotland taxa 17 referens 50 570 kr, fast avgift oförändrad 370 kr
+inkl. moms, besparing 4 016/6 024/8 032 kr, efterkostnad
+46 554/44 546/42 538 kr. Full Vitest 2444/2445 gröna (den enda röda,
+`harnosandRawData.driftprov.test.ts`, verifierades förbefintlig genom
+`git stash` mot obasen commit — orelaterad sökvägsberoende till en
+syskonrepo-layout som saknas i denna sandlåda). `tsc --noEmit` rent,
+`git diff --check` rent.
+
+**Öppen fråga till Codex innan någon merge/aktivering:** för att låta
+Gotland taxa 17 gå genom samma kontraktsgatade motor som Sundsvall
+krävde implementationen att lägga en `_kraver_kontrakt`-policy på
+tariffen (samma mönster som Sundsvall). Det gör att den redan
+**publikt existerande** legacy-besparingsvägen för Gotland taxa 17
+(`beraknaBesparingsvarde`, t.ex. 40 MWh/20 MWh påverkbar/50 % →
+kostnadFöre 50 570 kr, kostnadEfter 38 020 kr, besparing 12 550 kr) nu
+kastar `Produktbegransning('besparing_ej_stodd')` på denna branch. Inget
+är pushat eller aktiverat, men det är en verklig ändring av befintligt
+publikt beteende, inte bara en ny intern förmåga — Codex/Robert måste
+uttryckligen ta ställning till om detta är en godtagbar avveckling av
+Gotlands nuvarande besparingsväg eller om Gotland behöver en annan
+inkoppling, innan branchen får aktiveras eller mergas.
+
+**B. UI-adapter/resultatkort (samma committar).** Tariffneutral adapter
+(`byggOptimateScenarioInput`) och gated komponent (`OptimateScenarioCard`)
+är byggda och provade fristående (adapter-, komponent- och negativa
+prov gröna); komponenten kontrollerar uteslutande
+`stodjerOptimateScenarioPubliktAktiverad`. **Ej klart:** komponenten är
+inte kopplad in i `KalkylatorPage.tsx` (2725 rader) — det bedömdes för
+stort för denna leveransens verifieringsbudget utan egen regressionsrunda
+och lämnas som öppen deluppgift, inte gömt som klart.
+
+**C. Täckningsmatris och plan (denna checkout, ej committat ännu).**
+`SCENARIO_STATUS_REGISTRY` i
+`generera_besparingspotential_tackningsmatris.py` utökad med Gotland
+taxa 17 → `godkand_intern_pilot_ej_publik`; ny mekanisk, fail-closed
+`WAVE_1_PRODUCT_IDS`-kontroll att `review_wave==1` exakt matchar
+{Sundsvall, Gotland taxa 17}. Matrisen regenererad (`--write`): 74
+`not_reviewed` / 2 interna piloter / 1 synlig prototyp av 77
+(76 verkliga + 1 syntetisk), exakt enligt handoffens C.1. `--check` och
+samtliga 17 Python-unittest gröna (2 äldre tester uppdaterade från
+75/1 till 74/2 för att spegla den nya, avsiktliga statusfördelningen).
+Diffen i JSON är exakt de två rader som förväntas (Gotlands rad +
+räkningen `counts`); Gävle/Härnösand och övriga 74 produkter oförändrade.
+Batchplanens dagliga status uppdateras inte här — den räknar en separat
+äldre 92-produktsinitiativ, inte denna 77-radersmatris; ingen historisk
+text skriven om.
+
+Orelaterade lokala ändringar (e-post-/prislisteunderlag,
+`prisdialogen-medlemmar.json`, `AGENTS.md`, `conversations/automation/*`,
+`../milesight` m.fl.) lämnades helt orörda.
+
+Committar endast Neptune-worktreens tre commits (redan lokalt committade
+där) och skills-delens ändringar (matris + generator + test + denna
+logg + `index.md`) i denna checkout. Ingen aktivering, merge till
+Neptune-main, rebase, push eller historikomskrivning.
+
+approved_by: Codex, Robert (handoff 007); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`

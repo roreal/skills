@@ -41,7 +41,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 75)
+        self.assertEqual(len(not_reviewed), 74)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -49,19 +49,29 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(stockholm["scenario_review_status"], "synlig_sarskild_preliminar_prototyp")
         sundsvall = self.by_id["sundsvall-energi-indal-liden-och-lucksta"]
         self.assertEqual(sundsvall["scenario_review_status"], "godkand_intern_pilot_ej_publik")
-        others = [
-            row for pid, row in self.by_id.items()
-            if pid not in {"stockholm-exergi", "sundsvall-energi-indal-liden-och-lucksta"}
-        ]
+        gotland_taxa_17 = self.by_id["gotlands-energi-gotland-taxa-17-under-50-mwh-ar"]
+        self.assertEqual(gotland_taxa_17["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        pilot_ids = {
+            "stockholm-exergi",
+            "sundsvall-energi-indal-liden-och-lucksta",
+            "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
+        }
+        others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 1,
-                "not_reviewed": 75,
+                "godkand_intern_pilot_ej_publik": 2,
+                "not_reviewed": 74,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
+
+    def test_wave_1_membership_is_mechanically_locked(self) -> None:
+        wave_1_ids = {
+            row["product_id"] for row in self.matrix["rows"] if row["review_wave"] == 1
+        }
+        self.assertEqual(wave_1_ids, matrix_module.WAVE_1_PRODUCT_IDS)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

@@ -42,7 +42,18 @@ HISTORY_BAND_TYPES = frozenset({
 SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "stockholm-exergi": "synlig_sarskild_preliminar_prototyp",
     "sundsvall-energi-indal-liden-och-lucksta": "godkand_intern_pilot_ej_publik",
+    "gotlands-energi-gotland-taxa-17-under-50-mwh-ar": "godkand_intern_pilot_ej_publik",
 }
+
+# Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
+# del C.2). build_matrix kontrollerar att mängden produkter med
+# review_wave == 1 i den inlästa snapshoten är IDENTISK med denna lista —
+# ingen framtida katalogändring får tyst lägga till eller ta bort ett
+# våg-1-ID utan att detta test faller.
+WAVE_1_PRODUCT_IDS: frozenset[str] = frozenset({
+    "sundsvall-energi-indal-liden-och-lucksta",
+    "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
+})
 
 # Sluten vokabulär för scenario_review_status. build_matrix avvisar varje
 # registervärde som inte finns här, så ett stavfel i registret blir ett fel
@@ -207,6 +218,13 @@ def build_matrix(text: str) -> dict[str, Any]:
             raise ValueError(
                 f"Okänt scenario_review_status {status!r} för {registered_id!r} i SCENARIO_STATUS_REGISTRY."
             )
+    wave_1_ids = {row["product_id"] for row in rows if row["review_wave"] == 1}
+    if wave_1_ids != WAVE_1_PRODUCT_IDS:
+        raise ValueError(
+            "review_wave==1 i snapshoten matchar inte WAVE_1_PRODUCT_IDS. "
+            f"Endast i snapshoten: {sorted(wave_1_ids - WAVE_1_PRODUCT_IDS)}; "
+            f"endast i listan: {sorted(WAVE_1_PRODUCT_IDS - wave_1_ids)}."
+        )
     counts = {
         "products": len(rows),
         "real_products": sum(not row["synthetic"] for row in rows),
@@ -232,17 +250,19 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "",
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
         "godkänner inte något nytt besparingsscenario eller någon tariffaktivering.**",
-        "`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,",
+        "`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,",
         "tills prisledens före/efter-beroenden har granskats separat. Varken Stockholms",
-        "synliga prototyp eller Sundsvalls interna pilot ändrar tariffens befintliga",
-        "`stodjer_besparing`-spärr eller aktiverar något publikt UI.",
+        "synliga prototyp eller de två interna våg-1-piloterna (Sundsvall, Gotland taxa",
+        "17) ändrar tariffens befintliga `stodjer_besparing`-spärr eller aktiverar något",
+        "publikt UI.",
         "",
         "- `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):",
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
-        "  (sundsvall-energi-indal-liden-och-lucksta): godkänd för intern beräkningspilot,",
-        "  inte publikt aktiverad (se `stodjerOptimateScenarioPubliktAktiverad`).",
+        "  (sundsvall-energi-indal-liden-och-lucksta, gotlands-energi-gotland-taxa-17-",
+        "  under-50-mwh-ar): godkända för intern beräkningspilot (Optimate våg 1),",
+        "  inte publikt aktiverade (se `stodjerOptimateScenarioPubliktAktiverad`).",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",

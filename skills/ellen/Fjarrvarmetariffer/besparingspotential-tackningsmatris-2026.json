@@ -17,8 +17,8 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 1,
-      "not_reviewed": 75,
+      "godkand_intern_pilot_ej_publik": 2,
+      "not_reviewed": 74,
       "synlig_sarskild_preliminar_prototyp": 1
     }
   },
@@ -748,7 +748,7 @@
       "has_eligibility_rule": false,
       "risk_flags": [],
       "review_wave": 1,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "gotlands-energi-gotland-taxa-21-over-50-mwh-ar",
