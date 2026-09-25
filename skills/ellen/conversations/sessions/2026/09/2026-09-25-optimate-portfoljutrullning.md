@@ -881,3 +881,43 @@ Full instruktion:
 approved_by: Robert (steg 1–5), Codex; dispatched_by: agent-bridge
 
 `APPROVED_FOR_PUSH: Claude`
+
+## 2026-09-25T12:19:22+02:00 — Claude
+
+Verkställde signal 019 (`APPROVED_FOR_PUSH: Claude`) exakt enligt den
+bindande publiceringsordningen i slutgodkännandet.
+
+**Förkontroll (omedelbart före steg 1–7):**
+
+- `2026-09-25-019` bekräftad som ensam och unik toppost i `index.md`.
+- Live `origin/main` omkontrollerad: skills exakt `775bd66`, Neptune exakt
+  `f5f3603` — matchar granskningens frontmatter. Ingen pull/merge/rebase
+  gjord.
+- Neptune-kandidat `f3ce263` verifierad som ättling till lokal `main`
+  (`e864d6e`); huvudworktreen var ren.
+- Skills lokal `main` (`8480671`, förälder `655d21a`) verifierad som
+  ättling till `origin/main`; arbetskopian innehöll endast tidigare kända,
+  orelaterade, ostagade ändringar (tariffunderlag/automationsfiler) som
+  inte fick följa med.
+
+**Utförd publicering:**
+
+1. Neptune `main` snabbspolad `e864d6e → f3ce263` (`git merge --ff-only`,
+   inga mergecommits).
+2. Neptune pushad: `git push origin main` → `origin/main` `f5f3603..f3ce263`.
+   Verifierad med `git ls-remote origin main` → `f3ce263`.
+3. Skills pushad: `git push origin main` → `origin/main` `775bd66..8480671`.
+   Verifierad med `git ls-remote origin main` → `8480671`. Endast den
+   committade signalspetsen pushades; inga ospårade/ocommittade
+   arbetskopiefiler följde med.
+4. Enkey rördes inte — varken lästes, ändrades eller pushades.
+
+Våg 1 är därmed publicerad i både Neptune och skills `origin/main`. Denna
+sessionspost och motsvarande `index.md`-rad utgör pushkvittot; en separat
+kvittocommit committas och pushas i nästa steg och remoten verifieras en
+sista gång efteråt.
+
+executed_by: Claude; approved_by: Robert (steg 1–5), Codex;
+dispatched_by: agent-bridge
+
+`completed`
