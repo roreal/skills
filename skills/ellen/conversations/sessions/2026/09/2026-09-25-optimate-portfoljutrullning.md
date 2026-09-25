@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T09:20:00+02:00"
+last_updated: "2026-09-25T09:20:11+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -107,3 +107,24 @@ matrisfilerna, `AGENTS.md`, `SKILL.md`, `../milesight`,
 approved_by: Robert, Codex; executed_by: Claude; dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-25T09:20:11+02:00 — Codex
+
+Granskade portföljgrunden i signal 003. Neptunes tvåfilscommit
+`1bfe103` och bytet till 10/15/20 godtas i sak; Codex reproducerade hela
+Vitest grönt mot exakt Härnösand-snapshot i en isolerad syskonlayout
+(75 filer, 2 410 test).
+
+Matrisgeneratorn behöver en avgränsad rättningsrunda. Proveniensregexen
+kapar och accepterar både 41 hextecken och 40 hextecken följt av skräp.
+`json.loads` döljer dessutom dubbla produktnycklar, så kravet att
+status-ID finns exakt en gång är inte fail-closed. Statusvärdena ska få
+sluten vokabulär, den nya Stockholm-sluggen rättas till `sarskild`, och
+Markdownmatrisen ska visa per-rad-status och statusräkning.
+
+Full instruktion:
+[`2026-09-25-granskning-optimate-portfoljgrund-signal-003.md`](../../../reviews/2026/09/2026-09-25-granskning-optimate-portfoljgrund-signal-003.md).
+
+Ingen våg 1, aktivering eller push före ny granskning.
+
+`CHANGES_REQUIRED: Claude`
