@@ -32,6 +32,18 @@ HISTORY_BAND_TYPES = frozenset({
     "low_utilization", "volume_discount", "seasonal_banded_volume_discount_estimate",
 })
 
+# Namngiven, fail-closed statuskonfiguration för de enda två produkter som
+# har en granskad scenariostatus (handoff 2026-09-25-002, del B.4). Varje
+# nyckel MÅSTE finnas exakt en gång i den inlästa snapshoten (kontrolleras i
+# build_matrix) — ingen tyst fallback för ett ID som skrivits fel eller
+# tagits bort ur katalogen. Alla övriga 75 produkter förblir "not_reviewed".
+# Ingen av dessa statusar innebär publik UI-aktivering eller
+# stodjer_besparing-ändring; det avgörs separat i Neptune-koden.
+SCENARIO_STATUS_REGISTRY: dict[str, str] = {
+    "stockholm-exergi": "synlig_saerskild_preliminar_prototyp",
+    "sundsvall-energi-indal-liden-och-lucksta": "godkand_intern_pilot_ej_publik",
+}
+
 
 def parse_snapshot(text: str) -> tuple[dict[str, Any], dict[str, str]]:
     marker = "export const TARIFFER = "
@@ -42,7 +54,7 @@ def parse_snapshot(text: str) -> tuple[dict[str, Any], dict[str, str]]:
     if not isinstance(tariffs, dict) or not tariffs:
         raise ValueError("Tariff-snapshoten måste vara ett icke-tomt objekt.")
     generated = re.search(r"export const GENERERAD = '([^']+)';", text)
-    origin = re.search(r"Källkatalog: sha256=([0-9a-f]{64}) commit=([0-9a-f]{40})", text)
+    origin = re.search(r"Källkatalog: sha256=([0-9a-f]{64}) commit=([0-9a-f]{7,40})", text)
     if not generated or not origin:
         raise ValueError("Genereringsdatum eller katalogproveniens saknas.")
     return tariffs, {
@@ -149,7 +161,7 @@ def product_row(product_id: str, entry: dict[str, Any]) -> dict[str, Any]:
         "has_eligibility_rule": eligibility,
         "risk_flags": risk_flags,
         "review_wave": wave,
-        "scenario_review_status": "not_reviewed",
+        "scenario_review_status": SCENARIO_STATUS_REGISTRY.get(product_id, "not_reviewed"),
     }
 
 
@@ -161,6 +173,12 @@ def build_matrix(text: str) -> dict[str, Any]:
     tariff_ids = [row["tariff_id"] for row in rows if row["tariff_id"] is not None]
     if len(set(tariff_ids)) != len(tariff_ids):
         raise ValueError("Dubbla tariff-ID:n i matrisen.")
+    product_ids = {row["product_id"] for row in rows}
+    for registered_id in SCENARIO_STATUS_REGISTRY:
+        if registered_id not in product_ids:
+            raise ValueError(
+                f"SCENARIO_STATUS_REGISTRY refererar {registered_id!r}, som saknas i snapshoten."
+            )
     counts = {
         "products": len(rows),
         "real_products": sum(not row["synthetic"] for row in rows),
@@ -185,13 +203,21 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "",
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
         "godkänner inte något nytt besparingsscenario eller någon tariffaktivering.**",
-        "`scenario_review_status=not_reviewed` gäller samtliga rader tills prisledens",
-        "före/efter-beroenden har granskats separat. Stockholms lokala prototyp",
-        "är inte en ändring av tariffens befintliga `stodjer_besparing`-spärr.",
+        "`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,",
+        "tills prisledens före/efter-beroenden har granskats separat. Varken Stockholms",
+        "synliga prototyp eller Sundsvalls interna pilot ändrar tariffens befintliga",
+        "`stodjer_besparing`-spärr eller aktiverar något publikt UI.",
+        "",
+        "- `scenario_review_status=synlig_saerskild_preliminar_prototyp` (stockholm-exergi):",
+        "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
+        "  godkänd publik besparingsprodukt.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
+        "  (sundsvall-energi-indal-liden-och-lucksta): godkänd för intern beräkningspilot,",
+        "  inte publikt aktiverad (se `stodjerOptimateScenarioPubliktAktiverad`).",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",
-        f"- Produktval: {counts['products']} totalt = {counts['real_products']} verkliga + {counts['synthetic_products']} syntetiskt; {counts['existing_savings']} med befintlig besparingsväg och {counts['current_cost_only']} med enbart kontraktsstyrd årskostnad.",
+        f"- Produktval: {counts['products']} totalt = {counts['real_products']} verkliga leverantörsprodukter + {counts['synthetic_products']} syntetiskt riksgenomsnitt. Utrullningens måltal är de {counts['real_products']} verkliga produkterna; riksgenomsnittet redovisas separat och ingår inte i måltalet. {counts['existing_savings']} har befintlig besparingsväg och {counts['current_cost_only']} har enbart kontraktsstyrd årskostnad.",
         "- Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.",
         "- `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.",
         "- Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.",

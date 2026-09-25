@@ -2,13 +2,21 @@
 
 Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris
 godkänner inte något nytt besparingsscenario eller någon tariffaktivering.**
-`scenario_review_status=not_reviewed` gäller samtliga rader tills prisledens
-före/efter-beroenden har granskats separat. Stockholms lokala prototyp
-är inte en ändring av tariffens befintliga `stodjer_besparing`-spärr.
+`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,
+tills prisledens före/efter-beroenden har granskats separat. Varken Stockholms
+synliga prototyp eller Sundsvalls interna pilot ändrar tariffens befintliga
+`stodjer_besparing`-spärr eller aktiverar något publikt UI.
 
-- Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `cc5a5a591236ecd15370d3e54a0616520c21c26397c6d05b326b49e50d2df2d1`.
-- Genererad tariffdata: 2026-09-19; källkatalog `25bbba1415ec070f00fccb288ab842ccdd523d61` / SHA-256 `e05ae523acfe70bef67f4f520e7950680f794a94d29dbc9e2af0802d0dd76235`.
-- Produktval: 75 totalt = 74 verkliga + 1 syntetiskt; 8 med befintlig besparingsväg och 67 med enbart kontraktsstyrd årskostnad.
+- `scenario_review_status=synlig_saerskild_preliminar_prototyp` (stockholm-exergi):
+  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
+  godkänd publik besparingsprodukt.
+- `scenario_review_status=godkand_intern_pilot_ej_publik`
+  (sundsvall-energi-indal-liden-och-lucksta): godkänd för intern beräkningspilot,
+  inte publikt aktiverad (se `stodjerOptimateScenarioPubliktAktiverad`).
+
+- Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
+- Genererad tariffdata: 2026-09-24; källkatalog `6c0877d` / SHA-256 `463d7492d4ff9e69c91da0270fa586e0c3d0c094467859332649733b02876d38`.
+- Produktval: 77 totalt = 76 verkliga leverantörsprodukter + 1 syntetiskt riksgenomsnitt. Utrullningens måltal är de 76 verkliga produkterna; riksgenomsnittet redovisas separat och ingår inte i måltalet. 8 har befintlig besparingsväg och 69 har enbart kontraktsstyrd årskostnad.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
@@ -29,11 +37,13 @@ före/efter-beroenden har granskats separat. Stockholms lokala prototyp
 | 3 | falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo | Falu Energi & Vatten — Bjursås, Grycksbo, Sundborn, Svärdsjö | kontrakt_arskostnad | manadspriser | effekt (4 band) | volume | falun_ytterorter_debiterbar_effekt_kw, falun_ytterorter_vald_niva_id, flode_m3 | historik: falun_ytterorter_debiterbar_effekt_kw | — |
 | 3 | falu-energi-vatten-falun | Falu Energi & Vatten — Falun | kontrakt_arskostnad | manadspriser | effekt (7 band) | volume | falun_tatort_debiterbar_effekt_kw, falun_tatort_vald_niva_id, flode_m3 | historik: falun_tatort_debiterbar_effekt_kw | — |
 | 3 | finspangs-tekniska-verk-finspang | Finspångs Tekniska Verk | kontrakt_arskostnad | manadspriser | piecewise_polynomial | conditional_flow | conditional_flow_flode_m3, conditional_flow_returtemp_c, finspang_debiterbar_effekt_kw | serie: conditional_flow_flode_m3, conditional_flow_returtemp_c | — |
+| 2 | gavle-energi-gavle | Gävle Energi | kontrakt_arskostnad | manadspriser | effekt (1 band) | marginal_annual_volume_discount | gavle_kapacitetsbehov_kwh_dygn, gavle_vald_niva_id | — | — |
 | 3 | goteborg-energi | Göteborg Energi | legacy_besparing | manadspriser | effekt (6 band) | temperature_difference | — | — | — |
 | 1 | gotlands-energi-gotland-taxa-17-under-50-mwh-ar | Gotlands Energi — Gotland taxa 17, under 50 MWh/år | legacy_besparing | manadspriser | ingen debiterbar kapacitetsdel | — | — | — | — |
 | 3 | gotlands-energi-gotland-taxa-21-over-50-mwh-ar | Gotlands Energi — Gotland taxa 21, över 50 MWh/år | legacy_besparing | manadspriser | ingen debiterbar kapacitetsdel | cooling_deadband, volume_discount | — | — | — |
 | 3 | habo-energi-habo | Habo Energi | kontrakt_arskostnad | manadspriser | effekt (1 band) | volume | flode_m3, habo_debiterbar_effekt_kw, habo_vald_niva_id | historik: habo_debiterbar_effekt_kw | — |
 | 2 | halmstads-energi-och-miljo | Halmstads Energi och Miljö | legacy_besparing | manadspriser | effekt (1 band) | — | — | — | — |
+| 2 | harnosand-energi-miljo-harnosand | Härnösand Energi & Miljö | kontrakt_arskostnad | manadspriser | effekt (1 band) | capacity_overrun, marginal_annual_volume_discount | debiteringsgrundande_effekt_kw, harnosand_debiterbar_effekt_kw, harnosand_vald_niva_id | — | — |
 | 3 | jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge | Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge | kontrakt_arskostnad | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_are_debiterbar_effekt_kw, jamtkraft_are_vald_niva_id | historik: jamtkraft_are_debiterbar_effekt_kw | — |
 | 3 | jamtkraft-brunflo-och-opevagen | Jämtkraft — Brunflo och Opevägen | kontrakt_arskostnad | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_brunflo_debiterbar_effekt_kw, jamtkraft_brunflo_vald_niva_id | historik: jamtkraft_brunflo_debiterbar_effekt_kw | — |
 | 3 | jamtkraft-ostersund-froson-as | Jämtkraft — Östersund, Frösön, Ås | kontrakt_arskostnad | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_ostersund_debiterbar_effekt_kw, jamtkraft_ostersund_vald_niva_id | historik: jamtkraft_ostersund_debiterbar_effekt_kw | — |

@@ -26,16 +26,35 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_current_portfolio_is_complete_and_unique(self) -> None:
         counts = self.matrix["counts"]
-        self.assertEqual(counts["products"], 75)
-        self.assertEqual(counts["real_products"], 74)
+        self.assertEqual(counts["products"], 77)
+        self.assertEqual(counts["real_products"], 76)
         self.assertEqual(counts["synthetic_products"], 1)
         self.assertEqual(counts["existing_savings"], 8)
-        self.assertEqual(counts["current_cost_only"], 67)
-        self.assertEqual(counts["review_waves"], {"1": 2, "2": 13, "3": 48, "4": 12})
-        self.assertEqual(len(self.by_id), 75)
+        self.assertEqual(counts["current_cost_only"], 69)
+        self.assertEqual(counts["review_waves"], {"1": 2, "2": 15, "3": 48, "4": 12})
+        self.assertEqual(len(self.by_id), 77)
         self.assertEqual({row["price_year"] for row in self.matrix["rows"]}, {2026})
-        self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in self.matrix["rows"]))
+        not_reviewed = {
+            row["product_id"] for row in self.matrix["rows"]
+            if row["scenario_review_status"] == "not_reviewed"
+        }
+        self.assertEqual(len(not_reviewed), 75)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
+
+    def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
+        stockholm = self.by_id["stockholm-exergi"]
+        self.assertEqual(stockholm["scenario_review_status"], "synlig_saerskild_preliminar_prototyp")
+        sundsvall = self.by_id["sundsvall-energi-indal-liden-och-lucksta"]
+        self.assertEqual(sundsvall["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        others = [
+            row for pid, row in self.by_id.items()
+            if pid not in {"stockholm-exergi", "sundsvall-energi-indal-liden-och-lucksta"}
+        ]
+        self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
+
+    def test_gavle_and_harnosand_are_present_in_wave_2(self) -> None:
+        self.assertEqual(self.by_id["gavle-energi-gavle"]["review_wave"], 2)
+        self.assertEqual(self.by_id["harnosand-energi-miljo-harnosand"]["review_wave"], 2)
 
     def test_distinct_tariff_dependencies_are_not_confused_with_savings_approval(self) -> None:
         stockholm = self.by_id["stockholm-exergi"]
@@ -66,12 +85,37 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_markdown_has_one_row_per_product(self) -> None:
         rendered = render_markdown(self.matrix)
-        self.assertEqual(len([line for line in rendered.splitlines() if line.startswith("| ")]) - 2, 75)
+        self.assertEqual(len([line for line in rendered.splitlines() if line.startswith("| ")]) - 2, 77)
         self.assertIn("scenario_review_status=not_reviewed", rendered)
         self.assertIn("stockholm-exergi", rendered)
 
     def test_snapshot_parser_rejects_missing_provenance(self) -> None:
         text = self.source_text.replace("Källkatalog: sha256=", "Källkatalog: annan=")
+        with self.assertRaisesRegex(ValueError, "proveniens"):
+            parse_snapshot(text)
+
+    def test_snapshot_parser_accepts_short_and_full_commit_hash(self) -> None:
+        import re
+
+        sha = "a" * 64
+        for commit in ("6c0877d", "0123456789abcdef0123456789abcdef01234567"):
+            text = re.sub(
+                r"Källkatalog: sha256=[0-9a-f]{64} commit=[0-9a-f]{7,40}",
+                f"Källkatalog: sha256={sha} commit={commit}",
+                self.source_text,
+            )
+            _, provenance = parse_snapshot(text)
+            self.assertEqual(provenance["catalog_commit"], commit)
+
+    def test_snapshot_parser_rejects_commit_shorter_than_seven_hex_chars(self) -> None:
+        import re
+
+        sha = "a" * 64
+        text = re.sub(
+            r"Källkatalog: sha256=[0-9a-f]{64} commit=[0-9a-f]{7,40}",
+            f"Källkatalog: sha256={sha} commit=abc123",
+            self.source_text,
+        )
         with self.assertRaisesRegex(ValueError, "proveniens"):
             parse_snapshot(text)
 

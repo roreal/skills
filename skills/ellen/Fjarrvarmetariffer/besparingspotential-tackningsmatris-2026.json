@@ -1,18 +1,18 @@
 {
   "source_file": "neptune-marketing/src/data/tariffer.generated.ts",
-  "source_sha256": "cc5a5a591236ecd15370d3e54a0616520c21c26397c6d05b326b49e50d2df2d1",
-  "generated_on": "2026-09-19",
-  "catalog_sha256": "e05ae523acfe70bef67f4f520e7950680f794a94d29dbc9e2af0802d0dd76235",
-  "catalog_commit": "25bbba1415ec070f00fccb288ab842ccdd523d61",
+  "source_sha256": "e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5",
+  "generated_on": "2026-09-24",
+  "catalog_sha256": "463d7492d4ff9e69c91da0270fa586e0c3d0c094467859332649733b02876d38",
+  "catalog_commit": "6c0877d",
   "counts": {
-    "products": 75,
-    "real_products": 74,
+    "products": 77,
+    "real_products": 76,
     "synthetic_products": 1,
     "existing_savings": 8,
-    "current_cost_only": 67,
+    "current_cost_only": 69,
     "review_waves": {
       "1": 2,
-      "2": 13,
+      "2": 15,
       "3": 48,
       "4": 12
     }
@@ -647,6 +647,44 @@
       "scenario_review_status": "not_reviewed"
     },
     {
+      "product_id": "gavle-energi-gavle",
+      "product_name": "Gävle Energi",
+      "tariff_id": "gavle-energi-gavle-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "marginal_annual_volume_discount"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "gavle_kapacitetsbehov_kwh_dygn",
+        "gavle_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "gavle_kapacitetsbehov_kwh_dygn": "arsvis",
+        "gavle_vald_niva_id": "arsvis"
+      },
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
       "product_id": "goteborg-energi",
       "product_name": "Göteborg Energi",
       "tariff_id": "goteborg-energi-goteborg-2026",
@@ -806,6 +844,47 @@
       "documented_exclusions": [],
       "required_policy_fields": [],
       "measurement_resolutions": {},
+      "series_fields": [],
+      "history_fields": [],
+      "has_eligibility_rule": false,
+      "risk_flags": [
+        "debiterbar_effekt"
+      ],
+      "review_wave": 2,
+      "scenario_review_status": "not_reviewed"
+    },
+    {
+      "product_id": "harnosand-energi-miljo-harnosand",
+      "product_name": "Härnösand Energi & Miljö",
+      "tariff_id": "harnosand-energi-miljo-harnosand-2026",
+      "price_year": 2026,
+      "price_source": "katalog",
+      "synthetic": false,
+      "vat_basis": "exkl",
+      "cost_path": "kontrakt_arskostnad",
+      "savings_today": false,
+      "energy_rule_keys": [
+        "manadspriser"
+      ],
+      "capacity_rule": "effekt",
+      "capacity_bands": 1,
+      "has_capacity_charge": true,
+      "has_return_temperature_rule": false,
+      "adjustment_types": [
+        "capacity_overrun",
+        "marginal_annual_volume_discount"
+      ],
+      "documented_exclusions": [],
+      "required_policy_fields": [
+        "debiteringsgrundande_effekt_kw",
+        "harnosand_debiterbar_effekt_kw",
+        "harnosand_vald_niva_id"
+      ],
+      "measurement_resolutions": {
+        "harnosand_debiterbar_effekt_kw": "arsvis",
+        "harnosand_vald_niva_id": "arsvis",
+        "debiteringsgrundande_effekt_kw": "arsvis"
+      },
       "series_fields": [],
       "history_fields": [],
       "has_eligibility_rule": false,
@@ -2387,7 +2466,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "synlig_saerskild_preliminar_prototyp"
     },
     {
       "product_id": "sundsvall-energi-indal-liden-och-lucksta",
@@ -2415,7 +2494,7 @@
       "has_eligibility_rule": false,
       "risk_flags": [],
       "review_wave": 1,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "tekniska-verken-katrineholm-katrineholm",
