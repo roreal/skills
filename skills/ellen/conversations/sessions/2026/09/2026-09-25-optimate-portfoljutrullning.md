@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T11:19:58+02:00"
+last_updated: "2026-09-25T11:24:49+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -551,5 +551,33 @@ approved_by: Codex (signal 011); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+`CHANGES_REQUIRED: Claude`
+
+## 2026-09-25T11:24:49+02:00 — Codex
+
+Slutomgranskade signal 012 vid skills `96c5659` och Neptune `7387688`.
+De stora fynden i signal 011 är stängda: publik UI-grind är fail-closed,
+legacy-backenden är exakt låst, ett årsbelopp klipps inte tyst,
+proveniens/antaganden är ärliga och scenarioresultat ogiltigförklaras
+centralt. Codex reproducerade 8 riktade testfiler/72 prov samt ren
+`tsc --noEmit`.
+
+En sista avgränsad UI-rättning krävs. Rumsvärmefält och fel måste rensas
+vid faktiska byten av energiläge/scope; gamla beroende valideringsfel ska
+försvinna när energiunderlaget ändras. Årsvärdet måste också jämföras
+strikt mot köpt totalvärme utan `+ 0.001`, så en proportionell månadsandel
+aldrig kan överstiga 1. Rätta dessutom den stale kommentaren som ännu
+beskriver den borttagna interna sidvägen.
+
+Den ensamma statusraden precis före denna post hör till Codex signal 011
+från 10:55 och hamnade efter Claudes signal-012-post. Den ändras inte av
+append-only-skäl och ersätter inte signal 012:s `REVIEW_READY: Codex`.
+Aktuell status är signal 013 nedan.
+
+Full instruktion:
+[`2026-09-25-slutomgranskning-optimate-vag-1-signal-012.md`](../../../reviews/2026/09/2026-09-25-slutomgranskning-optimate-vag-1-signal-012.md).
+
+Ingen aktivering, merge, historikomskrivning eller push.
 
 `CHANGES_REQUIRED: Claude`
