@@ -1,11 +1,14 @@
 """Regressionsgrind för den tekniska Optimate-täckningsmatrisen."""
 
 from pathlib import Path
+import re
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import generera_besparingspotential_tackningsmatris as matrix_module  # noqa: E402
 from generera_besparingspotential_tackningsmatris import (  # noqa: E402
     DEFAULT_SOURCE,
     build_matrix,
@@ -43,7 +46,7 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
         stockholm = self.by_id["stockholm-exergi"]
-        self.assertEqual(stockholm["scenario_review_status"], "synlig_saerskild_preliminar_prototyp")
+        self.assertEqual(stockholm["scenario_review_status"], "synlig_sarskild_preliminar_prototyp")
         sundsvall = self.by_id["sundsvall-energi-indal-liden-och-lucksta"]
         self.assertEqual(sundsvall["scenario_review_status"], "godkand_intern_pilot_ej_publik")
         others = [
@@ -51,6 +54,26 @@ class TariffMatrixTests(unittest.TestCase):
             if pid not in {"stockholm-exergi", "sundsvall-energi-indal-liden-och-lucksta"}
         ]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
+        self.assertEqual(
+            self.matrix["counts"]["scenario_review_status"],
+            {
+                "godkand_intern_pilot_ej_publik": 1,
+                "not_reviewed": 75,
+                "synlig_sarskild_preliminar_prototyp": 1,
+            },
+        )
+
+    def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
+        bad_registry = {"stockholm-exergi": "not_a_real_status"}
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", bad_registry):
+            with self.assertRaisesRegex(ValueError, "scenario_review_status"):
+                build_matrix(self.source_text)
+
+    def test_scenario_status_registry_rejects_unknown_product_id(self) -> None:
+        bad_registry = {"does-not-exist-in-snapshot": "not_reviewed"}
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", bad_registry):
+            with self.assertRaisesRegex(ValueError, "saknas"):
+                build_matrix(self.source_text)
 
     def test_gavle_and_harnosand_are_present_in_wave_2(self) -> None:
         self.assertEqual(self.by_id["gavle-energi-gavle"]["review_wave"], 2)
@@ -89,14 +112,28 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertIn("scenario_review_status=not_reviewed", rendered)
         self.assertIn("stockholm-exergi", rendered)
 
+    def test_markdown_scenario_status_column_matches_json(self) -> None:
+        rendered = render_markdown(self.matrix)
+        self.assertIn("Scenariostatus", rendered)
+        lines_by_product = {
+            row["product_id"]: next(
+                line for line in rendered.splitlines()
+                if line.startswith("| ") and f"| {row['product_id']} |" in line
+            )
+            for row in self.matrix["rows"]
+        }
+        for product_id, line in lines_by_product.items():
+            row = self.by_id[product_id]
+            self.assertIn(f"| {row['scenario_review_status']} |", line)
+        for status, count in self.matrix["counts"]["scenario_review_status"].items():
+            self.assertIn(f"{status}: {count}", rendered)
+
     def test_snapshot_parser_rejects_missing_provenance(self) -> None:
         text = self.source_text.replace("Källkatalog: sha256=", "Källkatalog: annan=")
         with self.assertRaisesRegex(ValueError, "proveniens"):
             parse_snapshot(text)
 
     def test_snapshot_parser_accepts_short_and_full_commit_hash(self) -> None:
-        import re
-
         sha = "a" * 64
         for commit in ("6c0877d", "0123456789abcdef0123456789abcdef01234567"):
             text = re.sub(
@@ -108,8 +145,6 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(provenance["catalog_commit"], commit)
 
     def test_snapshot_parser_rejects_commit_shorter_than_seven_hex_chars(self) -> None:
-        import re
-
         sha = "a" * 64
         text = re.sub(
             r"Källkatalog: sha256=[0-9a-f]{64} commit=[0-9a-f]{7,40}",
@@ -117,6 +152,33 @@ class TariffMatrixTests(unittest.TestCase):
             self.source_text,
         )
         with self.assertRaisesRegex(ValueError, "proveniens"):
+            parse_snapshot(text)
+
+    def test_snapshot_parser_rejects_commit_longer_than_forty_hex_chars(self) -> None:
+        sha = "a" * 64
+        text = re.sub(
+            r"Källkatalog: sha256=[0-9a-f]{64} commit=[0-9a-f]{7,40}",
+            f"Källkatalog: sha256={sha} commit={'b' * 41}",
+            self.source_text,
+        )
+        with self.assertRaisesRegex(ValueError, "proveniens"):
+            parse_snapshot(text)
+
+    def test_snapshot_parser_rejects_commit_with_trailing_non_hex_char(self) -> None:
+        sha = "a" * 64
+        text = re.sub(
+            r"Källkatalog: sha256=[0-9a-f]{64} commit=[0-9a-f]{7,40}",
+            f"Källkatalog: sha256={sha} commit={'c' * 40}g",
+            self.source_text,
+        )
+        with self.assertRaisesRegex(ValueError, "proveniens"):
+            parse_snapshot(text)
+
+    def test_snapshot_parser_rejects_duplicate_json_keys(self) -> None:
+        marker = "export const TARIFFER = {"
+        idx = self.source_text.index(marker) + len(marker)
+        text = self.source_text[:idx] + '"stockholm-exergi":true,' + self.source_text[idx:]
+        with self.assertRaisesRegex(ValueError, "[Dd]ubbl"):
             parse_snapshot(text)
 
 

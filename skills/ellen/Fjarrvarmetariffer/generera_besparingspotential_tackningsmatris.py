@@ -40,9 +40,29 @@ HISTORY_BAND_TYPES = frozenset({
 # Ingen av dessa statusar innebär publik UI-aktivering eller
 # stodjer_besparing-ändring; det avgörs separat i Neptune-koden.
 SCENARIO_STATUS_REGISTRY: dict[str, str] = {
-    "stockholm-exergi": "synlig_saerskild_preliminar_prototyp",
+    "stockholm-exergi": "synlig_sarskild_preliminar_prototyp",
     "sundsvall-energi-indal-liden-och-lucksta": "godkand_intern_pilot_ej_publik",
 }
+
+# Sluten vokabulär för scenario_review_status. build_matrix avvisar varje
+# registervärde som inte finns här, så ett stavfel i registret blir ett fel
+# i stället för en ny, tyst tolererad status.
+ALLOWED_SCENARIO_REVIEW_STATUSES = frozenset({
+    "not_reviewed",
+    "synlig_sarskild_preliminar_prototyp",
+    "godkand_intern_pilot_ej_publik",
+})
+
+
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    seen: set[str] = set()
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in seen:
+            raise ValueError(f"Dubblerad JSON-nyckel i tariff-snapshoten: {key!r}.")
+        seen.add(key)
+        result[key] = value
+    return result
 
 
 def parse_snapshot(text: str) -> tuple[dict[str, Any], dict[str, str]]:
@@ -50,11 +70,15 @@ def parse_snapshot(text: str) -> tuple[dict[str, Any], dict[str, str]]:
     if text.count(marker) != 1 or text.count(" as const;") != 1:
         raise ValueError("Förväntade exakt ett genererat TARIFFER-objekt.")
     payload = text.split(marker, 1)[1].split(" as const;", 1)[0]
-    tariffs = json.loads(payload)
+    tariffs = json.loads(payload, object_pairs_hook=_reject_duplicate_keys)
     if not isinstance(tariffs, dict) or not tariffs:
         raise ValueError("Tariff-snapshoten måste vara ett icke-tomt objekt.")
     generated = re.search(r"export const GENERERAD = '([^']+)';", text)
-    origin = re.search(r"Källkatalog: sha256=([0-9a-f]{64}) commit=([0-9a-f]{7,40})", text)
+    origin = re.search(
+        r"Källkatalog: sha256=([0-9a-f]{64}) commit=([0-9a-f]{7,40})[ \t]*$",
+        text,
+        re.MULTILINE,
+    )
     if not generated or not origin:
         raise ValueError("Genereringsdatum eller katalogproveniens saknas.")
     return tariffs, {
@@ -174,10 +198,14 @@ def build_matrix(text: str) -> dict[str, Any]:
     if len(set(tariff_ids)) != len(tariff_ids):
         raise ValueError("Dubbla tariff-ID:n i matrisen.")
     product_ids = {row["product_id"] for row in rows}
-    for registered_id in SCENARIO_STATUS_REGISTRY:
+    for registered_id, status in SCENARIO_STATUS_REGISTRY.items():
         if registered_id not in product_ids:
             raise ValueError(
                 f"SCENARIO_STATUS_REGISTRY refererar {registered_id!r}, som saknas i snapshoten."
+            )
+        if status not in ALLOWED_SCENARIO_REVIEW_STATUSES:
+            raise ValueError(
+                f"Okänt scenario_review_status {status!r} för {registered_id!r} i SCENARIO_STATUS_REGISTRY."
             )
     counts = {
         "products": len(rows),
@@ -186,6 +214,7 @@ def build_matrix(text: str) -> dict[str, Any]:
         "existing_savings": sum(row["savings_today"] for row in rows),
         "current_cost_only": sum(row["cost_path"] == "kontrakt_arskostnad" for row in rows),
         "review_waves": {str(k): v for k, v in sorted(Counter(row["review_wave"] for row in rows).items())},
+        "scenario_review_status": dict(sorted(Counter(row["scenario_review_status"] for row in rows).items())),
     }
     return {
         "source_file": "neptune-marketing/src/data/tariffer.generated.ts",
@@ -208,7 +237,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "synliga prototyp eller Sundsvalls interna pilot ändrar tariffens befintliga",
         "`stodjer_besparing`-spärr eller aktiverar något publikt UI.",
         "",
-        "- `scenario_review_status=synlig_saerskild_preliminar_prototyp` (stockholm-exergi):",
+        "- `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):",
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
@@ -221,9 +250,12 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "- Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.",
         "- `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.",
         "- Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.",
+        "- Scenariostatusfördelning: " + ", ".join(
+            f"{status}: {count}" for status, count in counts["scenario_review_status"].items()
+        ) + ".",
         "",
-        "| Våg | Produkt-ID | Nät/produkt | Befintlig väg | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for row in matrix["rows"]:
         capacity = row["capacity_rule"] if row["has_capacity_charge"] else "ingen debiterbar kapacitetsdel"
@@ -240,6 +272,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
             special.append("returregel")
         values = [
             str(row["review_wave"]), row["product_id"], row["product_name"], row["cost_path"],
+            row["scenario_review_status"],
             ", ".join(row["energy_rule_keys"]), capacity,
             ", ".join(row["adjustment_types"]) or "—",
             ", ".join(row["required_policy_fields"]) or "—",
