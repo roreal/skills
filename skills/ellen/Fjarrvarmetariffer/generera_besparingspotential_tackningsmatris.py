@@ -32,17 +32,20 @@ HISTORY_BAND_TYPES = frozenset({
     "low_utilization", "volume_discount", "seasonal_banded_volume_discount_estimate",
 })
 
-# Namngiven, fail-closed statuskonfiguration för de enda två produkter som
-# har en granskad scenariostatus (handoff 2026-09-25-002, del B.4). Varje
-# nyckel MÅSTE finnas exakt en gång i den inlästa snapshoten (kontrolleras i
-# build_matrix) — ingen tyst fallback för ett ID som skrivits fel eller
-# tagits bort ur katalogen. Alla övriga 75 produkter förblir "not_reviewed".
-# Ingen av dessa statusar innebär publik UI-aktivering eller
-# stodjer_besparing-ändring; det avgörs separat i Neptune-koden.
+# Namngiven, fail-closed statuskonfiguration för de enda tre produkter som
+# har en granskad scenariostatus (handoff 2026-09-25-002, del B.4; aktivering
+# signal 2026-09-25-015). Varje nyckel MÅSTE finnas exakt en gång i den
+# inlästa snapshoten (kontrolleras i build_matrix) — ingen tyst fallback för
+# ett ID som skrivits fel eller tagits bort ur katalogen. Alla övriga 74
+# produkter förblir "not_reviewed". `synlig_sarskild_preliminar_prototyp`
+# innebär INTE publik UI-aktivering. `godkand_publik_10_15_20` (de två våg
+# 1-produkterna, se WAVE_1_PRODUCT_IDS) innebär att de ÄR publikt aktiverade
+# i Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
+# fortfarande inte tariffens `stodjer_besparing`-flagga, som förblir oändrad.
 SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "stockholm-exergi": "synlig_sarskild_preliminar_prototyp",
-    "sundsvall-energi-indal-liden-och-lucksta": "godkand_intern_pilot_ej_publik",
-    "gotlands-energi-gotland-taxa-17-under-50-mwh-ar": "godkand_intern_pilot_ej_publik",
+    "sundsvall-energi-indal-liden-och-lucksta": "godkand_publik_10_15_20",
+    "gotlands-energi-gotland-taxa-17-under-50-mwh-ar": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
@@ -62,6 +65,7 @@ ALLOWED_SCENARIO_REVIEW_STATUSES = frozenset({
     "not_reviewed",
     "synlig_sarskild_preliminar_prototyp",
     "godkand_intern_pilot_ej_publik",
+    "godkand_publik_10_15_20",
 })
 
 
@@ -249,20 +253,24 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "# Täckningsmatris för preliminär Optimate-potential, 2026",
         "",
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
-        "godkänner inte något nytt besparingsscenario eller någon tariffaktivering.**",
+        "godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —",
+        "aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.",
         "`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,",
-        "tills prisledens före/efter-beroenden har granskats separat. Varken Stockholms",
-        "synliga prototyp eller de två interna våg-1-piloterna (Sundsvall, Gotland taxa",
-        "17) ändrar tariffens befintliga `stodjer_besparing`-spärr eller aktiverar något",
-        "publikt UI.",
+        "tills prisledens före/efter-beroenden har granskats separat. Ingen av",
+        "statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.",
         "",
         "- `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):",
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
-        "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
+        "- `scenario_review_status=godkand_publik_10_15_20`",
         "  (sundsvall-energi-indal-liden-och-lucksta, gotlands-energi-gotland-taxa-17-",
-        "  under-50-mwh-ar): godkända för intern beräkningspilot (Optimate våg 1),",
-        "  inte publikt aktiverade (se `stodjerOptimateScenarioPubliktAktiverad`).",
+        "  under-50-mwh-ar): Optimate våg 1, publikt aktiverad (signal 2026-09-25-015) —",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa två leverantorId,",
+        "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik`: reserverad status för",
+        "  en produkt som är godkänd för intern beräkningspilot men INTE publikt",
+        "  aktiverad (se `stodjerOptimateScenario` vs. `stodjerOptimateScenarioPubliktAktiverad`",
+        "  i optimateScenario.ts). Ingen produkt har denna status just nu.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",

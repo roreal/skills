@@ -17,7 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 2,
+      "godkand_publik_10_15_20": 2,
       "not_reviewed": 74,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -748,7 +748,7 @@
       "has_eligibility_rule": false,
       "risk_flags": [],
       "review_wave": 1,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "gotlands-energi-gotland-taxa-21-over-50-mwh-ar",
@@ -2499,7 +2499,7 @@
       "has_eligibility_rule": false,
       "risk_flags": [],
       "review_wave": 1,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "tekniska-verken-katrineholm-katrineholm",

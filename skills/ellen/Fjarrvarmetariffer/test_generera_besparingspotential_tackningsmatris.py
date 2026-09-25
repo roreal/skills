@@ -48,9 +48,9 @@ class TariffMatrixTests(unittest.TestCase):
         stockholm = self.by_id["stockholm-exergi"]
         self.assertEqual(stockholm["scenario_review_status"], "synlig_sarskild_preliminar_prototyp")
         sundsvall = self.by_id["sundsvall-energi-indal-liden-och-lucksta"]
-        self.assertEqual(sundsvall["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(sundsvall["scenario_review_status"], "godkand_publik_10_15_20")
         gotland_taxa_17 = self.by_id["gotlands-energi-gotland-taxa-17-under-50-mwh-ar"]
-        self.assertEqual(gotland_taxa_17["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(gotland_taxa_17["scenario_review_status"], "godkand_publik_10_15_20")
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
@@ -61,10 +61,22 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 2,
+                "godkand_publik_10_15_20": 2,
                 "not_reviewed": 74,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
+        )
+
+    def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
+        # godkand_intern_pilot_ej_publik är en tillåten, reserverad status i
+        # den slutna vokabulären (se ALLOWED_SCENARIO_REVIEW_STATUSES) även
+        # om ingen produkt just nu har den — den utökade vokabulären ska
+        # aldrig ta bort en tidigare giltig status, bara lägga till en ny.
+        self.assertIn(
+            "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
+        )
+        self.assertIn(
+            "godkand_publik_10_15_20", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
 
     def test_wave_1_membership_is_mechanically_locked(self) -> None:
