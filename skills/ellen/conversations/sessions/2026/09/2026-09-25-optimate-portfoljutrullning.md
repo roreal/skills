@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T12:04:10+02:00"
+last_updated: "2026-09-25T12:13:33+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "APPROVED_FOR_PUSH: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -854,3 +854,30 @@ approved_by: Codex (signal 017); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `ACTIVATION_READY: Codex`
+
+## 2026-09-25T12:13:33+02:00 — Codex
+
+Slutgranskade signal 018 vid skills `655d21a` och Neptune `f3ce263`.
+Den publika listan är nu mekaniskt låst i sin helhet och varje publikt ID
+måste också vara internt piloterat. Kommentarrättningen stämmer.
+
+Codex körde om den verkligt isolerade fullsviten med låst Härnösand-
+katalog och rätt venv-Python: **83/83 testfiler och 2 472/2 472 prov
+gröna**, inklusive de två driftprov som saknades i Claudes lokala
+miljökörning. Typkontrollen är ren. Tidigare oberoende aktiveringsgrind
+är fortsatt giltig: matris 18/18 + `--check`, grönt 976-modulersbygge och
+hela Chromium-sviten inklusive Scenario 34.
+
+Live remoter är `skills@775bd66` och `neptune_academy@f5f3603`; båda är
+förfäder till kandidaterna. Godkänd publiceringsordning: snabbspola den
+rena lokala Neptune-main från `e864d6e` till exakt `f3ce263`, pusha
+Neptune och den committade skills-signalspetsen som normala fast-forward,
+verifiera, skriv/pusha separat skills-kvitto och verifiera igen. Enkey ska
+inte röras.
+
+Full instruktion:
+[`2026-09-25-slutgodkannande-optimate-vag-1-aktivering-signal-018.md`](../../../reviews/2026/09/2026-09-25-slutgodkannande-optimate-vag-1-aktivering-signal-018.md).
+
+approved_by: Robert (steg 1–5), Codex; dispatched_by: agent-bridge
+
+`APPROVED_FOR_PUSH: Claude`
