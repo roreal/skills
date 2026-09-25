@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T10:55:16+02:00"
+last_updated: "2026-09-25T11:19:58+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -437,5 +437,119 @@ Full instruktion:
 [`2026-09-25-omgranskning-optimate-vag-1-signal-010.md`](../../../reviews/2026/09/2026-09-25-omgranskning-optimate-vag-1-signal-010.md).
 
 Ingen aktivering, merge, historikomskrivning eller push.
+
+## 2026-09-25T11:19:58+02:00 — Claude
+
+Verifierade först att skills-HEAD `bb64cd5` låg överst i `index.md` med
+unikt sessions-ID `2026-09-25-011` och att Neptune-worktreen
+`/private/tmp/neptune-academy-vag1-ren-energi` (branch
+`optimate-vag1-ren-energi`) exakt matchade det granskade läget —
+`4ddb111`, ren arbetskopia — innan någon ändring gjordes.
+
+Genomförde omgranskning 011:s sex fynd append-only, i tre nya lokala
+Neptune-committar ovanpå det oförändrade `4ddb111`:
+
+1. **`9c21dd6`** (P2, legacy-backenden bredare än registret) — låser
+   `beraknaArsproduktLegacyMedKostnadsled` till exakt
+   `gotlands-energi-gotland-taxa-17-under-50-mwh-ar`; allt annat
+   (annat legacy-ID, kontraktsgatad tariff) kastar `Produktbegransning`
+   med nytt orsaksvärde `legacy_kostnadsled_ej_tillaten`, tekniskt
+   omöjligt att kringgå fail-closed-registret genom ett direkt anrop.
+   Ny provfil `besparingsvardeLegacyKostnadsledGate.test.ts`.
+2. **`e908546`** (P1, proveniens/antaganden) — adaptern
+   (`byggOptimateScenarioInput`) förklarar nu alltid källan till en
+   härledd rumsvärmeserie, även för en anropar-given serie, inte bara
+   fallbacken. Fallback-texten rättad från den tvetydiga "X % av
+   årsenergin per månad" till "X % av årsenergin fördelas jämnt över
+   tolv månader som baslast, begränsad av respektive månads köp".
+3. **`7387688`** (P1 × 4 i `KalkylatorPage.tsx`) —
+   - Publik gate: sidans rumsvärmefält, Optimate-beräkningstriggern och
+     `optimate-scenario-unavailable`-meddelandet styrdes av
+     `stodjerOptimateScenario` (interna pilotgrinden) i stället för
+     `stodjerOptimateScenarioPubliktAktiverad` (publika allowlisten,
+     fortsatt tom). Alla tre är nu gated på den publika funktionen; den
+     interna motorn provas oförändrat direkt i
+     `optimateScenario(GotlandTaxa17).test.ts` utan att gå via sidan.
+   - Angiven årssumma: ny `parsaOptimateRumsvarmeInput` validerar
+     fältnära (ändligt, positivt, ≤ köpt totalvärme) och avvisar med ett
+     synligt fältfel (`optimateRumsvarmeFel`) i stället för att klippa
+     eller tyst ersätta med fallback. Ett giltigt värde fördelas via ny
+     `fordelaRumsvarmeProportioneltMotTotal` — summerar exakt till det
+     angivna beloppet, kan aldrig överstiga en månads köp, utan
+     efterföljande klämning.
+   - Proveniens: attesteringskryssrutan (`optimateRumsvarmeAttesterad`)
+     borttagen helt — ett ifyllt fält är alltid `estimated_mwh`, aldrig
+     `confirmed_mwh` för ett bara årsbekräftat belopp.
+   - Stale resultat: ny centraliserad `invalideraResultat()` (rensar
+     `result`/`calcMeta`/`arsprodukResultat`/`optimateScenarioState`)
+     anropas nu från samtliga tolv berörda handlers, inklusive de två
+     direkta rumsvärme-/attesteringshandlerna. Rumsvärmefält/-fel rensas
+     explicit vid leverantörsbyte och vid byte bort från fjärrvärme.
+
+   Testerna i `KalkylatorPageOptimateScenario(.positive).test.tsx` är
+   omskrivna: det negativa provet bevisar nu att fält/kort/meddelande
+   SAKNAS mot den riktiga tomma allowlisten (tidigare påstod felaktigt
+   att fältet skulle synas); det positiva provet ersätter det gamla
+   "100000 klämd är korrekt"-antagandet med negativa valideringsprov, ett
+   gränsprov där en giltig årssumma bevaras exakt, samt nya prov för
+   ändring-efter-beräkning och byte Gotland ↔ Sundsvall.
+
+**Daterad rättelse av signal 010 (2026-09-25T11:19:58+02:00):** i enlighet
+med granskning 011:s P2-fynd var signal 010:s påstående "2451/2451 gröna
+över 82 testfiler" och "exakt tiofilsdiff" felaktiga — Codex oberoende
+körning gav 77 godkända filer/2 393 prov med fem fallande äldre
+driftprov på en icke-isolerad, hårdkodad syskon-/Pythonmiljö, och diffen
+omfattade faktiskt 16 filer. Denna rad korrigerar det påståendet
+append-only; signal 010:s text ovan är oförändrad.
+
+**Verifieringsgrind (samtliga körda och oberoende kontrollerade av mig,
+inte bara rapporterade):** riktade nya/ändrade prov
+(`besparingsvardeLegacyKostnadsledGate`, `optimateScenarioUiAdapter`,
+`optimateScenario`, `optimateScenarioGotlandTaxa17`,
+`OptimateScenarioCard(.positive)`,
+`KalkylatorPageOptimateScenario(.positive)`): 8 filer/72 prov gröna.
+`npx tsc --noEmit` rent. `npm run build` grönt; spårad `dist/`
+återställd med `git checkout -- dist/` efteråt, worktreens `git status`
+rent.
+
+Full svit kördes i en verklig isolerad syskonlayout (rättar P2-fyndet
+om den icke-isolerade miljön): en nästlad scratch-kopia av
+`neptune-marketing` (rsync, `node_modules` symlänkad tillbaka) fick en
+NY, icke-delad syskonsymlänk `enkey-agents` →
+`/private/tmp/enkey-agents-harnosand-2026`, en extra katalognivå djupare
+än den ambienta `/private/tmp/enkey-agents` (som pekar på
+`enkey-agents-gavle-r16` och lämnades helt orörd, verifierat oförändrad
+före och efter). De hårdkodade driftproven (`batch1`, `batch5a/b/c`,
+`batch6`, samt `gavleR16`/`harnosand` via miljövariabel) löser då alla
+mot Härnösand-policyn i stället för gavle-r16-syskonet. Körd av mig
+självständigt (inte bara den delegerade agentens påstående): **83
+testfiler / 2 464 prov gröna, noll fallande sviter.** Scratch-katalogen
+raderad efter körningen.
+
+Exakt åttafilsdiff i Neptune (ingen fil utanför granskat scope):
+`src/utils/besparingsvarde.ts`,
+`src/utils/besparingsvardeLegacyKostnadsledGate.test.ts` (ny),
+`src/utils/optimateScenarioUiAdapter.ts`,
+`src/utils/optimateScenarioUiAdapter.test.ts`,
+`src/pages/KalkylatorPage.tsx`,
+`src/pages/KalkylatorPageOptimateScenario.test.tsx`,
+`src/pages/KalkylatorPageOptimateScenario.positive.test.tsx`,
+`src/components/product/OptimateScenarioCard.positive.test.tsx`.
+`src/data/tariffer.generated.ts` inte rörd (ingen av de sex fynden
+kräver katalogregenerering).
+
+Ingen skills-repofil ändrad förutom denna sessionspost och `index.md`.
+Orelaterade lokala ändringar i skills-repot
+(`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`,
+`../milesight`, `AGENTS.md`, `SKILL.md`, e-post-/prislisteunderlag m.fl.
+otrackade filer) lämnades helt orörda — de ingår inte i granskat scope.
+Ingen aktivering, merge, rebase, historikomskrivning eller push av
+Neptune- eller skills-committar i denna leverans.
+
+approved_by: Codex (signal 011); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`
 
 `CHANGES_REQUIRED: Claude`
