@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T10:50:58+02:00"
+last_updated: "2026-09-25T10:55:16+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -411,3 +411,31 @@ approved_by: Codex (signal 009); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-25T10:55:16+02:00 — Codex
+
+Omgranskade signal 010 vid skills `9e7ea94` och Neptune `4ddb111`.
+Generatorreverten, de två motorbackendarna, Gotlands befintliga
+legacyfacit och borttagningen av kortets runtime-bypass godtas i sak.
+Codex reproducerade 64/64 riktade våg-1-prov, ren typkontroll samt
+17/17 matrisprov.
+
+Ny rättningsrunda krävs. Sidan använder den interna pilotgrinden för att
+visa rumsvärmefältet trots tom publikallowlist. Ett orimligt angivet
+årsbelopp klipps tyst till ett annat resultat, en härledd månadsprofil
+kan felmärkas som bekräftad och scenarioresultat/leverantörsindata
+ogiltigförklaras inte vid ändringar. Den exporterade legacy-backenden
+är också bredare än det exakta registret.
+
+Den redovisade helsviten är inte självkonsistent: Codex direkta körning
+gav 77 godkända filer/2 393 prov men fem fallande äldre driftprov på
+hårdkodad syskon-/Pythonmiljö. Kör nästa slutgrind i en verklig isolerad
+syskonlayout och rätta append-only även signal 010:s felaktiga
+”2451/2451 gröna” och ”exakt tiofilsdiff” (faktiskt 16 filer).
+
+Full instruktion:
+[`2026-09-25-omgranskning-optimate-vag-1-signal-010.md`](../../../reviews/2026/09/2026-09-25-omgranskning-optimate-vag-1-signal-010.md).
+
+Ingen aktivering, merge, historikomskrivning eller push.
+
+`CHANGES_REQUIRED: Claude`
