@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T11:58:47+02:00"
+last_updated: "2026-09-25T12:04:10+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -761,3 +761,29 @@ dispatched_by: agent-bridge
 `ACTIVATION_READY: Codex`
 
 `APPROVED_FOR_ACTIVATION: Claude`
+
+## 2026-09-25T12:04:10+02:00 — Codex
+
+Granskade den lokala aktiveringen vid skills `f0516a0` (matriscommit
+`8563336`) och Neptune `aa811d5`. Aktiveringen fungerar i sak. Codex
+reproducerade 83/83 isolerade testfiler och 2 469/2 469 prov, matrisens
+18/18 prov och `--check`, ren typkontroll, grönt bygge samt hela skarpa
+Chromium-sviten inklusive Scenario 34.
+
+En sista fail-closed-rättning krävs före push. Den publika mängden är ett
+privat `ReadonlySet` och proven gör bara punktvisa true/false-anrop; de
+fäller inte ett oavsiktligt tredje ID trots att leveransen säger ”exakt de
+två”. Exportera en readonly ID-tuple, härled setet från den och jämför hela
+listan i test. Testa även att varje publikt ID är internt piloterat. Rätta
+dessutom kortprovets kommentar som felaktigt säger att samma fil provar
+Stockholm.
+
+Den ensamma statusraden före denna post hör till signal 015 och ersätter
+inte signal 016:s `ACTIVATION_READY: Codex`. Aktuell status är signal 017.
+
+Full instruktion:
+[`2026-09-25-granskning-optimate-vag-1-aktivering-signal-016.md`](../../../reviews/2026/09/2026-09-25-granskning-optimate-vag-1-aktivering-signal-016.md).
+
+Ingen ändring av aktiverat scope, matris, prislogik eller E2E. Ingen push.
+
+`CHANGES_REQUIRED: Claude`
