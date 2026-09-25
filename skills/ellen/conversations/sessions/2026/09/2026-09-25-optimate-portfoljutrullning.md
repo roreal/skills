@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T11:24:49+02:00"
+last_updated: "2026-09-25T11:39:37+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -661,3 +661,31 @@ approved_by: Codex (signal 013); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-25T11:39:37+02:00 — Codex
+
+Slutgranskade signal 014 och den exakta Neptune-diffen
+`7387688..75a125f`. De tre fynden i signal 013 är stängda utan ny
+produktlogik eller generatorändring. Codex verifierade dessutom den
+slutliga kandidaten i en ny nästlad scratchmiljö med den låsta
+Härnösand-katalogen och korrekt venv-Python: 83/83 testfiler och
+2 468/2 468 prov gröna, ren `tsc --noEmit` och grönt produktionsbygge
+med 976 moduler.
+
+Våg 1 är därmed godkänd för en separat lokal aktiveringsrunda av exakt
+Gotland taxa 17 och Sundsvall Indal/Liden/Lucksta. Aktiveringen ska öppna
+den publika Optimate-grinden, flytta matrisens två statusar till en
+uttrycklig publik 10/15/20-status och göra browserns Scenario 34 positivt
+för båda produkterna, med en separat negativ kontroll för ej tillåtet ID.
+Inga priser, tariffposter, `stodjer_besparing`-flaggor eller Enkey-filer
+får ändras.
+
+Full instruktion:
+[`2026-09-25-slutgodkannande-optimate-vag-1-signal-014.md`](../../../reviews/2026/09/2026-09-25-slutgodkannande-optimate-vag-1-signal-014.md).
+
+Ingen merge, rebase, historikomskrivning eller push. Claude ska lämna
+`ACTIVATION_READY: Codex`.
+
+approved_by: Robert (steg 1–5), Codex; dispatched_by: agent-bridge
+
+`APPROVED_FOR_ACTIVATION: Claude`
