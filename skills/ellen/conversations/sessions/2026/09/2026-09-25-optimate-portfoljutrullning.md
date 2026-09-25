@@ -581,3 +581,83 @@ Full instruktion:
 Ingen aktivering, merge, historikomskrivning eller push.
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-25T11:34:52+02:00 — Claude
+
+Rättade signal 013 (slutomgranskning av 012) append-only ovanpå
+oförändrad Neptune `7387688` i `optimate-vag1-ren-energi`
+(`/private/tmp/neptune-academy-vag1-ren-energi`, samma worktree som
+tidigare, verifierat rent och exakt vid `7387688` innan rättning). Ny
+committ `75a125f`. Alla tre kvarstående fynd stängda:
+
+1. **P1 "rumsvärmeindata överlever läges- och scopebyten":**
+   `handleFormChange` rensar nu `optimateRumsvarmeMwhRaw` och
+   `optimateRumsvarmeFel` när `energyInputMode` eller `energyScope`
+   faktiskt ändras (samma mönster som redan fanns för leverantörsbyte/
+   bortval av fjärrvärme). Ett gammalt fältfel rensas dessutom separat
+   (utan att rensa det ifyllda talet) när `energyMwh` ändras, så det
+   inte kan stå kvar som om det fortfarande prövat den nya köpta
+   totalvärmen — nästa beräkning validerar det bevarade årsvärdet på
+   nytt.
+2. **P1 "årsgränsen tillåter fortfarande ett verkligt överskott":**
+   `parsaOptimateRumsvarmeInput` kräver nu strikt `tal <= koptTotalMwh`
+   (tog bort `+ 0.001`-toleransen). Den proportionella fördelningens
+   skalfaktor kan därmed aldrig bli > 1.
+3. **P2 "kommentaren beskriver den borttagna interna sidvägen":**
+   kommentaren vid `optimateScenarioState`-deklarationen uppdaterad för
+   att beskriva att sidan sedan signal 012 gatar beräkningen på den
+   publika allowlisten, inte längre bara kortet. Ingen runtime-logik
+   ändrad av denna punkt.
+
+**Nya sidprov** i `KalkylatorPageOptimateScenario.positive.test.tsx`
+(öppnad testgrind, samma mönster som befintlig fil): lägesbyte rensar
+fält/fel, scopebyte rensar fält/fel, ett fältfel försvinner när dess
+beroende totalenergi (`energyMwh`) redigeras utan att rumsvärmetalet
+rensas, samt ett gränsnära överskott (`100.0005` mot 100 MWh köpt) som
+den gamla `+ 0.001`-toleransen skulle ha godtagit avvisas nu. Det
+befintliga exakta likhetsprovet (100 mot 100) täcker redan kravet att
+en giltig gränssiffra fortsatt godtas.
+
+**Verifieringsgrind:** de åtta tidigare granskade riktade testfilerna
+(`besparingsvardeLegacyKostnadsledGate`, `optimateScenarioUiAdapter`,
+`optimateScenario`, `optimateScenarioGotlandTaxa17`,
+`OptimateScenarioCard(.positive)`,
+`KalkylatorPageOptimateScenario(.positive)`) körda om: **76/76 gröna**
+(72 tidigare + 4 nya prov om lägesbyte/scopebyte/fel-utan-raderat-
+tal/gränsnära-överskott; scopebyte- och lägesbytesproven är två
+separata `it`-block). `npx tsc --noEmit` rent.
+
+Full svit körd i samma worktree (ingen extra syskonsymlänk skapad
+denna gång — inga Härnösand-driftprov berörs av denna diff): 82 av 83
+testfiler gröna, 2 466 prov gröna. Den enda fallande sviten
+(`harnosandRawData.driftprov.test.ts`) beror på att worktreens
+`/private/tmp/enkey-agents`-symlänk saknas i denna miljö (extern
+Python-katalogläsning, `KeyError` på tariff-ID:t) — verifierat
+förbefintligt och orört av denna diff genom att köra samma fil på
+oförändrad `7387688` (`git stash`) med identiskt fel före ändringen
+återfördes. Ingen del av den kända testinfrastrukturen för Optimate
+våg 1 påverkas.
+
+**Exakt diff mot `7387688`** (`git diff --stat 7387688`): två filer,
+`src/pages/KalkylatorPage.tsx` (+33/-5) och
+`src/pages/KalkylatorPageOptimateScenario.positive.test.tsx` (+61).
+Ingen annan fil rörd; `src/data/tariffer.generated.ts` oförändrad.
+
+Ingen skills-repofil ändrad förutom denna sessionspost och `index.md`.
+Orelaterade lokala ändringar i skills-repot (samma lista som tidigare
+poster: `Fjarrvarmetariffer/...`, `conversations/automation/README.md`,
+`conversations/automation/agent-bridge.zsh`, `../milesight`,
+`AGENTS.md`, `SKILL.md`, e-post-/prislisteunderlag m.fl. otrackade
+filer) lämnades helt orörda. Ingen aktivering, merge, rebase,
+historikomskrivning eller push av Neptune- eller skills-committar i
+denna leverans — slutgrinden för denna rättningsrunda tillåter det
+uttryckligen inte.
+
+skills_head vid leverans: `c5071a3` (oförändrad av denna post innan
+committen som lägger till den). Neptune `optimate-vag1-ren-energi`:
+`7387688` → `75a125f`.
+
+approved_by: Codex (signal 013); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`
