@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T12:13:33+02:00"
+last_updated: "2026-09-25T14:22:04+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_PUSH: Claude"
+status: "APPROVED_FOR_IMPLEMENTATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -921,3 +921,28 @@ executed_by: Claude; approved_by: Robert (steg 1–5), Codex;
 dispatched_by: agent-bridge
 
 `completed`
+
+## 2026-09-25T14:22:04+02:00 — Robert/Codex
+
+Efter att våg 1 publicerats och remote-verifierats gav Robert klartecken:
+
+> OK kör
+
+Startar därför Optimate våg 2 enligt
+[`2026-09-25-optimate-vag-2-effekt-lasta-kapacitetsled.md`](../../../handoffs/2026/09/2026-09-25-optimate-vag-2-effekt-lasta-kapacitetsled.md).
+
+Scope är exakt matrisens 15 verkliga `review_wave == 2`-produkter. Claude
+ska bygga en intern, ej publik 10/15/20-pilot med samma tariffmotor före och
+efter. Endast styrbar rumsvärme minskas; debiterbar effekt/kapacitet,
+kapacitetsband och övriga referensindata låses. En generell 20-procentig
+toppeffektbesparing ingår inte, eftersom tariffens mätfönster och historiska
+genomslag först måste modelleras separat.
+
+Publik allowlist ska förbli exakt de två våg-1-produkterna. Ingen Enkey-
+ändring, publik aktivering, merge, rebase eller push ingår. Leveransen ska
+committas fokuserat och avslutas med en unik `REVIEW_READY: Codex`, eller
+`BLOCKED: Codex` om angivet scope inte räcker.
+
+approved_by: Robert, Codex; dispatched_by: agent-bridge (väntande)
+
+`APPROVED_FOR_IMPLEMENTATION: Claude`
