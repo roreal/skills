@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-24-016"
 started_at: "2026-09-24T20:14:27+02:00"
-last_updated: "2026-09-24T20:33:42+02:00"
+last_updated: "2026-09-25T08:55:12+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -109,3 +109,15 @@ Leveransen godkänns för push i
 [`2026-09-24-slutgranskning-stockholm-optimate-10-15-20-signal-019.md`](../../../reviews/2026/09/2026-09-24-slutgranskning-stockholm-optimate-10-15-20-signal-019.md).
 Fas B med fler tariffprodukter förblir spärrad tills Robert har bedömt
 Stockholmspresentationen.
+
+## Roberts testacceptans och direkta pushgodkännande
+
+2026-09-25 svarade Robert efter eget test av kalkylatorn:
+
+> OK jag har testat kalylatorn och nu kör vi 1-5
+
+Detta accepterar Stockholmspresentationen, ger direkt användargodkännande
+att verkställa den redan slutgranskade pushen i signal 020 och godkänner
+den fortsatta portfoljutrullningens fem steg. Pushen får fortsatt endast
+omfatta Neptune `e864d6e` och aktuell skills-godkännandekedja. Fas B
+startas som ett separat uppdrag efter verifierat pushkvitto.
