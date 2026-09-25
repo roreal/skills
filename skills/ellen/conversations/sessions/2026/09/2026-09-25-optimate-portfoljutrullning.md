@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T10:21:45+02:00"
+last_updated: "2026-09-25T10:50:58+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -314,3 +314,100 @@ Full avgränsad rättningsinstruktion:
 Ingen aktivering, merge, historikomskrivning eller push.
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-25T10:50:58+02:00 — Claude
+
+Verifierade först att den granskade Neptune-committen `2b57bd8` i
+`/private/tmp/neptune-academy-vag1-ren-energi/neptune-marketing` (branch
+`optimate-vag1-ren-energi`) exakt matchade granskning 009 innan någon
+ändring gjordes, och att skills-HEAD `abfed19` fortfarande låg överst i
+`index.md` med unikt sessions-ID `2026-09-25-009`.
+
+Genomförde rättningsrundan från signal 009 append-only, i två nya lokala
+Neptune-committar ovanpå det oförändrade `2b57bd8` (`6c78871`/`e32379a`
+inte heller rörda):
+
+1. **`9f1ce4c`** — återställer `tariffer.generated.ts` exakt till
+   genererat skick genom att precist reverta handpatchen från `6c78871`
+   (den riktiga Python-generatorn ligger i ett syskonrepo utanför denna
+   worktree och kunde inte köras om härifrån; reverten är byte-för-byte
+   samma diff baklänges). Tar bort `_manadsuppdelningForKontraktfasad`
+   och katalogaktiveringstestet. Ger scenariomotorn två separata
+   kostnadsbackends bakom samma fail-closed register
+   (`SCENARIO_PILOT_TARIFFER` är nu en `Map`): Sundsvall oförändrad via
+   `beraknaArsproduktMedKostnadsled`, Gotland taxa 17 via ny
+   `beraknaArsproduktLegacyMedKostnadsled` som återanvänder den
+   befintliga, redan publika `arskostnad`-motorn (ingen ny prisformel).
+   Nytt regressionsprov `besparingsvardeGotlandTaxa17.test.ts` låser
+   Gotlands ursprungliga publika facit via `beraknaBesparingsvarde`: 40
+   MWh/20 MWh påverkbart/50 % → 50 570/38 020/12 550 kr inkl. moms, taxa
+   17 (inte 21). Gotlands legacyväg kastar `Produktbegransning` om
+   tariffen faktiskt är kontraktsgatad; ett oregistrerat leverantorId
+   blockeras fortsatt av `backendForLeverantor` innan någon serie når
+   tariffmotorn — ingen generisk bypass av kontraktsgrinden.
+2. **`4ddb111`** — kopplar in `OptimateScenarioCard` i `KalkylatorPage.tsx`
+   för både Sundsvall- och Gotland-vägen (publik allowlist fortsatt tom,
+   verifierat med nya negativa prov utan mock). Tar bort produktionsproppen
+   `stodjerPubliktAktiverad` helt ur `OptimateScenarioCardProps` — kortet
+   anropar nu uteslutande den riktiga exporterade
+   `stodjerOptimateScenarioPubliktAktiverad`; provfilen delad i en
+   mockfri negativ del och en ny `*.positive.test.tsx` med testlokal
+   `vi.mock`. Rumsvärmeskattningen är nu synlig
+   (`skattningsAntaganden` renderas i kortet, texten beskriver den
+   faktiska formeln — flat bas last upp till 18 % per månad, klippt vid
+   noll — i stället för ett felaktigt fast 82-procentspåstående) och
+   redigerbar via nytt fält på sidan; ett användarvärde skalar
+   fallbackens månadsform och klipps per månad mot köpt totalvärme
+   (kan aldrig överstiga), och behåller `estimated_mwh`-proveniens om
+   det inte markeras som attesterat (`confirmed_mwh`).
+
+**Verifieringsgrind (samtliga körda och oberoende kontrollerade av mig,
+inte bara rapporterade):** Vitest 2451/2451 gröna över 82 testfiler; en
+testfil (`harnosandRawData.driftprov.test.ts`) misslyckas alltjämt av en
+förbefintlig, orelaterad orsak (den ambienta `/private/tmp/enkey-agents`-
+symlänken pekar på `enkey-agents-gavle-r16` i stället för
+`enkey-agents-harnosand-2026`, så `POLICYREGISTER` saknar
+Härnösand-tariffen i det körda underlaget) — samma kända miljöbetingade
+brist som i tidigare signaler, inte orsakad av eller relaterad till denna
+rättning. `npx tsc --noEmit` rent. `npm run build` grönt två gånger;
+spårad `dist/` återställdes till committerat skick med
+`git checkout -- dist/` efter varje körning (paketet har `dist/` spårat
+trots `.gitignore`, ett förbefintligt repomönster, inte något jag ändrat).
+`npm run test:e2e`: samtliga 34 scenarier gröna, inklusive nytt Scenario
+34 (negativ kontroll mot den byggda sidan: rumsvärmefältet och
+huvudresultatet fungerar för både Sundsvall och Gotland taxa 17 utan att
+den riktiga, tomma allowlisten exponerar kortet publikt). `git diff
+--check` rent. Neptune-worktreens `git status` rent efter varje
+återställning av `dist/`.
+
+Exakt tiofilsdiff i Neptune (ingen fil utanför granskat scope):
+`e2e/kalkylator.smoke.mjs`,
+`src/components/product/OptimateScenarioCard.tsx`,
+`src/components/product/OptimateScenarioCard.test.tsx` (delad),
+`src/components/product/OptimateScenarioCard.positive.test.tsx` (ny),
+`src/data/tariffer.generated.ts`, `src/pages/KalkylatorPage.tsx`,
+`src/pages/KalkylatorPageOptimateScenario.test.tsx` (ny),
+`src/pages/KalkylatorPageOptimateScenario.positive.test.tsx` (ny),
+`src/utils/besparingsvarde.ts`,
+`src/utils/besparingsvardeGotlandTaxa17.test.ts` (ny, ersätter borttagna
+`besparingsvardeGotlandTaxa17Katalogaktivering.test.ts`),
+`src/utils/fjarrvarme.ts`, `src/utils/fjarrvarme.test.ts`,
+`src/utils/optimateScenario.ts`,
+`src/utils/optimateScenarioGotlandTaxa17.test.ts`,
+`src/utils/optimateScenarioUiAdapter.ts`.
+
+Ingen skills-repofil ändrad i denna rättningsrunda (matrisen från signal
+008 gäller oförändrat — Gotlands interna pilotstatus kvarstår eftersom
+den rättade implementationen nu klarar hela grinden). Orelaterade lokala
+ändringar i skills-repot
+(`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`,
+`../milesight`, e-post-/prislisteunderlag m.fl. otrackade filer) lämnades
+helt orörda — de ingår inte i granskat scope. Ingen aktivering, merge,
+rebase, historikomskrivning eller push av Neptune- eller
+skills-committar i denna leverans.
+
+approved_by: Codex (signal 009); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`
