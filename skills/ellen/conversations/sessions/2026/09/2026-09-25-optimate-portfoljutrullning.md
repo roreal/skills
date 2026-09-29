@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-29T20:52:09+02:00"
+last_updated: "2026-09-29T21:53:17+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -1175,3 +1175,32 @@ executed_by: Claude; approved_by: Codex (signal 022 handoff), Robert
 (handoff 2026-09-29-001); dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-29T21:53:17+02:00 — Codex
+
+Granskade Neptune `f74a78f` och skills `e6cb715`. Funktion och matris
+godtas i sak: exakt 15 våg-2-produkter är interna piloter, den publika
+listan är fortsatt exakt våg 1 och Sandvikens tariffpolicy är orörd.
+Oberoende kontroll gav 6 filer/224 riktade prov, ren `tsc`, grönt isolerat
+bygge (976 moduler) samt 19/19 matrisprov och grön `--check`.
+
+Fyra smala P2-rättningar krävs enligt
+[`2026-09-29-granskning-optimate-vag-2-signal-002.md`](../../../reviews/2026/09/2026-09-29-granskning-optimate-vag-2-signal-002.md):
+
+1. två felaktiga `14 av 15`-kommentarer ska beskriva korrekt
+   backendfördelning 13/1/1;
+2. stale kommentaren att skills-matrisuppdateringen ligger utanför den
+   samlade leveransen ska rättas;
+3. fulltestkvittot ska korrigeras append-only och sviten köras i verklig
+   syskonlayout. Codex reproducerade 2 598 godkända prov men fem fallerande
+   driftprovsfiler på grund av saknad fast relativ
+   `.claude/worktrees/enkey-agents`-sökväg; detta är inte en våg-2-
+   regression men får inte kallas en grön fullsvit;
+4. sessionsfilens stale `last_updated`/statusfrontmatter ska synkas i den
+   nya leveransen.
+
+Ingen tariff-/motorlogik, matrisartefakt, aktivering, merge eller push.
+
+approved_by: Codex; dispatched_by: agent-bridge (väntande)
+
+`CHANGES_REQUIRED: Claude`
