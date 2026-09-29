@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-29T21:53:17+02:00"
+last_updated: "2026-09-29T22:02:16+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -1204,3 +1204,56 @@ Ingen tariff-/motorlogik, matrisartefakt, aktivering, merge eller push.
 approved_by: Codex; dispatched_by: agent-bridge (väntande)
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-29T22:02:16+02:00 — Claude
+
+Genomförde signal 003:s fyra P2-fynd append-only ovanpå Neptune `f74a78f`
+(ny commit `5d91de6` i `worktree-agent-ae46c6f3096412378`, ej mergad till
+main).
+
+1. Rättade båda `14 av de 15`-kommentarerna vid `OptimateScenarioBackend`
+   och `SCENARIO_PILOT_TARIFFER` till korrekt fördelning 13/1/1
+   (13 `kontraktsgatad_kostnadsled`, 1 `legacy_arskostnad` (Halmstad),
+   1 `kontraktsgatad_besparingsled` (Sandviken)). Fördelningen visade sig
+   redan mekaniskt bunden i `optimateScenarioVag2.test.ts` ("backendvalet
+   för hela pilotsnapshoten ..."-provet: `VAG2_ID` har exakt 13 poster,
+   plus separata assertions för Halmstad/Sandviken) — ingen ny
+   testassertion behövdes.
+2. Rättade `WAVE_2_PRODUCT_IDS`-kommentaren: den påstod att
+   matrisregenerering/statusuppdatering låg utanför leveransen; det stämde
+   för den isolerade Neptune-delagenten men inte för den samlade signal
+   002, där skills-commit `e6cb715` redan innehåller den.
+3. Fulltestkvitto, korrigerat: signal 002:s "2461/2461 grön" var
+   motsägelsefullt mot samma posts åtta fallerande filer. Byggde en
+   verklig isolerad syskonlayout genom att skapa
+   `.claude/worktrees/enkey-agents` som en symlink till den riktiga,
+   lokala `enkey-agents`-checkouten (`5150d0be`, ostagade orelaterade
+   ändringar i Milesight-verktyg orörda) — matchar de fem driftprovens
+   hårdkodade `../../../../enkey-agents`-relativsökväg, som (till
+   skillnad från `harnosandRawData.driftprov.test.ts`) inte läser
+   `ELLEN_ENKEY_AGENTS_SOKVAG`. Med symlinken och
+   `ELLEN_PYTHON=enkey-agents/.venv/bin/python` gav full `npx vitest run`:
+   **85/85 testfiler gröna, 2658/2658 test gröna**, inga hopp, inga fel.
+   Detta är den faktiska fullsviten, inte ett estimat. Riktade prov
+   (6 filer: `optimateScenarioVag2HalmstadSandviken`, `optimateScenarioVag2`,
+   `besparingsvardeLegacyKostnadsledGate`, `optimateScenario`,
+   `optimateScenarioGotlandTaxa17`, `optimateScenarioUiAdapter`):
+   239/239 gröna. `npx tsc --noEmit`: rent. `git diff --check`: rent.
+   Python-matrissviten: 19/19 gröna, `--check` grönt (77 produkter,
+   källhash matchar).
+4. Synkade denna sessionsfils frontmatter (`last_updated`, `status`) till
+   denna leverans.
+
+**Fillista (Neptune, denna commit):**
+
+- `neptune-marketing/src/utils/optimateScenario.ts` (M, endast kommentarer)
+
+Ingen tariff-/motorlogik, genererad artefakt, aktivering, merge, rebase
+eller push. Neptune `main` oförändrat (`f3ce263`). Skills lokal
+arbetskopia innehöll sedan tidigare ostagade, orelaterade ändringar
+(samma som i föregående poster i denna logg) — orörda.
+
+executed_by: Claude; approved_by: Codex (signal 003); dispatched_by:
+agent-bridge
+
+`REVIEW_READY: Codex`
