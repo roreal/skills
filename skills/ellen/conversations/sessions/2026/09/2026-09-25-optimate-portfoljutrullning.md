@@ -1062,3 +1062,116 @@ Enkey-ändring, merge, rebase eller push ingår.
 approved_by: Robert, Codex; dispatched_by: agent-bridge (väntande)
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-09-29T21:15:00+02:00 — Claude
+
+Genomförde signal `2026-09-29-001` exakt enligt handoffen. Verifierade
+baser före arbetet: skills lokal `main@4e86fba` (innehåller handoffen),
+Neptune worktree `worktree-agent-ae46c6f3096412378@49c65a9` (oförändrad
+sedan signal 022, ren arbetskopia).
+
+**A. Halmstad** — `LEGACY_KOSTNADSLED_TILLATEN_TARIFF` (en sträng) i
+`besparingsvarde.ts` ersatt med en namngiven, oföränderlig
+`ReadonlySet<string>` (`LEGACY_KOSTNADSLED_TILLATNA_TARIFFER`) som
+innehåller exakt Gotland taxa 17 och Halmstad. Gaten sitter kvar i
+backend-entryn själv (`beraknaArsproduktLegacyMedKostnadsled`); ett tredje
+ID kastar fortfarande `legacy_kostnadsled_ej_tillaten`
+(`besparingsvardeLegacyKostnadsledGate.test.ts`). Halmstad tillagd i
+`SCENARIO_PILOT_TARIFFER` (`optimateScenario.ts`) med backend
+`legacy_arskostnad`, med egen referens-/10/15/20-facit och regressionsprov
+mot Gotland taxa 17 och den publika legacyvägen.
+
+**B. Sandviken** — ny tredje `OptimateScenarioBackend`,
+`kontraktsgatad_besparingsled`. `beraknaArsproduktKarna` utbruten i två steg:
+`beraknaArsproduktKarnaMedPolicy` (tar redan resolverad
+leverantör/prisar/policy, ingen egen förmågekontroll) och den befintliga,
+beteendemässigt oförändrade `beraknaArsproduktKarna` (löser
+leverantör/prisar, kräver `stodjerAktuellArskostnad`, delegerar till steg
+1). Ny exporterad funktion
+`beraknaArsproduktKontraktBesparingsledMedKostnadsled` har ett eget,
+separat fail-closed-register (`KONTRAKTSGATAD_BESPARINGSLED_TILLATNA_TARIFFER`,
+exakt Sandviken), kräver auktoritativt `policy.stodjerBesparing===true`,
+och återanvänder samma kärna/`beraknaArskostnadMedKontraktProdukt`/
+statuslogik — ingen duplicerad prisformel. `tariffer.generated.ts` och
+policyfälten (`stodjer_aktuell_arskostnad: false`,
+`stodjer_besparing: true`) är orörda; `beraknaArsproduktMedKostnadsled`/
+`stodjerAktuellArskostnad`/`beraknaArsprodukt` avvisar Sandviken fortfarande
+oförändrat (verifierat i eget prov).
+
+**C. Matris/bokföring** — `SCENARIO_PILOT_TARIFFER_SNAPSHOT` är nu 17
+poster (2 våg 1 + samtliga 15 `review_wave==2`). Ny exporterad
+`WAVE_2_PRODUCT_IDS` (15 ID:n, alfabetisk ordning) bunden mekaniskt mot
+snapshoten i test. Publik lista oförändrad, exakt Gotland taxa 17 +
+Sundsvall; negativa publika prov för Halmstad, Sandviken och Karlstad.
+Stale "13/15"/blockerad-kommentarer i `optimateScenario.ts` och
+testfilerna omskrivna. Skills-repots matrisartefakter
+(`Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py`,
+`besparingspotential-tackningsmatris-2026.json`/`.md`) uppdaterade separat
+i samma leverans: samtliga 15 `review_wave==2`-produkter satta till
+`godkand_intern_pilot_ej_publik` i `SCENARIO_STATUS_REGISTRY`
+(deterministiskt regenererade, inte handredigerade), fördelning nu 2
+publika/15 interna/1 prototyp/59 ej granskade. Regressionssviten
+(`test_generera_besparingspotential_tackningsmatris.py`) uppdaterad för
+den nya fördelningen och kompletterad med ett nytt prov som mekaniskt
+binder `review_wave==2`-mängden till exakt de 15
+`godkand_intern_pilot_ej_publik`-raderna.
+
+**Fillista (Neptune, append-only ovanpå `49c65a9`, ny commit `f74a78f` i
+`worktree-agent-ae46c6f3096412378`, ej mergad till main):**
+
+- `neptune-marketing/src/utils/besparingsvarde.ts` (M)
+- `neptune-marketing/src/utils/optimateScenario.ts` (M)
+- `neptune-marketing/src/utils/besparingsvardeLegacyKostnadsledGate.test.ts` (M)
+- `neptune-marketing/src/utils/optimateScenarioVag2.test.ts` (M)
+- `neptune-marketing/src/utils/optimateScenarioVag2HalmstadSandviken.test.ts` (ny)
+
+**Fillista (skills-repo, del av denna leverans):**
+
+- `Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py` (M)
+- `Fjarrvarmetariffer/test_generera_besparingspotential_tackningsmatris.py` (M)
+- `Fjarrvarmetariffer/besparingspotential-tackningsmatris-2026.json` (M, regenererad)
+- `Fjarrvarmetariffer/besparingspotential-tackningsmatris-2026.md` (M, regenererad)
+
+**Testresultat, egen oberoende körning (inte bara den delegerade
+implementationsrapportens påstående):**
+
+- Riktade filer (`optimateScenarioVag2HalmstadSandviken.test.ts`,
+  `optimateScenarioVag2.test.ts`, `besparingsvardeLegacyKostnadsledGate.test.ts`,
+  `optimateScenario.test.ts`, `optimateScenarioGotlandTaxa17.test.ts`):
+  5 filer, 233/233 prov gröna.
+- Full `npx vitest run`: 2 461/2 461 gröna, 133 hoppade över, 8 testfiler
+  failar. Samtliga 8 verifierade förbefintliga/miljöbundna (kräver en
+  `enkey-agents`-syskoncheckout på en worktree-relativ sökväg som saknas i
+  denna sandlåda): identiska filer misslyckas identiskt, och samtliga 8 går
+  gröna (`ELLEN_ENKEY_AGENTS_SOKVAG`/`PYTHONPATH` satt mot den riktiga
+  `enkey-agents`-checkouten: 2 körda + 6 gröna eller korrekt överhoppade,
+  0 fallande) — bekräftar sökvägsberoende, ingen regression av denna
+  leverans.
+- `npx tsc --noEmit`: rent.
+- `git diff --check` (Neptune): rent.
+- Python: `python3 -m pytest test_generera_besparingspotential_tackningsmatris.py`:
+  19/19 gröna (efter uppdatering av sviten mot den nya fördelningen).
+  `python3 generera_besparingspotential_tackningsmatris.py --check`: grönt,
+  matchar 77 produkter och källhashen.
+
+**Redovisad avvikelse:** ingen. Handoffens §C.3-matrisdel (skills-repots
+generator/artefakter) utfördes som en del av denna leverans, till skillnad
+från den delegerade delimplementationens rapport som flaggade den som
+kvarstående i Neptune-scopet — den hör hemma i skills-repot (denna
+katalog), inte i Neptune-worktreet, och är nu klar här.
+
+`npm run build` (isolerat vite-bygge) kördes av den delegerade
+implementationen med `dist/` verifierat återställt efteråt
+(`git status`/`git diff` rent i Neptune efter körningen) — inte
+självständigt ombekört av mig i denna logg, men workträdets `git status`
+visar inga spårade `dist`-ändringar kvar.
+
+Ingen aktivering, merge till main, rebase eller push ingår. Neptune `main`
+oförändrat (`f3ce263`). Skills lokal arbetskopia innehöll sedan tidigare
+ostagade, orelaterade ändringar (samma som i föregående post i denna
+logg) — orörda.
+
+executed_by: Claude; approved_by: Codex (signal 022 handoff), Robert
+(handoff 2026-09-29-001); dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`

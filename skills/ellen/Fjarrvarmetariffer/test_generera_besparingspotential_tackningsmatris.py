@@ -41,7 +41,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 74)
+        self.assertEqual(len(not_reviewed), 59)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -51,27 +51,48 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(sundsvall["scenario_review_status"], "godkand_publik_10_15_20")
         gotland_taxa_17 = self.by_id["gotlands-energi-gotland-taxa-17-under-50-mwh-ar"]
         self.assertEqual(gotland_taxa_17["scenario_review_status"], "godkand_publik_10_15_20")
+        wave_2_ids = {
+            "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad",
+            "c4-energi-kristianstad",
+            "gavle-energi-gavle",
+            "halmstads-energi-och-miljo",
+            "harnosand-energi-miljo-harnosand",
+            "karlstads-energi-karlstad",
+            "kils-energi-kil",
+            "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024",
+            "ovik-energi-ornskoldsvik",
+            "sandviken-energi-sandviken-normal",
+            "skovde-energi-skovde",
+            "soderhamn-nara-soderhamn-taxa-11-och-12",
+            "tekniska-verken-katrineholm-katrineholm",
+            "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus",
+            "trollhattan-energi-trollhattan",
+        }
+        self.assertTrue(
+            all(self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik" for pid in wave_2_ids)
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
-        }
+        } | wave_2_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 15,
                 "godkand_publik_10_15_20": 2,
-                "not_reviewed": 74,
+                "not_reviewed": 59,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
 
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
-        # godkand_intern_pilot_ej_publik är en tillåten, reserverad status i
-        # den slutna vokabulären (se ALLOWED_SCENARIO_REVIEW_STATUSES) även
-        # om ingen produkt just nu har den — den utökade vokabulären ska
-        # aldrig ta bort en tidigare giltig status, bara lägga till en ny.
+        # godkand_intern_pilot_ej_publik är nu bunden till Optimate våg 2
+        # (handoff 2026-09-29-001) — kvarstår som ett allmänt vokabulärprov
+        # så en framtida omskrivning inte tyst tar bort statusen ur
+        # ALLOWED_SCENARIO_REVIEW_STATUSES.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -84,6 +105,19 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"] if row["review_wave"] == 1
         }
         self.assertEqual(wave_1_ids, matrix_module.WAVE_1_PRODUCT_IDS)
+
+    def test_wave_2_scenario_status_is_mechanically_locked_to_wave_2_membership(self) -> None:
+        # Handoff 2026-09-29-001, §C.3: samtliga och ENDAST review_wave==2-
+        # produkter ska ha status godkand_intern_pilot_ej_publik.
+        wave_2_ids = {
+            row["product_id"] for row in self.matrix["rows"] if row["review_wave"] == 2
+        }
+        pilot_wave_2_ids = {
+            row["product_id"] for row in self.matrix["rows"]
+            if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+        }
+        self.assertEqual(wave_2_ids, pilot_wave_2_ids)
+        self.assertEqual(len(wave_2_ids), 15)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}
