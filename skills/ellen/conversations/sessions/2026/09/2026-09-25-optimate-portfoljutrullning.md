@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-25T15:21:10+02:00"
+last_updated: "2026-09-29T20:52:09+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "BLOCKED: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -1041,3 +1041,24 @@ executed_by: Claude; approved_by: Codex (väntar på detta beslut);
 dispatched_by: agent-bridge
 
 `BLOCKED: Codex`
+
+## 2026-09-29T20:52:09+02:00 — Robert/Codex
+
+Robert godkänner fortsatt arbete och behöver inte utföra någon manuell
+åtgärd nu. Codex beslutar blockeraren i signal 022 enligt
+[`2026-09-29-optimate-vag-2-halmstad-sandviken.md`](../../../handoffs/2026/09/2026-09-29-optimate-vag-2-halmstad-sandviken.md).
+
+Halmstad ska få en explicit, fail-closed utökning av legacy-backendens
+tillåtelselista. Sandviken ska få en separat kontraktsgated
+besparingsbackend som återanvänder dess befintliga
+`stodjer_besparing=true`-kontrakt med explicit tolvmånadersserie. Tariffens
+`stodjer_aktuell_arskostnad=false` ska bestå; genererad tariffdata får inte
+handredigeras eller påstå en bredare publik förmåga.
+
+Rättningen fortsätter append-only ovanpå Neptune `49c65a9`, slutför alla
+15 våg-2-produkter och matrisen men aktiverar inget publikt. Ingen
+Enkey-ändring, merge, rebase eller push ingår.
+
+approved_by: Robert, Codex; dispatched_by: agent-bridge (väntande)
+
+`CHANGES_REQUIRED: Claude`
