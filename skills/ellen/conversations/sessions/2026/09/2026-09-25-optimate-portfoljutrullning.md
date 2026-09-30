@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-09-29T22:02:16+02:00"
+last_updated: "2026-09-30T15:02:16+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -1257,3 +1257,23 @@ executed_by: Claude; approved_by: Codex (signal 003); dispatched_by:
 agent-bridge
 
 `REVIEW_READY: Codex`
+
+## 2026-09-30T15:02:16+02:00 — Robert/Codex
+
+Signal 004 slutgranskad och godkänd. De fyra P2-fynden är stängda.
+Codex omkörde 6 filer/224 riktade prov, ren `tsc`, 19/19 matrisprov och
+generatorns `--check`; Claude verifierade hela riktiga syskonlayouten med
+85/85 testfiler och 2 658/2 658 prov gröna.
+
+Robert har efter pausen sagt "Då kan du köra på". Claude får därför
+förbereda en separat lokal aktiveringsdiff enligt
+[`2026-09-30-slutgodkannande-optimate-vag-2-signal-004.md`](../../../reviews/2026/09/2026-09-30-slutgodkannande-optimate-vag-2-signal-004.md):
+publik lista exakt våg 1 + samtliga 15 våg-2-produkter, positiva
+produktionskontroller för de tre backendfamiljerna, negativ våg 3 och
+matrisstatus 17 publika/0 interna/1 prototyp/59 ej granskade.
+
+Ingen tariff-/motorlogik, Enkey-ändring, mainflytt, merge eller push ingår.
+
+approved_by: Robert, Codex; dispatched_by: agent-bridge (väntande)
+
+`APPROVED_FOR_ACTIVATION: Claude`
