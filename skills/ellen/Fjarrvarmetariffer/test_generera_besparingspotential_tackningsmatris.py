@@ -69,7 +69,7 @@ class TariffMatrixTests(unittest.TestCase):
             "trollhattan-energi-trollhattan",
         }
         self.assertTrue(
-            all(self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik" for pid in wave_2_ids)
+            all(self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20" for pid in wave_2_ids)
         )
         pilot_ids = {
             "stockholm-exergi",
@@ -81,17 +81,17 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 15,
-                "godkand_publik_10_15_20": 2,
+                "godkand_publik_10_15_20": 17,
                 "not_reviewed": 59,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
 
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
-        # godkand_intern_pilot_ej_publik är nu bunden till Optimate våg 2
-        # (handoff 2026-09-29-001) — kvarstår som ett allmänt vokabulärprov
-        # så en framtida omskrivning inte tyst tar bort statusen ur
+        # godkand_intern_pilot_ej_publik används inte av någon rad längre
+        # sedan Optimate våg 2 publikt aktiverades (signal 2026-09-30-002),
+        # men kvarstår i den slutna vokabulären för en framtida våg 3-pilot
+        # — så en framtida omskrivning inte tyst tar bort statusen ur
         # ALLOWED_SCENARIO_REVIEW_STATUSES.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
@@ -107,17 +107,26 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(wave_1_ids, matrix_module.WAVE_1_PRODUCT_IDS)
 
     def test_wave_2_scenario_status_is_mechanically_locked_to_wave_2_membership(self) -> None:
-        # Handoff 2026-09-29-001, §C.3: samtliga och ENDAST review_wave==2-
-        # produkter ska ha status godkand_intern_pilot_ej_publik.
+        # Handoff 2026-09-29-001, §C.3 + aktivering signal 2026-09-30-002:
+        # samtliga och ENDAST review_wave==2-produkter ska nu ha status
+        # godkand_publik_10_15_20 (publikt aktiverade, samma status som
+        # våg 1) — ingen rad har längre godkand_intern_pilot_ej_publik.
         wave_2_ids = {
             row["product_id"] for row in self.matrix["rows"] if row["review_wave"] == 2
         }
-        pilot_wave_2_ids = {
+        activated_wave_2_ids = {
             row["product_id"] for row in self.matrix["rows"]
-            if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+            if row["review_wave"] == 2 and row["scenario_review_status"] == "godkand_publik_10_15_20"
         }
-        self.assertEqual(wave_2_ids, pilot_wave_2_ids)
+        self.assertEqual(wave_2_ids, activated_wave_2_ids)
         self.assertEqual(len(wave_2_ids), 15)
+        self.assertEqual(
+            {
+                row["product_id"] for row in self.matrix["rows"]
+                if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+            },
+            set(),
+        )
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

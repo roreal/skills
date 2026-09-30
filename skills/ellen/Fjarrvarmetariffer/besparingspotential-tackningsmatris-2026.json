@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 15,
-      "godkand_publik_10_15_20": 2,
+      "godkand_publik_10_15_20": 17,
       "not_reviewed": 59,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -65,7 +64,7 @@
         "specialeffekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "borlange-energi-borlange",
@@ -148,7 +147,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader",
@@ -688,7 +687,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "goteborg-energi",
@@ -857,7 +856,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "harnosand-energi-miljo-harnosand",
@@ -898,7 +897,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge",
@@ -1115,7 +1114,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "kils-energi-kil",
@@ -1154,7 +1153,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "kraftringen-kraftringen",
@@ -2063,7 +2062,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "ovik-energi-ornskoldsvik",
@@ -2099,7 +2098,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "partille-energi-partille",
@@ -2302,7 +2301,7 @@
         "debiterbar_effekt"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "skovde-energi-skovde",
@@ -2341,7 +2340,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "soderhamn-nara-soderhamn-taxa-11-och-12",
@@ -2380,7 +2379,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
@@ -2539,7 +2538,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "tekniska-verken-linkoping-linkoping",
@@ -2671,7 +2670,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "trollhattan-energi-trollhattan",
@@ -2710,7 +2709,7 @@
         "historik_eller_band"
       ],
       "review_wave": 2,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "umea-energi-umea-enkel",

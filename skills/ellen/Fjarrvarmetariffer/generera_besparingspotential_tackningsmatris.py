@@ -32,41 +32,41 @@ HISTORY_BAND_TYPES = frozenset({
     "low_utilization", "volume_discount", "seasonal_banded_volume_discount_estimate",
 })
 
-# Namngiven, fail-closed statuskonfiguration för de enda tre produkter som
-# har en granskad scenariostatus (handoff 2026-09-25-002, del B.4; aktivering
-# signal 2026-09-25-015). Varje nyckel MÅSTE finnas exakt en gång i den
-# inlästa snapshoten (kontrolleras i build_matrix) — ingen tyst fallback för
-# ett ID som skrivits fel eller tagits bort ur katalogen. Alla övriga 59
-# produkter förblir "not_reviewed". `synlig_sarskild_preliminar_prototyp`
-# innebär INTE publik UI-aktivering. `godkand_publik_10_15_20` (de två våg
-# 1-produkterna, se WAVE_1_PRODUCT_IDS) innebär att de ÄR publikt aktiverade
-# i Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
-# fortfarande inte tariffens `stodjer_besparing`-flagga, som förblir oändrad.
-# De 15 `godkand_intern_pilot_ej_publik`-raderna (handoff 2026-09-29-001,
-# §C.3, som slutför handoff 2026-09-25-021 avsnitt D) är EXAKT
-# Neptune-kodens `WAVE_2_PRODUCT_IDS` (optimateScenario.ts) — samtliga
-# review_wave==2-produkter. Statusen betyder intern beräkningspilot bakom
-# `stodjerOptimateScenario`, INTE publik aktivering
-# (`stodjerOptimateScenarioPubliktAktiverad` är fortsatt falsk för alla 15).
+# Namngiven, fail-closed statuskonfiguration för de enda produkter som har en
+# granskad scenariostatus (handoff 2026-09-25-002, del B.4; aktivering våg 1
+# signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
+# finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
+# — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
+# katalogen. Alla övriga 59 produkter förblir "not_reviewed".
+# `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
+# `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
+# Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
+# fortfarande inte tariffens `stodjer_besparing`-flagga, som förblir
+# oändrad. Samtliga 17 raderna nedan (våg 1, WAVE_1_PRODUCT_IDS, plus våg 2,
+# EXAKT Neptune-kodens `WAVE_2_PRODUCT_IDS` i optimateScenario.ts) är nu
+# `godkand_publik_10_15_20` efter signal 2026-09-30-002 — de 15 våg
+# 2-produkterna gick från `godkand_intern_pilot_ej_publik` (intern
+# beräkningspilot, handoff 2026-09-29-001 §C.3) till publikt aktiverade,
+# precis som våg 1 tidigare.
 SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "stockholm-exergi": "synlig_sarskild_preliminar_prototyp",
     "sundsvall-energi-indal-liden-och-lucksta": "godkand_publik_10_15_20",
     "gotlands-energi-gotland-taxa-17-under-50-mwh-ar": "godkand_publik_10_15_20",
-    "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad": "godkand_intern_pilot_ej_publik",
-    "c4-energi-kristianstad": "godkand_intern_pilot_ej_publik",
-    "gavle-energi-gavle": "godkand_intern_pilot_ej_publik",
-    "halmstads-energi-och-miljo": "godkand_intern_pilot_ej_publik",
-    "harnosand-energi-miljo-harnosand": "godkand_intern_pilot_ej_publik",
-    "karlstads-energi-karlstad": "godkand_intern_pilot_ej_publik",
-    "kils-energi-kil": "godkand_intern_pilot_ej_publik",
-    "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024": "godkand_intern_pilot_ej_publik",
-    "ovik-energi-ornskoldsvik": "godkand_intern_pilot_ej_publik",
-    "sandviken-energi-sandviken-normal": "godkand_intern_pilot_ej_publik",
-    "skovde-energi-skovde": "godkand_intern_pilot_ej_publik",
-    "soderhamn-nara-soderhamn-taxa-11-och-12": "godkand_intern_pilot_ej_publik",
-    "tekniska-verken-katrineholm-katrineholm": "godkand_intern_pilot_ej_publik",
-    "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus": "godkand_intern_pilot_ej_publik",
-    "trollhattan-energi-trollhattan": "godkand_intern_pilot_ej_publik",
+    "boras-energi-och-miljo-boras-sjomarken-sandared-dalsjofors-fristad": "godkand_publik_10_15_20",
+    "c4-energi-kristianstad": "godkand_publik_10_15_20",
+    "gavle-energi-gavle": "godkand_publik_10_15_20",
+    "halmstads-energi-och-miljo": "godkand_publik_10_15_20",
+    "harnosand-energi-miljo-harnosand": "godkand_publik_10_15_20",
+    "karlstads-energi-karlstad": "godkand_publik_10_15_20",
+    "kils-energi-kil": "godkand_publik_10_15_20",
+    "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024": "godkand_publik_10_15_20",
+    "ovik-energi-ornskoldsvik": "godkand_publik_10_15_20",
+    "sandviken-energi-sandviken-normal": "godkand_publik_10_15_20",
+    "skovde-energi-skovde": "godkand_publik_10_15_20",
+    "soderhamn-nara-soderhamn-taxa-11-och-12": "godkand_publik_10_15_20",
+    "tekniska-verken-katrineholm-katrineholm": "godkand_publik_10_15_20",
+    "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus": "godkand_publik_10_15_20",
+    "trollhattan-energi-trollhattan": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
@@ -284,15 +284,17 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (sundsvall-energi-indal-liden-och-lucksta, gotlands-energi-gotland-taxa-17-",
-        "  under-50-mwh-ar): Optimate våg 1, publikt aktiverad (signal 2026-09-25-015) —",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa två leverantorId,",
+        "  (17 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
+        "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
+        "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 17 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
-        "- `scenario_review_status=godkand_intern_pilot_ej_publik` (Optimate våg 2,",
-        "  15 review_wave==2-produkter, handoff 2026-09-29-001): godkänd för intern",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik`: godkänd för intern",
         "  beräkningspilot men INTE publikt aktiverad (se `stodjerOptimateScenario`",
-        "  vs. `stodjerOptimateScenarioPubliktAktiverad` i optimateScenario.ts,",
-        "  Neptune-kodens `WAVE_2_PRODUCT_IDS`).",
+        "  vs. `stodjerOptimateScenarioPubliktAktiverad` i optimateScenario.ts). Ingen",
+        "  rad har denna status just nu — samtliga tidigare interna våg 2-pilotrader",
+        "  är publikt aktiverade sedan signal 2026-09-30-002.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",
