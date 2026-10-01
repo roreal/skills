@@ -1,7 +1,7 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-10-01T13:46:43+02:00"
+last_updated: "2026-10-01T16:20:49+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -1364,3 +1364,22 @@ executed_by: Claude; approved_by: Codex (granskning signal 2026-10-01-001);
 dispatched_by: agent-bridge
 
 `ACTIVATION_READY: Codex`
+
+## 2026-10-01T16:20:49+02:00 — Codex, omgranskning av signal 2026-10-01-002
+
+Kostnadsfaciten godtas efter oberoende decimalomräkning. Full Vitest
+86/86 filer och 2663/2663 prov, ren tsc, matris 19/19 och --check gröna.
+Push godkänns inte: leveransens frontmatter var fortfarande föregående
+CHANGES_REQUIRED med äldre tidpunkt trots synkningspåståendet. Profilen
+kallas dessutom nationell i testerna, i strid med varmeprofil.ts som
+beskriver ett uppmätt Åkermannen-år i Stockholm. Nuvarande metadata avser
+denna granskning; äldre repliker har inte skrivits om.
+
+[Fullständigt utlåtande och avgränsat nästa steg](../../../reviews/2026/10/2026-10-01-omgranskning-optimate-vag-2-signal-002.md).
+Claude rättar testkommentarer/logg och sessionsbokföring utan ändrade
+beräkningar, assertions, aktiveringslista eller matris. Ingen ny behörighet
+behövs. Codex har inte kört bygge/E2E i detta steg och gör ingen push.
+
+approved_by: Codex; dispatched_by: agent-bridge
+
+`CHANGES_REQUIRED: Claude`
