@@ -94,3 +94,18 @@ har utförts.
 Codex granskar den oberoende facitderivationen (schablonformel,
 säsongspriser, identiteten `besparing = energi × andel`) och testdiffen,
 och lämnar `APPROVED_FOR_PUSH: Claude` eller `CHANGES_REQUIRED: Claude`.
+
+## Daterad rättelse (2026-10-01T18:00:00+02:00 — Claude, signal 2026-10-01-003)
+
+"Fynd 2: osynkad session/kvitto" ovan påstod felaktigt att sessionsfilen
+var fullt synkad. Endast sluttexten (`ACTIVATION_READY: Codex`) lades till;
+frontmatterns `last_updated` (`2026-10-01T13:46:43+02:00`) och `status`
+(`"CHANGES_REQUIRED: Claude"`) förblev oförändrade och motsade därmed den
+egna leveransen, vilket Codex fångade i omgranskningen av signal 002
+(`reviews/2026/10/2026-10-01-omgranskning-optimate-vag-2-signal-002.md`,
+fynd P2). Frontmattern rättades inte av denna leverans utan av Codex eget
+efterföljande granskningssteg, som satte `last_updated` till sin egen
+tidpunkt `2026-10-01T16:20:49+02:00` med oförändrat `status:
+"CHANGES_REQUIRED: Claude"` — korrekt, eftersom det är det faktiska läget
+efter granskningen. Denna rad rättar påståendet append-only; texten ovan
+är oförändrad.

@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-10-01T16:20:49+02:00"
+last_updated: "2026-10-01T18:00:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "ACTIVATION_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -1383,3 +1383,63 @@ behövs. Codex har inte kört bygge/E2E i detta steg och gör ingen push.
 approved_by: Codex; dispatched_by: agent-bridge
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-10-01T18:00:00+02:00 — Claude, rättningsrunda för signal 2026-10-01-003
+
+Verifierade först att skills-HEAD `6c3479c` låg överst i `index.md` med
+unikt sessions-ID `2026-10-01-003` och att Neptune-worktreen
+`/Users/robertrennel/Code/neptune_academy/.claude/worktrees/agent-ae46c6f3096412378`
+exakt matchade det granskade läget (`bb020b3`, ren arbetskopia) innan
+någon ändring gjordes.
+
+Rättade Codex omgranskning 2026-10-01-003:s två P2-fynd, append-only:
+
+1. **Sessionsmetadata.** Codex eget granskningssteg (commit `6c3479c`)
+   hade redan satt denna fils `last_updated` till sin egen tidpunkt
+   (`2026-10-01T16:20:49+02:00`) med oförändrat `status: "CHANGES_REQUIRED:
+   Claude"`, vilket korrekt speglar det faktiska läget efter granskningen.
+   Ingen ytterligare frontmatterändring behövdes därför. Lade i stället en
+   daterad append-only-rättelse i
+   [rättningskvittot](../../../handoffs/2026/10/2026-10-01-optimate-vag-2-rattning-facit.md)
+   som pekade på den bakomliggande osynkade leveransen, eftersom det var
+   kvittots eget felaktiga synkningspåstående granskningen syftade på.
+2. **Facitkommentarernas profilbeskrivning.** I
+   `neptune-marketing/e2e/kalkylator.smoke.mjs` rättades fem förekomster
+   av "nationell(a) schablonprofil(en)" (rad 2587, 2599, 2639, 2755 samt
+   Scenario 35:s loggtext) till "Åkermannen-baserade schablonprofilen",
+   i linje med `src/utils/varmeprofil.ts` som uttryckligen beskriver ett
+   uppmätt Stockholmsår för Brf Åkermannen 33, inte normalårskorrigerat
+   och inte giltigt för alla orter. Rättade även den felaktiga enheten
+   "halva öron"/"halvöresfacitet" till "halvkronbelopp" för beloppen
+   311 387,5 kr (rad 221) och 25 408,5 kr (ingen ytterligare felbenämning
+   hittades vid grep). Inga assertions, belopp, aktiveringslista eller
+   produktionslogik ändrade.
+
+**Verifieringsgrind:** `node --check` på den ändrade filen rent.
+Riktat komponentprov `OptimateScenarioCardVag2.positive.test.tsx`
+omkört (oberört av diffen, körs som regressionskontroll): **5/5 gröna**.
+`git diff --check` rent i Neptune-worktreen. Grep efter "nationell" och
+"halvöre" i den ändrade filen gav noll träffar efter rättningen. Ingen
+fullständig Vitest/E2E-omkörning krävdes eftersom granskningen uttryckligen
+undantog ren kommentar-/loggrättning från ny testskrivning och ingen
+assertion ändrades.
+
+**Exakt diff:** `neptune-marketing/e2e/kalkylator.smoke.mjs` (+10/-9,
+enbart kommentarer och en console.log-sträng). Ingen annan Neptune-fil
+rörd. Neptune-worktree `bb020b3` → `c9a8bb7`. Neptune `main`/`origin/main`
+oförändrat (`f3ce263`).
+
+Ingen skills-repofil ändrad förutom denna sessionspost, det rättade
+rättningskvittot och `index.md`. Orelaterade lokala ändringar i
+skills-repot (samma lista som tidigare poster:
+`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+`conversations/automation/README.md`, `conversations/automation/agent-bridge.zsh`,
+`../milesight`, `AGENTS.md`, `SKILL.md`, e-post-/prislisteunderlag m.fl.
+otrackade filer) lämnades helt orörda — de ingår inte i granskat scope.
+Ingen tariff-/motorlogik, frysta publika ID-listan, matrisdata, mainflytt,
+merge, rebase eller push ingår.
+
+approved_by: Codex (signal 2026-10-01-003); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`ACTIVATION_READY: Codex`
