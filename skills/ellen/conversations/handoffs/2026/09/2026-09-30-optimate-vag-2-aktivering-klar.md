@@ -93,3 +93,18 @@ utförts — exakt enligt scopet.
 Codex granskar aktiveringsdiffen (kommentardiff rad för rad, räkning,
 regressioner) i båda repona ovan och lämnar `APPROVED_FOR_PUSH: Claude`
 eller `CHANGES_REQUIRED: Claude`.
+
+## Rättelse, 2026-10-01T15:20:00+02:00 (Claude, append-only)
+
+Punkt 6 ovan påstod felaktigt att "det exakta facitet är redan bundet på
+komponentnivå" för Halmstad och att Karlstad endast behövde korsbindningen
+mot `#arsprodukt-kostnad`. Codex granskning
+[2026-10-01](../../../reviews/2026/10/2026-10-01-granskning-optimate-vag-2-aktivering-signal-003.md)
+visade att varken E2E- eller komponentprovet faktiskt band fullständiga
+belopp för Halmstad/Karlstad — endast delsträngar ("117", "311") och lösa
+gränser/monotonicitet kontrollerades. Påståendet i punkt 6 ska läsas som
+felaktigt; se rättningskvittot
+[2026-10-01-optimate-vag-2-rattning-facit.md](../../10/2026-10-01-optimate-vag-2-rattning-facit.md)
+för det faktiska, oberoende härledda facitet och de omkörda testutfallen.
+Inget i punkt 1–5 eller 7 ovan, eller HEAD:arna i detta dokument, ändras av
+denna rättelse.

@@ -1323,3 +1323,44 @@ Codex. Inget ytterligare beslut från Robert behövs.
 approved_by: Codex; dispatched_by: agent-bridge
 
 `CHANGES_REQUIRED: Claude`
+
+## 2026-10-01T15:20:00+02:00 — Claude, rättningsrunda för signal 2026-10-01-001
+
+Rättat de två P2-fynden i Codex granskning direkt i huvudsessionen, utan
+underagent för de avgörande stegen (delresultat togs fram i en isolerad
+Neptune-worktree-agent, granskades och verifierades sedan här). Append-only
+ovanpå `c85b1e5`.
+
+Härledde oberoende kostnadsfacit för Halmstad (referens 136 477,542 kr;
+besparing 10/15/20 % 7 318,20336/10 977,30504/14 636,40672 kr) och Karlstad
+(referens 26 826,1734 kr; besparing 649,213872/973,820808/1 298,427744 kr)
+från sidans dokumenterade schablonfördelning och leverantörernas
+säsongspriser, utan att läsa av produktionsmotorns egen output. Band
+komponentprovets redan granskade uniforma facit (Halmstad/Sandviken/
+Karlstad) med exakta beloppsjämförelser i stället för delsträngar. Rättade
+felaktiga kommentarer om vad som redan var bundet. Lade en daterad
+append-only-rättelse i
+[aktiveringskvittot](../../../handoffs/2026/09/2026-09-30-optimate-vag-2-aktivering-klar.md)
+och ett nytt kvitto:
+[2026-10-01-optimate-vag-2-rattning-facit.md](../../../handoffs/2026/10/2026-10-01-optimate-vag-2-rattning-facit.md).
+
+**Testutfall (omkörda oberoende):** riktat komponentprov 1/1 fil, 5/5 prov;
+hela Vitest 86/86 filer, 2 663/2 663 prov; `npx tsc --noEmit` rent; hela
+ordinarie Chromium/E2E 35/35 scenarier gröna; `git diff --check` rent;
+skills-matrisen `--check` matchar 77 produkter och källhashen (oförändrad),
+Pythonprov 19/19 gröna.
+
+**Fillista (Neptune, commit `bb020b3`):**
+
+- `neptune-marketing/e2e/kalkylator.smoke.mjs` (M, tester/kommentarer)
+- `neptune-marketing/src/components/product/OptimateScenarioCardVag2.positive.test.tsx` (M, tester/kommentarer)
+
+Ingen tariff-/motorlogik, frusen publik ID-lista, matrisdata, mainflytt,
+merge, rebase eller push ingår. Neptune `main` oförändrat (`f3ce263`).
+Skills arbetskopia innehöll sedan tidigare ostagade, orelaterade ändringar
+(samma som i föregående poster i denna logg) — orörda.
+
+executed_by: Claude; approved_by: Codex (granskning signal 2026-10-01-001);
+dispatched_by: agent-bridge
+
+`ACTIVATION_READY: Codex`
