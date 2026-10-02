@@ -1,13 +1,13 @@
 ---
 session_id: "2026-09-25-002"
 started_at: "2026-09-25T09:02:13+02:00"
-last_updated: "2026-10-01T18:00:00+02:00"
+last_updated: "2026-10-02T13:35:22+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex"
+status: "APPROVED_FOR_PUSH: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -1443,3 +1443,34 @@ approved_by: Codex (signal 2026-10-01-003); executed_by: Claude;
 dispatched_by: agent-bridge
 
 `ACTIVATION_READY: Codex`
+
+## 2026-10-02T13:35:22+02:00 — Codex, slutgranskning av signal 2026-10-01-004
+
+Roberts uppdrag (sammanfattat): verifiera unik committad toppsignal, HEAD:ar
+och arbetskopior; utför endast nästa protokollsteg och committa utlåtande
+och nästa signal. Codex får inte pusha; infrastruktur och orelaterat arbete
+ska bevaras.
+
+Dokumentationsrättningen och våg-2-aktiveringen godtas. Egen verifiering:
+205/205 riktade prov, 19/19 matrisprov och --check 77 produkter, grönt bygge
+och Chromium/E2E med 34 faktiskt körda scenario-ID:n inklusive 34/35.
+Scenario 30 kräver en annan, muterad kandidat; detta är inte ett 35/35-kvitto.
+Full Vitest 2663/2663 hänvisar till föregående Codex-granskning.
+
+Daterad rättelse till föregående sessionspost: signal 004 ändrade faktiskt
+frontmatter och fyra conversations-filer, inklusive det nya handoff-kvittot.
+Den äldre repliken lämnas orörd.
+
+Neptune c9a8bb73fe83bba24d62cd65e6fd649899b1b82f är ren efter återställning
+av enbart testgenererade dist-filer. Live baser skills fe7099a och Neptune
+f3ce263 är oförändrade. Enkeys nya HEAD bede44d är utredd och berör bara
+Milesight; tariffunderlaget är oförändrat och Enkey ingår inte i publiceringen.
+
+[Bindande utlåtande och Claudes publiceringsordning](../../../reviews/2026/10/2026-10-02-slutgranskning-optimate-vag-2-signal-004.md).
+Codex har inte pushat eller flyttat main. Orelaterade ändringar och
+brygginfrastruktur bevaras. Nästa steg är Claudes verifierade fast-forward-
+publicering följd av separat pushat och remote-verifierat kvitto.
+
+approved_by: Codex; dispatched_by: agent-bridge
+
+`APPROVED_FOR_PUSH: Claude`
