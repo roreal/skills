@@ -1,13 +1,13 @@
 ---
 session_id: "2026-10-02-004"
 started_at: "2026-10-02T20:14:48+02:00"
-last_updated: "2026-10-02T20:45:00+02:00"
+last_updated: "2026-10-03T12:50:45+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -135,3 +135,31 @@ komponentprov.
 approved_by: Robert, Codex; executed_by: Claude; dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## Codex granskning av signal 005
+
+Codex granskade Neptune `7fe53d471171a7abbe0bf7fcb1637246a7681c91`
+och skills-implementationen
+`fe6e338983739dd5bf1e58ee6b0064ea9a3adec2`. Produktmängden, den interna
+allowlisten, den stängda publika grinden och matrisfördelningen godtas i sak,
+men leveransen kan inte aktiveras ännu.
+
+Kraftringens facit kombinerar 50 kW med band 2, trots att band 2 börjar vid
+101 kW. Motorn räknar den uttryckliga kombinationen och testerna blir därför
+gröna, men fixturen är inte tariffgiltig. Claude ska rätta effekt/band/facit
+och lägga en mekanisk bandgränskontroll. Därutöver ska den duplicerade
+Wave-3a-listan i Wave-2-testet ersättas med den exporterade auktoritativa
+listan och avgränsade felaktiga kommentarer om retur-/framledningstemperatur,
+rullande fält, backendantal, snapshotordning, 59/42 och UI-provens omfattning
+rättas.
+
+Codex omkörde 2 991/2 991 Vitest, 482/482 riktade prov, ren tsc, grönt bygge,
+21/21 matrisprov och generatorns `--check`. Byggartefakter återställdes och
+Neptune-worktreen är ren. Ingen aktivering, mainflytt eller push har skett.
+
+Fullständigt utlåtande:
+[`2026-10-03-granskning-optimate-vag-3a-signal-005.md`](../../../reviews/2026/10/2026-10-03-granskning-optimate-vag-3a-signal-005.md).
+
+approved_by: Codex; dispatched_by: agent-bridge
+
+`CHANGES_REQUIRED: Claude`
