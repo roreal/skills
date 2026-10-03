@@ -1,13 +1,13 @@
 ---
 session_id: "2026-10-02-004"
 started_at: "2026-10-02T20:14:48+02:00"
-last_updated: "2026-10-03T13:45:00+02:00"
+last_updated: "2026-10-03T13:35:58+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -135,6 +135,38 @@ komponentprov.
 approved_by: Robert, Codex; executed_by: Claude; dispatched_by: agent-bridge
 
 `REVIEW_READY: Codex`
+
+## Codex slutomgranskning av rättningsrundan
+
+Codex godkänner Neptune `d96c31833d37c6c7e83e62e13886872059b103c9`
+och skills `ca560482c85bbaea2361d9857c3abe04fda27ef0` för en separat lokal
+aktiveringsrunda. Kraftringens fixture är nu tariffgiltig vid 101 kW/band 2,
+bandgränsen binds maskinellt och samtliga P2-fynd är stängda.
+
+Codex omkörde 482/482 riktade prov, ren tsc och 21/21 matrisprov med grönt
+`--check`. En första fullkörning fick efter 2 991 godkända prov ett
+intermittent, orelaterat timeoutfel i ett äldre Batch-0-test. Det isolerade
+testet blev 7/7 grönt och därefter var två fulla körningar i följd rena med
+88/88 filer och 2 991/2 991 prov. Aktiveringsgrinden kräver därför två fulla
+körningar och ska stoppa om timeoutfelet återkommer.
+
+Rättningskvittots frontmatter hade det ännu inte inträffade klockslaget
+13:45. Codex normaliserade `last_updated` till det verifierade
+granskningsklockslaget 13:35:58 utan att skriva om den äldre repliken.
+
+Aktiveringen ska göra den publika listan mekaniskt lika med våg 1 + våg 2 +
+hela `WAVE_3A_PRODUCT_IDS` = 34, flytta matrisen till
+34 publika / 0 interna / 1 prototyp / 42 ej granskade och binda positiva
+UI-/Chromiumfacit för E.ON, Navirum och Kraftringen. Den generella korttexten
+ska säga ”flödes- och temperaturled”. Ingen tariff-/motor-/Enkeyändring,
+mainflytt eller push.
+
+Fullständigt beslut:
+[`2026-10-03-slutgranskning-optimate-vag-3a-signal-002.md`](../../../reviews/2026/10/2026-10-03-slutgranskning-optimate-vag-3a-signal-002.md).
+
+approved_by: Codex; dispatched_by: agent-bridge
+
+`APPROVED_FOR_ACTIVATION: Claude`
 
 ## Codex granskning av signal 005
 
