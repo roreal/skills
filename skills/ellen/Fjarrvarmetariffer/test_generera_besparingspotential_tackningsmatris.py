@@ -73,7 +73,7 @@ class TariffMatrixTests(unittest.TestCase):
         )
         wave_3a_ids = matrix_module.WAVE_3A_PRODUCT_IDS
         self.assertTrue(
-            all(self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik" for pid in wave_3a_ids)
+            all(self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20" for pid in wave_3a_ids)
         )
         pilot_ids = {
             "stockholm-exergi",
@@ -85,19 +85,18 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 17,
-                "godkand_publik_10_15_20": 17,
+                "godkand_publik_10_15_20": 34,
                 "not_reviewed": 42,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
 
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
-        # godkand_intern_pilot_ej_publik var oanvänd mellan Optimate våg 2:s
-        # publika aktivering (signal 2026-09-30-002) och våg 3a (handoff
-        # 2026-10-02-optimate-vag-3a-eon-navirum-kraftringen) — nu används
-        # den igen av exakt WAVE_3A_PRODUCT_IDS (se
-        # test_wave_3a_scenario_status_is_mechanically_locked_to_wave_3a_membership).
+        # godkand_intern_pilot_ej_publik är oanvänd sedan Optimate våg 3a:s
+        # publika aktivering (signal 2026-10-03-003/004) slog samman den sista
+        # interna pilotkohorten (WAVE_3A_PRODUCT_IDS) in i
+        # godkand_publik_10_15_20 — statusvärdet förblir i vokabulären för en
+        # framtida intern-men-ej-publik våg.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -135,16 +134,26 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(len(wave_2_ids), 15)
 
     def test_wave_3a_scenario_status_is_mechanically_locked_to_wave_3a_membership(self) -> None:
-        # Handoff 2026-10-02-optimate-vag-3a-eon-navirum-kraftringen: samtliga
-        # och ENDAST WAVE_3A_PRODUCT_IDS ska ha status
-        # godkand_intern_pilot_ej_publik (intern pilot, EJ publik) — ingen
-        # review_wave==2-rad (redan publik) får denna status.
+        # Signal 2026-10-03-003/004: samtliga WAVE_3A_PRODUCT_IDS ska ha
+        # status godkand_publik_10_15_20 (publikt aktiverade, samma status
+        # som våg 1/2) — ingen godkand_intern_pilot_ej_publik-rad kvarstår.
+        wave_3a_status_ids = {
+            row["product_id"] for row in self.matrix["rows"]
+            if row["product_id"] in matrix_module.WAVE_3A_PRODUCT_IDS
+        }
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
+                for pid in wave_3a_status_ids
+            )
+        )
+        self.assertEqual(wave_3a_status_ids, matrix_module.WAVE_3A_PRODUCT_IDS)
+        self.assertEqual(len(wave_3a_status_ids), 17)
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3A_PRODUCT_IDS)
-        self.assertEqual(len(internal_pilot_ids), 17)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 17,
-      "godkand_publik_10_15_20": 17,
+      "godkand_publik_10_15_20": 34,
       "not_reviewed": 42,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -194,7 +193,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-bostader--bas-delvarme",
@@ -240,7 +239,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter",
@@ -286,7 +285,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter--bas-delvarme",
@@ -332,7 +331,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-malmo-malmo-och-burlov-bostader",
@@ -378,7 +377,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-malmo-malmo-och-burlov-bostader--bas-delvarme",
@@ -424,7 +423,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter",
@@ -470,7 +469,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "e-on-malmo-malmo-och-burlov-ovriga-fastigheter--bas-delvarme",
@@ -516,7 +515,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo",
@@ -1200,7 +1199,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "lidkoping-energi-lidkoping-041-kw",
@@ -1523,7 +1522,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader--bas-delvarme",
@@ -1569,7 +1568,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter",
@@ -1615,7 +1614,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter--bas-delvarme",
@@ -1661,7 +1660,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader",
@@ -1707,7 +1706,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme",
@@ -1753,7 +1752,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter",
@@ -1799,7 +1798,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme",
@@ -1845,7 +1844,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "nevel-gimo-osterbybruk-och-osthammar",

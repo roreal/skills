@@ -67,34 +67,33 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "tekniska-verken-katrineholm-katrineholm": "godkand_publik_10_15_20",
     "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus": "godkand_publik_10_15_20",
     "trollhattan-energi-trollhattan": "godkand_publik_10_15_20",
-    # Våg 3a ("flödes-/temperaturled", intern 10/15/20-pilot, handoff
-    # 2026-10-02-optimate-vag-3a-eon-navirum-kraftringen, EJ publik): exakt de
-    # 17 produkter vars `adjustment_types` innehåller
-    # `supply_temperature_adjusted_flow` — se WAVE_3A_PRODUCT_IDS nedan, som
-    # binder denna delmängd mot snapshoten, och Neptune-kodens EXAKT samma 17
-    # ID:n i SCENARIO_PILOT_TARIFFER/WAVE_3A_PRODUCT_IDS
-    # (optimateScenario.ts). `godkand_intern_pilot_ej_publik` betyder HÄR,
-    # precis som för tidigare våg 2-rader innan de aktiverades publikt, att
-    # `stodjerOptimateScenario` är sann men `stodjerOptimateScenarioPubliktAktiverad`
-    # förblir falsk — Neptunes kalkylator visar INGET 10/15/20-scenario för
-    # dessa 17 leverantorId.
-    "e-on-jarfalla-jarfalla-och-upplands-bro-bostader": "godkand_intern_pilot_ej_publik",
-    "e-on-jarfalla-jarfalla-och-upplands-bro-bostader--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter": "godkand_intern_pilot_ej_publik",
-    "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "e-on-malmo-malmo-och-burlov-bostader": "godkand_intern_pilot_ej_publik",
-    "e-on-malmo-malmo-och-burlov-bostader--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "e-on-malmo-malmo-och-burlov-ovriga-fastigheter": "godkand_intern_pilot_ej_publik",
-    "e-on-malmo-malmo-och-burlov-ovriga-fastigheter--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "kraftringen-kraftringen": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter": "godkand_intern_pilot_ej_publik",
-    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme": "godkand_intern_pilot_ej_publik",
+    # Våg 3a ("flödes-/temperaturled", publik 10/15/20-aktivering, signal
+    # 2026-10-03-003/004): exakt de 17 produkter vars `adjustment_types`
+    # innehåller `supply_temperature_adjusted_flow` — se WAVE_3A_PRODUCT_IDS
+    # nedan, som binder denna delmängd mot snapshoten, och Neptune-kodens
+    # EXAKT samma 17 ID:n i SCENARIO_PUBLIKT_AKTIVERADE_ID/
+    # WAVE_3A_PRODUCT_IDS (optimateScenario.ts). `godkand_publik_10_15_20`
+    # betyder HÄR, precis som för tidigare våg 1/2-rader, att BÅDE
+    # `stodjerOptimateScenario` OCH `stodjerOptimateScenarioPubliktAktiverad`
+    # är sanna — Neptunes kalkylator visar nu 10/15/20-scenariot för dessa
+    # 17 leverantorId.
+    "e-on-jarfalla-jarfalla-och-upplands-bro-bostader": "godkand_publik_10_15_20",
+    "e-on-jarfalla-jarfalla-och-upplands-bro-bostader--bas-delvarme": "godkand_publik_10_15_20",
+    "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter": "godkand_publik_10_15_20",
+    "e-on-jarfalla-jarfalla-och-upplands-bro-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
+    "e-on-malmo-malmo-och-burlov-bostader": "godkand_publik_10_15_20",
+    "e-on-malmo-malmo-och-burlov-bostader--bas-delvarme": "godkand_publik_10_15_20",
+    "e-on-malmo-malmo-och-burlov-ovriga-fastigheter": "godkand_publik_10_15_20",
+    "e-on-malmo-malmo-och-burlov-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
+    "kraftringen-kraftringen": "godkand_publik_10_15_20",
+    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader": "godkand_publik_10_15_20",
+    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader--bas-delvarme": "godkand_publik_10_15_20",
+    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter": "godkand_publik_10_15_20",
+    "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
+    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader": "godkand_publik_10_15_20",
+    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme": "godkand_publik_10_15_20",
+    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter": "godkand_publik_10_15_20",
+    "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -317,10 +316,10 @@ def build_matrix(text: str) -> dict[str, Any]:
             f"endast i listan: {sorted(WAVE_3A_PRODUCT_IDS - wave_3a_ids)}."
         )
     for product_id in WAVE_3A_PRODUCT_IDS:
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3a-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
     counts = {
         "products": len(rows),
@@ -348,7 +347,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
         "godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —",
         "aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.",
-        "`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,",
+        "`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,",
         "tills prisledens före/efter-beroenden har granskats separat. Ingen av",
         "statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.",
         "",
@@ -356,23 +355,17 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (17 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (34 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
-        "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 17 leverantorId,",
+        "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
+        "  samtliga 17 review_wave==3-produkter vars `adjustment_types` innehåller",
+        "  `supply_temperature_adjusted_flow` (E.ON Järfälla/Malmö, Navirum",
+        "  Norrköping/Söderköping och Örebro/Kumla/Hallsberg, Kraftringen), exakt",
+        "  Neptune-kodens `WAVE_3A_PRODUCT_IDS`, publikt aktiverad signal",
+        "  2026-10-03-003/004):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 34 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
-        "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
-        "  (17 produkter — våg 3a: samtliga review_wave==3-produkter vars",
-        "  `adjustment_types` innehåller `supply_temperature_adjusted_flow`",
-        "  (E.ON Järfälla/Malmö, Navirum Norrköping/Söderköping och",
-        "  Örebro/Kumla/Hallsberg, Kraftringen), exakt Neptune-kodens",
-        "  `WAVE_3A_PRODUCT_IDS`, handoff",
-        "  2026-10-02-optimate-vag-3a-eon-navirum-kraftringen): godkänd för intern",
-        "  beräkningspilot men INTE publikt aktiverad (se `stodjerOptimateScenario`",
-        "  vs. `stodjerOptimateScenarioPubliktAktiverad` i optimateScenario.ts) —",
-        "  samtliga tidigare interna våg 2-pilotrader är publikt aktiverade sedan",
-        "  signal 2026-09-30-002, men våg 3a är EJ publik.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",
