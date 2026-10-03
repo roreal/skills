@@ -1,13 +1,13 @@
 ---
 session_id: "2026-10-02-004"
 started_at: "2026-10-02T20:14:48+02:00"
-last_updated: "2026-10-03T12:50:45+02:00"
+last_updated: "2026-10-03T13:45:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "REVIEW_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -163,3 +163,99 @@ Fullständigt utlåtande:
 approved_by: Codex; dispatched_by: agent-bridge
 
 `CHANGES_REQUIRED: Claude`
+
+## Rättelse (2026-10-03, append-only): benämning "flödes-/returtemperaturled"
+
+Signal 005s leveranskvitto ovan, och fe6e338s commit-rubrik ("markera 17
+flödes-/returtemperaturledsprodukter..."), kallade våg 3a-ledet ett
+"flödes-/returtemperaturled". Det är sakligt fel och rättas inte i den
+äldre texten eller commit-historiken, utan noteras här: fältet är
+`supply_temperature_adjusted_flow`/`framledningstemperatur_c` —
+ett framledningstemperaturjusterat flödesled, inte ett returtemperaturled.
+Korrekt, neutral benämning i koden och denna logg härefter är
+"flödes-/temperaturled".
+
+## Claude: rättningsrunda efter Codex granskning av signal 005
+
+Claude har genomfört exakt den avgränsade rättningsrundan Codex begärde i
+[`2026-10-03-granskning-optimate-vag-3a-signal-005.md`](../../../reviews/2026/10/2026-10-03-granskning-optimate-vag-3a-signal-005.md),
+append-only ovanpå Neptune `7fe53d471171a7abbe0bf7fcb1637246a7681c91` i
+samma isolerade worktree och skills `caf0f101b08d86afe6ca9c935fc1c8409e6ac8a0`.
+Ingen aktivering, mainflytt, merge, rebase eller push.
+
+**neptune_academy**, samma isolerade worktree
+`.claude/worktrees/agent-ae46c6f3096412378`, ny commit
+`d96c31833d37c6c7e83e62e13886872059b103c9` ovanpå `7fe53d4`:
+
+- `src/utils/optimateScenarioVag3a.test.ts` (P1): Kraftringens facit
+  rättat från `effektKw: 50` (ogiltigt mot band 2:s min 101 kW) till
+  `effektKw: 101`. Lagt till en maskinell bindning i
+  "den valda bindningsnyckeln/bandet finns"-provet som kontrollerar
+  `min === null || effekt >= min` och `max === null || effekt <= max` för
+  det valda bandet, så samma fel inte kan återkomma för en annan
+  flerbandsprodukt. Rättade sakfel i kommentarer: "15 av de 17" →
+  "14 av de 17" tidigare piloterade produkter delar backend (Sundsvall +
+  13 våg-2-rader; Gotland/Halmstad legacy, Sandviken besparingsbackenden);
+  "samtliga 17 ... rullande=true" → 16 av 17, Kraftringen är
+  rullande=false (januari–februari-bas); "övriga 16 ... har
+  matchning_mot_manad===true" → bara de åtta bas-/delvärmevarianterna har
+  det, de åtta fullvärmevarianterna har `false`. Benämningen
+  "flöde/returtemperatur-led"/"flödes-/returtemperaturled" ändrad till
+  "flödes-/temperaturled" (P2).
+- `src/utils/optimateScenarioVag2.test.ts` (P2): den lokala,
+  handunderhållna `VAG_3A_ID`-listan borttagen och ersatt med den
+  importerade, auktoritativa `WAVE_3A_PRODUCT_IDS` från
+  `optimateScenario.ts` vid filtrering av våg 2:s delmängd ur
+  pilotsnapshoten.
+- `src/utils/optimateScenario.ts` (P2): Wave-3a-kommentarerna vid
+  `SCENARIO_PILOT_TARIFFER`, `Flödes-/temperaturjusteringen` och
+  `SCENARIO_PUBLIKT_AKTIVERADE_ID`s jsdoc bytta från "retur-" till
+  "flödes-/temperaturled"-formuleringar. Pilotsnapshotens
+  läsordningskommentar nämner nu uttryckligen Våg 3a (tidigare bara
+  "Våg 1 följt av Våg 2").
+- `src/components/product/OptimateScenarioCardVag3a.negative.test.tsx`
+  (P2): filhuvudets påstående rättat från "samtliga 17" till att provet
+  renderar ETT representativt id per leverantör (E.ON, Navirum,
+  Kraftringen) av de 17, medan `stodjerOptimateScenario` är TRUE för hela
+  mängden enligt det separata, fullständiga bindningsprovet.
+
+Produktionsmotorn, tariffdata och katalogen (`src/data/tariffer.generated.ts`)
+är oförändrade — endast de två scenario-testfilerna, Wave-3a-kommentarer i
+`optimateScenario.ts` och komponenttestets kommentar ändrades, exakt det
+tillåtna scopet.
+
+Verifiering (körd på nytt): riktade filer (Wave-3a/Wave-2/UI) 3/3 filer,
+**482/482** prov gröna. Hela Vitest: **88/88 filer, 2 991/2 991** prov
+gröna. `npx tsc --noEmit` rent. `npm run build` grönt; de spårade
+`dist/`-skillnaderna bygget skapade (7 PNG-borttagningar + `index.html`)
+återställdes med `git checkout -- dist/` och ingår inte i diffen.
+`git diff --check` rent. Worktreen innehåller efter commit endast de fyra
+avsedda filerna ovan utöver oförändrad `7fe53d4`.
+
+**skills-repot**, samma arbetskopia, ny commit på `main` ovanpå `c694ced`:
+
+- `Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py`:
+  kommentarrättning, ingen beteendeändring. "Alla övriga 59 produkter" →
+  "Alla övriga 42 produkter" (korrekt antal efter denna pilot:
+  17 + 17 + 1 + 42 = 77). Wave-3a-kommentarens benämning ändrad från
+  "flödes-/returtemperaturled" till "flödes-/temperaturled".
+
+Verifiering (körd på nytt): `python3 -m pytest
+Fjarrvarmetariffer/test_generera_besparingspotential_tackningsmatris.py`
+**21/21** gröna (oförändrat, testfilen hade redan 42). `--check` godkänner
+"Täckningsmatrisen matchar 77 produkter och källhashen." Matrisens JSON-/
+Markdown-artefakter ändrades inte (ingen datakälla eller statusregister
+rördes). `git diff --check` rent. `git status` visar att samtliga sedan
+tidigare orelaterade ospårade/ändrade filer (e-postunderlag, PDF:er,
+AGENTS.md, SKILL.md, `prislistor/`, `milesight`-submodulen,
+`conversations/automation/*`) förblir oberörda; endast den namngivna
+Python-filen plus denna conversations-bokföring ingår i rättningscommitten.
+
+Ingen ändring av tariffdata, prisformler, `stodjer_besparing`,
+`stodjer_aktuell_arskostnad`, kostnadsmotorn, Enkey eller
+brygginfrastruktur. Ingen aktivering, mainflytt, merge, rebase eller push.
+
+approved_by: Robert, Codex (signal 2026-10-03-001); executed_by: Claude;
+dispatched_by: agent-bridge
+
+`REVIEW_READY: Codex`

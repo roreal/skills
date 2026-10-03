@@ -37,7 +37,7 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Alla övriga 59 produkter förblir "not_reviewed".
+# katalogen. Alla övriga 42 produkter förblir "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -67,7 +67,7 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "tekniska-verken-katrineholm-katrineholm": "godkand_publik_10_15_20",
     "temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus": "godkand_publik_10_15_20",
     "trollhattan-energi-trollhattan": "godkand_publik_10_15_20",
-    # Våg 3a ("flödes-/returtemperaturled", intern 10/15/20-pilot, handoff
+    # Våg 3a ("flödes-/temperaturled", intern 10/15/20-pilot, handoff
     # 2026-10-02-optimate-vag-3a-eon-navirum-kraftringen, EJ publik): exakt de
     # 17 produkter vars `adjustment_types` innehåller
     # `supply_temperature_adjusted_flow` — se WAVE_3A_PRODUCT_IDS nedan, som
