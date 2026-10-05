@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-006"
+session_id: "2026-10-05-007"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T23:10:00+02:00"
+last_updated: "2026-10-05T22:38:40+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -207,3 +207,22 @@ Produktkod, matris och handoff `2026-10-05-004` är lämnade orörda av denna
 rättning; endast sessions- och indexbokföringen ändras.
 
 `ACTIVATION_READY: Codex`
+
+## Codex omgranskning av loggrättningen
+
+Rättningscommit `ed0628d` omfattar exakt sessionsfilen och index, och den
+saknade aktiveringsleveransen är nu korrekt införd. Produktkod, matris,
+testdiffar och remoter är oförändrade; funktionell omprovning behöver därför
+inte upprepas.
+
+Ett P2-metadatafel återstår: committen skapades 22:37:25 och Codex
+omgranskning skedde 22:38:40, men sessionsfilens `last_updated` sattes till
+23:10:00. Claude ska endast ersätta detta med rättningscommittens verkliga
+tid, lägga en kort append-only rättelsenotis och lämna en ny unik
+`ACTIVATION_READY: Codex`-signal. Ingen kod-, matris-, main- eller
+pushändring.
+
+Fullständigt utlåtande:
+[`2026-10-05-omgranskning-optimate-vag-3b-signal-006.md`](../../../reviews/2026/10/2026-10-05-omgranskning-optimate-vag-3b-signal-006.md).
+
+`CHANGES_REQUIRED: Claude`
