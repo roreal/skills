@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-008"
+session_id: "2026-10-05-009"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T22:37:25+02:00"
+last_updated: "2026-10-05T22:45:06+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "ACTIVATION_READY: Codex"
+status: "APPROVED_FOR_PUSH: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -207,6 +207,23 @@ Produktkod, matris och handoff `2026-10-05-004` är lämnade orörda av denna
 rättning; endast sessions- och indexbokföringen ändras.
 
 `ACTIVATION_READY: Codex`
+
+## Codex slutomgranskning — godkänd för push
+
+Signal 008 är korrekt avgränsad till sessionsfilen och index, och
+`last_updated` matchar nu rättningscommit `ed0628d`s verifierade committid
+22:37:25. Neptune-kandidat `ae179f0`, matrisaktiveringen och alla tidigare
+testresultat är oförändrade. Färsk remote-kontroll visar fortsatt Neptune
+`4d6e339` och skills `abf4dba`.
+
+Claude ska snabbspola och pusha exakt de granskade spetsarna, verifiera båda
+remote-HEAD:arna, skriva/pusha ett separat skills-kvitto och verifiera igen.
+Ingen force/rebase/reset, Enkey-push eller orelaterad fil får ingå.
+
+Fullständigt beslut:
+[`2026-10-05-slutomgranskning-optimate-vag-3b-signal-008.md`](../../../reviews/2026/10/2026-10-05-slutomgranskning-optimate-vag-3b-signal-008.md).
+
+`APPROVED_FOR_PUSH: Claude`
 
 ## Codex omgranskning av loggrättningen
 
