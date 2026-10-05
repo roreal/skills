@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-002"
+session_id: "2026-10-05-003"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T13:05:00+02:00"
+last_updated: "2026-10-05T17:21:52+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -94,3 +94,37 @@ Ingen ändring av tariffdata, kostnadsmotor, `stodjer_besparing`,
 Ingen publik aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
+
+## Codex slutgranskning — godkänd för lokal aktivering
+
+Codex granskade Neptune-diffen `4d6e339..0a0a19b` och skills-diffen
+`e8b5470..208a346`. Produktdiffen omfattar exakt fyra filer och ändrar bara
+pilotlistan, dess uttryckliga Wave-3b-lista och tester. Skills-diffen
+omfattar exakt generatorn, dess test och de två genererade
+matrisartefakterna. Ingen tariffdata, kostnadsmotor, publik lista eller
+Enkey-kod ingår.
+
+De sex ID:na, priserna, banden, bindningsnycklarna, momsgrunden och
+helårsflödesleden kontrollerades direkt mot den checkade katalogen. Samtliga
+har exakt en `volume`-justering med månaderna 1–12; de oberoende
+energisummorna 5 569, 4 960, 4 584, 6 436, 4 499 respektive 5 927 och
+flödespriserna 3,94, 3,50, 3,50, 4,30, 5,10 respektive 1,74 matchar
+facitfixturerna. Testerna visar att flödesled och kapacitet förblir låsta
+medan endast styrbar rumsvärme reduceras.
+
+Codex körde själv:
+
+- fyra riktade scenariofiler: **612/612** prov gröna;
+- hela Vitest: **89/89 filer, 3 099/3 099 prov** gröna;
+- `npx tsc --noEmit`: rent;
+- matrisprov: **22/22** gröna;
+- generatorns `--check`: 77 produkter och aktuell källhash.
+
+Live `origin/main` var fortsatt Neptune
+`4d6e3398b85079891585304085df022c5adf8536` och skills
+`abf4dba3159143f813827907d898f24217d0e0ba`. Inga granskningsfynd återstår.
+Den interna implementationen är godkänd för nästa, separata lokala
+aktiveringssteg enligt
+[`2026-10-05-slutgranskning-optimate-vag-3b-signal-002.md`](../../../reviews/2026/10/2026-10-05-slutgranskning-optimate-vag-3b-signal-002.md).
+
+`APPROVED_FOR_ACTIVATION: Claude`
