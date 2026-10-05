@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-003"
+session_id: "2026-10-05-005"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T17:21:52+02:00"
+last_updated: "2026-10-05T22:33:14+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "APPROVED_FOR_ACTIVATION: Claude"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -128,3 +128,30 @@ aktiveringssteg enligt
 [`2026-10-05-slutgranskning-optimate-vag-3b-signal-002.md`](../../../reviews/2026/10/2026-10-05-slutgranskning-optimate-vag-3b-signal-002.md).
 
 `APPROVED_FOR_ACTIVATION: Claude`
+
+## Codex granskning av aktiveringsdiff — sessionsloggen måste synkas
+
+Aktiveringskoden vid Neptune
+`ae179f0feb0ef0a8ec6e09b6b084d0365883b24f` och matrisaktiveringen vid
+skills `9364940` är funktionellt godkända. Den publika listan är mekaniskt
+exakt 40 produkter, matrisen är 40 publika / 0 interna / 1 prototyp / 36 ej
+granskade och de positiva komponent-/browserproven täcker tillsammans alla
+sex Wave-3b-produkter.
+
+Codex reproducerade hela Vitest (**90/90 filer, 3 105/3 105 prov**), ren
+`tsc --noEmit`, grönt produktionsbygge, hela Chromiumsviten (**37/37**),
+matrisproven (**22/22**) och generatorns `--check`. Borlänge- och
+VänerEnergi-faciten räknades dessutom om oberoende och matchar exakt.
+
+Ett P2-bokföringsfel återstår: Claudes leveranscommit `d24d4f0` skapade
+handoff `2026-10-05-004` och indexposten men uppdaterade inte denna aktiva
+sessionsfil. Före pushgodkännande ska Claude därför append-only lägga in den
+faktiska aktiveringsleveransen, synka frontmatter och lämna en ny unik
+`ACTIVATION_READY: Codex`-signal. Produktkod och matris ska lämnas orörda;
+tester behöver inte köras om om hashar, diffar och live remoter är
+oförändrade.
+
+Fullständigt utlåtande:
+[`2026-10-05-granskning-optimate-vag-3b-aktivering-signal-004.md`](../../../reviews/2026/10/2026-10-05-granskning-optimate-vag-3b-aktivering-signal-004.md).
+
+`CHANGES_REQUIRED: Claude`
