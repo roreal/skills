@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-005"
+session_id: "2026-10-05-006"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T22:33:14+02:00"
+last_updated: "2026-10-05T23:10:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "ACTIVATION_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -155,3 +155,55 @@ Fullständigt utlåtande:
 [`2026-10-05-granskning-optimate-vag-3b-aktivering-signal-004.md`](../../../reviews/2026/10/2026-10-05-granskning-optimate-vag-3b-aktivering-signal-004.md).
 
 `CHANGES_REQUIRED: Claude`
+
+## Claude synkar sessionsloggen med den faktiska aktiveringen
+
+Förkontroll före denna loggrättning: Neptune kandidatgren
+`optimate-vag-3b-arsvolym` stod oförändrat på
+`ae179f0feb0ef0a8ec6e09b6b084d0365883b24f`, skills-HEAD oförändrat på
+`9364940` (ovanpå signalcommit `d24d4f0`), och ingen av hasharna hade
+ändrats sedan Codex granskning. Live `origin/main` var fortsatt oförändrat
+Neptune `4d6e3398b85079891585304085df022c5adf8536` och skills
+`abf4dba3159143f813827907d898f24217d0e0ba`. `git status`/`git diff` visade
+inga nya produkt-, matris- eller testdiffar i någotdera repo. Eftersom
+hasharna, diffarna och live-remoterna är identiska med dem Codex redan
+verifierade krävs ingen omkörning av testsviterna; nedanstående siffror är
+Codex egna, återanvända resultat.
+
+Den faktiska Wave 3b-aktiveringsleveransen (utförd i signal `2026-10-05-004`,
+dokumenterad fullständigt i
+[`2026-10-05-optimate-vag-3b-aktivering-klar.md`](../../../handoffs/2026/10/2026-10-05-optimate-vag-3b-aktivering-klar.md)
+men saknad i denna sessionsfil fram till nu):
+
+- Neptune: ny commit `ae179f0` (förälder `0a0a19b`, den granskade
+  implementationen) på kandidatgrenen `optimate-vag-3b-arsvolym`. Ingen
+  mainflytt — `main`/`origin/main` kvar på `4d6e339`.
+- `SCENARIO_PUBLIKT_AKTIVERADE_ID` mekaniskt utökad till våg 1 + alla
+  `WAVE_2_PRODUCT_IDS` + alla `WAVE_3A_PRODUCT_IDS` + alla
+  `WAVE_3B_PRODUCT_IDS` = 40 unika, frysta ID:n.
+- Skills: ny commit `9364940` (förälder granskningscommit `5d9a082`) flyttar
+  exakt de sex Wave-3b-raderna i
+  `generera_besparingspotential_tackningsmatris.py` från
+  `godkand_intern_pilot_ej_publik` till `godkand_publik_10_15_20`. Matris
+  regenererad via `--write`, verifierad med `--check`: **40 publika / 0
+  interna / 1 prototyp / 36 ej granskade = 77.**
+- Täckning av de sex produkterna: nytt positivt komponentprov
+  (`OptimateScenarioCardVag3b.positive.test.tsx`) binder Falun, Falu
+  ytterorter, Habo och Mjölby mot oberoende handräknat facit; nytt
+  Chromiumscenario 37 i `e2e/kalkylator.smoke.mjs` binder Borlänge och
+  VänerEnergi genom det byggda formulärflödet mot samma typ av oberoende
+  facit. Negativ närliggande produkt förblir spärrad.
+- Testutfall (Codex reproduktion, signal 005): 9 riktade filer / 637 prov
+  gröna, hela Vitest **90/90 filer, 3 105/3 105 prov**, ren
+  `tsc --noEmit`, grönt `npm run build`, hela Chromiumsviten **37/37**
+  (inklusive nytt Scenario 37), `dist/` återställt, ren `git diff --check`
+  i båda repona. Skills: `--check` grönt mot 77 produkter och aktuell
+  källhash, pytest **22/22** gröna.
+- Ingen ändring av tariffdata, kostnadsmotor, `stodjer_besparing`,
+  `stodjer_aktuell_arskostnad`, Enkey eller `conversations/automation/`.
+  Ingen mainflytt eller push i någotdera repo.
+
+Produktkod, matris och handoff `2026-10-05-004` är lämnade orörda av denna
+rättning; endast sessions- och indexbokföringen ändras.
+
+`ACTIVATION_READY: Codex`
