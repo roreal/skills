@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 6,
-      "godkand_publik_10_15_20": 34,
+      "godkand_publik_10_15_20": 40,
       "not_reviewed": 36,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -109,7 +108,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "c4-energi-kristianstad",
@@ -560,7 +559,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "falu-energi-vatten-falun",
@@ -604,7 +603,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "finspangs-tekniska-verk-finspang",
@@ -827,7 +826,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "halmstads-energi-och-miljo",
@@ -1444,7 +1443,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "molndal-energi",
@@ -2797,7 +2796,7 @@
         "flode_eller_temperatur"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig",

@@ -94,23 +94,23 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme": "godkand_publik_10_15_20",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter": "godkand_publik_10_15_20",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
-    # Våg 3b ("årsvis volymled", handoff 2026-10-05-001,
-    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt de 6 produkter vars
+    # Våg 3b ("årsvis volymled", publik 10/15/20-aktivering, signal
+    # 2026-10-05-003): exakt de 6 produkter vars
     # `adjustment_types` innehåller `volume` (skalär, årsvis flode_m3 × rate,
     # inga månadsseriefält) OCH `cost_path == kontrakt_arskostnad` OCH
     # `capacity_rule == effekt` — se WAVE_3B_PRODUCT_IDS nedan, som binder
     # denna delmängd mot snapshoten via ID (INTE via adjustment_types ensamt,
     # eftersom `volume` förekommer brett i katalogen för produkter utanför
     # denna pilot). IDENTISK med Neptune-kodens WAVE_3B_PRODUCT_IDS i
-    # optimateScenario.ts. `godkand_intern_pilot_ej_publik` — INTERN pilot,
-    # INTE publikt aktiverad (SCENARIO_PUBLIKT_AKTIVERADE_ID oförändrad vid
-    # 34 i Neptune-koden).
-    "borlange-energi-borlange": "godkand_intern_pilot_ej_publik",
-    "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo": "godkand_intern_pilot_ej_publik",
-    "falu-energi-vatten-falun": "godkand_intern_pilot_ej_publik",
-    "habo-energi-habo": "godkand_intern_pilot_ej_publik",
-    "mjolby-svartadalen-energi-mjolby": "godkand_intern_pilot_ej_publik",
-    "vanerenergi-mariestad-och-toreboda": "godkand_intern_pilot_ej_publik",
+    # optimateScenario.ts. `godkand_publik_10_15_20` — publikt aktiverad,
+    # precis som våg 1/2/3a (SCENARIO_PUBLIKT_AKTIVERADE_ID nu 40 i
+    # Neptune-koden).
+    "borlange-energi-borlange": "godkand_publik_10_15_20",
+    "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo": "godkand_publik_10_15_20",
+    "falu-energi-vatten-falun": "godkand_publik_10_15_20",
+    "habo-energi-habo": "godkand_publik_10_15_20",
+    "mjolby-svartadalen-energi-mjolby": "godkand_publik_10_15_20",
+    "vanerenergi-mariestad-och-toreboda": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -374,10 +374,10 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3b-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
                 "förväntat 'effekt'."
             )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3b-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
     counts = {
         "products": len(rows),
@@ -413,7 +413,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (34 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (40 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
         "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
@@ -421,8 +421,11 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  `supply_temperature_adjusted_flow` (E.ON Järfälla/Malmö, Navirum",
         "  Norrköping/Söderköping och Örebro/Kumla/Hallsberg, Kraftringen), exakt",
         "  Neptune-kodens `WAVE_3A_PRODUCT_IDS`, publikt aktiverad signal",
-        "  2026-10-03-003/004):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 34 leverantorId,",
+        "  2026-10-03-003/004; våg 3b: samtliga 6 produkter vars `adjustment_types`",
+        "  innehåller `volume` (Borlänge, Falu Energi & Vatten, Habo,",
+        "  Mjölby-Svartådalen, VänerEnergi), exakt Neptune-kodens",
+        "  `WAVE_3B_PRODUCT_IDS`, publikt aktiverad signal 2026-10-05-003):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 40 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
