@@ -41,7 +41,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 42)
+        self.assertEqual(len(not_reviewed), 36)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -75,28 +75,36 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertTrue(
             all(self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20" for pid in wave_3a_ids)
         )
+        wave_3b_ids = matrix_module.WAVE_3B_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3b_ids
+            )
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
-        } | wave_2_ids | wave_3a_ids
+        } | wave_2_ids | wave_3a_ids | wave_3b_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 6,
                 "godkand_publik_10_15_20": 34,
-                "not_reviewed": 42,
+                "not_reviewed": 36,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
 
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
-        # godkand_intern_pilot_ej_publik är oanvänd sedan Optimate våg 3a:s
-        # publika aktivering (signal 2026-10-03-003/004) slog samman den sista
-        # interna pilotkohorten (WAVE_3A_PRODUCT_IDS) in i
-        # godkand_publik_10_15_20 — statusvärdet förblir i vokabulären för en
-        # framtida intern-men-ej-publik våg.
+        # godkand_intern_pilot_ej_publik var oanvänd mellan Optimate våg 3a:s
+        # publika aktivering (signal 2026-10-03-003/004, som slog samman den
+        # dåvarande interna pilotkohorten in i godkand_publik_10_15_20) och
+        # Optimate våg 3b (handoff 2026-10-05-001), som nu återanvänder
+        # statusvärdet för WAVE_3B_PRODUCT_IDS (intern pilot, ej publik).
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -149,11 +157,29 @@ class TariffMatrixTests(unittest.TestCase):
         )
         self.assertEqual(wave_3a_status_ids, matrix_module.WAVE_3A_PRODUCT_IDS)
         self.assertEqual(len(wave_3a_status_ids), 17)
+        # Sedan Optimate våg 3b (handoff 2026-10-05-001) är
+        # godkand_intern_pilot_ej_publik åter i bruk — men ENDAST för
+        # WAVE_3B_PRODUCT_IDS, ingen våg 3a-rad.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3B_PRODUCT_IDS)
+
+    def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
+        # Handoff 2026-10-05-001 (APPROVED_FOR_IMPLEMENTATION: Claude):
+        # samtliga WAVE_3B_PRODUCT_IDS har volume i adjustment_types,
+        # cost_path==kontrakt_arskostnad, capacity_rule==effekt och status
+        # godkand_intern_pilot_ej_publik — INTERN pilot, inte publik (det
+        # senare verifieras på Neptune-sidan, inte i denna matris).
+        wave_3b_ids = matrix_module.WAVE_3B_PRODUCT_IDS
+        self.assertEqual(len(wave_3b_ids), 6)
+        for pid in wave_3b_ids:
+            row = self.by_id[pid]
+            self.assertIn("volume", row["adjustment_types"])
+            self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
+            self.assertEqual(row["capacity_rule"], "effekt")
+            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

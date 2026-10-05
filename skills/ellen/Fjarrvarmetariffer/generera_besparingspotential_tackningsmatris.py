@@ -37,7 +37,7 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Alla övriga 42 produkter förblir "not_reviewed".
+# katalogen. Alla övriga 36 produkter förblir "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -94,6 +94,23 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme": "godkand_publik_10_15_20",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter": "godkand_publik_10_15_20",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme": "godkand_publik_10_15_20",
+    # Våg 3b ("årsvis volymled", handoff 2026-10-05-001,
+    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt de 6 produkter vars
+    # `adjustment_types` innehåller `volume` (skalär, årsvis flode_m3 × rate,
+    # inga månadsseriefält) OCH `cost_path == kontrakt_arskostnad` OCH
+    # `capacity_rule == effekt` — se WAVE_3B_PRODUCT_IDS nedan, som binder
+    # denna delmängd mot snapshoten via ID (INTE via adjustment_types ensamt,
+    # eftersom `volume` förekommer brett i katalogen för produkter utanför
+    # denna pilot). IDENTISK med Neptune-kodens WAVE_3B_PRODUCT_IDS i
+    # optimateScenario.ts. `godkand_intern_pilot_ej_publik` — INTERN pilot,
+    # INTE publikt aktiverad (SCENARIO_PUBLIKT_AKTIVERADE_ID oförändrad vid
+    # 34 i Neptune-koden).
+    "borlange-energi-borlange": "godkand_intern_pilot_ej_publik",
+    "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo": "godkand_intern_pilot_ej_publik",
+    "falu-energi-vatten-falun": "godkand_intern_pilot_ej_publik",
+    "habo-energi-habo": "godkand_intern_pilot_ej_publik",
+    "mjolby-svartadalen-energi-mjolby": "godkand_intern_pilot_ej_publik",
+    "vanerenergi-mariestad-och-toreboda": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -121,6 +138,23 @@ WAVE_3A_PRODUCT_IDS: frozenset[str] = frozenset({
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-bostader--bas-delvarme",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter",
     "navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme",
+})
+
+# Mekanisk, fail-closed lista över exakt Optimate våg 3b-ID:na (handoff
+# 2026-10-05-001, APPROVED_FOR_IMPLEMENTATION: Claude) — IDENTISK med
+# Neptune-kodens WAVE_3B_PRODUCT_IDS i optimateScenario.ts. build_matrix
+# kontrollerar att samtliga sex har `volume` i `adjustment_types`,
+# `cost_path == kontrakt_arskostnad` och `capacity_rule == effekt` i den
+# inlästa snapshoten — men (till skillnad från WAVE_3A_PRODUCT_IDS) INTE att
+# detta är den EXAKTA mängden rader med `volume`, eftersom `volume` som
+# justeringstyp inte är unik för denna pilot i hela katalogen.
+WAVE_3B_PRODUCT_IDS: frozenset[str] = frozenset({
+    "borlange-energi-borlange",
+    "falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo",
+    "falu-energi-vatten-falun",
+    "habo-energi-habo",
+    "mjolby-svartadalen-energi-mjolby",
+    "vanerenergi-mariestad-och-toreboda",
 })
 
 # Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
@@ -320,6 +354,30 @@ def build_matrix(text: str) -> dict[str, Any]:
             raise ValueError(
                 f"Våg 3a-produkten {product_id!r} måste ha scenario_review_status "
                 "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
+            )
+    rows_by_id = {row["product_id"]: row for row in rows}
+    for product_id in WAVE_3B_PRODUCT_IDS:
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3B_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if "volume" not in row["adjustment_types"]:
+            raise ValueError(
+                f"Våg 3b-produkten {product_id!r} saknar 'volume' i adjustment_types."
+            )
+        if row["cost_path"] != "kontrakt_arskostnad":
+            raise ValueError(
+                f"Våg 3b-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                "förväntat 'kontrakt_arskostnad'."
+            )
+        if row["capacity_rule"] != "effekt":
+            raise ValueError(
+                f"Våg 3b-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                "förväntat 'effekt'."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3b-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
             )
     counts = {
         "products": len(rows),
