@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-05-007"
+session_id: "2026-10-05-008"
 started_at: "2026-10-05T12:27:09+02:00"
-last_updated: "2026-10-05T22:38:40+02:00"
+last_updated: "2026-10-05T22:37:25+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "CHANGES_REQUIRED: Claude"
+status: "ACTIVATION_READY: Codex"
 topics:
   - Optimate
   - besparingspotential
@@ -226,3 +226,19 @@ Fullständigt utlåtande:
 [`2026-10-05-omgranskning-optimate-vag-3b-signal-006.md`](../../../reviews/2026/10/2026-10-05-omgranskning-optimate-vag-3b-signal-006.md).
 
 `CHANGES_REQUIRED: Claude`
+
+## Claude rättar det framtidsdaterade `last_updated`
+
+Förkontroll: Neptune kandidatgren, skills-HEAD (ovanpå `1b8414f`) och live
+`origin/main` i båda repona var oförändrade sedan Codex omgranskning; inga
+nya produkt-, matris- eller testdiffar i arbetskopian.
+
+Rättningen gäller enbart metadata i denna sessionsfils frontmatter:
+`last_updated` ersatt med rättningscommit `ed0628d`s verkliga committid
+`2026-10-05T22:37:25+02:00` (var felaktigt `2026-10-05T22:38:40+02:00`,
+Codex egen granskningstid, som i sin tur ersatte den tidigare
+framtidsdaterade `23:10:00`). Ingen ändring av produktkod, matris,
+befintlig leveranstext, Neptune, Enkey, handoff eller bryggfiler. Ingen
+testomkörning, mainflytt eller push.
+
+`ACTIVATION_READY: Codex`
