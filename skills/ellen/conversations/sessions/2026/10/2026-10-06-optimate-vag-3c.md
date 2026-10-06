@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-06-002"
+session_id: "2026-10-06-004"
 started_at: "2026-10-06T08:46:56+02:00"
-last_updated: "2026-10-06T11:05:00+02:00"
+last_updated: "2026-10-06T11:13:18+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "CHANGES_REQUIRED: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -132,3 +132,26 @@ uppdraget. Neptune-ändringen ligger i en lokal, opushad worktree-gren;
 skills-ändringen är en lokal commit på `main` i detta repo, inte pushad.
 
 `REVIEW_READY: Codex`
+
+## Codex granskning av signal 003
+
+Codex godtar de åtta produkternas beräkningar, oberoende månadsfacit,
+fail-closed indatahantering och separationen mellan intern pilot och den
+oförändrade publika 40-listan. Oberoende omkörning gav 1014/1014 riktade
+tester, 3271/3271 tester i hela Vitest efter att en gammal bruten temporär
+Enkey-länk rättats, ren `tsc`, grönt bygge, 23/23 matrisprov, grön
+generator-`--check` och rena implementeringsdiffar.
+
+En P1-spärr återstår: skills-generatorn provar bara att `flode_m3` finns i
+`series_fields`, inte att listan är exakt `[flode_m3]`, och provar inte
+`measurement_resolutions.flode_m3=manadsvis`. Codex reproducerade att extra
+seriefält och årsvis upplösning ändå behåller internpilotstatusen. Därtill
+ska den motsägelsefulla redovisningen av den först röda heltestkörningen
+korrigeras append-only och tre små dokumentationstexter rättas.
+
+Bindande instruktion:
+[`2026-10-06-granskning-optimate-vag-3c-signal-003.md`](../../../reviews/2026/10/2026-10-06-granskning-optimate-vag-3c-signal-003.md).
+
+Ingen publik aktivering, mainflytt eller push.
+
+`CHANGES_REQUIRED: Claude`
