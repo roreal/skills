@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import sys
 import unittest
+from typing import Any
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -206,7 +207,8 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertIn("volume", row["adjustment_types"])
             self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
             self.assertEqual(row["capacity_rule"], "effekt")
-            self.assertIn("flode_m3", row["series_fields"])
+            self.assertEqual(row["series_fields"], ["flode_m3"])
+            self.assertEqual(row["measurement_resolutions"].get("flode_m3"), "manadsvis")
             self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
             self.assertNotEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
 
@@ -217,6 +219,43 @@ class TariffMatrixTests(unittest.TestCase):
             row = self.by_id[pid]
             self.assertTrue(row["has_capacity_charge"])
             self.assertGreater(row["capacity_bands"], 0)
+
+    def test_wave_3c_extra_series_field_is_fail_closed(self) -> None:
+        # Handoff 2026-10-06-002 kräver exakt series_fields=[flode_m3] för
+        # WAVE_3C_PRODUCT_IDS. Codex (granskning 2026-10-06-004, P1) visade att
+        # ett extra seriefält tidigare passerade fail-open eftersom gaten bara
+        # kontrollerade medlemskap, inte exakt likhet.
+        mutated_id = next(iter(matrix_module.WAVE_3C_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["series_fields"] = sorted({*row["series_fields"], "extra_series"})
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "series_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3c_wrong_resolution_is_fail_closed(self) -> None:
+        # Samma P1: måndsupplösningen kontrollerades inte alls innan
+        # rättningen. Ett muterat flode_m3 med annan upplösning ska nu kastas.
+        mutated_id = next(iter(matrix_module.WAVE_3C_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    **row["measurement_resolutions"],
+                    "flode_m3": "arsvis",
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

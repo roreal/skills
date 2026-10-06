@@ -3,7 +3,7 @@
 Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris
 godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —
 aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.
-`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,
+`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,
 tills prisledens före/efter-beroenden har granskats separat. Ingen av
 statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 

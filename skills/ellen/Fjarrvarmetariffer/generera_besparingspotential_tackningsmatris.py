@@ -442,9 +442,15 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3c-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
                 "förväntat 'effekt'."
             )
-        if "flode_m3" not in row["series_fields"]:
+        if row["series_fields"] != ["flode_m3"]:
             raise ValueError(
-                f"Våg 3c-produkten {product_id!r} saknar 'flode_m3' i series_fields."
+                f"Våg 3c-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt ['flode_m3']."
+            )
+        if row["measurement_resolutions"].get("flode_m3") != "manadsvis":
+            raise ValueError(
+                f"Våg 3c-produkten {product_id!r} har measurement_resolutions.flode_m3 "
+                f"{row['measurement_resolutions'].get('flode_m3')!r}, förväntat 'manadsvis'."
             )
         if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
             raise ValueError(
@@ -477,7 +483,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
         "godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —",
         "aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.",
-        "`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,",
+        "`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,",
         "tills prisledens före/efter-beroenden har granskats separat. Ingen av",
         "statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.",
         "",
