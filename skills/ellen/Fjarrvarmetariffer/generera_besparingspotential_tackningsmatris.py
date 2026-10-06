@@ -111,29 +111,30 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "habo-energi-habo": "godkand_publik_10_15_20",
     "mjolby-svartadalen-energi-mjolby": "godkand_publik_10_15_20",
     "vanerenergi-mariestad-och-toreboda": "godkand_publik_10_15_20",
-    # Våg 3c ("årsvis säsongsviktad volymled, INTERN PILOT — ej publik",
-    # handoff 2026-10-06-002, APPROVED_FOR_IMPLEMENTATION: Claude): exakt de
+    # Våg 3c ("årsvis säsongsviktad volymled", publik 10/15/20-aktivering,
+    # signal 2026-10-06-006 — APPROVED_FOR_ACTIVATION: Claude, slutgranskning
+    # av handoff 2026-10-06-002/rättningsrundan 2026-10-06-004/005): exakt de
     # 8 produkter vars `adjustment_types` innehåller `volume` med en
     # säsongsbegränsad `months`-delmängd OCH `cost_path == kontrakt_arskostnad`
     # OCH `capacity_rule == effekt` OCH ett genuint tolvmånadersseriefält
     # `flode_m3` (INTE bara en skalär årsvolym som våg 3b) — se
     # WAVE_3C_PRODUCT_IDS nedan, som binder denna delmängd mot snapshoten via
     # ID. IDENTISK med Neptune-kodens WAVE_3C_PRODUCT_IDS i
-    # optimateScenario.ts. Till skillnad från alla tidigare vågor är detta
-    # INTE `godkand_publik_10_15_20` — Neptune-sidans motsvarande ändring
-    # lade medvetet INTE till dessa 8 ID:n i sin publika aktiveringslista.
-    # Statusen `godkand_intern_pilot_ej_publik` betyder att
-    # `stodjerOptimateScenario` är sann i Neptunes interna pilotgrind, men
-    # `stodjerOptimateScenarioPubliktAktiverad` förblir explicit falsk — inte
-    # synlig för kund. Antalet publikt aktiverade produkter kvarstår på 40.
-    "lulea-energi-lulea": "godkand_intern_pilot_ej_publik",
-    "malarenergi-vasteras-och-hallstahammar-24-lagenheter": "godkand_intern_pilot_ej_publik",
-    "nevel-gimo-osterbybruk-och-osthammar": "godkand_intern_pilot_ej_publik",
-    "oresundskraft-angelholm-normal": "godkand_intern_pilot_ej_publik",
-    "oresundskraft-helsingborg-normal": "godkand_intern_pilot_ej_publik",
-    "piteenergi-norrfjarden-och-sjulnas": "godkand_intern_pilot_ej_publik",
-    "piteenergi-pitea-centrala-natet": "godkand_intern_pilot_ej_publik",
-    "tekniska-verken-linkoping-linkoping": "godkand_intern_pilot_ej_publik",
+    # optimateScenario.ts. `godkand_publik_10_15_20` — publikt aktiverad,
+    # precis som våg 1/2/3a/3b (SCENARIO_PUBLIKT_AKTIVERADE_ID nu 48 i
+    # Neptune-koden). Statusen `godkand_intern_pilot_ej_publik` var den
+    # tidigare interna pilotstatusen (APPROVED_FOR_IMPLEMENTATION: Claude,
+    # handoff 2026-10-06-002) och kvarstår i ALLOWED_SCENARIO_REVIEW_STATUSES
+    # som reserverad vokabulär för en framtida intern pilot, men bärs INTE
+    # längre av någon rad i registret.
+    "lulea-energi-lulea": "godkand_publik_10_15_20",
+    "malarenergi-vasteras-och-hallstahammar-24-lagenheter": "godkand_publik_10_15_20",
+    "nevel-gimo-osterbybruk-och-osthammar": "godkand_publik_10_15_20",
+    "oresundskraft-angelholm-normal": "godkand_publik_10_15_20",
+    "oresundskraft-helsingborg-normal": "godkand_publik_10_15_20",
+    "piteenergi-norrfjarden-och-sjulnas": "godkand_publik_10_15_20",
+    "piteenergi-pitea-centrala-natet": "godkand_publik_10_15_20",
+    "tekniska-verken-linkoping-linkoping": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -180,17 +181,16 @@ WAVE_3B_PRODUCT_IDS: frozenset[str] = frozenset({
     "vanerenergi-mariestad-och-toreboda",
 })
 
-# Mekanisk, fail-closed lista över exakt Optimate våg 3c-ID:na (handoff
-# 2026-10-06-002, APPROVED_FOR_IMPLEMENTATION: Claude) — IDENTISK med
-# Neptune-kodens WAVE_3C_PRODUCT_IDS i optimateScenario.ts. Till skillnad
-# från samtliga tidigare vågor är denna bunden till statusen
-# `godkand_intern_pilot_ej_publik`, INTE `godkand_publik_10_15_20`, eftersom
-# den kompletterande Neptune-ändringen medvetet höll dessa 8 ID:n utanför
-# sin publika aktiveringslista — detta är en intern pilotkohort, inte en
-# publikt aktiverad produkt. build_matrix kontrollerar att samtliga åtta har
-# `volume` i `adjustment_types`, `cost_path == kontrakt_arskostnad`,
-# `capacity_rule == effekt`, ett genuint `flode_m3`-seriefält och status
-# `godkand_intern_pilot_ej_publik` i den inlästa snapshoten.
+# Mekanisk, fail-closed lista över exakt Optimate våg 3c-ID:na (publik
+# aktivering, signal 2026-10-06-006) — IDENTISK med Neptune-kodens
+# WAVE_3C_PRODUCT_IDS i optimateScenario.ts. Precis som våg 1/2/3a/3b är
+# denna nu bunden till statusen `godkand_publik_10_15_20` — den
+# kompletterande Neptune-ändringen lade mekaniskt till hela
+# WAVE_3C_PRODUCT_IDS i sin publika aktiveringslista. build_matrix
+# kontrollerar att samtliga åtta har `volume` i `adjustment_types`,
+# `cost_path == kontrakt_arskostnad`, `capacity_rule == effekt`, ett genuint
+# `flode_m3`-seriefält med månadsvis upplösning och status
+# `godkand_publik_10_15_20` i den inlästa snapshoten.
 WAVE_3C_PRODUCT_IDS: frozenset[str] = frozenset({
     "lulea-energi-lulea",
     "malarenergi-vasteras-och-hallstahammar-24-lagenheter",
@@ -452,10 +452,10 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3c-produkten {product_id!r} har measurement_resolutions.flode_m3 "
                 f"{row['measurement_resolutions'].get('flode_m3')!r}, förväntat 'manadsvis'."
             )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3c-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
     counts = {
         "products": len(rows),
@@ -491,7 +491,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (40 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (48 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
         "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
@@ -502,20 +502,18 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  2026-10-03-003/004; våg 3b: samtliga 6 produkter vars `adjustment_types`",
         "  innehåller `volume` (Borlänge, Falu Energi & Vatten, Habo,",
         "  Mjölby-Svartådalen, VänerEnergi), exakt Neptune-kodens",
-        "  `WAVE_3B_PRODUCT_IDS`, publikt aktiverad signal 2026-10-05-003):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 40 leverantorId,",
+        "  `WAVE_3B_PRODUCT_IDS`, publikt aktiverad signal 2026-10-05-003; våg 3c:",
+        "  samtliga 8 produkter med en säsongsbunden `volume`-justering och en genuin",
+        "  tolvmånaders `flode_m3`-serie (Luleå Energi, Mälarenergi, Nevel,",
+        "  Öresundskraft Ängelholm/Helsingborg, PiteEnergi Norrfjärden/Sjulnäs och",
+        "  Piteå centrala nätet, Tekniska Verken Linköping), exakt Neptune-kodens",
+        "  `WAVE_3C_PRODUCT_IDS`, publikt aktiverad signal 2026-10-06-006):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 48 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
-        "- `scenario_review_status=godkand_intern_pilot_ej_publik`",
-        "  (8 produkter — våg 3c: WAVE_3C_PRODUCT_IDS, handoff 2026-10-06-002,",
-        "  APPROVED_FOR_IMPLEMENTATION: Claude: lulea-energi-lulea,",
-        "  malarenergi-vasteras-och-hallstahammar-24-lagenheter,",
-        "  nevel-gimo-osterbybruk-och-osthammar, oresundskraft-angelholm-normal,",
-        "  oresundskraft-helsingborg-normal, piteenergi-norrfjarden-och-sjulnas,",
-        "  piteenergi-pitea-centrala-natet, tekniska-verken-linkoping-linkoping):",
-        "  `stodjerOptimateScenario` är sann i Neptunes INTERNA pilotgrind för dessa 8",
-        "  leverantorId, men `stodjerOptimateScenarioPubliktAktiverad` är explicit",
-        "  falsk — scenariot visas INTE för kund. Antalet publikt aktiverade",
-        "  produkter kvarstår oförändrat på 40.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik`: reserverad status",
+        "  för en framtida intern pilotkohort. Bärs för närvarande av 0 produkter —",
+        "  våg 3c (den enda kohort som hittills haft denna status) blev publikt",
+        "  aktiverad av signal 2026-10-06-006.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",

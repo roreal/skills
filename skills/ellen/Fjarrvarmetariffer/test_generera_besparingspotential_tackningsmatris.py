@@ -86,7 +86,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3c_ids = matrix_module.WAVE_3C_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3c_ids
             )
         )
@@ -100,22 +100,19 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_publik_10_15_20": 40,
-                "godkand_intern_pilot_ej_publik": 8,
+                "godkand_publik_10_15_20": 48,
                 "not_reviewed": 28,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
 
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
-        # godkand_intern_pilot_ej_publik används nu av WAVE_3C_PRODUCT_IDS
-        # (handoff 2026-10-06-002): Optimate våg 3a:s publika aktivering
-        # (signal 2026-10-03-003/004) slog samman den dåvarande interna
-        # pilotkohorten in i godkand_publik_10_15_20, och våg 3b:s egen
-        # publika aktivering (signal 2026-10-05-003) gjorde detsamma för
-        # WAVE_3B_PRODUCT_IDS — men våg 3c är medvetet INTE publikt
-        # aktiverad på Neptune-sidan, så dess 8 produkter är de första som
-        # faktiskt bär denna status i snapshoten.
+        # godkand_intern_pilot_ej_publik bars tidigare av WAVE_3C_PRODUCT_IDS
+        # (handoff 2026-10-06-002, intern pilot). Signal 2026-10-06-006
+        # (APPROVED_FOR_ACTIVATION: Claude) aktiverade hela kohorten publikt,
+        # precis som våg 1/2/3a/3b före den — status bars nu av 0 produkter,
+        # men förblir en giltig, reserverad vokabulärpost för en framtida
+        # intern pilot.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -168,15 +165,14 @@ class TariffMatrixTests(unittest.TestCase):
         )
         self.assertEqual(wave_3a_status_ids, matrix_module.WAVE_3A_PRODUCT_IDS)
         self.assertEqual(len(wave_3a_status_ids), 17)
-        # Signal 2026-10-05-003: våg 3b publikt aktiverad också. Men till
-        # skillnad från 3a/3b är våg 3c (handoff 2026-10-06-002) medvetet en
-        # INTERN pilot — den är den enda kohorten som bär status
-        # godkand_intern_pilot_ej_publik i snapshoten.
+        # Signal 2026-10-05-003: våg 3b publikt aktiverad också. Signal
+        # 2026-10-06-006 aktiverade därefter våg 3c publikt också — ingen
+        # rad i snapshoten bär längre godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3C_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -194,12 +190,14 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
 
     def test_wave_3c_membership_and_status_is_mechanically_locked(self) -> None:
-        # Handoff 2026-10-06-002 (APPROVED_FOR_IMPLEMENTATION: Claude):
-        # samtliga WAVE_3C_PRODUCT_IDS har volume i adjustment_types,
+        # Signal 2026-10-06-006 (APPROVED_FOR_ACTIVATION: Claude, slutgranskning
+        # av handoff 2026-10-06-002/rättningsrundan 004/005): samtliga
+        # WAVE_3C_PRODUCT_IDS har volume i adjustment_types,
         # cost_path==kontrakt_arskostnad, capacity_rule==effekt, ett genuint
-        # flode_m3-seriefält och status godkand_intern_pilot_ej_publik — INTE
-        # publikt aktiverad (det senare verifieras på Neptune-sidan, som
-        # medvetet håller dessa 8 ID:n utanför sin publika lista).
+        # flode_m3-seriefält och status godkand_publik_10_15_20 — publikt
+        # aktiverad, precis som våg 1/2/3a/3b (det senare verifieras på
+        # Neptune-sidan, som nu mekaniskt lägger till hela WAVE_3C_PRODUCT_IDS
+        # i sin publika lista).
         wave_3c_ids = matrix_module.WAVE_3C_PRODUCT_IDS
         self.assertEqual(len(wave_3c_ids), 8)
         for pid in wave_3c_ids:
@@ -209,8 +207,7 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(row["capacity_rule"], "effekt")
             self.assertEqual(row["series_fields"], ["flode_m3"])
             self.assertEqual(row["measurement_resolutions"].get("flode_m3"), "manadsvis")
-            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
-            self.assertNotEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
+            self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
 
         malarenergi = self.by_id["malarenergi-vasteras-och-hallstahammar-24-lagenheter"]
         self.assertFalse(malarenergi["has_capacity_charge"])
@@ -250,6 +247,27 @@ class TariffMatrixTests(unittest.TestCase):
                 row["measurement_resolutions"] = {
                     **row["measurement_resolutions"],
                     "flode_m3": "arsvis",
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3c_missing_resolution_is_fail_closed(self) -> None:
+        # Signal 2026-10-06-006, P.5: koden blockerar redan både fel värde
+        # (ovan) och en helt SAKNAD flode_m3-upplösning (.get returnerar None,
+        # som aldrig är "manadsvis") — det här testet ger den andra grenen
+        # egen testtäckning i stället för att bara lita på den delade
+        # kodvägen.
+        mutated_id = next(iter(matrix_module.WAVE_3C_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    k: v for k, v in row["measurement_resolutions"].items() if k != "flode_m3"
                 }
             return row
 
