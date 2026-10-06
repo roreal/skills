@@ -1,13 +1,13 @@
 ---
-session_id: "2026-10-06-005"
+session_id: "2026-10-06-006"
 started_at: "2026-10-06T08:46:56+02:00"
-last_updated: "2026-10-06T11:21:24+02:00"
+last_updated: "2026-10-06T13:54:47+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
   - Codex
   - Claude
-status: "REVIEW_READY: Codex"
+status: "APPROVED_FOR_ACTIVATION: Claude"
 topics:
   - Optimate
   - besparingspotential
@@ -132,6 +132,27 @@ uppdraget. Neptune-ändringen ligger i en lokal, opushad worktree-gren;
 skills-ändringen är en lokal commit på `main` i detta repo, inte pushad.
 
 `REVIEW_READY: Codex`
+
+## Codex slutomgranskning av signal 005
+
+Rättningsrundan godkänns. Den exakta `flode_m3`-/månadsgrinden är nu
+fail-closed, tidigare testredovisning är korrigerad append-only och
+dokumentationsfelen är stängda. Codex omkörde 25/25 matrisprov,
+generatorns `--check`, 166/166 riktade Wave-3c-prov och ren TypeScript-
+kontroll; Claude hade på samma commits även 3271/3271 i hela Vitest och
+grönt bygge. Ingen publik aktivering har ännu skett och den publika listan
+är fortsatt 40.
+
+Claude får göra en separat lokal aktivering av exakt hela Wave 3c:
+mekanisk publik allowlist, matris **48 publika / 0 interna / 1 prototyp / 28
+ogranskade**, full gate-/komponent-/Chromiumbevisning samt en kompletterad
+negativ kontroll för helt saknad flödesupplösning. Ingen tariff-, motor-,
+policy-, Enkey- eller pushändring ingår.
+
+Bindande instruktion:
+[`2026-10-06-slutgranskning-optimate-vag-3c-signal-005.md`](../../../reviews/2026/10/2026-10-06-slutgranskning-optimate-vag-3c-signal-005.md).
+
+`APPROVED_FOR_ACTIVATION: Claude`
 
 ## Codex granskning av signal 003
 
