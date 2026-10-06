@@ -17,8 +17,9 @@
       "4": 12
     },
     "scenario_review_status": {
+      "godkand_intern_pilot_ej_publik": 8,
       "godkand_publik_10_15_20": 40,
-      "not_reviewed": 36,
+      "not_reviewed": 28,
       "synlig_sarskild_preliminar_prototyp": 1
     }
   },
@@ -1357,7 +1358,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "malarenergi-vasteras-och-hallstahammar-24-lagenheter",
@@ -1399,7 +1400,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "mjolby-svartadalen-energi-mjolby",
@@ -1892,7 +1893,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "norrenergi",
@@ -1975,7 +1976,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "oresundskraft-helsingborg-normal",
@@ -2023,7 +2024,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024",
@@ -2187,7 +2188,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "piteenergi-pitea-centrala-natet",
@@ -2235,7 +2236,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "riksgenomsnitt",
@@ -2586,7 +2587,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "telge-nat-telge-foretag-och-bostadsrattsforeningar",
