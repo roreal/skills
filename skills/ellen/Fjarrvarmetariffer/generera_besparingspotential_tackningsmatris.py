@@ -37,17 +37,17 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Alla övriga 28 produkter förblir "not_reviewed".
+# katalogen. Aktuell disposition av 77 produkter (signal 2026-10-07-003):
+# 48 `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C_PRODUCT_IDS), 3
+# `godkand_intern_pilot_ej_publik` (WAVE_3D_PRODUCT_IDS, INTERN pilot, ej
+# publik), 1 `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
+# återstående 25 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
 # fortfarande inte tariffens `stodjer_besparing`-flagga, som förblir
-# oändrad. Samtliga 17 raderna nedan (våg 1, WAVE_1_PRODUCT_IDS, plus våg 2,
-# EXAKT Neptune-kodens `WAVE_2_PRODUCT_IDS` i optimateScenario.ts) är nu
-# `godkand_publik_10_15_20` efter signal 2026-09-30-002 — de 15 våg
-# 2-produkterna gick från `godkand_intern_pilot_ej_publik` (intern
-# beräkningspilot, handoff 2026-09-29-001 §C.3) till publikt aktiverade,
-# precis som våg 1 tidigare.
+# oändrad. `godkand_intern_pilot_ej_publik` innebär bara en intern
+# beräkningspilot (stodjerOptimateScenario) — ingen publik aktivering.
 SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "stockholm-exergi": "synlig_sarskild_preliminar_prototyp",
     "sundsvall-energi-indal-liden-och-lucksta": "godkand_publik_10_15_20",
@@ -231,6 +231,28 @@ WAVE_3D_PRODUCT_IDS: frozenset[str] = frozenset({
     "jamtkraft-brunflo-och-opevagen",
     "jamtkraft-ostersund-froson-as",
 })
+
+# Per-ID effekt-/bandnyckelbindning för WAVE_3D_PRODUCT_IDS, direkt ur
+# tariffer.generated.ts::policy.kapacitet_bindning/kapacitet_band_bindning
+# (granskning 2026-10-07-004, P1: `adjustment_types`-grinden kontrollerade
+# tidigare bara medlemskap, inte exakthet, och saknade helt en bindning mot
+# produktens egna effekt-/bandnycklar — en extra justeringstyp eller fel
+# nyckelpar passerade därför tyst). build_matrix kräver nu exakt dessa två
+# nycklar per produkt i required_policy_fields/history_fields nedan.
+WAVE_3D_PRODUCT_KEYS: dict[str, dict[str, str]] = {
+    "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge": {
+        "effekt": "jamtkraft_are_debiterbar_effekt_kw",
+        "band": "jamtkraft_are_vald_niva_id",
+    },
+    "jamtkraft-brunflo-och-opevagen": {
+        "effekt": "jamtkraft_brunflo_debiterbar_effekt_kw",
+        "band": "jamtkraft_brunflo_vald_niva_id",
+    },
+    "jamtkraft-ostersund-froson-as": {
+        "effekt": "jamtkraft_ostersund_debiterbar_effekt_kw",
+        "band": "jamtkraft_ostersund_vald_niva_id",
+    },
+}
 
 # Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
 # del C.2). build_matrix kontrollerar att mängden produkter med
@@ -491,9 +513,22 @@ def build_matrix(text: str) -> dict[str, Any]:
         row = rows_by_id.get(product_id)
         if row is None:
             raise ValueError(f"WAVE_3D_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
-        if "flow_difference" not in row["adjustment_types"]:
+        if row["adjustment_types"] != ["flow_difference"]:
             raise ValueError(
-                f"Våg 3d-produkten {product_id!r} saknar 'flow_difference' i adjustment_types."
+                f"Våg 3d-produkten {product_id!r} har adjustment_types "
+                f"{row['adjustment_types']!r}, förväntat exakt ['flow_difference']."
+            )
+        keys = WAVE_3D_PRODUCT_KEYS[product_id]
+        expected_required_fields = sorted({"flode_okt_apr_m3", keys["effekt"], keys["band"]})
+        if row["required_policy_fields"] != expected_required_fields:
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har required_policy_fields "
+                f"{row['required_policy_fields']!r}, förväntat exakt {expected_required_fields!r}."
+            )
+        if row["history_fields"] != [keys["effekt"]]:
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har history_fields "
+                f"{row['history_fields']!r}, förväntat exakt {[keys['effekt']]!r}."
             )
         if row["cost_path"] != "kontrakt_arskostnad":
             raise ValueError(

@@ -300,7 +300,13 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(len(wave_3d_ids), 3)
         for pid in wave_3d_ids:
             row = self.by_id[pid]
-            self.assertIn("flow_difference", row["adjustment_types"])
+            keys = matrix_module.WAVE_3D_PRODUCT_KEYS[pid]
+            self.assertEqual(row["adjustment_types"], ["flow_difference"])
+            self.assertEqual(
+                row["required_policy_fields"],
+                sorted({"flode_okt_apr_m3", keys["effekt"], keys["band"]}),
+            )
+            self.assertEqual(row["history_fields"], [keys["effekt"]])
             self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
             self.assertEqual(row["capacity_rule"], "effekt")
             self.assertEqual(row["capacity_bands"], 5)
@@ -322,6 +328,58 @@ class TariffMatrixTests(unittest.TestCase):
 
         with patch.object(matrix_module, "product_row", mutated_product_row):
             with self.assertRaisesRegex(ValueError, "flow_difference"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_extra_adjustment_type_is_fail_closed(self) -> None:
+        # Granskning 2026-10-07-004, P1: Codex reproducerade att en extra
+        # justeringstyp (t.ex. 'volume' bredvid 'flow_difference') tidigare
+        # passerade grinden eftersom den bara kontrollerade medlemskap
+        # ("flow_difference" in adjustment_types), inte exakthet.
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["adjustment_types"] = sorted({*row["adjustment_types"], "volume"})
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "adjustment_types"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_wrong_required_policy_fields_is_fail_closed(self) -> None:
+        # Granskning 2026-10-07-004, P1: Codex reproducerade att helt
+        # felaktiga produktnycklar (fel effekt-/bandnyckel) passerade
+        # grinden tyst, eftersom den aldrig band required_policy_fields mot
+        # produktens egna nycklar.
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["required_policy_fields"] = ["flode_okt_apr_m3", "fel_effekt_kw", "fel_band_id"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_wrong_history_fields_is_fail_closed(self) -> None:
+        # Granskning 2026-10-07-004, P1: history_fields kontrollerades
+        # tidigare inte alls mot produktens effektnyckel.
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["history_fields"] = ["fel_effekt_kw"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "history_fields"):
                 build_matrix(self.source_text)
 
     def test_wave_3d_extra_series_field_is_fail_closed(self) -> None:
