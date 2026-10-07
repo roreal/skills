@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-07-002"
 started_at: "2026-10-07T12:53:47+02:00"
-last_updated: "2026-10-07T13:32:19+02:00"
+last_updated: "2026-10-07T14:05:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -229,3 +229,73 @@ Ingen tariff-/motor-/policyregister-/Enkeyändring, mainflytt eller push.
 Se [slutomgranskningen](../../../reviews/2026/10/2026-10-07-slutomgranskning-optimate-vag-3d-signal-005.md).
 
 `APPROVED_FOR_ACTIVATION: Claude`
+
+## Lokal publik aktivering klar (Claude, executed_by: Claude)
+
+Aktiverade exakt hela `WAVE_3D_PRODUCT_IDS` publikt enligt
+[slutomgranskningens](../../../reviews/2026/10/2026-10-07-slutomgranskning-optimate-vag-3d-signal-005.md)
+uppdrag, på samma isolerade Neptune-gren/worktree och skills `main`. Ingen
+tariff-, kostnadsmotor-, policyregister- eller Enkeyändring; ingen mainflytt
+eller push.
+
+**Neptune (worktree `optimate-vag-3d-jamtkraft-flodesdifferens`, bas
+`origin/main=8abed657b88acafe6700f2b7735702bb03c7286a`, ej pushad, ej
+mergad):**
+
+- `WAVE_3D_PRODUCT_IDS` tillagd i `SCENARIO_PUBLIKT_AKTIVERADE_ID`
+  (`jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge`,
+  `jamtkraft-brunflo-och-opevagen`, `jamtkraft-ostersund-froson-as`), nu 51
+  i stället för 48. Alla "INTERN pilot ENDAST"-kommentarer kring
+  exporten/registret uppdaterade till publik-aktiverad text.
+- Fem befintliga testfiler (vag 1/2/3a/3b/3c) med hårdkodad 48-längd
+  mekaniskt rättade till 51; `optimateScenarioVag3d.test.ts`s publika
+  gate-prov vända från FALSE till TRUE.
+- Ny omockad `OptimateScenarioCardVag3d.positive.test.tsx`: binder
+  Östersund/Frösön/Ås genom `beraknaOptimateScenario` →
+  `OptimateScenarioCard` för 10/15/20 mot ett oberoende facit (referens
+  118 610 kr, besparing 5 706,80/8 560,20/11 413,60 kr), plus negativ
+  kontroll som bekräftar att Umeås genuina
+  `asymmetric_flow_difference`-produkt förblir stängd.
+- Nytt Scenario 39 i `e2e/kalkylator.smoke.mjs`: hela kedjan
+  formulär→adapter→motor→kort för en verklig Jämtkraft-produkt, med
+  bundet facit (referens 118 369,4404 kr; besparing 5 687,56/8 531,33/
+  11 375,11 kr vid 10/15/20 %), aktuell årskostnad och Optimate-kortet
+  båda synliga, statustext matchande `/prelimin[äa]r/i`, ingen
+  effektbesparing tillskriven.
+- Commit (lokal, branch `optimate-vag-3d-jamtkraft-flodesdifferens`):
+  `d2976151749466258ea96ce987ca5f75ffbc392b`.
+- Testutfall (verifierat oberoende av Claude i denna körning, inte bara
+  rapporterat): `npx vitest run` → **94 testfiler, 3352 prov, samtliga
+  gröna**. `npx tsc --noEmit` → rent. `npm run build` → grön; endast
+  spårad `dist/`-smuts återställdes (`git checkout -- dist`), ingen
+  orelaterad fil rörd. `npm run test:e2e` (Chromium/Playwright) →
+  **samtliga 39 scenarier godkända**, inklusive nytt Scenario 39.
+  `git diff --check` → rent.
+
+**Skills-repot (denna checkout, `main`):**
+
+- De tre Jämtkraft-raderna i `SCENARIO_STATUS_REGISTRY` flyttade från
+  `godkand_intern_pilot_ej_publik` till `godkand_publik_10_15_20` i
+  `generera_besparingspotential_tackningsmatris.py`, i linje med
+  3a/3b/3c-mönstret. Regenererat JSON/Markdown via `--write`.
+- Testfilens antaganden om den gamla 48/3-fördelningen rättade till
+  51/0-fördelningen.
+- Commit (lokal, `main`): `84a205e` (direkt barn till
+  `a5f062c`/signal 006).
+- Testutfall (verifierat oberoende): `pytest` → **37 prov, samtliga
+  gröna**. `--check` → "Täckningsmatrisen matchar 77 produkter och
+  källhashen." Disposition **51 publika / 0 interna / 1 prototyp / 25
+  ogranskade = 77**, exakt målet. `git diff --check` → rent.
+- Samtliga redan befintliga ospårade/ändrade filer i checkouten (bl.a.
+  `leverantorsfragor-blockerade-tariffer-2026.md`,
+  `conversations/automation/README.md`,
+  `conversations/automation/agent-bridge.zsh`, `.claude/`, `AGENTS.md`,
+  `SKILL.md`, m.fl.) lämnades helt orörda — endast de fyra avsedda
+  matrisfilerna ingår i skills-commiten ovan.
+
+**Ingen push eller mainflytt har skett i någon av de två reporna.**
+`origin/main` för Neptune är fortfarande `8abed65` (basen, oförändrad);
+skills `main` har endast fått den lokala aktiveringscommiten ovanpå redan
+pushat innehåll.
+
+`ACTIVATION_READY: Codex`
