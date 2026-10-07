@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 28)
+        self.assertEqual(len(not_reviewed), 25)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -90,18 +90,26 @@ class TariffMatrixTests(unittest.TestCase):
                 for pid in wave_3c_ids
             )
         )
+        wave_3d_ids = matrix_module.WAVE_3D_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3d_ids
+            )
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
-        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids
+        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 3,
                 "godkand_publik_10_15_20": 48,
-                "not_reviewed": 28,
+                "not_reviewed": 25,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -110,9 +118,10 @@ class TariffMatrixTests(unittest.TestCase):
         # godkand_intern_pilot_ej_publik bars tidigare av WAVE_3C_PRODUCT_IDS
         # (handoff 2026-10-06-002, intern pilot). Signal 2026-10-06-006
         # (APPROVED_FOR_ACTIVATION: Claude) aktiverade hela kohorten publikt,
-        # precis som våg 1/2/3a/3b före den — status bars nu av 0 produkter,
-        # men förblir en giltig, reserverad vokabulärpost för en framtida
-        # intern pilot.
+        # precis som våg 1/2/3a/3b före den — status bars av 0 produkter
+        # tills handoff 2026-10-07-002 (våg 3d, Jämtkrafts tre
+        # flödesdifferens-produkter) tog den i bruk igen, INTERN pilot ENDAST
+        # (ingen publik aktivering denna gång).
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -167,12 +176,15 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(len(wave_3a_status_ids), 17)
         # Signal 2026-10-05-003: våg 3b publikt aktiverad också. Signal
         # 2026-10-06-006 aktiverade därefter våg 3c publikt också — ingen
-        # rad i snapshoten bär längre godkand_intern_pilot_ej_publik.
+        # rad bar då längre godkand_intern_pilot_ej_publik. Handoff
+        # 2026-10-07-002 (våg 3d) tog statusen i bruk igen för exakt de tre
+        # Jämtkraft-produkterna, INTERN pilot ENDAST (ingen publik
+        # aktivering denna gång) — se WAVE_3D_PRODUCT_IDS.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3D_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -274,6 +286,126 @@ class TariffMatrixTests(unittest.TestCase):
         with patch.object(matrix_module, "product_row", mutated_product_row):
             with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
                 build_matrix(self.source_text)
+
+    def test_wave_3d_membership_and_status_is_mechanically_locked(self) -> None:
+        # Handoff 2026-10-07-002 (APPROVED_FOR_IMPLEMENTATION: Claude): de
+        # tre Jämtkraft-produkterna har flow_difference i adjustment_types,
+        # cost_path==kontrakt_arskostnad, capacity_rule==effekt, exakt fem
+        # effektband, series_fields==[] (årsupplöst flode_okt_apr_m3, inte
+        # en månadsserie) och status godkand_intern_pilot_ej_publik — INTERN
+        # pilot ENDAST, ingen publik aktivering (det verifieras på
+        # Neptune-sidan: WAVE_3D_PRODUCT_IDS saknas i
+        # SCENARIO_PUBLIKT_AKTIVERADE_ID).
+        wave_3d_ids = matrix_module.WAVE_3D_PRODUCT_IDS
+        self.assertEqual(len(wave_3d_ids), 3)
+        for pid in wave_3d_ids:
+            row = self.by_id[pid]
+            self.assertIn("flow_difference", row["adjustment_types"])
+            self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
+            self.assertEqual(row["capacity_rule"], "effekt")
+            self.assertEqual(row["capacity_bands"], 5)
+            self.assertEqual(row["series_fields"], [])
+            self.assertEqual(row["measurement_resolutions"].get("flode_okt_apr_m3"), "arsvis")
+            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertTrue(row["has_capacity_charge"])
+            self.assertIn("flode_eller_temperatur", row["risk_flags"])
+
+    def test_wave_3d_wrong_adjustment_type_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["adjustment_types"] = [t for t in row["adjustment_types"] if t != "flow_difference"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "flow_difference"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_extra_series_field_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["series_fields"] = sorted({*row["series_fields"], "extra_series"})
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "series_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_wrong_resolution_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    **row["measurement_resolutions"],
+                    "flode_okt_apr_m3": "manadsvis",
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_missing_resolution_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    k: v for k, v in row["measurement_resolutions"].items() if k != "flode_okt_apr_m3"
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_wrong_band_count_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["capacity_bands"] = 4
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "effektband"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_wrong_capacity_rule_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3D_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["capacity_rule"] = "piecewise_polynomial"
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "capacity_rule"):
+                build_matrix(self.source_text)
+
+    def test_wave_3d_is_not_publicly_activated_by_this_matrix(self) -> None:
+        # Till skillnad från våg 1/2/3a/3b/3c: godkand_intern_pilot_ej_publik
+        # betyder HÄR fortsatt bara intern beräkningspilot. Matrisen gör
+        # inget påstående om Neptunes publika gate, men den bärs
+        # uttryckligen INTE av statusen godkand_publik_10_15_20.
+        for pid in matrix_module.WAVE_3D_PRODUCT_IDS:
+            self.assertNotEqual(self.by_id[pid]["scenario_review_status"], "godkand_publik_10_15_20")
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}

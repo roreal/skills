@@ -30,10 +30,14 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   `WAVE_3C_PRODUCT_IDS`, publikt aktiverad signal 2026-10-06-006):
   `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 48 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
-- `scenario_review_status=godkand_intern_pilot_ej_publik`: reserverad status
-  för en framtida intern pilotkohort. Bärs för närvarande av 0 produkter —
-  våg 3c (den enda kohort som hittills haft denna status) blev publikt
-  aktiverad av signal 2026-10-06-006.
+- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3d:
+  Jämtkrafts tre `flow_difference`-produkter Åre/Järpen/Mörsil/Duved/Kall/
+  Hallen/Krokom/Nälden/Föllinge, Brunflo/Opevägen och Östersund/Frösön/Ås,
+  exakt Neptune-kodens `WAVE_3D_PRODUCT_IDS`, handoff 2026-10-07-002,
+  APPROVED_FOR_IMPLEMENTATION: Claude): endast den interna beräkningspiloten
+  är godkänd — `stodjerOptimateScenarioPubliktAktiverad` är FALSK för dessa
+  tre, de ingår inte i `SCENARIO_PUBLIKT_AKTIVERADE_ID` och Neptunes
+  kalkylator visar inte scenariot publikt för dem.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
 - Genererad tariffdata: 2026-09-24; källkatalog `6c0877d` / SHA-256 `463d7492d4ff9e69c91da0270fa586e0c3d0c094467859332649733b02876d38`.
@@ -41,7 +45,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_publik_10_15_20: 48, not_reviewed: 28, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 3, godkand_publik_10_15_20: 48, not_reviewed: 25, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -66,9 +70,9 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | habo-energi-habo | Habo Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | volume | flode_m3, habo_debiterbar_effekt_kw, habo_vald_niva_id | historik: habo_debiterbar_effekt_kw | — |
 | 2 | halmstads-energi-och-miljo | Halmstads Energi och Miljö | legacy_besparing | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | — | — | — | — |
 | 2 | harnosand-energi-miljo-harnosand | Härnösand Energi & Miljö | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | capacity_overrun, marginal_annual_volume_discount | debiteringsgrundande_effekt_kw, harnosand_debiterbar_effekt_kw, harnosand_vald_niva_id | — | — |
-| 3 | jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge | Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_are_debiterbar_effekt_kw, jamtkraft_are_vald_niva_id | historik: jamtkraft_are_debiterbar_effekt_kw | — |
-| 3 | jamtkraft-brunflo-och-opevagen | Jämtkraft — Brunflo och Opevägen | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_brunflo_debiterbar_effekt_kw, jamtkraft_brunflo_vald_niva_id | historik: jamtkraft_brunflo_debiterbar_effekt_kw | — |
-| 3 | jamtkraft-ostersund-froson-as | Jämtkraft — Östersund, Frösön, Ås | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_ostersund_debiterbar_effekt_kw, jamtkraft_ostersund_vald_niva_id | historik: jamtkraft_ostersund_debiterbar_effekt_kw | — |
+| 3 | jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge | Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_are_debiterbar_effekt_kw, jamtkraft_are_vald_niva_id | historik: jamtkraft_are_debiterbar_effekt_kw | — |
+| 3 | jamtkraft-brunflo-och-opevagen | Jämtkraft — Brunflo och Opevägen | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_brunflo_debiterbar_effekt_kw, jamtkraft_brunflo_vald_niva_id | historik: jamtkraft_brunflo_debiterbar_effekt_kw | — |
+| 3 | jamtkraft-ostersund-froson-as | Jämtkraft — Östersund, Frösön, Ås | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_ostersund_debiterbar_effekt_kw, jamtkraft_ostersund_vald_niva_id | historik: jamtkraft_ostersund_debiterbar_effekt_kw | — |
 | 3 | jonkoping-energi-jonkoping-och-granna | Jönköping Energi | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (4 band) | metered_access_fee, volume | access_pris_kr_per_central_manad, antal_undercentraler, flode_m3, jonkoping_debiterbar_effekt_kw, jonkoping_vald_niva_id | historik: jonkoping_debiterbar_effekt_kw | — |
 | 2 | karlstads-energi-karlstad | Karlstads Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | karlstad_debiterbar_effekt_kw, karlstad_vald_niva_id | — | — |
 | 2 | kils-energi-kil | Kils Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | — | kil_debiterbar_effekt_kw, kil_vald_niva_id | historik: kil_debiterbar_effekt_kw | — |

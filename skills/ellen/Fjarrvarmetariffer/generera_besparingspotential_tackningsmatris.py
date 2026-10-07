@@ -135,6 +135,21 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "piteenergi-norrfjarden-och-sjulnas": "godkand_publik_10_15_20",
     "piteenergi-pitea-centrala-natet": "godkand_publik_10_15_20",
     "tekniska-verken-linkoping-linkoping": "godkand_publik_10_15_20",
+    # Våg 3d ("flödesdifferens", INTERN pilot, ej publik — handoff
+    # 2026-10-07-002, APPROVED_FOR_IMPLEMENTATION: Claude): exakt de tre
+    # Jämtkraft-produkter vars `adjustment_types` innehåller
+    # `flow_difference` OCH `cost_path == kontrakt_arskostnad` OCH
+    # `capacity_rule == effekt` med fem effektband OCH ett årsupplöst
+    # `flode_okt_apr_m3`-fält (ingen månadsserie) — se WAVE_3D_PRODUCT_IDS
+    # nedan, som binder denna delmängd mot snapshoten via ID. IDENTISK med
+    # Neptune-kodens WAVE_3D_PRODUCT_IDS i optimateScenario.ts. Till
+    # skillnad från våg 1/2/3a/3b/3c är detta `godkand_intern_pilot_ej_publik`
+    # — Neptunes publika `SCENARIO_PUBLIKT_AKTIVERADE_ID`/
+    # `stodjerOptimateScenarioPubliktAktiverad`-grind förblir falsk för
+    # dessa tre; endast den interna beräkningspiloten är godkänd.
+    "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge": "godkand_intern_pilot_ej_publik",
+    "jamtkraft-brunflo-och-opevagen": "godkand_intern_pilot_ej_publik",
+    "jamtkraft-ostersund-froson-as": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -200,6 +215,21 @@ WAVE_3C_PRODUCT_IDS: frozenset[str] = frozenset({
     "piteenergi-norrfjarden-och-sjulnas",
     "piteenergi-pitea-centrala-natet",
     "tekniska-verken-linkoping-linkoping",
+})
+
+# Mekanisk, fail-closed lista över exakt Optimate våg 3d-ID:na (INTERN pilot,
+# ej publik — handoff 2026-10-07-002, APPROVED_FOR_IMPLEMENTATION: Claude) —
+# IDENTISK med Neptune-kodens WAVE_3D_PRODUCT_IDS i optimateScenario.ts.
+# build_matrix kontrollerar att samtliga tre har `flow_difference` i
+# adjustment_types, cost_path==kontrakt_arskostnad, capacity_rule==effekt,
+# exakt fem effektband, series_fields==[] (årsupplöst flode_okt_apr_m3, inte
+# en månadsserie) och status godkand_intern_pilot_ej_publik i den inlästa
+# snapshoten. Till skillnad från tidigare vågor aktiveras denna INTE i
+# Neptunes publika SCENARIO_PUBLIKT_AKTIVERADE_ID.
+WAVE_3D_PRODUCT_IDS: frozenset[str] = frozenset({
+    "jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge",
+    "jamtkraft-brunflo-och-opevagen",
+    "jamtkraft-ostersund-froson-as",
 })
 
 # Mekanisk, fail-closed lista över exakt våg-1-ID:na (handoff 2026-09-25-007,
@@ -457,6 +487,44 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3c-produkten {product_id!r} måste ha scenario_review_status "
                 "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
+    for product_id in WAVE_3D_PRODUCT_IDS:
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3D_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if "flow_difference" not in row["adjustment_types"]:
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} saknar 'flow_difference' i adjustment_types."
+            )
+        if row["cost_path"] != "kontrakt_arskostnad":
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                "förväntat 'kontrakt_arskostnad'."
+            )
+        if row["capacity_rule"] != "effekt":
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                "förväntat 'effekt'."
+            )
+        if row["capacity_bands"] != 5:
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har {row['capacity_bands']} effektband, "
+                "förväntat exakt 5."
+            )
+        if row["series_fields"] != []:
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt []."
+            )
+        if row["measurement_resolutions"].get("flode_okt_apr_m3") != "arsvis":
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} har measurement_resolutions.flode_okt_apr_m3 "
+                f"{row['measurement_resolutions'].get('flode_okt_apr_m3')!r}, förväntat 'arsvis'."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3d-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+            )
     counts = {
         "products": len(rows),
         "real_products": sum(not row["synthetic"] for row in rows),
@@ -510,10 +578,14 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  `WAVE_3C_PRODUCT_IDS`, publikt aktiverad signal 2026-10-06-006):",
         "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 48 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
-        "- `scenario_review_status=godkand_intern_pilot_ej_publik`: reserverad status",
-        "  för en framtida intern pilotkohort. Bärs för närvarande av 0 produkter —",
-        "  våg 3c (den enda kohort som hittills haft denna status) blev publikt",
-        "  aktiverad av signal 2026-10-06-006.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3d:",
+        "  Jämtkrafts tre `flow_difference`-produkter Åre/Järpen/Mörsil/Duved/Kall/",
+        "  Hallen/Krokom/Nälden/Föllinge, Brunflo/Opevägen och Östersund/Frösön/Ås,",
+        "  exakt Neptune-kodens `WAVE_3D_PRODUCT_IDS`, handoff 2026-10-07-002,",
+        "  APPROVED_FOR_IMPLEMENTATION: Claude): endast den interna beräkningspiloten",
+        "  är godkänd — `stodjerOptimateScenarioPubliktAktiverad` är FALSK för dessa",
+        "  tre, de ingår inte i `SCENARIO_PUBLIKT_AKTIVERADE_ID` och Neptunes",
+        "  kalkylator visar inte scenariot publikt för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
         f"- Genererad tariffdata: {matrix['generated_on']}; källkatalog `{matrix['catalog_commit']}` / SHA-256 `{matrix['catalog_sha256']}`.",
