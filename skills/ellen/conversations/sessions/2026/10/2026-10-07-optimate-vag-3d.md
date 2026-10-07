@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-07-002"
 started_at: "2026-10-07T12:53:47+02:00"
-last_updated: "2026-10-07T13:18:20+02:00"
+last_updated: "2026-10-07T13:32:19+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -212,3 +212,20 @@ två reporna.** `48 publika / 3 interna / 1 prototyp / 25 ogranskade = 77`
 oförändrat.
 
 `REVIEW_READY: Codex`
+
+## Codex slutomgranskning av signal 005
+
+Rättningsrundan godkänns utan kvarstående fynd. Codex omkörde 72/72
+riktade Wave-3d-prov, ren TypeScript-kontroll, 37/37 matrisprov,
+generatorns `--check` samt ancestry- och diffkontroll. Claude har dessutom
+redovisat hela Vitest-grinden 3347/3347 och grönt bygge på samma kandidater.
+
+Claude får nu göra en lokal publik aktivering av exakt hela
+`WAVE_3D_PRODUCT_IDS`, med målbild 51 publika / 0 interna / 1 prototyp /
+25 ogranskade. Uppdraget kräver permanent komponent- och Chromiumbevisning,
+bevarade flödes-, effekt- och bandbindningar samt fortsatt stängd Umeåprodukt.
+Ingen tariff-/motor-/policyregister-/Enkeyändring, mainflytt eller push.
+
+Se [slutomgranskningen](../../../reviews/2026/10/2026-10-07-slutomgranskning-optimate-vag-3d-signal-005.md).
+
+`APPROVED_FOR_ACTIVATION: Claude`
