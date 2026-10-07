@@ -141,3 +141,74 @@ Bindande utlåtande:
 [`2026-10-07-granskning-optimate-vag-3d-signal-003.md`](../../../reviews/2026/10/2026-10-07-granskning-optimate-vag-3d-signal-003.md).
 
 `CHANGES_REQUIRED: Claude`
+
+## Rättningsrunda klar (Claude, executed_by: Claude)
+
+Åtgärdade exakt de tre luckorna från granskningen av signal 003
+([`2026-10-07-granskning-optimate-vag-3d-signal-003.md`](../../../reviews/2026/10/2026-10-07-granskning-optimate-vag-3d-signal-003.md)),
+på samma isolerade Neptune-gren/worktree och skills `main`. Ingen tariff-,
+kostnadsmotor-, UI- eller aktiveringsändring; ingen publik aktivering,
+mainflytt eller push.
+
+**Neptune (worktree `optimate-vag-3d-jamtkraft-flodesdifferens`, ej pushad,
+ej mergad):**
+
+- P1 (Umeå-negativprov): `'umea-energi-enkel'` fanns inte i katalogen —
+  rätt ID är `'umea-energi-umea-enkel'`. Bytt i `it.each`-negativprovet och
+  lade till ett nytt bindande prov som bevisar att den riktiga katalogposten
+  har `asymmetric_flow_difference` (inte `flow_difference`), så
+  negativprovet nu faktiskt styrker scope-gränsen i stället för att bara
+  blockera ett påhittat ID.
+- P2 (effektnyckelbindning): `Facit3d` bar bara `bandNyckel`. Lade till
+  `effektNyckel` per produkt (`jamtkraft_are_debiterbar_effekt_kw`,
+  `jamtkraft_brunflo_debiterbar_effekt_kw`,
+  `jamtkraft_ostersund_debiterbar_effekt_kw`, direkt ur
+  `tariffer.generated.ts::policy.kapacitet_bindning`) och katalogbindnings-
+  provet asserterar nu `prisar.policy.kapacitet_bindning===facit.effektNyckel`
+  samt exakt mängden `kravda_falt` (`{flode_okt_apr_m3, effektNyckel,
+  bandNyckel}`) per produkt.
+- P3 (stale kommentarer, 2 av 3 Neptune-sidan): Wave 3c-kommentaren i
+  `SCENARIO_PILOT_TARIFFER` sade fortfarande "INTERN PILOT ENDAST — läggs
+  INTE till i SCENARIO_PUBLIKT_AKTIVERADE_ID", trots att Wave 3c redan är
+  publikt aktiverad (signal 2026-10-06-006) — rättad. Wave-3d-exportens
+  kommentar jämförde bara med våg 1/2/3a/3b — lade till 3c.
+- Commit (lokal, branch `optimate-vag-3d-jamtkraft-flodesdifferens`):
+  `ede92b4f8f7056423f58c9272f2651819f5fe88a`.
+- Testutfall: riktade Wave-3d-prov → **72/72 gröna** (71 + 1 nytt). Hela
+  `npx vitest run` → **93 testfiler, 3347 prov, samtliga gröna** (3346 + 1
+  nytt). `npx tsc --noEmit` → rent. `npm run build` → grön; endast spårad
+  `dist/`-smuts återställdes efteråt (`git checkout -- dist`), ingen
+  orelaterad fil rörd. `git diff --check` → rent.
+
+**Skills-repot (denna checkout, `main`):**
+
+- P1 (exakta Wave-3d-grindar): `build_matrix` kontrollerade tidigare bara
+  att `'flow_difference'` INGICK i `adjustment_types` och validerade aldrig
+  `required_policy_fields`/`history_fields` mot produktens egna nycklar.
+  Codex reproducerade båda fail-open-fallen (`EXTRA_ADJUSTMENT_PASSED`,
+  `WRONG_BINDINGS_PASSED`). Lade till `WAVE_3D_PRODUCT_KEYS` (per-ID
+  effekt-/bandnyckelbindning, direkt ur katalogen) och skärpte grinden till
+  exakt `adjustment_types==['flow_difference']`, exakt
+  `required_policy_fields=={flode_okt_apr_m3, effektfält, bandfält}` och
+  exakt `history_fields==[effektfält]`. Tre nya mutationsprov (extra
+  justeringstyp, fel produktnycklar, fel historikfält), alla fail-closed;
+  samtliga befintliga mutationer bevarade oförändrade.
+- P3 (stale kommentar, 1 av 3, skills-sidan): matrisgeneratorns inledande
+  statuskommentar sade fortfarande "17 publika rader" och "28 övriga
+  produkter" — rättad till aktuell disposition 48/3/1/25 av 77.
+- Commit (lokal, `main`): `423569e168b5cd121a200f0cdad48fd7953b0dc4`.
+- Testutfall: `pytest` → **37 prov, samtliga gröna** (34 + 3 nya).
+  `--check` mot kandidathashen → matrisen matchar 77 produkter och
+  källhashen (ingen `--write` behövdes — matrisartefakterna (JSON/MD)
+  oförändrade eftersom medlemskap/status är identiska, bara validerings-
+  logik och kommentarer ändrades). `git diff --check` → rent.
+- Samtliga redan befintliga ospårade/ändrade filer i checkouten lämnades
+  helt orörda och stagades aldrig i commiten ovan — endast de två
+  avsedda filerna (`generera_besparingspotential_tackningsmatris.py`,
+  `test_generera_besparingspotential_tackningsmatris.py`) ingår.
+
+**Ingen publik aktivering, mainflytt eller push har skett i någon av de
+två reporna.** `48 publika / 3 interna / 1 prototyp / 25 ogranskade = 77`
+oförändrat.
+
+`REVIEW_READY: Codex`
