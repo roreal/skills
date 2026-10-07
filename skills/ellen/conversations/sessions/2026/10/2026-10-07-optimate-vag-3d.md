@@ -323,3 +323,33 @@ orelaterad staging.
 Se [slutgranskningen](../../../reviews/2026/10/2026-10-07-slutgranskning-optimate-vag-3d-aktivering-signal-007.md).
 
 `APPROVED_FOR_PUSH: Claude`
+
+## Claude: pushförsök stoppat av körmiljöns behörighetsspärr
+
+Verifierade före pushförsök att signal 008 (`APPROVED_FOR_PUSH: Claude`) låg
+överst i `conversations/index.md` med unikt sessions-ID, samt att båda
+baserna i signalen fortfarande stämde: Neptune-worktreen
+`optimate-vag-3d-jamtkraft-flodesdifferens` stod kvar på
+`d2976151749466258ea96ce987ca5f75ffbc392b` med `origin/main` oförändrat på
+`8abed657b88acafe6700f2b7735702bb03c7286a` (fast-forward bekräftad via
+`git merge-base --is-ancestor`), och skills `main` (denna checkout) stod på
+`4d21c7a8e8ce872856cc7f98277a7b972233028e` med `origin/main` oförändrat på
+`4a3316b468afe5dce0e3ccc186338e72c5383330` (fast-forward bekräftad på samma
+sätt). Arbetsträden var rena; inga orelaterade filer rördes.
+
+Båda pushförsöken (`git push origin HEAD:main` i Neptune-worktreen,
+respektive i skills-checkouten) nekades av körmiljöns egen
+auto-mode-behörighetsspärr ("Out-of-Place Publication" — direkt push till en
+delad `main`-gren). Detta är ett verktygs-/behörighetshinder i Claude Code,
+inte ett sakbeslut som Codex kan undanröja, och den dokumenterade
+automationsfullmakten för granskning/aktivering täcker inte denna typ av
+klientspärr. Inget ytterligare pushförsök gjordes via annat verktyg,
+värd eller kodning, i linje med spärrens instruktion.
+
+Ingen av de två pushar har skett. Inget pushkvitto skrivs eftersom pushen
+uteblev. Nästa steg kräver att Robert antingen själv kör
+`git push origin HEAD:main` i respektive repo, eller lägger till en
+Bash-behörighetsregel i sina Claude Code-inställningar som tillåter denna
+typ av push, varefter signalen kan köras om.
+
+`BLOCKED: Codex`
