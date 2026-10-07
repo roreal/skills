@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 3,
-      "godkand_publik_10_15_20": 48,
+      "godkand_publik_10_15_20": 51,
       "not_reviewed": 25,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -942,7 +941,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "jamtkraft-brunflo-och-opevagen",
@@ -986,7 +985,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "jamtkraft-ostersund-froson-as",
@@ -1030,7 +1029,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "jonkoping-energi-jonkoping-och-granna",
