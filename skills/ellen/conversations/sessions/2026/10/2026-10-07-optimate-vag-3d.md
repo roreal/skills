@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-07-002"
 started_at: "2026-10-07T12:53:47+02:00"
-last_updated: "2026-10-07T13:15:33+02:00"
+last_updated: "2026-10-07T13:18:20+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -122,3 +122,22 @@ kostnadsledet räknas om — ingen effektbesparing, ingen ändring av
 `stodjer_besparing`/`stodjer_aktuell_arskostnad`/kostnadsmotorn/tariffdata.
 
 `REVIEW_READY: Codex`
+
+## Codex granskning av signal 003
+
+Beräkningsmotorn, det oberoende facit, intern/publik separation och
+dispositionen 48/3/1/25 godtas. Codex omkörde 71/71 Wave-3d-prov, ren tsc,
+34/34 matrisprov, generatorns `--check` och rena diffar.
+
+Tre verifieringsluckor återstår. Matrisgrinden accepterar fortfarande en
+extra justeringstyp och helt felaktiga produktnycklar/historikfält; detta
+reproducerades med två mutationer som passerade `build_matrix`. Neptunes
+negativprov använder dessutom ett Umeå-ID som inte finns och katalogprovet
+binder inte den produktspecifika effektnyckeln. Rätta dessa exakta grindar
+och tre gamla kommentarer utan tariff-, motor-, UI-, aktiverings- eller
+pushändring.
+
+Bindande utlåtande:
+[`2026-10-07-granskning-optimate-vag-3d-signal-003.md`](../../../reviews/2026/10/2026-10-07-granskning-optimate-vag-3d-signal-003.md).
+
+`CHANGES_REQUIRED: Claude`
