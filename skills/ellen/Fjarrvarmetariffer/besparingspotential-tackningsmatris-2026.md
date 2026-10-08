@@ -11,7 +11,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
 - `scenario_review_status=godkand_publik_10_15_20`
-  (51 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
+  (52 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
   2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens
   `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:
@@ -31,15 +31,12 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   Jämtkrafts tre `flow_difference`-produkter Åre/Järpen/Mörsil/Duved/Kall/
   Hallen/Krokom/Nälden/Föllinge, Brunflo/Opevägen och Östersund/Frösön/Ås,
   exakt Neptune-kodens `WAVE_3D_PRODUCT_IDS`, publikt aktiverad signal
-  APPROVED_FOR_ACTIVATION: Claude, 2026-10-07):
-  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 51 leverantorId,
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-07; våg 3e: Umeå Energis
+  `asymmetric_flow_difference`-produkt umea-energi-umea-enkel, exakt
+  Neptune-kodens `WAVE_3E_PRODUCT_IDS`, publikt aktiverad signal
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-08):
+  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 52 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
-- `scenario_review_status=godkand_intern_pilot_ej_publik` (1 produkt — våg 3e,
-  handoff 2026-10-08-001, APPROVED_FOR_IMPLEMENTATION: Claude: Umeå Energis
-  `asymmetric_flow_difference`-produkt umea-energi-umea-enkel, exakt Neptune-
-  kodens `WAVE_3E_PRODUCT_IDS`): `stodjerOptimateScenario` är sann (INTERN
-  beräkningspilot), men `stodjerOptimateScenarioPubliktAktiverad` förblir falsk
-  — ingen publik UI-aktivering i denna etapp.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
 - Genererad tariffdata: 2026-09-24; källkatalog `6c0877d` / SHA-256 `463d7492d4ff9e69c91da0270fa586e0c3d0c094467859332649733b02876d38`.
@@ -47,7 +44,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 1, godkand_publik_10_15_20: 51, not_reviewed: 24, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_publik_10_15_20: 52, not_reviewed: 24, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -114,7 +111,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | telge-nat-telge-foretag-och-bostadsrattsforeningar | Telge Nät | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (3 band) | incremental_return_temperature, low_utilization | normalarskorrigerad_energi_mwh, returtemperatur_c, telge_debiterbar_effekt_kw, telge_vald_niva_id | — | — |
 | 2 | temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus | TEMAB Fjärrvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (3 band) | — | temab_debiteringseffekt_kw, temab_vald_taxa_id | historik: temab_debiteringseffekt_kw | — |
 | 2 | trollhattan-energi-trollhattan | Trollhättan Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | trollhattan_debiterbar_effekt_kw, trollhattan_vald_niva_id | historik: trollhattan_debiterbar_effekt_kw | — |
-| 3 | umea-energi-umea-enkel | Umeå Energi | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (7 band) | asymmetric_flow_difference | flode_okt_apr_m3, umea_enkel_arseffekt_a_kw, umea_enkel_kapacitetsfaktor_b, umea_enkel_vald_niva_id | historik: umea_enkel_arseffekt_a_kw | — |
+| 3 | umea-energi-umea-enkel | Umeå Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (7 band) | asymmetric_flow_difference | flode_okt_apr_m3, umea_enkel_arseffekt_a_kw, umea_enkel_kapacitetsfaktor_b, umea_enkel_vald_niva_id | historik: umea_enkel_arseffekt_a_kw | — |
 | 3 | vanerenergi-mariestad-och-toreboda | VänerEnergi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | volume | flode_m3, vanerenergi_debiterbar_effekt_kw, vanerenergi_vald_niva_id | — | — |
 | 4 | vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-spetsig | Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Gustavsberg – Spetsig | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (1 band) | categorical_flow_rate_estimate, documented_exclusion, seasonal_banded_volume_discount_estimate | vattenfall_arsenergi_maj_april_mwh, vattenfall_energiprofil_id, vattenfall_flodeskategori_m3_per_mwh, vattenfall_gustavsberg_spetsig_abonnerad_effekt_kw, vattenfall_gustavsberg_spetsig_vald_niva_id, vattenfall_tre_hogsta_timmedeleffekter_kw | behörighet | capacity_overrun, industrial_deduction |
 | 4 | vattenfall-haninge-tyreso-alta-och-gustavsberg-gustavsberg-standard | Vattenfall - Haninge, Tyresö, Älta och Gustavsberg — Gustavsberg – Standard | kontrakt_arskostnad | not_reviewed | manadspriser | effekt (1 band) | categorical_flow_rate_estimate, documented_exclusion, seasonal_banded_volume_discount_estimate | vattenfall_arsenergi_maj_april_mwh, vattenfall_energiprofil_id, vattenfall_flodeskategori_m3_per_mwh, vattenfall_gustavsberg_standard_abonnerad_effekt_kw, vattenfall_gustavsberg_standard_vald_niva_id, vattenfall_tre_hogsta_timmedeleffekter_kw | behörighet | capacity_overrun, industrial_deduction |

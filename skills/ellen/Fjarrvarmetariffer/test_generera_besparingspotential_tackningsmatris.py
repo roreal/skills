@@ -100,7 +100,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3e_ids = matrix_module.WAVE_3E_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3e_ids
             )
         )
@@ -114,8 +114,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 1,
-                "godkand_publik_10_15_20": 51,
+                "godkand_publik_10_15_20": 52,
                 "not_reviewed": 24,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -124,11 +123,12 @@ class TariffMatrixTests(unittest.TestCase):
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
         # godkand_intern_pilot_ej_publik bars tidigare av WAVE_3C_PRODUCT_IDS
         # (handoff 2026-10-06-002, intern pilot), sedan av WAVE_3D_PRODUCT_IDS
-        # (handoff 2026-10-07-002, intern pilot) innan båda publikt
-        # aktiverades (signal APPROVED_FOR_ACTIVATION-2026-10-07). Sedan
-        # handoff 2026-10-08-001 bars statusen av exakt WAVE_3E_PRODUCT_IDS
-        # (Umeå Energi) — se test_wave_3e_membership_and_status_is_
-        # mechanically_locked nedan.
+        # (handoff 2026-10-07-002, intern pilot) och därefter av
+        # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) innan
+        # samtliga tre publikt aktiverades (signal
+        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08) — statusen bars nu
+        # av 0 produkter men kvarstår i ALLOWED_SCENARIO_REVIEW_STATUSES som
+        # reserverad vokabulär för en framtida intern pilot.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -183,17 +183,18 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(len(wave_3a_status_ids), 17)
         # Signal 2026-10-05-003: våg 3b publikt aktiverad också. Signal
         # 2026-10-06-006 aktiverade därefter våg 3c publikt också, och
-        # signal APPROVED_FOR_ACTIVATION-2026-10-07 aktiverade slutligen
-        # våg 3d publikt också (handoff 2026-10-07-002 hade ursprungligen
-        # lagt in dem som INTERN pilot ENDAST, se WAVE_3D_PRODUCT_IDS).
-        # Handoff 2026-10-08-001 (våg 3e) lade därefter exakt Umeå Energi
-        # in som en NY intern pilot — den enda rad som nu bär
-        # godkand_intern_pilot_ej_publik.
+        # signal APPROVED_FOR_ACTIVATION-2026-10-07 aktiverade våg 3d
+        # publikt också (handoff 2026-10-07-002 hade ursprungligen lagt in
+        # dem som INTERN pilot ENDAST, se WAVE_3D_PRODUCT_IDS). Signal
+        # APPROVED_FOR_ACTIVATION-2026-10-08 aktiverade slutligen våg 3e
+        # publikt också (handoff 2026-10-08-001 hade ursprungligen lagt in
+        # Umeå Energi som en NY intern pilot, se WAVE_3E_PRODUCT_IDS) —
+        # ingen rad bär längre godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3E_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -476,14 +477,15 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(self.by_id[pid]["scenario_review_status"], "godkand_publik_10_15_20")
 
     def test_wave_3e_membership_and_status_is_mechanically_locked(self) -> None:
-        # Handoff 2026-10-08-001 (APPROVED_FOR_IMPLEMENTATION: Claude): Umeå
-        # Energis asymmetric_flow_difference-produkt har exakt en justering,
-        # cost_path==kontrakt_arskostnad, capacity_rule==effekt, exakt sju
-        # effektband, fyra krävda policyfält (effekt/band/B/flöde),
-        # series_fields==[] och status godkand_intern_pilot_ej_publik —
-        # INTERN pilot, EJ publikt aktiverad i denna etapp (verifieras på
-        # Neptune-sidan: WAVE_3E_PRODUCT_IDS ingår INTE i
-        # SCENARIO_PUBLIKT_AKTIVERADE_ID).
+        # Signal APPROVED_FOR_ACTIVATION-2026-10-08 (publik aktivering av
+        # handoff 2026-10-08-001, tidigare APPROVED_FOR_IMPLEMENTATION:
+        # Claude): Umeå Energis asymmetric_flow_difference-produkt har
+        # exakt en justering, cost_path==kontrakt_arskostnad,
+        # capacity_rule==effekt, exakt sju effektband, fyra krävda
+        # policyfält (effekt/band/B/flöde), series_fields==[] och status
+        # godkand_publik_10_15_20 — publikt aktiverad, precis som våg
+        # 1/2/3a/3b/3c/3d (det verifieras på Neptune-sidan:
+        # WAVE_3E_PRODUCT_IDS ingår nu i SCENARIO_PUBLIKT_AKTIVERADE_ID).
         wave_3e_ids = matrix_module.WAVE_3E_PRODUCT_IDS
         self.assertEqual(len(wave_3e_ids), 1)
         for pid in wave_3e_ids:
@@ -500,16 +502,17 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(row["capacity_bands"], 7)
             self.assertEqual(row["series_fields"], [])
             self.assertEqual(row["measurement_resolutions"].get("flode_okt_apr_m3"), "arsvis")
-            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
             self.assertTrue(row["has_capacity_charge"])
             self.assertIn("flode_eller_temperatur", row["risk_flags"])
 
-    def test_wave_3e_is_internal_only_not_publicly_activated(self) -> None:
-        # Till skillnad från våg 3d (publikt aktiverad) ska Umeå INTE bära
-        # godkand_publik_10_15_20 i denna etapp.
+    def test_wave_3e_is_now_publicly_activated_by_this_matrix(self) -> None:
+        # Signal APPROVED_FOR_ACTIVATION-2026-10-08: precis som våg
+        # 1/2/3a/3b/3c/3d bärs Umeås asymmetric_flow_difference-produkt nu
+        # av godkand_publik_10_15_20 — den bär inte längre
+        # godkand_intern_pilot_ej_publik.
         for pid in matrix_module.WAVE_3E_PRODUCT_IDS:
-            self.assertNotEqual(self.by_id[pid]["scenario_review_status"], "godkand_publik_10_15_20")
-            self.assertEqual(self.by_id[pid]["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(self.by_id[pid]["scenario_review_status"], "godkand_publik_10_15_20")
 
     def test_wave_3e_wrong_adjustment_type_is_fail_closed(self) -> None:
         mutated_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
@@ -645,10 +648,13 @@ class TariffMatrixTests(unittest.TestCase):
                 build_matrix(self.source_text)
 
     def test_wave_3e_wrong_status_is_fail_closed(self) -> None:
+        # Sedan signal APPROVED_FOR_ACTIVATION-2026-10-08 är
+        # godkand_publik_10_15_20 den korrekta statusen för Umeå — en
+        # mutation TILL den gamla interna pilotstatusen ska nu falla.
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry["umea-energi-umea-enkel"] = "godkand_publik_10_15_20"
+        mutated_registry["umea-energi-umea-enkel"] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3e_raw_adjustment_params_are_bound_and_fail_closed(self) -> None:
