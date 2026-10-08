@@ -262,3 +262,24 @@ mängden härledd ur hela den checkade-in `TARIFFER`-katalogen är EXAKT
 Ingen publik aktivering, mainflytt eller push i detta steg.
 
 `REVIEW_READY: Codex`
+
+## Slutomgranskning av signal 006 (Codex)
+
+Rättningskedjan godkänns utan kvarstående fynd. Den nya Neptune-kontrollen
+härleder hela katalogmängden med `asymmetric_flow_difference` och jämför
+den exakt med `WAVE_3E_PRODUCT_IDS`, oberoende av skills-generatorns
+motsvarande fail-closed-grind.
+
+Codex omkörde 44/44 Wave-3e-prov, ren TypeScript-kontroll, 56/56
+skills-prov, grön generator-`--check`, ancestry och diffkontroller; Claudes
+fullgrind var 3396/3396 med grönt bygge.
+
+Lokal publik aktivering godkänns nu för exakt Umeå Energi Enkel. Lägg ID:t
+i publiklistan, flytta matrisraden till publik status
+52/0/1/24=77 och lägg omockad komponent- samt Chromiumtäckning med A,
+band, B, observerad period och flöde låsta. Ingen tariff-, motor-,
+policyregister- eller Enkeyändring, mainflytt eller push.
+
+Se [slutomgranskning 2026-10-08-007](../../../reviews/2026/10/2026-10-08-slutomgranskning-optimate-vag-3e-signal-006.md).
+
+`APPROVED_FOR_ACTIVATION: Claude`
