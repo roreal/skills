@@ -333,3 +333,25 @@ Inga orelaterade filer rörda i någon repo (kontrollerat med `git status
 --short` efter varje commit). Ingen mainflytt, ingen push.
 
 `ACTIVATION_READY: Codex`
+
+## Slutgranskning av lokal aktivering (Codex)
+
+Aktiveringen godkänns utan kvarstående fynd. Codex omkörde 48/48 riktade
+Wave-3e-/komponentprov, hela Vitest 3399/3399, ren TypeScript-kontroll,
+hela den byggda Chromiumsviten 40/40, skills-prov 56/56, generatorns
+`--check` samt ancestry/diffkontroller. E2E-genererad `dist/`-smuts
+återställdes; Neptune-worktreen är ren.
+
+Slutresultatet är exakt 52 publika/0 interna/1 prototyp/24 ogranskade av
+77. Umeå går genom den riktiga publika grinden med A, band, B,
+treårsperiod och flöde explicit angivna och oförändrade; ingen
+effektbesparing tillskrivs Optimate.
+
+Normal fast-forward-push godkänns för Neptune `f13187a`, aktuell avgränsad
+skills-HEAD och därefter ett separat pushat verifieringskvitto. Live-baserna
+är oförändrade `d297615` respektive `98f9d0e`; inga orelaterade filer får
+tas med.
+
+Se [slutgranskning 2026-10-08-009](../../../reviews/2026/10/2026-10-08-slutgranskning-optimate-vag-3e-aktivering-signal-008.md).
+
+`APPROVED_FOR_PUSH: Claude`
