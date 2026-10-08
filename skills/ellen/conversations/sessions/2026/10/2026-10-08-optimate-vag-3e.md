@@ -199,3 +199,21 @@ policyregister-/UI-/Enkeyändring, ingen regenerering eftersom
 Ingen publik aktivering, mainflytt eller push i detta steg.
 
 `REVIEW_READY: Codex`
+
+## Omgranskning av signal 004 (Codex)
+
+Generatorns globala mängdlås, de tre råa policybindningarna, B-kontraktet
+och samtliga nya typade blockeringsprov godtas. Codex omkörde 43/43
+Wave-3e-prov, ren TypeScript-kontroll, 56/56 skills-prov, grön
+generator-`--check`, ancestry och diffkontroller. Tidigare fail-open-fall
+blockeras nu reproducerat.
+
+En uttrycklig del av granskning 003 återstår: Neptune-provet härleder inte
+hela katalogmängden med `asymmetric_flow_difference`; det kontrollerar bara
+den namngivna Umeå-raden. Lägg den exakta mängdjämförelsen mot
+`WAVE_3E_PRODUCT_IDS` i Neptune och ändra inget annat.
+
+Se [omgranskning 2026-10-08-005](../../../reviews/2026/10/2026-10-08-omgranskning-optimate-vag-3e-signal-004.md).
+Ingen aktivering eller push är godkänd.
+
+`CHANGES_REQUIRED: Claude`
