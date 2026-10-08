@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-08-001"
 started_at: "2026-10-08T08:57:54+02:00"
-last_updated: "2026-10-08T09:40:00+02:00"
+last_updated: "2026-10-08T15:10:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -217,3 +217,48 @@ Se [omgranskning 2026-10-08-005](../../../reviews/2026/10/2026-10-08-omgransknin
 Ingen aktivering eller push är godkänd.
 
 `CHANGES_REQUIRED: Claude`
+
+## Rättningsrunda (Claude), signal 2026-10-08-006
+
+Åtgärdade exakt den enda återstående P1-punkten ur
+[omgranskning 2026-10-08-005](../../../reviews/2026/10/2026-10-08-omgranskning-optimate-vag-3e-signal-004.md):
+Neptune-provet kontrollerade bara den namngivna Umeå-raden, aldrig att
+mängden härledd ur hela den checkade-in `TARIFFER`-katalogen är EXAKT
+`WAVE_3E_PRODUCT_IDS`.
+
+- **Neptune** (`optimateScenarioVag3e.test.ts`): ny
+  `describe('WAVE_3E_PRODUCT_IDS — maskinell bindning mot katalogens
+  asymmetric_flow_difference-rader')`, samma mönster som den befintliga
+  `WAVE_3A_PRODUCT_IDS`-bindningen i `optimateScenarioVag3a.test.ts`.
+  Filtrerar `Object.entries(ALLA_TARIFFER)` på
+  `justeringar.some(j => j.type === 'asymmetric_flow_difference')` och
+  jämför den härledda, sorterade mängden exakt mot
+  `[...WAVE_3E_PRODUCT_IDS].sort()`, plus en längdkontroll (1). Inget annat
+  ändrat — ingen produktionskod, tariffdata, matris eller status.
+- **skills**: inga ändringar krävdes (omgranskningen avgränsade rättningen
+  till Neptune-sidan). Körde ändå om pytest och generatorkontrollen för att
+  bekräfta oförändrat grönt läge.
+
+### Testutfall
+
+- Neptune: riktade Wave-3e-prov **43 → 44 gröna**, hela `npx vitest run` →
+  **3396/3396 gröna**, `npx tsc --noEmit` rent, `npm run build` OK (genererad
+  `dist/`-smuts återställd med `git checkout -- dist`), `git diff --check`
+  rent.
+- skills: pytest **56/56 gröna** (oförändrat),
+  `generera_besparingspotential_tackningsmatris.py --check` grönt,
+  disposition oförändrad **51/1/1/24=77**, inga filer ändrade.
+
+### Repo-HEAD:ar efter lokal commit
+
+- Neptune `optimate-vag-3e-umea-flodesdifferens`:
+  `4af968a17da282d338297f92f6e2757089c6a4ac` (ovanpå oförändrat
+  `origin/main=d2976151749466258ea96ce987ca5f75ffbc392b`,
+  fast-forward-kandidat, verifierad med `git merge-base --is-ancestor`).
+- skills `main`: oförändrad `9dfc0cd96cbf0eb9b54635879c0d4f28292d0e7c`
+  (ovanpå oförändrat `origin/main=98f9d0e9652e2e9a337aa5a22c790974abb3082d`;
+  ingen ny commit på skills-sidan i detta steg).
+
+Ingen publik aktivering, mainflytt eller push i detta steg.
+
+`REVIEW_READY: Codex`
