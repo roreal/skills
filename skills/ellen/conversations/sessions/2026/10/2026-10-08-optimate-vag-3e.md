@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-08-001"
 started_at: "2026-10-08T08:57:54+02:00"
-last_updated: "2026-10-08T09:15:00+02:00"
+last_updated: "2026-10-08T09:40:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -145,3 +145,57 @@ Full rättningsinstruktion finns i
 Ingen aktivering eller push är godkänd.
 
 `CHANGES_REQUIRED: Claude`
+
+## Rättningsrunda (Claude), signal 2026-10-08-004
+
+Åtgärdade exakt de tre P1-luckorna ur granskning 2026-10-08-003, inom
+rättningsscopet (minimala generator-/teständringar, ingen tariff-/motor-/
+policyregister-/UI-/Enkeyändring, ingen regenerering eftersom
+`--check` redan var grönt med oförändrad disposition).
+
+- **skills** (`generera_besparingspotential_tackningsmatris.py`): ny global
+  mängdkontroll — härledd `asymmetric_flow_difference`-mängd jämförs nu
+  EXAKT mot `WAVE_3E_PRODUCT_IDS` (samma mönster som `WAVE_3A_PRODUCT_IDS`),
+  innan den produktspecifika loopen. Nytt: de tre råa policybindningarna
+  (`kapacitet_bindning`, `kapacitet_band_bindning`,
+  `kapacitet_multiplikator_bindning`) läses nu direkt ur den råa
+  katalogposten och jämförs mot `WAVE_3E_PRODUCT_KEYS`; B-fältets råa
+  kontrakt (`vardetyp=number`, `matupplosning=arsvis`, det slutna
+  intervallet `[0,93; 1,401]`) är låst i samma kontroll. 5 nya pytest-prov:
+  reproduktion av den globala mängdluckan (`partille-energi-partille` får
+  tyst typen, precis som Codex visade), en mutation per rå bindning, och en
+  mutation av B:s `maxvarde`. **51/51 → 56/56 gröna**, `--check` grönt,
+  disposition oförändrad **51/1/1/24=77**.
+- **Neptune** (`optimateScenarioVag3e.test.ts`): Codex påpekade att B var
+  obunden i provet trots att den finns i `kravda_falt` — lade
+  `expect(prisar.policy.kapacitet_multiplikator_bindning).toBe(B_NYCKEL)`
+  på båda ställena där kapacitet_bindning/kapacitet_band_bindning redan
+  bands, plus en assertion på B-fältets råa `vardetyp`/`matupplosning`/
+  `minvarde`/`minvarde_exklusiv`/`maxvarde`. 6 nya typade blockeringsprov:
+  saknat band, saknat B, B under 0,93, B över 1,401, saknad
+  `kapacitetObserveradPeriod`, ogiltig `kapacitetObserveradPeriod`.
+  `underlagMed`/`forvantaBlockering` kunde tidigare inte uttrycka "saknad
+  period" eftersom ett JS-default-parametervärde substituerar även ett
+  explicit skickat `undefined` — upptäckt under testkörning (första
+  versionen av det provet föll felaktigt grönt). Period är nu ett valbart
+  typat argument (`?: string`) utan default; samtliga fyra befintliga
+  anrop uppdaterade att ange det explicit. **37/37 → 43/43 gröna**, hela
+  Vitest **3395/3395 gröna** (ingen annan fil ändrad), `npx tsc --noEmit`
+  rent, `npm run build` OK (genererad `dist/`-smuts återställd med
+  `git checkout -- neptune-marketing/dist`), `git diff --check` rent i
+  båda reporna.
+
+### Repo-HEAD:ar efter lokal commit
+
+- Neptune `optimate-vag-3e-umea-flodesdifferens`: `e8001cfb03b9f70fefb8f145c9edf944d09e46f6`
+  (ovanpå oförändrat `origin/main=d2976151749466258ea96ce987ca5f75ffbc392b`,
+  fast-forward-kandidat, verifierad med `git merge-base --is-ancestor`).
+- skills `main`: `ee70a8b403341864e5cf390e4cd91f7c433afc1c` (ovanpå
+  oförändrat `origin/main=98f9d0e9652e2e9a337aa5a22c790974abb3082d`,
+  fast-forward-kandidat, verifierad med `git merge-base --is-ancestor`;
+  endast de två avgränsade filerna committades, allt sedan tidigare
+  ocommitterat/orelaterat arbete i arbetskopian lämnat orört).
+
+Ingen publik aktivering, mainflytt eller push i detta steg.
+
+`REVIEW_READY: Codex`
