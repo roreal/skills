@@ -616,6 +616,22 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3d-produkten {product_id!r} måste ha scenario_review_status "
                 "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
+    # Rättning, granskning 2026-10-08-003 (P1): WAVE_3E_PRODUCT_IDS påstods
+    # vara exakt hela katalogmängden med asymmetric_flow_difference, men
+    # ingen kontroll jämförde den härledda mängden mot listan — en andra
+    # katalograd kunde tyst få samma justeringstyp utan att build_matrix
+    # föll. Samma mönster som wave_3a_ids ovan.
+    wave_3e_ids = {
+        row["product_id"] for row in rows
+        if "asymmetric_flow_difference" in row["adjustment_types"]
+    }
+    if wave_3e_ids != WAVE_3E_PRODUCT_IDS:
+        raise ValueError(
+            "asymmetric_flow_difference-raderna i snapshoten matchar inte "
+            "WAVE_3E_PRODUCT_IDS. "
+            f"Endast i snapshoten: {sorted(wave_3e_ids - WAVE_3E_PRODUCT_IDS)}; "
+            f"endast i listan: {sorted(WAVE_3E_PRODUCT_IDS - wave_3e_ids)}."
+        )
     for product_id in WAVE_3E_PRODUCT_IDS:
         row = rows_by_id.get(product_id)
         if row is None:
@@ -685,6 +701,47 @@ def build_matrix(text: str) -> dict[str, Any]:
                 raise ValueError(
                     f"Våg 3e-produkten {product_id!r} har {key}={raw_adjustment.get(key)!r} "
                     f"i justeringen, förväntat exakt {expected!r}."
+                )
+
+        # Rättning, granskning 2026-10-08-003 (P1): required_policy_fields
+        # bevisar bara att B FINNS bland kravda_falt, inte att
+        # kapacitetsmotorn faktiskt binder till den. Kontrollera därför de
+        # tre RÅA policybindningarna direkt, och lås samtidigt B-fältets
+        # råa kontrakt (vardetyp/matupplosning/det slutna intervallet
+        # [0,93; 1,401]) mot handoff 2026-10-08-001.
+        raw_policy = raw_price.get("policy") or {}
+        raw_bindings = {
+            "kapacitet_bindning": keys["effekt"],
+            "kapacitet_band_bindning": keys["band"],
+            "kapacitet_multiplikator_bindning": keys["b"],
+        }
+        for binding_key, expected_nyckel in raw_bindings.items():
+            if raw_policy.get(binding_key) != expected_nyckel:
+                raise ValueError(
+                    f"Våg 3e-produkten {product_id!r} har policy.{binding_key}="
+                    f"{raw_policy.get(binding_key)!r}, förväntat exakt {expected_nyckel!r}."
+                )
+        raw_required_fields = raw_policy.get("kravda_falt") or []
+        b_field = next(
+            (field for field in raw_required_fields if field.get("nyckel") == keys["b"]),
+            None,
+        )
+        if b_field is None:
+            raise ValueError(
+                f"Våg 3e-produkten {product_id!r} saknar kravda_falt-posten för {keys['b']!r}."
+            )
+        expected_b_contract = {
+            "vardetyp": "number",
+            "matupplosning": "arsvis",
+            "minvarde": 0.93,
+            "minvarde_exklusiv": False,
+            "maxvarde": 1.401,
+        }
+        for contract_key, expected_value in expected_b_contract.items():
+            if b_field.get(contract_key) != expected_value:
+                raise ValueError(
+                    f"Våg 3e-produkten {product_id!r} har {keys['b']}.{contract_key}="
+                    f"{b_field.get(contract_key)!r}, förväntat exakt {expected_value!r}."
                 )
     counts = {
         "products": len(rows),

@@ -689,6 +689,113 @@ class TariffMatrixTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "justeringar"):
                 build_matrix(self.source_text)
 
+    def test_wave_3e_second_product_with_adjustment_type_is_fail_closed(self) -> None:
+        # Rättning, granskning 2026-10-08-003 (P1): WAVE_3E_PRODUCT_IDS
+        # påstods vara exakt hela katalogmängden med
+        # asymmetric_flow_difference, men ingen kontroll jämförde den
+        # härledda mängden globalt mot listan. Codex reproducerade felet
+        # genom att låta en andra katalograd rapportera typen — build_matrix
+        # slutförde då ändå (GLOBAL_SET_FAIL_OPEN).
+        wave_3e_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
+        second_id = "partille-energi-partille"
+        self.assertIn(second_id, self.by_id)
+        self.assertNotIn(second_id, matrix_module.WAVE_3E_PRODUCT_IDS)
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == second_id:
+                row["adjustment_types"] = sorted({*row["adjustment_types"], "asymmetric_flow_difference"})
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "WAVE_3E_PRODUCT_IDS"):
+                build_matrix(self.source_text)
+        # Kontrollgrupp: samma mutation på det egna Våg 3e-ID:t ska INTE
+        # falla på denna kontroll (bara på en oväntad ANDRA rad).
+        def noop_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            return original_product_row(product_id, entry)
+
+        with patch.object(matrix_module, "product_row", noop_product_row):
+            build_matrix(self.source_text)
+        self.assertIsNotNone(wave_3e_id)
+
+    def test_wave_3e_wrong_raw_capacity_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_bindning": "fel_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3e_wrong_raw_band_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_band_bindning": "fel_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_band_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3e_wrong_raw_multiplier_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_multiplikator_bindning": "fel_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_multiplikator_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3e_b_field_raw_contract_is_fail_closed(self) -> None:
+        # Låser B-fältets råa kontrakt (vardetyp/matupplosning/det slutna
+        # intervallet 0,93-1,401) — en framtida ändring av maxvarde ska
+        # falla här, inte bara upptäckas i Neptune-testerna.
+        mutated_id = next(iter(matrix_module.WAVE_3E_PRODUCT_IDS))
+        keys = matrix_module.WAVE_3E_PRODUCT_KEYS[mutated_id]
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                mutated_fields = [
+                    {**field, "maxvarde": 999} if field.get("nyckel") == keys["b"] else field
+                    for field in price["policy"]["kravda_falt"]
+                ]
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kravda_falt": mutated_fields},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "maxvarde"):
+                build_matrix(self.source_text)
+
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", bad_registry):
