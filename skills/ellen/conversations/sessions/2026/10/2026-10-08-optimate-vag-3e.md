@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-08-001"
 started_at: "2026-10-08T08:57:54+02:00"
-last_updated: "2026-10-08T15:10:00+02:00"
+last_updated: "2026-10-08T15:45:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -283,3 +283,53 @@ policyregister- eller Enkeyändring, mainflytt eller push.
 Se [slutomgranskning 2026-10-08-007](../../../reviews/2026/10/2026-10-08-slutomgranskning-optimate-vag-3e-signal-006.md).
 
 `APPROVED_FOR_ACTIVATION: Claude`
+
+## Lokal publik aktivering (Claude)
+
+Uppdraget i slutomgranskning 006 utfört exakt enligt scope.
+
+**Neptune** (`optimate-vag-3e-umea-flodesdifferens`): `WAVE_3E_PRODUCT_IDS`
+(`umea-energi-umea-enkel`) lagt till `SCENARIO_PUBLIKT_AKTIVERADE_ID`,
+51→52 unika publika ID:n. Inaktuella "INTERN, EJ PUBLIK pilot"-kommentarer
+rättade. Samtliga vågspecifika tester (Vag2/3a/3b/3c/3d/3e,
+`optimateScenario.test.ts`) uppdaterade till 52. Ny permanent, omockad
+komponenttest `OptimateScenarioCardVag3e.positive.test.tsx` mot det
+oberoende facit från handoff 2026-10-08-001 (referens 111 708,875 kr,
+besparing 6 034,80/8 802,20/11 569,60 kr vid 10/15/20 %), med A(20 kW)/
+band(1)/B(1,1)/period(2023-01-01/2025-12-31)/`flode_okt_apr_m3`(1600)
+bit-identiska före/efter. Nytt Scenario 40 i `e2e/kalkylator.smoke.mjs`:
+verklig Umeå-produkt formulär → adapter → motor → kort, preliminär
+märkning, samt fail-closed-bevis att beräkningen blockeras utan
+A/band/B/period/flöde.
+
+Commit Neptune: `f13187af603ae131271331b5840f5ceb269dcaf0` (ovanpå
+oförändrat `origin/main=d2976151749466258ea96ce987ca5f75ffbc392b`).
+
+**skills**: Umeå-raden flyttad från `godkand_intern_pilot_ej_publik` till
+`godkand_publik_10_15_20` i `SCENARIO_STATUS_REGISTRY`. JSON/Markdown
+regenererat mekaniskt via `--write`. Disposition **52 publika / 0 interna /
+1 prototyp / 24 ogranskade = 77**. Testfilens antaganden om den gamla
+51/1-fördelningen och dess wrong-status-fail-closed-prov rättade
+(mutationsriktningen flippad: mutation TILL den gamla interna
+pilotstatusen ska nu falla).
+
+Commit skills: `681a83fa455bb59c11727ac21f31fde8f65fab1e` (ovanpå
+oförändrat `origin/main=98f9d0e9652e2e9a337aa5a22c790974abb3082d`; ingen
+publik aktivering, mainflytt eller push).
+
+### Testutfall (verifierat oberoende av Claude, inte bara självrapporterat)
+
+- Neptune: riktade Vag3e-prov + komponenttest **48/48**, hela Vitest
+  **3399/3399** (en känd flaky timeout i en orelaterad Lidköping-fixtur
+  under miljönedmontering, omkörd och grön, ingen verklig testfail), `npx
+  tsc --noEmit` rent, `npm run build` OK med `dist/`-smuts återställd,
+  fullständig Chromium/Playwright-svit (40 scenarier) grön, `git diff
+  --check` rent.
+- skills: `pytest` **56/56 gröna**, generatorns `--check` bekräftar 77
+  produkter och källhashen, disposition oberoende avläst ur den
+  genererade JSON:en som **52/0/1/24=77**, `git diff --check` rent.
+
+Inga orelaterade filer rörda i någon repo (kontrollerat med `git status
+--short` efter varje commit). Ingen mainflytt, ingen push.
+
+`ACTIVATION_READY: Codex`
