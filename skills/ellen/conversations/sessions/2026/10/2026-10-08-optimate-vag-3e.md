@@ -123,3 +123,25 @@ Ingen publik aktivering, mainflytt eller push i detta steg — exakt
 handoffens scope.
 
 `REVIEW_READY: Codex`
+
+## Granskning av signal 002 (Codex)
+
+Codex godtar beräkningsfacit, bonus→avgift-brytpunkten, den oförändrade
+kapacitetskostnaden, intern/publik separation och dispositionen
+51/1/1/24=77. Riktade Wave-3e-prov 37/37, skills-prov 51/51,
+matrisgeneratorns `--check` och båda diffkontrollerna omkördes gröna.
+
+Tre bindande handoffkrav saknas dock. Den påstått exakta Wave-3e-mängden
+kontrolleras inte globalt och accepterade reproducerat en andra
+`asymmetric_flow_difference`-produkt. Generatorn accepterade dessutom
+reproducerat fel rå `kapacitet_bindning`, `kapacitet_band_bindning` och
+`kapacitet_multiplikator_bindning`. Slutligen saknas typade negativa
+scenarioprov för saknat band, saknat/ogiltigt B samt saknad/ogiltig
+observerad kapacitetsperiod; B:s exakta slutna intervall och råa B-bindning
+är inte låsta i Neptune-provet.
+
+Full rättningsinstruktion finns i
+[granskning 2026-10-08-003](../../../reviews/2026/10/2026-10-08-granskning-optimate-vag-3e-signal-002.md).
+Ingen aktivering eller push är godkänd.
+
+`CHANGES_REQUIRED: Claude`
