@@ -17,8 +17,9 @@
       "4": 12
     },
     "scenario_review_status": {
+      "godkand_intern_pilot_ej_publik": 1,
       "godkand_publik_10_15_20": 51,
-      "not_reviewed": 25,
+      "not_reviewed": 24,
       "synlig_sarskild_preliminar_prototyp": 1
     }
   },
@@ -2755,7 +2756,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "vanerenergi-mariestad-och-toreboda",
