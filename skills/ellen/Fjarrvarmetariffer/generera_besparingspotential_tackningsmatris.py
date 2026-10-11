@@ -37,11 +37,16 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Aktuell disposition av 77 produkter (signal
-# APPROVED_FOR_ACTIVATION: Claude, 2026-10-08, våg 3e publikt aktiverad): 52
-# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E_PRODUCT_IDS), 0
-# `godkand_intern_pilot_ej_publik`, 1 `synlig_sarskild_preliminar_prototyp`
-# (Stockholm Exergi) och de återstående 24 "not_reviewed".
+# katalogen. Aktuell disposition av 77 produkter (session 2026-10-11-002,
+# våg 3f tillagd som INTERN PILOT, ej publikt aktiverad): 52
+# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E_PRODUCT_IDS), 3
+# `godkand_intern_pilot_ej_publik` (våg 3f: goteborg-energi,
+# partille-energi-partille, sodertorns-fjarrvarme-sodertorns-fjarrvarme —
+# IDENTISK med Neptune-kodens WAVE_3F_PRODUCT_IDS i optimateScenario.ts,
+# vars `stodjerOptimateScenario` nu är TRUE men
+# `stodjerOptimateScenarioPubliktAktiverad` förblir FALSE för samtliga tre),
+# 1 `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
+# återstående 21 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -168,6 +173,19 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # ALLOWED_SCENARIO_REVIEW_STATUSES som reserverad vokabulär för en
     # framtida intern pilot, men bärs INTE längre av någon rad i registret.
     "umea-energi-umea-enkel": "godkand_publik_10_15_20",
+    # Våg 3f ("temperaturdifferens", session 2026-10-11-002): exakt de 3
+    # produkter vars `adjustment_types` innehåller `temperature_difference`
+    # — IDENTISK med Neptune-kodens WAVE_3F_PRODUCT_IDS i
+    # optimateScenario.ts. Till SKILLNAD från våg 3d/3e (som båda lades till
+    # som intern pilot men sedan aktiverades publikt i samma leverans) är
+    # denna våg INTERN PILOT ENDAST — `godkand_intern_pilot_ej_publik`
+    # betyder att `stodjerOptimateScenario` är TRUE men
+    # `stodjerOptimateScenarioPubliktAktiverad` förblir FALSE för samtliga
+    # tre i Neptune-koden; Neptunes publika kalkylator visar INTE
+    # 10/15/20-scenariot för dessa tre leverantorId.
+    "goteborg-energi": "godkand_intern_pilot_ej_publik",
+    "partille-energi-partille": "godkand_intern_pilot_ej_publik",
+    "sodertorns-fjarrvarme-sodertorns-fjarrvarme": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff

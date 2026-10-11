@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 24)
+        self.assertEqual(len(not_reviewed), 21)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -104,18 +104,30 @@ class TariffMatrixTests(unittest.TestCase):
                 for pid in wave_3e_ids
             )
         )
+        wave_3f_ids = {
+            "goteborg-energi",
+            "partille-energi-partille",
+            "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
+        }
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3f_ids
+            )
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
-        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids
+        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids | wave_3f_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
                 "godkand_publik_10_15_20": 52,
-                "not_reviewed": 24,
+                "godkand_intern_pilot_ej_publik": 3,
+                "not_reviewed": 21,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -126,9 +138,13 @@ class TariffMatrixTests(unittest.TestCase):
         # (handoff 2026-10-07-002, intern pilot) och därefter av
         # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) innan
         # samtliga tre publikt aktiverades (signal
-        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08) — statusen bars nu
-        # av 0 produkter men kvarstår i ALLOWED_SCENARIO_REVIEW_STATUSES som
-        # reserverad vokabulär för en framtida intern pilot.
+        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08). Statusen bars
+        # sedan av 0 produkter tills session 2026-10-11-002 (Optimate våg
+        # 3f, temperaturdifferens) lade till goteborg-energi,
+        # partille-energi-partille och
+        # sodertorns-fjarrvarme-sodertorns-fjarrvarme som INTERN PILOT
+        # ENDAST — till skillnad från 3c/3d/3e är våg 3f INTE publikt
+        # aktiverad i Neptune-koden.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -188,13 +204,24 @@ class TariffMatrixTests(unittest.TestCase):
         # dem som INTERN pilot ENDAST, se WAVE_3D_PRODUCT_IDS). Signal
         # APPROVED_FOR_ACTIVATION-2026-10-08 aktiverade slutligen våg 3e
         # publikt också (handoff 2026-10-08-001 hade ursprungligen lagt in
-        # Umeå Energi som en NY intern pilot, se WAVE_3E_PRODUCT_IDS) —
-        # ingen rad bär längre godkand_intern_pilot_ej_publik.
+        # Umeå Energi som en NY intern pilot, se WAVE_3E_PRODUCT_IDS).
+        # Session 2026-10-11-002 (Optimate våg 3f, temperaturdifferens) lade
+        # därefter till EXAKT tre nya rader som INTERN PILOT ENDAST —
+        # goteborg-energi, partille-energi-partille och
+        # sodertorns-fjarrvarme-sodertorns-fjarrvarme — INTE publikt
+        # aktiverade i Neptune-koden, till skillnad från 3a–3e.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(
+            internal_pilot_ids,
+            {
+                "goteborg-energi",
+                "partille-energi-partille",
+                "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
+            },
+        )
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
