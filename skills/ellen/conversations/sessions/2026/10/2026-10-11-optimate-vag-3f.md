@@ -149,3 +149,103 @@ skills-prov och grön generatorcheck. Dispositionen är fortsatt
 Se [granskning 2026-10-12-001](../../../reviews/2026/10/2026-10-12-granskning-optimate-vag-3f-signal-003.md).
 
 `CHANGES_REQUIRED: Claude`
+
+## Rättelse 2026-10-12 (append-only)
+
+Granskning 2026-10-12-001 (P2) påpekade att den ursprungliga
+`REVIEW_READY`-postens formulering **"Ingen motorkod
+(`beraknaOptimateScenario`/`beraknaArsprodukt*`/`arskostnad`/
+`returtemperaturjusteringGoteborg`) ... ändrad"** är för bred. Ingen
+beräkningsformel ändrades, men `besparingsvarde.ts` ändrades faktiskt
+genom den uttryckligen tillåtna och handoff-godkända tilläggsraden
+`'goteborg-energi'` i `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER` (samma
+ändring som redan var beskriven separat under "Implementation och
+verifiering"). Den korrekta formuleringen är: ingen
+beräkningsformel/motorlogik ändrades, men en fail-closed allowlist i
+`besparingsvarde.ts` utökades med exakt ett ID, enligt handoffets
+uttryckliga tillstånd.
+
+## Rättningsrunda efter omgranskning 2026-10-12-001 (Claude)
+
+Åtgärdade exakt rättningsscopet ur
+[omgranskning 2026-10-12-001](../../../reviews/2026/10/2026-10-12-granskning-optimate-vag-3f-signal-003.md).
+Ingen tariffdata, beräkningsformel, produktionsbackend, policyregister,
+kund-UI eller Enkey-fil ändrad. Ingen publik aktivering, mainflytt eller
+push.
+
+**Neptune** — samma isolerade worktree
+`/private/tmp/neptune-academy-optimate-vag-3f`, gren
+`optimate-vag-3f-temperaturdifferens`, ovanpå oförändrat
+`origin/main=f13187af603ae131271331b5840f5ceb269dcaf0` (fast-forward
+verifierat med `git merge-base --is-ancestor`). Lokal commit
+`dd3b081538d2a8db65a1928e03a2df5f42a78d07` "Rätta omgranskning
+2026-10-12-001 (P1/P2): utöka Neptunes våg 3f-kataloggrind" ovanpå
+`573bd14`.
+
+- Utökade `optimateScenarioVag3f.test.ts`: ny assertion för
+  justeringens `reference`/`formula` i det befintliga katalogprovet; nytt
+  prov som binder avvikelse_c:s råa `indatafalt`-kontrakt (°C, default 0,
+  `[-10;10]`, `heltal=false`); nytt prov för `capacity_rule='effekt'` och
+  bandantal 6/7/4; nytt prov som bevisar att Göteborg helt saknar
+  `policy`/`_kraver_kontrakt`/`eligibility`; nytt `it.each`-prov som binder
+  Partilles och Södertörns exakta policyfält (`{avvikelse_c,
+  <leverantör>_debiterbar_effekt_kw, <leverantör>_vald_niva_id}`), samtliga
+  `arsvis`/icke-rullande/icke-serie, samt `kapacitet_bindning`/
+  `kapacitet_band_bindning`/`kapacitet_multiplikator_bindning=null`.
+- Bytte legacy-negativprovets ID från det obefintliga
+  `vattenfall-standard-uppsala` till det verkliga, ej piloterade
+  `gotlands-energi-gotland-taxa-21-over-50-mwh-ar` (finns i katalogen,
+  saknar `policy`, saknas i `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER`).
+- Låste den felaktiga månadsseriens prov till den faktiska typade orsaken
+  `OptimateScenarioBlockerat('invalid_total_serie')` i stället för att
+  acceptera endera av två feltyper (verifierat mot `giltigSerie`-kontrollen
+  i `beraknaOptimateScenario`, som når detta fel innan
+  backend-entryns `KontraktBlockerat`).
+- Ingen produktionskod (`optimateScenario.ts`, `besparingsvarde.ts`,
+  `fjarrvarme.ts`) ändrad i denna rättningsrunda — endast testfilen.
+- Testutfall (verifierat självständigt av Claude): nya/riktade
+  Wave-3f-prov 81/81; hela Vitest-sviten 3480/3480 (97/97 filer); `npx tsc
+  --noEmit` rent; `npm run build` OK, genererad `dist/`-smuts återställd
+  med `git checkout -- dist/`; `git diff --check` rent.
+
+**skills** — lokal commit
+`6ab2c8ca9414ae8fb300fbb4f64808c00bb3362b` "Rätta omgranskning
+2026-10-12-001 (P1/P2): lägg Wave-3f-grind i matrisgeneratorn", på `main`,
+ovanpå oförändrat `origin/main=9487764ee64afa9df57b94bf22dfc337689e0dc1`
+(fast-forward verifierat), ovanpå `9f0a4c6`.
+
+- `generera_besparingspotential_tackningsmatris.py`: nytt fryst
+  `WAVE_3F_PRODUCT_IDS`/`WAVE_3F_PRODUCT_PARAMS`/`WAVE_3F_FORMULA`/
+  `WAVE_3F_AVVIKELSE_C_CONTRACT`, och en ny `build_matrix()`-grind (samma
+  mönster som Våg 3e) som binder: hela den globala
+  `temperature_difference`-mängden exakt mot listan; per produkt exakt en
+  justering, säsongsmånaderna okt–apr, sats/referens/formel, `avvikelse_c`:s
+  råa indatafältskontrakt, `capacity_rule='effekt'` och bandantal 6/7/4;
+  tomma serie-/historikfält och inget behörighetsvillkor; och för
+  Partille/Södertörn exakta `required_policy_fields`,
+  `measurement_resolutions=arsvis` samt råa
+  `kapacitet_bindning`/`kapacitet_band_bindning`/
+  `kapacitet_multiplikator_bindning=null`. Reproducerade Codex egen
+  mutation (Göteborgs `reference` → `FELAKTIG_REFERENS`) manuellt och
+  bekräftade att `build_matrix()` nu kastar `ValueError` innan rättningen
+  skrevs, och att den INTE längre gör det efter rättningen.
+- Lade en tredje markdown-punkt för
+  `scenario_review_status=godkand_intern_pilot_ej_publik` i
+  `render_markdown()` (Göteborg/Partille/Södertörn, ej publikt visade).
+- Matris regenererad ENDAST via generatorn (`--write`); JSON-innehållet
+  var bit-identiskt (ingen radändring), bara Markdown-texten ändrades.
+- Verifierat självständigt av Claude: `python3 -I
+  generera_besparingspotential_tackningsmatris.py --check` → "matchar 77
+  produkter och källhashen"; pytest 56/56; `counts.scenario_review_status`
+  oförändrad `{godkand_publik_10_15_20: 52,
+  godkand_intern_pilot_ej_publik: 3, synlig_sarskild_preliminar_prototyp: 1,
+  not_reviewed: 21}` = 77; `git diff --check` rent. Samtliga tidigare
+  ospårade/ändrade, orelaterade filer (inklusive `conversations/automation/`)
+  lämnades OFÖRÄNDRADE och ostagade; endast de två avsedda filerna
+  (`generera_besparingspotential_tackningsmatris.py` och den regenererade
+  `.md`) staga­des och committades.
+
+Slutlig disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
+ogranskade = 77**. Ingen publik aktivering, mainflytt eller push.
+
+`REVIEW_READY: Codex`
