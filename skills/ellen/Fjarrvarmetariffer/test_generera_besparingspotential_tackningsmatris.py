@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 21)
+        self.assertEqual(len(not_reviewed), 19)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -115,18 +115,27 @@ class TariffMatrixTests(unittest.TestCase):
                 for pid in wave_3f_ids
             )
         )
+        wave_3g_ids = matrix_module.WAVE_3G_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3g_ids
+            )
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
-        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids | wave_3f_ids
+        } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids | wave_3f_ids \
+            | wave_3g_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 2,
                 "godkand_publik_10_15_20": 55,
-                "not_reviewed": 21,
+                "not_reviewed": 19,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -136,11 +145,13 @@ class TariffMatrixTests(unittest.TestCase):
         # (handoff 2026-10-06-002, intern pilot), sedan av WAVE_3D_PRODUCT_IDS
         # (handoff 2026-10-07-002, intern pilot), därefter av
         # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) och
-        # slutligen av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern
+        # sedan av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern
         # pilot) innan samtliga publikt aktiverades (signal
         # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12).
-        # Statusen bars sedan 2026-10-12 av 0 produkter igen — ingen rad i
-        # registret bär den längre.
+        # Statusen bars sedan 2026-10-12 åter av exakt WAVE_3G_PRODUCT_IDS
+        # (handoff/session 2026-10-12-012, Lidköpings signerade
+        # flödesjustering) — se test_wave_3g_membership_and_status_is_
+        # mechanically_locked nedan.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -206,12 +217,15 @@ class TariffMatrixTests(unittest.TestCase):
         # partille-energi-partille och
         # sodertorns-fjarrvarme-sodertorns-fjarrvarme — och signal
         # APPROVED_FOR_ACTIVATION-2026-10-12 aktiverade dem publikt också.
-        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
+        # Handoff/session 2026-10-12-012 (Optimate våg 3g, Lidköpings
+        # signerade flödesjustering) lade därefter till EXAKT två nya rader
+        # som INTERN PILOT ENDAST — lidkoping-energi-lidkoping-041-kw och
+        # lidkoping-energi-lidkoping-42-kw — ÄNNU EJ publikt aktiverade.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3G_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -1306,6 +1320,398 @@ class TariffMatrixTests(unittest.TestCase):
 
         with patch.object(matrix_module, "latest_price", mutated_latest_price):
             with self.assertRaisesRegex(ValueError, "kapacitet_multiplikator_bindning"):
+                build_matrix(self.source_text)
+
+    # -------------------------------------------------------------------
+    # Våg 3g ("Lidköpings signerade månadsvisa flödesjustering", handoff/
+    # session 2026-10-12-012, INTERN PILOT ENDAST) — samma mutationsmönster
+    # som våg 3f ovan.
+    # -------------------------------------------------------------------
+    def test_wave_3g_membership_and_status_is_mechanically_locked(self) -> None:
+        wave_3g_ids = matrix_module.WAVE_3G_PRODUCT_IDS
+        self.assertEqual(len(wave_3g_ids), 2)
+        for pid, params in matrix_module.WAVE_3G_PRODUCT_PARAMS.items():
+            row = self.by_id[pid]
+            self.assertEqual(row["adjustment_types"], ["signed_monthly_flow_adjustment"])
+            self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
+            self.assertEqual(row["capacity_rule"], "effekt")
+            self.assertEqual(row["capacity_bands"], params["capacity_bands"])
+            self.assertEqual(
+                row["series_fields"], sorted(matrix_module.WAVE_3G_SERIES_FIELDS)
+            )
+            self.assertEqual(
+                row["history_fields"], sorted(matrix_module.WAVE_3G_SERIES_FIELDS)
+            )
+            self.assertFalse(row["has_eligibility_rule"])
+            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            keys = params["keys"]
+            self.assertEqual(
+                row["required_policy_fields"],
+                sorted({keys["effekt"], keys["band"], *matrix_module.WAVE_3G_SERIES_FIELDS}),
+            )
+            for falt in (keys["effekt"], keys["band"]):
+                self.assertEqual(row["measurement_resolutions"].get(falt), "arsvis")
+            for falt in matrix_module.WAVE_3G_SERIES_FIELDS:
+                self.assertEqual(row["measurement_resolutions"].get(falt), "manadsvis")
+
+    def test_wave_3g_params_registry_missing_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3G_PRODUCT_PARAMS)
+        del mutated_params["lidkoping-energi-lidkoping-42-kw"]
+        with patch.object(matrix_module, "WAVE_3G_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3G_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_params_registry_extra_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3G_PRODUCT_PARAMS)
+        mutated_params["stockholm-exergi"] = dict(
+            next(iter(matrix_module.WAVE_3G_PRODUCT_PARAMS.values()))
+        )
+        with patch.object(matrix_module, "WAVE_3G_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3G_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_adjustment_type_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["adjustment_types"] = [
+                    t for t in row["adjustment_types"] if t != "signed_monthly_flow_adjustment"
+                ]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "signed_monthly_flow_adjustment"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_extra_adjustment_type_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["adjustment_types"] = sorted({*row["adjustment_types"], "volume"})
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "adjustment_types"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_second_product_with_adjustment_type_is_fail_closed(self) -> None:
+        third_id = "stockholm-exergi"
+        self.assertIn(third_id, self.by_id)
+        self.assertNotIn(third_id, matrix_module.WAVE_3G_PRODUCT_IDS)
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == third_id:
+                row["adjustment_types"] = sorted(
+                    {*row["adjustment_types"], "signed_monthly_flow_adjustment"}
+                )
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "WAVE_3G_PRODUCT_IDS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_faktor_n_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "justeringar": [{**price["justeringar"][0], "faktor_n": 999}],
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "faktor_n"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_field_key_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "justeringar": [{**price["justeringar"][0], "kund_volym_falt": "fel_nyckel"}],
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kund_volym_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_extra_adjustment_entry_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "justeringar": [*price["justeringar"], dict(price["justeringar"][0])],
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_cost_path_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["cost_path"] = "legacy_besparing"
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "cost_path"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_capacity_rule_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["capacity_rule"] = "piecewise_polynomial"
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "capacity_rule"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_band_count_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["capacity_bands"] = row["capacity_bands"] + 1
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "effektband"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_required_policy_fields_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["required_policy_fields"] = ["fel_effekt_kw", "fel_band_id"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_measurement_resolution_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        mutated_field = matrix_module.WAVE_3G_PRODUCT_PARAMS[mutated_id]["keys"]["effekt"]
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    **row["measurement_resolutions"],
+                    mutated_field: "manadsvis",
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_extra_series_field_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["series_fields"] = [*row["series_fields"], "extra_series"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "series_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_missing_series_field_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["series_fields"] = row["series_fields"][:-1]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "series_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_extra_history_field_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["history_fields"] = [*row["history_fields"], "extra_history"]
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "history_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_eligibility_rule_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["has_eligibility_rule"] = True
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "behörighetsvillkor"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_status_is_fail_closed(self) -> None:
+        # Till skillnad från våg 3f (nu publikt aktiverad) är den korrekta
+        # statusen här godkand_intern_pilot_ej_publik — en mutation TILL
+        # godkand_publik_10_15_20 (en förtida "aktivering") ska falla.
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry[next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))] = "godkand_publik_10_15_20"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_raw_capacity_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_bindning": "fel_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_raw_band_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_band_bindning": "fel_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_band_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_extra_multiplier_binding_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = {
+                    **price,
+                    "policy": {**price["policy"], "kapacitet_multiplikator_bindning": "ovantad_nyckel"},
+                }
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "kapacitet_multiplikator_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_wrong_effekt_min_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                mutated_fields = [
+                    {**field, "minvarde": 999} if field.get("nyckel") == "lidkoping_debiterbar_effekt_kw" else field
+                    for field in price["policy"]["kravda_falt"]
+                ]
+                price = {**price, "policy": {**price["policy"], "kravda_falt": mutated_fields}}
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "lidkoping_debiterbar_effekt_kw.minvarde"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_tm_wrong_min_exclusivity_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                mutated_fields = [
+                    {**field, "minvarde_exklusiv": False} if field.get("nyckel") == "lidkoping_nat_avkylning_c" else field
+                    for field in price["policy"]["kravda_falt"]
+                ]
+                price = {**price, "policy": {**price["policy"], "kravda_falt": mutated_fields}}
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "lidkoping_nat_avkylning_c"):
+                build_matrix(self.source_text)
+
+    def test_wave_3g_tm_missing_attestation_requirement_is_fail_closed(self) -> None:
+        mutated_id = next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                mutated_fields = [
+                    {**field, "krav_attestering": False} if field.get("nyckel") == "lidkoping_nat_avkylning_c" else field
+                    for field in price["policy"]["kravda_falt"]
+                ]
+                price = {**price, "policy": {**price["policy"], "kravda_falt": mutated_fields}}
+            return price
+
+        with patch.object(matrix_module, "latest_price", mutated_latest_price):
+            with self.assertRaisesRegex(ValueError, "krav_attestering"):
                 build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
