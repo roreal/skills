@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 3,
-      "godkand_publik_10_15_20": 52,
+      "godkand_publik_10_15_20": 55,
       "not_reviewed": 21,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -721,7 +720,7 @@
         "flode_eller_temperatur"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
@@ -2140,7 +2139,7 @@
         "flode_eller_temperatur"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "piteenergi-norrfjarden-och-sjulnas",
@@ -2421,7 +2420,7 @@
         "flode_eller_temperatur"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "stockholm-exergi",

@@ -111,7 +111,7 @@ class TariffMatrixTests(unittest.TestCase):
         }
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3f_ids
             )
         )
@@ -125,8 +125,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_publik_10_15_20": 52,
-                "godkand_intern_pilot_ej_publik": 3,
+                "godkand_publik_10_15_20": 55,
                 "not_reviewed": 21,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -135,16 +134,13 @@ class TariffMatrixTests(unittest.TestCase):
     def test_scenario_status_vocabulary_still_allows_reserved_internal_pilot_status(self) -> None:
         # godkand_intern_pilot_ej_publik bars tidigare av WAVE_3C_PRODUCT_IDS
         # (handoff 2026-10-06-002, intern pilot), sedan av WAVE_3D_PRODUCT_IDS
-        # (handoff 2026-10-07-002, intern pilot) och därefter av
-        # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) innan
-        # samtliga tre publikt aktiverades (signal
-        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08). Statusen bars
-        # sedan av 0 produkter tills session 2026-10-11-002 (Optimate våg
-        # 3f, temperaturdifferens) lade till goteborg-energi,
-        # partille-energi-partille och
-        # sodertorns-fjarrvarme-sodertorns-fjarrvarme som INTERN PILOT
-        # ENDAST — till skillnad från 3c/3d/3e är våg 3f INTE publikt
-        # aktiverad i Neptune-koden.
+        # (handoff 2026-10-07-002, intern pilot), därefter av
+        # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) och
+        # slutligen av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern
+        # pilot) innan samtliga publikt aktiverades (signal
+        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12).
+        # Statusen bars sedan 2026-10-12 av 0 produkter igen — ingen rad i
+        # registret bär den längre.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -206,22 +202,16 @@ class TariffMatrixTests(unittest.TestCase):
         # publikt också (handoff 2026-10-08-001 hade ursprungligen lagt in
         # Umeå Energi som en NY intern pilot, se WAVE_3E_PRODUCT_IDS).
         # Session 2026-10-11-002 (Optimate våg 3f, temperaturdifferens) lade
-        # därefter till EXAKT tre nya rader som INTERN PILOT ENDAST —
-        # goteborg-energi, partille-energi-partille och
-        # sodertorns-fjarrvarme-sodertorns-fjarrvarme — INTE publikt
-        # aktiverade i Neptune-koden, till skillnad från 3a–3e.
+        # till EXAKT tre nya rader som INTERN PILOT ENDAST — goteborg-energi,
+        # partille-energi-partille och
+        # sodertorns-fjarrvarme-sodertorns-fjarrvarme — och signal
+        # APPROVED_FOR_ACTIVATION-2026-10-12 aktiverade dem publikt också.
+        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(
-            internal_pilot_ids,
-            {
-                "goteborg-energi",
-                "partille-energi-partille",
-                "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
-            },
-        )
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -831,9 +821,10 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_wave_3f_membership_and_status_is_mechanically_locked(self) -> None:
         # Rättning, omgranskning 2026-10-12-003: bevisar att en OMUTERAD
-        # snapshot fortfarande ger exakt intern status för samtliga tre
+        # snapshot fortfarande ger exakt publik status för samtliga tre
         # Wave-3f-ID:n (Göteborg Energi, Partille Energi, Södertörns
         # Fjärrvärme) — kravet från granskning 2026-10-12-001/-003 p.3.
+        # Signal APPROVED_FOR_ACTIVATION-2026-10-12 aktiverade dem publikt.
         wave_3f_ids = matrix_module.WAVE_3F_PRODUCT_IDS
         self.assertEqual(len(wave_3f_ids), 3)
         for pid, params in matrix_module.WAVE_3F_PRODUCT_PARAMS.items():
@@ -845,7 +836,7 @@ class TariffMatrixTests(unittest.TestCase):
             self.assertEqual(row["series_fields"], [])
             self.assertEqual(row["history_fields"], [])
             self.assertFalse(row["has_eligibility_rule"])
-            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
             if "keys" in params:
                 keys = params["keys"]
                 self.assertEqual(
@@ -1248,10 +1239,13 @@ class TariffMatrixTests(unittest.TestCase):
                 build_matrix(self.source_text)
 
     def test_wave_3f_wrong_status_is_fail_closed(self) -> None:
+        # Sedan signal APPROVED_FOR_ACTIVATION-2026-10-12 är
+        # godkand_publik_10_15_20 den korrekta statusen för samtliga tre — en
+        # mutation TILL den gamla interna pilotstatusen ska nu falla.
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry[next(iter(matrix_module.WAVE_3F_PRODUCT_IDS))] = "godkand_publik_10_15_20"
+        mutated_registry[next(iter(matrix_module.WAVE_3F_PRODUCT_IDS))] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3f_wrong_raw_capacity_binding_is_fail_closed(self) -> None:
