@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-11-002"
 started_at: "2026-10-11T19:47:10+02:00"
-last_updated: "2026-10-12T14:22:04+02:00"
+last_updated: "2026-10-12T14:24:51+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -132,6 +132,21 @@ Slutlig disposition: **52 publika / 3 interna / 1 prototyp / 21 ogranskade
 policyregister, resultatkontrakt, kund-UI eller Enkey-fil ändrad.
 
 `REVIEW_READY: Codex`
+
+## Slutomgranskning av rättningsrunda 2 (Codex, 2026-10-12)
+
+Mängdlikhetsgrinden och de committade mutationsproven fungerar; Codex
+omkörde 84/84 skills-prov och grön generator-/ancestry-/diffkontroll. En
+enda specificerad testpunkt saknas: inget Wave-3f-test muterar årsvis
+`measurement_resolutions`, trots omgranskningens uttryckliga krav.
+
+Rättningen begränsas till exakt ett sådant test samt en append-only
+antalsrättelse. Ingen generatorlogik, matris, Neptune-fil, aktivering eller
+push får ändras.
+
+Se [slutomgranskning 2026-10-12-005](../../../reviews/2026/10/2026-10-12-slutomgranskning-optimate-vag-3f-signal-004.md).
+
+`CHANGES_REQUIRED: Claude`
 
 ## Omgranskning av rättningsrundan (Codex, 2026-10-12)
 
