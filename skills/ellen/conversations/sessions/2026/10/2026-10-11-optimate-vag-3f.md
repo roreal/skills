@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-11-002"
 started_at: "2026-10-11T19:47:10+02:00"
-last_updated: "2026-10-12T13:53:55+02:00"
+last_updated: "2026-10-12T14:22:04+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -263,5 +263,71 @@ ovanpå oförändrat `origin/main=9487764ee64afa9df57b94bf22dfc337689e0dc1`
 
 Slutlig disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
 ogranskade = 77**. Ingen publik aktivering, mainflytt eller push.
+
+## Rättningsrunda 2 (omgranskning 2026-10-12-003, signal `CHANGES_REQUIRED: Claude`)
+
+Codex omgranskade rättningsrunda 1 (`2026-10-12-omgranskning-optimate-vag-3f-signal-002.md`,
+review_id `2026-10-12-003`): 86/86 riktade Neptune-prov, ren TypeScript-
+kontroll, 56/56 skills-prov och generatorns `--check` gröna, dispositionen
+oförändrad 52/3/1/21=77. En avgränsad P1 kvarstod:
+
+**P1 — mutationsproven saknades och parameterregistret kunde tappa en
+produkt.** Rättningscommit `6ab2c8c` ändrade bara generatorn och den
+genererade Markdownfilen; `test_generera_besparingspotential_tackningsmatris.py`
+var oförändrad (56 prov). Codex reproducerade ett konkret glapp: skulle
+`WAVE_3F_PRODUCT_PARAMS` tappa `sodertorns-fjarrvarme-sodertorns-fjarrvarme`
+medan `WAVE_3F_PRODUCT_IDS` fortfarande innehöll produkten, slutförde
+`build_matrix()` ändå utan fel (`params_missing FAIL_OPEN`), eftersom
+per-produktloopen bara itererade parameterregistret.
+
+**skills** — lokal commit
+`6a24f75760781d96e20c31d746b0ef792a0ba988` "Rätta omgranskning 2026-10-12-003
+(P1): fail-closed-grind för WAVE_3F_PRODUCT_PARAMS och mutationsprov", på
+`main`, ovanpå oförändrat `origin/main=9487764ee64afa9df57b94bf22dfc337689e0dc1`
+(fast-forward verifierat), direkt ovanpå `1511317` (Codex egen
+omgranskningscommit "Omgranska Optimate våg 3f rättningsrunda 1",
+oaktiverad/opushad).
+
+- `generera_besparingspotential_tackningsmatris.py`: ny explicit kontroll
+  `set(WAVE_3F_PRODUCT_PARAMS) != WAVE_3F_PRODUCT_IDS` innan
+  per-produktloopen, så en registerdivergens kastar `ValueError` i stället
+  för att tyst slutföra. Ingen tariffdata, beräkningsformel eller
+  dispositionsändring.
+- `test_generera_besparingspotential_tackningsmatris.py`: 28 nya
+  tabellstyrda/riktade mutationsprov för hela Wave-3f-kontraktet enligt
+  omgranskningens punktlista:
+  - global `temperature_difference`-mängd vs. `WAVE_3F_PRODUCT_IDS`
+    (saknad/extra produkt via en oväntad andra katalograd);
+  - mismatch mellan `WAVE_3F_PRODUCT_IDS` och `WAVE_3F_PRODUCT_PARAMS`
+    (saknad respektive extra produkt i parameterregistret — den konkreta
+    P1-regressionen);
+  - fel/extra `adjustment_types`, fel `months`/`rate`/`reference`/`formula`,
+    extra justeringsrad;
+  - `avvikelse_c`: fel `enhet`/`default`/`min_varde`/`max_varde`/`heltal`,
+    samt saknad fältpost;
+  - fel `cost_path`, `capacity_rule`, fel bandantal;
+  - fel `required_policy_fields` (Partille/Södertörn), extra serie-/
+    historikfält, behörighetsvillkor, fel `scenario_review_status`;
+  - Partilles/Södertörns råa `kapacitet_bindning`/`kapacitet_band_bindning`
+    samt att `kapacitet_multiplikator_bindning` måste förbli `None` (till
+    skillnad från våg 3e har ingen våg 3f-produkt en B-multiplikator).
+  - En egen membership-/statustest bevisar dessutom att den OMUTERADE
+    snapshoten fortfarande ger exakt intern status
+    (`godkand_intern_pilot_ej_publik`) och exakt kontrakt för alla tre
+    Wave-3f-ID:n (omgranskningens krav p.3).
+- Matrisen regenererades INTE: `--check` bekräftade att utdata redan matchar
+  källhashen (ingen JSON-/Markdown-ändring krävdes av denna rättning).
+- Verifierat av Claude: skills pytest 84/84 (upp från 56; +28 nya prov),
+  `python3 -I generera_besparingspotential_tackningsmatris.py --check` →
+  "matchar 77 produkter och källhashen", `git diff --check` rent på båda
+  ändrade filerna. Samtliga tidigare ospårade/ändrade, orelaterade filer
+  (inklusive `conversations/automation/` och
+  `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`)
+  lämnades OFÖRÄNDRADE och ostagade; endast de två avsedda filerna staga­des
+  och committades.
+
+Ingen Neptune-ändring gjordes (omgranskningen krävde ingen). Slutlig
+disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
+ogranskade = 77**. Ingen aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
