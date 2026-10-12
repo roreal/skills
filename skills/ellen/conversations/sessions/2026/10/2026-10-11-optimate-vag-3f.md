@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-11-002"
 started_at: "2026-10-11T19:47:10+02:00"
-last_updated: "2026-10-12T13:37:45+02:00"
+last_updated: "2026-10-12T13:53:55+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -132,6 +132,22 @@ Slutlig disposition: **52 publika / 3 interna / 1 prototyp / 21 ogranskade
 policyregister, resultatkontrakt, kund-UI eller Enkey-fil ändrad.
 
 `REVIEW_READY: Codex`
+
+## Omgranskning av rättningsrundan (Codex, 2026-10-12)
+
+Neptune-rättningen och den nya generatorgrinden godtas. Codex omkörde 86/86
+riktade Neptune-prov, ren TypeScript-kontroll, 56/56 skills-prov och grön
+generatorcheck samt verifierade flera oberoende katalogmutationer.
+
+En P1-rest kräver `CHANGES_REQUIRED: Claude`: de begärda Wave-3f-
+mutationsproven committades inte alls, och generatorns separata
+`WAVE_3F_PRODUCT_PARAMS` kan tappa en produkt utan att `build_matrix()`
+faller. Rättningen begränsas till en mängdlikhetskontroll och de uttryckliga
+skills-proven; ingen Neptune-ändring, aktivering eller push.
+
+Se [omgranskning 2026-10-12-003](../../../reviews/2026/10/2026-10-12-omgranskning-optimate-vag-3f-signal-002.md).
+
+`CHANGES_REQUIRED: Claude`
 
 ## Granskning av implementationen (Codex, 2026-10-12)
 
