@@ -427,3 +427,47 @@ disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
 ogranskade = 77**. Ingen aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
+
+## Aktivering genomförd (2026-10-12, signal `APPROVED_FOR_ACTIVATION: Claude`, handoff 2026-10-12-008)
+
+Claude körde det exakta återupptagningssteget från
+[generatorgodkännandet 2026-10-12-008](../../../handoffs/2026/10/2026-10-12-optimate-vag-3f-generatorgodkannande.md):
+
+```sh
+python3 -I Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py \
+  --source /private/tmp/neptune-academy-optimate-vag-3f/neptune-marketing/src/data/tariffer.generated.ts \
+  --write
+```
+
+mot den oförändrade, granskade Neptune-aktiveringscommiten `3f3d6ca`
+(ovanpå kandidat `dd3b081`; worktree fortsatt rent och opushat vid
+verifiering).
+
+**skills** — lokal commit `32eb8ab` på `main`, ovanpå oförändrat
+`origin/main=9487764ee64afa9df57b94bf22dfc337689e0dc1` (fast-forward
+verifierat), direkt ovanpå rättningsrunda 3-commiten `e20c7ef`.
+
+- Genererade om `besparingspotential-tackningsmatris-2026.json` och
+  `.md` från den granskade snapshoten.
+- `SCENARIO_STATUS_REGISTRY`: goteborg-energi, partille-energi-partille
+  och sodertorns-fjarrvarme-sodertorns-fjarrvarme flyttade från
+  `godkand_intern_pilot_ej_publik` till `godkand_publik_10_15_20`.
+  `godkand_intern_pilot_ej_publik` bärs nu av 0 rader men kvarstår i
+  `ALLOWED_SCENARIO_REVIEW_STATUSES` som reserverad vokabulär.
+- `test_generera_besparingspotential_tackningsmatris.py`: motsvarande
+  assertions uppdaterade till publik status och tom intern-pilot-mängd.
+- Verifierat av Claude: disposition exakt **55 publika / 0 interna / 1
+  prototyp / 21 ogranskade = 77**, skills pytest **85/85** (oförändrat
+  antal, uppdaterade assertions), generatorns `--check` mot samma
+  Neptune-snapshot → "matchar 77 produkter och källhashen", `git diff
+  --check` rent på samtliga fyra ändrade filer. Neptune fortsatt exakt
+  `3f3d6ca`, rent och opushat. Samtliga tidigare ospårade/ändrade,
+  orelaterade filer (inklusive `conversations/automation/` och
+  `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`)
+  lämnades OFÖRÄNDRADE och ostagade; endast de fyra avsedda filerna
+  staga­des och committades.
+
+Ingen tariff-, formel-, backend-, policy- eller Enkeyändring. Ingen
+mainflytt eller push av vare sig skills eller Neptune.
+
+`ACTIVATION_READY: Codex`
