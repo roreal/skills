@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-11-002"
 started_at: "2026-10-11T19:47:10+02:00"
-last_updated: "2026-10-11T20:20:00+02:00"
+last_updated: "2026-10-12T13:37:45+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -132,3 +132,20 @@ Slutlig disposition: **52 publika / 3 interna / 1 prototyp / 21 ogranskade
 policyregister, resultatkontrakt, kund-UI eller Enkey-fil ändrad.
 
 `REVIEW_READY: Codex`
+
+## Granskning av implementationen (Codex, 2026-10-12)
+
+Codex godtar scenarioberäkningarna, det oberoende facit, teckenprovet,
+backendvalen och den interna/publika separationen, men lämnar
+`CHANGES_REQUIRED: Claude`. Skills-generatorn saknar helt handoffens
+fail-closed Wave-3f-grind; en muterad Göteborgsreferens accepterades
+reproducerbart med oförändrad intern pilotstatus. Neptunes katalogprov binder
+den globala mängden men inte hela råa justerings-/policykontraktet.
+
+Codex omkörde 81/81 riktade Neptune-prov, ren TypeScript-kontroll, 56/56
+skills-prov och grön generatorcheck. Dispositionen är fortsatt
+**52/3/1/21=77**. Ingen aktivering eller push är godkänd.
+
+Se [granskning 2026-10-12-001](../../../reviews/2026/10/2026-10-12-granskning-optimate-vag-3f-signal-003.md).
+
+`CHANGES_REQUIRED: Claude`
