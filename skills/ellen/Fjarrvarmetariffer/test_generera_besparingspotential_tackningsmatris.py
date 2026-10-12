@@ -1179,6 +1179,32 @@ class TariffMatrixTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "required_policy_fields"):
                 build_matrix(self.source_text)
 
+    def test_wave_3f_wrong_measurement_resolution_is_fail_closed(self) -> None:
+        # Rättning, slutomgranskning 2026-10-12-005: ingen tidigare Wave-3f-
+        # mutation ändrade measurement_resolutions, så en felaktig upplösning
+        # (t.ex. 'manadsvis' i stället för 'arsvis') kunde i teorin passera
+        # obemärkt. Muterar ett kontraktsgatat fälts upplösning och verifierar
+        # att build_matrix faller typat på measurement_resolutions.
+        mutated_id = next(
+            pid for pid, params in matrix_module.WAVE_3F_PRODUCT_PARAMS.items() if "keys" in params
+        )
+        mutated_keys = matrix_module.WAVE_3F_PRODUCT_PARAMS[mutated_id]["keys"]
+        mutated_field = mutated_keys["effekt"]
+        original_product_row = matrix_module.product_row
+
+        def mutated_product_row(product_id: str, entry: Any) -> dict[str, Any]:
+            row = original_product_row(product_id, entry)
+            if product_id == mutated_id:
+                row["measurement_resolutions"] = {
+                    **row["measurement_resolutions"],
+                    mutated_field: "manadsvis",
+                }
+            return row
+
+        with patch.object(matrix_module, "product_row", mutated_product_row):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
     def test_wave_3f_extra_series_field_is_fail_closed(self) -> None:
         mutated_id = next(iter(matrix_module.WAVE_3F_PRODUCT_IDS))
         original_product_row = matrix_module.product_row
