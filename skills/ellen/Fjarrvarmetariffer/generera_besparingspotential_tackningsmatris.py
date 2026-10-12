@@ -835,6 +835,17 @@ def build_matrix(text: str) -> dict[str, Any]:
             f"Endast i snapshoten: {sorted(wave_3f_ids - WAVE_3F_PRODUCT_IDS)}; "
             f"endast i listan: {sorted(WAVE_3F_PRODUCT_IDS - wave_3f_ids)}."
         )
+    # Rättning, omgranskning 2026-10-12-003 (P1): loopen nedan itererade bara
+    # WAVE_3F_PRODUCT_PARAMS, så om registret tappade en produkt som
+    # WAVE_3F_PRODUCT_IDS fortfarande innehöll slutfördes build_matrix utan
+    # fel (params_missing FAIL_OPEN). Kräv att mängderna är EXAKT lika innan
+    # per-produktkontrollerna körs.
+    if set(WAVE_3F_PRODUCT_PARAMS) != WAVE_3F_PRODUCT_IDS:
+        raise ValueError(
+            "WAVE_3F_PRODUCT_PARAMS matchar inte WAVE_3F_PRODUCT_IDS. "
+            f"Endast i WAVE_3F_PRODUCT_PARAMS: {sorted(set(WAVE_3F_PRODUCT_PARAMS) - WAVE_3F_PRODUCT_IDS)}; "
+            f"endast i WAVE_3F_PRODUCT_IDS: {sorted(WAVE_3F_PRODUCT_IDS - set(WAVE_3F_PRODUCT_PARAMS))}."
+        )
     for product_id, params in WAVE_3F_PRODUCT_PARAMS.items():
         row = rows_by_id.get(product_id)
         if row is None:
