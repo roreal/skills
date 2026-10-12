@@ -346,3 +346,52 @@ disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
 ogranskade = 77**. Ingen aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
+
+## Rättelse 2026-10-12-2 (append-only)
+
+Slutomgranskning 2026-10-12-005 påpekade att formuleringen ovan — "28 nya
+tabellstyrda/riktade mutationsprov ... plus en egen membership-/statustest"
+— är felaktig räkning. De 28 testmetoderna i rättningsrunda 2 var **27
+mutationsprov + 1 positivt membership-/statusprov**, inte 28 mutationer
+plus ett membership-prov utöver dessa. Ingen av de 27 mutationerna ändrade
+`measurement_resolutions`.
+
+## Rättningsrunda 3 (slutomgranskning 2026-10-12-005, signal `CHANGES_REQUIRED: Claude`)
+
+Codex slutomgranskade rättningsrunda 2 (review_id `2026-10-12-005`): 84/84
+skills-prov, generatorns `--check`, ancestry- och diffkontroller gröna, och
+en oberoende mutation av Partilles `avvikelse_c`-upplösning (`arsvis` →
+`manadsvis`) blockerades korrekt. En enda specificerad testpunkt saknades:
+inget Wave-3f-mutationsprov ändrade `measurement_resolutions`.
+
+**skills** — lokal commit `e20c7ef` på `main`, ovanpå oförändrat
+`origin/main=9487764ee64afa9df57b94bf22dfc337689e0dc1` (fast-forward
+verifierat), direkt ovanpå `859d4b1` (Codex egen slutomgranskningscommit,
+oaktiverad/opushad).
+
+- `test_generera_besparingspotential_tackningsmatris.py`: en ny riktad
+  mutation, `test_wave_3f_wrong_measurement_resolution_is_fail_closed`,
+  som ändrar ett kontraktsgatat Wave-3f-fälts (`keys["effekt"]`)
+  `measurement_resolutions`-värde från `arsvis` till `manadsvis` via samma
+  `patch.object(matrix_module, "product_row", ...)`-mönster som övriga
+  Wave-3f-mutationsprov, och verifierar att `build_matrix()` kastar typat
+  `ValueError` som matchar `measurement_resolutions`.
+- Append-only rättelse av den tidigare felaktiga testantalsformuleringen,
+  se "Rättelse 2026-10-12-2" ovan.
+- Ingen generatorlogik, genererad matris (JSON/Markdown) eller Neptune-fil
+  ändrad.
+- Verifierat av Claude: skills pytest **85/85** (upp från 84; +1 nytt
+  mutationsprov), `python3 -I generera_besparingspotential_tackningsmatris.py
+  --check` → "matchar 77 produkter och källhashen" (ingen regenerering
+  krävdes), `git diff --check` rent på den ändrade testfilen. Samtliga
+  tidigare ospårade/ändrade, orelaterade filer (inklusive
+  `conversations/automation/` och
+  `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`)
+  lämnades OFÖRÄNDRADE och ostagade; endast testfilen och denna
+  sessionsfil (plus `index.md`) staga­des och committades.
+
+Ingen Neptune-ändring gjordes (omgranskningen krävde ingen). Slutlig
+disposition oförändrad: **52 publika / 3 interna / 1 prototyp / 21
+ogranskade = 77**. Ingen aktivering, mainflytt eller push.
+
+`REVIEW_READY: Codex`
