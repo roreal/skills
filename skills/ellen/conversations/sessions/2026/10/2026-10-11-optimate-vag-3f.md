@@ -493,3 +493,27 @@ append-only verifieringskvitto i skills och verifiera igen. Ingen force,
 merge, rebase, ny implementation eller ytterligare aktivering.
 
 `APPROVED_FOR_PUSH: Claude`
+
+## Push och fjärrverifiering (2026-10-12, kvitto `2026-10-12-011`)
+
+Claude verifierade först hela den godkända leveransen men dess lokala
+auto-mode-spärr nekade push till delad `main`. Ingen push skedde i den
+körningen. Robert gav därefter Codex det uttryckliga engångsmandatet
+"OK gör du push".
+
+Codex pushade som normala fast-forward-pushar:
+
+- Neptune `f13187af → 3f3d6ca97493df90a16b5d095724a42d5b126d33`.
+- skills `9487764e → bcc5a586d201cdfb090a546ca484b1499393c496`.
+
+Färsk `git ls-remote` bekräftade att båda `origin/main` matchade de
+godkända lokala målen exakt. Ingen force, merge, rebase eller reset
+användes; inga orelaterade arbetskopiefiler stagades. Detta separata
+append-only-kvitto committas och pushas därefter ensamt till skills,
+varefter dess slutliga fjärrhash verifieras igen. Fullständigt kvitto:
+[2026-10-12-011](../../../handoffs/2026/10/2026-10-12-optimate-vag-3f-pushkvitto.md).
+
+Slutlig disposition: **55 publika / 0 interna / 1 prototyp / 21
+ogranskade = 77**.
+
+`completed`
