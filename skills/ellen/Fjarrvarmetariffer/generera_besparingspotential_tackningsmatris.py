@@ -317,6 +317,61 @@ WAVE_3E_PRODUCT_KEYS: dict[str, dict[str, str]] = {
     },
 }
 
+# Mekanisk, fail-closed lista över exakt Optimate våg 3f-ID:na (session
+# 2026-10-11-002, INTERN PILOT ENDAST, ej publikt aktiverad) — IDENTISK med
+# Neptune-kodens WAVE_3F_PRODUCT_IDS i optimateScenario.ts. build_matrix
+# kontrollerar att detta är EXAKT mängden produkter vars `adjustment_types`
+# innehåller `temperature_difference`, med exakt en justering per produkt,
+# säsongsmånaderna okt–apr, satsen/referensen/formeln, avvikelse_c:s råa
+# indatafältskontrakt, capacity_rule='effekt' och bandantal 6/7/4
+# (Göteborg/Partille/Södertörn), Göteborgs legacy_besparing-backend utan
+# kontraktsfält, och Partilles/Södertörns kontrakt_arskostnad-backend med
+# exakta policyfält/bindningar och tomma serie-/historikfält.
+WAVE_3F_PRODUCT_IDS: frozenset[str] = frozenset({
+    "goteborg-energi",
+    "partille-energi-partille",
+    "sodertorns-fjarrvarme-sodertorns-fjarrvarme",
+})
+
+# Per produkt: rate, reference och (för de kontraktsgatade) effekt-/
+# bandnyckelbindning, direkt ur tariffer.generated.ts — handoff
+# 2026-10-11-002 §"Fail-closed-grindar". Göteborg har ingen policy (legacy,
+# inget kontraktsfält) och saknar därför nycklar här.
+WAVE_3F_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
+    "goteborg-energi": {
+        "rate": 7,
+        "reference": "network_monthly_mean",
+        "capacity_bands": 6,
+        "cost_path": "legacy_besparing",
+    },
+    "partille-energi-partille": {
+        "rate": 7,
+        "reference": "network_monthly_mean",
+        "capacity_bands": 7,
+        "cost_path": "kontrakt_arskostnad",
+        "keys": {"effekt": "partille_debiterbar_effekt_kw", "band": "partille_vald_niva_id"},
+    },
+    "sodertorns-fjarrvarme-sodertorns-fjarrvarme": {
+        "rate": 2.2,
+        "reference": "previous_winter_network_mean",
+        "capacity_bands": 4,
+        "cost_path": "kontrakt_arskostnad",
+        "keys": {"effekt": "sodertorn_debiterbar_effekt_kw", "band": "sodertorn_vald_niva_id"},
+    },
+}
+
+WAVE_3F_FORMULA = "energy_MWh * rate * (customer_return_degC - reference_return_degC)"
+
+# avvikelse_c:s råa indatafältskontrakt (Göteborgs `indatafalt`, inte en
+# policy.kravda_falt-post) — identiskt för samtliga tre produkter.
+WAVE_3F_AVVIKELSE_C_CONTRACT: dict[str, Any] = {
+    "enhet": "°C",
+    "default": 0,
+    "min_varde": -10,
+    "max_varde": 10,
+    "heltal": False,
+}
+
 # Umeå Energi Enkels asymmetriska flödesdifferens-justeringsparametrar,
 # direkt ur den checkade-in tariffer.generated.ts — handoff 2026-10-08-001
 # §"Bindande scenariokontrakt". build_matrix binder dessa EXAKT mot den
@@ -762,6 +817,150 @@ def build_matrix(text: str) -> dict[str, Any]:
                     f"Våg 3e-produkten {product_id!r} har {keys['b']}.{contract_key}="
                     f"{b_field.get(contract_key)!r}, förväntat exakt {expected_value!r}."
                 )
+    # Rättning, omgranskning 2026-10-12-001 (P1): skills-sidan godkände
+    # tidigare våg 3f utan någon matrisgrind alls — de tre ID:na låg bara i
+    # SCENARIO_STATUS_REGISTRY, och build_matrix kontrollerade varken den
+    # globala temperature_difference-mängden eller det råa
+    # justerings-/policykontraktet. Samma mönster som wave_3e_ids ovan,
+    # utökat med Göteborgs legacy-indatafalt och Partilles/Södertörns råa
+    # policybindningar.
+    wave_3f_ids = {
+        row["product_id"] for row in rows
+        if "temperature_difference" in row["adjustment_types"]
+    }
+    if wave_3f_ids != WAVE_3F_PRODUCT_IDS:
+        raise ValueError(
+            "temperature_difference-raderna i snapshoten matchar inte "
+            "WAVE_3F_PRODUCT_IDS. "
+            f"Endast i snapshoten: {sorted(wave_3f_ids - WAVE_3F_PRODUCT_IDS)}; "
+            f"endast i listan: {sorted(WAVE_3F_PRODUCT_IDS - wave_3f_ids)}."
+        )
+    for product_id, params in WAVE_3F_PRODUCT_PARAMS.items():
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3F_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if row["adjustment_types"] != ["temperature_difference"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har adjustment_types "
+                f"{row['adjustment_types']!r}, förväntat exakt ['temperature_difference']."
+            )
+        if row["cost_path"] != params["cost_path"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                f"förväntat {params['cost_path']!r}."
+            )
+        if row["capacity_rule"] != "effekt":
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                "förväntat 'effekt'."
+            )
+        if row["capacity_bands"] != params["capacity_bands"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har {row['capacity_bands']} effektband, "
+                f"förväntat exakt {params['capacity_bands']}."
+            )
+        if row["series_fields"] != []:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt []."
+            )
+        if row["history_fields"] != []:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har history_fields "
+                f"{row['history_fields']!r}, förväntat exakt []."
+            )
+        if row["has_eligibility_rule"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+            )
+
+        raw_price = latest_price(tariffs[product_id])
+        raw_adjustments = raw_price.get("justeringar", [])
+        if len(raw_adjustments) != 1:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har {len(raw_adjustments)} justeringar, "
+                "förväntat exakt 1."
+            )
+        raw_adjustment = raw_adjustments[0]
+        if raw_adjustment.get("months") != [1, 2, 3, 4, 10, 11, 12]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har months {raw_adjustment.get('months')!r}, "
+                "förväntat exakt [1, 2, 3, 4, 10, 11, 12]."
+            )
+        if raw_adjustment.get("rate") != params["rate"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har rate {raw_adjustment.get('rate')!r}, "
+                f"förväntat exakt {params['rate']!r}."
+            )
+        if raw_adjustment.get("reference") != params["reference"]:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har reference {raw_adjustment.get('reference')!r}, "
+                f"förväntat exakt {params['reference']!r}."
+            )
+        if raw_adjustment.get("formula") != WAVE_3F_FORMULA:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har formula {raw_adjustment.get('formula')!r}, "
+                f"förväntat exakt {WAVE_3F_FORMULA!r}."
+            )
+
+        raw_indatafalt = raw_price.get("indatafalt") or []
+        avvikelse_falt = next(
+            (field for field in raw_indatafalt if field.get("nyckel") == "avvikelse_c"), None
+        )
+        if avvikelse_falt is None:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} saknar indatafalt-posten för 'avvikelse_c'."
+            )
+        for contract_key, expected_value in WAVE_3F_AVVIKELSE_C_CONTRACT.items():
+            if avvikelse_falt.get(contract_key) != expected_value:
+                raise ValueError(
+                    f"Våg 3f-produkten {product_id!r} har avvikelse_c.{contract_key}="
+                    f"{avvikelse_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
+                )
+
+        if "keys" not in params:
+            if raw_price.get("policy") is not None:
+                raise ValueError(
+                    f"Våg 3f-produkten {product_id!r} förväntas sakna policy, men har en."
+                )
+            continue
+
+        keys = params["keys"]
+        expected_required_fields = sorted({"avvikelse_c", keys["effekt"], keys["band"]})
+        if row["required_policy_fields"] != expected_required_fields:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har required_policy_fields "
+                f"{row['required_policy_fields']!r}, förväntat exakt {expected_required_fields!r}."
+            )
+        for falt in (keys["effekt"], keys["band"], "avvikelse_c"):
+            if row["measurement_resolutions"].get(falt) != "arsvis":
+                raise ValueError(
+                    f"Våg 3f-produkten {product_id!r} har measurement_resolutions.{falt} "
+                    f"{row['measurement_resolutions'].get(falt)!r}, förväntat 'arsvis'."
+                )
+        raw_policy = raw_price.get("policy") or {}
+        raw_bindings = {
+            "kapacitet_bindning": keys["effekt"],
+            "kapacitet_band_bindning": keys["band"],
+        }
+        for binding_key, expected_nyckel in raw_bindings.items():
+            if raw_policy.get(binding_key) != expected_nyckel:
+                raise ValueError(
+                    f"Våg 3f-produkten {product_id!r} har policy.{binding_key}="
+                    f"{raw_policy.get(binding_key)!r}, förväntat exakt {expected_nyckel!r}."
+                )
+        if raw_policy.get("kapacitet_multiplikator_bindning") is not None:
+            raise ValueError(
+                f"Våg 3f-produkten {product_id!r} har "
+                f"policy.kapacitet_multiplikator_bindning={raw_policy.get('kapacitet_multiplikator_bindning')!r}, "
+                "förväntat None."
+            )
+
     counts = {
         "products": len(rows),
         "real_products": sum(not row["synthetic"] for row in rows),
@@ -795,6 +994,12 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "- `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):",
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3f:",
+        "  Göteborg Energi, Partille Energi och Södertörns Fjärrvärme, samtliga med en",
+        "  `temperature_difference`-justering, exakt Neptune-kodens `WAVE_3F_PRODUCT_IDS`,",
+        "  session 2026-10-11-002): `stodjerOptimateScenario` är sann för dessa tre",
+        "  leverantorId, men `stodjerOptimateScenarioPubliktAktiverad` förblir falsk.",
+        "  Neptunes publika kalkylator visar INTE 10/15/20-scenariot för dem.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
         "  (52 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",

@@ -10,6 +10,12 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
+- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3f:
+  Göteborg Energi, Partille Energi och Södertörns Fjärrvärme, samtliga med en
+  `temperature_difference`-justering, exakt Neptune-kodens `WAVE_3F_PRODUCT_IDS`,
+  session 2026-10-11-002): `stodjerOptimateScenario` är sann för dessa tre
+  leverantorId, men `stodjerOptimateScenarioPubliktAktiverad` förblir falsk.
+  Neptunes publika kalkylator visar INTE 10/15/20-scenariot för dem.
 - `scenario_review_status=godkand_publik_10_15_20`
   (52 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
