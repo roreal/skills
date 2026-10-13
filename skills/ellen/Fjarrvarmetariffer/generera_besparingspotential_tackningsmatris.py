@@ -411,6 +411,13 @@ WAVE_3G_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
         "effekt_min": 3,
         "effekt_max": 41,
         "keys": {"effekt": "lidkoping_debiterbar_effekt_kw", "band": "lidkoping_vald_niva_id"},
+        "kapacitet_typ": "effekt",
+        "kw_faktor": 1.0,
+        "min_debiteringsbas": 3,
+        "capacity_band_values": [
+            {"id": "1", "min": 0, "max": 10, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 1906},
+            {"id": "2", "min": 11, "max": 41, "avgift_kr_ar": 3852, "pris_kr_per_enhet_ar": 1521},
+        ],
     },
     "lidkoping-energi-lidkoping-42-kw": {
         "faktor_n": 5,
@@ -418,12 +425,44 @@ WAVE_3G_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
         "effekt_min": 42,
         "effekt_max": None,
         "keys": {"effekt": "lidkoping_debiterbar_effekt_kw", "band": "lidkoping_vald_niva_id"},
+        "kapacitet_typ": "effekt",
+        "kw_faktor": 1.0,
+        "min_debiteringsbas": 3,
+        "capacity_band_values": [
+            {"id": "1", "min": 42, "max": 163, "avgift_kr_ar": 11670, "pris_kr_per_enhet_ar": 1317},
+            {"id": "2", "min": 164, "max": None, "avgift_kr_ar": 23342, "pris_kr_per_enhet_ar": 1245},
+        ],
     },
 }
 
 WAVE_3G_SERIES_FIELDS: tuple[str, ...] = (
     "lidkoping_kund_avkylning_c", "lidkoping_kund_volym_m3", "lidkoping_nat_avkylning_c",
 )
+
+# Exakt Q/T/Tm-kontrakt per fältnyckel, direkt ur handoff 2026-10-12-012
+# §"Bindande scenariokontrakt": Q (volym) är inklusiv noll, T (kundens
+# avkylning) har inget dokumenterat min/max, Tm (nätets avkylning) är
+# exklusiv noll och kräver attestering. Omgranskning 2026-10-13-001 (P1)
+# band detta mekaniskt eftersom Codex kunde mutera alla tre tyst förbi
+# build_matrix.
+WAVE_3G_SERIES_FIELD_CONTRACT: dict[str, dict[str, Any]] = {
+    "lidkoping_kund_volym_m3": {
+        "minvarde": 0, "minvarde_exklusiv": False, "maxvarde": None, "krav_attestering": False,
+    },
+    "lidkoping_kund_avkylning_c": {
+        "minvarde": None, "minvarde_exklusiv": False, "maxvarde": None, "krav_attestering": False,
+    },
+    "lidkoping_nat_avkylning_c": {
+        "minvarde": 0, "minvarde_exklusiv": True, "maxvarde": None, "krav_attestering": True,
+    },
+}
+
+# Den enda tillåtna nyckelmängden i den råa justeringsposten. Omgranskning
+# 2026-10-13-001 (P1): tysta extra justeringsparametrar fick tidigare
+# passera build_matrix.
+WAVE_3G_ADJUSTMENT_KEYS: frozenset[str] = frozenset({
+    "type", "faktor_n", "kund_volym_falt", "kund_avkylning_falt", "nat_avkylning_falt",
+})
 
 # Umeå Energi Enkels asymmetriska flödesdifferens-justeringsparametrar,
 # direkt ur den checkade-in tariffer.generated.ts — handoff 2026-10-08-001
@@ -1071,6 +1110,29 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3g-produkten {product_id!r} har {row['capacity_bands']} effektband, "
                 f"förväntat exakt {params['capacity_bands']}."
             )
+        raw_capacity = latest_price(tariffs[product_id]).get("kapacitet") or {}
+        if raw_capacity.get("typ") != params["kapacitet_typ"]:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har kapacitet.typ={raw_capacity.get('typ')!r}, "
+                f"förväntat exakt {params['kapacitet_typ']!r}."
+            )
+        if raw_capacity.get("kw_faktor") != params["kw_faktor"]:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har kapacitet.kw_faktor="
+                f"{raw_capacity.get('kw_faktor')!r}, förväntat exakt {params['kw_faktor']!r}."
+            )
+        if raw_capacity.get("min_debiteringsbas") != params["min_debiteringsbas"]:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har kapacitet.min_debiteringsbas="
+                f"{raw_capacity.get('min_debiteringsbas')!r}, förväntat exakt "
+                f"{params['min_debiteringsbas']!r}."
+            )
+        if (raw_capacity.get("nivaer") or []) != params["capacity_band_values"]:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har kapacitet.nivaer="
+                f"{raw_capacity.get('nivaer')!r}, förväntat exakt "
+                f"{params['capacity_band_values']!r}."
+            )
         keys = params["keys"]
         expected_required_fields = sorted({keys["effekt"], keys["band"], *WAVE_3G_SERIES_FIELDS})
         if row["required_policy_fields"] != expected_required_fields:
@@ -1135,8 +1197,24 @@ def build_matrix(text: str) -> dict[str, Any]:
                     f"{raw_adjustment.get(adjustment_key)!r} i justeringen, förväntat exakt "
                     f"{expected_nyckel!r}."
                 )
+        if set(raw_adjustment) != WAVE_3G_ADJUSTMENT_KEYS:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har justeringsnycklar "
+                f"{sorted(raw_adjustment)!r}, förväntat exakt "
+                f"{sorted(WAVE_3G_ADJUSTMENT_KEYS)!r}."
+            )
 
         raw_policy = raw_price.get("policy") or {}
+        if raw_policy.get("stodjer_aktuell_arskostnad") is not True:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har policy.stodjer_aktuell_arskostnad="
+                f"{raw_policy.get('stodjer_aktuell_arskostnad')!r}, förväntat exakt True."
+            )
+        if raw_policy.get("stodjer_besparing") is not False:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har policy.stodjer_besparing="
+                f"{raw_policy.get('stodjer_besparing')!r}, förväntat exakt False."
+            )
         raw_bindings = {
             "kapacitet_bindning": keys["effekt"],
             "kapacitet_band_bindning": keys["band"],
@@ -1171,26 +1249,57 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3g-produkten {product_id!r} har {keys['effekt']}.maxvarde="
                 f"{effekt_field.get('maxvarde')!r}, förväntat exakt {params['effekt_max']!r}."
             )
-        tm_field = next(
-            (field for field in raw_required_fields if field.get("nyckel") == "lidkoping_nat_avkylning_c"),
-            None,
+        if effekt_field.get("vardetyp") != "number":
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har {keys['effekt']}.vardetyp="
+                f"{effekt_field.get('vardetyp')!r}, förväntat exakt 'number'."
+            )
+        band_field = next(
+            (field for field in raw_required_fields if field.get("nyckel") == keys["band"]), None
         )
-        if tm_field is None:
+        if band_field is None:
             raise ValueError(
-                f"Våg 3g-produkten {product_id!r} saknar kravda_falt-posten för "
-                "'lidkoping_nat_avkylning_c'."
+                f"Våg 3g-produkten {product_id!r} saknar kravda_falt-posten för {keys['band']!r}."
             )
-        if tm_field.get("minvarde") != 0 or tm_field.get("minvarde_exklusiv") is not True:
+        if band_field.get("vardetyp") != "band_id":
             raise ValueError(
-                f"Våg 3g-produkten {product_id!r} har lidkoping_nat_avkylning_c med minvarde="
-                f"{tm_field.get('minvarde')!r}/minvarde_exklusiv={tm_field.get('minvarde_exklusiv')!r}, "
-                "förväntat minvarde=0 (exklusiv)."
+                f"Våg 3g-produkten {product_id!r} har {keys['band']}.vardetyp="
+                f"{band_field.get('vardetyp')!r}, förväntat exakt 'band_id'."
             )
-        if tm_field.get("krav_attestering") is not True:
-            raise ValueError(
-                f"Våg 3g-produkten {product_id!r} har lidkoping_nat_avkylning_c med "
-                f"krav_attestering={tm_field.get('krav_attestering')!r}, förväntat True."
+
+        # Q/T/Tm: binder exakt antal_varden, rullande och varje fälts
+        # dokumenterade min/max/exklusivitet/attestering ur
+        # WAVE_3G_SERIES_FIELD_CONTRACT (omgranskning 2026-10-13-001, P1) —
+        # tidigare band endast Tm:s minvarde/exklusivitet/attestering.
+        for serie_nyckel, contract in WAVE_3G_SERIES_FIELD_CONTRACT.items():
+            serie_field = next(
+                (field for field in raw_required_fields if field.get("nyckel") == serie_nyckel), None
             )
+            if serie_field is None:
+                raise ValueError(
+                    f"Våg 3g-produkten {product_id!r} saknar kravda_falt-posten för {serie_nyckel!r}."
+                )
+            if serie_field.get("vardetyp") != "number_series":
+                raise ValueError(
+                    f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.vardetyp="
+                    f"{serie_field.get('vardetyp')!r}, förväntat exakt 'number_series'."
+                )
+            if serie_field.get("antal_varden") != 12:
+                raise ValueError(
+                    f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.antal_varden="
+                    f"{serie_field.get('antal_varden')!r}, förväntat exakt 12."
+                )
+            if serie_field.get("rullande") is not True:
+                raise ValueError(
+                    f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.rullande="
+                    f"{serie_field.get('rullande')!r}, förväntat exakt True."
+                )
+            for contract_key, expected_value in contract.items():
+                if serie_field.get(contract_key) != expected_value:
+                    raise ValueError(
+                        f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.{contract_key}="
+                        f"{serie_field.get(contract_key)!r}, förväntat exakt {expected_value!r}."
+                    )
 
     counts = {
         "products": len(rows),

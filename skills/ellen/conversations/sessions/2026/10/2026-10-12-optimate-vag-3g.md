@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-12-012"
 started_at: "2026-10-12T20:57:05+02:00"
-last_updated: "2026-10-12T21:30:00+02:00"
+last_updated: "2026-10-13T00:00:00+02:00"
 timezone: "Europe/Stockholm"
 participants:
   - Robert
@@ -187,7 +187,91 @@ aktivering, mainflytt eller push.
 
 `CHANGES_REQUIRED: Claude`
 
+## Claude rättning (2026-10-13, signal `2026-10-13-002`)
+
+Claude implementerade det avgränsade P1/P2-scopet från
+[granskning 2026-10-13-001](../../../reviews/2026/10/2026-10-13-granskning-optimate-vag-3g-signal-013.md)
+utan ny fråga till Robert, enligt den befintliga `CHANGES_REQUIRED: Claude`-
+signalen.
+
+**P1 — bundet hela kapacitets- och Q/T/Tm-kontraktet.** I
+`Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py`
+utökades `WAVE_3G_PRODUCT_PARAMS` med `kapacitet.typ`, `kw_faktor`,
+`min_debiteringsbas` och den exakta ordnade `nivaer`-listan (id, min, max,
+fast del, rörligt pris) per Lidköping-produkt. Ett nytt
+`WAVE_3G_SERIES_FIELD_CONTRACT` binder Q/T/Tm:s `vardetyp=number_series`,
+`antal_varden=12`, `rullande=true` samt vart fälts dokumenterade
+min/max/exklusivitet/attestering (Q min 0 inklusive, T utan min/max, Tm
+min 0 exklusiv och attesterad). `WAVE_3G_ADJUSTMENT_KEYS` binder
+justeringens exakta tillåtna nyckelmängd. Effekt- och bandfälten får
+dessutom ett explicit `vardetyp`-kontrakt (`number` respektive
+`band_id`), och de råa policyflaggorna `stodjer_aktuell_arskostnad=true`/
+`stodjer_besparing=false` kontrolleras nu direkt mot den råa katalograden.
+
+Tolv nya committade mutationsprov lades i
+`Fjarrvarmetariffer/test_generera_besparingspotential_tackningsmatris.py`,
+ett per punkt i granskningens lista (bandpris, `kw_faktor`,
+`min_debiteringsbas`, Q:s min/exklusivitet/kardinalitet/attestering,
+T:s påhittade min/max, Tm:s kardinalitet) plus justeringens nyckelmängd
+och en icke-boolesk `stodjer_besparing`-mutation. Mutatorn tillämpas på
+båda Lidköping-produkterna (via `WAVE_3G_PRODUCT_IDS`-medlemskap), så
+kravet på minst en produktspecifik bandtabellsmutation per produkt är
+uppfyllt för båda.
+
+**P2 — städning och testnotation.** Den otrackade genererade
+`node_modules/.vite/vitest`-cachen i Neptune-worktreen
+`/private/tmp/neptune-academy-optimate-vag-3g` togs bort (inte committad,
+inte lagd i `.gitignore`). Worktreen är verifierad ren (`git status
+--short` ger inget) på oförändrad HEAD `f2c57c3f9b92febb8256b8a05ef59d716a790421`.
+Den felaktiga testnotationen i indexrad `2026-10-12-013` rättas härmed
+append-only: korrekt utfall var **99 testfiler totalt och 69/69 nya
+riktade Wave-3g-prov**, inte "99/69 nya riktade" som tidigare skrevs. Den
+committade historikraden i `index.md` lämnas oförändrad; detta är
+rättelsen enligt konversations-README §5.
+
+### Verifiering (oberoende omkörd av Claude)
+
+- `python3 -I -m pytest Fjarrvarmetariffer/ -q`: **122/122 passerade**
+  (110 tidigare + 12 nya mutationsprov för denna rättning).
+- `python3 -I generera_besparingspotential_tackningsmatris.py --check`:
+  "Täckningsmatrisen matchar 77 produkter och källhashen." (exit 0,
+  oförändrad disposition).
+- `git diff --check` mot de två ändrade skills-filerna: rent.
+- `git status` i skills-repot oförändrat utöver denna rättning — samtliga
+  förbefintliga, orelaterade ospårade/ändrade filer
+  (`conversations/automation/*`, `Fjarrvarmetariffer/
+  leverantorsfragor-blockerade-tariffer-2026.md`, `.claude/`, `SKILL.md`,
+  `claude.md`, `AGENTS.md`, `Tau (kopia).xlsx`, `conversations/
+  proposals/...`, nya `.eml`/prislista-filer) lämnade ostagade och
+  orörda.
+- Neptune-worktreen `optimate-vag-3g-lidkoping-signed-flow`: `git status
+  --short` ger inget efter cacheborttagningen. HEAD oförändrat på
+  `f2c57c3f9b92febb8256b8a05ef59d716a790421`. Ingen Neptune-
+  produktionskod, tariffdata, motor, UI eller Enkey-fil rördes; ingen
+  Vitest-omkörning behövdes eftersom rättningen enbart gällde skills och
+  städning.
+
+### Slutläge
+
+- Neptune: oförändrad, gren `optimate-vag-3g-lidkoping-signed-flow` @
+  `f2c57c3f9b92febb8256b8a05ef59d716a790421`, worktree nu bevisat ren.
+- skills: ny commit ovanpå tidigare `74d9d4aab6a1377d09b76e69da9408071e4633c5`
+  på `main`, fortfarande ovanpå `origin/main=9a9fe40171b392372b73a940daec1ce3964bd1df`.
+  Opushad.
+- Disposition oförändrad: **55 publika / 2 interna pilot (ej publik) / 1
+  prototyp / 19 ogranskade = 77**.
+
+Ingen Neptune-produktionsändring, tariff-, motor-, UI- eller
+Enkeyändring. Ingen publik aktivering, mainflytt eller push.
+
+`REVIEW_READY: Codex`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
   `REVIEW_READY: Codex`.
+- `2026-10-13T00:00:00+02:00` – Append-only-rättelse: indexrad
+  `2026-10-12-013` angav "3563/3563 Vitest (99/69 nya riktade)". Korrekt
+  utfall är **99 testfiler totalt och 69/69 nya riktade Wave-3g-prov**.
+  Historikraden i `index.md` ändras inte; denna post är den dokumenterade
+  rättelsen enligt konversations-README §5.
