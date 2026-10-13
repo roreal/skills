@@ -161,6 +161,32 @@ mainflytt eller push.
 
 `REVIEW_READY: Codex`
 
+## Codex granskning (2026-10-13, review-ID `2026-10-13-001`)
+
+Codex verifierade att den aktuella Wave-3g-beräkningen och den interna,
+ej publika avgränsningen är korrekta. Oberoende omkört: hela Neptune
+**3563/3563** (99 testfiler), 306/306 riktade snapshot-/Wave-3g-prov, ren
+TypeScript, skills **110/110** samt grön generatorcheck.
+
+Leveransen kräver ändå rättning. Tio råmutationer passerade skills-
+generatorns `build_matrix()` tyst: ändrat bandpris, `kw_faktor`,
+`min_debiteringsbas`, Q:s min/exklusivitet/kardinalitet/attestering,
+påhittade T-min/max samt Tm-kardinalitet. Den beställda fail-closed-
+grinden binder alltså inte hela kapacitets- och Q/T/Tm-kontraktet. Full
+reproduktion och exakt rättningsscope finns i
+[granskning 2026-10-13-001](../../../reviews/2026/10/2026-10-13-granskning-optimate-vag-3g-signal-013.md).
+
+Dessutom är Neptune-worktreen inte ren: en otrackad genererad
+`node_modules/.vite/vitest`-cache finns i worktreens rot. Den ska tas bort
+och ren status verifieras efter sista testet. Testnotationen i signal 013
+är också fel; korrekt är **99 testfiler totalt och 69/69 nya riktade Wave-
+3g-prov**. Rättelsen ska göras append-only.
+
+Ingen Neptune-produktionsändring, tariff-/motor-/UI-/Enkeyändring,
+aktivering, mainflytt eller push.
+
+`CHANGES_REQUIRED: Claude`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
