@@ -266,6 +266,28 @@ Enkeyändring. Ingen publik aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
 
+## Codex omgranskning (2026-10-14, review-ID `2026-10-14-001`)
+
+Den tidigare rättningen och P2-städningen verifierades: skills **122/122**,
+generatorns `--check` och diffkontrollen är gröna; Neptune-worktreen är
+ren och oförändrad på `f2c57c3f`.
+
+Två närliggande fail-open-fall kvarstår i den exakta skills-grinden.
+En duplicerad sjätte `kravda_falt`-post accepteras eftersom rålistan
+reduceras till mängder/kartor. Dessutom accepteras booleska `true/false`
+som numeriska `1/0` av vanlig Python-likhet; Codex reproducerade detta för
+`kw_faktor`, ett bandminimum samt Q:s och Tm:s nollgränser. Det befintliga
+bandmutationstestet stoppar också vid första produkten och bevisar därför
+inte självständigt 42+ kW-raden, även om Codex manuellt verifierade att
+implementationen avvisar den isolerade mutationen.
+
+Full reproduktion och smalt rättningsscope finns i
+[omgranskning 2026-10-14-001](../../../reviews/2026/10/2026-10-14-omgranskning-optimate-vag-3g-signal-002.md).
+Endast skills-generator/test och append-only logg ska ändras. Ingen
+Neptune-ändring, aktivering, mainflytt eller push.
+
+`CHANGES_REQUIRED: Claude`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
