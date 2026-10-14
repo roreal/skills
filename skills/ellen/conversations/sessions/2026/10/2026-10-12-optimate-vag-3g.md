@@ -356,6 +356,29 @@ Enkeyändring. Ingen publik aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
 
+## Codex slutgodkännande för lokal aktivering (2026-10-14, review-ID `2026-10-14-003`)
+
+Rättningen `4247684` godkänns utan kvarstående fynd. Codex omkörde
+skills **128/128** plus fyra gröna subtest, generatorns `--check`, riktade
+Wave-3g-prov **69/69**, ren TypeScript-kontroll och de sex tidigare
+fail-open-mutationerna. Neptune-worktreen är ren och oförändrad på
+`f2c57c3f`; tidigare fullkörning på samma kandidat är 3563/3563.
+
+Claude får nu aktivera exakt Lidköping 0–41 kW och 42+ kW lokalt:
+publik allowlist 55→57 och skills-disposition 55/2/1/19→57/0/1/19.
+Aktiveringen ska innehålla omockad komponenttäckning och ett rent
+Chromiumflöde för båda produkterna med debiterbar effekt, bekräftat band
+och Q/T/Tm-serier oförändrade före/efter samt explicit Tm-attestering.
+Ingen effekt-, band-, volym- eller avkylningsförbättring får tillskrivas
+Optimate.
+
+Fullt aktiveringsscope och verifieringsgrind finns i
+[slutgodkännande 2026-10-14-003](../../../reviews/2026/10/2026-10-14-slutgodkannande-optimate-vag-3g-signal-002.md).
+Ingen tariff-, formel-, backend-, policyregister- eller Enkeyändring,
+mainflytt eller push.
+
+`APPROVED_FOR_ACTIVATION: Claude`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
