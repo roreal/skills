@@ -379,6 +379,111 @@ mainflytt eller push.
 
 `APPROVED_FOR_ACTIVATION: Claude`
 
+## Claude lokal publik aktivering (2026-10-14, signal 2026-10-14-004)
+
+Claude utförde slutgodkännandets uppdrag från
+[slutgodkännande 2026-10-14-003](../../../reviews/2026/10/2026-10-14-slutgodkannande-optimate-vag-3g-signal-002.md)
+utan ny fråga till Robert, mekaniskt enligt samma mönster som våg 3f:s
+publika aktivering (Neptune `3f3d6ca`, skills `32eb8ab`).
+
+### Neptune
+
+Ny commit `5e827ddb5d83486f0e6f50e77a4db2cf1a7d8a9e` på samma gren
+`optimate-vag-3g-lidkoping-signed-flow` i samma worktree
+`/private/tmp/neptune-academy-optimate-vag-3g`, exakt 1 commit ovanpå
+`f2c57c3f9b92febb8256b8a05ef59d716a790421`. Historik: `5e827dd` →
+`f2c57c3` → `3f3d6ca` (`origin/main`). Den ordinarie checkouten
+`optimate-vag-3b-arsvolym` (`ae179f0`) orörd.
+
+- `WAVE_3G_PRODUCT_IDS` flyttat till `SCENARIO_PUBLIKT_AKTIVERADE_ID`
+  (52→55→**57** unika, frysta ID:n). `SCENARIO_PILOT_TARIFFER_SNAPSHOT`
+  oförändrad på 57. Alla stale "INTERN PILOT ENDAST"-kommentarer
+  uppdaterade.
+- Samtliga vågspecifika tester (Vag2/3a/3b/3c/3d/3e/3f/3g och
+  huvudtestet) uppdaterade 55→57 där de hårdkodar publika räkningen;
+  `optimateScenarioVag3g.test.ts`:s "publik gate STÄNGD"-beskrivning
+  flippad till "ÖPPEN". Den genuina `riksgenomsnitt`-negativkontrollen
+  kvarstår fail-closed för båda grindarna.
+- Ny permanent, omockad komponenttest
+  `OptimateScenarioCardVag3g.positive.test.tsx` (`describe.each` över
+  båda Lidköping-produkterna, motor→kort för 10/15/20 %, mot
+  `optimateScenarioVag3g.test.ts::FACIT_3G`), plus bit-identisk kontroll
+  av kapacitetsled, justering och de tre Q/T/Tm-serierna
+  referens↔samtliga tre scenarier.
+- Två nya Chromium/Playwright-scenarier (44: 0–41 kW, kapacitetKw 20,
+  band 2; 45: 42+ kW, kapacitetKw 100, band 1) i
+  `e2e/kalkylator.smoke.mjs`, båda föregångna av en fail-closed-kontroll
+  (saknad effekt resp. ej ikryssad Tm-attestering ger inget
+  besparingsresultat) och med oberoende, fristående beräknade facit
+  (inte kopierade från enhetstestets literal).
+
+Verifiering, **oberoende omkörd av Claude** efter leveransen (inte bara
+agentens eget påstående):
+
+- `npx tsc --noEmit`: rent, exit 0.
+- `npx vitest run` (hela sviten): **3571/3571 passerade** (100
+  testfiler).
+- Riktad omkörning av enbart `optimateScenarioVag3g.test.ts` +
+  `OptimateScenarioCardVag3g.positive.test.tsx`: **77/77 passerade**.
+- `git log --oneline -3` bekräftar linjär historik och exakt 1 ny
+  commit.
+- `git status --short`: tomt (rent) efter full vitest-körning.
+- Fullständig Chromium/Playwright-E2E-svit (45 scenarier, inkl. de två
+  nya) och `npm run build`/`git diff --check` rapporterades gröna av
+  den utförande agenten; inte oberoende omkörda av Claude i detta steg
+  utöver ovanstående tsc/vitest/status-kontroller.
+
+### skills (Ellen)
+
+Ny commit `847aaf9826a3b53ba834df066dbd0f2bd47263be` på `main`, exakt 1
+commit ovanpå `81b7619e380ef138010b13807cc9b2bb3f4d0145`.
+
+Endast fyra filer rörda:
+`Fjarrvarmetariffer/generera_besparingspotential_tackningsmatris.py`,
+`.../test_generera_besparingspotential_tackningsmatris.py`,
+`.../besparingspotential-tackningsmatris-2026.json`,
+`.../besparingspotential-tackningsmatris-2026.md`.
+
+- Båda Lidköping-ID:na flyttade i `SCENARIO_STATUS_REGISTRY` från
+  `godkand_intern_pilot_ej_publik` till `godkand_publik_10_15_20`.
+  Dispositionskommentaren och `render_markdown`-texten uppdaterade
+  55/2/1/19→**57/0/1/19=77**, mekaniskt enligt våg 3f:s mönster.
+- JSON/Markdown regenererat enbart via generatorns `--write`.
+- Testfilen uppdaterad endast där statusflippen kräver det
+  (räknardikt, `internal_pilot_ids`-mängd, den omvända
+  fail-closed-kontrollen för gammal status); inga tidigare
+  våg-3g-mutationsprov togs bort.
+
+Verifiering, **oberoende omkörd av Claude**:
+
+- `git log --oneline -3` och `git show --stat` bekräftar exakt 1 ny
+  commit och de fyra filerna ovan.
+- `python3 -I -m pytest Fjarrvarmetariffer/ -q`: **128 passerade, 4
+  subtests passerade** (oförändrat antal — ren statusflipp).
+- `git status --porcelain`: identiskt med läget före denna commit
+  utöver den nya commiten — samtliga förbefintliga, orelaterade
+  ospårade/ändrade filer (`conversations/automation/*`,
+  `Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+  `.claude/`, `SKILL.md`, `claude.md`, `AGENTS.md`,
+  `Tau (kopia).xlsx`, nya `.eml`/prislista-filer,
+  `conversations/proposals/...`, `../milesight`) lämnade ostagade och
+  orörda.
+
+### Slutläge
+
+- Neptune: gren `optimate-vag-3g-lidkoping-signed-flow` @
+  `5e827ddb5d83486f0e6f50e77a4db2cf1a7d8a9e`, 2 commits ovanpå
+  `origin/main=3f3d6ca97493df90a16b5d095724a42d5b126d33`. Opushad.
+- skills: `main` @ `847aaf9826a3b53ba834df066dbd0f2bd47263be`, 3 commits
+  ovanpå `origin/main=9a9fe40171b392372b73a940daec1ce3964bd1df`. Opushad.
+- Disposition: **57 publika / 0 interna pilot (ej publik) / 1 prototyp /
+  19 ogranskade = 77**.
+
+Ingen tariff-, motor-, UI- eller Enkeyändring utöver den godkända
+aktiveringen. Ingen mainflytt och ingen push.
+
+`ACTIVATION_READY: Codex`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
