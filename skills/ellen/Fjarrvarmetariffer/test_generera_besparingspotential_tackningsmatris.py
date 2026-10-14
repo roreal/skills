@@ -118,7 +118,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3g_ids = matrix_module.WAVE_3G_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3g_ids
             )
         )
@@ -133,8 +133,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 2,
-                "godkand_publik_10_15_20": 55,
+                "godkand_publik_10_15_20": 57,
                 "not_reviewed": 19,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -144,14 +143,13 @@ class TariffMatrixTests(unittest.TestCase):
         # godkand_intern_pilot_ej_publik bars tidigare av WAVE_3C_PRODUCT_IDS
         # (handoff 2026-10-06-002, intern pilot), sedan av WAVE_3D_PRODUCT_IDS
         # (handoff 2026-10-07-002, intern pilot), därefter av
-        # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot) och
-        # sedan av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern
-        # pilot) innan samtliga publikt aktiverades (signal
-        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12).
-        # Statusen bars sedan 2026-10-12 åter av exakt WAVE_3G_PRODUCT_IDS
-        # (handoff/session 2026-10-12-012, Lidköpings signerade
-        # flödesjustering) — se test_wave_3g_membership_and_status_is_
-        # mechanically_locked nedan.
+        # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot), sedan
+        # av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern pilot) och
+        # slutligen av WAVE_3G_PRODUCT_IDS (handoff/session 2026-10-12-012,
+        # intern pilot) innan samtliga publikt aktiverades (signal
+        # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12/
+        # -2026-10-14). Statusen bars sedan 2026-10-14 av 0 produkter igen —
+        # ingen rad i registret bär den längre.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -220,12 +218,14 @@ class TariffMatrixTests(unittest.TestCase):
         # Handoff/session 2026-10-12-012 (Optimate våg 3g, Lidköpings
         # signerade flödesjustering) lade därefter till EXAKT två nya rader
         # som INTERN PILOT ENDAST — lidkoping-energi-lidkoping-041-kw och
-        # lidkoping-energi-lidkoping-42-kw — ÄNNU EJ publikt aktiverade.
+        # lidkoping-energi-lidkoping-42-kw — och signal
+        # APPROVED_FOR_ACTIVATION-2026-10-14 aktiverade dem publikt också.
+        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3G_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -1324,8 +1324,9 @@ class TariffMatrixTests(unittest.TestCase):
 
     # -------------------------------------------------------------------
     # Våg 3g ("Lidköpings signerade månadsvisa flödesjustering", handoff/
-    # session 2026-10-12-012, INTERN PILOT ENDAST) — samma mutationsmönster
-    # som våg 3f ovan.
+    # session 2026-10-12-012, lade ursprungligen till som INTERN PILOT
+    # ENDAST; signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-14 aktiverade
+    # dem publikt) — samma mutationsmönster som våg 3f ovan.
     # -------------------------------------------------------------------
     def test_wave_3g_membership_and_status_is_mechanically_locked(self) -> None:
         wave_3g_ids = matrix_module.WAVE_3G_PRODUCT_IDS
@@ -1343,7 +1344,7 @@ class TariffMatrixTests(unittest.TestCase):
                 row["history_fields"], sorted(matrix_module.WAVE_3G_SERIES_FIELDS)
             )
             self.assertFalse(row["has_eligibility_rule"])
-            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
             keys = params["keys"]
             self.assertEqual(
                 row["required_policy_fields"],
@@ -1600,13 +1601,13 @@ class TariffMatrixTests(unittest.TestCase):
                 build_matrix(self.source_text)
 
     def test_wave_3g_wrong_status_is_fail_closed(self) -> None:
-        # Till skillnad från våg 3f (nu publikt aktiverad) är den korrekta
-        # statusen här godkand_intern_pilot_ej_publik — en mutation TILL
-        # godkand_publik_10_15_20 (en förtida "aktivering") ska falla.
+        # Sedan signal APPROVED_FOR_ACTIVATION-2026-10-14 är
+        # godkand_publik_10_15_20 den korrekta statusen för båda — en
+        # mutation TILL den gamla interna pilotstatusen ska nu falla.
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry[next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))] = "godkand_publik_10_15_20"
+        mutated_registry[next(iter(matrix_module.WAVE_3G_PRODUCT_IDS))] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3g_wrong_raw_capacity_binding_is_fail_closed(self) -> None:

@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 2,
-      "godkand_publik_10_15_20": 55,
+      "godkand_publik_10_15_20": 57,
       "not_reviewed": 19,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -1255,7 +1254,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "lidkoping-energi-lidkoping-42-kw",
@@ -1310,7 +1309,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "lulea-energi-lulea",

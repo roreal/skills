@@ -37,19 +37,18 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Aktuell disposition av 77 produkter (handoff/session
-# 2026-10-12-012, våg 3g INTERN PILOT ENDAST): 55 `godkand_publik_10_15_20`
-# (våg 1 + WAVE_2/3A/3B/3C/3D/3E/3F_PRODUCT_IDS, inkl. våg 3f:
-# goteborg-energi, partille-energi-partille,
-# sodertorns-fjarrvarme-sodertorns-fjarrvarme — IDENTISK med Neptune-kodens
-# WAVE_3F_PRODUCT_IDS i optimateScenario.ts, vars `stodjerOptimateScenario`
-# och `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
-# tre), 2 `godkand_intern_pilot_ej_publik` (våg 3g: lidkoping-energi-
-# lidkoping-041-kw och lidkoping-energi-lidkoping-42-kw — IDENTISK med
-# Neptune-kodens WAVE_3G_PRODUCT_IDS i optimateScenario.ts, vars
-# `stodjerOptimateScenario` är TRUE men `stodjerOptimateScenarioPubliktAktiverad`
-# förblir FALSE för båda), 1 `synlig_sarskild_preliminar_prototyp`
-# (Stockholm Exergi) och de återstående 19 "not_reviewed".
+# katalogen. Aktuell disposition av 77 produkter (signal
+# APPROVED_FOR_ACTIVATION: Claude, 2026-10-14, våg 3g publikt aktiverad): 57
+# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E/3F/3G_PRODUCT_IDS,
+# inkl. våg 3f: goteborg-energi, partille-energi-partille,
+# sodertorns-fjarrvarme-sodertorns-fjarrvarme, och våg 3g: lidkoping-energi-
+# lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw — IDENTISK med
+# Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS i
+# optimateScenario.ts, vars `stodjerOptimateScenario` och
+# `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
+# fem), 0 `godkand_intern_pilot_ej_publik`, 1
+# `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
+# återstående 19 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -190,16 +189,20 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "goteborg-energi": "godkand_publik_10_15_20",
     "partille-energi-partille": "godkand_publik_10_15_20",
     "sodertorns-fjarrvarme-sodertorns-fjarrvarme": "godkand_publik_10_15_20",
-    # Våg 3g ("Lidköpings signerade månadsvisa flödesjustering", handoff/
-    # session 2026-10-12-012, INTERN PILOT ENDAST): exakt de 2 produkter
-    # vars `adjustment_types` innehåller `signed_monthly_flow_adjustment` —
+    # Våg 3g ("Lidköpings signerade månadsvisa flödesjustering", publik
+    # 10/15/20-aktivering, signal APPROVED_FOR_ACTIVATION: Claude,
+    # 2026-10-14 — handoff/session 2026-10-12-012, lade ursprungligen till
+    # dem som INTERN pilot ENDAST): exakt de 2 produkter vars
+    # `adjustment_types` innehåller `signed_monthly_flow_adjustment` —
     # IDENTISK med Neptune-kodens WAVE_3G_PRODUCT_IDS i optimateScenario.ts.
-    # `godkand_intern_pilot_ej_publik` — till skillnad från våg 3d/3e/3f är
-    # detta INTE publikt aktiverat: Neptune-kodens
-    # SCENARIO_PUBLIKT_AKTIVERADE_ID förblir vid exakt 55, oförändrad av
-    # denna våg.
-    "lidkoping-energi-lidkoping-041-kw": "godkand_intern_pilot_ej_publik",
-    "lidkoping-energi-lidkoping-42-kw": "godkand_intern_pilot_ej_publik",
+    # `godkand_publik_10_15_20` — publikt aktiverad, precis som våg
+    # 1/2/3a/3b/3c/3d/3e/3f (SCENARIO_PUBLIKT_AKTIVERADE_ID nu 57 i
+    # Neptune-koden). Statusen `godkand_intern_pilot_ej_publik` var den
+    # tidigare interna pilotstatusen och kvarstår i
+    # ALLOWED_SCENARIO_REVIEW_STATUSES som reserverad vokabulär för en
+    # framtida intern pilot, men bärs INTE längre av någon rad i registret.
+    "lidkoping-energi-lidkoping-041-kw": "godkand_publik_10_15_20",
+    "lidkoping-energi-lidkoping-42-kw": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -1185,10 +1188,10 @@ def build_matrix(text: str) -> dict[str, Any]:
                     f"Våg 3g-produkten {product_id!r} har measurement_resolutions.{falt} "
                     f"{row['measurement_resolutions'].get(falt)!r}, förväntat 'manadsvis'."
                 )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3g-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
 
         raw_price = latest_price(tariffs[product_id])
@@ -1374,7 +1377,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (55 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (57 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
         "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
@@ -1401,8 +1404,11 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  Partille Energi och Södertörns Fjärrvärme, samtliga med en",
         "  `temperature_difference`-justering, exakt Neptune-kodens",
         "  `WAVE_3F_PRODUCT_IDS`, publikt aktiverad signal APPROVED_FOR_ACTIVATION:",
-        "  Claude, 2026-10-12):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 55 leverantorId,",
+        "  Claude, 2026-10-12; våg 3g: Lidköping Energi 0–41 kW och 42+ kW,",
+        "  samtliga med en `signed_monthly_flow_adjustment`-justering, exakt",
+        "  Neptune-kodens `WAVE_3G_PRODUCT_IDS`, publikt aktiverad signal",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-14):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 57 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",

@@ -11,7 +11,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
 - `scenario_review_status=godkand_publik_10_15_20`
-  (55 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
+  (57 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
   2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens
   `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:
@@ -38,8 +38,11 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   Partille Energi och Södertörns Fjärrvärme, samtliga med en
   `temperature_difference`-justering, exakt Neptune-kodens
   `WAVE_3F_PRODUCT_IDS`, publikt aktiverad signal APPROVED_FOR_ACTIVATION:
-  Claude, 2026-10-12):
-  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 55 leverantorId,
+  Claude, 2026-10-12; våg 3g: Lidköping Energi 0–41 kW och 42+ kW,
+  samtliga med en `signed_monthly_flow_adjustment`-justering, exakt
+  Neptune-kodens `WAVE_3G_PRODUCT_IDS`, publikt aktiverad signal
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-14):
+  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 57 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
@@ -48,7 +51,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 2, godkand_publik_10_15_20: 55, not_reviewed: 19, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_publik_10_15_20: 57, not_reviewed: 19, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -80,8 +83,8 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 2 | karlstads-energi-karlstad | Karlstads Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | karlstad_debiterbar_effekt_kw, karlstad_vald_niva_id | — | — |
 | 2 | kils-energi-kil | Kils Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | — | kil_debiterbar_effekt_kw, kil_vald_niva_id | historik: kil_debiterbar_effekt_kw | — |
 | 3 | kraftringen-kraftringen | Kraftringen | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, kraftringen_debiterbar_effekt_kw, kraftringen_vald_niva_id | historik: kraftringen_debiterbar_effekt_kw | — |
-| 3 | lidkoping-energi-lidkoping-041-kw | Lidköping Energi — Lidköping 0–41 kW | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (2 band) | signed_monthly_flow_adjustment | lidkoping_debiterbar_effekt_kw, lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c, lidkoping_vald_niva_id | historik: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c; serie: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c | — |
-| 3 | lidkoping-energi-lidkoping-42-kw | Lidköping Energi — Lidköping 42+ kW | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (2 band) | signed_monthly_flow_adjustment | lidkoping_debiterbar_effekt_kw, lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c, lidkoping_vald_niva_id | historik: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c; serie: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c | — |
+| 3 | lidkoping-energi-lidkoping-041-kw | Lidköping Energi — Lidköping 0–41 kW | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (2 band) | signed_monthly_flow_adjustment | lidkoping_debiterbar_effekt_kw, lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c, lidkoping_vald_niva_id | historik: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c; serie: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c | — |
+| 3 | lidkoping-energi-lidkoping-42-kw | Lidköping Energi — Lidköping 42+ kW | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (2 band) | signed_monthly_flow_adjustment | lidkoping_debiterbar_effekt_kw, lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c, lidkoping_vald_niva_id | historik: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c; serie: lidkoping_kund_avkylning_c, lidkoping_kund_volym_m3, lidkoping_nat_avkylning_c | — |
 | 3 | lulea-energi-lulea | Luleå Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (7 band) | volume | flode_m3, lulea_debiterbar_effekt_kw, lulea_vald_niva_id | historik: flode_m3, lulea_debiterbar_effekt_kw; serie: flode_m3 | — |
 | 3 | malarenergi-vasteras-och-hallstahammar-24-lagenheter | Mälarenergi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | ingen debiterbar kapacitetsdel | volume | flode_m3 | historik: flode_m3; serie: flode_m3 | — |
 | 3 | mjolby-svartadalen-energi-mjolby | Mjölby Svartådalen Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | volume | flode_m3, mjolby_debiterbar_effekt_kw, mjolby_vald_niva_id | historik: mjolby_debiterbar_effekt_kw | — |
