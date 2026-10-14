@@ -288,6 +288,74 @@ Neptune-ändring, aktivering, mainflytt eller push.
 
 `CHANGES_REQUIRED: Claude`
 
+## Claude rättningsrunda 2 (2026-10-14, signal 2026-10-14-002)
+
+Claude utförde den avgränsade rättningsrundan från omgranskning
+`2026-10-14-001` utan ny fråga till Robert.
+
+**P1 — exakt fem policyfält mekaniskt bundet.** `build_matrix()`
+kontrollerar nu den råa `kravda_falt`-listan direkt, innan den reduceras
+till mängder/kartor: listan måste ha exakt 5 poster, posternas nycklar
+måste vara inbördes unika, och nyckelmängden måste vara exakt de fem
+förväntade (`keys["effekt"]`, `keys["band"]`, de tre Q/T/Tm-serierna). En
+duplicerad sjätte post — både en ordagrann kopia och en kopia med ett
+annat värde för samma nyckel — faller nu mekaniskt.
+
+**P1 — typmedveten numerisk jämförelse.** Ny hjälpfunktion
+`_strict_numeric_equal()` avvisar varje bool/tal-korsning (Python:
+`True == 1`, `False == 0`) rekursivt genom listor/dict. Tillämpad på
+`kapacitet.kw_faktor`, `kapacitet.min_debiteringsbas`, hela
+`kapacitet.nivaer`-bandtabellen samt Q/T/Tm-kontraktets `minvarde`/
+`maxvarde`/`antal_varden`-jämförelser. Sex nya committade mutationsprov
+reproducerar de fyra råmutationer Codex listade (`kw_faktor=true`,
+bandminimum `false`, Q- och Tm-minimum `false`) samt de två
+`kravda_falt`-dupliceringsfallen.
+
+**Testlucka — bandmutationstestet görs produktspecifikt.**
+`test_wave_3g_band_price_mutation_is_fail_closed` och den nya
+`test_wave_3g_band_min_boolean_mutation_is_fail_closed` itererar nu över
+båda `WAVE_3G_PRODUCT_IDS` med `subTest` och en ny
+`_mutate_wave_3g_price_for()`-hjälpfunktion som muterar exakt en produkt
+åt gången, så att både 0–41 kW- och 42+ kW-bandtabellerna faktiskt
+exekveras och bevisas oberoende av varandra.
+
+Oförändrat scope: endast skills-generatorn, dess testfil och append-only
+loggning ändrades. Ingen Neptune-ändring, tariff-/motor-/UI-/Enkeyändring,
+aktivering, mainflytt eller push.
+
+### Verifiering (oberoende körd av Claude)
+
+- `python3 -I -m pytest Fjarrvarmetariffer/ -q`: **128 passerade, 4
+  subtests passerade** (122 tidigare + 6 nya mutationsprov för denna
+  rättning).
+- `python3 -I generera_besparingspotential_tackningsmatris.py --check`:
+  "Täckningsmatrisen matchar 77 produkter och källhashen." (exit 0,
+  oförändrad disposition 55/2/1/19=77).
+- `git diff --check` mot de två ändrade skills-filerna: rent.
+- `git status` i skills-repot oförändrat utöver denna rättning — samtliga
+  förbefintliga, orelaterade ospårade/ändrade filer lämnade ostagade och
+  orörda.
+- Neptune-worktreen `/private/tmp/neptune-academy-optimate-vag-3g`:
+  `git status --short` ger inget. HEAD oförändrat på
+  `f2c57c3f9b92febb8256b8a05ef59d716a790421`. Ingen Neptune-
+  produktionskod, tariffdata, motor, UI eller Enkey-fil rördes; ingen
+  Vitest-omkörning behövdes.
+
+### Slutläge
+
+- Neptune: oförändrad, gren `optimate-vag-3g-lidkoping-signed-flow` @
+  `f2c57c3f9b92febb8256b8a05ef59d716a790421`, worktree bevisat ren.
+- skills: ny commit ovanpå `ba815e70ec71471be42092bf06e06faead08ea72` på
+  `main`, fortfarande ovanpå `origin/main=9a9fe40171b392372b73a940daec1ce3964bd1df`.
+  Opushad.
+- Disposition oförändrad: **55 publika / 2 interna pilot (ej publik) / 1
+  prototyp / 19 ogranskade = 77**.
+
+Ingen Neptune-produktionsändring, tariff-, motor-, UI- eller
+Enkeyändring. Ingen publik aktivering, mainflytt eller push.
+
+`REVIEW_READY: Codex`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
@@ -297,3 +365,8 @@ Neptune-ändring, aktivering, mainflytt eller push.
   utfall är **99 testfiler totalt och 69/69 nya riktade Wave-3g-prov**.
   Historikraden i `index.md` ändras inte; denna post är den dokumenterade
   rättelsen enligt konversations-README §5.
+- `2026-10-14T00:00:00+02:00` – Rättningsrunda 2 levererad mot
+  omgranskning `2026-10-14-001`: `kravda_falt`-längd/unikhet bundet,
+  typmedveten numerisk jämförelse stänger bool/tal-korsningen, och
+  bandmutationstestet gjordes produktspecifikt. `REVIEW_READY: Codex`
+  (signal `2026-10-14-002`).

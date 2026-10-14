@@ -497,6 +497,25 @@ ALLOWED_SCENARIO_REVIEW_STATUSES = frozenset({
 })
 
 
+# Omgranskning 2026-10-14-001 (P1): vanlig Python-likhet gör att
+# True == 1 och False == 0, så ett booleskt JSON-värde kan tyst passera
+# ett numeriskt Wave 3g-kontrakt (kapacitet.kw_faktor, bandtabellens
+# nivåer, Q/T/Tm-seriekontraktet). Denna jämförelse avvisar varje
+# bool/tal-korsning i båda riktningarna, rekursivt genom listor och dict.
+def _strict_numeric_equal(actual: Any, expected: Any) -> bool:
+    if isinstance(actual, bool) or isinstance(expected, bool):
+        return type(actual) is type(expected) and actual == expected
+    if isinstance(expected, dict) and isinstance(actual, dict):
+        return actual.keys() == expected.keys() and all(
+            _strict_numeric_equal(actual[key], expected[key]) for key in expected
+        )
+    if isinstance(expected, list) and isinstance(actual, list):
+        return len(actual) == len(expected) and all(
+            _strict_numeric_equal(a, e) for a, e in zip(actual, expected)
+        )
+    return actual == expected
+
+
 def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     seen: set[str] = set()
     result: dict[str, Any] = {}
@@ -1116,18 +1135,18 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3g-produkten {product_id!r} har kapacitet.typ={raw_capacity.get('typ')!r}, "
                 f"förväntat exakt {params['kapacitet_typ']!r}."
             )
-        if raw_capacity.get("kw_faktor") != params["kw_faktor"]:
+        if not _strict_numeric_equal(raw_capacity.get("kw_faktor"), params["kw_faktor"]):
             raise ValueError(
                 f"Våg 3g-produkten {product_id!r} har kapacitet.kw_faktor="
                 f"{raw_capacity.get('kw_faktor')!r}, förväntat exakt {params['kw_faktor']!r}."
             )
-        if raw_capacity.get("min_debiteringsbas") != params["min_debiteringsbas"]:
+        if not _strict_numeric_equal(raw_capacity.get("min_debiteringsbas"), params["min_debiteringsbas"]):
             raise ValueError(
                 f"Våg 3g-produkten {product_id!r} har kapacitet.min_debiteringsbas="
                 f"{raw_capacity.get('min_debiteringsbas')!r}, förväntat exakt "
                 f"{params['min_debiteringsbas']!r}."
             )
-        if (raw_capacity.get("nivaer") or []) != params["capacity_band_values"]:
+        if not _strict_numeric_equal(raw_capacity.get("nivaer") or [], params["capacity_band_values"]):
             raise ValueError(
                 f"Våg 3g-produkten {product_id!r} har kapacitet.nivaer="
                 f"{raw_capacity.get('nivaer')!r}, förväntat exakt "
@@ -1232,6 +1251,26 @@ def build_matrix(text: str) -> dict[str, Any]:
                 "förväntat None."
             )
         raw_required_fields = raw_policy.get("kravda_falt") or []
+        # Omgranskning 2026-10-14-001 (P1): product_row() reducerar
+        # kravda_falt till mängder/kartor, så en duplicerad post (två
+        # fält med samma nyckel) passerade tidigare tyst. Bind den råa
+        # listans längd och nyckelunikhet innan fälten används.
+        if len(raw_required_fields) != 5:
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har {len(raw_required_fields)} "
+                "kravda_falt-poster, förväntat exakt 5."
+            )
+        raw_required_keys = [field.get("nyckel") for field in raw_required_fields]
+        if len(set(raw_required_keys)) != len(raw_required_keys):
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har duplicerade kravda_falt-nycklar "
+                f"{raw_required_keys!r}, förväntat exakt fem unika nycklar."
+            )
+        if set(raw_required_keys) != set(expected_required_fields):
+            raise ValueError(
+                f"Våg 3g-produkten {product_id!r} har kravda_falt-nycklar "
+                f"{sorted(raw_required_keys)!r}, förväntat exakt {expected_required_fields!r}."
+            )
         effekt_field = next(
             (field for field in raw_required_fields if field.get("nyckel") == keys["effekt"]), None
         )
@@ -1284,7 +1323,7 @@ def build_matrix(text: str) -> dict[str, Any]:
                     f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.vardetyp="
                     f"{serie_field.get('vardetyp')!r}, förväntat exakt 'number_series'."
                 )
-            if serie_field.get("antal_varden") != 12:
+            if not _strict_numeric_equal(serie_field.get("antal_varden"), 12):
                 raise ValueError(
                     f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.antal_varden="
                     f"{serie_field.get('antal_varden')!r}, förväntat exakt 12."
@@ -1295,7 +1334,7 @@ def build_matrix(text: str) -> dict[str, Any]:
                     f"{serie_field.get('rullande')!r}, förväntat exakt True."
                 )
             for contract_key, expected_value in contract.items():
-                if serie_field.get(contract_key) != expected_value:
+                if not _strict_numeric_equal(serie_field.get(contract_key), expected_value):
                     raise ValueError(
                         f"Våg 3g-produkten {product_id!r} har {serie_nyckel}.{contract_key}="
                         f"{serie_field.get(contract_key)!r}, förväntat exakt {expected_value!r}."
