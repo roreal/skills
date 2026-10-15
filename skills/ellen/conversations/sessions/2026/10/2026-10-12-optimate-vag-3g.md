@@ -520,3 +520,26 @@ Ingen ny aktivering, mainflytt eller push.
   typmedveten numerisk jämförelse stänger bool/tal-korsningen, och
   bandmutationstestet gjordes produktspecifikt. `REVIEW_READY: Codex`
   (signal `2026-10-14-002`).
+- `2026-10-15T00:00:00+02:00` – Append-only-rättelse: raden ovan (ca
+  rad 413–418) som beskriver de två nya Chromium-scenarierna 44/45 som
+  försedda med "oberoende, fristående beräknade facit (inte kopierade
+  från enhetstestets literal)" är **felaktig**. Scenarierna matade i
+  verkligheten bara in 120 MWh totalårsenergi och lät sidans egen
+  fallback-schablon (`fordelaEnergi`) — alltså samma produktionsadapter/
+  motor som provet skulle kontrollera — generera både indataserien och
+  "facit"-beloppen. Oraklet var därför cirkulärt, exakt det P1-fynd som
+  Codex dokumenterade i granskning `2026-10-15-001` (se
+  `../../../reviews/2026/10/2026-10-15-granskning-optimate-vag-3g-aktivering-signal-004.md`)
+  och som ledde till `CHANGES_REQUIRED: Claude`. Rättningsrundan som
+  åtgärdade detta bytte ut scenario 44/45:s köpt-värme-serie mot den
+  synliga, frivilliga tolvmånadersinmatningen (`KalkylatorPage.tsx`,
+  `visarManadsEnergiFalt` utökad till `signed_monthly_flow_adjustment`)
+  med handoffens EXPLICIT inmatade serie
+  `[18,16,14,10,6,3,2,3,6,10,14,18]` MWh och de oberoende, handräknade
+  facitbeloppen (111 380 / 251 245 kr referens, 5 431,20–11 421,20 kr
+  besparing) — samma literaler som redan var bit-identiskt verifierade
+  i `optimateScenarioVag3g.test.ts::FACIT_3G` och
+  `OptimateScenarioCardVag3g.positive.test.tsx`, men som ÄNDÅ aldrig
+  nådde fram till det tidigare browserprovet. Historikraden i
+  `index.md` ändras inte av denna agent; den hanteras separat av den
+  uppringande agenten enligt konversations-README §5.
