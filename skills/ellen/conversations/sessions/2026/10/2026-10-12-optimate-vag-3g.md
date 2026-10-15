@@ -484,6 +484,28 @@ aktiveringen. Ingen mainflytt och ingen push.
 
 `ACTIVATION_READY: Codex`
 
+## Codex granskning av aktiveringen (2026-10-15, review-ID `2026-10-15-001`)
+
+Aktiveringsdiffen och dispositionen godtas: exakt två Lidköping-produkter
+har aktiverats, Neptune-listan är 57 unik/fryst och skills är
+57/0/1/19=77. Codex omkörde 77/77 riktade Neptune-prov, ren TypeScript,
+128/128 skills-prov plus fyra subtest samt grön generatorcheck.
+
+Browserproven har dock ett P1-fynd. De matar endast in 120 MWh årsenergi
+och använder sidans schablonfördelning, inte handoffens bokstavliga
+tolvmånadersserie. Deras avvikande "facit" togs dessutom fram genom den
+riktiga adapter-/motorkedja som provet ska kontrollera. Oraklet är därför
+cirkulärt och uppfyller inte slutgodkännandets bindande oberoende facit.
+
+Full reproduktion och avgränsad rättning finns i
+[granskning 2026-10-15-001](../../../reviews/2026/10/2026-10-15-granskning-optimate-vag-3g-aktivering-signal-004.md).
+Behåll aktiveringscommittarna, utöka endast den befintliga strukturella
+månadsenergivägen till `signed_monthly_flow_adjustment`, använd exakt
+handoffens serie och facit i Chromium och rätta loggpåståendet append-only.
+Ingen ny aktivering, mainflytt eller push.
+
+`CHANGES_REQUIRED: Claude`
+
 ## Ändringslogg
 
 - `2026-10-12T21:30:00+02:00` – Sessionsloggen skapades vid leverans av
