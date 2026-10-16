@@ -170,3 +170,41 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   [omgranskning 2026-10-16-005](../../../reviews/2026/10/2026-10-16-omgranskning-optimate-vag-3h-signal-004.md).
 
   `CHANGES_REQUIRED: Claude`
+
+- `2026-10-16T21:13:21+02:00` – Claude utförde sluträttningsrundan ur
+  omgranskning 2026-10-16-005 (signal 004) utan ny fråga till Robert, i den
+  verifierade worktreen `/private/tmp/neptune-academy-optimate-vag-3h`
+  (gren `optimate-vag-3h-legacyprodukter`, ovanpå oförändrat
+  `origin/main=00fe4bf`, direkt ovanpå den omgranskade commiten `698d167`).
+  **P1:** `optimateScenarioVag3h.test.ts` — de punktvisa toppfältsassertionerna
+  för Mölndals och Norrenergis `prisar.kapacitet` ersatta med var sin enda
+  `expect(prisar.kapacitet).toEqual({...})` som binder exakt `typ`/`enhet`/
+  `kw_faktor`/`nivaer`/`min_debiteringsbas`, samma mönster som redan användes
+  för Gotland taxa 21. **P2:**
+  `besparingsvardeLegacyKostnadsledGate.test.ts` — Vattenfall-provet
+  omdöpt för att ärligt beskriva ett okänt, aldrig piloterat ID (ID:t finns
+  inte i `TARIFFER`, verifierat direkt mot katalogen); Sandviken/Habo-proven
+  för kontraktsgatade katalog-ID:n lämnade oförändrade; nytt separat prov
+  verifierar att `riksgenomsnitt` — bekräftat i matrisen
+  (`scenario_review_status=not_reviewed`, `cost_path=legacy_besparing`,
+  `synthetic=true`) som det enda kvarvarande ogranskade objektet med denna
+  cost_path, och ett GENUINT checkat-in katalogobjekt
+  (`STANDARD_LEVERANTOR`-fallbacken i `besparingsvarde.ts`) — inte ingår i
+  `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER_IDS` och avvisas typat med
+  `Produktbegransning('legacy_kostnadsled_ej_tillaten')`. Ingen
+  produktionskod, tariffdata, allowlist eller generator rörd.
+
+  Oberoende omkört av Claude: riktade Wave-3h-/legacyprov **53/53** (52
+  tidigare + 1 nytt), hela Vitest **3624/3624** (102 filer), `npx tsc
+  --noEmit` rent, grönt produktionsbygge (`dist/` återställd till
+  committerat innehåll efter bygget), `git diff --check` rent. skills:
+  ingen kodändring krävdes; `python3 -m pytest` **155 passed, 4 subtests
+  passed** oförändrat. Disposition oförändrad **57/3/1/16=77**, publik
+  lista exakt 57. Ny Neptune-commit `9cf9aab` på
+  `optimate-vag-3h-legacyprodukter` (ovanpå `698d167`), ej pushad, ej
+  sammanslagen. Orelaterade, sedan tidigare befintliga lokala ändringar i
+  båda reporna lämnade orörda och ostagade.
+
+  Ingen publik aktivering, mainflytt eller push.
+
+  `REVIEW_READY: Codex`
