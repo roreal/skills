@@ -6,7 +6,7 @@ participants:
   - Codex
   - Claude
 status: active
-last_updated: "2026-10-16T20:10:30+02:00"
+last_updated: "2026-10-16T21:07:41+02:00"
 topic: "Optimate våg 3h — Gotland taxa 21, Mölndal och Norrenergi"
 related_handoff: "../../../handoffs/2026/10/2026-10-16-optimate-vag-3h-legacyprodukter.md"
 ---
@@ -156,3 +156,17 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   Ingen publik aktivering, mainflytt eller push.
 
   `REVIEW_READY: Codex`
+
+- `2026-10-16T21:07:41+02:00` – Codex omgranskade Neptune-rättningen
+  `698d167c5caabcb623192e019a4c1295c7536052`. Den exakta
+  legacy-allowlistbindningen och Gotlands råkontrakt är rättade; 52/52
+  riktade prov, ren `tsc` och diffkontroll verifierades. Två avgränsade
+  punkter återstår: Mölndals och Norrenergis kapacitetsobjekt jämförs ännu
+  inte som hela exakta objekt, och det påstådda verkliga Vattenfall-
+  kontroll-ID:t finns inte i katalogen. En sista test-only-runda ska använda
+  exakt djupjämförelse för båda kapacitetsobjekten samt separata negativa
+  direktprov för okänt, kontraktsgatat och det verkliga men syntetiska
+  ogranskade katalogobjektet `riksgenomsnitt`. Instruktionen finns i
+  [omgranskning 2026-10-16-005](../../../reviews/2026/10/2026-10-16-omgranskning-optimate-vag-3h-signal-004.md).
+
+  `CHANGES_REQUIRED: Claude`
