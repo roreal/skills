@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 19)
+        self.assertEqual(len(not_reviewed), 16)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -122,19 +122,27 @@ class TariffMatrixTests(unittest.TestCase):
                 for pid in wave_3g_ids
             )
         )
+        wave_3h_ids = matrix_module.WAVE_3H_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3h_ids
+            )
+        )
         pilot_ids = {
             "stockholm-exergi",
             "sundsvall-energi-indal-liden-och-lucksta",
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
         } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids | wave_3f_ids \
-            | wave_3g_ids
+            | wave_3g_ids | wave_3h_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 3,
                 "godkand_publik_10_15_20": 57,
-                "not_reviewed": 19,
+                "not_reviewed": 16,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -145,11 +153,13 @@ class TariffMatrixTests(unittest.TestCase):
         # (handoff 2026-10-07-002, intern pilot), därefter av
         # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot), sedan
         # av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern pilot) och
-        # slutligen av WAVE_3G_PRODUCT_IDS (handoff/session 2026-10-12-012,
+        # sedan av WAVE_3G_PRODUCT_IDS (handoff/session 2026-10-12-012,
         # intern pilot) innan samtliga publikt aktiverades (signal
         # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12/
-        # -2026-10-14). Statusen bars sedan 2026-10-14 av 0 produkter igen —
-        # ingen rad i registret bär den längre.
+        # -2026-10-14). Statusen bars sedan 2026-10-14 av 0 produkter, men
+        # bärs nu (handoff 2026-10-16-optimate-vag-3h-legacyprodukter) av
+        # exakt WAVE_3H_PRODUCT_IDS (3 produkter) — en REN INTERN PILOT som
+        # INTE publikt aktiveras i detta steg.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -220,12 +230,15 @@ class TariffMatrixTests(unittest.TestCase):
         # som INTERN PILOT ENDAST — lidkoping-energi-lidkoping-041-kw och
         # lidkoping-energi-lidkoping-42-kw — och signal
         # APPROVED_FOR_ACTIVATION-2026-10-14 aktiverade dem publikt också.
-        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
+        # Handoff 2026-10-16-optimate-vag-3h-legacyprodukter lade därefter
+        # till EXAKT tre nya rader som REN INTERN PILOT — Gotland taxa 21,
+        # Mölndal och Norrenergi — se WAVE_3H_PRODUCT_IDS. Dessa publikt
+        # aktiveras INTE i detta steg.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3H_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -1960,6 +1973,306 @@ class TariffMatrixTests(unittest.TestCase):
 
         with self._mutate_wave_3g_price(mutator):
             with self.assertRaisesRegex(ValueError, "lidkoping_nat_avkylning_c.minvarde"):
+                build_matrix(self.source_text)
+
+    def _mutate_wave_3h_price_for(self, mutated_id: str, mutator: Any) -> Any:
+        original_latest_price = matrix_module.latest_price
+
+        def mutated_latest_price(entry: Any) -> dict[str, Any]:
+            price = original_latest_price(entry)
+            if entry.get("id") == mutated_id:
+                price = mutator(price)
+            return price
+
+        return patch.object(matrix_module, "latest_price", mutated_latest_price)
+
+    def test_wave_3h_membership_and_status_is_mechanically_locked(self) -> None:
+        # Handoff 2026-10-16-optimate-vag-3h-legacyprodukter,
+        # APPROVED_FOR_IMPLEMENTATION: Claude — INTERN PILOT ENDAST. Exakt
+        # tre verkliga, icke kontraktsgatade legacyprodukter.
+        wave_3h_ids = matrix_module.WAVE_3H_PRODUCT_IDS
+        self.assertEqual(
+            wave_3h_ids,
+            frozenset({
+                "gotlands-energi-gotland-taxa-21-over-50-mwh-ar",
+                "molndal-energi",
+                "norrenergi",
+            }),
+        )
+        self.assertEqual(len(wave_3h_ids), 3)
+        for pid in wave_3h_ids:
+            row = self.by_id[pid]
+            self.assertEqual(row["cost_path"], "legacy_besparing")
+            self.assertTrue(row["savings_today"])
+            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(row["required_policy_fields"], [])
+            self.assertEqual(row["series_fields"], [])
+            self.assertEqual(row["history_fields"], [])
+            self.assertFalse(row["has_eligibility_rule"])
+        # Ingen överlappning med tidigare vågors ID:n eller publik aktivering.
+        self.assertFalse(wave_3h_ids & matrix_module.WAVE_3F_PRODUCT_IDS)
+        self.assertFalse(wave_3h_ids & matrix_module.WAVE_3G_PRODUCT_IDS)
+
+    def test_wave_3h_params_registry_missing_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3H_PRODUCT_PARAMS)
+        del mutated_params["norrenergi"]
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_params_registry_extra_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3H_PRODUCT_PARAMS)
+        mutated_params["sundsvall-energi-indal-liden-och-lucksta"] = dict(
+            next(iter(matrix_module.WAVE_3H_PRODUCT_PARAMS.values()))
+        )
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_extra_product_with_status_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry["sundsvall-energi-indal-liden-och-lucksta"] = "godkand_intern_pilot_ej_publik"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_missing_product_status_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        del mutated_registry["norrenergi"]
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_wrong_status_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry["molndal-energi"] = "godkand_publik_10_15_20"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_wrong_adjustment_types_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: (dict(params, adjustment_types=["volume"]) if pid == "norrenergi" else params)
+            for pid, params in matrix_module.WAVE_3H_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "adjustment_types"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_wrong_capacity_rule_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: (dict(params, capacity_rule="heterogeneous_bands") if pid == "molndal-energi" else params)
+            for pid, params in matrix_module.WAVE_3H_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "capacity_rule"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_wrong_capacity_bands_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: (dict(params, capacity_bands=99) if pid == "norrenergi" else params)
+            for pid, params in matrix_module.WAVE_3H_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "kapacitetsband"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_wrong_has_capacity_charge_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: (dict(params, has_capacity_charge=True) if pid == "gotlands-energi-gotland-taxa-21-over-50-mwh-ar" else params)
+            for pid, params in matrix_module.WAVE_3H_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3H_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "has_capacity_charge"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_product_with_policy_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {
+                **price,
+                "_kraver_kontrakt": True,
+                "policy": {"stodjer_aktuell_arskostnad": True, "stodjer_besparing": False, "kravda_falt": []},
+            }
+
+        with self._mutate_wave_3h_price_for("molndal-energi", mutator):
+            with self.assertRaisesRegex(ValueError, "cost_path"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_gotland_deadband_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "rate": 11} if a.get("type") == "cooling_deadband" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("gotlands-energi-gotland-taxa-21-over-50-mwh-ar", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_gotland_deadband_fee_below_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "fee_below_degC": 37} if a.get("type") == "cooling_deadband" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("gotlands-energi-gotland-taxa-21-over-50-mwh-ar", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_gotland_volume_discount_band_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "band": [{**a["band"][0], "sats": 1}, *a["band"][1:]]}
+                if a.get("type") == "volume_discount" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("gotlands-energi-gotland-taxa-21-over-50-mwh-ar", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_gotland_foregaende_ars_mwh_default_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "ar_gissning": False} if field.get("nyckel") == "foregaende_ars_mwh" else field
+                for field in price["indatafalt"]
+            ]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for("gotlands-energi-gotland-taxa-21-over-50-mwh-ar", mutator):
+            with self.assertRaisesRegex(ValueError, "foregaende_ars_mwh"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_molndal_flow_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [{**a, "rate": 4.5} for a in price["justeringar"]]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("molndal-energi", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_molndal_capacity_band_price_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            nivaer = [
+                {**band, "pris_kr_per_enhet_ar": 999} if band["id"] == "3" else band
+                for band in price["kapacitet"]["nivaer"]
+            ]
+            return {**price, "kapacitet": {**price["kapacitet"], "nivaer": nivaer}}
+
+        with self._mutate_wave_3h_price_for("molndal-energi", mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_molndal_hogsta_dygnsenergi_heltal_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "heltal": False} if field.get("nyckel") == "hogsta_dygnsenergi_kwh" else field
+                for field in price["indatafalt"]
+            ]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for("molndal-energi", mutator):
+            with self.assertRaisesRegex(ValueError, "hogsta_dygnsenergi_kwh"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_norrenergi_low_utilization_threshold_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "threshold_hours": 2000} if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_norrenergi_incremental_return_temperature_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "rates": [3.4, 27]} if a.get("type") == "incremental_return_temperature" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_norrenergi_incremental_return_temperature_months_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "months": [1, 2, 3, 4, 11, 12]} if a.get("type") == "incremental_return_temperature" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_norrenergi_capacity_band_fee_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            nivaer = [
+                {**band, "avgift_kr_ar": 1} if band["id"] == "2" else band
+                for band in price["kapacitet"]["nivaer"]
+            ]
+            return {**price, "kapacitet": {**price["kapacitet"], "nivaer": nivaer}}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_norrenergi_returtemperatur_c_default_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "default": 35} if field.get("nyckel") == "returtemperatur_c" else field
+                for field in price["indatafalt"]
+            ]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "returtemperatur_c"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_extra_indatafalt_key_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [*price["indatafalt"], {"nyckel": "extra_falt", "enhet": "X"}]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "indatafalt-nycklar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_manadspriser_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            manadspriser = list(price["energi"]["manadspriser"])
+            manadspriser[0] += 1
+            return {**price, "energi": {**price["energi"], "manadspriser": manadspriser}}
+
+        with self._mutate_wave_3h_price_for("norrenergi", mutator):
+            with self.assertRaisesRegex(ValueError, "manadspriser"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_manadsperiodisering_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "manadsperiodisering": "monthly_rate_no_annual_proration"}
+
+        with self._mutate_wave_3h_price_for("gotlands-energi-gotland-taxa-21-over-50-mwh-ar", mutator):
+            with self.assertRaisesRegex(ValueError, "manadsperiodisering"):
+                build_matrix(self.source_text)
+
+    def test_wave_3h_moms_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "moms": "inkl"}
+
+        with self._mutate_wave_3h_price_for("molndal-energi", mutator):
+            with self.assertRaisesRegex(ValueError, "moms"):
                 build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:

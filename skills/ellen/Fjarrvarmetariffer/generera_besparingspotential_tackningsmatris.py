@@ -37,18 +37,24 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Aktuell disposition av 77 produkter (signal
-# APPROVED_FOR_ACTIVATION: Claude, 2026-10-14, våg 3g publikt aktiverad): 57
-# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E/3F/3G_PRODUCT_IDS,
-# inkl. våg 3f: goteborg-energi, partille-energi-partille,
+# katalogen. Aktuell disposition av 77 produkter (handoff
+# 2026-10-16-optimate-vag-3h-legacyprodukter, APPROVED_FOR_IMPLEMENTATION:
+# Claude): 57 `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E/3F/
+# 3G_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-energi-partille,
 # sodertorns-fjarrvarme-sodertorns-fjarrvarme, och våg 3g: lidkoping-energi-
 # lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw — IDENTISK med
 # Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS i
 # optimateScenario.ts, vars `stodjerOptimateScenario` och
 # `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
-# fem), 0 `godkand_intern_pilot_ej_publik`, 1
+# fem), 3 `godkand_intern_pilot_ej_publik` (våg 3h, INTERN PILOT ENDAST, ej
+# publikt aktiverad: gotlands-energi-gotland-taxa-21-over-50-mwh-ar,
+# molndal-energi, norrenergi — tre verkliga, icke kontraktsgatade
+# legacyprodukter med befintlig `legacy_besparing`-väg — IDENTISK med
+# Neptune-kodens WAVE_3H_PRODUCT_IDS i optimateScenario.ts, vars
+# `stodjerOptimateScenario` nu är TRUE och
+# `stodjerOptimateScenarioPubliktAktiverad` förblir FALSE för alla tre), 1
 # `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
-# återstående 19 "not_reviewed".
+# återstående 16 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -203,6 +209,22 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # framtida intern pilot, men bärs INTE längre av någon rad i registret.
     "lidkoping-energi-lidkoping-041-kw": "godkand_publik_10_15_20",
     "lidkoping-energi-lidkoping-42-kw": "godkand_publik_10_15_20",
+    # Våg 3h ("verkliga legacyprodukter", handoff
+    # 2026-10-16-optimate-vag-3h-legacyprodukter, APPROVED_FOR_IMPLEMENTATION:
+    # Claude — INTERN PILOT ENDAST, ej publikt aktiverad): exakt de 3
+    # verkliga, icke kontraktsgatade legacyprodukter (`cost_path ==
+    # legacy_besparing`, befintligt `legacy_arskostnad`-besparingsstöd) som
+    # återstod bland de 19 ogranskade — se WAVE_3H_PRODUCT_IDS/
+    # WAVE_3H_PRODUCT_PARAMS nedan, som binder dessa mot snapshotens råa
+    # pris-/justeringskontrakt. IDENTISK med Neptune-kodens
+    # WAVE_3H_PRODUCT_IDS i optimateScenario.ts, som lagts till i
+    # SCENARIO_PILOT_TARIFFER (backend `legacy_arskostnad`) men explicit INTE
+    # i SCENARIO_PUBLIKT_AKTIVERADE_ID. `godkand_intern_pilot_ej_publik` —
+    # bara en intern beräkningspilot (`stodjerOptimateScenario`), ingen
+    # publik aktivering.
+    "gotlands-energi-gotland-taxa-21-over-50-mwh-ar": "godkand_intern_pilot_ej_publik",
+    "molndal-energi": "godkand_intern_pilot_ej_publik",
+    "norrenergi": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -466,6 +488,166 @@ WAVE_3G_SERIES_FIELD_CONTRACT: dict[str, dict[str, Any]] = {
 WAVE_3G_ADJUSTMENT_KEYS: frozenset[str] = frozenset({
     "type", "faktor_n", "kund_volym_falt", "kund_avkylning_falt", "nat_avkylning_falt",
 })
+
+# Mekanisk, fail-closed lista över exakt Optimate våg 3h-ID:na (handoff
+# 2026-10-16-optimate-vag-3h-legacyprodukter, APPROVED_FOR_IMPLEMENTATION:
+# Claude — INTERN PILOT ENDAST, ej publikt aktiverad) — IDENTISK med
+# Neptune-kodens WAVE_3H_PRODUCT_IDS i optimateScenario.ts. Till skillnad
+# från tidigare vågor delar dessa tre produkter ingen gemensam
+# `adjustment_types`-signatur (Gotland: dödband + volymrabatt; Mölndal:
+# årsvis volymled; Norrenergi: lågutnyttjande + marginell returtemperatur),
+# så build_matrix binder i stället mängden rader med
+# `scenario_review_status == godkand_intern_pilot_ej_publik` mot denna
+# lista — en bindning som fungerar eftersom statusen (reserverad vokabulär
+# sedan våg 3c/3d/3e/3f/3g, men aldrig tidigare buren av någon rad) nu
+# används för EXAKT dessa tre, alla icke kontraktsgatade legacyprodukter
+# med `cost_path=legacy_besparing`, `savings_today=true`, backend
+# `legacy_arskostnad`. Lägg inte till dessa i någon
+# WAVE_*_PUBLIKT_AKTIVERAD-motsvarighet.
+WAVE_3H_PRODUCT_IDS: frozenset[str] = frozenset({
+    "gotlands-energi-gotland-taxa-21-over-50-mwh-ar",
+    "molndal-energi",
+    "norrenergi",
+})
+
+# Per produkt: hela det råa pris-/justerings-/indatafältskontraktet, direkt
+# ur tariffer.generated.ts — handoff 2026-10-16-optimate-vag-3h-
+# legacyprodukter §"Fail-closed-grindar". Dessa tre saknar `policy` (ingen
+# `_kraver_kontrakt`-markör) eftersom de är legacyprodukter — därför är
+# required_policy_fields/series_fields/history_fields tomma för alla tre,
+# precis som Göteborg Energi i WAVE_3F_PRODUCT_PARAMS.
+WAVE_3H_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
+    "gotlands-energi-gotland-taxa-21-over-50-mwh-ar": {
+        "adjustment_types": ["cooling_deadband", "volume_discount"],
+        "capacity_rule": "effekt",
+        "capacity_bands": 0,
+        "has_capacity_charge": False,
+        "manadspriser": [1020] * 12,
+        "kapacitet": {
+            "typ": "effekt", "enhet": "kW", "kw_faktor": 1.0, "nivaer": [],
+            "min_debiteringsbas": None,
+        },
+        "fast_avgift": {"kr_ar": 0, "periodisering": "days_in_month/days_in_year"},
+        "manadsperiodisering": "days_in_month/days_in_year",
+        "justeringar": [
+            {
+                "type": "cooling_deadband", "rate": 10, "unit": "SEK/MWh/degC",
+                "months": [1, 2, 3, 4, 5, 9, 10, 11, 12],
+                "fee_below_degC": 38, "bonus_above_degC": 48,
+                "measurement": "monthly_mean_cooling_delta_temperature",
+                "formula": "energy_MWh * 10 * (max(38-cooling_degC,0)-max(cooling_degC-48,0))",
+            },
+            {
+                "type": "volume_discount", "basis": "previous_calendar_year_MWh",
+                "unit": "SEK/MWh", "application": "selected_rate_applies_to_all_purchased_energy",
+                "source_vat": "inclusive; divided by 1.25",
+                "band": [
+                    {"min": 0, "max": 249, "sats": 0},
+                    {"min": 250, "max": 1249, "sats": 4},
+                    {"min": 1250, "max": 2500, "sats": 8},
+                    {"min": 2500, "max": None, "sats": 12},
+                ],
+            },
+        ],
+        "indatafalt": {
+            "avkylning_c": {
+                "enhet": "°C", "default": 43, "min_varde": 20, "max_varde": 70,
+                "ar_gissning": False, "heltal": False,
+            },
+            "foregaende_ars_mwh": {
+                "enhet": "MWh", "default": None, "min_varde": 0, "max_varde": 100000,
+                "ar_gissning": True, "heltal": False,
+            },
+        },
+    },
+    "molndal-energi": {
+        "adjustment_types": ["volume"],
+        "capacity_rule": "effekt",
+        "capacity_bands": 14,
+        "has_capacity_charge": True,
+        "manadspriser": [484, 484, 356, 215.5, 152, 152, 152, 152, 152, 215.5, 356, 484],
+        "kapacitet": {
+            "typ": "effekt", "enhet": "kWh/dygn", "kw_faktor": 24.0,
+            "nivaer": [
+                {"id": "1", "min": 0, "max": 299, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 83.4},
+                {"id": "2", "min": 300, "max": 600, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 77.03999999999999},
+                {"id": "3", "min": 601, "max": 1200, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 72.84},
+                {"id": "4", "min": 1201, "max": 2400, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 65.03999999999999},
+                {"id": "5", "min": 2401, "max": 4800, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 63.599999999999994},
+                {"id": "6", "min": 4801, "max": 7200, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 62.16},
+                {"id": "7", "min": 7201, "max": 9600, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 60.72},
+                {"id": "8", "min": 9601, "max": 12000, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 58.67999999999999},
+                {"id": "9", "min": 12001, "max": 14400, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 57.12},
+                {"id": "10", "min": 14401, "max": 16800, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 55.199999999999996},
+                {"id": "11", "min": 16801, "max": 19200, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 53.519999999999996},
+                {"id": "12", "min": 19201, "max": 21600, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 51.72},
+                {"id": "13", "min": 21601, "max": 24000, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 50.16},
+                {"id": "14", "min": 24001, "max": None, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 48.12},
+            ],
+            "min_debiteringsbas": None,
+        },
+        "fast_avgift": None,
+        "manadsperiodisering": "monthly_rate_no_annual_proration",
+        "justeringar": [
+            {"type": "volume", "rate": 4.31, "unit": "SEK/m3", "months": list(range(1, 13))},
+        ],
+        "indatafalt": {
+            "flode_m3": {
+                "enhet": "m³/år", "default": None, "min_varde": 0, "max_varde": 1000000,
+                "ar_gissning": True, "heltal": False,
+            },
+            "hogsta_dygnsenergi_kwh": {
+                "enhet": "kWh/dygn", "default": None, "min_varde": 0, "max_varde": 1000000,
+                "ar_gissning": True, "heltal": True,
+            },
+        },
+    },
+    "norrenergi": {
+        "adjustment_types": ["incremental_return_temperature", "low_utilization"],
+        "capacity_rule": "effekt",
+        "capacity_bands": 7,
+        "has_capacity_charge": True,
+        "manadspriser": [694.75, 694.75, 557, 557, 334, 334, 334, 334, 334, 557, 557, 694.75],
+        "kapacitet": {
+            "typ": "effekt", "enhet": "kW", "kw_faktor": 1.0,
+            "nivaer": [
+                {"id": "1", "min": 10, "max": 50, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 1185},
+                {"id": "2", "min": 51, "max": 300, "avgift_kr_ar": 2849, "pris_kr_per_enhet_ar": 1128},
+                {"id": "3", "min": 301, "max": 600, "avgift_kr_ar": 48055, "pris_kr_per_enhet_ar": 979},
+                {"id": "4", "min": 601, "max": 1000, "avgift_kr_ar": 62653, "pris_kr_per_enhet_ar": 954},
+                {"id": "5", "min": 1001, "max": 2000, "avgift_kr_ar": 94518, "pris_kr_per_enhet_ar": 923},
+                {"id": "6", "min": 2001, "max": 5000, "avgift_kr_ar": 197955, "pris_kr_per_enhet_ar": 871},
+                {"id": "7", "min": 5001, "max": None, "avgift_kr_ar": 301358, "pris_kr_per_enhet_ar": 819},
+            ],
+            "min_debiteringsbas": None,
+        },
+        "fast_avgift": None,
+        "manadsperiodisering": "days_in_month/days_in_year",
+        "justeringar": [
+            {
+                "type": "low_utilization", "threshold_hours": 2100, "rate": 0.38,
+                "unit": "SEK/kW/hour",
+                "formula": "max(0, 2100-utilization_hours) * billing_kW * 0.38",
+                "utilization_basis": "normal_year_corrected_energy_June_May_kWh / billing_kW",
+            },
+            {
+                "type": "incremental_return_temperature", "months": [1, 2, 3, 4, 10, 11, 12],
+                "thresholds_degC": [30, 60], "rates": [3.4, 26.5], "unit": "SEK/MWh/degC",
+                "temperature_weighting": "flow_weighted_monthly",
+            },
+        ],
+        "indatafalt": {
+            "normalarskorrigerad_energi_mwh": {
+                "enhet": "MWh", "default": None, "min_varde": 0, "max_varde": 100000,
+                "ar_gissning": False, "heltal": False,
+            },
+            "returtemperatur_c": {
+                "enhet": "°C", "default": 30, "min_varde": 20, "max_varde": 90,
+                "ar_gissning": False, "heltal": False,
+            },
+        },
+    },
+}
 
 # Umeå Energi Enkels asymmetriska flödesdifferens-justeringsparametrar,
 # direkt ur den checkade-in tariffer.generated.ts — handoff 2026-10-08-001
@@ -1343,6 +1525,151 @@ def build_matrix(text: str) -> dict[str, Any]:
                         f"{serie_field.get(contract_key)!r}, förväntat exakt {expected_value!r}."
                     )
 
+    # Våg 3h ("verkliga legacyprodukter", handoff
+    # 2026-10-16-optimate-vag-3h-legacyprodukter, INTERN PILOT ENDAST, ej
+    # publikt aktiverad): till skillnad från wave_3e_ids/wave_3f_ids/
+    # wave_3g_ids ovan delar dessa tre produkter ingen gemensam
+    # `adjustment_types`-signatur, så bindningen sker i stället via statusen
+    # `godkand_intern_pilot_ej_publik` — se kommentaren vid
+    # WAVE_3H_PRODUCT_IDS. Bevisar att exakt dessa tre, och inga andra,
+    # bär statusen.
+    wave_3h_ids = {
+        row["product_id"] for row in rows
+        if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+    }
+    if wave_3h_ids != WAVE_3H_PRODUCT_IDS:
+        raise ValueError(
+            "godkand_intern_pilot_ej_publik-raderna i snapshoten matchar inte "
+            "WAVE_3H_PRODUCT_IDS. "
+            f"Endast i snapshoten: {sorted(wave_3h_ids - WAVE_3H_PRODUCT_IDS)}; "
+            f"endast i listan: {sorted(WAVE_3H_PRODUCT_IDS - wave_3h_ids)}."
+        )
+    if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
+        raise ValueError(
+            "WAVE_3H_PRODUCT_PARAMS matchar inte WAVE_3H_PRODUCT_IDS. "
+            f"Endast i WAVE_3H_PRODUCT_PARAMS: {sorted(set(WAVE_3H_PRODUCT_PARAMS) - WAVE_3H_PRODUCT_IDS)}; "
+            f"endast i WAVE_3H_PRODUCT_IDS: {sorted(WAVE_3H_PRODUCT_IDS - set(WAVE_3H_PRODUCT_PARAMS))}."
+        )
+    for product_id, params in WAVE_3H_PRODUCT_PARAMS.items():
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3H_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if row["cost_path"] != "legacy_besparing":
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                "förväntat 'legacy_besparing'."
+            )
+        if row["savings_today"] is not True:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har savings_today {row['savings_today']!r}, "
+                "förväntat exakt True."
+            )
+        if row["adjustment_types"] != params["adjustment_types"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har adjustment_types "
+                f"{row['adjustment_types']!r}, förväntat exakt {params['adjustment_types']!r}."
+            )
+        if row["capacity_rule"] != params["capacity_rule"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                f"förväntat exakt {params['capacity_rule']!r}."
+            )
+        if row["capacity_bands"] != params["capacity_bands"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har {row['capacity_bands']} kapacitetsband, "
+                f"förväntat exakt {params['capacity_bands']}."
+            )
+        if row["has_capacity_charge"] != params["has_capacity_charge"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har has_capacity_charge "
+                f"{row['has_capacity_charge']!r}, förväntat exakt {params['has_capacity_charge']!r}."
+            )
+        # Legacyprodukter saknar `policy` (ingen `_kraver_kontrakt`-markör),
+        # så required_policy_fields/series_fields/history_fields/
+        # measurement_resolutions ska alla vara tomma — precis som Göteborg
+        # Energi i WAVE_3F_PRODUCT_PARAMS.
+        if row["required_policy_fields"] != []:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har required_policy_fields "
+                f"{row['required_policy_fields']!r}, förväntat exakt []."
+            )
+        if row["series_fields"] != []:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt []."
+            )
+        if row["history_fields"] != []:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har history_fields "
+                f"{row['history_fields']!r}, förväntat exakt []."
+            )
+        if row["has_eligibility_rule"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+            )
+
+        raw_price = latest_price(tariffs[product_id])
+        if raw_price.get("policy") is not None:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} förväntas sakna policy, men har en."
+            )
+        if raw_price.get("moms") != "exkl":
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har moms {raw_price.get('moms')!r}, "
+                "förväntat 'exkl'."
+            )
+        raw_energi = raw_price.get("energi") or {}
+        if not _strict_numeric_equal(raw_energi.get("manadspriser"), params["manadspriser"]):
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har energi.manadspriser="
+                f"{raw_energi.get('manadspriser')!r}, förväntat exakt {params['manadspriser']!r}."
+            )
+        raw_capacity = raw_price.get("kapacitet") or {}
+        for capacity_key, expected_value in params["kapacitet"].items():
+            if not _strict_numeric_equal(raw_capacity.get(capacity_key), expected_value):
+                raise ValueError(
+                    f"Våg 3h-produkten {product_id!r} har kapacitet.{capacity_key}="
+                    f"{raw_capacity.get(capacity_key)!r}, förväntat exakt {expected_value!r}."
+                )
+        if not _strict_numeric_equal(raw_price.get("fast_avgift"), params["fast_avgift"]):
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har fast_avgift="
+                f"{raw_price.get('fast_avgift')!r}, förväntat exakt {params['fast_avgift']!r}."
+            )
+        if raw_price.get("manadsperiodisering") != params["manadsperiodisering"]:
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har manadsperiodisering="
+                f"{raw_price.get('manadsperiodisering')!r}, förväntat exakt "
+                f"{params['manadsperiodisering']!r}."
+            )
+        raw_adjustments = raw_price.get("justeringar") or []
+        if not _strict_numeric_equal(raw_adjustments, params["justeringar"]):
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har justeringar="
+                f"{raw_adjustments!r}, förväntat exakt {params['justeringar']!r}."
+            )
+        raw_indatafalt = raw_price.get("indatafalt") or []
+        raw_indatafalt_by_key = {field.get("nyckel"): field for field in raw_indatafalt}
+        if set(raw_indatafalt_by_key) != set(params["indatafalt"]):
+            raise ValueError(
+                f"Våg 3h-produkten {product_id!r} har indatafalt-nycklar "
+                f"{sorted(raw_indatafalt_by_key)!r}, förväntat exakt "
+                f"{sorted(params['indatafalt'])!r}."
+            )
+        for falt_nyckel, expected_falt in params["indatafalt"].items():
+            raw_falt = raw_indatafalt_by_key[falt_nyckel]
+            for contract_key, expected_value in expected_falt.items():
+                if not _strict_numeric_equal(raw_falt.get(contract_key), expected_value):
+                    raise ValueError(
+                        f"Våg 3h-produkten {product_id!r} har {falt_nyckel}.{contract_key}="
+                        f"{raw_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
+                    )
+
     counts = {
         "products": len(rows),
         "real_products": sum(not row["synthetic"] for row in rows),
@@ -1369,13 +1696,22 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris",
         "godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —",
         "aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.",
-        "`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,",
+        "`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,",
         "tills prisledens före/efter-beroenden har granskats separat. Ingen av",
         "statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.",
         "",
         "- `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):",
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
+        "- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3h,",
+        "  handoff 2026-10-16-optimate-vag-3h-legacyprodukter,",
+        "  APPROVED_FOR_IMPLEMENTATION: Claude: gotlands-energi-gotland-taxa-21-",
+        "  over-50-mwh-ar, molndal-energi, norrenergi): tre verkliga, icke",
+        "  kontraktsgatade legacyprodukter med befintlig `legacy_besparing`-väg, exakt",
+        "  Neptune-kodens `WAVE_3H_PRODUCT_IDS` i `SCENARIO_PILOT_TARIFFER`",
+        "  (`legacy_arskostnad`-backend). `stodjerOptimateScenario` är sann för dessa",
+        "  tre leverantorId, men `stodjerOptimateScenarioPubliktAktiverad` förblir",
+        "  FALSE — ingen publik UI-aktivering.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
         "  (57 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",

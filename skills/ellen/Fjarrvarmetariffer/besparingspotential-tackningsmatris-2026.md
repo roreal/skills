@@ -3,13 +3,22 @@
 Maskingenererad inventering av den valbara tariff-snapshoten. **Denna matris
 godkänner inte något nytt besparingsscenario eller någon tariffaktivering** —
 aktiveringen sker separat i Neptune-koden; matrisen redovisar bara dess status.
-`scenario_review_status=not_reviewed` gäller alla rader utom de två nedan,
+`scenario_review_status=not_reviewed` gäller alla rader utom de tre nedan,
 tills prisledens före/efter-beroenden har granskats separat. Ingen av
 statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 
 - `scenario_review_status=synlig_sarskild_preliminar_prototyp` (stockholm-exergi):
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
+- `scenario_review_status=godkand_intern_pilot_ej_publik` (3 produkter — våg 3h,
+  handoff 2026-10-16-optimate-vag-3h-legacyprodukter,
+  APPROVED_FOR_IMPLEMENTATION: Claude: gotlands-energi-gotland-taxa-21-
+  over-50-mwh-ar, molndal-energi, norrenergi): tre verkliga, icke
+  kontraktsgatade legacyprodukter med befintlig `legacy_besparing`-väg, exakt
+  Neptune-kodens `WAVE_3H_PRODUCT_IDS` i `SCENARIO_PILOT_TARIFFER`
+  (`legacy_arskostnad`-backend). `stodjerOptimateScenario` är sann för dessa
+  tre leverantorId, men `stodjerOptimateScenarioPubliktAktiverad` förblir
+  FALSE — ingen publik UI-aktivering.
 - `scenario_review_status=godkand_publik_10_15_20`
   (57 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
@@ -51,7 +60,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_publik_10_15_20: 57, not_reviewed: 19, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 3, godkand_publik_10_15_20: 57, not_reviewed: 16, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -72,7 +81,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 2 | gavle-energi-gavle | Gävle Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | marginal_annual_volume_discount | gavle_kapacitetsbehov_kwh_dygn, gavle_vald_niva_id | — | — |
 | 3 | goteborg-energi | Göteborg Energi | legacy_besparing | godkand_publik_10_15_20 | manadspriser | effekt (6 band) | temperature_difference | — | — | — |
 | 1 | gotlands-energi-gotland-taxa-17-under-50-mwh-ar | Gotlands Energi — Gotland taxa 17, under 50 MWh/år | legacy_besparing | godkand_publik_10_15_20 | manadspriser | ingen debiterbar kapacitetsdel | — | — | — | — |
-| 3 | gotlands-energi-gotland-taxa-21-over-50-mwh-ar | Gotlands Energi — Gotland taxa 21, över 50 MWh/år | legacy_besparing | not_reviewed | manadspriser | ingen debiterbar kapacitetsdel | cooling_deadband, volume_discount | — | — | — |
+| 3 | gotlands-energi-gotland-taxa-21-over-50-mwh-ar | Gotlands Energi — Gotland taxa 21, över 50 MWh/år | legacy_besparing | godkand_intern_pilot_ej_publik | manadspriser | ingen debiterbar kapacitetsdel | cooling_deadband, volume_discount | — | — | — |
 | 3 | habo-energi-habo | Habo Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | volume | flode_m3, habo_debiterbar_effekt_kw, habo_vald_niva_id | historik: habo_debiterbar_effekt_kw | — |
 | 2 | halmstads-energi-och-miljo | Halmstads Energi och Miljö | legacy_besparing | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | — | — | — | — |
 | 2 | harnosand-energi-miljo-harnosand | Härnösand Energi & Miljö | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | capacity_overrun, marginal_annual_volume_discount | debiteringsgrundande_effekt_kw, harnosand_debiterbar_effekt_kw, harnosand_vald_niva_id | — | — |
@@ -88,7 +97,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | lulea-energi-lulea | Luleå Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (7 band) | volume | flode_m3, lulea_debiterbar_effekt_kw, lulea_vald_niva_id | historik: flode_m3, lulea_debiterbar_effekt_kw; serie: flode_m3 | — |
 | 3 | malarenergi-vasteras-och-hallstahammar-24-lagenheter | Mälarenergi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | ingen debiterbar kapacitetsdel | volume | flode_m3 | historik: flode_m3; serie: flode_m3 | — |
 | 3 | mjolby-svartadalen-energi-mjolby | Mjölby Svartådalen Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | volume | flode_m3, mjolby_debiterbar_effekt_kw, mjolby_vald_niva_id | historik: mjolby_debiterbar_effekt_kw | — |
-| 3 | molndal-energi | Mölndal Energi | legacy_besparing | not_reviewed | manadspriser | effekt (14 band) | volume | — | — | — |
+| 3 | molndal-energi | Mölndal Energi | legacy_besparing | godkand_intern_pilot_ej_publik | manadspriser | effekt (14 band) | volume | — | — | — |
 | 3 | navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader | Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Bostäder – Fullvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, navirum_norrkoping_bostader_debiterbar_effekt_kw, navirum_norrkoping_bostader_vald_niva_id | historik: navirum_norrkoping_bostader_debiterbar_effekt_kw | — |
 | 3 | navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader--bas-delvarme | Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Bostäder – Bas-/delvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, navirum_norrkoping_bostader_bas_delvarme_debiterbar_effekt_kw, navirum_norrkoping_bostader_bas_delvarme_vald_niva_id | historik: navirum_norrkoping_bostader_bas_delvarme_debiterbar_effekt_kw | — |
 | 3 | navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-ovriga-fastigheter | Navirum Energi - Norrköping och Söderköping — Norrköping och Söderköping – Övriga fastigheter – Fullvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, navirum_norrkoping_ovriga_debiterbar_effekt_kw, navirum_norrkoping_ovriga_vald_niva_id | historik: navirum_norrkoping_ovriga_debiterbar_effekt_kw | — |
@@ -98,7 +107,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter | Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Övriga fastigheter – Fullvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, navirum_orebro_ovriga_debiterbar_effekt_kw, navirum_orebro_ovriga_vald_niva_id | historik: navirum_orebro_ovriga_debiterbar_effekt_kw | — |
 | 3 | navirum-energi-orebro-kumla-och-hallsberg-orebro-kumla-och-hallsberg-ovriga-fastigheter--bas-delvarme | Navirum Energi - Örebro, Kumla och Hallsberg — Örebro, Kumla och Hallsberg – Övriga fastigheter – Bas-/delvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, navirum_orebro_ovriga_bas_delvarme_debiterbar_effekt_kw, navirum_orebro_ovriga_bas_delvarme_vald_niva_id | historik: navirum_orebro_ovriga_bas_delvarme_debiterbar_effekt_kw | — |
 | 3 | nevel-gimo-osterbybruk-och-osthammar | Nevel | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (3 band) | volume | flode_m3, nevel_debiterbar_effekt_kw, nevel_vald_niva_id | historik: flode_m3, nevel_debiterbar_effekt_kw; serie: flode_m3 | — |
-| 3 | norrenergi | Norrenergi | legacy_besparing | not_reviewed | manadspriser | effekt (7 band) | incremental_return_temperature, low_utilization | — | — | — |
+| 3 | norrenergi | Norrenergi | legacy_besparing | godkand_intern_pilot_ej_publik | manadspriser | effekt (7 band) | incremental_return_temperature, low_utilization | — | — | — |
 | 3 | oresundskraft-angelholm-normal | Öresundskraft — Ängelholm normal | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | volume | flode_m3, oresundskraft_angelholm_debiterbar_effekt_kw, oresundskraft_angelholm_vald_niva_id | historik: flode_m3, oresundskraft_angelholm_debiterbar_effekt_kw; serie: flode_m3 | — |
 | 3 | oresundskraft-helsingborg-normal | Öresundskraft — Helsingborg normal | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | volume | flode_m3, oresundskraft_helsingborg_debiterbar_effekt_kw, oresundskraft_helsingborg_vald_niva_id | historik: flode_m3, oresundskraft_helsingborg_debiterbar_effekt_kw; serie: flode_m3 | — |
 | 2 | oresundskraft-helsingborg-totalvarme-central-installerad-fore-2024 | Öresundskraft — Helsingborg Totalvärme, central installerad före 2024 | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | oresund_totalvarme_effekt_kw, oresund_totalvarme_vald_niva_id | historik: oresund_totalvarme_effekt_kw | — |
