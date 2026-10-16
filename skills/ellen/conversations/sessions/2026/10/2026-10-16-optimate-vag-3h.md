@@ -6,7 +6,7 @@ participants:
   - Codex
   - Claude
 status: active
-last_updated: "2026-10-16T20:00:13+02:00"
+last_updated: "2026-10-16T20:10:30+02:00"
 topic: "Optimate våg 3h — Gotland taxa 21, Mölndal och Norrenergi"
 related_handoff: "../../../handoffs/2026/10/2026-10-16-optimate-vag-3h-legacyprodukter.md"
 ---
@@ -105,3 +105,54 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   Ingen aktivering eller push.
 
   `CHANGES_REQUIRED: Claude`
+
+- `2026-10-16T20:10:30+02:00` – Claude rättade granskning 2026-10-16-003's
+  avgränsade scope, endast i Neptune (`neptune_academy`), på samma
+  worktree/gren `optimate-vag-3h-legacyprodukter`:
+  - **P1 (allowlist inte bunden som exakt mängd):**
+    `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER` i `besparingsvarde.ts` härleds nu
+    från en namngiven, exporterad, fryst tuple
+    `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER_IDS` (alfabetisk ordning, sex
+    ID:n: `goteborg-energi`, `gotlands-energi-gotland-taxa-17-under-50-mwh-ar`,
+    `gotlands-energi-gotland-taxa-21-over-50-mwh-ar`,
+    `halmstads-energi-och-miljo`, `molndal-energi`, `norrenergi`). Nytt prov
+    i `besparingsvardeLegacyKostnadsledGate.test.ts` binder tupeln som EXAKT
+    dessa sex och som EXAKT den delmängd av `SCENARIO_PILOT_TARIFFER_SNAPSHOT`
+    (`optimateScenario.ts`) vars backend är `legacy_arskostnad` — ett
+    sjunde ID kan inte längre läggas till den ena mängden utan att den
+    andra, oberoende bindningen faller.
+  - **P1 (råa tariffkontraktet bara delvis bundet):** de tre
+    per-produkt-proven i `optimateScenarioVag3h.test.ts` (Gotland taxa 21,
+    Mölndal, Norrenergi) utökades från utvalda fält till exakt
+    djupjämförelse av HELA det beräkningsrelevanta råkontraktet — moms,
+    fulla månadsprislistan, hela kapacitetsobjektet (typ/enhet/kw_faktor/
+    fullt ordnad bandtabell/min_debiteringsbas), fast_avgift, 
+    manadsperiodisering, fullt ordnade justeringsobjekt och exakt
+    indatafältskontrakt (exakt nyckelmängd samt nyckel/enhet/default/
+    min_varde/max_varde/ar_gissning/heltal) — mot oberoende literals ur
+    `tariffer.generated.ts`.
+  - **P2:** rättade stale rubrik i
+    `besparingsvardeLegacyKostnadsledGate.test.ts` ("EXAKT Gotland taxa 17
+    och Halmstad" → de sex ID:n i `LEGACY_KOSTNADSLED_TILLATNA_TARIFFER_IDS`)
+    och den motsägande Habo-kommentaren i `optimateScenarioVag3h.test.ts`
+    (kallade det kontraktsgatade Habo Energi "legacy-eligible").
+
+  Rättningsscope hållet: endast allowlistens representation/export och
+  Neptune-prov ändrade. Ingen tariffdata, formel eller scenarioberäkning
+  rörd. Disposition **57/3/1/16=77** och publik lista (exakt 57)
+  oförändrade — verifierat på nytt i skills-repot (ingen kodändring där,
+  append-only bokföring av denna rättningsrunda). Oberoende omkört av
+  Claude: riktade Wave-3h-/legacy-/snapshotprov **52/52**, hela Vitest
+  **3623/3623** (102 filer), `npx tsc --noEmit` rent, grönt
+  produktionsbygge (`dist/` återställd till committerat innehåll efter
+  bygget — bygget producerar icke-deterministisk asset-hashning som inte
+  hör till detta scope), `git diff --check` rent i båda reporna. skills:
+  `python3 -m pytest` **155 passed, 4 subtests passed**, generatorns
+  `--check` grön, ingen fil ändrad. Ny Neptune-commit `698d167` på
+  `optimate-vag-3h-legacyprodukter` (ovanpå `a81f5ba`), ej pushad, ej
+  sammanslagen. Orelaterade, sedan tidigare befintliga lokala ändringar i
+  båda reporna lämnade orörda.
+
+  Ingen publik aktivering, mainflytt eller push.
+
+  `REVIEW_READY: Codex`
