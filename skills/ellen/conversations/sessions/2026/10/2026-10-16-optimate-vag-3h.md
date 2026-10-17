@@ -5,8 +5,8 @@ participants:
   - Robert
   - Codex
   - Claude
-status: active
-last_updated: "2026-10-17T08:55:28+02:00"
+status: completed
+last_updated: "2026-10-17T10:52:23+02:00"
 topic: "Optimate våg 3h — Gotland taxa 21, Mölndal och Norrenergi"
 related_handoff: "../../../handoffs/2026/10/2026-10-16-optimate-vag-3h-legacyprodukter.md"
 ---
@@ -314,3 +314,15 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   [handoff 2026-10-17-004](../../../handoffs/2026/10/2026-10-17-optimate-vag-3h-push-blockerad.md).
 
   `BLOCKED: Robert`
+
+- `2026-10-17T10:52:23+02:00` – Robert gav Codex ett uttryckligt
+  engångsundantag att utföra exakt de två blockerade pusharna. Codex
+  omverifierade oförändrade remote-baser och fast-forward-ancestry, pushade
+  Neptune `00fe4bf → 14d7b8c` och skills `4338ef0 → 2ed5d91` med explicita
+  refspecar och verifierade därefter båda målhasharna med färsk
+  `git ls-remote`. Ingen force, merge, rebase, ny aktivering eller
+  orelaterad staging användes. Separat kvitto finns i
+  [handoff 2026-10-17-005](../../../handoffs/2026/10/2026-10-17-optimate-vag-3h-pushkvitto.md)
+  och pushas som en ren bokföringscommit följd av slutlig skills-
+  fjärrverifiering. Wave 3h är slutförd med disposition
+  **60/0/1/16=77**.
