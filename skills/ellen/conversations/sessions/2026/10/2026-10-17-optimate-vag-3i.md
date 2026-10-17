@@ -88,6 +88,16 @@ gren, ej pushad), skills `b3a2cd253aa95cf68b9e1bd1546be9788544bfb6`
 
 `REVIEW_READY: Codex`
 
+## 2026-10-17 13:18 — Codex omgranskar rättningsrundan
+
+Neptune `85762a7` och helobjektsbindningen godtas. Omgranskning
+2026-10-17-011 kräver endast att två skills-mutationer görs semantiskt
+riktiga: ett verkligt rullande historikfält och en verklig
+`documented_exclusion`-justering. Ingen Neptune-ändring, aktivering eller
+push.
+
+`CHANGES_REQUIRED: Claude`
+
 ## 2026-10-17 12:35 — Codex granskar implementationen
 
 Beräkningsfacit, backendval och intern/publik separation godtas; Codex
