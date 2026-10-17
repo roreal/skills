@@ -1856,6 +1856,16 @@ def build_matrix(text: str) -> dict[str, Any]:
         row = rows_by_id.get(product_id)
         if row is None:
             raise ValueError(f"WAVE_3I_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        # Omgranskning 2026-10-17-011 (Codex): explicit produktgrind före den
+        # generella justeringstypsjämförelsen nedan, så en tillagd
+        # documented_exclusion-justering fångas av den avsedda invarianten
+        # (Telge dokumenterar ingen exkludering) i stället för att bara råka
+        # fälla den bredare adjustment_types/justeringar-jämförelsen.
+        if row["documented_exclusions"] != []:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har documented_exclusions "
+                f"{row['documented_exclusions']!r}, förväntat exakt []."
+            )
         if row["adjustment_types"] != params["adjustment_types"]:
             raise ValueError(
                 f"Våg 3i-produkten {product_id!r} har adjustment_types "

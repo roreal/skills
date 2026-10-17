@@ -2774,38 +2774,42 @@ class TariffMatrixTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "kravda_falt"):
                 build_matrix(self.source_text)
 
-    def test_wave_3i_extra_indatafalt_entry_is_fail_closed(self) -> None:
+    def test_wave_3i_returtemperatur_c_rullande_mutation_is_fail_closed(self) -> None:
+        # history_fields härleds ur policy.kravda_falt (rullande,
+        # kalperiod_definition eller takad_till_snapshot). Telges returtemp-
+        # fält har rullande=False i det råa kontraktet (ingen historik
+        # dokumenterad). Sätts det i stället till True ska generatorns
+        # history_fields-bindning (förväntat exakt []) fånga det, inte en
+        # ofarlig extra indatafält-post som aldrig rör history_fields.
         def mutator(price: dict[str, Any]) -> dict[str, Any]:
             fields = [
-                *price["indatafalt"],
-                {
-                    "nyckel": "telge_historik_extra", "etikett": "Historik (extra)", "enhet": "MWh",
-                    "default": None, "min_varde": 0, "max_varde": 100000,
-                    "hjalptext": "Odokumenterat extra fält.", "ar_gissning": True, "heltal": False,
-                },
-            ]
-            return {**price, "indatafalt": fields}
-
-        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
-            with self.assertRaisesRegex(ValueError, "indatafalt"):
-                build_matrix(self.source_text)
-
-    def test_wave_3i_kravda_falt_documented_exclusion_mutation_is_fail_closed(self) -> None:
-        # "Documented exclusion"-kontroll: tillampliga_manader är null i
-        # det råa kontraktet för samtliga fyra fält (ingen månadsvis
-        # begränsning dokumenterad för Telge). Sätts den i stället till en
-        # konkret lista ska det fångas som en kontraktsändring, inte tyst
-        # tolereras som en ofarlig precisering.
-        def mutator(price: dict[str, Any]) -> dict[str, Any]:
-            fields = [
-                {**field, "tillampliga_manader": [1, 2, 3]}
+                {**field, "rullande": True}
                 if field.get("nyckel") == "returtemperatur_c" else field
                 for field in price["policy"]["kravda_falt"]
             ]
             return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
 
         with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
-            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+            with self.assertRaisesRegex(ValueError, "history_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_kravda_falt_documented_exclusion_mutation_is_fail_closed(self) -> None:
+        # "Documented exclusion"-kontroll: documented_exclusions härleds
+        # enbart ur price.justeringar med type="documented_exclusion", inte
+        # ur tillampliga_manader. Lägg en verklig sådan justering och
+        # verifiera att den explicita produktgrinden row["documented_exclusions"]
+        # == [] (förväntat tomt för Telge) fångar den, i stället för att
+        # tyst tolereras eller enbart råka fälla den bredare
+        # justeringar-jämförelsen.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                *price["justeringar"],
+                {"type": "documented_exclusion", "component": "capacity_overrun"},
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "documented_exclusions"):
                 build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
