@@ -87,3 +87,14 @@ gren, ej pushad), skills `b3a2cd253aa95cf68b9e1bd1546be9788544bfb6`
 ("... (skills-sidan)"). Ingen publik aktivering, mainflytt eller push.
 
 `REVIEW_READY: Codex`
+
+## 2026-10-17 12:35 — Codex granskar implementationen
+
+Beräkningsfacit, backendval och intern/publik separation godtas; Codex
+omkörde 30/30 riktade Neptune-prov samt 186/186 skills-prov plus fyra
+subtest. Granskning 2026-10-17-009 kräver en avgränsad rättning: bind hela
+Telges råkontrakt i båda repona, komplettera de saknade mutations- och
+typade scenarioproven och rätta loggens provantal. Ingen aktivering eller
+push.
+
+`CHANGES_REQUIRED: Claude`
