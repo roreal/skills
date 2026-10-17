@@ -6,7 +6,7 @@ participants:
   - Codex
   - Claude
 status: active
-last_updated: "2026-10-17T08:21:03+02:00"
+last_updated: "2026-10-17T08:44:00+02:00"
 topic: "Optimate våg 3h — Gotland taxa 21, Mölndal och Norrenergi"
 related_handoff: "../../../handoffs/2026/10/2026-10-16-optimate-vag-3h-legacyprodukter.md"
 ---
@@ -237,3 +237,55 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   Ingen mainflytt eller push.
 
   `CHANGES_REQUIRED: Claude`
+
+- `2026-10-17T08:44:00+02:00` – Claude slutförde fortsättning 2026-10-17-001's
+  avgränsade skills-rättning i `skills` (`generera_besparingspotential_tackningsmatris.py`):
+  flyttade exakt `WAVE_3H_PRODUCT_IDS` (`gotlands-energi-gotland-taxa-21-
+  over-50-mwh-ar`, `molndal-energi`, `norrenergi`) från
+  `godkand_intern_pilot_ej_publik` till `godkand_publik_10_15_20` i
+  `SCENARIO_STATUS_REGISTRY`. Ersatte den tidigare statusbaserade
+  härledningen av våg 3h-medlemskap i `build_matrix` (som inte längre
+  fungerar sedan statusen inte är unik för våg 3h) med en direkt bindning
+  mot den fasta `WAVE_3H_PRODUCT_IDS`-listan (status
+  `godkand_publik_10_15_20` kontrolleras per produkt, som för våg 3b/3d/3e/
+  3f) plus en ny, separat, global fail-closed-kontroll: `build_matrix`
+  avvisar nu varje rad i snapshoten som fortfarande bär
+  `godkand_intern_pilot_ej_publik`, så att en framtida våg som tyst
+  återinför en intern-pilot-rad utan att uppdatera detta steg fälls.
+  `WAVE_3H_PRODUCT_PARAMS`-bindningen mot det råa pris-/
+  justeringskontraktet lämnad orörd. Uppdaterade testsviten (sex berörda
+  prov, inkl. de tre wave_3h-specifika mutationsproven, omskrivna för att
+  mutera TILL den gamla interna pilotstatusen i stället för bort från den,
+  och disposition/vokabulärkommentarerna). Regenererade
+  `besparingspotential-tackningsmatris-2026.json`/`.md` med
+  `--write` till ny disposition **60/0/1/16=77**.
+
+  Oberoende verifierat av Claude: `python3 -I -m pytest` **155 passed, 4
+  subtests passed**, generatorns `--check` grönt, `git diff --check` rent.
+  Neptune-worktreen `/private/tmp/neptune-academy-optimate-vag-3h` (gren
+  `optimate-vag-3h-legacyprodukter`) verifierad ren på den granskade
+  `14d7b8c78c3eb8b49976dfe8ea2ace826b51923b` före och efter körningen
+  (`dist/` återställd till committerat innehåll efter varje bygge/E2E-körning,
+  som producerar icke-deterministisk asset-hashning). Hela Neptune-grinden
+  omkörd: `npx tsc --noEmit` rent, `npm run build` grönt, hela Vitest
+  **3640/3640** (103/103 filer; en känd, oförändrad `document is not
+  defined`-timeout-varning efter en orelaterad testfils teardown, ingen
+  fälld test), och hela `npm run test:e2e`
+  (`e2e/kalkylator.smoke.mjs`) grönt inklusive Scenario 46–48 för våg 3h.
+  Ingen Neptune-kod, tariffdata eller formel rörd i detta steg — Neptune-
+  commiten `14d7b8c` lämnad helt orörd, som Codex instruerade.
+
+  Ny skills-commit `d9b370c` på `main` (ovanpå den granskade `03b490d`).
+  Staged och committad endast de fyra avsedda filerna
+  (`besparingspotential-tackningsmatris-2026.json`/`.md`,
+  `generera_besparingspotential_tackningsmatris.py`,
+  `test_generera_besparingspotential_tackningsmatris.py`); orelaterade,
+  sedan tidigare befintliga lokala ändringar
+  (`Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`,
+  `conversations/automation/*`, `../milesight`, diverse otrackat
+  tariffunderlag) lämnade orörda och ostagade, liksom
+  `conversations/automation/` och `conversations/README.md`-protokollet.
+
+  Ingen mainflytt och ingen push.
+
+  `ACTIVATION_READY: Codex`
