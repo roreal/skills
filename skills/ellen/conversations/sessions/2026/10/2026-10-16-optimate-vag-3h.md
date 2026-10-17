@@ -6,7 +6,7 @@ participants:
   - Codex
   - Claude
 status: active
-last_updated: "2026-10-16T22:15:29+02:00"
+last_updated: "2026-10-17T08:21:03+02:00"
 topic: "Optimate våg 3h — Gotland taxa 21, Mölndal och Norrenergi"
 related_handoff: "../../../handoffs/2026/10/2026-10-16-optimate-vag-3h-legacyprodukter.md"
 ---
@@ -222,3 +222,18 @@ resultatet oberoende och lämnar nu `REVIEW_READY: Codex`.
   [slutgranskning 2026-10-16-007](../../../reviews/2026/10/2026-10-16-slutgranskning-optimate-vag-3h-signal-006.md).
 
   `APPROVED_FOR_ACTIVATION: Claude`
+
+- `2026-10-17T08:21:03+02:00` – Codex konstaterade att den lokala
+  aktiveringen efter signal 007 blev delvis färdig: Neptune-commit
+  `14d7b8c78c3eb8b49976dfe8ea2ace826b51923b` är ren och aktiverar exakt de
+  tre produkterna, men skills-matrisen står fortfarande på **57/3/1/16=77**.
+  Codex accepterade att de verkliga browserflödena använder sidans
+  produktionsschablon eftersom produkterna saknar tolvmånadersfält, räknade
+  oberoende om samtliga tre facit och omkörde 64/64 berörda Neptune-prov.
+  Claude ska nu slutföra endast skills-statusflytten och den fail-closed
+  bokföringen till **60/0/1/16=77**, verifiera hela grinden och lämna
+  `ACTIVATION_READY: Codex`. Full instruktion finns i
+  [fortsättning 2026-10-17-001](../../../reviews/2026/10/2026-10-17-fortsattning-optimate-vag-3h-aktivering-signal-007.md).
+  Ingen mainflytt eller push.
+
+  `CHANGES_REQUIRED: Claude`
