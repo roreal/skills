@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 16)
+        self.assertEqual(len(not_reviewed), 15)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -135,13 +135,22 @@ class TariffMatrixTests(unittest.TestCase):
             "gotlands-energi-gotland-taxa-17-under-50-mwh-ar",
         } | wave_2_ids | wave_3a_ids | wave_3b_ids | wave_3c_ids | wave_3d_ids | wave_3e_ids | wave_3f_ids \
             | wave_3g_ids | wave_3h_ids
+        wave_3i_ids = matrix_module.WAVE_3I_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3i_ids
+            )
+        )
+        pilot_ids = pilot_ids | wave_3i_ids
         others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
                 "godkand_publik_10_15_20": 60,
-                "not_reviewed": 16,
+                "not_reviewed": 15,
+                "godkand_intern_pilot_ej_publik": 1,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -234,12 +243,15 @@ class TariffMatrixTests(unittest.TestCase):
         # till EXAKT tre nya rader som REN INTERN PILOT — Gotland taxa 21,
         # Mölndal och Norrenergi — se WAVE_3H_PRODUCT_IDS, och signal
         # APPROVED_FOR_ACTIVATION-2026-10-17 aktiverade dem publikt också.
-        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
+        # Handoff 2026-10-17-006/007 (Optimate våg 3i, Telge Nät) lade
+        # därefter till EXAKT en ny rad som INTERN PILOT ENDAST — se
+        # WAVE_3I_PRODUCT_IDS — så godkand_intern_pilot_ej_publik bärs nu
+        # av exakt den raden.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, frozenset())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3I_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -2282,6 +2294,328 @@ class TariffMatrixTests(unittest.TestCase):
 
         with self._mutate_wave_3h_price_for("molndal-energi", mutator):
             with self.assertRaisesRegex(ValueError, "moms"):
+                build_matrix(self.source_text)
+
+    # -------------------------------------------------------------------
+    # Våg 3i ("Telge Nät, låg utnyttjning och returtemperatur", handoff
+    # 2026-10-17-006/007, INTERN PILOT ENDAST). Till skillnad från
+    # Norrenergi (Våg 3h, legacyprodukt) ÄR Telge kontraktsgatad, så
+    # policybindningarna (kapacitet_bindning/kapacitet_band_bindning/
+    # kravda_falt) mutationstestas också, precis som Våg 3g.
+    # -------------------------------------------------------------------
+    TELGE_ID = "telge-nat-telge-foretag-och-bostadsrattsforeningar"
+
+    def test_wave_3i_membership_and_status_is_mechanically_locked(self) -> None:
+        wave_3i_ids = matrix_module.WAVE_3I_PRODUCT_IDS
+        self.assertEqual(wave_3i_ids, frozenset({self.TELGE_ID}))
+        row = self.by_id[self.TELGE_ID]
+        self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
+        self.assertFalse(row["savings_today"])
+        self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(
+            row["required_policy_fields"],
+            sorted([
+                "telge_debiterbar_effekt_kw", "telge_vald_niva_id",
+                "normalarskorrigerad_energi_mwh", "returtemperatur_c",
+            ]),
+        )
+        self.assertEqual(row["series_fields"], [])
+        self.assertEqual(row["history_fields"], [])
+        self.assertFalse(row["has_eligibility_rule"])
+        self.assertEqual(sorted(row["adjustment_types"]), sorted(["low_utilization", "incremental_return_temperature"]))
+        # Inte publikt aktiverad och ingen överlappning med tidigare vågor.
+        self.assertNotIn(self.TELGE_ID, matrix_module.WAVE_3H_PRODUCT_IDS)
+
+    def test_wave_3i_params_registry_missing_product_is_fail_closed(self) -> None:
+        mutated_params: dict[str, Any] = {}
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3I_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_params_registry_extra_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3I_PRODUCT_PARAMS)
+        mutated_params["norrenergi"] = dict(next(iter(matrix_module.WAVE_3I_PRODUCT_PARAMS.values())))
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3I_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_wrong_adjustment_types_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, adjustment_types=["volume"])
+            for pid, params in matrix_module.WAVE_3I_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "adjustment_types"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_wrong_cost_path_status_mismatch_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry[self.TELGE_ID] = "godkand_publik_10_15_20"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_missing_product_status_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        del mutated_registry[self.TELGE_ID]
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_extra_internal_pilot_row_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry["norrenergi"] = "godkand_intern_pilot_ej_publik"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_wrong_capacity_rule_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, capacity_rule="heterogeneous_bands")
+            for pid, params in matrix_module.WAVE_3I_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "capacity_rule"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_wrong_capacity_bands_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, capacity_bands=99)
+            for pid, params in matrix_module.WAVE_3I_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "kapacitetsband"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_wrong_required_policy_fields_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, keys={"effekt": "telge_debiterbar_effekt_kw", "band": "fel_nyckel"})
+            for pid, params in matrix_module.WAVE_3I_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3I_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_eligibility_rule_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "eligibility": {"min_varde": 0}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "behörighetsvillkor"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_extra_series_field_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                *price["policy"]["kravda_falt"],
+                {
+                    "nyckel": "telge_extra_serie", "vardetyp": "number_series", "antal_varden": 12,
+                    "rullande": True, "matupplosning": "manadsvis",
+                },
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_policy_wrong_capacity_binding_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_bindning": "fel_nyckel"}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_policy_wrong_band_binding_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_band_bindning": "fel_nyckel"}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_band_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_policy_extra_multiplier_binding_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_multiplikator_bindning": "extra"}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_multiplikator_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_policy_stodjer_besparing_mutation_is_fail_closed(self) -> None:
+        # stodjer_besparing=True flyttar produkten till cost_path
+        # 'kontrakt_besparing' (se build_matrix's cost_path-härledning),
+        # vilket fäller på cost_path-kontrollen innan någon dedikerad
+        # stodjer_besparing-kontroll nås — fortfarande fail-closed.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "stodjer_besparing": True}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "cost_path"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_low_utilization_threshold_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "threshold_hours": 2000} if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_low_utilization_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "rate": 0.5} if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_incremental_return_temperature_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "rates": [2.4, 27]} if a.get("type") == "incremental_return_temperature" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_incremental_return_temperature_months_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "months": [1, 2, 3, 4, 11, 12]} if a.get("type") == "incremental_return_temperature" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_incremental_return_temperature_thresholds_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "thresholds_degC": [25, 60]} if a.get("type") == "incremental_return_temperature" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_extra_adjustment_entry_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [*price["justeringar"], {"type": "volume", "rate": 1, "months": list(range(1, 13))}]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "(justeringar|adjustment_types)"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_capacity_band_price_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            nivaer = [
+                {**band, "pris_kr_per_enhet_ar": 1} if band["id"] == "1" else band
+                for band in price["kapacitet"]["nivaer"]
+            ]
+            return {**price, "kapacitet": {**price["kapacitet"], "nivaer": nivaer}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_capacity_band_fee_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            nivaer = [
+                {**band, "avgift_kr_ar": 999} if band["id"] == "2" else band
+                for band in price["kapacitet"]["nivaer"]
+            ]
+            return {**price, "kapacitet": {**price["kapacitet"], "nivaer": nivaer}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_manadspriser_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            priser = list(price["energi"]["manadspriser"])
+            priser[0] = 1.0
+            return {**price, "energi": {**price["energi"], "manadspriser": priser}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "manadspriser"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_fast_avgift_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "fast_avgift": {"kr_ar": 1, "periodisering": "days_in_month/days_in_year"}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "fast_avgift"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_manadsperiodisering_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "manadsperiodisering": "monthly_rate_no_annual_proration"}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "manadsperiodisering"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_moms_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "moms": "inkl"}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "moms"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_returtemperatur_c_default_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "default": 35} if field.get("nyckel") == "returtemperatur_c" else field
+                for field in price["indatafalt"]
+            ]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "returtemperatur_c"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_effekt_heltal_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "heltal": False} if field.get("nyckel") == "telge_debiterbar_effekt_kw" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "heltal"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_band_vardetyp_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "vardetyp": "number"} if field.get("nyckel") == "telge_vald_niva_id" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "band_id"):
                 build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:

@@ -224,6 +224,17 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "gotlands-energi-gotland-taxa-21-over-50-mwh-ar": "godkand_publik_10_15_20",
     "molndal-energi": "godkand_publik_10_15_20",
     "norrenergi": "godkand_publik_10_15_20",
+    # Optimate våg 3i (handoff 2026-10-17-006/007,
+    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt 1 kontraktsgatad produkt —
+    # telge-nat-telge-foretag-och-bostadsrattsforeningar — den enda
+    # återstående, ogranskade, verkliga produkten med kombinationen
+    # `low_utilization` + `incremental_return_temperature` (Norrenergi har
+    # samma två justeringstyper men är redan granskad och publik via
+    # `legacy_arskostnad`, Våg 3h). INTERN pilot ENDAST — IDENTISK med
+    # Neptune-kodens WAVE_3I_PRODUCT_IDS i optimateScenario.ts, tillagd i
+    # SCENARIO_PILOT_TARIFFER men INTE i SCENARIO_PUBLIKT_AKTIVERADE_ID
+    # (Neptune-koden förblir 60 publika).
+    "telge-nat-telge-foretag-och-bostadsrattsforeningar": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -646,6 +657,83 @@ WAVE_3H_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
                 "ar_gissning": False, "heltal": False,
             },
         },
+    },
+}
+
+# Mekanisk, fail-closed lista över exakt Optimate våg 3i-ID:na (handoff
+# 2026-10-17-006/007, APPROVED_FOR_IMPLEMENTATION: Claude, INTERN PILOT
+# ENDAST) — IDENTISK med Neptune-kodens WAVE_3I_PRODUCT_IDS i
+# optimateScenario.ts: telge-nat-telge-foretag-och-bostadsrattsforeningar,
+# den enda återstående, ogranskade, verkliga kontraktsgatade produkten med
+# kombinationen `low_utilization` + `incremental_return_temperature`.
+# Precis som WAVE_3B_PRODUCT_IDS (och till skillnad från WAVE_3A/3G, vars
+# justeringstyp råkar vara unik i hela katalogen) binder build_matrix
+# Telge direkt mot denna fasta lista i stället för ett generiskt
+# `adjustment_types`-filter, eftersom kombinationen low_utilization +
+# incremental_return_temperature INTE är unik för denna pilot — Norrenergi
+# (Våg 3h) bär samma två justeringstyper men är redan granskad och publik
+# via backend 'legacy_arskostnad'.
+WAVE_3I_PRODUCT_IDS: frozenset[str] = frozenset({
+    "telge-nat-telge-foretag-och-bostadsrattsforeningar",
+})
+
+# Telges fulla råa pris-/justerings-/policykontrakt, direkt ur
+# tariffer.generated.ts — handoff 2026-10-17-006/007 §"Fail-closed-grindar".
+# Till skillnad från Norrenergi (Våg 3h, legacyprodukt utan policy) ÄR
+# Telge kontraktsgatad (`_kraver_kontrakt=true`), så required_policy_fields
+# binds här mot policy.kravda_falt i stället för att vara tomma.
+WAVE_3I_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
+    "telge-nat-telge-foretag-och-bostadsrattsforeningar": {
+        "adjustment_types": ["incremental_return_temperature", "low_utilization"],
+        "capacity_rule": "effekt",
+        "capacity_bands": 3,
+        "has_capacity_charge": True,
+        "manadspriser": [584, 584, 584, 442, 294, 294, 294, 294, 294, 442, 442, 584],
+        "kapacitet": {
+            "typ": "effekt", "enhet": "kW", "kw_faktor": 1.0,
+            "nivaer": [
+                {"id": "1", "min": 0, "max": 299, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 1661},
+                {"id": "2", "min": 300, "max": 999, "avgift_kr_ar": 41725, "pris_kr_per_enhet_ar": 1529},
+                {"id": "3", "min": 1000, "max": None, "avgift_kr_ar": 143238, "pris_kr_per_enhet_ar": 1426},
+            ],
+            "min_debiteringsbas": None,
+        },
+        "fast_avgift": None,
+        "manadsperiodisering": "days_in_month/days_in_year",
+        "justeringar": [
+            {
+                "type": "low_utilization", "threshold_hours": 2300, "rate": 0.31,
+                "unit": "SEK/kW/hour",
+                "formula": "max(0, 2300-utilization_hours) * billing_kW * 0.31",
+                "rate_period": "year",
+                "utilization_basis":
+                    "normal_year_corrected_energy_previous_July_June_divided_by_billing_capacity",
+                "monthly_proration": "days_in_month/days_in_year",
+            },
+            {
+                "type": "incremental_return_temperature", "months": [1, 2, 3, 4, 10, 11, 12],
+                "thresholds_degC": [30, 60], "rates": [2.4, 28], "unit": "SEK/MWh/degC",
+                "temperature_weighting": "flow_weighted",
+                "formula":
+                    "energy_MWh * (2.4 * min(max(return_degC-30, 0), 30) + 28 * max(return_degC-60, 0))",
+            },
+        ],
+        "indatafalt": {
+            "normalarskorrigerad_energi_mwh": {
+                "enhet": "MWh", "default": None, "min_varde": 0, "max_varde": 100000,
+                "ar_gissning": False, "heltal": False,
+            },
+            "returtemperatur_c": {
+                "enhet": "°C", "default": 30, "min_varde": 20, "max_varde": 90,
+                "ar_gissning": False, "heltal": False,
+            },
+        },
+        "keys": {"effekt": "telge_debiterbar_effekt_kw", "band": "telge_vald_niva_id"},
+        "kapacitet_bindning": "telge_debiterbar_effekt_kw",
+        "kapacitet_band_bindning": "telge_vald_niva_id",
+        "effekt_min": 0,
+        "effekt_max": None,
+        "effekt_heltal": True,
     },
 }
 
@@ -1532,18 +1620,21 @@ def build_matrix(text: str) -> dict[str, Any]:
     # mot den fasta WAVE_3H_PRODUCT_IDS-listan (status per produkt
     # kontrolleras i loopen nedan) i stället för en statusbaserad
     # härledning. Statusen `godkand_intern_pilot_ej_publik` bars tidigare av
-    # exakt dessa tre rader men ska nu inte bäras av NÅGON rad i
-    # snapshoten — en framtida våg som tyst återinför en intern-pilot-rad
-    # utan att uppdatera detta steg ska falla.
+    # exakt dessa tre rader; Våg 3h gjorde den tillfälligt obärd av någon
+    # rad. Våg 3i (nedan) återinför statusen för exakt Telge — denna
+    # kontroll binder därför nu att EXAKT WAVE_3I_PRODUCT_IDS bär statusen,
+    # inte att ingen rad gör det, så en framtida våg som tyst lägger till
+    # en FJÄRDE intern-pilot-rad utan att uppdatera WAVE_3I_PRODUCT_IDS
+    # ändå faller.
     remaining_internal_pilot_ids = {
         row["product_id"] for row in rows
         if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
     }
-    if remaining_internal_pilot_ids:
+    if remaining_internal_pilot_ids != WAVE_3I_PRODUCT_IDS:
         raise ValueError(
-            "godkand_intern_pilot_ej_publik bars fortfarande av "
-            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, men ingen rad "
-            "ska längre bära den statusen sedan våg 3h publikt aktiverades."
+            "godkand_intern_pilot_ej_publik bärs av "
+            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat exakt "
+            f"WAVE_3I_PRODUCT_IDS ({sorted(WAVE_3I_PRODUCT_IDS)})."
         )
     if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
         raise ValueError(
@@ -1670,6 +1761,205 @@ def build_matrix(text: str) -> dict[str, Any]:
                         f"Våg 3h-produkten {product_id!r} har {falt_nyckel}.{contract_key}="
                         f"{raw_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
                     )
+
+    # Våg 3i ("Telge Nät, låg utnyttjning och returtemperatur", handoff
+    # 2026-10-17-006/007, INTERN PILOT ENDAST): till skillnad från
+    # wave_3a_ids/wave_3g_ids ovan delar Telge sin adjustment_types-
+    # kombination med Norrenergi (redan granskad, Våg 3h), så bindningen
+    # sker direkt mot den fasta WAVE_3I_PRODUCT_IDS-listan (precis som
+    # WAVE_3B_PRODUCT_IDS) i stället för ett generiskt filter. Till
+    # skillnad från Norrenergi ÄR Telge kontraktsgatad, så
+    # required_policy_fields/kapacitet_bindning binds här mot
+    # policy.kravda_falt.
+    if set(WAVE_3I_PRODUCT_PARAMS) != WAVE_3I_PRODUCT_IDS:
+        raise ValueError(
+            "WAVE_3I_PRODUCT_PARAMS matchar inte WAVE_3I_PRODUCT_IDS. "
+            f"Endast i WAVE_3I_PRODUCT_PARAMS: {sorted(set(WAVE_3I_PRODUCT_PARAMS) - WAVE_3I_PRODUCT_IDS)}; "
+            f"endast i WAVE_3I_PRODUCT_IDS: {sorted(WAVE_3I_PRODUCT_IDS - set(WAVE_3I_PRODUCT_PARAMS))}."
+        )
+    for product_id, params in WAVE_3I_PRODUCT_PARAMS.items():
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3I_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if row["adjustment_types"] != params["adjustment_types"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har adjustment_types "
+                f"{row['adjustment_types']!r}, förväntat exakt {params['adjustment_types']!r}."
+            )
+        if row["cost_path"] != "kontrakt_arskostnad":
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                "förväntat 'kontrakt_arskostnad'."
+            )
+        if row["savings_today"] is not False:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har savings_today {row['savings_today']!r}, "
+                "förväntat exakt False."
+            )
+        if row["capacity_rule"] != params["capacity_rule"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                f"förväntat exakt {params['capacity_rule']!r}."
+            )
+        if row["capacity_bands"] != params["capacity_bands"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har {row['capacity_bands']} kapacitetsband, "
+                f"förväntat exakt {params['capacity_bands']}."
+            )
+        if row["has_capacity_charge"] != params["has_capacity_charge"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har has_capacity_charge "
+                f"{row['has_capacity_charge']!r}, förväntat exakt {params['has_capacity_charge']!r}."
+            )
+        keys = params["keys"]
+        expected_required_fields = sorted({keys["effekt"], keys["band"], *params["indatafalt"]})
+        if row["required_policy_fields"] != expected_required_fields:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har required_policy_fields "
+                f"{row['required_policy_fields']!r}, förväntat exakt {expected_required_fields!r}."
+            )
+        if row["series_fields"] != []:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt []."
+            )
+        if row["history_fields"] != []:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har history_fields "
+                f"{row['history_fields']!r}, förväntat exakt []."
+            )
+        if row["has_eligibility_rule"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+            )
+        for falt in (keys["effekt"], keys["band"]):
+            if row["measurement_resolutions"].get(falt) != "arsvis":
+                raise ValueError(
+                    f"Våg 3i-produkten {product_id!r} har measurement_resolutions.{falt} "
+                    f"{row['measurement_resolutions'].get(falt)!r}, förväntat 'arsvis'."
+                )
+
+        raw_price = latest_price(tariffs[product_id])
+        raw_policy = raw_price.get("policy") or {}
+        if raw_price.get("_kraver_kontrakt") is not True:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} saknar _kraver_kontrakt=true."
+            )
+        if raw_policy.get("stodjer_aktuell_arskostnad") is not True:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har policy.stodjer_aktuell_arskostnad="
+                f"{raw_policy.get('stodjer_aktuell_arskostnad')!r}, förväntat exakt True."
+            )
+        if raw_policy.get("stodjer_besparing") is not False:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har policy.stodjer_besparing="
+                f"{raw_policy.get('stodjer_besparing')!r}, förväntat exakt False."
+            )
+        if raw_policy.get("kapacitet_bindning") != params["kapacitet_bindning"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har policy.kapacitet_bindning="
+                f"{raw_policy.get('kapacitet_bindning')!r}, förväntat exakt "
+                f"{params['kapacitet_bindning']!r}."
+            )
+        if raw_policy.get("kapacitet_band_bindning") != params["kapacitet_band_bindning"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har policy.kapacitet_band_bindning="
+                f"{raw_policy.get('kapacitet_band_bindning')!r}, förväntat exakt "
+                f"{params['kapacitet_band_bindning']!r}."
+            )
+        if raw_policy.get("kapacitet_multiplikator_bindning") is not None:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har "
+                f"policy.kapacitet_multiplikator_bindning="
+                f"{raw_policy.get('kapacitet_multiplikator_bindning')!r}, förväntat None."
+            )
+        if raw_price.get("moms") != "exkl":
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har moms {raw_price.get('moms')!r}, "
+                "förväntat 'exkl'."
+            )
+        raw_energi = raw_price.get("energi") or {}
+        if not _strict_numeric_equal(raw_energi.get("manadspriser"), params["manadspriser"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har energi.manadspriser="
+                f"{raw_energi.get('manadspriser')!r}, förväntat exakt {params['manadspriser']!r}."
+            )
+        raw_capacity = raw_price.get("kapacitet") or {}
+        for capacity_key, expected_value in params["kapacitet"].items():
+            if not _strict_numeric_equal(raw_capacity.get(capacity_key), expected_value):
+                raise ValueError(
+                    f"Våg 3i-produkten {product_id!r} har kapacitet.{capacity_key}="
+                    f"{raw_capacity.get(capacity_key)!r}, förväntat exakt {expected_value!r}."
+                )
+        if not _strict_numeric_equal(raw_price.get("fast_avgift"), params["fast_avgift"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har fast_avgift="
+                f"{raw_price.get('fast_avgift')!r}, förväntat exakt {params['fast_avgift']!r}."
+            )
+        if raw_price.get("manadsperiodisering") != params["manadsperiodisering"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har manadsperiodisering="
+                f"{raw_price.get('manadsperiodisering')!r}, förväntat exakt "
+                f"{params['manadsperiodisering']!r}."
+            )
+        raw_adjustments = raw_price.get("justeringar") or []
+        if not _strict_numeric_equal(raw_adjustments, params["justeringar"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har justeringar="
+                f"{raw_adjustments!r}, förväntat exakt {params['justeringar']!r}."
+            )
+        raw_indatafalt = raw_price.get("indatafalt") or []
+        raw_indatafalt_by_key = {field.get("nyckel"): field for field in raw_indatafalt}
+        if set(raw_indatafalt_by_key) != set(params["indatafalt"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har indatafalt-nycklar "
+                f"{sorted(raw_indatafalt_by_key)!r}, förväntat exakt "
+                f"{sorted(params['indatafalt'])!r}."
+            )
+        for falt_nyckel, expected_falt in params["indatafalt"].items():
+            raw_falt = raw_indatafalt_by_key[falt_nyckel]
+            for contract_key, expected_value in expected_falt.items():
+                if not _strict_numeric_equal(raw_falt.get(contract_key), expected_value):
+                    raise ValueError(
+                        f"Våg 3i-produkten {product_id!r} har {falt_nyckel}.{contract_key}="
+                        f"{raw_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
+                    )
+        raw_required_fields = raw_policy.get("kravda_falt") or []
+        effekt_field = next(
+            (f for f in raw_required_fields if f.get("nyckel") == keys["effekt"]), None
+        )
+        if effekt_field is None:
+            raise ValueError(f"Våg 3i-produkten {product_id!r} saknar kravda_falt-posten för effekt.")
+        if effekt_field.get("heltal") is not params["effekt_heltal"]:
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.heltal="
+                f"{effekt_field.get('heltal')!r}, förväntat exakt {params['effekt_heltal']!r}."
+            )
+        if not _strict_numeric_equal(effekt_field.get("minvarde"), params["effekt_min"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.minvarde="
+                f"{effekt_field.get('minvarde')!r}, förväntat exakt {params['effekt_min']!r}."
+            )
+        if not _strict_numeric_equal(effekt_field.get("maxvarde"), params["effekt_max"]):
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.maxvarde="
+                f"{effekt_field.get('maxvarde')!r}, förväntat exakt {params['effekt_max']!r}."
+            )
+        band_field = next(
+            (f for f in raw_required_fields if f.get("nyckel") == keys["band"]), None
+        )
+        if band_field is None:
+            raise ValueError(f"Våg 3i-produkten {product_id!r} saknar kravda_falt-posten för band.")
+        if band_field.get("vardetyp") != "band_id":
+            raise ValueError(
+                f"Våg 3i-produkten {product_id!r} har {keys['band']}.vardetyp="
+                f"{band_field.get('vardetyp')!r}, förväntat exakt 'band_id'."
+            )
 
     counts = {
         "products": len(rows),
