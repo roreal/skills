@@ -718,22 +718,97 @@ WAVE_3I_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
                     "energy_MWh * (2.4 * min(max(return_degC-30, 0), 30) + 28 * max(return_degC-60, 0))",
             },
         ],
-        "indatafalt": {
-            "normalarskorrigerad_energi_mwh": {
+        # Fulla, ordnade, råa indatafalt-objekten (samtliga egenskaper,
+        # inklusive nyckel/etikett/hjalptext) — omgranskning 2026-10-17-009
+        # (P1, Codex): den tidigare dict-by-key-formen jämförde bara en
+        # delmängd av egenskaperna, så en extra eller ändrad odokumenterad
+        # rå egenskap kunde passera. Jämförs nu som en hel, ordnad lista
+        # mot raw_price["indatafalt"] via _strict_numeric_equal.
+        "indatafalt": [
+            {
+                "nyckel": "normalarskorrigerad_energi_mwh",
+                "etikett": "Normalårskorrigerad energi juni–maj",
                 "enhet": "MWh", "default": None, "min_varde": 0, "max_varde": 100000,
+                "hjalptext": "Begärs från leverantören.", "ar_gissning": False, "heltal": False,
+            },
+            {
+                "nyckel": "returtemperatur_c", "etikett": "Returtemperatur", "enhet": "°C",
+                "default": 30, "min_varde": 20, "max_varde": 90,
+                "hjalptext": (
+                    "Flödesviktat månadsmedel, angett som ett enda årsvärde — approximation "
+                    "om returtemperaturen varierar mycket mellan säsonger."
+                ),
                 "ar_gissning": False, "heltal": False,
             },
-            "returtemperatur_c": {
-                "enhet": "°C", "default": 30, "min_varde": 20, "max_varde": 90,
-                "ar_gissning": False, "heltal": False,
+        ],
+        # Fulla, ordnade, råa kravda_falt-objekten (samtliga fyra fält,
+        # samtliga egenskaper) — omgranskning 2026-10-17-009 (P1, Codex):
+        # den tidigare koden plockade bara ut effekt_field/band_field och
+        # kontrollerade var och en mot ett fåtal enskilda egenskaper
+        # (heltal/minvarde/maxvarde respektive vardetyp), och validerade
+        # normalarskorrigerad_energi_mwh/returtemperatur_c INTE alls.
+        # Jämförs nu som en hel, ordnad lista mot
+        # raw_price["policy"]["kravda_falt"] via _strict_numeric_equal, så
+        # ordning, saknade/extra fält och varje enskild rå egenskap binds.
+        "kravda_falt": [
+            {
+                "nyckel": "telge_debiterbar_effekt_kw", "enhet": "kW", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "arsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": (
+                    "Telge Näts prisvillkor och 2026-prislista (telge-attachment/telge-terms) — "
+                    "effektsignatur vid -11°C, heltalsavrundad (villkorens s.3: \"Den debiterade "
+                    "effekten avrundas till närmaste heltal.\")."
+                ),
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": 0, "minvarde_exklusiv": False,
+                "maxvarde": None, "heltal": True, "vardetyp": "number", "antal_varden": None,
+                "tillatna_varden": None, "varden_etiketter": None, "etikett": "Debiterbar effekt",
+                "hjalptext": "Leverantörens effektsignatur, från fakturan.",
+                "krav_attestering": False,
             },
-        },
+            {
+                "nyckel": "normalarskorrigerad_energi_mwh", "enhet": "MWh",
+                "kravs_for": ["annual"], "tillatna_kallor": ["supplier_value"],
+                "matupplosning": "arsvis", "kalperiod_definition": "",
+                "tillamplighet": "samtliga manader",
+                "kalla": "Telge Näts prisvillkor (telge-terms) — nyttjandetidstillägg.",
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": 0, "minvarde_exklusiv": False,
+                "maxvarde": 100000, "heltal": False, "vardetyp": "number", "antal_varden": None,
+                "tillatna_varden": None, "varden_etiketter": None,
+                "etikett": "Normalårskorrigerad energi juni–maj",
+                "hjalptext": "Begärs från leverantören.", "krav_attestering": False,
+            },
+            {
+                "nyckel": "returtemperatur_c", "enhet": "°C", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "arsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": "Telge Näts prisvillkor (telge-terms) — stegvis returtemperaturavgift.",
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": 20, "minvarde_exklusiv": False,
+                "maxvarde": 90, "heltal": False, "vardetyp": "number", "antal_varden": None,
+                "tillatna_varden": None, "varden_etiketter": None, "etikett": "Returtemperatur",
+                "hjalptext": "Flödesviktat månadsmedel, från fakturan.",
+                "krav_attestering": False,
+            },
+            {
+                "nyckel": "telge_vald_niva_id", "enhet": "", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "arsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": (
+                    "Telge Näts prisvillkor och 2026-prislista — bekräftat effektband."
+                ),
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": None, "minvarde_exklusiv": False,
+                "maxvarde": None, "heltal": False, "vardetyp": "band_id", "antal_varden": None,
+                "tillatna_varden": None, "varden_etiketter": None, "etikett": "Effektband",
+                "hjalptext": "Leverantörens bekräftade effektband.", "krav_attestering": False,
+            },
+        ],
         "keys": {"effekt": "telge_debiterbar_effekt_kw", "band": "telge_vald_niva_id"},
         "kapacitet_bindning": "telge_debiterbar_effekt_kw",
         "kapacitet_band_bindning": "telge_vald_niva_id",
-        "effekt_min": 0,
-        "effekt_max": None,
-        "effekt_heltal": True,
     },
 }
 
@@ -1812,7 +1887,8 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"{row['has_capacity_charge']!r}, förväntat exakt {params['has_capacity_charge']!r}."
             )
         keys = params["keys"]
-        expected_required_fields = sorted({keys["effekt"], keys["band"], *params["indatafalt"]})
+        indatafalt_keys = {field["nyckel"] for field in params["indatafalt"]}
+        expected_required_fields = sorted({keys["effekt"], keys["band"], *indatafalt_keys})
         if row["required_policy_fields"] != expected_required_fields:
             raise ValueError(
                 f"Våg 3i-produkten {product_id!r} har required_policy_fields "
@@ -1913,52 +1989,25 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3i-produkten {product_id!r} har justeringar="
                 f"{raw_adjustments!r}, förväntat exakt {params['justeringar']!r}."
             )
+        # Omgranskning 2026-10-17-009 (P1, Codex): indatafalt och
+        # policy.kravda_falt jämförs nu som hela, ordnade listor av
+        # kompletta råa objekt (samtliga egenskaper, inte en delmängd),
+        # via samma _strict_numeric_equal-komparator som används för
+        # övriga vågars kontrakt ovan. Det fångar extra/saknade/omordnade
+        # fält, och varje enskild mutering av en enskild rå egenskap —
+        # inte bara effekt-/bandfältet, utan samtliga fyra kravda_falt-
+        # poster och båda indatafalt-posterna.
         raw_indatafalt = raw_price.get("indatafalt") or []
-        raw_indatafalt_by_key = {field.get("nyckel"): field for field in raw_indatafalt}
-        if set(raw_indatafalt_by_key) != set(params["indatafalt"]):
+        if not _strict_numeric_equal(raw_indatafalt, params["indatafalt"]):
             raise ValueError(
-                f"Våg 3i-produkten {product_id!r} har indatafalt-nycklar "
-                f"{sorted(raw_indatafalt_by_key)!r}, förväntat exakt "
-                f"{sorted(params['indatafalt'])!r}."
+                f"Våg 3i-produkten {product_id!r} har indatafalt="
+                f"{raw_indatafalt!r}, förväntat exakt {params['indatafalt']!r}."
             )
-        for falt_nyckel, expected_falt in params["indatafalt"].items():
-            raw_falt = raw_indatafalt_by_key[falt_nyckel]
-            for contract_key, expected_value in expected_falt.items():
-                if not _strict_numeric_equal(raw_falt.get(contract_key), expected_value):
-                    raise ValueError(
-                        f"Våg 3i-produkten {product_id!r} har {falt_nyckel}.{contract_key}="
-                        f"{raw_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
-                    )
         raw_required_fields = raw_policy.get("kravda_falt") or []
-        effekt_field = next(
-            (f for f in raw_required_fields if f.get("nyckel") == keys["effekt"]), None
-        )
-        if effekt_field is None:
-            raise ValueError(f"Våg 3i-produkten {product_id!r} saknar kravda_falt-posten för effekt.")
-        if effekt_field.get("heltal") is not params["effekt_heltal"]:
+        if not _strict_numeric_equal(raw_required_fields, params["kravda_falt"]):
             raise ValueError(
-                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.heltal="
-                f"{effekt_field.get('heltal')!r}, förväntat exakt {params['effekt_heltal']!r}."
-            )
-        if not _strict_numeric_equal(effekt_field.get("minvarde"), params["effekt_min"]):
-            raise ValueError(
-                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.minvarde="
-                f"{effekt_field.get('minvarde')!r}, förväntat exakt {params['effekt_min']!r}."
-            )
-        if not _strict_numeric_equal(effekt_field.get("maxvarde"), params["effekt_max"]):
-            raise ValueError(
-                f"Våg 3i-produkten {product_id!r} har {keys['effekt']}.maxvarde="
-                f"{effekt_field.get('maxvarde')!r}, förväntat exakt {params['effekt_max']!r}."
-            )
-        band_field = next(
-            (f for f in raw_required_fields if f.get("nyckel") == keys["band"]), None
-        )
-        if band_field is None:
-            raise ValueError(f"Våg 3i-produkten {product_id!r} saknar kravda_falt-posten för band.")
-        if band_field.get("vardetyp") != "band_id":
-            raise ValueError(
-                f"Våg 3i-produkten {product_id!r} har {keys['band']}.vardetyp="
-                f"{band_field.get('vardetyp')!r}, förväntat exakt 'band_id'."
+                f"Våg 3i-produkten {product_id!r} har policy.kravda_falt="
+                f"{raw_required_fields!r}, förväntat exakt {params['kravda_falt']!r}."
             )
 
     counts = {

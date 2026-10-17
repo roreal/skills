@@ -2618,6 +2618,196 @@ class TariffMatrixTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "band_id"):
                 build_matrix(self.source_text)
 
+    # Omgranskning 2026-10-17-009 (P1, Codex): indatafalt och
+    # policy.kravda_falt jämfördes tidigare bara mot en delmängd av
+    # egenskaperna (indatafalt saknade nyckel/etikett/hjalptext i
+    # kontraktet; kravda_falt validerade bara effekt-/bandfältet mot ett
+    # fåtal enskilda egenskaper, och lämnade
+    # normalarskorrigerad_energi_mwh/returtemperatur_c helt ovaliderade).
+    # Testerna nedan binder ordning, extra/saknade egenskaper och de
+    # tidigare ovaliderade fälten.
+
+    def test_wave_3i_adjustment_order_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "justeringar": list(reversed(price["justeringar"]))}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_adjustment_formula_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "formula": "0"} if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_adjustment_unit_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "unit": "SEK/kW/day"} if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_monthly_proration_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {k: v for k, v in a.items() if k != "monthly_proration"}
+                if a.get("type") == "low_utilization" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_kravda_falt_order_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = list(price["policy"]["kravda_falt"])
+            fields[0], fields[1] = fields[1], fields[0]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_kravda_falt_extra_property_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "bogus_extra_property": True}
+                if field.get("nyckel") == "telge_debiterbar_effekt_kw" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_kravda_falt_matupplosning_mutation_is_fail_closed(self) -> None:
+        # matupplosning är gemensam för samtliga fyra kravda_falt-poster
+        # men validerades tidigare inte alls. Kör samma mutation mot var
+        # och en av de fyra nycklarna isolerat. För effekt-/bandnyckeln
+        # fäller den tidigare, separata measurement_resolutions-kontrollen
+        # (som härleds från samma råa matupplosning) innan den nya
+        # kravda_falt-jämförelsen ens nås — fortfarande fail-closed, bara
+        # via en annan av de två kontrollerna.
+        for nyckel in (
+            "telge_debiterbar_effekt_kw",
+            "normalarskorrigerad_energi_mwh",
+            "returtemperatur_c",
+            "telge_vald_niva_id",
+        ):
+            with self.subTest(nyckel=nyckel):
+                def mutator(price: dict[str, Any], nyckel: str = nyckel) -> dict[str, Any]:
+                    fields = [
+                        {**field, "matupplosning": "manadsvis"} if field.get("nyckel") == nyckel else field
+                        for field in price["policy"]["kravda_falt"]
+                    ]
+                    return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+                with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+                    with self.assertRaisesRegex(ValueError, "(kravda_falt|measurement_resolutions)"):
+                        build_matrix(self.source_text)
+
+    def test_wave_3i_normalarskorrigerad_energi_mwh_maxvarde_mutation_is_fail_closed(self) -> None:
+        # Tidigare helt ovaliderat fält (effekt_field/band_field var de
+        # enda som kontrollerades individuellt).
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "maxvarde": 50000}
+                if field.get("nyckel") == "normalarskorrigerad_energi_mwh" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_normalarskorrigerad_energi_mwh_vardetyp_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "vardetyp": "band_id"}
+                if field.get("nyckel") == "normalarskorrigerad_energi_mwh" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_returtemperatur_c_policy_minvarde_mutation_is_fail_closed(self) -> None:
+        # Tidigare helt ovaliderat fält.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "minvarde": 10} if field.get("nyckel") == "returtemperatur_c" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_returtemperatur_c_policy_vardetyp_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "vardetyp": "band_id"} if field.get("nyckel") == "returtemperatur_c" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_extra_indatafalt_entry_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                *price["indatafalt"],
+                {
+                    "nyckel": "telge_historik_extra", "etikett": "Historik (extra)", "enhet": "MWh",
+                    "default": None, "min_varde": 0, "max_varde": 100000,
+                    "hjalptext": "Odokumenterat extra fält.", "ar_gissning": True, "heltal": False,
+                },
+            ]
+            return {**price, "indatafalt": fields}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "indatafalt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3i_kravda_falt_documented_exclusion_mutation_is_fail_closed(self) -> None:
+        # "Documented exclusion"-kontroll: tillampliga_manader är null i
+        # det råa kontraktet för samtliga fyra fält (ingen månadsvis
+        # begränsning dokumenterad för Telge). Sätts den i stället till en
+        # konkret lista ska det fångas som en kontraktsändring, inte tyst
+        # tolereras som en ofarlig precisering.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**field, "tillampliga_manader": [1, 2, 3]}
+                if field.get("nyckel") == "returtemperatur_c" else field
+                for field in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:
         bad_registry = {"stockholm-exergi": "not_a_real_status"}
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", bad_registry):
