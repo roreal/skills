@@ -17,8 +17,7 @@
       "4": 12
     },
     "scenario_review_status": {
-      "godkand_intern_pilot_ej_publik": 3,
-      "godkand_publik_10_15_20": 57,
+      "godkand_publik_10_15_20": 60,
       "not_reviewed": 16,
       "synlig_sarskild_preliminar_prototyp": 1
     }
@@ -783,7 +782,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "habo-energi-habo",
@@ -1477,7 +1476,7 @@
         "flode_eller_temperatur"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "navirum-energi-norrkoping-och-soderkoping-norrkoping-och-soderkoping-bostader",
@@ -1928,7 +1927,7 @@
         "historik_eller_band"
       ],
       "review_wave": 3,
-      "scenario_review_status": "godkand_intern_pilot_ej_publik"
+      "scenario_review_status": "godkand_publik_10_15_20"
     },
     {
       "product_id": "oresundskraft-angelholm-normal",

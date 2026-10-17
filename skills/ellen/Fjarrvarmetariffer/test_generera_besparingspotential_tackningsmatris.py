@@ -125,7 +125,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3h_ids = matrix_module.WAVE_3H_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3h_ids
             )
         )
@@ -140,8 +140,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 3,
-                "godkand_publik_10_15_20": 57,
+                "godkand_publik_10_15_20": 60,
                 "not_reviewed": 16,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -154,12 +153,13 @@ class TariffMatrixTests(unittest.TestCase):
         # WAVE_3E_PRODUCT_IDS (handoff 2026-10-08-001, intern pilot), sedan
         # av WAVE_3F_PRODUCT_IDS (session 2026-10-11-002, intern pilot) och
         # sedan av WAVE_3G_PRODUCT_IDS (handoff/session 2026-10-12-012,
-        # intern pilot) innan samtliga publikt aktiverades (signal
+        # intern pilot), och därefter av WAVE_3H_PRODUCT_IDS (handoff
+        # 2026-10-16-optimate-vag-3h-legacyprodukter, intern pilot) innan
+        # samtliga publikt aktiverades (signal
         # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12/
-        # -2026-10-14). Statusen bars sedan 2026-10-14 av 0 produkter, men
-        # bärs nu (handoff 2026-10-16-optimate-vag-3h-legacyprodukter) av
-        # exakt WAVE_3H_PRODUCT_IDS (3 produkter) — en REN INTERN PILOT som
-        # INTE publikt aktiveras i detta steg.
+        # -2026-10-14/-2026-10-17). Statusen bars sedan 2026-10-17 av 0
+        # produkter — ren reserverad vokabulär för en framtida intern pilot,
+        # ingen rad bär den just nu.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -232,13 +232,14 @@ class TariffMatrixTests(unittest.TestCase):
         # APPROVED_FOR_ACTIVATION-2026-10-14 aktiverade dem publikt också.
         # Handoff 2026-10-16-optimate-vag-3h-legacyprodukter lade därefter
         # till EXAKT tre nya rader som REN INTERN PILOT — Gotland taxa 21,
-        # Mölndal och Norrenergi — se WAVE_3H_PRODUCT_IDS. Dessa publikt
-        # aktiveras INTE i detta steg.
+        # Mölndal och Norrenergi — se WAVE_3H_PRODUCT_IDS, och signal
+        # APPROVED_FOR_ACTIVATION-2026-10-17 aktiverade dem publikt också.
+        # Ingen rad bär längre godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3H_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, frozenset())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -1987,9 +1988,9 @@ class TariffMatrixTests(unittest.TestCase):
         return patch.object(matrix_module, "latest_price", mutated_latest_price)
 
     def test_wave_3h_membership_and_status_is_mechanically_locked(self) -> None:
-        # Handoff 2026-10-16-optimate-vag-3h-legacyprodukter,
-        # APPROVED_FOR_IMPLEMENTATION: Claude — INTERN PILOT ENDAST. Exakt
-        # tre verkliga, icke kontraktsgatade legacyprodukter.
+        # Signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-17 — publikt
+        # aktiverad. Exakt tre verkliga, icke kontraktsgatade
+        # legacyprodukter.
         wave_3h_ids = matrix_module.WAVE_3H_PRODUCT_IDS
         self.assertEqual(
             wave_3h_ids,
@@ -2004,7 +2005,7 @@ class TariffMatrixTests(unittest.TestCase):
             row = self.by_id[pid]
             self.assertEqual(row["cost_path"], "legacy_besparing")
             self.assertTrue(row["savings_today"])
-            self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+            self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
             self.assertEqual(row["required_policy_fields"], [])
             self.assertEqual(row["series_fields"], [])
             self.assertEqual(row["history_fields"], [])
@@ -2030,24 +2031,32 @@ class TariffMatrixTests(unittest.TestCase):
                 build_matrix(self.source_text)
 
     def test_wave_3h_extra_product_with_status_is_fail_closed(self) -> None:
+        # Sedan signal APPROVED_FOR_ACTIVATION-2026-10-17 ska ingen rad
+        # bära godkand_intern_pilot_ej_publik; en tyst återinförd
+        # intern-pilot-rad på en icke-3h-produkt ska falla på den globala
+        # kontrollen, inte på WAVE_3H_PRODUCT_IDS-bindningen.
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
         mutated_registry["sundsvall-energi-indal-liden-och-lucksta"] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
                 build_matrix(self.source_text)
 
     def test_wave_3h_missing_product_status_is_fail_closed(self) -> None:
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
         del mutated_registry["norrenergi"]
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3h_wrong_status_is_fail_closed(self) -> None:
+        # Sedan signal APPROVED_FOR_ACTIVATION-2026-10-17 är
+        # godkand_publik_10_15_20 den korrekta statusen för samtliga tre —
+        # en mutation TILL den gamla interna pilotstatusen ska nu falla på
+        # den globala "inga kvarvarande intern-pilot-rader"-kontrollen.
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry["molndal-energi"] = "godkand_publik_10_15_20"
+        mutated_registry["molndal-energi"] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "WAVE_3H_PRODUCT_IDS"):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
                 build_matrix(self.source_text)
 
     def test_wave_3h_wrong_adjustment_types_is_fail_closed(self) -> None:
