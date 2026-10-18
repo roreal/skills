@@ -11,7 +11,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
 - `scenario_review_status=godkand_publik_10_15_20`
-  (60 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
+  (61 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
   2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens
   `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:
@@ -45,8 +45,14 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   taxa 21, Mölndal Energi och Norrenergi, tre verkliga, icke
   kontraktsgatade legacyprodukter med befintlig `legacy_besparing`-väg,
   exakt Neptune-kodens `WAVE_3H_PRODUCT_IDS`, publikt aktiverad signal
-  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17):
-  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 60 leverantorId,
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17; våg 3i: Telge Nät
+  (telge-nat-telge-foretag-och-bostadsrattsforeningar), den enda
+  kontraktsgatade produkten i listan (`kontraktsgatad_kostnadsled`,
+  inte `legacy_arskostnad`) med samma `low_utilization`+
+  `incremental_return_temperature`-kombination som Norrenergi, exakt
+  Neptune-kodens `WAVE_3I_PRODUCT_IDS`, publikt aktiverad signal
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013):
+  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 61 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
@@ -55,7 +61,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 1, godkand_publik_10_15_20: 60, not_reviewed: 15, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_publik_10_15_20: 61, not_reviewed: 15, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -119,7 +125,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 1 | sundsvall-energi-indal-liden-och-lucksta | Sundsvall Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | ingen debiterbar kapacitetsdel | — | — | — | — |
 | 2 | tekniska-verken-katrineholm-katrineholm | Tekniska Verken - Katrineholm | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | — | katrineholm_effektsignatur_kw, katrineholm_vald_niva_id | historik: katrineholm_effektsignatur_kw | — |
 | 3 | tekniska-verken-linkoping-linkoping | Tekniska Verken - Linköping | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | volume | flode_m3, tekniska_verken_linkoping_debiterbar_effekt_kw, tekniska_verken_linkoping_vald_niva_id | historik: flode_m3, tekniska_verken_linkoping_debiterbar_effekt_kw; serie: flode_m3 | — |
-| 3 | telge-nat-telge-foretag-och-bostadsrattsforeningar | Telge Nät | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (3 band) | incremental_return_temperature, low_utilization | normalarskorrigerad_energi_mwh, returtemperatur_c, telge_debiterbar_effekt_kw, telge_vald_niva_id | — | — |
+| 3 | telge-nat-telge-foretag-och-bostadsrattsforeningar | Telge Nät | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (3 band) | incremental_return_temperature, low_utilization | normalarskorrigerad_energi_mwh, returtemperatur_c, telge_debiterbar_effekt_kw, telge_vald_niva_id | — | — |
 | 2 | temab-fjarrvarme-tierp-karlholmsbruk-och-orbyhus | TEMAB Fjärrvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (3 band) | — | temab_debiteringseffekt_kw, temab_vald_taxa_id | historik: temab_debiteringseffekt_kw | — |
 | 2 | trollhattan-energi-trollhattan | Trollhättan Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | trollhattan_debiterbar_effekt_kw, trollhattan_vald_niva_id | historik: trollhattan_debiterbar_effekt_kw | — |
 | 3 | umea-energi-umea-enkel | Umeå Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (7 band) | asymmetric_flow_difference | flode_okt_apr_m3, umea_enkel_arseffekt_a_kw, umea_enkel_kapacitetsfaktor_b, umea_enkel_vald_niva_id | historik: umea_enkel_arseffekt_a_kw | — |

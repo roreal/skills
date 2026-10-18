@@ -138,7 +138,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3i_ids = matrix_module.WAVE_3I_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3i_ids
             )
         )
@@ -148,9 +148,8 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_publik_10_15_20": 60,
+                "godkand_publik_10_15_20": 61,
                 "not_reviewed": 15,
-                "godkand_intern_pilot_ej_publik": 1,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -244,14 +243,14 @@ class TariffMatrixTests(unittest.TestCase):
         # Mölndal och Norrenergi — se WAVE_3H_PRODUCT_IDS, och signal
         # APPROVED_FOR_ACTIVATION-2026-10-17 aktiverade dem publikt också.
         # Handoff 2026-10-17-006/007 (Optimate våg 3i, Telge Nät) lade
-        # därefter till EXAKT en ny rad som INTERN PILOT ENDAST — se
-        # WAVE_3I_PRODUCT_IDS — så godkand_intern_pilot_ej_publik bärs nu
-        # av exakt den raden.
+        # därefter till exakt en intern rad; signal 2026-10-17-013
+        # aktiverade även den publikt. Ingen rad bär därför längre den
+        # reserverade internpilotstatusen.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3I_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -2298,7 +2297,8 @@ class TariffMatrixTests(unittest.TestCase):
 
     # -------------------------------------------------------------------
     # Våg 3i ("Telge Nät, låg utnyttjning och returtemperatur", handoff
-    # 2026-10-17-006/007, INTERN PILOT ENDAST). Till skillnad från
+    # 2026-10-17-006/007, publikt aktiverad via signal 2026-10-17-013).
+    # Till skillnad från
     # Norrenergi (Våg 3h, legacyprodukt) ÄR Telge kontraktsgatad, så
     # policybindningarna (kapacitet_bindning/kapacitet_band_bindning/
     # kravda_falt) mutationstestas också, precis som Våg 3g.
@@ -2311,7 +2311,7 @@ class TariffMatrixTests(unittest.TestCase):
         row = self.by_id[self.TELGE_ID]
         self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
         self.assertFalse(row["savings_today"])
-        self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
         self.assertEqual(
             row["required_policy_fields"],
             sorted([
@@ -2323,7 +2323,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(row["history_fields"], [])
         self.assertFalse(row["has_eligibility_rule"])
         self.assertEqual(sorted(row["adjustment_types"]), sorted(["low_utilization", "incremental_return_temperature"]))
-        # Inte publikt aktiverad och ingen överlappning med tidigare vågor.
+        # Egen våg utan överlappning med tidigare vågor.
         self.assertNotIn(self.TELGE_ID, matrix_module.WAVE_3H_PRODUCT_IDS)
 
     def test_wave_3i_params_registry_missing_product_is_fail_closed(self) -> None:
@@ -2350,7 +2350,7 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_wave_3i_wrong_cost_path_status_mismatch_is_fail_closed(self) -> None:
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry[self.TELGE_ID] = "godkand_publik_10_15_20"
+        mutated_registry[self.TELGE_ID] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
             with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
                 build_matrix(self.source_text)
@@ -2359,7 +2359,7 @@ class TariffMatrixTests(unittest.TestCase):
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
         del mutated_registry[self.TELGE_ID]
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3i_extra_internal_pilot_row_is_fail_closed(self) -> None:

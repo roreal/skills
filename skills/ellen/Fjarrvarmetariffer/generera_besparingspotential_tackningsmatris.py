@@ -38,20 +38,21 @@ HISTORY_BAND_TYPES = frozenset({
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
 # katalogen. Aktuell disposition av 77 produkter (signal
-# APPROVED_FOR_ACTIVATION: Claude, 2026-10-17, våg 3h publikt aktiverad): 60
-# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/3E/3F/3G/
-# 3H_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-energi-partille,
-# sodertorns-fjarrvarme-sodertorns-fjarrvarme, våg 3g: lidkoping-energi-
-# lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw, och våg 3h:
-# gotlands-energi-gotland-taxa-21-over-50-mwh-ar, molndal-energi,
-# norrenergi — tre verkliga, icke kontraktsgatade legacyprodukter med
-# befintlig `legacy_besparing`-väg — IDENTISK med Neptune-kodens
-# WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS/WAVE_3H_PRODUCT_IDS i
-# optimateScenario.ts, vars `stodjerOptimateScenario` och
-# `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
-# åtta), 0 `godkand_intern_pilot_ej_publik`, 1
+# APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013, våg 3i publikt
+# aktiverad): 61 `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
+# 3E/3F/3G/3H/3I_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
+# energi-partille, sodertorns-fjarrvarme-sodertorns-fjarrvarme, våg 3g:
+# lidkoping-energi-lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw,
+# våg 3h: gotlands-energi-gotland-taxa-21-over-50-mwh-ar, molndal-energi,
+# norrenergi, och våg 3i: telge-nat-telge-foretag-och-
+# bostadsrattsforeningar — den enda kontraktsgatade produkten i listan,
+# via `kontraktsgatad_kostnadsled` snarare än `legacy_arskostnad` — IDENTISK
+# med Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS/
+# WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS i optimateScenario.ts, vars
+# `stodjerOptimateScenario` och `stodjerOptimateScenarioPubliktAktiverad`
+# nu båda är TRUE för samtliga nio), 0 `godkand_intern_pilot_ej_publik`, 1
 # `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
-# återstående 16 "not_reviewed".
+# återstående 15 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -215,7 +216,8 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # ogranskade — se WAVE_3H_PRODUCT_IDS/WAVE_3H_PRODUCT_PARAMS nedan, som
     # binder dessa mot snapshotens råa pris-/justeringskontrakt. IDENTISK
     # med Neptune-kodens WAVE_3H_PRODUCT_IDS i optimateScenario.ts, som nu
-    # lagts till i SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden 60).
+    # lagts till i SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden 60 vid
+    # våg 3h, nu 61 sedan våg 3i).
     # `godkand_publik_10_15_20` — publikt aktiverad, precis som våg
     # 1/2/3a/3b/3c/3d/3e/3f/3g. Statusen `godkand_intern_pilot_ej_publik` var
     # den tidigare interna pilotstatusen och kvarstår i
@@ -224,17 +226,17 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     "gotlands-energi-gotland-taxa-21-over-50-mwh-ar": "godkand_publik_10_15_20",
     "molndal-energi": "godkand_publik_10_15_20",
     "norrenergi": "godkand_publik_10_15_20",
-    # Optimate våg 3i (handoff 2026-10-17-006/007,
-    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt 1 kontraktsgatad produkt —
+    # Optimate våg 3i (signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013,
+    # lokal publik aktivering): exakt 1 kontraktsgatad produkt —
     # telge-nat-telge-foretag-och-bostadsrattsforeningar — den enda
-    # återstående, ogranskade, verkliga produkten med kombinationen
-    # `low_utilization` + `incremental_return_temperature` (Norrenergi har
-    # samma två justeringstyper men är redan granskad och publik via
-    # `legacy_arskostnad`, Våg 3h). INTERN pilot ENDAST — IDENTISK med
-    # Neptune-kodens WAVE_3I_PRODUCT_IDS i optimateScenario.ts, tillagd i
-    # SCENARIO_PILOT_TARIFFER men INTE i SCENARIO_PUBLIKT_AKTIVERADE_ID
-    # (Neptune-koden förblir 60 publika).
-    "telge-nat-telge-foretag-och-bostadsrattsforeningar": "godkand_intern_pilot_ej_publik",
+    # produkten med kombinationen `low_utilization` +
+    # `incremental_return_temperature` som använde `kontraktsgatad_kostnadsled`
+    # (Norrenergi har samma två justeringstyper men är publik via
+    # `legacy_arskostnad`, Våg 3h). Nu publikt aktiverad — IDENTISK med
+    # Neptune-kodens WAVE_3I_PRODUCT_IDS i optimateScenario.ts, som nu ingår i
+    # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 61 publika,
+    # Neptune-commit 51e78a2).
+    "telge-nat-telge-foretag-och-bostadsrattsforeningar": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -1696,20 +1698,21 @@ def build_matrix(text: str) -> dict[str, Any]:
     # kontrolleras i loopen nedan) i stället för en statusbaserad
     # härledning. Statusen `godkand_intern_pilot_ej_publik` bars tidigare av
     # exakt dessa tre rader; Våg 3h gjorde den tillfälligt obärd av någon
-    # rad. Våg 3i (nedan) återinför statusen för exakt Telge — denna
-    # kontroll binder därför nu att EXAKT WAVE_3I_PRODUCT_IDS bär statusen,
-    # inte att ingen rad gör det, så en framtida våg som tyst lägger till
-    # en FJÄRDE intern-pilot-rad utan att uppdatera WAVE_3I_PRODUCT_IDS
-    # ändå faller.
+    # rad. Våg 3i återinförde statusen temporärt för exakt Telge under sin
+    # interna pilotfas; signal APPROVED_FOR_ACTIVATION: Claude,
+    # 2026-10-17-013 gjorde Telge publik och statusen obärd av någon rad
+    # igen — denna kontroll binder därför nu att INGEN rad bär statusen,
+    # så en framtida våg som tyst lämnar en produkt kvar i intern pilot
+    # utan att den granskas vidare till publik eller tas bort ändå faller.
     remaining_internal_pilot_ids = {
         row["product_id"] for row in rows
         if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
     }
-    if remaining_internal_pilot_ids != WAVE_3I_PRODUCT_IDS:
+    if remaining_internal_pilot_ids:
         raise ValueError(
             "godkand_intern_pilot_ej_publik bärs av "
-            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat exakt "
-            f"WAVE_3I_PRODUCT_IDS ({sorted(WAVE_3I_PRODUCT_IDS)})."
+            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat ingen rad "
+            "(våg 3i gjorde Telge publik, signal 2026-10-17-013)."
         )
     if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
         raise ValueError(
@@ -1837,15 +1840,18 @@ def build_matrix(text: str) -> dict[str, Any]:
                         f"{raw_falt.get(contract_key)!r}, förväntat exakt {expected_value!r}."
                     )
 
-    # Våg 3i ("Telge Nät, låg utnyttjning och returtemperatur", handoff
-    # 2026-10-17-006/007, INTERN PILOT ENDAST): till skillnad från
-    # wave_3a_ids/wave_3g_ids ovan delar Telge sin adjustment_types-
-    # kombination med Norrenergi (redan granskad, Våg 3h), så bindningen
-    # sker direkt mot den fasta WAVE_3I_PRODUCT_IDS-listan (precis som
-    # WAVE_3B_PRODUCT_IDS) i stället för ett generiskt filter. Till
-    # skillnad från Norrenergi ÄR Telge kontraktsgatad, så
-    # required_policy_fields/kapacitet_bindning binds här mot
-    # policy.kravda_falt.
+    # Våg 3i ("Telge Nät, låg utnyttjning och returtemperatur", signal
+    # APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013, publik 10/15/20-
+    # aktivering): till skillnad från wave_3a_ids/wave_3g_ids ovan delar
+    # Telge sin adjustment_types-kombination med Norrenergi (redan
+    # granskad, Våg 3h), så bindningen sker direkt mot den fasta
+    # WAVE_3I_PRODUCT_IDS-listan (precis som WAVE_3B_PRODUCT_IDS) i stället
+    # för ett generiskt filter. Till skillnad från Norrenergi ÄR Telge
+    # kontraktsgatad, så required_policy_fields/kapacitet_bindning binds
+    # här mot policy.kravda_falt. `scenario_review_status` är nu
+    # `godkand_publik_10_15_20`, men precis som för övriga kontraktsgatade
+    # produkter ändrar den publika UI-aktiveringen inte katalogens egen
+    # `stodjer_besparing`/`savings_today`-spärr, som förblir False nedan.
     if set(WAVE_3I_PRODUCT_PARAMS) != WAVE_3I_PRODUCT_IDS:
         raise ValueError(
             "WAVE_3I_PRODUCT_PARAMS matchar inte WAVE_3I_PRODUCT_IDS. "
@@ -1918,10 +1924,10 @@ def build_matrix(text: str) -> dict[str, Any]:
             raise ValueError(
                 f"Våg 3i-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
             )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3i-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
         for falt in (keys["effekt"], keys["band"]):
             if row["measurement_resolutions"].get(falt) != "arsvis":
@@ -2054,7 +2060,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (60 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (61 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
         "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
@@ -2088,8 +2094,14 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  taxa 21, Mölndal Energi och Norrenergi, tre verkliga, icke",
         "  kontraktsgatade legacyprodukter med befintlig `legacy_besparing`-väg,",
         "  exakt Neptune-kodens `WAVE_3H_PRODUCT_IDS`, publikt aktiverad signal",
-        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 60 leverantorId,",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17; våg 3i: Telge Nät",
+        "  (telge-nat-telge-foretag-och-bostadsrattsforeningar), den enda",
+        "  kontraktsgatade produkten i listan (`kontraktsgatad_kostnadsled`,",
+        "  inte `legacy_arskostnad`) med samma `low_utilization`+",
+        "  `incremental_return_temperature`-kombination som Norrenergi, exakt",
+        "  Neptune-kodens `WAVE_3I_PRODUCT_IDS`, publikt aktiverad signal",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 61 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
