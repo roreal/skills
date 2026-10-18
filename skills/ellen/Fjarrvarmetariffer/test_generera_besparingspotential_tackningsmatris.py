@@ -146,20 +146,20 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3j_ids = matrix_module.WAVE_3J_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3j_ids
             )
         )
+        pilot_ids = pilot_ids | wave_3j_ids
         others = [
             row for pid, row in self.by_id.items()
-            if pid not in pilot_ids and pid not in wave_3j_ids
+            if pid not in pilot_ids
         ]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 1,
-                "godkand_publik_10_15_20": 61,
+                "godkand_publik_10_15_20": 62,
                 "not_reviewed": 14,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -176,10 +176,12 @@ class TariffMatrixTests(unittest.TestCase):
         # 2026-10-16-optimate-vag-3h-legacyprodukter, intern pilot) innan
         # samtliga publikt aktiverades (signal
         # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12/
-        # -2026-10-14/-2026-10-17). Statusen bars sedan 2026-10-17 av 0
-        # produkter tills handoff 2026-10-18-003 (Optimate våg 3j) lade till
-        # EXAKT en ny rad som REN INTERN PILOT — finspangs-tekniska-verk-
-        # finspang, se WAVE_3J_PRODUCT_IDS — ingen publik aktivering ännu.
+        # -2026-10-14/-2026-10-17). Handoff 2026-10-18-003 (Optimate våg 3j)
+        # lade därefter till exakt en ny rad som intern pilot —
+        # finspangs-tekniska-verk-finspang, se WAVE_3J_PRODUCT_IDS — innan
+        # signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005 aktiverade
+        # den publikt också. Statusen bärs nu av 0 produkter men förblir
+        # reserverad vokabulär för en framtida intern pilot.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -257,14 +259,16 @@ class TariffMatrixTests(unittest.TestCase):
         # Handoff 2026-10-17-006/007 (Optimate våg 3i, Telge Nät) lade
         # därefter till exakt en intern rad; signal 2026-10-17-013
         # aktiverade även den publikt. Handoff 2026-10-18-003 (Optimate våg
-        # 3j, Finspångs Tekniska Verk) återinförde statusen för exakt en ny
-        # rad — finspangs-tekniska-verk-finspang — se WAVE_3J_PRODUCT_IDS,
-        # ingen publik aktivering ännu.
+        # 3j, Finspångs Tekniska Verk) återinförde statusen temporärt för
+        # exakt en ny rad — finspangs-tekniska-verk-finspang — se
+        # WAVE_3J_PRODUCT_IDS; signal APPROVED_FOR_ACTIVATION: Claude,
+        # 2026-10-18-005 aktiverade även den publikt. Ingen rad bär därför
+        # längre den reserverade internpilotstatusen.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3J_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, set())
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -2828,14 +2832,15 @@ class TariffMatrixTests(unittest.TestCase):
 
     # -------------------------------------------------------------------
     # Våg 3j ("Finspångs Tekniska Verk, styckvis polynom + villkorad
-    # flödesavgift", handoff 2026-10-18-003, INTERN PILOT ENDAST). Till
-    # skillnad från Telge (Våg 3i, banded `effekt` + två justeringstyper)
-    # har Finspång INGEN nivålista/bandbindning, bara EN justeringstyp
-    # (conditional_flow), och TVÅ manadsvisa number_series-policyfält i
-    # stället för Telges noll — mutationsproven nedan binder den egna
-    # formen direkt, med samma rigor som Wave 3i:s Codex-omgranskning
-    # 2026-10-17-009 (hela indatafalt/kravda_falt, inte bara en delmängd),
-    # tillämpad redan från start.
+    # flödesavgift", signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005,
+    # publik 10/15/20-aktivering). Till skillnad från Telge (Våg 3i, banded
+    # `effekt` + två justeringstyper) har Finspång INGEN
+    # nivålista/bandbindning, bara EN justeringstyp (conditional_flow), och
+    # TVÅ manadsvisa number_series-policyfält i stället för Telges noll —
+    # mutationsproven nedan binder den egna formen direkt, med samma rigor
+    # som Wave 3i:s Codex-omgranskning 2026-10-17-009 (hela
+    # indatafalt/kravda_falt, inte bara en delmängd), tillämpad redan från
+    # start.
     # -------------------------------------------------------------------
     FINSPANG_ID = "finspangs-tekniska-verk-finspang"
 
@@ -2845,7 +2850,7 @@ class TariffMatrixTests(unittest.TestCase):
         row = self.by_id[self.FINSPANG_ID]
         self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
         self.assertFalse(row["savings_today"])
-        self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(row["scenario_review_status"], "godkand_publik_10_15_20")
         self.assertEqual(
             row["required_policy_fields"],
             sorted([
@@ -2897,7 +2902,7 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_wave_3j_wrong_status_mismatch_is_fail_closed(self) -> None:
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry[self.FINSPANG_ID] = "godkand_publik_10_15_20"
+        mutated_registry[self.FINSPANG_ID] = "godkand_intern_pilot_ej_publik"
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
             with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
                 build_matrix(self.source_text)
@@ -2906,7 +2911,7 @@ class TariffMatrixTests(unittest.TestCase):
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
         del mutated_registry[self.FINSPANG_ID]
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3j_extra_internal_pilot_row_is_fail_closed(self) -> None:

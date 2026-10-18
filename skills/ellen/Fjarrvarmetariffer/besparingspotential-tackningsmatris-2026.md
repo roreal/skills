@@ -11,7 +11,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en
   godkänd publik besparingsprodukt.
 - `scenario_review_status=godkand_publik_10_15_20`
-  (61 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
+  (62 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,
   gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal
   2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens
   `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:
@@ -51,8 +51,12 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   inte `legacy_arskostnad`) med samma `low_utilization`+
   `incremental_return_temperature`-kombination som Norrenergi, exakt
   Neptune-kodens `WAVE_3I_PRODUCT_IDS`, publikt aktiverad signal
-  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013):
-  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 61 leverantorId,
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013; våg 3j: Finspångs
+  Tekniska Verk (finspangs-tekniska-verk-finspang), en
+  `piecewise_polynomial`-kapacitet + `conditional_flow`-justering, exakt
+  Neptune-kodens `WAVE_3J_PRODUCT_IDS`, publikt aktiverad signal
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005):
+  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 62 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
@@ -61,7 +65,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 1, godkand_publik_10_15_20: 61, not_reviewed: 14, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_publik_10_15_20: 62, not_reviewed: 14, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -78,7 +82,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | e-on-malmo-malmo-och-burlov-ovriga-fastigheter--bas-delvarme | E.ON - Malmö — Malmö och Burlöv – Övriga fastigheter – Bas-/delvärme | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | supply_temperature_adjusted_flow | eon_malmo_ovriga_bas_delvarme_debiterbar_effekt_kw, eon_malmo_ovriga_bas_delvarme_vald_niva_id, flode_m3, framledningstemperatur_c | historik: eon_malmo_ovriga_bas_delvarme_debiterbar_effekt_kw | — |
 | 3 | falu-energi-vatten-bjursas-grycksbo-sundborn-svardsjo | Falu Energi & Vatten — Bjursås, Grycksbo, Sundborn, Svärdsjö | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | volume | falun_ytterorter_debiterbar_effekt_kw, falun_ytterorter_vald_niva_id, flode_m3 | historik: falun_ytterorter_debiterbar_effekt_kw | — |
 | 3 | falu-energi-vatten-falun | Falu Energi & Vatten — Falun | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (7 band) | volume | falun_tatort_debiterbar_effekt_kw, falun_tatort_vald_niva_id, flode_m3 | historik: falun_tatort_debiterbar_effekt_kw | — |
-| 3 | finspangs-tekniska-verk-finspang | Finspångs Tekniska Verk | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | piecewise_polynomial | conditional_flow | conditional_flow_flode_m3, conditional_flow_returtemp_c, finspang_debiterbar_effekt_kw | serie: conditional_flow_flode_m3, conditional_flow_returtemp_c | — |
+| 3 | finspangs-tekniska-verk-finspang | Finspångs Tekniska Verk | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | piecewise_polynomial | conditional_flow | conditional_flow_flode_m3, conditional_flow_returtemp_c, finspang_debiterbar_effekt_kw | serie: conditional_flow_flode_m3, conditional_flow_returtemp_c | — |
 | 2 | gavle-energi-gavle | Gävle Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (1 band) | marginal_annual_volume_discount | gavle_kapacitetsbehov_kwh_dygn, gavle_vald_niva_id | — | — |
 | 3 | goteborg-energi | Göteborg Energi | legacy_besparing | godkand_publik_10_15_20 | manadspriser | effekt (6 band) | temperature_difference | — | — | — |
 | 1 | gotlands-energi-gotland-taxa-17-under-50-mwh-ar | Gotlands Energi — Gotland taxa 17, under 50 MWh/år | legacy_besparing | godkand_publik_10_15_20 | manadspriser | ingen debiterbar kapacitetsdel | — | — | — | — |

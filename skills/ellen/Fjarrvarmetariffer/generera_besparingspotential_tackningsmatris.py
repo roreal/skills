@@ -37,24 +37,22 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Aktuell disposition av 77 produkter (handoff 2026-10-18-003,
-# APPROVED_FOR_IMPLEMENTATION: Claude, våg 3j — INTERN PILOT ENDAST): 61
-# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
-# 3E/3F/3G/3H/3I_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
+# katalogen. Aktuell disposition av 77 produkter (signal
+# APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005, våg 3j publikt
+# aktiverad): 62 `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
+# 3E/3F/3G/3H/3I/3J_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
 # energi-partille, sodertorns-fjarrvarme-sodertorns-fjarrvarme, våg 3g:
 # lidkoping-energi-lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw,
 # våg 3h: gotlands-energi-gotland-taxa-21-over-50-mwh-ar, molndal-energi,
-# norrenergi, och våg 3i: telge-nat-telge-foretag-och-
-# bostadsrattsforeningar — den enda kontraktsgatade produkten bland de nio,
-# via `kontraktsgatad_kostnadsled` snarare än `legacy_arskostnad` — IDENTISK
+# norrenergi, våg 3i: telge-nat-telge-foretag-och-
+# bostadsrattsforeningar och våg 3j: finspangs-tekniska-verk-finspang — de
+# två kontraktsgatade produkterna bland de tio, via
+# `kontraktsgatad_kostnadsled` snarare än `legacy_arskostnad` — IDENTISK
 # med Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS/
-# WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS i optimateScenario.ts, vars
-# `stodjerOptimateScenario` och `stodjerOptimateScenarioPubliktAktiverad`
-# nu båda är TRUE för samtliga nio), 1 `godkand_intern_pilot_ej_publik`
-# (våg 3j: finspangs-tekniska-verk-finspang — den enda återstående,
-# ogranskade, verkliga produkten med kombinationen `piecewise_polynomial` +
-# `conditional_flow`; IDENTISK med Neptune-kodens WAVE_3J_PRODUCT_IDS, INTE
-# i SCENARIO_PUBLIKT_AKTIVERADE_ID — ren intern beräkningspilot), 1
+# WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS/WAVE_3J_PRODUCT_IDS i
+# optimateScenario.ts, vars `stodjerOptimateScenario` och
+# `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
+# tio), 0 `godkand_intern_pilot_ej_publik`, 1
 # `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
 # återstående 14 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
@@ -241,15 +239,16 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 61 publika,
     # Neptune-commit 51e78a2).
     "telge-nat-telge-foretag-och-bostadsrattsforeningar": "godkand_publik_10_15_20",
-    # Optimate våg 3j (handoff 2026-10-18-003,
-    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt 1 kontraktsgatad produkt —
-    # finspangs-tekniska-verk-finspang — den enda återstående, ogranskade,
-    # verkliga produkten med kombinationen `piecewise_polynomial`
-    # (kapacitetsled) + `conditional_flow` (flödesjustering). INTERN pilot
-    # ENDAST — IDENTISK med Neptune-kodens WAVE_3J_PRODUCT_IDS i
-    # optimateScenario.ts, tillagd i SCENARIO_PILOT_TARIFFER men INTE i
-    # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden förblir 61 publika).
-    "finspangs-tekniska-verk-finspang": "godkand_intern_pilot_ej_publik",
+    # Optimate våg 3j (signal APPROVED_FOR_ACTIVATION: Claude,
+    # 2026-10-18-005, lokal publik aktivering): exakt 1 kontraktsgatad
+    # produkt — finspangs-tekniska-verk-finspang — den enda återstående,
+    # ogranskade, verkliga produkten med kombinationen
+    # `piecewise_polynomial` (kapacitetsled) + `conditional_flow`
+    # (flödesjustering). Nu publikt aktiverad — IDENTISK med Neptune-kodens
+    # WAVE_3J_PRODUCT_IDS i optimateScenario.ts, som nu ingår i
+    # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 62 publika,
+    # Neptune-commit db218c0).
+    "finspangs-tekniska-verk-finspang": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -1817,19 +1816,21 @@ def build_matrix(text: str) -> dict[str, Any]:
     # interna pilotfas; signal APPROVED_FOR_ACTIVATION: Claude,
     # 2026-10-17-013 gjorde Telge publik och statusen obärd av någon rad
     # igen. Handoff 2026-10-18-003 (Optimate våg 3j, Finspångs Tekniska
-    # Verk) återinför därefter statusen för exakt Finspång — denna kontroll
-    # binder därför nu att EXAKT WAVE_3J_PRODUCT_IDS bär statusen, inte att
-    # ingen rad gör det, så en framtida våg som tyst lägger till en EXTRA
-    # intern-pilot-rad utan att uppdatera WAVE_3J_PRODUCT_IDS ändå faller.
+    # Verk) återinförde statusen temporärt för exakt Finspång under sin
+    # interna pilotfas; signal APPROVED_FOR_ACTIVATION: Claude,
+    # 2026-10-18-005 gjorde Finspång publik och statusen obärd av någon rad
+    # igen — denna kontroll binder därför nu att INGEN rad bär statusen, så
+    # en framtida våg som tyst lämnar en produkt kvar i intern pilot utan
+    # att den granskas vidare till publik eller tas bort ändå faller.
     remaining_internal_pilot_ids = {
         row["product_id"] for row in rows
         if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
     }
-    if remaining_internal_pilot_ids != WAVE_3J_PRODUCT_IDS:
+    if remaining_internal_pilot_ids:
         raise ValueError(
             "godkand_intern_pilot_ej_publik bärs av "
-            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat exakt "
-            f"WAVE_3J_PRODUCT_IDS ({sorted(WAVE_3J_PRODUCT_IDS)})."
+            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat ingen rad "
+            "(våg 3j gjorde Finspång publik, signal 2026-10-18-005)."
         )
     if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
         raise ValueError(
@@ -2144,15 +2145,15 @@ def build_matrix(text: str) -> dict[str, Any]:
             )
 
     # Våg 3j ("Finspångs Tekniska Verk, styckvis polynom + villkorad
-    # flödesavgift", handoff 2026-10-18-003, INTERN PILOT ENDAST): den enda
-    # återstående, ogranskade, verkliga produkten med kombinationen
-    # `piecewise_polynomial` + `conditional_flow`. Bindningen sker direkt
-    # mot den fasta WAVE_3J_PRODUCT_IDS-listan (samma mönster som
-    # WAVE_3I_PRODUCT_IDS) i stället för ett generiskt filter. Till
-    # skillnad från Telge (Våg 3i, banded `effekt` + två justeringstyper)
-    # har Finspång INGEN nivålista eller bandbindning, bara EN
-    # justeringstyp, och TVÅ manadsvisa `number_series`-policyfält i
-    # stället för Telges noll.
+    # flödesavgift", signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005,
+    # publik 10/15/20-aktivering): den enda återstående, ogranskade,
+    # verkliga produkten med kombinationen `piecewise_polynomial` +
+    # `conditional_flow`. Bindningen sker direkt mot den fasta
+    # WAVE_3J_PRODUCT_IDS-listan (samma mönster som WAVE_3I_PRODUCT_IDS) i
+    # stället för ett generiskt filter. Till skillnad från Telge (Våg 3i,
+    # banded `effekt` + två justeringstyper) har Finspång INGEN nivålista
+    # eller bandbindning, bara EN justeringstyp, och TVÅ manadsvisa
+    # `number_series`-policyfält i stället för Telges noll.
     if set(WAVE_3J_PRODUCT_PARAMS) != WAVE_3J_PRODUCT_IDS:
         raise ValueError(
             "WAVE_3J_PRODUCT_PARAMS matchar inte WAVE_3J_PRODUCT_IDS. "
@@ -2220,10 +2221,10 @@ def build_matrix(text: str) -> dict[str, Any]:
             raise ValueError(
                 f"Våg 3j-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
             )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3j-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
         if row["measurement_resolutions"].get(keys["effekt"]) != "arsvis":
             raise ValueError(
@@ -2350,7 +2351,7 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  10/15/20-scenariot är synligt som en avgränsad, preliminär prototyp — inte en",
         "  godkänd publik besparingsprodukt.",
         "- `scenario_review_status=godkand_publik_10_15_20`",
-        "  (61 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
+        "  (62 produkter — våg 1: sundsvall-energi-indal-liden-och-lucksta,",
         "  gotlands-energi-gotland-taxa-17-under-50-mwh-ar, publikt aktiverad signal",
         "  2026-09-25-015; våg 2: samtliga 15 review_wave==2-produkter i Neptune-kodens",
         "  `WAVE_2_PRODUCT_IDS`, publikt aktiverad signal 2026-09-30-002; våg 3a:",
@@ -2390,8 +2391,12 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  inte `legacy_arskostnad`) med samma `low_utilization`+",
         "  `incremental_return_temperature`-kombination som Norrenergi, exakt",
         "  Neptune-kodens `WAVE_3I_PRODUCT_IDS`, publikt aktiverad signal",
-        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 61 leverantorId,",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013; våg 3j: Finspångs",
+        "  Tekniska Verk (finspangs-tekniska-verk-finspang), en",
+        "  `piecewise_polynomial`-kapacitet + `conditional_flow`-justering, exakt",
+        "  Neptune-kodens `WAVE_3J_PRODUCT_IDS`, publikt aktiverad signal",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 62 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
