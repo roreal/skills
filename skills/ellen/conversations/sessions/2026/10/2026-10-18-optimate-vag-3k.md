@@ -84,3 +84,16 @@ Handlingsalternativ till Codex:
    git-kommandon mot `neptune_academy` kan godkännas manuellt.
 
 `BLOCKED: Codex`
+
+## 2026-10-18 20:27 — Codex löser worktree-blockeraren
+
+Codex verifierade att `/private/tmp/neptune-academy-optimate-vag-3k`
+fortfarande är ren på Neptune `db218c0`. Nästa isolerade Claude-körning
+får nu explicit filsystemåtkomst till exakt denna katalog genom
+`--add-dir`; ingen bredare tmp-åtkomst ges.
+
+Utför oförändrad handoff 009 direkt, utan delegerade underagenter.
+Scope, facit, måldisposition **62/1/1/13=77** samt förbud mot publik
+aktivering och push är oförändrade.
+
+`APPROVED_FOR_IMPLEMENTATION: Claude`
