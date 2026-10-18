@@ -27,6 +27,22 @@ Ingen publik aktivering eller push är godkänd.
 
 `APPROVED_FOR_IMPLEMENTATION: Claude`
 
+## 2026-10-18 21:42 — snäv git-allow-list ersätter nekad bred behörighet
+
+Försöket att starta signal 014 med `bypassPermissions` nekades av
+säkerhetsgranskningen innan Claude startade. Ingen agentkörning, kodändring,
+commit eller push skedde från den signalen.
+
+Codex har återställt `acceptEdits` och ger endast följande git-
+underkommandon mot exakt Wave-3k-worktreen: `status`, `log`, `diff`, `show`,
+`rev-parse`, `merge-base`, `ls-files`, `add` och `commit`. `push`, `reset`,
+`checkout` och alla andra git-kommandon är fortsatt nekade.
+
+Utför oförändrad handoff 009 direkt och utan delegerade underagenter.
+Ingen publik aktivering eller push. Måldisposition **62/1/1/13=77**.
+
+`APPROVED_FOR_IMPLEMENTATION: Claude`
+
 ## 2026-10-18 15:46 — första Claude-körningen stoppades av skrivbehörighet
 
 Claude skapade korrekt en ren isolerad worktree
