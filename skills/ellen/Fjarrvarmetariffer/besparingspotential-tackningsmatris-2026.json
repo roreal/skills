@@ -17,8 +17,9 @@
       "4": 12
     },
     "scenario_review_status": {
+      "godkand_intern_pilot_ej_publik": 1,
       "godkand_publik_10_15_20": 61,
-      "not_reviewed": 15,
+      "not_reviewed": 14,
       "synlig_sarskild_preliminar_prototyp": 1
     }
   },
@@ -649,7 +650,7 @@
         "manadsserie"
       ],
       "review_wave": 3,
-      "scenario_review_status": "not_reviewed"
+      "scenario_review_status": "godkand_intern_pilot_ej_publik"
     },
     {
       "product_id": "gavle-energi-gavle",

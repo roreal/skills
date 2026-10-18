@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 15)
+        self.assertEqual(len(not_reviewed), 14)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -143,13 +143,24 @@ class TariffMatrixTests(unittest.TestCase):
             )
         )
         pilot_ids = pilot_ids | wave_3i_ids
-        others = [row for pid, row in self.by_id.items() if pid not in pilot_ids]
+        wave_3j_ids = matrix_module.WAVE_3J_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3j_ids
+            )
+        )
+        others = [
+            row for pid, row in self.by_id.items()
+            if pid not in pilot_ids and pid not in wave_3j_ids
+        ]
         self.assertTrue(all(row["scenario_review_status"] == "not_reviewed" for row in others))
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 1,
                 "godkand_publik_10_15_20": 61,
-                "not_reviewed": 15,
+                "not_reviewed": 14,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -166,8 +177,9 @@ class TariffMatrixTests(unittest.TestCase):
         # samtliga publikt aktiverades (signal
         # APPROVED_FOR_ACTIVATION-2026-10-07/-2026-10-08/-2026-10-12/
         # -2026-10-14/-2026-10-17). Statusen bars sedan 2026-10-17 av 0
-        # produkter — ren reserverad vokabulär för en framtida intern pilot,
-        # ingen rad bär den just nu.
+        # produkter tills handoff 2026-10-18-003 (Optimate våg 3j) lade till
+        # EXAKT en ny rad som REN INTERN PILOT — finspangs-tekniska-verk-
+        # finspang, se WAVE_3J_PRODUCT_IDS — ingen publik aktivering ännu.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -244,13 +256,15 @@ class TariffMatrixTests(unittest.TestCase):
         # APPROVED_FOR_ACTIVATION-2026-10-17 aktiverade dem publikt också.
         # Handoff 2026-10-17-006/007 (Optimate våg 3i, Telge Nät) lade
         # därefter till exakt en intern rad; signal 2026-10-17-013
-        # aktiverade även den publikt. Ingen rad bär därför längre den
-        # reserverade internpilotstatusen.
+        # aktiverade även den publikt. Handoff 2026-10-18-003 (Optimate våg
+        # 3j, Finspångs Tekniska Verk) återinförde statusen för exakt en ny
+        # rad — finspangs-tekniska-verk-finspang — se WAVE_3J_PRODUCT_IDS,
+        # ingen publik aktivering ännu.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3J_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -2810,6 +2824,427 @@ class TariffMatrixTests(unittest.TestCase):
 
         with self._mutate_wave_3h_price_for(self.TELGE_ID, mutator):
             with self.assertRaisesRegex(ValueError, "documented_exclusions"):
+                build_matrix(self.source_text)
+
+    # -------------------------------------------------------------------
+    # Våg 3j ("Finspångs Tekniska Verk, styckvis polynom + villkorad
+    # flödesavgift", handoff 2026-10-18-003, INTERN PILOT ENDAST). Till
+    # skillnad från Telge (Våg 3i, banded `effekt` + två justeringstyper)
+    # har Finspång INGEN nivålista/bandbindning, bara EN justeringstyp
+    # (conditional_flow), och TVÅ manadsvisa number_series-policyfält i
+    # stället för Telges noll — mutationsproven nedan binder den egna
+    # formen direkt, med samma rigor som Wave 3i:s Codex-omgranskning
+    # 2026-10-17-009 (hela indatafalt/kravda_falt, inte bara en delmängd),
+    # tillämpad redan från start.
+    # -------------------------------------------------------------------
+    FINSPANG_ID = "finspangs-tekniska-verk-finspang"
+
+    def test_wave_3j_membership_and_status_is_mechanically_locked(self) -> None:
+        wave_3j_ids = matrix_module.WAVE_3J_PRODUCT_IDS
+        self.assertEqual(wave_3j_ids, frozenset({self.FINSPANG_ID}))
+        row = self.by_id[self.FINSPANG_ID]
+        self.assertEqual(row["cost_path"], "kontrakt_arskostnad")
+        self.assertFalse(row["savings_today"])
+        self.assertEqual(row["scenario_review_status"], "godkand_intern_pilot_ej_publik")
+        self.assertEqual(
+            row["required_policy_fields"],
+            sorted([
+                "finspang_debiterbar_effekt_kw", "conditional_flow_returtemp_c", "conditional_flow_flode_m3",
+            ]),
+        )
+        self.assertEqual(row["series_fields"], sorted(["conditional_flow_flode_m3", "conditional_flow_returtemp_c"]))
+        self.assertEqual(row["history_fields"], [])
+        self.assertFalse(row["has_eligibility_rule"])
+        self.assertEqual(row["adjustment_types"], ["conditional_flow"])
+        self.assertEqual(row["capacity_rule"], "piecewise_polynomial")
+        self.assertEqual(row["capacity_bands"], 0)
+        self.assertTrue(row["has_capacity_charge"])
+        # Egen våg utan överlappning med tidigare vågor.
+        self.assertNotIn(self.FINSPANG_ID, matrix_module.WAVE_3I_PRODUCT_IDS)
+        self.assertNotIn(self.FINSPANG_ID, matrix_module.WAVE_3H_PRODUCT_IDS)
+
+    def test_wave_3j_is_the_only_conditional_flow_product_in_the_catalog(self) -> None:
+        # Handoffets påstående: Finspång är den enda produkten i hela
+        # katalogen med en `conditional_flow`-justering — binder det exakta
+        # globala mängden mot WAVE_3J_PRODUCT_IDS, inte bara punktvis.
+        conditional_flow_ids = {
+            row["product_id"] for row in self.matrix["rows"]
+            if "conditional_flow" in row["adjustment_types"]
+        }
+        self.assertEqual(conditional_flow_ids, matrix_module.WAVE_3J_PRODUCT_IDS)
+
+    def test_wave_3j_params_registry_missing_product_is_fail_closed(self) -> None:
+        mutated_params: dict[str, Any] = {}
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3J_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_params_registry_extra_product_is_fail_closed(self) -> None:
+        mutated_params = dict(matrix_module.WAVE_3J_PRODUCT_PARAMS)
+        mutated_params["norrenergi"] = dict(next(iter(matrix_module.WAVE_3J_PRODUCT_PARAMS.values())))
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "WAVE_3J_PRODUCT_PARAMS"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_wrong_adjustment_types_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, adjustment_types=["volume"])
+            for pid, params in matrix_module.WAVE_3J_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "adjustment_types"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_wrong_status_mismatch_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry[self.FINSPANG_ID] = "godkand_publik_10_15_20"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_missing_product_status_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        del mutated_registry[self.FINSPANG_ID]
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_extra_internal_pilot_row_is_fail_closed(self) -> None:
+        mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
+        mutated_registry["norrenergi"] = "godkand_intern_pilot_ej_publik"
+        with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
+            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_wrong_capacity_rule_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, capacity_rule="heterogeneous_bands")
+            for pid, params in matrix_module.WAVE_3J_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "capacity_rule"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_wrong_capacity_bands_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, capacity_bands=3)
+            for pid, params in matrix_module.WAVE_3J_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "kapacitetsband"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_wrong_required_policy_fields_is_fail_closed(self) -> None:
+        mutated_params = {
+            pid: dict(params, keys={"effekt": "fel_nyckel"})
+            for pid, params in matrix_module.WAVE_3J_PRODUCT_PARAMS.items()
+        }
+        with patch.object(matrix_module, "WAVE_3J_PRODUCT_PARAMS", mutated_params):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_eligibility_rule_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "eligibility": {"min_varde": 0}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "behörighetsvillkor"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_extra_policy_field_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                *price["policy"]["kravda_falt"],
+                {
+                    "nyckel": "finspang_extra_falt", "vardetyp": "number", "matupplosning": "arsvis",
+                    "rullande": False,
+                },
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_missing_series_field_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                f for f in price["policy"]["kravda_falt"] if f.get("nyckel") != "conditional_flow_flode_m3"
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "required_policy_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_policy_wrong_capacity_binding_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_bindning": "fel_nyckel"}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_policy_extra_band_binding_is_fail_closed(self) -> None:
+        # Till skillnad från Telge (Våg 3i) har Finspång INGET band —
+        # kapacitet_band_bindning ska förbli None. Ett icke-null-värde ska
+        # fällas, inte tolereras eller tyst ignoreras.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_band_bindning": "nagot_band"}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_band_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_policy_extra_multiplier_binding_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kapacitet_multiplikator_bindning": "extra"}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet_multiplikator_bindning"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_policy_stodjer_besparing_mutation_is_fail_closed(self) -> None:
+        # stodjer_besparing=True flyttar produkten till cost_path
+        # 'kontrakt_besparing' (se build_matrix's cost_path-härledning),
+        # vilket fäller på cost_path-kontrollen innan någon dedikerad
+        # stodjer_besparing-kontroll nås — fortfarande fail-closed.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "stodjer_besparing": True}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "cost_path"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_conditional_flow_rate_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "rate": 1} if a.get("type") == "conditional_flow" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_conditional_flow_threshold_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "threshold_degC": 50.0} if a.get("type") == "conditional_flow" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_conditional_flow_returtemp_falt_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "returtemp_falt": "annan_nyckel"} if a.get("type") == "conditional_flow" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_conditional_flow_flode_falt_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                {**a, "flode_falt": "annan_nyckel"} if a.get("type") == "conditional_flow" else a
+                for a in price["justeringar"]
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "justeringar"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_extra_adjustment_entry_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [*price["justeringar"], {"type": "volume", "rate": 1, "months": list(range(1, 13))}]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "(justeringar|adjustment_types)"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_documented_exclusion_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            adjustments = [
+                *price["justeringar"],
+                {"type": "documented_exclusion", "component": "capacity_overrun"},
+            ]
+            return {**price, "justeringar": adjustments}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "documented_exclusions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_capacity_threshold_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "kapacitet": {**price["kapacitet"], "threshold_kw": 2000}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_capacity_low_branch_parameter_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "kapacitet": {**price["kapacitet"], "low": {"a": -0.5, "b": 1093}}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_capacity_high_branch_parameter_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "kapacitet": {**price["kapacitet"], "high": {"c": 1.0, "d": 1206554}}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_capacity_nivaer_mutation_is_fail_closed(self) -> None:
+        # piecewise_polynomial ska sakna nivålista helt (tom lista) — en
+        # tillagd nivå (t.ex. om en framtida katalogändring av misstag
+        # introducerar ett bandbegrepp) ska fällas, inte tolereras.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            nivaer = [{"id": "1", "min": 0, "max": None, "avgift_kr_ar": 0, "pris_kr_per_enhet_ar": 1}]
+            return {**price, "kapacitet": {**price["kapacitet"], "nivaer": nivaer}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kapacitet"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_manadspriser_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            priser = list(price["energi"]["manadspriser"])
+            priser[0] = 1.0
+            return {**price, "energi": {**price["energi"], "manadspriser": priser}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "manadspriser"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_fast_avgift_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "fast_avgift": {"kr_ar": 1, "periodisering": "days_in_month/365"}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "fast_avgift"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_manadsperiodisering_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "manadsperiodisering": "days_in_month/days_in_year"}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "manadsperiodisering"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_moms_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "moms": "inkl"}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "moms"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_kravda_falt_order_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            return {**price, "policy": {**price["policy"], "kravda_falt": list(reversed(price["policy"]["kravda_falt"]))}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_kravda_falt_extra_property_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**f, "extra_egenskap": True} if f.get("nyckel") == "finspang_debiterbar_effekt_kw" else f
+                for f in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_kravda_falt_matupplosning_mutation_is_fail_closed(self) -> None:
+        # measurement_resolutions-grinden (manadsvis för serien) fäller
+        # detta FÖRE den bredare kravda_falt-helhetskontrollen nås — ändå
+        # fail-closed, bara en annan, tidigare namngiven grind.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**f, "matupplosning": "arsvis"} if f.get("nyckel") == "conditional_flow_returtemp_c" else f
+                for f in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "measurement_resolutions"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_returtemp_c_minvarde_mutation_is_fail_closed(self) -> None:
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**f, "minvarde": -100} if f.get("nyckel") == "conditional_flow_returtemp_c" else f
+                for f in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_flode_m3_vardetyp_mutation_is_fail_closed(self) -> None:
+        # series_fields-grinden fäller detta FÖRE den bredare kravda_falt-
+        # helhetskontrollen nås (flode_m3 slutar klassas som number_series)
+        # — ändå fail-closed, bara en annan, tidigare namngiven grind.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**f, "vardetyp": "number"} if f.get("nyckel") == "conditional_flow_flode_m3" else f
+                for f in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "series_fields"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_effekt_krav_attestering_mutation_is_fail_closed(self) -> None:
+        # "Ändrad behörighet": krav_attestering=True på effektfältet skulle
+        # kräva ett attesteringssteg som inte finns dokumenterat/godkänt för
+        # Finspång — ska fällas av den fullständiga kravda_falt-bindningen.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            fields = [
+                {**f, "krav_attestering": True} if f.get("nyckel") == "finspang_debiterbar_effekt_kw" else f
+                for f in price["policy"]["kravda_falt"]
+            ]
+            return {**price, "policy": {**price["policy"], "kravda_falt": fields}}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "kravda_falt"):
+                build_matrix(self.source_text)
+
+    def test_wave_3j_indatafalt_mutation_is_fail_closed(self) -> None:
+        # Finspångs indatafalt ska vara tomt — en tillagd post (t.ex. om en
+        # framtida katalogändring av misstag kopierar in ett UI-indatafält)
+        # ska fällas, inte tolereras.
+        def mutator(price: dict[str, Any]) -> dict[str, Any]:
+            extra = {
+                "nyckel": "extra_indatafalt", "etikett": "Extra", "enhet": "", "default": None,
+                "min_varde": 0, "max_varde": 1, "hjalptext": "", "ar_gissning": False, "heltal": False,
+            }
+            return {**price, "indatafalt": [*price["indatafalt"], extra]}
+
+        with self._mutate_wave_3h_price_for(self.FINSPANG_ID, mutator):
+            with self.assertRaisesRegex(ValueError, "indatafalt"):
                 build_matrix(self.source_text)
 
     def test_scenario_status_registry_rejects_unknown_status_value(self) -> None:

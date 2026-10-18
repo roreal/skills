@@ -37,22 +37,26 @@ HISTORY_BAND_TYPES = frozenset({
 # signal 2026-09-25-015, våg 2 signal 2026-09-30-002). Varje nyckel MÅSTE
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
-# katalogen. Aktuell disposition av 77 produkter (signal
-# APPROVED_FOR_ACTIVATION: Claude, 2026-10-17-013, våg 3i publikt
-# aktiverad): 61 `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
+# katalogen. Aktuell disposition av 77 produkter (handoff 2026-10-18-003,
+# APPROVED_FOR_IMPLEMENTATION: Claude, våg 3j — INTERN PILOT ENDAST): 61
+# `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
 # 3E/3F/3G/3H/3I_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
 # energi-partille, sodertorns-fjarrvarme-sodertorns-fjarrvarme, våg 3g:
 # lidkoping-energi-lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw,
 # våg 3h: gotlands-energi-gotland-taxa-21-over-50-mwh-ar, molndal-energi,
 # norrenergi, och våg 3i: telge-nat-telge-foretag-och-
-# bostadsrattsforeningar — den enda kontraktsgatade produkten i listan,
+# bostadsrattsforeningar — den enda kontraktsgatade produkten bland de nio,
 # via `kontraktsgatad_kostnadsled` snarare än `legacy_arskostnad` — IDENTISK
 # med Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS/
 # WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS i optimateScenario.ts, vars
 # `stodjerOptimateScenario` och `stodjerOptimateScenarioPubliktAktiverad`
-# nu båda är TRUE för samtliga nio), 0 `godkand_intern_pilot_ej_publik`, 1
+# nu båda är TRUE för samtliga nio), 1 `godkand_intern_pilot_ej_publik`
+# (våg 3j: finspangs-tekniska-verk-finspang — den enda återstående,
+# ogranskade, verkliga produkten med kombinationen `piecewise_polynomial` +
+# `conditional_flow`; IDENTISK med Neptune-kodens WAVE_3J_PRODUCT_IDS, INTE
+# i SCENARIO_PUBLIKT_AKTIVERADE_ID — ren intern beräkningspilot), 1
 # `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
-# återstående 15 "not_reviewed".
+# återstående 14 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
 # Neptunes stodjerOptimateScenarioPubliktAktiverad-grind — men avgör
@@ -237,6 +241,15 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 61 publika,
     # Neptune-commit 51e78a2).
     "telge-nat-telge-foretag-och-bostadsrattsforeningar": "godkand_publik_10_15_20",
+    # Optimate våg 3j (handoff 2026-10-18-003,
+    # APPROVED_FOR_IMPLEMENTATION: Claude): exakt 1 kontraktsgatad produkt —
+    # finspangs-tekniska-verk-finspang — den enda återstående, ogranskade,
+    # verkliga produkten med kombinationen `piecewise_polynomial`
+    # (kapacitetsled) + `conditional_flow` (flödesjustering). INTERN pilot
+    # ENDAST — IDENTISK med Neptune-kodens WAVE_3J_PRODUCT_IDS i
+    # optimateScenario.ts, tillagd i SCENARIO_PILOT_TARIFFER men INTE i
+    # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden förblir 61 publika).
+    "finspangs-tekniska-verk-finspang": "godkand_intern_pilot_ej_publik",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -811,6 +824,108 @@ WAVE_3I_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
         "keys": {"effekt": "telge_debiterbar_effekt_kw", "band": "telge_vald_niva_id"},
         "kapacitet_bindning": "telge_debiterbar_effekt_kw",
         "kapacitet_band_bindning": "telge_vald_niva_id",
+    },
+}
+
+# Mekanisk, fail-closed lista över exakt Optimate våg 3j-ID:na (handoff
+# 2026-10-18-003, APPROVED_FOR_IMPLEMENTATION: Claude, INTERN PILOT ENDAST)
+# — IDENTISK med Neptune-kodens WAVE_3J_PRODUCT_IDS i optimateScenario.ts:
+# finspangs-tekniska-verk-finspang, den enda återstående, ogranskade,
+# verkliga kontraktsgatade produkten med kombinationen
+# `piecewise_polynomial` (kapacitetsled) + `conditional_flow`
+# (flödesjustering). Justeringstypen `conditional_flow` är unik i hela
+# katalogen för denna produkt, men bindningen sker ändå direkt mot den fasta
+# ID-listan (samma mönster som WAVE_3I_PRODUCT_IDS), inte ett generiskt
+# `adjustment_types`-filter.
+WAVE_3J_PRODUCT_IDS: frozenset[str] = frozenset({
+    "finspangs-tekniska-verk-finspang",
+})
+
+# Finspångs fulla råa pris-/kapacitets-/justerings-/policykontrakt, direkt
+# ur tariffer.generated.ts — handoff 2026-10-18-003 §"Bindande
+# scenariokontrakt". Finspång ÄR kontraktsgatad (`_kraver_kontrakt=true`),
+# så required_policy_fields binds här mot policy.kravda_falt. Till skillnad
+# från Telge (Våg 3i, banded `effekt` + två justeringstyper) har Finspång
+# INGEN nivålista (`piecewise_polynomial` saknar bandbegrepp helt), bara EN
+# justeringstyp, och TVÅ månadsvisa `number_series`-policyfält i stället
+# för Telges noll — indatafalt/kravda_falt jämförs därför direkt som hela,
+# ordnade listor (samma rigor som Wave 3i:s Codex-omgranskning
+# 2026-10-17-009, P1, tillämpad redan från start här).
+WAVE_3J_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
+    "finspangs-tekniska-verk-finspang": {
+        "adjustment_types": ["conditional_flow"],
+        "capacity_rule": "piecewise_polynomial",
+        "capacity_bands": 0,
+        "has_capacity_charge": True,
+        "manadspriser": [708.6, 708.6, 708.6, 355, 355, 212.2, 212.2, 212.2, 355, 355, 708.6, 708.6],
+        "kapacitet": {
+            "typ": "piecewise_polynomial", "enhet": "kW", "kw_faktor": 1.0,
+            "nivaer": [], "min_debiteringsbas": None,
+            "threshold_kw": 2600,
+            "low": {"a": -0.204, "b": 1093},
+            "high": {"c": 98.45, "d": 1206554},
+        },
+        "fast_avgift": None,
+        "manadsperiodisering": "days_in_month/365",
+        "justeringar": [
+            {
+                "type": "conditional_flow", "rate": 20, "threshold_degC": 55.0,
+                "returtemp_falt": "conditional_flow_returtemp_c",
+                "flode_falt": "conditional_flow_flode_m3",
+            },
+        ],
+        "indatafalt": [],
+        "kravda_falt": [
+            {
+                "nyckel": "finspang_debiterbar_effekt_kw", "enhet": "kW", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "arsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": (
+                    "Finspångs Tekniska Verks 2026-underlag (07_1/web-review-finspang-final) — "
+                    "debiterbar effekt (P), styckvis polynom med brytpunkt 2600 kW."
+                ),
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": 0, "minvarde_exklusiv": True,
+                "maxvarde": None, "heltal": False, "vardetyp": "number", "antal_varden": None,
+                "tillatna_varden": None, "varden_etiketter": None, "etikett": "Debiterbar effekt",
+                "hjalptext": "Från fakturan (debiterbar effekt).", "krav_attestering": False,
+            },
+            {
+                "nyckel": "conditional_flow_returtemp_c", "enhet": "°C", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "manadsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": (
+                    "Finspångs Tekniska Verks 2026-underlag — villkorad flödesavgift, 20 kr/m³ de "
+                    "kalendermånader returtemperaturen är strikt över 55,0 °C."
+                ),
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": -50, "minvarde_exklusiv": False,
+                "maxvarde": 150, "heltal": False, "vardetyp": "number_series", "antal_varden": 12,
+                "tillatna_varden": None, "varden_etiketter": None,
+                "etikett": "Returtemperatur (jan–dec)",
+                "hjalptext": "Tolv rutor januari–december, °C — flödesviktat månadsmedel per kalendermånad.",
+                "krav_attestering": False,
+            },
+            {
+                "nyckel": "conditional_flow_flode_m3", "enhet": "m³", "kravs_for": ["annual"],
+                "tillatna_kallor": ["supplier_value"], "matupplosning": "manadsvis",
+                "kalperiod_definition": "", "tillamplighet": "samtliga manader",
+                "kalla": (
+                    "Finspångs Tekniska Verks 2026-underlag — villkorad flödesavgift, 20 kr/m³ de "
+                    "kalendermånader returtemperaturen är strikt över 55,0 °C."
+                ),
+                "rullande": False, "takad_till_snapshot": False, "matchning_mot_manad": False,
+                "tillampliga_manader": None, "minvarde": 0, "minvarde_exklusiv": False,
+                "maxvarde": None, "heltal": False, "vardetyp": "number_series", "antal_varden": 12,
+                "tillatna_varden": None, "varden_etiketter": None, "etikett": "Flöde (jan–dec)",
+                "hjalptext": "Tolv rutor januari–december, m³ — flöde per kalendermånad.",
+                "krav_attestering": False,
+            },
+        ],
+        "keys": {"effekt": "finspang_debiterbar_effekt_kw"},
+        "series_keys": ["conditional_flow_flode_m3", "conditional_flow_returtemp_c"],
+        "kapacitet_bindning": "finspang_debiterbar_effekt_kw",
+        "kapacitet_band_bindning": None,
     },
 }
 
@@ -1701,18 +1816,20 @@ def build_matrix(text: str) -> dict[str, Any]:
     # rad. Våg 3i återinförde statusen temporärt för exakt Telge under sin
     # interna pilotfas; signal APPROVED_FOR_ACTIVATION: Claude,
     # 2026-10-17-013 gjorde Telge publik och statusen obärd av någon rad
-    # igen — denna kontroll binder därför nu att INGEN rad bär statusen,
-    # så en framtida våg som tyst lämnar en produkt kvar i intern pilot
-    # utan att den granskas vidare till publik eller tas bort ändå faller.
+    # igen. Handoff 2026-10-18-003 (Optimate våg 3j, Finspångs Tekniska
+    # Verk) återinför därefter statusen för exakt Finspång — denna kontroll
+    # binder därför nu att EXAKT WAVE_3J_PRODUCT_IDS bär statusen, inte att
+    # ingen rad gör det, så en framtida våg som tyst lägger till en EXTRA
+    # intern-pilot-rad utan att uppdatera WAVE_3J_PRODUCT_IDS ändå faller.
     remaining_internal_pilot_ids = {
         row["product_id"] for row in rows
         if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
     }
-    if remaining_internal_pilot_ids:
+    if remaining_internal_pilot_ids != WAVE_3J_PRODUCT_IDS:
         raise ValueError(
             "godkand_intern_pilot_ej_publik bärs av "
-            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat ingen rad "
-            "(våg 3i gjorde Telge publik, signal 2026-10-17-013)."
+            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat exakt "
+            f"WAVE_3J_PRODUCT_IDS ({sorted(WAVE_3J_PRODUCT_IDS)})."
         )
     if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
         raise ValueError(
@@ -2023,6 +2140,179 @@ def build_matrix(text: str) -> dict[str, Any]:
         if not _strict_numeric_equal(raw_required_fields, params["kravda_falt"]):
             raise ValueError(
                 f"Våg 3i-produkten {product_id!r} har policy.kravda_falt="
+                f"{raw_required_fields!r}, förväntat exakt {params['kravda_falt']!r}."
+            )
+
+    # Våg 3j ("Finspångs Tekniska Verk, styckvis polynom + villkorad
+    # flödesavgift", handoff 2026-10-18-003, INTERN PILOT ENDAST): den enda
+    # återstående, ogranskade, verkliga produkten med kombinationen
+    # `piecewise_polynomial` + `conditional_flow`. Bindningen sker direkt
+    # mot den fasta WAVE_3J_PRODUCT_IDS-listan (samma mönster som
+    # WAVE_3I_PRODUCT_IDS) i stället för ett generiskt filter. Till
+    # skillnad från Telge (Våg 3i, banded `effekt` + två justeringstyper)
+    # har Finspång INGEN nivålista eller bandbindning, bara EN
+    # justeringstyp, och TVÅ manadsvisa `number_series`-policyfält i
+    # stället för Telges noll.
+    if set(WAVE_3J_PRODUCT_PARAMS) != WAVE_3J_PRODUCT_IDS:
+        raise ValueError(
+            "WAVE_3J_PRODUCT_PARAMS matchar inte WAVE_3J_PRODUCT_IDS. "
+            f"Endast i WAVE_3J_PRODUCT_PARAMS: {sorted(set(WAVE_3J_PRODUCT_PARAMS) - WAVE_3J_PRODUCT_IDS)}; "
+            f"endast i WAVE_3J_PRODUCT_IDS: {sorted(WAVE_3J_PRODUCT_IDS - set(WAVE_3J_PRODUCT_PARAMS))}."
+        )
+    for product_id, params in WAVE_3J_PRODUCT_PARAMS.items():
+        row = rows_by_id.get(product_id)
+        if row is None:
+            raise ValueError(f"WAVE_3J_PRODUCT_IDS refererar {product_id!r}, som saknas i snapshoten.")
+        if row["documented_exclusions"] != []:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har documented_exclusions "
+                f"{row['documented_exclusions']!r}, förväntat exakt []."
+            )
+        if row["adjustment_types"] != params["adjustment_types"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har adjustment_types "
+                f"{row['adjustment_types']!r}, förväntat exakt {params['adjustment_types']!r}."
+            )
+        if row["cost_path"] != "kontrakt_arskostnad":
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har cost_path {row['cost_path']!r}, "
+                "förväntat 'kontrakt_arskostnad'."
+            )
+        if row["savings_today"] is not False:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har savings_today {row['savings_today']!r}, "
+                "förväntat exakt False."
+            )
+        if row["capacity_rule"] != params["capacity_rule"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har capacity_rule {row['capacity_rule']!r}, "
+                f"förväntat exakt {params['capacity_rule']!r}."
+            )
+        if row["capacity_bands"] != params["capacity_bands"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har {row['capacity_bands']} kapacitetsband, "
+                f"förväntat exakt {params['capacity_bands']}."
+            )
+        if row["has_capacity_charge"] != params["has_capacity_charge"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har has_capacity_charge "
+                f"{row['has_capacity_charge']!r}, förväntat exakt {params['has_capacity_charge']!r}."
+            )
+        keys = params["keys"]
+        series_keys = params["series_keys"]
+        expected_required_fields = sorted({keys["effekt"], *series_keys})
+        if row["required_policy_fields"] != expected_required_fields:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har required_policy_fields "
+                f"{row['required_policy_fields']!r}, förväntat exakt {expected_required_fields!r}."
+            )
+        if row["series_fields"] != sorted(series_keys):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har series_fields "
+                f"{row['series_fields']!r}, förväntat exakt {sorted(series_keys)!r}."
+            )
+        if row["history_fields"] != []:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har history_fields "
+                f"{row['history_fields']!r}, förväntat exakt []."
+            )
+        if row["has_eligibility_rule"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
+            )
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} måste ha scenario_review_status "
+                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+            )
+        if row["measurement_resolutions"].get(keys["effekt"]) != "arsvis":
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har measurement_resolutions.{keys['effekt']} "
+                f"{row['measurement_resolutions'].get(keys['effekt'])!r}, förväntat 'arsvis'."
+            )
+        for falt in series_keys:
+            if row["measurement_resolutions"].get(falt) != "manadsvis":
+                raise ValueError(
+                    f"Våg 3j-produkten {product_id!r} har measurement_resolutions.{falt} "
+                    f"{row['measurement_resolutions'].get(falt)!r}, förväntat 'manadsvis'."
+                )
+
+        raw_price = latest_price(tariffs[product_id])
+        raw_policy = raw_price.get("policy") or {}
+        if raw_price.get("_kraver_kontrakt") is not True:
+            raise ValueError(f"Våg 3j-produkten {product_id!r} saknar _kraver_kontrakt=true.")
+        if raw_policy.get("stodjer_aktuell_arskostnad") is not True:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har policy.stodjer_aktuell_arskostnad="
+                f"{raw_policy.get('stodjer_aktuell_arskostnad')!r}, förväntat exakt True."
+            )
+        if raw_policy.get("stodjer_besparing") is not False:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har policy.stodjer_besparing="
+                f"{raw_policy.get('stodjer_besparing')!r}, förväntat exakt False."
+            )
+        if raw_policy.get("kapacitet_bindning") != params["kapacitet_bindning"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har policy.kapacitet_bindning="
+                f"{raw_policy.get('kapacitet_bindning')!r}, förväntat exakt "
+                f"{params['kapacitet_bindning']!r}."
+            )
+        if raw_policy.get("kapacitet_band_bindning") != params["kapacitet_band_bindning"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har policy.kapacitet_band_bindning="
+                f"{raw_policy.get('kapacitet_band_bindning')!r}, förväntat exakt "
+                f"{params['kapacitet_band_bindning']!r}."
+            )
+        if raw_policy.get("kapacitet_multiplikator_bindning") is not None:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har "
+                f"policy.kapacitet_multiplikator_bindning="
+                f"{raw_policy.get('kapacitet_multiplikator_bindning')!r}, förväntat None."
+            )
+        if raw_price.get("moms") != "exkl":
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har moms {raw_price.get('moms')!r}, förväntat 'exkl'."
+            )
+        raw_energi = raw_price.get("energi") or {}
+        if not _strict_numeric_equal(raw_energi.get("manadspriser"), params["manadspriser"]):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har energi.manadspriser="
+                f"{raw_energi.get('manadspriser')!r}, förväntat exakt {params['manadspriser']!r}."
+            )
+        raw_capacity = raw_price.get("kapacitet") or {}
+        for capacity_key, expected_value in params["kapacitet"].items():
+            if not _strict_numeric_equal(raw_capacity.get(capacity_key), expected_value):
+                raise ValueError(
+                    f"Våg 3j-produkten {product_id!r} har kapacitet.{capacity_key}="
+                    f"{raw_capacity.get(capacity_key)!r}, förväntat exakt {expected_value!r}."
+                )
+        if not _strict_numeric_equal(raw_price.get("fast_avgift"), params["fast_avgift"]):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har fast_avgift="
+                f"{raw_price.get('fast_avgift')!r}, förväntat exakt {params['fast_avgift']!r}."
+            )
+        if raw_price.get("manadsperiodisering") != params["manadsperiodisering"]:
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har manadsperiodisering="
+                f"{raw_price.get('manadsperiodisering')!r}, förväntat exakt "
+                f"{params['manadsperiodisering']!r}."
+            )
+        raw_adjustments = raw_price.get("justeringar") or []
+        if not _strict_numeric_equal(raw_adjustments, params["justeringar"]):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har justeringar="
+                f"{raw_adjustments!r}, förväntat exakt {params['justeringar']!r}."
+            )
+        raw_indatafalt = raw_price.get("indatafalt") or []
+        if not _strict_numeric_equal(raw_indatafalt, params["indatafalt"]):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har indatafalt="
+                f"{raw_indatafalt!r}, förväntat exakt {params['indatafalt']!r}."
+            )
+        raw_required_fields = raw_policy.get("kravda_falt") or []
+        if not _strict_numeric_equal(raw_required_fields, params["kravda_falt"]):
+            raise ValueError(
+                f"Våg 3j-produkten {product_id!r} har policy.kravda_falt="
                 f"{raw_required_fields!r}, förväntat exakt {params['kravda_falt']!r}."
             )
 
