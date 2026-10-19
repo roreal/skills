@@ -42,7 +42,7 @@ class TariffMatrixTests(unittest.TestCase):
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "not_reviewed"
         }
-        self.assertEqual(len(not_reviewed), 14)
+        self.assertEqual(len(not_reviewed), 13)
         self.assertTrue(all(row["price_source"] for row in self.matrix["rows"]))
 
     def test_scenario_status_registry_is_bound_and_fail_closed(self) -> None:
@@ -151,6 +151,14 @@ class TariffMatrixTests(unittest.TestCase):
             )
         )
         pilot_ids = pilot_ids | wave_3j_ids
+        wave_3k_ids = matrix_module.WAVE_3K_PRODUCT_IDS
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                for pid in wave_3k_ids
+            )
+        )
+        pilot_ids = pilot_ids | wave_3k_ids
         others = [
             row for pid, row in self.by_id.items()
             if pid not in pilot_ids
@@ -159,8 +167,9 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
+                "godkand_intern_pilot_ej_publik": 1,
                 "godkand_publik_10_15_20": 62,
-                "not_reviewed": 14,
+                "not_reviewed": 13,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
         )
@@ -262,13 +271,18 @@ class TariffMatrixTests(unittest.TestCase):
         # 3j, Finspångs Tekniska Verk) återinförde statusen temporärt för
         # exakt en ny rad — finspangs-tekniska-verk-finspang — se
         # WAVE_3J_PRODUCT_IDS; signal APPROVED_FOR_ACTIVATION: Claude,
-        # 2026-10-18-005 aktiverade även den publikt. Ingen rad bär därför
-        # längre den reserverade internpilotstatusen.
+        # 2026-10-18-005 aktiverade även den publikt. Handoff 2026-10-18-009
+        # (Optimate våg 3k, Jönköping Energi, signal
+        # APPROVED_FOR_IMPLEMENTATION: Claude, 2026-10-19-001) återinförde
+        # statusen temporärt för exakt en ny rad —
+        # jonkoping-energi-jonkoping-och-granna — se WAVE_3K_PRODUCT_IDS.
+        # Jönköping är INTERN PILOT ENDAST i detta steg, ingen publik
+        # aktivering ännu.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, set())
+        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3K_PRODUCT_IDS)
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga

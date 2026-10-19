@@ -13,7 +13,7 @@ samma tråd och bifoga gärna korrigerad prislista eller formelbeskrivning.
 ### A1. Hässleholm Miljö — frigör två tariffer
 
 - Till: `hassleholmmiljo@hassleholm.se`
-- Ämne: `Förtydligande: hur tillämpas effektrabatten för företagskunder 2026?`
+- Ämne: `	`
 
 Hej,
 
