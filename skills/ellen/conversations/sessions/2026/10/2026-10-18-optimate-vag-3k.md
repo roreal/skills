@@ -1,8 +1,8 @@
 ---
 session_id: "2026-10-18-optimate-vag-3k"
 created_at: "2026-10-18T15:29:08+02:00"
-updated_at: "2026-10-19T09:20:00+02:00"
-status: blocked
+updated_at: "2026-10-19T11:40:00+02:00"
+status: active
 participants:
   - Robert
   - Codex
@@ -302,3 +302,47 @@ Handlingsalternativ till Codex:
    kan slutföra grinden och committa direkt.
 
 `BLOCKED: Codex`
+
+## 2026-10-19 11:40 — Claude committar avgränsat och lämnar REVIEW_READY
+
+Verifierade att signal `2026-10-19-003` (`APPROVED_FOR_IMPLEMENTATION:
+Claude`) fortfarande låg överst i `index.md` med unikt sessions-ID och
+oförändrat scope från handoff 009. Kontrollerade endast scopet (ingen
+ytterligare implementation): staged diff matchade exakt handoffens
+avsedda filer i båda arbetskopiorna, utan orelaterade filer. Lämnade
+`skills/ellen/conversations/automation/README.md`,
+`agent-bridge.zsh` och `skills/milesight`-submodulpekaren orörda —
+separat infrastruktur/orelaterade ändringar utanför tariffscopet,
+precis som redan dokumenterat.
+
+Commit, Neptune-worktree `optimate-vag-3k-jonkoping-access-flode`:
+`3c3afa47afbdd45e0765d5a174014408aa124a91`
+(förälder `db218c0b4d8247a5577e4b6bc3cf980658dbf7a9` = `origin/main`,
+oförändrad ancestry, ingen merge/rebase). 13 filer,
+`optimateScenario.ts` (WAVE_3K_PRODUCT_IDS, intern pilot, ingen ändring
+av `SCENARIO_PUBLIKT_AKTIVERADE_ID`), Vag2/Vag3a–3j-testrättningar samt
+ny Vag3k-testsvit (53 test).
+
+Commit, skills `main`:
+`23d99b8fc38226388dbcb2520186518c2dee7daf`
+(förälder `275950f562d612c94d1464fb3f7bdc7c96f584be`, Codex'
+verifieringsgrind-commit). 5 filer: matrisgenerator (`WAVE_3K_PRODUCT_IDS`/
+`WAVE_3K_PRODUCT_PARAMS`), JSON/MD regenererade till disposition
+**62 publika / 1 intern / 1 prototyp / 13 ogranskade = 77**, testfilens
+tre föråldrade räkneverk rättade plus nytt `wave_3k_ids`-prov,
+leverantörsfrågedokumentet.
+
+Testutfall (körda av Codex i verifieringsgrinden 2026-10-19, se föregående
+loggpost ovan; denna körnings permission-läge tillät inte egen
+omkörning av `pytest`/`vitest`/generatorn, så befintlig dokumenterad
+verifiering återanvänds oförändrad för committet ovan):
+full Vitest 3787/3787 (108 filer), `tsc --noEmit` ren, `npm run build`
+grön med återställd `dist`, skills 238/238 pytest + 8 subtest,
+matrisgenerator `--write`→`--check` grön för 77 produkter, `git diff
+--check` ren i båda repona.
+
+Ingen publik aktivering, mainflytt eller push utförd. Ingen tariffdata,
+kostnadsmotor, policyregister eller annan produkt ändrad utöver
+handoffets scope.
+
+`REVIEW_READY: Codex`
