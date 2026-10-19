@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-18-optimate-vag-3k"
 created_at: "2026-10-18T15:29:08+02:00"
-updated_at: "2026-10-18T21:37:35+02:00"
+updated_at: "2026-10-19T09:20:00+02:00"
 status: blocked
 participants:
   - Robert
@@ -190,5 +190,95 @@ Handlingsalternativ till Codex:
 3. Flytta arbetet till en miljö/session där Neptune-repot redan ligger
    under ett permission-läge som tillåter git-skrivoperationer utan
    interaktiv bekräftelse, och bekräfta det innan nästa dispatch.
+
+`BLOCKED: Codex`
+
+## 2026-10-19 09:20 — femte körningen, gränden öppnad för Vitest/pytest men stängd för generator/build
+
+En ny, isolerad Claude-session verifierade signal `2026-10-19-001`
+(`APPROVED_FOR_IMPLEMENTATION: Claude`) överst i `index.md` med unikt ID,
+oförändrat scope från handoff 009, och att Neptune-utkastet låg kvar
+ospårat/ostaged i den rena Wave-3k-worktreen ovanpå `db218c0` precis som
+signal 016/2026-10-19-001 beskriver.
+
+Jämfört med signal 016 är den här körningens permission-läge delvis
+bredare: `npx vitest run` (riktad och full), bar `git diff --check`/
+`git status` (utan `cd`-sammansättning), `npm run build` och
+`npx tsc --noEmit` kräver nu INGEN interaktiv bekräftelse — de körs direkt.
+`python3 <generatorn> --check/--write` kräver dock fortfarande interaktiv
+bekräftelse i varje prövad form (absolut sökväg, relativ sökväg, `-c`-
+wrapper som anropar `main()` direkt, med och utan föregående `cd`) — ingen
+kringgång via ett annat tillåtet kommando (t.ex. att smuggla skrivanropet
+genom `pytest`) försöktes. `npm install` kräver likaså bekräftelse och
+ligger även utanför handoffets uttryckliga kommandoallow-list, så den
+nekades inte kringgås.
+
+Slutförde Neptune-sidan av handoff 009 i den redan påbörjade worktreen:
+rättade de missade `Set(snapshotIds).size`-assertionerna i
+`optimateScenarioVag3e/3f/3g/3h/3j.test.ts` (62→63, vid sidan av den redan
+gjorda `toHaveLength(63)`-ändringen) och Vag2-testets
+`WAVE_2_PRODUCT_IDS`-filter (lade till `WAVE_3K_PRODUCT_IDS`-exkluderingen,
+annars räknades Jönköping som ett Vag2-ID). Riktad Vag3k-sviten (53 test),
+samtliga äldre snapshotfiler (1145 test) och den fulla Vitest-sviten
+(3478 test över 79 filer) går nu alla igenom. 29 filer (jsdom-baserade
+UI-/komponenttester, utanför detta scope) kan inte starta eftersom
+`jsdom`/`vitest` saknas i den här worktreens `node_modules` trots att de
+står i `package.json`/`package-lock.json` — ett redan existerande,
+scope-oberoende installationsgap i just denna temporära worktree, inte en
+regression av den här ändringen. `tsc`/`npm run build` faller av samma
+grundorsak (`tsc: command not found`); att åtgärda det kräver `npm install`,
+vilket nekades enligt ovan och ligger utanför allow-listan.
+
+Slutförde därefter skills-sidan: lade till `WAVE_3K_PRODUCT_IDS`/
+`WAVE_3K_PRODUCT_PARAMS` i `generera_besparingspotential_tackningsmatris.py`
+med samma fail-closed råkontraktsbindning som `WAVE_3I`/`WAVE_3J`
+(effektband, volym- och `metered_access_fee`-justeringarna, samtliga fem
+`kravda_falt`, `antal_undercentraler_bindning`), lade till
+`jonkoping-energi-jonkoping-och-granna → godkand_intern_pilot_ej_publik` i
+`SCENARIO_STATUS_REGISTRY`, och uppdaterade invarianten som tidigare krävde
+att INGEN rad bar `godkand_intern_pilot_ej_publik` till att nu kräva exakt
+`WAVE_3K_PRODUCT_IDS` (våg 3k är avsiktligt kvar som intern pilot i detta
+steg). Rättade tre föråldrade hårdkodade räkneverk i testfilen
+(`not_reviewed` 14→13, `scenario_review_status`-dict, samt
+`internal_pilot_ids`/`wave_3a`-testets tomma-mängd-förväntning) och lade
+till ett nytt `wave_3k_ids`-medlemskaps-/statusprov. Hela
+`python3 -m pytest test_generera_besparingspotential_tackningsmatris.py`
+(238 test) går nu igenom. `git diff --check` är rent i båda arbetskopiorna.
+
+`matrisgeneratorns --check/--write` kunde däremot inte köras (se ovan), så
+den genererade `besparingspotential-tackningsmatris-2026.json/.md` är
+OFÖRÄNDRAD och visar fortfarande `not_reviewed` för Jönköping — en känd,
+avsiktligt olöst inkonsekvens mot Python-källan, eftersom instruktionen är
+att regenerera ENDAST via generatorn, inte handredigera dessa filer.
+
+Konsekvens: handoffets fulla leveransgrind är INTE fullständigt körd
+(generatorns `--check/--write` saknas, liksom `tsc`/`npm run build` på
+grund av det separata installationsgapet). Ingenting har därför
+committats i någon av arbetskopiorna — Neptune-diffen och
+skills-Python-diffen ligger kvar ospårade i respektive arbetskopia, precis
+som efter signal 016.
+
+Handlingsalternativ till Codex:
+
+1. Kör (eller ge en körning med rätt behörighet i uppdrag att köra)
+   `npm install` i exakt
+   `/private/tmp/neptune-academy-optimate-vag-3k/neptune-marketing`
+   (inga ändringar av `package.json`/`package-lock.json`) för att installera
+   de redan deklarerade `typescript`/`jsdom`-paketen, och därefter
+   `python3 generera_besparingspotential_tackningsmatris.py --write` i
+   `skills/ellen/Fjarrvarmetariffer` för att regenerera JSON/MD från den nu
+   pytest-verifierade Python-källan — därefter kan Claude verifiera
+   `tsc`/`npm run build`/`git diff --check` och committa avgränsat.
+2. Granska Python-källdiffen och testdiffen (238/238 pytest, inklusive
+   exakt de medlemskaps-/räkneprov `--check` annars skulle göra) som
+   tillräcklig verifiering för just denna regenereringsgrind, och godkänn
+   explicit att Claude kör `--write` i en session där kommandot är
+   förgodkänt (t.ex. den faktiska `agent-bridge`-dispatchen snarare än
+   denna interaktiva körning).
+3. Robert godkänner interaktivt de väntande permission-prompterna för
+   `npm install` (endast i Wave-3k-worktreen) och
+   `python3 generera_besparingspotential_tackningsmatris.py --write`
+   (endast i `skills/ellen/Fjarrvarmetariffer`) så att den här körningen
+   kan slutföra grinden och committa direkt.
 
 `BLOCKED: Codex`
