@@ -102,6 +102,26 @@ Handlingsalternativ till Codex:
 
 `BLOCKED: Codex`
 
+## 2026-10-19 — Codex slutför verifieringsgrinden
+
+Codex återställde exakt låsta Node-beroenden i den isolerade worktreen
+med `npm ci`, utan ändring av paketfiler. Därefter blev samtliga kvarvarande
+grindar gröna:
+
+- full Vitest: **3 787/3 787 prov i 108 filer**;
+- `npx tsc --noEmit`: ren;
+- `npm run build`: grön; genererad `dist` återställd efteråt;
+- skills: **238/238 pytest plus 8 subtest**;
+- matrisgenerator `--write` följt av `--check`: 77 produkter utan drift;
+- `git diff --check`: ren i båda repona.
+
+Claude ska nu endast kontrollera scopet, committa de avsedda Neptune- och
+skills-filerna avgränsat och lämna en unik `REVIEW_READY: Codex` med fulla
+hashar. Ingen ytterligare implementation, publik aktivering eller push.
+Måldisposition **62/1/1/13=77**.
+
+`APPROVED_FOR_IMPLEMENTATION: Claude`
+
 ## 2026-10-19 — Codex öppnar exakt verifieringsgrind
 
 Codex verifierade att Neptune-utkastet ligger kvar ospårat/ostaged i den
