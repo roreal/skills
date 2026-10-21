@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-18-optimate-vag-3k"
 created_at: "2026-10-18T15:29:08+02:00"
-updated_at: "2026-10-19T11:40:00+02:00"
+updated_at: "2026-10-21T21:10:00+02:00"
 status: active
 participants:
   - Robert
@@ -344,5 +344,89 @@ matrisgenerator `--write`→`--check` grön för 77 produkter, `git diff
 Ingen publik aktivering, mainflytt eller push utförd. Ingen tariffdata,
 kostnadsmotor, policyregister eller annan produkt ändrad utöver
 handoffets scope.
+
+`REVIEW_READY: Codex`
+
+## 2026-10-21 21:10 — Claude rättar Codex-granskning 2026-10-21-001 (CHANGES_REQUIRED), avgränsat
+
+Verifierade att signal `2026-10-21-001` (`CHANGES_REQUIRED: Claude`,
+[granskningen](../../../reviews/2026/10/2026-10-21-granskning-optimate-vag-3k.md))
+fortfarande låg överst i `index.md` med unikt sessions-ID. Granskat Neptune
+`3c3afa47afbdd45e0765d5a174014408aa124a91` (förälder `db218c0b`) och skills
+`23d99b8fc38226388dbcb2520186518c2dee7daf` matchade exakt arbetskopiornas
+HEAD innan ändring. Återanvände Neptune-worktreen
+`/private/tmp/neptune-academy-optimate-vag-3k` (samma gren
+`optimate-vag-3k-jonkoping-access-flode`) för implementationen; granskarens
+separata detached worktree (`/Users/robertrennel/Code/neptune-review-vag-3k`)
+rördes inte.
+
+Rättade exakt de tre P2-fynden, ingen annan ändring:
+
+1. **Energi/kapacitet bands nu i sin helhet** (`generera_besparingspotential_tackningsmatris.py`):
+   `raw_energi`/`raw_capacity` jämförs nu som hela objekt mot `_strict_numeric_equal`
+   i stället för utvalda nycklar — en extra egenskap (`energi.unexpected=1`,
+   `kapacitet.unexpected=1`) faller nu.
+2. **Hela policy-objektet bands i ett steg**: tidigare sex utvalda nycklar
+   plus `kravda_falt` separat ersattes med en enda strikt jämförelse mot
+   samtliga 16 råa policy-nycklar (inklusive `tariff_id`, `tackning`,
+   `kallenergi_bindning`, `returtemperatur_bindning`,
+   `flodeskorrigering_variant`, `kallenergi_arsserie_bindning`,
+   `returtemperatur_arsserie_bindning`, `ersatter_katalograd`,
+   `kapacitet_band_falt_bindning`) — `policy.kallenergi_bindning='flode_m3'`
+   faller nu.
+3. **Global `metered_access_fee`-familjebindning**: ny kontroll, samma
+   mönster som `wave_3f_ids`, binder mängden rader som faktiskt bär
+   justeringen mot `WAVE_3K_PRODUCT_IDS` — en kopierad justering på en
+   annan rad (t.ex. `riksgenomsnitt`) faller nu.
+
+48 nya pytest-mutationsprov (`test_wave_3k_*`) lades till, inklusive exakt
+de tre mutationer granskningen körde manuellt
+(`energi.unexpected=1`/`kapacitet.unexpected=1`/
+`policy.kallenergi_bindning='flode_m3'`) samt resterande kontraktsdelar ur
+handoff 009 (justeringsordning, allow-listor, fältnycklar, `kravda_falt`-
+ordning/attestering, substations-bindning m.fl.).
+
+TS-sidan (`optimateScenarioVag3k.test.ts`): bandgränsprovet kör nu samtliga
+fyra literalgränser genom `beraknaOptimateScenario` (referens + alla tre
+efter-scenarier), inte bara testfilens egen `kapacitetsled`-hjälpfunktion.
+`kostnadsskillnadKr` pinnas direkt mot 6 033,20/9 049,80/12 066,40 i stället
+för bara positivitet/monotonicitet. Nya prov: icke-numerisk (sträng)
+kapacitet blockeras typat `invalid_capacity`; ett existerande men för
+angiven effekt felaktigt band dokumenterar det verifierade, medvetna
+produktionsbeteendet (bandvalet är kundbekräftat/auktoritativt — motorn
+validerar det aldrig numeriskt mot `kapacitetKw`, bekräftat i
+`resultatkontrakt.ts`).
+
+Testutfall, körda av Claude i denna körning:
+
+- skills: full pytest **286/286 + 8 subtest** (238 tidigare + 48 nya),
+  generatorns `--check` grön för 77 produkter.
+- Neptune: riktad `optimateScenarioVag3k.test.ts` 59/59; full Vitest
+  **100 filer/3 596 prov gröna**; 8 filer (driftprov mot `gavleR16`/
+  `harnosand`/`batch6RawData`/Vattenfall-kandidatmatrisen) kunde inte
+  köras i den här sessionen — de kräver `ELLEN_PYTHON`/
+  `ELLEN_ENKEY_AGENTS_SOKVAG` mot ett syskon-`enkey-agents`-repo på en
+  hårdkodad sökväg som denna körnings permission-lager inte tillät att
+  sätta miljövariabler för. Samtliga åtta filer är overifierade i denna
+  körning men obefintliga i denna ändrings diff (`git diff --stat` visar
+  bara `optimateScenarioVag3k.test.ts`) — känt, scope-oberoende
+  miljögap, ingen regression av denna rättning.
+  `tsc --noEmit` ren; `npm run build` grön med `dist` återställd via
+  `git restore --source=HEAD`; `git diff --check` ren i båda repona.
+
+Committade avgränsat, ingen annan fil rörd:
+
+- Neptune `optimate-vag-3k-jonkoping-access-flode` →
+  `8db511042600e04dcbd8f30313da6cecd67712ba`
+  (förälder `3c3afa47afbdd45e0765d5a174014408aa124a91`, oförändrad ancestry,
+  1 fil: `optimateScenarioVag3k.test.ts`).
+- skills `main` → `97f41e3bb219be4076e4aaf7a42f743a2a2a3161`
+  (förälder `0d729790d0a9144d3c42ad4b93a2937284375b20` = granskningscommiten,
+  oförändrad ancestry, 2 filer: `generera_besparingspotential_tackningsmatris.py`,
+  `test_generera_besparingspotential_tackningsmatris.py`).
+
+Ingen tariffdata, kostnadsmotor, policyregister eller kund-UI ändrad. Ingen
+publik aktivering, mainflytt eller push. Disposition oförändrad
+**62 publika / 1 intern / 1 prototyp / 13 ogranskade = 77**.
 
 `REVIEW_READY: Codex`
