@@ -2507,6 +2507,26 @@ def build_matrix(text: str) -> dict[str, Any]:
     # innehåller därför också metered_access_fee-justeringens
     # price_field/count_field utöver effekt-/bandfältet och
     # indatafalt-fältet.
+    #
+    # Rättning, omgranskning 2026-10-21-001 (P2): till skillnad från
+    # wave_3f_ids/wave_3g_ids ovan band build_matrix tidigare bara den fasta
+    # WAVE_3K_PRODUCT_IDS-listan mot snapshoten (nästa if-sats), men aldrig
+    # den globala mängden produkter som faktiskt BÄR
+    # `metered_access_fee`-justeringen i hela katalogen. Att lägga en kopia
+    # av Jönköpings `metered_access_fee`-justering på en annan produkt (t.ex.
+    # `riksgenomsnitt`) accepterades därför tyst. Härled samma mönster som
+    # wave_3f_ids och kräv att mängden är IDENTISK med WAVE_3K_PRODUCT_IDS.
+    wave_3k_ids = {
+        row["product_id"] for row in rows
+        if "metered_access_fee" in row["adjustment_types"]
+    }
+    if wave_3k_ids != WAVE_3K_PRODUCT_IDS:
+        raise ValueError(
+            "metered_access_fee-raderna i snapshoten matchar inte "
+            "WAVE_3K_PRODUCT_IDS. "
+            f"Endast i snapshoten: {sorted(wave_3k_ids - WAVE_3K_PRODUCT_IDS)}; "
+            f"endast i listan: {sorted(WAVE_3K_PRODUCT_IDS - wave_3k_ids)}."
+        )
     if set(WAVE_3K_PRODUCT_PARAMS) != WAVE_3K_PRODUCT_IDS:
         raise ValueError(
             "WAVE_3K_PRODUCT_PARAMS matchar inte WAVE_3K_PRODUCT_IDS. "
@@ -2593,57 +2613,32 @@ def build_matrix(text: str) -> dict[str, Any]:
         raw_policy = raw_price.get("policy") or {}
         if raw_price.get("_kraver_kontrakt") is not True:
             raise ValueError(f"Våg 3k-produkten {product_id!r} saknar _kraver_kontrakt=true.")
-        if raw_policy.get("stodjer_aktuell_arskostnad") is not True:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.stodjer_aktuell_arskostnad="
-                f"{raw_policy.get('stodjer_aktuell_arskostnad')!r}, förväntat exakt True."
-            )
-        if raw_policy.get("stodjer_besparing") is not False:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.stodjer_besparing="
-                f"{raw_policy.get('stodjer_besparing')!r}, förväntat exakt False."
-            )
-        if raw_policy.get("kapacitet_bindning") != params["kapacitet_bindning"]:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.kapacitet_bindning="
-                f"{raw_policy.get('kapacitet_bindning')!r}, förväntat exakt "
-                f"{params['kapacitet_bindning']!r}."
-            )
-        if raw_policy.get("kapacitet_band_bindning") != params["kapacitet_band_bindning"]:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.kapacitet_band_bindning="
-                f"{raw_policy.get('kapacitet_band_bindning')!r}, förväntat exakt "
-                f"{params['kapacitet_band_bindning']!r}."
-            )
-        if raw_policy.get("kapacitet_multiplikator_bindning") is not None:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har "
-                f"policy.kapacitet_multiplikator_bindning="
-                f"{raw_policy.get('kapacitet_multiplikator_bindning')!r}, förväntat None."
-            )
-        if raw_policy.get("antal_undercentraler_bindning") != params["antal_undercentraler_bindning"]:
-            raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.antal_undercentraler_bindning="
-                f"{raw_policy.get('antal_undercentraler_bindning')!r}, förväntat exakt "
-                f"{params['antal_undercentraler_bindning']!r}."
-            )
         if raw_price.get("moms") != "exkl":
             raise ValueError(
                 f"Våg 3k-produkten {product_id!r} har moms {raw_price.get('moms')!r}, förväntat 'exkl'."
             )
+        # Rättning, omgranskning 2026-10-21-001 (P2): den tidigare kontrollen
+        # jämförde bara energi.manadspriser i stället för hela energi-objektet,
+        # vilket lät en oberoende extra egenskap (energi.unexpected=1) passera
+        # tyst. Bind nu hela objektet strikt, inga extra fält tillåtna.
         raw_energi = raw_price.get("energi") or {}
-        if not _strict_numeric_equal(raw_energi.get("manadspriser"), params["manadspriser"]):
+        expected_energi = {"manadspriser": params["manadspriser"]}
+        if not _strict_numeric_equal(raw_energi, expected_energi):
             raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har energi.manadspriser="
-                f"{raw_energi.get('manadspriser')!r}, förväntat exakt {params['manadspriser']!r}."
+                f"Våg 3k-produkten {product_id!r} har energi={raw_energi!r}, "
+                f"förväntat exakt {expected_energi!r} (fullständig bindning, inga extra fält)."
             )
+        # Rättning, omgranskning 2026-10-21-001 (P2): motsvarande gap för
+        # kapacitet — loopen itererade bara de nycklar som redan fanns i
+        # params["kapacitet"], så en extra egenskap i det råa objektet
+        # (kapacitet.unexpected=1) upptäcktes aldrig. Bind hela objektet
+        # strikt i ett steg i stället.
         raw_capacity = raw_price.get("kapacitet") or {}
-        for capacity_key, expected_value in params["kapacitet"].items():
-            if not _strict_numeric_equal(raw_capacity.get(capacity_key), expected_value):
-                raise ValueError(
-                    f"Våg 3k-produkten {product_id!r} har kapacitet.{capacity_key}="
-                    f"{raw_capacity.get(capacity_key)!r}, förväntat exakt {expected_value!r}."
-                )
+        if not _strict_numeric_equal(raw_capacity, params["kapacitet"]):
+            raise ValueError(
+                f"Våg 3k-produkten {product_id!r} har kapacitet={raw_capacity!r}, "
+                f"förväntat exakt {params['kapacitet']!r} (fullständig bindning, inga extra fält)."
+            )
         if not _strict_numeric_equal(raw_price.get("fast_avgift"), params["fast_avgift"]):
             raise ValueError(
                 f"Våg 3k-produkten {product_id!r} har fast_avgift="
@@ -2667,11 +2662,40 @@ def build_matrix(text: str) -> dict[str, Any]:
                 f"Våg 3k-produkten {product_id!r} har indatafalt="
                 f"{raw_indatafalt!r}, förväntat exakt {params['indatafalt']!r}."
             )
-        raw_required_fields = raw_policy.get("kravda_falt") or []
-        if not _strict_numeric_equal(raw_required_fields, params["kravda_falt"]):
+        # Rättning, omgranskning 2026-10-21-001 (P2): den tidigare kontrollen
+        # band bara sex utvalda policy-nycklar (stodjer_aktuell_arskostnad,
+        # stodjer_besparing, kapacitet_bindning, kapacitet_band_bindning,
+        # kapacitet_multiplikator_bindning, antal_undercentraler_bindning)
+        # plus kravda_falt separat, och lämnade resten av det råa
+        # policy-objektet (tariff_id, tackning, kallenergi_bindning,
+        # returtemperatur_bindning, flodeskorrigering_variant,
+        # kallenergi_arsserie_bindning, returtemperatur_arsserie_bindning,
+        # ersatter_katalograd, kapacitet_band_falt_bindning) obundet. En
+        # mutation av exempelvis policy.kallenergi_bindning till 'flode_m3'
+        # passerade därför tyst. Bind nu hela det råa policy-objektet strikt
+        # mot en fullständig förväntad bild i ett enda steg.
+        expected_policy = {
+            "tariff_id": raw_price.get("tariff_id"),
+            "kravda_falt": params["kravda_falt"],
+            "tackning": ["annual_forward"],
+            "kapacitet_bindning": params["kapacitet_bindning"],
+            "kallenergi_bindning": None,
+            "returtemperatur_bindning": None,
+            "kapacitet_band_bindning": params["kapacitet_band_bindning"],
+            "kapacitet_multiplikator_bindning": None,
+            "flodeskorrigering_variant": None,
+            "kallenergi_arsserie_bindning": None,
+            "returtemperatur_arsserie_bindning": None,
+            "ersatter_katalograd": None,
+            "stodjer_aktuell_arskostnad": True,
+            "stodjer_besparing": False,
+            "antal_undercentraler_bindning": params["antal_undercentraler_bindning"],
+            "kapacitet_band_falt_bindning": None,
+        }
+        if not _strict_numeric_equal(raw_policy, expected_policy):
             raise ValueError(
-                f"Våg 3k-produkten {product_id!r} har policy.kravda_falt="
-                f"{raw_required_fields!r}, förväntat exakt {params['kravda_falt']!r}."
+                f"Våg 3k-produkten {product_id!r} har policy={raw_policy!r}, "
+                f"förväntat exakt {expected_policy!r} (fullständig bindning, inga extra fält)."
             )
 
     counts = {
