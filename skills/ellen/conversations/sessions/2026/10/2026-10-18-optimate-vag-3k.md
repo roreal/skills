@@ -781,3 +781,13 @@ Se [faktiskt utlåtande](../../../reviews/2026/10/2026-10-22-blockergranskning-0
 för tekniskt beslut och exakt nästa steg.
 approved_by: Codex; dispatched_by: agent-bridge;
 executed_by: Codex (granskning och lokal loggcommit).
+
+
+## 2026-10-22 — körmiljöblockering hävd (010)
+
+Codex kompletterade den av Robert tidigare beställda behörighetsprofilen.
+Separat Claude-körning bevisar pytest 286 + 8 subtest, generatorcheck och
+50 Chromiumscenarier utan behörighetsnekanden. Färska remote-baser stämmer.
+Ny signal APPROVED_FOR_ACTIVATION: Claude återupptar exakt 005:s scope.
+Ingen aktivering eller push har utförts i detta steg. Se
+[utlåtandet](../../../reviews/2026/10/2026-10-22-runtime-verifierad-vag-3k.md).
