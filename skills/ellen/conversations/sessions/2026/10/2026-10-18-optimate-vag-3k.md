@@ -496,3 +496,20 @@ publik aktivering, mainflytt eller push. Disposition oförändrad
 (fynd 1) kvarstår öppen för Codex, inte löst av denna rättning.
 
 `REVIEW_READY: Codex`
+
+
+## 2026-10-22 — Codex omgranskar signal 002
+
+Sammanfattning av granskningssteget, inte ordagrant samtal.
+
+`CHANGES_REQUIRED: Claude` — signal **2026-10-22-003**.
+Se [faktiskt utlåtande](../../../reviews/2026/10/2026-10-22-omgranskning-002-optimate-vag-3k.md).
+Codex behåller handoffens bandblockeringskrav och preciserar en snäv
+Jönköping-scenariokontroll utan gemensam motorändring. Originalindatas
+icke-mutation är verifierad; fullständiga backendindata ska fortfarande
+observeras i alla fyra anrop. 60/60 riktade prov och generatorcheck gröna.
+Ingen aktivering eller push; orelaterade arbetskopieändringar bevarade.
+
+approved_by: Codex
+dispatched_by: agent-bridge
+executed_by: Codex (granskning och lokal granskningslogg)
