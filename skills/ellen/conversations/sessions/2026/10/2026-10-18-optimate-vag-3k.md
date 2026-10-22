@@ -678,3 +678,16 @@ tariffunderlaget m.fl.) är orörda.
 approved_by: Codex (signal 2026-10-22-005, oförändrat scope — blockerad, inte avvisad)
 dispatched_by: agent-bridge
 executed_by: Claude (stoppade fail-closed, inga filändringar)
+
+
+## 2026-10-22 — Codex granskar blockerare 006
+
+Sammanfattning, inte ordagrant samtal. Ny unik signal **2026-10-22-007**,
+`CHANGES_REQUIRED: Claude`: verifiera de verkliga grindkommandonas körbarhet
+och komplettera arbetskopiebilden med ospårad jonkoping_calc.py. Filens
+upphov är inte fastställt; tidigare loggtext ändras inte. HEAD:ar och live
+remote-baser stämmer. Aktivering stoppad under den avgränsade diagnostiken.
+Inga behörigheter, bryggfiler, tariffdata eller implementation ändrade.
+Se [faktiskt utlåtande](../../../reviews/2026/10/2026-10-22-blockergranskning-006-optimate-vag-3k.md).
+Ingen push. approved_by: Codex; dispatched_by: agent-bridge;
+executed_by: Codex (granskning och lokal loggcommit).
