@@ -55,8 +55,13 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
   Tekniska Verk (finspangs-tekniska-verk-finspang), en
   `piecewise_polynomial`-kapacitet + `conditional_flow`-justering, exakt
   Neptune-kodens `WAVE_3J_PRODUCT_IDS`, publikt aktiverad signal
-  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005):
-  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 62 leverantorId,
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005); våg 3k: Jönköping
+  Energi (jonkoping-energi-jonkoping-och-granna), en `effekt`-band
+  kapacitet med `volume`+`metered_access_fee`-justeringar,
+  `kontraktsgatad_kostnadsled`, exakt Neptune-kodens
+  `WAVE_3K_PRODUCT_IDS`, publikt aktiverad signal
+  APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010):
+  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 63 leverantorId,
   och Neptunes kalkylator visar 10/15/20-scenariot för dem.
 
 - Källa: `neptune-marketing/src/data/tariffer.generated.ts`, SHA-256 `e347584bc1421940778d599e7255cc1dd4799d2785fd262a3c8ec486e295b4b5`.
@@ -65,7 +70,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 - Vågnumret är endast en mekanisk sortering för granskning: 1 utan identifierat effekt-/flödesberoende, 2 effekt, 3 flöde/temperatur/serie, 4 behörighet. Även legacyprodukter kan ligga i våg 2–3 och flera beroenden kan finnas på samma rad.
 - `historikfält` avser policyfält märkta rullande, källperiod eller snapshot; det är **inte** ett fullständigt bevis för tariffens historiska prisregler.
 - Källreferens, mätupplösning per policyfält, dokumenterade exkluderingar och granskningsstatus finns i JSON-filen. `katalog` betyder källkatalogen ovan, inte en direktlänk till prislistan.
-- Scenariostatusfördelning: godkand_intern_pilot_ej_publik: 1, godkand_publik_10_15_20: 62, not_reviewed: 13, synlig_sarskild_preliminar_prototyp: 1.
+- Scenariostatusfördelning: godkand_publik_10_15_20: 63, not_reviewed: 13, synlig_sarskild_preliminar_prototyp: 1.
 
 | Våg | Produkt-ID | Nät/produkt | Befintlig väg | Scenariostatus | Energiregel | Kapacitet | Justeringstyper | Krävda policyfält | Historik/serie/behörighet | Exkluderingar |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -93,7 +98,7 @@ statusarna nedan ändrar tariffens befintliga `stodjer_besparing`-spärr.
 | 3 | jamtkraft-are-jarpen-morsil-duved-kall-hallen-krokom-nalden-follinge | Jämtkraft — Åre, Järpen, Mörsil, Duved, Kall, Hallen, Krokom, Nälden, Föllinge | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_are_debiterbar_effekt_kw, jamtkraft_are_vald_niva_id | historik: jamtkraft_are_debiterbar_effekt_kw | — |
 | 3 | jamtkraft-brunflo-och-opevagen | Jämtkraft — Brunflo och Opevägen | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_brunflo_debiterbar_effekt_kw, jamtkraft_brunflo_vald_niva_id | historik: jamtkraft_brunflo_debiterbar_effekt_kw | — |
 | 3 | jamtkraft-ostersund-froson-as | Jämtkraft — Östersund, Frösön, Ås | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | flow_difference | flode_okt_apr_m3, jamtkraft_ostersund_debiterbar_effekt_kw, jamtkraft_ostersund_vald_niva_id | historik: jamtkraft_ostersund_debiterbar_effekt_kw | — |
-| 3 | jonkoping-energi-jonkoping-och-granna | Jönköping Energi | kontrakt_arskostnad | godkand_intern_pilot_ej_publik | manadspriser | effekt (4 band) | metered_access_fee, volume | access_pris_kr_per_central_manad, antal_undercentraler, flode_m3, jonkoping_debiterbar_effekt_kw, jonkoping_vald_niva_id | historik: jonkoping_debiterbar_effekt_kw | — |
+| 3 | jonkoping-energi-jonkoping-och-granna | Jönköping Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | metered_access_fee, volume | access_pris_kr_per_central_manad, antal_undercentraler, flode_m3, jonkoping_debiterbar_effekt_kw, jonkoping_vald_niva_id | historik: jonkoping_debiterbar_effekt_kw | — |
 | 2 | karlstads-energi-karlstad | Karlstads Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (5 band) | — | karlstad_debiterbar_effekt_kw, karlstad_vald_niva_id | — | — |
 | 2 | kils-energi-kil | Kils Energi | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | — | kil_debiterbar_effekt_kw, kil_vald_niva_id | historik: kil_debiterbar_effekt_kw | — |
 | 3 | kraftringen-kraftringen | Kraftringen | kontrakt_arskostnad | godkand_publik_10_15_20 | manadspriser | effekt (4 band) | supply_temperature_adjusted_flow | flode_m3, framledningstemperatur_c, kraftringen_debiterbar_effekt_kw, kraftringen_vald_niva_id | historik: kraftringen_debiterbar_effekt_kw | — |

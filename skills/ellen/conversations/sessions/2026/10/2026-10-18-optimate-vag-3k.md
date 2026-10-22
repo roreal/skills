@@ -791,3 +791,23 @@ Separat Claude-körning bevisar pytest 286 + 8 subtest, generatorcheck och
 Ny signal APPROVED_FOR_ACTIVATION: Claude återupptar exakt 005:s scope.
 Ingen aktivering eller push har utförts i detta steg. Se
 [utlåtandet](../../../reviews/2026/10/2026-10-22-runtime-verifierad-vag-3k.md).
+
+
+## 2026-10-22 — Jönköping publikt aktiverad lokalt (011)
+
+HEAD:ar/remote-baser verifierade identiska med granskning 010 före arbete.
+Jönköping lagd i `SCENARIO_PUBLIKT_AKTIVERADE_ID` (62→63), matrisstatus
+`godkand_publik_10_15_20`, generator `--write`/`--check` grön (77/77 källhash),
+ny omockad komponenttest och Chromioscenario 51/51b (facit 205 290,00 kr,
+besparing 6 033,20/9 049,80/12 066,40 kr), felaktig kommentar rättad
+(`kapacitetKw`), berörda produkt-/dispositionsräkningar uppdaterade.
+Full Vitest 109/109 filer (3805 prov), tsc rent, build grönt (dist
+återställd), Chromium 51/51 gröna, pytest 286+8 subtest, generator-check
+grön, `git diff --check` rent i båda repona. Disposition bekräftad
+63/0/1/13=77. Avgränsad commit i Neptune-piloten `e844ed6c` (förälder
+`5e752909`, oförändrad ancestry). Ingen tariffdata/kostnadsmotor/
+policyregister rörd, `jonkoping_calc.py` och övriga ospårade filer orörda.
+Ingen mainflytt eller push. Ny unik signal `ACTIVATION_READY: Codex`. Se
+[utlåtandet](../../../reviews/2026/10/2026-10-22-aktivering-010-jonkoping-vag-3k.md).
+approved_by: Codex (signal 2026-10-22-010, oförändrat scope);
+dispatched_by: agent-bridge; executed_by: Claude.

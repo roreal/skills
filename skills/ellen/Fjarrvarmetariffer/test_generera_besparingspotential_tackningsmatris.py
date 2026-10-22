@@ -154,7 +154,7 @@ class TariffMatrixTests(unittest.TestCase):
         wave_3k_ids = matrix_module.WAVE_3K_PRODUCT_IDS
         self.assertTrue(
             all(
-                self.by_id[pid]["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
                 for pid in wave_3k_ids
             )
         )
@@ -167,8 +167,7 @@ class TariffMatrixTests(unittest.TestCase):
         self.assertEqual(
             self.matrix["counts"]["scenario_review_status"],
             {
-                "godkand_intern_pilot_ej_publik": 1,
-                "godkand_publik_10_15_20": 62,
+                "godkand_publik_10_15_20": 63,
                 "not_reviewed": 13,
                 "synlig_sarskild_preliminar_prototyp": 1,
             },
@@ -189,8 +188,12 @@ class TariffMatrixTests(unittest.TestCase):
         # lade därefter till exakt en ny rad som intern pilot —
         # finspangs-tekniska-verk-finspang, se WAVE_3J_PRODUCT_IDS — innan
         # signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005 aktiverade
-        # den publikt också. Statusen bärs nu av 0 produkter men förblir
-        # reserverad vokabulär för en framtida intern pilot.
+        # den publikt också. Handoff 2026-10-18-009 (Optimate våg 3k) lade
+        # därefter till exakt en ny rad som intern pilot —
+        # jonkoping-energi-jonkoping-och-granna, se WAVE_3K_PRODUCT_IDS —
+        # innan signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010
+        # aktiverade den publikt också. Statusen bärs nu av 0 produkter men
+        # förblir reserverad vokabulär för en framtida intern pilot.
         self.assertIn(
             "godkand_intern_pilot_ej_publik", matrix_module.ALLOWED_SCENARIO_REVIEW_STATUSES
         )
@@ -275,14 +278,21 @@ class TariffMatrixTests(unittest.TestCase):
         # (Optimate våg 3k, Jönköping Energi, signal
         # APPROVED_FOR_IMPLEMENTATION: Claude, 2026-10-19-001) återinförde
         # statusen temporärt för exakt en ny rad —
-        # jonkoping-energi-jonkoping-och-granna — se WAVE_3K_PRODUCT_IDS.
-        # Jönköping är INTERN PILOT ENDAST i detta steg, ingen publik
-        # aktivering ännu.
+        # jonkoping-energi-jonkoping-och-granna — se WAVE_3K_PRODUCT_IDS;
+        # signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010 aktiverade
+        # även den publikt. Ingen rad bär längre
+        # godkand_intern_pilot_ej_publik.
         internal_pilot_ids = {
             row["product_id"] for row in self.matrix["rows"]
             if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
         }
-        self.assertEqual(internal_pilot_ids, matrix_module.WAVE_3K_PRODUCT_IDS)
+        self.assertEqual(internal_pilot_ids, frozenset())
+        self.assertTrue(
+            all(
+                self.by_id[pid]["scenario_review_status"] == "godkand_publik_10_15_20"
+                for pid in matrix_module.WAVE_3K_PRODUCT_IDS
+            )
+        )
 
     def test_wave_3b_membership_and_status_is_mechanically_locked(self) -> None:
         # Signal 2026-10-05-003 (publik aktivering): samtliga
@@ -3333,9 +3343,9 @@ class TariffMatrixTests(unittest.TestCase):
 
     def test_wave_3k_wrong_status_mismatch_is_fail_closed(self) -> None:
         mutated_registry = dict(matrix_module.SCENARIO_STATUS_REGISTRY)
-        mutated_registry[self.JONKOPING_ID] = "godkand_publik_10_15_20"
+        del mutated_registry[self.JONKOPING_ID]
         with patch.object(matrix_module, "SCENARIO_STATUS_REGISTRY", mutated_registry):
-            with self.assertRaisesRegex(ValueError, "godkand_intern_pilot_ej_publik"):
+            with self.assertRaisesRegex(ValueError, "godkand_publik_10_15_20"):
                 build_matrix(self.source_text)
 
     def test_wave_3k_wrong_capacity_rule_is_fail_closed(self) -> None:

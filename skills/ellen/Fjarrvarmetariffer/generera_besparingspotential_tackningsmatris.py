@@ -38,26 +38,26 @@ HISTORY_BAND_TYPES = frozenset({
 # finnas exakt en gång i den inlästa snapshoten (kontrolleras i build_matrix)
 # — ingen tyst fallback för ett ID som skrivits fel eller tagits bort ur
 # katalogen. Aktuell disposition av 77 produkter (signal
-# APPROVED_FOR_IMPLEMENTATION: Claude, 2026-10-18-015/2026-10-19-001, våg
-# 3k intern pilot ENDAST, ingen publik aktivering): 62
+# APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010, lokal publik
+# aktivering av våg 3k): 63
 # `godkand_publik_10_15_20` (våg 1 + WAVE_2/3A/3B/3C/3D/
-# 3E/3F/3G/3H/3I/3J_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
+# 3E/3F/3G/3H/3I/3J/3K_PRODUCT_IDS, inkl. våg 3f: goteborg-energi, partille-
 # energi-partille, sodertorns-fjarrvarme-sodertorns-fjarrvarme, våg 3g:
 # lidkoping-energi-lidkoping-041-kw, lidkoping-energi-lidkoping-42-kw,
 # våg 3h: gotlands-energi-gotland-taxa-21-over-50-mwh-ar, molndal-energi,
 # norrenergi, våg 3i: telge-nat-telge-foretag-och-
-# bostadsrattsforeningar och våg 3j: finspangs-tekniska-verk-finspang — de
-# två kontraktsgatade produkterna bland de tio, via
+# bostadsrattsforeningar, våg 3j: finspangs-tekniska-verk-finspang och
+# våg 3k: jonkoping-energi-jonkoping-och-granna — de tre
+# kontraktsgatade produkterna bland de elva, via
 # `kontraktsgatad_kostnadsled` snarare än `legacy_arskostnad` — IDENTISK
 # med Neptune-kodens WAVE_3F_PRODUCT_IDS/WAVE_3G_PRODUCT_IDS/
-# WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS/WAVE_3J_PRODUCT_IDS i
-# optimateScenario.ts, vars `stodjerOptimateScenario` och
-# `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för samtliga
-# tio), 1 `godkand_intern_pilot_ej_publik` (våg 3k:
-# jonkoping-energi-jonkoping-och-granna — IDENTISK med Neptune-kodens
-# WAVE_3K_PRODUCT_IDS, vars `stodjerOptimateScenario` är TRUE men
-# `stodjerOptimateScenarioPubliktAktiverad` förblir FALSE), 1
-# `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
+# WAVE_3H_PRODUCT_IDS/WAVE_3I_PRODUCT_IDS/WAVE_3J_PRODUCT_IDS/
+# WAVE_3K_PRODUCT_IDS i optimateScenario.ts, vars `stodjerOptimateScenario`
+# och `stodjerOptimateScenarioPubliktAktiverad` nu båda är TRUE för
+# samtliga elva), 0 `godkand_intern_pilot_ej_publik` (statusen kvarstår
+# i ALLOWED_SCENARIO_REVIEW_STATUSES som reserverad vokabulär för en
+# framtida intern pilot, men bärs INTE längre av någon rad i registret),
+# 1 `synlig_sarskild_preliminar_prototyp` (Stockholm Exergi) och de
 # återstående 13 "not_reviewed".
 # `synlig_sarskild_preliminar_prototyp` innebär INTE publik UI-aktivering.
 # `godkand_publik_10_15_20` innebär att leverantorId ÄR publikt aktiverat i
@@ -253,16 +253,16 @@ SCENARIO_STATUS_REGISTRY: dict[str, str] = {
     # SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 62 publika,
     # Neptune-commit db218c0).
     "finspangs-tekniska-verk-finspang": "godkand_publik_10_15_20",
-    # Optimate våg 3k (signal APPROVED_FOR_IMPLEMENTATION: Claude,
-    # 2026-10-18-015/2026-10-19-001, INTERN PILOT ENDAST): exakt 1
-    # kontraktsgatad produkt — jonkoping-energi-jonkoping-och-granna — den
-    # enda återstående, ogranskade, verkliga kontraktsgatade produkten med
+    # Optimate våg 3k (signal APPROVED_FOR_ACTIVATION: Claude,
+    # 2026-10-22-010, lokal publik aktivering): exakt 1 kontraktsgatad
+    # produkt — jonkoping-energi-jonkoping-och-granna — den enda
+    # återstående, ogranskade, verkliga kontraktsgatade produkten med
     # kombinationen `effekt` (bandkapacitet) + `volume` +
-    # `metered_access_fee`. INTERN beräkningspilot
-    # (stodjerOptimateScenario) ENDAST — IDENTISK med Neptune-kodens
-    # WAVE_3K_PRODUCT_IDS i optimateScenario.ts, som INTE ingår i
-    # SCENARIO_PUBLIKT_AKTIVERADE_ID (förblir exakt 62 publika).
-    "jonkoping-energi-jonkoping-och-granna": "godkand_intern_pilot_ej_publik",
+    # `metered_access_fee`. Nu publikt aktiverad — IDENTISK med
+    # Neptune-kodens WAVE_3K_PRODUCT_IDS i optimateScenario.ts, som nu
+    # ingår i SCENARIO_PUBLIKT_AKTIVERADE_ID (Neptune-koden är nu 63
+    # publika).
+    "jonkoping-energi-jonkoping-och-granna": "godkand_publik_10_15_20",
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3a-ID:na (handoff
@@ -943,9 +943,9 @@ WAVE_3J_PRODUCT_PARAMS: dict[str, dict[str, Any]] = {
 }
 
 # Mekanisk, fail-closed lista över exakt Optimate våg 3k-ID:na (handoff
-# 2026-10-18-009, signal 2026-10-18-015/2026-10-19-001,
-# APPROVED_FOR_IMPLEMENTATION: Claude, INTERN PILOT ENDAST) — IDENTISK med
-# Neptune-kodens WAVE_3K_PRODUCT_IDS i optimateScenario.ts:
+# 2026-10-18-009, signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010,
+# lokal publik aktivering) — IDENTISK med Neptune-kodens
+# WAVE_3K_PRODUCT_IDS i optimateScenario.ts:
 # jonkoping-energi-jonkoping-och-granna, den enda återstående, ogranskade,
 # verkliga kontraktsgatade produkten med kombinationen `effekt`
 # (bandkapacitet) + `volume` + `metered_access_fee`.
@@ -1994,20 +1994,21 @@ def build_matrix(text: str) -> dict[str, Any]:
     # igen. Handoff 2026-10-18-009 (Optimate våg 3k, Jönköping Energi,
     # signal APPROVED_FOR_IMPLEMENTATION: Claude, 2026-10-19-001)
     # återinförde statusen temporärt för exakt Jönköping under sin interna
-    # pilotfas — denna kontroll binder därför nu att statusen bärs av EXAKT
-    # WAVE_3K_PRODUCT_IDS, varken mer eller mindre, så en framtida våg som
-    # tyst lämnar en ANNAN produkt kvar i intern pilot utan att den
-    # granskas vidare till publik eller tas bort ändå faller.
+    # pilotfas; signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010
+    # (lokal publik aktivering, våg 3k) gjorde Jönköping publik och
+    # statusen obärd av någon rad igen — denna kontroll binder därför nu
+    # att statusen INTE bärs av någon rad, så en framtida våg som tyst
+    # lämnar en produkt kvar i intern pilot utan att den granskas vidare
+    # till publik eller tas bort ändå faller.
     remaining_internal_pilot_ids = {
         row["product_id"] for row in rows
         if row["scenario_review_status"] == "godkand_intern_pilot_ej_publik"
     }
-    if remaining_internal_pilot_ids != WAVE_3K_PRODUCT_IDS:
+    if remaining_internal_pilot_ids != frozenset():
         raise ValueError(
             "godkand_intern_pilot_ej_publik bärs av "
-            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat exakt "
-            f"{sorted(WAVE_3K_PRODUCT_IDS)} (våg 3k, Jönköping, INTERN PILOT ENDAST; "
-            "våg 3j gjorde Finspång publik, signal 2026-10-18-005)."
+            f"{sorted(remaining_internal_pilot_ids)} i snapshoten, förväntat ingen "
+            "rad (våg 3k gjorde Jönköping publik, signal 2026-10-22-010)."
         )
     if set(WAVE_3H_PRODUCT_PARAMS) != WAVE_3H_PRODUCT_IDS:
         raise ValueError(
@@ -2495,9 +2496,9 @@ def build_matrix(text: str) -> dict[str, Any]:
             )
 
     # Våg 3k ("Jönköping Energi, effektband + volym + metered_access_fee",
-    # signal APPROVED_FOR_IMPLEMENTATION: Claude, 2026-10-18-015/
-    # 2026-10-19-001, INTERN PILOT ENDAST): den enda återstående,
-    # ogranskade, verkliga produkten med kombinationen `effekt`
+    # signal APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010, lokal publik
+    # aktivering): den enda återstående, ogranskade, verkliga produkten
+    # med kombinationen `effekt`
     # (bandkapacitet) + `volume` + `metered_access_fee`. Bindningen sker
     # direkt mot den fasta WAVE_3K_PRODUCT_IDS-listan (samma mönster som
     # WAVE_3I/3J_PRODUCT_IDS). Till skillnad från Telge (Våg 3i) har
@@ -2597,10 +2598,10 @@ def build_matrix(text: str) -> dict[str, Any]:
             raise ValueError(
                 f"Våg 3k-produkten {product_id!r} har ett behörighetsvillkor, förväntat inget."
             )
-        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_intern_pilot_ej_publik":
+        if SCENARIO_STATUS_REGISTRY.get(product_id) != "godkand_publik_10_15_20":
             raise ValueError(
                 f"Våg 3k-produkten {product_id!r} måste ha scenario_review_status "
-                "'godkand_intern_pilot_ej_publik' i SCENARIO_STATUS_REGISTRY."
+                "'godkand_publik_10_15_20' i SCENARIO_STATUS_REGISTRY."
             )
         for falt in expected_required_fields:
             if row["measurement_resolutions"].get(falt) != "arsvis":
@@ -2776,8 +2777,13 @@ def render_markdown(matrix: dict[str, Any]) -> str:
         "  Tekniska Verk (finspangs-tekniska-verk-finspang), en",
         "  `piecewise_polynomial`-kapacitet + `conditional_flow`-justering, exakt",
         "  Neptune-kodens `WAVE_3J_PRODUCT_IDS`, publikt aktiverad signal",
-        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005):",
-        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 62 leverantorId,",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-18-005); våg 3k: Jönköping",
+        "  Energi (jonkoping-energi-jonkoping-och-granna), en `effekt`-band",
+        "  kapacitet med `volume`+`metered_access_fee`-justeringar,",
+        "  `kontraktsgatad_kostnadsled`, exakt Neptune-kodens",
+        "  `WAVE_3K_PRODUCT_IDS`, publikt aktiverad signal",
+        "  APPROVED_FOR_ACTIVATION: Claude, 2026-10-22-010):",
+        "  `stodjerOptimateScenarioPubliktAktiverad` är sann för dessa 63 leverantorId,",
         "  och Neptunes kalkylator visar 10/15/20-scenariot för dem.",
         "",
         f"- Källa: `{matrix['source_file']}`, SHA-256 `{matrix['source_sha256']}`.",
