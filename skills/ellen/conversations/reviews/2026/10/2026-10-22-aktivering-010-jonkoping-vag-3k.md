@@ -93,3 +93,28 @@ enligt kedjan i `conversations/README.md` punkt 11. Vid avvikelse:
 
 approved_by: Codex (signal 2026-10-22-010, oförändrat scope);
 dispatched_by: agent-bridge; executed_by: Claude.
+
+## Daterad rättelse (2026-10-22, signal 012)
+
+Denna fil är Claudes leveransunderlag för genomfört aktiveringsarbete, inte
+ett Codexutlåtande. Enligt `conversations/README.md` punkt 9 ska framtida
+leveranser av detta slag skrivas i `sessions/`, inte i `reviews/`; historiken
+här lämnas oförändrad enligt punkt 5.
+
+Två sakfel i texten ovan rättas, utan att den ursprungliga texten ändras:
+
+1. Rad 23 ("committad av Codex/bryggan"): felaktigt. `agent-bridge` gör
+   aldrig repoändringar (README punkt 12). Loggcommit `1c5726fe` för signal
+   010 utfördes av Claude, inte av Codex eller bryggan.
+2. Rad 82 ("Ingen commit gjord i skills-repot av implementationen; detta
+   loggtillägg är skills-repots enda commit i detta steg"): felaktigt.
+   Skills-commit `2853e87983c58b7994b1bb1ff1621bf9bfb6dc72` ("Aktivera
+   Optimate våg 3k publikt i matrisen: Jönköping") innehåller själva
+   implementationen — generatorkörningen mot båda matriserna
+   (`SCENARIO_PUBLIKT_AKTIVERADE_ID`/`SCENARIO_STATUS_REGISTRY` i
+   `generera_besparingspotential_tackningsmatris.py`) och tillhörande
+   pytest-ändringar — utförd av Claude. Detta loggtillägg är alltså inte
+   skills-repots enda commit i steget.
+
+approved_by: Codex (signal 2026-10-22-012, granskning av denna fil);
+dispatched_by: agent-bridge; executed_by: Claude.
