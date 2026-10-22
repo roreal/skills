@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-18-optimate-vag-3k"
 created_at: "2026-10-18T15:29:08+02:00"
-updated_at: "2026-10-21T21:10:00+02:00"
+updated_at: "2026-10-22T09:50:00+02:00"
 status: active
 participants:
   - Robert
@@ -428,5 +428,71 @@ Committade avgränsat, ingen annan fil rörd:
 Ingen tariffdata, kostnadsmotor, policyregister eller kund-UI ändrad. Ingen
 publik aktivering, mainflytt eller push. Disposition oförändrad
 **62 publika / 1 intern / 1 prototyp / 13 ogranskade = 77**.
+
+## 2026-10-22 09:50 — Rättning av omgranskning 2026-10-22-001
+
+Omgranskningen (`conversations/reviews/2026/10/2026-10-22-omgranskning-optimate-vag-3k.md`,
+Neptune `8db51104`/skills `97f41e3`) stängde de två Python-fynden från
+2026-10-21-001 och bandgränsproven genom produktionsvägen, men lämnade
+`CHANGES_REQUIRED: Claude` på två kvarstående P2:
+
+1. Felaktig källhänvisning i bandblockeringsprovet (rad 578): citatet
+   "VALIDERAS INTE här" hänvisades till `resultatkontrakt.ts`, men står i
+   stället i `besparingsvarde.ts:332` (`byggKontraktIndata`) och gäller att
+   `prisar` inte valideras just där, eftersom `resultatkontrakt.ts`' egen
+   `band_id`-kontroll (`orsak: 'okant_val'`) kvarstår som defense in depth
+   — den verifierar bara att bandet FINNS, aldrig att dess intervall
+   matchar `kapacitetKw`. Bandfrågan själv (ska ett numeriskt felaktigt men
+   existerande band blockeras, mot handoff 2026-10-18-009 rad 103) är INTE
+   avgjord här — den lämnas uttryckligen till Codex med konkret underlag i
+   testkommentaren; ingen motor- eller kravändring gjord.
+2. Saknat icke-mutations-/anropsbevis. Lade ett nytt Jönköping-prov som
+   djupfryser hela `underlag`-, `policyFalt`- och
+   `policyFaltAttestering`-objektet samt `rumsvarmeMwhPerManad` FÖRE anrop
+   till `beraknaOptimateScenario` (mutationsförsök kastar direkt, ESM körs
+   strict), tar en oberoende `structuredClone`-ögonblicksbild före anropet
+   och jämför den mot objektet efteråt, samt kontrollerar att
+   `kapacitetKw`, bekräftat band, flöde, accessval, substations och
+   `rumsvarmeProvenance` är bit-identiska i referens och alla tre
+   efter-scenarier. Ingen mutation påvisad.
+
+Rättade endast testfilen `optimateScenarioVag3k.test.ts` (källhänvisningen
+i det befintliga provets beskrivning + ett nytt prov), ingen ändring av
+gemensam motor, tariffdata, policyregister eller kund-UI.
+
+Testutfall, körda av Claude i denna körning:
+
+- Neptune: riktad `optimateScenarioVag3k.test.ts` **60/60** (59 tidigare +
+  1 nytt). Full Vitest **100/108 filer gröna** (3 597 prov); 8 driftprov-
+  filer (`gavleR16RawData`/`harnosandRawData`/`batch6RawData`/Vattenfall-
+  kandidatmatrisen) overifierade i denna körning — samma kända,
+  scope-oberoende `ELLEN_PYTHON`/`ELLEN_ENKEY_AGENTS_SOKVAG`-gap som
+  dokumenterats sedan 2026-10-19-004/2026-10-21-002: denna körnings
+  permission-lager tillät varken `export` av miljövariabler eller
+  `git checkout`/`git restore` (destruktiva arbetskopia-kommandon kräver
+  explicit godkännande, ingen interaktiv användare tillgänglig i denna
+  autonoma körning). Ingen regression — diffen rör uteslutande
+  `optimateScenarioVag3k.test.ts`. `tsc --noEmit` ren. `npm run build`
+  grön, men `dist` KUNDE INTE återställas (`git checkout`/`restore`
+  blockerat av sandboxen) — lämnad som en ocommittad, orelaterad
+  arbetskopieändring i Neptune-worktreet; inte iscensatt, inte committad.
+  `git diff --check` av den faktiska commiten (bara testfilen) ren.
+- skills: full pytest **286/286 + 8 subtest**, oförändrat. Matrisgenerator
+  `--check` kunde inte köras i denna körning (kommandot krävde
+  godkännande); ingen indata till generatorn rörd av denna rättning, så
+  den granskade snapshoten (77 produkter) är opåverkad i sak.
+
+Committade avgränsat, ingen annan fil rörd:
+
+- Neptune `optimate-vag-3k-jonkoping-access-flode` →
+  `95837c7e916b0fdc7f8cb788003d30b2584547c7`
+  (förälder `8db511042600e04dcbd8f30313da6cecd67712ba`, oförändrad ancestry,
+  1 fil: `optimateScenarioVag3k.test.ts`).
+- skills: ingen commit i denna körning.
+
+Ingen tariffdata, kostnadsmotor, policyregister eller kund-UI ändrad. Ingen
+publik aktivering, mainflytt eller push. Disposition oförändrad
+**62 publika / 1 intern / 1 prototyp / 13 ogranskade = 77**. Bandfrågan
+(fynd 1) kvarstår öppen för Codex, inte löst av denna rättning.
 
 `REVIEW_READY: Codex`
