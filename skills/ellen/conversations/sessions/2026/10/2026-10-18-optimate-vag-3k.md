@@ -618,3 +618,63 @@ Ingen aktivering, mainflytt eller push utförd. Orelaterade ändringar bevarade.
 approved_by: Codex
 dispatched_by: agent-bridge
 executed_by: Codex (granskning och lokal granskningslogg)
+
+
+## 2026-10-22 — Claude stoppar fail-closed på signal 005
+
+Sammanfattning av körningssteget, inte ordagrant samtal.
+
+Claude verifierade först att committad `index.md` låg överst med exakt
+`2026-10-22-005` (`APPROVED_FOR_ACTIVATION: Claude`), att ID:t förekom
+exakt en gång, och att Neptune-worktreen `/private/tmp/neptune-academy-
+optimate-vag-3k` stod kvar på granskad `5e752909e2d9370720622577a7f8ac3cd5c30327`
+och skills-`main` på `082e85a` — oförändrat sedan granskningen.
+
+Uppdraget (SCENARIO_PUBLIKT_AKTIVERADE_ID 62→63, matris 63/0/1/13,
+omockad komponenttäckning, nytt Chromium-scenario, skills-statusflytt
+`godkand_intern_pilot_ej_publik` → `godkand_publik_10_15_20`, generatorns
+`--write`, full Vitest/tsc/bygge/Chromium/pytest/`--check`/`diff --check`)
+delegerades först till en fork med fullt ärvt sammanhang. Forken
+identifierade korrekt att Chromium-scenariot måste använda produktions-
+schablonens egna månadsserie (som tidigare vågors e2e-scenarier, t.ex.
+Telge) snarare än handoffens literal-fixtur rakt av för
+komponentprovet — men kunde inte köra någon tolk (`node`, `python3`,
+`npx vitest`, `bc`, `awk`) i sin körning; varje sådant anrop krävde
+godkännande som ingen kunde lämna, och forken stoppade korrekt utan att
+röra någon fil i något repo.
+
+Claude körde därefter samma kontroll direkt i huvudkörningen: `git
+status`/`git log` fungerar, men `node -e …`, `python3 -c …` och
+motsvarande tolkanrop blockeras alla med "This command requires
+approval" utan att något godkännande kan lämnas i denna körnings
+icke-interaktiva läge. Utan en körbar tolk går det inte att köra
+Vitest, `tsc --noEmit`, produktionsbygget, Chromium/Playwright-sviten,
+pytest eller generatorns `--write`/`--check` — samtliga är obligatoriska
+gröna grindar enligt handoff 2026-10-18-009 och slutgranskningen 004
+innan någon kod- eller matrisändring får committas. Att skriva
+aktiveringsändringarna utan att kunna verifiera dem skulle bryta både
+uppdragets egna testkrav och den allmänna fail-closed-regeln.
+
+**Ingen fil är ändrad eller staged i något av de två reporna.** Neptune-
+worktreen och skills-`main` står kvar på exakt de HEAD:ar som angavs
+ovan; samtliga sedan tidigare orelaterade ospårade/ändrade filer i båda
+arbetskopiorna (`conversations/automation/*`, `../milesight`, `.claude/`,
+`AGENTS.md`, `SKILL.md`, `claude.md`, `Tau (kopia).xlsx`, Fjärrvärme-
+tariffunderlaget m.fl.) är orörda.
+
+**Handlingsalternativ för Codex:**
+1. Robert/Codex godkänner att denna körnings sandlåda får nödvändig,
+   varaktig behörighet att köra `node`/`python3`/`npx` icke-interaktivt
+   för exakt dessa två repos-sökvägar, varefter samma uppdrag kan
+   köras om från denna signal utan ny sakgranskning.
+2. Steget körs i stället i en interaktiv session där Robert kan
+   godkänna de enskilda tolk-anropen när de uppstår.
+3. Uppdraget delas upp så att en annan körning med redan beviljad
+   tolkbehörighet (t.ex. en tidigare, redan godkänd sessionstyp) utför
+   exakt detta avgränsade aktiveringssteg.
+
+`BLOCKED: Codex`
+
+approved_by: Codex (signal 2026-10-22-005, oförändrat scope — blockerad, inte avvisad)
+dispatched_by: agent-bridge
+executed_by: Claude (stoppade fail-closed, inga filändringar)
