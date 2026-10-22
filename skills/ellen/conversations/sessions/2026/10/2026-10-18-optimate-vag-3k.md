@@ -513,3 +513,90 @@ Ingen aktivering eller push; orelaterade arbetskopieändringar bevarade.
 approved_by: Codex
 dispatched_by: agent-bridge
 executed_by: Codex (granskning och lokal granskningslogg)
+
+
+## 2026-10-22 — Claude rättar omgranskning 003 (fynd 1 och 2)
+
+Sammanfattning av genomförandesteget, inte ordagrant samtal.
+
+Läste AGENTS.md, SKILL.md och conversations/README.md fullständigt.
+Bekräftade att `2026-10-22-003` fortfarande låg överst i den committade
+`index.md` med unikt sessions-ID innan arbetet startade. Verifierade
+Neptune-worktreens HEAD mot omgranskningens dokumenterade bas
+(`95837c7e916b0fdc7f8cb788003d30b2584547c7`) och att skills-repots HEAD
+(`08fa200db13785db4150f750e2c2a6d3984eed5b`) var oförändrat. De åtta
+redan spårade dist-ändringarna och övriga orelaterade ospårade filer i
+båda arbetskopiorna lämnades orörda.
+
+Utförde exakt de två rättningarna från omgranskning `2026-10-22-003`,
+begränsat till `optimateScenario.ts` och `optimateScenarioVag3k.test.ts`:
+
+1. **Fynd 1 (band/effekt).** Ny, snäv Jönköping-specifik förkontroll
+   `kontrolleraJonkopingBandMotOriginalEffekt`, körd i
+   `beraknaOptimateScenario` före det första backendanropet. Kontrollerar
+   det bekräftade bandet (`jonkoping_vald_niva_id`) mot den ursprungliga,
+   icke scenario-reducerade debiterbara effekten (`underlag.kapacitetKw`),
+   med bandgränserna hämtade från den redan bundna tariffen via
+   `valjLeverantorOchPrisar` — inga duplicerade priser, ingen ändring av
+   årsproduktvägen, kostnadsmotorn, policyregistret eller tariffdata.
+   Motsägande men syntaktiskt giltig kombination ger ett nytt typat fel
+   `OptimateScenarioBlockerat('jonkoping_band_matchar_ej_effekt')`; saknade
+   eller ogiltiga fält lämnas oförändrat till motorns befintliga
+   fail-closed-kontroller längre ner i kedjan. Testfilens tidigare
+   accepterande "scenariokrav"-prov är nu omskrivet till att dokumentera
+   den oförändrade årsproduktvägens eget beteende (utanför scenariot), och
+   två nya prov låser scenariovägens faktiska beteende: band 1 bekräftat
+   vid 100 kW blockeras typat, band 2 bekräftat vid 100 kW accepteras
+   fortfarande.
+2. **Fynd 2 (backendindata).** Nytt prov lägger en `vi.spyOn`-
+   anropsobservatör runt den riktiga, importerade
+   `beraknaArsproduktMedKostnadsled` (vidarebefordrar alltid till
+   originalet). Kräver exakt fyra anrop (referens + tre 10/15/20-
+   scenarier) och jämför varje anrops hela mottagna underlag mot en
+   oberoende `structuredClone`-originalbild tagen före
+   `beraknaOptimateScenario`-anropet, med enda tillåtna undantagen
+   `manadsEnergiMwh`/`totalMwh` i de tre efterfallen (referensanropet
+   måste matcha bit-identiskt även där). Kontrollerar explicit
+   `policyFalt`, `policyFaltAttestering`, `energyProvenance`,
+   `kapacitetKw` och `substations`. Det befintliga frysprovet
+   (icke-mutation av originalobjektet) är oförändrat kvar; `rumsvarmeProvenance`
+   beskrivs inte som ett backendfält i det nya provet.
+
+Testutfall, körda både av den delegerade genomförandeagenten och
+oberoende av Claude i huvudkörningen efteråt:
+
+- Neptune: riktad `optimateScenarioVag3k.test.ts` **63/63** (60 tidigare +
+  3 nya: ett omskrivet årsproduktvägsprov räknas inte som nytt, plus
+  scenariovägens negativa band-prov, positiva referens-band-prov och
+  fyra-anrops-observatörsprovet). Full Vitest **100/108 filer gröna**
+  (3 600 prov, 133 skip); samma 8 kända, scope-oberoende drift­provsfiler
+  (`gavleR16RawData`/`harnosandRawData`/`batch6RawData`/Vattenfall-
+  kandidatmatrisen) overifierade på grund av `ELLEN_PYTHON`/
+  `ELLEN_ENKEY_AGENTS_SOKVAG`-miljögapet, oförändrat sedan tidigare
+  signaler — ingen regression; diffen rör uteslutande de två tillåtna
+  filerna. `tsc --noEmit` ren. `npm run build` grön; `dist`-diffen var
+  identisk före och efter bygget (endast de åtta redan spårade filerna),
+  inga nya byggrester skapades eller committades. `git diff --check` ren.
+- skills: matrisgenerator `--check` grön, **77 produkter och källhashen
+  matchar** — ingen skills-fil ändrad eller committad i denna körning.
+
+Committade avgränsat, ingen annan fil rörd:
+
+- Neptune `optimate-vag-3k-jonkoping-access-flode` →
+  `5e752909e2d9370720622577a7f8ac3cd5c30327`
+  (förälder `95837c7e916b0fdc7f8cb788003d30b2584547c7` = granskad commit,
+  oförändrad ancestry, 2 filer: `optimateScenario.ts`,
+  `optimateScenarioVag3k.test.ts`).
+- skills: ingen commit i denna körning (bara detta sessionstillägg och
+  `index.md` i den avslutande loggcommiten).
+
+Ingen tariffdata, kostnadsmotor, policyregister eller kund-UI ändrad.
+Ingen publik aktivering, mainflytt eller push. Disposition oförändrad
+**62 publika / 1 intern / 1 prototyp / 13 ogranskade = 77**. Båda
+P2-fynden från omgranskning 003 är nu åtgärdade inom befintligt scope.
+
+`REVIEW_READY: Codex`
+
+approved_by: Codex (signal 2026-10-22-003, oförändrat scope)
+dispatched_by: agent-bridge
+executed_by: Claude
