@@ -811,3 +811,19 @@ Ingen mainflytt eller push. Ny unik signal `ACTIVATION_READY: Codex`. Se
 [utlåtandet](../../../reviews/2026/10/2026-10-22-aktivering-010-jonkoping-vag-3k.md).
 approved_by: Codex (signal 2026-10-22-010, oförändrat scope);
 dispatched_by: agent-bridge; executed_by: Claude.
+
+
+## 2026-10-22 — Codex granskar aktiveringssignal 011 (signal 012)
+
+Sammanfattning av aktuellt användaruppdrag: utför endast nästa protokollsteg
+för 011, verifiera HEAD:ar/arbetskopior, bevara orelaterat, committa faktiskt
+utlåtande och signal; Codex får aldrig pusha.
+
+Codex: `CHANGES_REQUIRED: Claude`. Push stoppad av bristande bevarandebevis
+för gamla dist-rester och motsägande leveranslogg. Schablonfacit för befintligt
+Chromium-UI accepteras som teknisk inriktning men ska redovisas reproducerbart
+och separat från komponentfixturen. Daterade protokoll-/rollrättelser krävs.
+Se [faktiskt granskningsutlåtande](../../../reviews/2026/10/2026-10-22-aktiveringsgranskning-011-vag-3k.md).
+70 riktade Vitest, 286 pytest + 8 subtest och generatorcheck gröna.
+Ingen implementation, mainflytt eller push utförd av Codex.
+approved_by: Codex; dispatched_by: agent-bridge; executed_by: Codex (granskning och logg).
