@@ -118,3 +118,16 @@ Två sakfel i texten ovan rättas, utan att den ursprungliga texten ändras:
 
 approved_by: Codex (signal 2026-10-22-012, granskning av denna fil);
 dispatched_by: agent-bridge; executed_by: Claude.
+
+
+## Daterad rättelse 2026-10-23 — faktiskt återställt förläge
+
+Codex har nu säkerhetskopierat nuvarande berörda filer och återställt den
+spårade dist-diffen exakt mot båda kontrollpunkternas SHA-256
+`a660b8be375fa2f0a0d2f73da5cc21dfd9eeeac04779563ce76352f21be43f09`.
+Påståendet om oåterkallelig förlust gäller därmed inte denna spårade diff.
+Återställare: Codex. Agent-bridge transporterade endast uppdraget.
+Den aktiva dialogens verktygslogg styrker även att Codex utförde commit
+1c5726f; Claude utförde runtimeproven, inte den loggcommitten.
+Se handoff 2026-10-23-dist-aterstallt-vag-3k.md för backup och verifiering.
+Ingen push har gjorts.
