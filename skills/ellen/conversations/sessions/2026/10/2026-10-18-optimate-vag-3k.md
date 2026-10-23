@@ -1,7 +1,7 @@
 ---
 session_id: "2026-10-18-optimate-vag-3k"
 created_at: "2026-10-18T15:29:08+02:00"
-updated_at: "2026-10-22T15:50:00+02:00"
+updated_at: "2026-10-23T09:45:00+02:00"
 status: active
 participants:
   - Robert
@@ -840,3 +840,51 @@ Den aktiva dialogens verktygslogg styrker även att Codex utförde commit
 1c5726f; Claude utförde runtimeproven, inte den loggcommitten.
 Se handoff 2026-10-23-dist-aterstallt-vag-3k.md för backup och verifiering.
 Ingen push har gjorts.
+
+
+## 2026-10-23 — Claude rättar orelaterad ämnesrad (signal 002 → 003)
+
+Uppdrag: endast nästa protokollsteg för `CHANGES_REQUIRED: Claude`
+(2026-10-23-002). Verifierade att 002 låg committad, överst och unik i
+`index.md` (committat index identiskt med arbetskopian). Skills HEAD var
+`37ac0e4` (committen som innehåller 002); Neptune-pilot `881f54f5`,
+ordinarie Neptune `299bcc91`, Enkey `6e4d1e50` — alla identiska med
+granskningens värden. Live remote-baser verifierades med
+`git -C <repo> ls-remote origin refs/heads/main`: skills/main `cce4c889`,
+Neptune/main `db218c0b`, båda oförändrade sedan granskningen.
+
+Bevarande innan rättning: filens exakta HEAD-bytes (med tabulatortecknet)
+kopierades till `.tmp-ellen-claude-correction-20261023/` i reporoten
+(ospårat), och `git diff --binary cce4c889..bacf891 --
+skills/ellen/Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`
+exporterades till samma mapp. Verktyg för kryptografisk hash (`shasum`,
+`python3 -c`, `git hash-object`, `cksum`) är inte del av denna sessions
+godkända kommandolista och gick inte att köra; bevarandet styrks i stället
+med byte-identisk `diff` mot den säkerhetskopierade filen (tomt resultat)
+och `git diff --binary` mot verifierad remote-bas, vilket är fullt
+tillräckligt för en enskild textrad. Flaggas som ett verktygsgap, inte en
+avvikelse i innehållet.
+
+Rättning: filen återställdes till `cce4c889`-basens innehåll (ämnesraden
+tillbaka till `Förtydligande: hur tillämpas effektrabatten för
+företagskunder 2026?`) och committades ensam i `e7a82dd`
+("Rätta orelaterad ämnesrad i leverantörsfrågor-filen"). `git diff
+cce4c889..e7a82dd -- skills/ellen/Fjarrvarmetariffer/leverantorsfragor-blockerade-tariffer-2026.md`
+är nu tomt. Därefter återlades säkerhetskopians exakta bytes (tabulatorraden)
+som en OSTAGAD lokal arbetskopieändring; `diff` mot backupen är tomt och
+`git status` visar filen som `M`, inte staged. Historisk commit `23d99b8`
+är oförändrad; inget reset, rebase eller cherry-pick gjordes.
+
+`git diff --stat cce4c889..e7a82dd -- skills/ellen` visar endast tidigare
+kända aktiverings-/konversationsfiler plus denna rättning; inga andra
+tariff-, infrastruktur- eller pilotfiler rörda. Pilot-HEAD `881f54f5`
+och dess dist-status (7 borttagna PNG + index.html, 10 rader) oförändrade.
+Enkeys, ordinarie Neptunes och skills-infrastrukturens ospårade/ändrade
+filer lämnade orörda. Dokumenträttningen motiverar inte en ny full
+enhetstestsvit; endast diff-/HEAD-kontroller kördes, enligt granskning 001.
+
+Ingen ny tariffaktivering, mainflytt eller push i detta steg. Ny unik
+signal `ACTIVATION_READY: Codex` (2026-10-23-003). Kvarvarande isolerad
+Chromiumgrind och ett senare pushgodkännande kvarstår som tidigare.
+approved_by: Codex (signal 2026-10-23-002, oförändrat scope);
+dispatched_by: agent-bridge; executed_by: Claude.
